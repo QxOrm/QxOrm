@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+  <title>QxOrm - C++ Object Relational Mapping library</title>
+  <meta name="generator" content="Amaya, see http://www.w3.org/Amaya/">
+  <style type="text/css">
+   .comment { color: #008000; font-style: italic; }
+   .pre { color: #000099; }
+   .string { color: #DF0101; }
+   .char { color: #009900; }
+   .float { color: #996600; }
+   .int { color: #999900; }
+   .bool { color: #000000; font-weight: bold; }
+   .type { color: #FF6633; }
+   .flow { color: #FF0000; }
+   .keyword { color: #990000; }
+   .operator { color: #663300; font-weight: bold; }
+   .operator { color: #663300; font-weight: bold; }
+  </style>
+</head>
+<body>
+<table border="0" style="width: 80%" align="center">
+  <col><col>
+  <tbody>
+    <tr>
+      <td><a href="./home.html"><img alt="QxOrm"
+        src="./resource/logo_qxorm.jpg" width="256" align="left" height="61"
+        border="0"></a></td>
+      <td><img alt="C++" src="./resource/logo_cpp.jpg" width="50" align="right"
+        height="50"></td>
+    </tr>
+  </tbody>
+</table>
+<hr style="width: 80%" align="center" size="1" color="#100D5A">
+<table border="0" style="width: 80%" align="center">
+  <col><col><col><col><col><col>
+  <tbody>
+    <tr>
+      <td align="center"><a href="./home.html"><img alt="Home"
+        src="./resource/link_home.jpg" width="120" height="35"
+        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
+      <td align="center"><a href="./download.html"><img alt="Download"
+        src="./resource/link_download.jpg" width="120" height="35"
+        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
+      <td align="center"><a href="./quick_sample.html"><img alt="Quick sample"
+        src="./resource/link_quick_sample.jpg" width="120" height="35"
+        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
+      <td align="center"><a href="./tutorial.html"><img alt="Tutorial"
+        src="./resource/link_tutorial.jpg" width="120" height="35"
+        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
+      <td align="center"><a href="./faq.html"><img alt="Faq"
+        src="./resource/link_faq.jpg" width="120" height="35"
+        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
+      <td align="center"><a href="./link.html"><img alt="Link"
+        src="./resource/link_link.jpg" width="120" height="35"
+        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
+    </tr>
+  </tbody>
+</table>
+<hr style="width: 80%" align="center" size="1" color="#100D5A"><br>
+<table border="1" frame="vsides" rules="cols" style="width: 80%" align="center" cellpadding="6" bgcolor="#F2F2F4">
+  <col>
+  <tbody>
+    <tr>
+      <td align="justify">
+      <b>QxOrm</b> est une librairie C++ disponible sous une double licence :
+      <ul><li><b>licence <a href="./resource/license.gpl3.txt" target="_blank">GNU/GPLv3</a> : open-source et gratuite</b>
+      </li><li><b>licence commerciale : payante au tarif de 50€ par an par développeur</b>
+      </li></ul>
+      Pour savoir quelle licence correspond le mieux à votre projet, vous pouvez nous contacter à l'adresse suivante : <u><i>contact@qxorm.com</i></u><br>
+      La licence open-source de QxOrm permet de distribuer votre application gratuitement sous la condition que votre projet soit également open-source.<br>
+      Vous devez donc fournir les sources de votre application et indiquer les éventuelles modifications apportées à la librairie QxOrm.<br>
+      La licence commerciale de QxOrm permet de distribuer votre application sans restriction.<br><br>
+      <table border="0" style="width: 100%" align="center">
+       <col>
+       <col>
+       <tbody>
+         <tr>
+           <td valign="middle" width="80" align="center"><a
+             href="http://sourceforge.net/projects/qxorm/files/" target="_blank"><img alt="Download QxOrm" src="./resource/download.jpg" width="40" height="48" border="0"></a>
+           </td>
+           <td align="justify">
+             <a href="http://sourceforge.net/projects/qxorm/files/" target="_blank"><b>Télécharger QxOrm version 1.1.0 (source + test + documentation)</b></a><br>
+             Cette version est compatible avec <b>Visual Studio 2008</b> (Windows) et <b>GCC 4.4.1</b> (Linux)
+           </td>
+         </tr>
+       </tbody>
+      </table>
+        <br>
+        <p align="justify"><b>QxOrm</b> est dépendant des excellentes librairies
+        <a href="http://www.boost.org/" target="_blank"><b>boost</b></a> (compatible à partir de la version 1.38) et
+        <a href="http://qt.nokia.com/" target="_blank"><b>Qt</b></a>
+        (compatible à partir de la version 4.5.0).<br>
+        Vous devez donc télécharger et installer ces 2 librairies avant de pouvoir utiliser QxOrm.
+        </p>
+        <p></p>
+        <table border="0" style="width: 100%" align="center">
+          <col>
+          <col>
+          <tbody>
+            <tr>
+              <td valign="middle" width="161" align="center"><a
+                href="http://www.boost.org/" target="_blank"><img alt="Boost"
+                src="./resource/logo_boost.jpg" width="161"
+              height="50" border="0"></a></td>
+              <td align="justify"><b>boost</b> : de nombreux modules de la
+                librairie boost font partis de la nouvelle norme C++.<br>
+                C'est une librairie reconnue pour sa qualité, son code 'C++
+                moderne', sa documentation, sa portabilité, etc...<br>
+                QxOrm utilise les fonctionnalités suivantes de boost :
+                <i>smart_pointer, serialization, type_traits,
+                multi_index_container, unordered_container, any, tuple,
+                foreach, function.</i><br>
+                Il est conseillé d'installer et d'utiliser la dernière version
+                de boost disponible à l'adresse suivante : <a
+                href="http://www.boost.org/"
+                target="_blank">http://www.boost.org/</a> </td>
+            </tr>
+          </tbody>
+        </table>
+        <p></p>
+        <table border="0" style="width: 100%" align="center">
+          <col>
+          <col>
+          <tbody>
+            <tr>
+              <td valign="middle" width="161" align="center"><a
+                href="http://qt.nokia.com/" target="_blank"><img alt="Qt"
+                src="./resource/logo_qt.jpg" width="42" height="50" border="0"></a></td>
+              <td align="justify"><b>Qt</b> : bibliothèque complète : IHM
+                (<i>QtGui</i>), réseau (<i>QtNetwork</i>), XML (<i>QtXml</i>), base de données
+                (<i>QtSql</i>), etc...<br>
+                La documentation est excellente et le code C++ écrit à partir
+                de cette bibliothèque est à la fois performant et simple de
+                compréhension.<br>
+                Depuis le rachat par Nokia et sa nouvelle license LGPL, Qt est
+                sans contexte la bibliothèque phare du moment.<br>
+                QxOrm est compatible avec les principaux objets définis par Qt
+                : <i>QObject, QString, QDate, QTime, QDateTime, QList, QHash,
+                QSharedPointer, QScopedPointer, etc...</i><br>
+                Il est conseillé d'installer et d'utiliser la dernière version
+                de Qt disponible à l'adresse suivante : <a
+                href="http://qt.nokia.com/"
+                target="_blank">http://qt.nokia.com/</a> </td>
+            </tr>
+          </tbody>
+        </table>
+        <p></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br><hr style="width: 80%" align="center" size="1" color="#100D5A">
+<table border="0" style="width: 80%" align="center">
+  <col><col>
+  <tbody>
+    <tr>
+      <td align="left" valign="middle"><img alt="QxOrm"
+        src="./resource/logo_qxorm_small.jpg" width="168" height="40"></td>
+      <td align="right" valign="middle"><font size="2">Copyright © 2010 QxOrm France</font> </td>
+    </tr>
+  </tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,303 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+  <title>QxOrm - C++ Object Relational Mapping library</title>
+  <meta name="generator" content="Amaya, see http://www.w3.org/Amaya/">
+  <style type="text/css">
+   .comment { color: #008000; font-style: italic; }
+   .pre { color: #000099; }
+   .string { color: #DF0101; }
+   .char { color: #009900; }
+   .float { color: #996600; }
+   .int { color: #999900; }
+   .bool { color: #000000; font-weight: bold; }
+   .type { color: #FF6633; }
+   .flow { color: #FF0000; }
+   .keyword { color: #990000; }
+   .operator { color: #663300; font-weight: bold; }
+   .operator { color: #663300; font-weight: bold; }
+  </style>
+</head>
+<body>
+<table border="0" style="width: 80%" align="center">
+  <col><col>
+  <tbody>
+    <tr>
+      <td><a href="./home.html"><img alt="QxOrm"
+        src="./resource/logo_qxorm.jpg" width="256" align="left" height="61"
+        border="0"></a></td>
+      <td><img alt="C++" src="./resource/logo_cpp.jpg" width="50" align="right"
+        height="50"></td>
+    </tr>
+  </tbody>
+</table>
+<hr style="width: 80%" align="center" size="1" color="#100D5A">
+<table border="0" style="width: 80%" align="center">
+  <col><col><col><col><col><col>
+  <tbody>
+    <tr>
+      <td align="center"><a href="./home.html"><img alt="Home"
+        src="./resource/link_home.jpg" width="120" height="35"
+        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
+      <td align="center"><a href="./download.html"><img alt="Download"
+        src="./resource/link_download.jpg" width="120" height="35"
+        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
+      <td align="center"><a href="./quick_sample.html"><img alt="Quick sample"
+        src="./resource/link_quick_sample.jpg" width="120" height="35"
+        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
+      <td align="center"><a href="./tutorial.html"><img alt="Tutorial"
+        src="./resource/link_tutorial.jpg" width="120" height="35"
+        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
+      <td align="center"><a href="./faq.html"><img alt="Faq"
+        src="./resource/link_faq.jpg" width="120" height="35"
+        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
+      <td align="center"><a href="./link.html"><img alt="Link"
+        src="./resource/link_link.jpg" width="120" height="35"
+        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
+    </tr>
+  </tbody>
+</table>
+<hr style="width: 80%" align="center" size="1" color="#100D5A"><br>
+<table border="1" frame="vsides" rules="cols" style="width: 80%" align="center" cellpadding="6" bgcolor="#F2F2F4">
+  <col>
+  <tbody>
+    <tr>
+      <td align="justify"><b>Dans ce chapitre, nous allons traiter un exemple
+        rapide d'utilisation qui présente les fonctionnalités de base de la
+        librairie QxOrm.</b> <br>
+        <br>
+        <i>Remarque :</i> la librairie <b>QxOrm</b> utilise les <b>conventions d'écriture de code C++</b> suivantes :
+        <ul><li>toutes les classes, fonctions, variables, etc... sont définies sous le <a href="./resource/qxorm.namespace.qx.jpg"><i>namespace qx</i></a>
+        </li><li>les macro de QxOrm sont écrites sous la forme <i>QX_...</i>
+        </li><li>les classes abstraites (ou interfaces) commencent par <i>Ix</i> (par exemple <i>IxFactory</i> est une interface pour la création d'instances)
+        </li><li>les autres classes commencent par <i>Qx</i> (par exemple <i>QxDataMember</i>)
+        </li><li>les collections d'objets se terminent par <i>X</i> (par exemple <i>QxDataMemberX</i> est une collection de <i>QxDataMember</i>)
+        </li><li>les fonctions pour communiquer avec les bases de données se trouvent sous le <a href="./resource/qxorm.namespace.qx.dao.jpg"><i>namespace qx::dao</i></a> (par exemple <i>qx::dao::fetch_by_id()</i>)
+        </li><li>les fonctions pour la <i>serialization</i> des données se trouvent sous le <a href="./resource/qxorm.namespace.qx.serialization.jpg"><i>namespace qx::serialization</i></a> (par exemple <i>qx::serialization::xml::to_file()</i>)
+        </li><li>le moteur de <i>reflection</i> est accessible depuis la classe <b><i>qx::QxClassX</i></b> (par exemple <i>qx::QxClassX::invoke()</i> pour invoquer une méthode de classe)
+        </li><li>les classes de traits se trouvent sous le <a href="./resource/qxorm.namespace.qx.trait.jpg"><i>namespace qx::trait</i></a> (par exemple <i>qx::trait::is_smart_ptr&lt;T&gt;</i>)
+        </li></ul>
+        <i>Autre Remarque :</i> un exemple plus complet (avec notion d'héritage, de
+        relations entre tables, de collections, de libraries partagées, de
+        memory leak, etc...) est présent dans le dossier <i>./test/</i> de la
+        distribution de QxOrm. Ce dossier <i>./test/</i> contient 2 projets de
+        type dll et 1 projet de type exécutable : <i>./dll1/</i>,
+        <i>./dll2/</i> et <i>./exe/</i>. La solution complète peut-être
+        compilée avec <b>Visual C++ 2008</b> sous Windows (ouvrir le fichier
+        <i>./test/test.sln</i>) et <b>GCC 4.4.1</b> sous Linux en utilisant la
+        commande <i>qmake</i>. <br>
+        <br>
+        L'exemple qui suit présente différentes étapes : 
+        <ul>
+          <li><a href="#quick_sample_1">1- fichier <i>drug.h</i> : définition
+            d'une classe <i>drug</i> avec 3 attributs : <i>id</i>, <i>name</i>
+            et <i>description</i></a></li>
+          <li><a href="#quick_sample_2">2- fichier <i>drug.cpp</i> :
+            implémentation de la 'fonction de paramétrage' : <i>void
+            qx::register_class()</i></a></li>
+          <li><a href="#quick_sample_3">3- fichier <i>main.cpp</i> :
+            présentation des fonctionnalités de base de QxOrm avec la classe
+            <i>drug</i></a></li>
+          <li><a href="#quick_sample_4">4- exécution du programme de test et
+            affichage des traces générées</a></li>
+          <li><a href="#quick_sample_5">5- contenu du fichier
+            <i>./export_drugs.xml</i> créé par le programme de test</a></li>
+        </ul>
+        <br>
+        <font color="#100D5A"><a name="quick_sample_1">*
+        -----------------------------------------------------------------------------------------------------<br>
+        * 1- fichier <i>drug.h</i> : définition d'une classe <i>drug</i> avec 3
+        attributs : <i>id</i>, <i>name</i> et <i>description</i></a><br>
+        *
+        -----------------------------------------------------------------------------------------------------<br>
+        </font><br>
+        <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="drug.h">
+<pre><span class="pre">#ifndef _CLASS_DRUG_H_
+#define _CLASS_DRUG_H_
+</span><span class="keyword">
+class</span> drug<span class="operator">
+{</span><span class="keyword">
+public</span><span class="operator">:</span><span class="type">
+   long</span> id<span class="operator">;</span>
+   QString name<span class="operator">;</span>
+   QString description<span class="operator">;</span>
+
+   drug<span class="operator">() :</span> id<span class="operator">(</span><span class="int">0</span><span class="operator">) { ; }</span><span class="keyword">
+   virtual</span><span class="operator"> ~</span>drug<span class="operator">() { ; }
+};</span>
+
+QX_REGISTER_HPP_MY_TEST_EXE<span class="operator">(</span>drug<span class="operator">,</span> qx<span class="operator">::</span>trait<span class="operator">::</span>no_base_class_defined<span class="operator">,</span><span class="int"> 1</span><span class="operator">)</span><span class="comment">
+
+/* This macro is necessary to register 'drug' class in QxOrm context */
+/* param 1 : the current class to register =&gt; 'drug' */
+/* param 2 : the base class, if no base class, use the qx trait =&gt; 'qx::trait::no_base_class_defined' */
+/* param 3 : the class version used by serialization to provide 'ascendant compatibility' */</span><span class="pre">
+
+#endif <span class="comment">// _CLASS_DRUG_H_</span></span></pre>
+        </td></tr></tbody></table>
+        <br><br>
+        <font color="#100D5A"><a name="quick_sample_2">*
+        ----------------------------------------------------------------------------------------------------<br>
+        * 2- fichier <i>drug.cpp</i> : implémentation de la 'fonction de
+        paramétrage' : <i>void qx::register_class()</i><br>
+        *
+        ----------------------------------------------------------------------------------------------------
+        </a></font><br><br>
+        <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="drug.cpp">
+<pre><span class="pre">#include <span class="string">"precompiled.h"</span>   <span class="comment">// Precompiled-header with '#include &lt;QxOrm.h&gt;' and '#include "export.h"'</span>
+#include <span class="string">"drug.h"</span>          <span class="comment">// Class definition 'drug'</span>
+#include <span class="string">&lt;QxMemLeak.h&gt;</span>     <span class="comment">// Automatic memory leak detection</span>
+</span>
+QX_REGISTER_CPP_MY_TEST_EXE<span class="operator">(</span>drug<span class="operator">)</span><span class="comment">   // This macro is necessary to register 'drug' class in QxOrm context
+</span><span class="keyword">
+namespace</span> qx<span class="operator"> {</span><span class="keyword">
+template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</span> register_class<span class="operator">(</span>QxClass<span class="operator">&lt;</span>drug<span class="operator">&gt; &amp;</span> t<span class="operator">)
+{</span>
+  t<span class="operator">.</span>id<span class="operator">(&amp;</span> drug<span class="operator">::</span>id<span class="operator">,</span><span class="string"> "id"</span><span class="operator">);</span><span class="comment">               // Register 'drug::id' &lt;=&gt; primary key in your database
+</span>  t<span class="operator">.</span>data<span class="operator">(&amp;</span> drug<span class="operator">::</span>name<span class="operator">,</span><span class="string"> "name"</span><span class="operator">,</span><span class="int"> 1</span><span class="operator">);</span><span class="comment">      // Register 'drug::name' property with key 'name' and version '1'
+</span>  t<span class="operator">.</span>data<span class="operator">(&amp;</span> drug<span class="operator">::</span>description<span class="operator">,</span><span class="string"> "desc"</span><span class="operator">);</span><span class="comment">  // Register 'drug::description' property with key 'desc'
+</span><span class="operator">}}</span></pre>
+        </td></tr></tbody></table>
+        <br>
+        <br>
+        <font color="#100D5A"><a name="quick_sample_3">*
+        -----------------------------------------------------------------------------------------------<br>
+        * 3- fichier <i>main.cpp</i> : présentation des fonctionnalités de base
+        de QxOrm avec la classe <i>drug</i><br>
+        *
+        -----------------------------------------------------------------------------------------------
+        </a></font><br><br>
+        <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="main.cpp">
+<pre><span class="pre">#include <span class="string">"precompiled.h"</span>
+#include <span class="string">"drug.h"</span>
+#include <span class="string">&lt;QxMemLeak.h&gt;</span>
+</span><span class="type">
+int</span><span class="keyword"> main</span><span class="operator">(</span><span class="type">int</span> argc<span class="operator">,</span><span class="type"> char</span><span class="operator"> *</span> argv<span class="operator">[])
+{</span>
+   QApplication app<span class="operator">(</span>argc<span class="operator">,</span> argv<span class="operator">);</span><span class="comment"> // Qt application
+
+   // Create 3 new drugs
+   // It is possible to use 'boost' and 'Qt' smart pointer : 'boost::shared_ptr', 'QSharedPointer', etc...
+</span><span class="keyword">   typedef</span> boost<span class="operator">::</span>shared_ptr<span class="operator">&lt;</span>drug<span class="operator">&gt;</span> drug_ptr<span class="operator">;</span>
+   drug_ptr d1<span class="operator">;</span> d1<span class="operator">.</span>reset<span class="operator">(</span><span class="keyword">new</span> drug<span class="operator">());</span> d1<span class="operator">-&gt;</span>name<span class="operator"> =</span><span class="string"> "name1"</span><span class="operator">;</span> d1<span class="operator">-&gt;</span>description<span class="operator"> =</span><span class="string"> "desc1"</span><span class="operator">;</span>
+   drug_ptr d2<span class="operator">;</span> d2<span class="operator">.</span>reset<span class="operator">(</span><span class="keyword">new</span> drug<span class="operator">());</span> d2<span class="operator">-&gt;</span>name<span class="operator"> =</span><span class="string"> "name2"</span><span class="operator">;</span> d2<span class="operator">-&gt;</span>description<span class="operator"> =</span><span class="string"> "desc2"</span><span class="operator">;</span>
+   drug_ptr d3<span class="operator">;</span> d3<span class="operator">.</span>reset<span class="operator">(</span><span class="keyword">new</span> drug<span class="operator">());</span> d3<span class="operator">-&gt;</span>name<span class="operator"> =</span><span class="string"> "name3"</span><span class="operator">;</span> d3<span class="operator">-&gt;</span>description<span class="operator"> =</span><span class="string"> "desc3"</span><span class="operator">;</span><span class="comment">
+
+   // Insert drugs into container
+   // It is possible to use a lot of containers from 'std', 'boost', 'Qt' and 'qx::QxCollection&lt;Key, Value&gt;'
+</span><span class="keyword">   typedef</span> std<span class="operator">::</span>vector<span class="operator">&lt;</span>drug_ptr<span class="operator">&gt;</span> type_lst_drug<span class="operator">;</span>
+   type_lst_drug lst_drug<span class="operator">;</span>
+   lst_drug<span class="operator">.</span>push_back<span class="operator">(</span>d1<span class="operator">);</span>
+   lst_drug<span class="operator">.</span>push_back<span class="operator">(</span>d2<span class="operator">);</span>
+   lst_drug<span class="operator">.</span>push_back<span class="operator">(</span>d3<span class="operator">);</span><span class="comment">
+
+   // Init parameters to communicate with a database
+</span>   qx<span class="operator">::</span>QxSqlDatabase<span class="operator">::</span>getSingleton<span class="operator">()-&gt;</span>setDriverName<span class="operator">(</span><span class="string">"QSQLITE"</span><span class="operator">);</span>
+   qx<span class="operator">::</span>QxSqlDatabase<span class="operator">::</span>getSingleton<span class="operator">()-&gt;</span>setDatabaseName<span class="operator">(</span><span class="string">"./test_qxorm.db"</span><span class="operator">);</span>
+   qx<span class="operator">::</span>QxSqlDatabase<span class="operator">::</span>getSingleton<span class="operator">()-&gt;</span>setHostName<span class="operator">(</span><span class="string">"localhost"</span><span class="operator">);</span>
+   qx<span class="operator">::</span>QxSqlDatabase<span class="operator">::</span>getSingleton<span class="operator">()-&gt;</span>setUserName<span class="operator">(</span><span class="string">"root"</span><span class="operator">);</span>
+   qx<span class="operator">::</span>QxSqlDatabase<span class="operator">::</span>getSingleton<span class="operator">()-&gt;</span>setPassword<span class="operator">(</span><span class="string">""</span><span class="operator">);</span><span class="comment">
+
+   // Create table 'drug' into database to store drugs
+</span>   QSqlError daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<span class="operator">::</span>create_table<span class="operator">&lt;</span>drug<span class="operator">&gt;();</span><span class="comment">
+
+   // Insert drugs from container to database
+   // 'id' property of 'd1', 'd2' and 'd3' are auto-updated
+</span>   daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<span class="operator">::</span>insert<span class="operator">(</span>lst_drug<span class="operator">);</span><span class="comment">
+
+   // Modify and update the second drug into database
+</span>   d2<span class="operator">-&gt;</span>name<span class="operator"> =</span><span class="string"> "name2 modified"</span><span class="operator">;</span>
+   d2<span class="operator">-&gt;</span>description<span class="operator"> =</span><span class="string"> "desc2 modified"</span><span class="operator">;</span>
+   daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<span class="operator">::</span>update<span class="operator">(</span>d2<span class="operator">);</span><span class="comment">
+
+   // Delete the first drug from database
+</span>   daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<span class="operator">::</span>delete_by_id<span class="operator">(</span>d1<span class="operator">);</span><span class="comment">
+
+   // Count drugs into database
+</span><span class="type">   long</span> lDrugCount<span class="operator"> =</span> qx<span class="operator">::</span>dao<span class="operator">::</span>count<span class="operator">&lt;</span>drug<span class="operator">&gt;();</span><span class="comment">
+
+   // Fetch drug with id '3' into a new variable
+</span>   drug_ptr d_tmp<span class="operator">;</span> d_tmp<span class="operator">.</span>reset<span class="operator">(</span><span class="keyword">new</span> drug<span class="operator">());</span>
+   d_tmp<span class="operator">-&gt;</span>id<span class="operator"> =</span><span class="int"> 3</span><span class="operator">;</span>
+   daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<span class="operator">::</span>fetch_by_id<span class="operator">(</span>d_tmp<span class="operator">);</span><span class="comment">
+
+   // Export drugs from container to a file under xml format (serialization)
+</span>   qx<span class="operator">::</span>serialization<span class="operator">::</span>xml<span class="operator">::</span>to_file<span class="operator">(</span>lst_drug<span class="operator">,</span><span class="string"> "./export_drugs.xml"</span><span class="operator">);</span><span class="comment">
+
+   // Import drugs from xml file into a new container
+</span>   type_lst_drug lst_drug_tmp<span class="operator">;</span>
+   qx<span class="operator">::</span>serialization<span class="operator">::</span>xml<span class="operator">::</span>from_file<span class="operator">(</span>lst_drug_tmp<span class="operator">,</span><span class="string"> "./export_drugs.xml"</span><span class="operator">);</span><span class="comment">
+
+   // Clone a drug
+</span>   drug_ptr d_clone<span class="operator"> =</span> qx<span class="operator">::</span>clone<span class="operator">(*</span> d1<span class="operator">);</span><span class="comment">
+
+   // Create a new drug by class name (factory)
+</span>   boost<span class="operator">::</span>any d_any<span class="operator"> =</span> qx<span class="operator">::</span>create<span class="operator">(</span><span class="string">"drug"</span><span class="operator">);</span><span class="comment">
+
+   // Insert drugs container into 'qx::cache'
+</span>   qx<span class="operator">::</span>cache<span class="operator">::</span>set<span class="operator">(</span><span class="string">"drugs"</span><span class="operator">,</span> lst_drug<span class="operator">);</span><span class="comment">
+
+   // Remove all elements from 'qx::cache'
+</span>   qx<span class="operator">::</span>cache<span class="operator">::</span>clear<span class="operator">();</span><span class="comment">
+
+   // Create a dummy memory leak
+</span>   drug<span class="operator"> *</span> pDummy<span class="operator"> =</span><span class="keyword"> new</span> drug<span class="operator">();</span><span class="flow">
+
+   return</span><span class="int"> 0</span><span class="operator">;
+}</span></pre>
+        </td></tr></tbody></table>
+        <br>
+        <p><font color="#100D5A"><a name="quick_sample_4">*
+        -------------------------------------------------------------------------<br>
+        * 4- exécution du programme de test et affichage des traces générées<br>
+        *
+        -------------------------------------------------------------------------</a>
+        </font><br></p>
+        <p></p>
+        <font size="2">[QxOrm] qx::QxSqlDatabase : create new database
+        connection in thread '3616' with key
+        '{d315250c-b5c9-46e0-9402-f800368a6673}'<br>
+        [QxOrm] sql query (78 ms) : CREATE TABLE drug (id INTEGER NOT NULL
+        PRIMARY KEY AUTOINCREMENT, name TEXT, desc TEXT)<br>
+        [QxOrm] sql query (63 ms) : INSERT INTO drug (name, desc) VALUES
+        (:name, :desc)<br>
+        [QxOrm] sql query (62 ms) : UPDATE drug SET id = :id, name = :name,
+        desc = :desc WHERE id = :id_bis<br>
+        [QxOrm] sql query (63 ms) : DELETE FROM drug WHERE id = :id<br>
+        [QxOrm] sql query (0 ms) : SELECT COUNT(*) FROM drug<br>
+        [QxOrm] sql query (0 ms) : SELECT drug.id AS drug_id_0, drug.name AS
+        drug_name_0, drug.desc AS drug_desc_0 FROM drug WHERE drug_id_0 =
+        :id<br>
+        [QxOrm] Leaked object at 0xf52ad8 (size 16, src\main.cpp:74)<br>
+        [QxOrm] **** 1 memory leaks found **** </font><br>
+        <br>
+        <p></p>
+        <font color="#100D5A"><a name="quick_sample_5">*
+        ------------------------------------------------------------------------------<br>
+        * 5- contenu du fichier <i>./export_drugs.xml</i> créé par le programme
+        de test<br>
+        *
+        ------------------------------------------------------------------------------</a>
+        </font><br>
+        <br>
+        <a href="./resource/quick_sample.export_drugs.xml.txt"><img
+        alt="quick_sample.export_drugs.xml"
+        src="./resource/quick_sample.export_drugs.xml.jpg" width="642"
+        height="452" border="0"></a> </td>
+    </tr>
+  </tbody>
+</table>
+<br><hr style="width: 80%" align="center" size="1" color="#100D5A">
+<table border="0" style="width: 80%" align="center">
+  <col><col>
+  <tbody>
+    <tr>
+      <td align="left" valign="middle"><img alt="QxOrm"
+        src="./resource/logo_qxorm_small.jpg" width="168" height="40"></td>
+      <td align="right" valign="middle"><font size="2">Copyright © 2010 QxOrm France</font> </td>
+    </tr>
+  </tbody>
+</table>
+</body>
+</html>

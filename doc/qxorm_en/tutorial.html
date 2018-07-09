@@ -1,0 +1,771 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+  <title>QxOrm - C++ Object Relational Mapping library</title>
+  <meta name="generator" content="Amaya, see http://www.w3.org/Amaya/">
+  <style type="text/css">
+   .comment { color: #008000; font-style: italic; }
+   .pre { color: #000099; }
+   .string { color: #DF0101; }
+   .char { color: #009900; }
+   .float { color: #996600; }
+   .int { color: #999900; }
+   .bool { color: #000000; font-weight: bold; }
+   .type { color: #FF6633; }
+   .flow { color: #FF0000; }
+   .keyword { color: #990000; }
+   .operator { color: #663300; font-weight: bold; }
+   .operator { color: #663300; font-weight: bold; }
+  </style>
+</head>
+<body>
+<table border="0" style="width: 80%" align="center">
+  <col><col>
+  <tbody>
+    <tr>
+      <td><a href="./home.html"><img alt="QxOrm"
+        src="./resource/logo_qxorm.jpg" width="256" align="left" height="61"
+        border="0"></a></td>
+      <td><img alt="C++" src="./resource/logo_cpp.jpg" width="50" align="right"
+        height="50"></td>
+    </tr>
+  </tbody>
+</table>
+<hr style="width: 80%" align="center" size="1" color="#100D5A">
+<table border="0" style="width: 80%" align="center">
+  <col><col><col><col><col><col>
+  <tbody>
+    <tr>
+      <td align="center"><a href="./home.html"><img alt="Home"
+        src="./resource/link_home.jpg" width="120" height="35"
+        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
+      <td align="center"><a href="./download.html"><img alt="Download"
+        src="./resource/link_download.jpg" width="120" height="35"
+        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
+      <td align="center"><a href="./quick_sample.html"><img alt="Quick sample"
+        src="./resource/link_quick_sample.jpg" width="120" height="35"
+        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
+      <td align="center"><a href="./tutorial.html"><img alt="Tutorial"
+        src="./resource/link_tutorial.jpg" width="120" height="35"
+        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
+      <td align="center"><a href="./faq.html"><img alt="Faq"
+        src="./resource/link_faq.jpg" width="120" height="35"
+        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
+      <td align="center"><a href="./link.html"><img alt="Link"
+        src="./resource/link_link.jpg" width="120" height="35"
+        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
+    </tr>
+  </tbody>
+</table>
+<hr style="width: 80%" align="center" size="1" color="#100D5A"><br>
+<table border="1" frame="vsides" rules="cols" style="width: 80%" align="center"
+cellpadding="6" bgcolor="#F2F2F4">
+  <col>
+  <tbody>
+    <tr>
+      <td align="justify">
+        Dans ce chapitre, nous allons traiter plusieurs fonctionnalités de la librarie <b>QxOrm</b> avec la création 
+        d'un projet de <b>gestion d'un blog en C++</b>.<br>
+        Le tutoriel <b>qxBlog</b> est constitué des étapes suivantes :
+        <ul>
+          <li><a href="#tuto_1">1- Projet <b>qxBlog</b> - gestion d'un blog en C++</a></li>
+          <li><a href="#tuto_2">2- Arborescence du projet <b>qxBlog</b></a></li>
+          <li><a href="#tuto_3">3- Contenu du fichier <i>qxBlog.pro</i></a></li>
+          <li><a href="#tuto_4">4- Contenu du fichier <i>export.h</i></a></li>
+          <li><a href="#tuto_5">5- Contenu du fichier <i>precompiled.h</i></a></li>
+          <li><a href="#tuto_6">6- Contenu des fichiers <i>author.h</i> et <i>author.cpp</i></a></li>
+          <li><a href="#tuto_7">7- Contenu des fichiers <i>comment.h</i> et <i>comment.cpp</i></a></li>
+          <li><a href="#tuto_8">8- Contenu des fichiers <i>category.h</i> et <i>category.cpp</i></a></li>
+          <li><a href="#tuto_9">9- Contenu des fichiers <i>blog.h</i> et <i>blog.cpp</i></a></li>
+          <li><a href="#tuto_10">10- Contenu du fichier <i>main.cpp</i></a></li>
+          <li><a href="#tuto_11">11- Annexe - exemple de relation <i>one-to-one</i> avec la classe <i>person</i></a></li>
+        </ul>
+        <br>
+        <a name="tuto_1"><u><font color="#100D5A">1- Projet <b>qxBlog</b> -
+        gestion d'un blog en C++ avec les tables suivantes :</font></u></a> 
+        <ul>
+          <li><b>blog</b> : 1 <i>blog</i> est écrit par 1 <i>author</i>, peut avoir plusieurs <i>comment</i> et peut être associé à plusieurs <i>category</i>
+          </li><li><b>author</b> : 1 <i>author</i> peut rédiger plusieurs <i>blog</i>
+          </li><li><b>comment</b> : 1 <i>comment</i> est associé à 1 <i>blog</i>
+          </li><li><b>category</b> : 1 <i>category</i> référence plusieurs <i>blog</i>
+        </li></ul>
+        <br>
+        <a name="tuto_2"><u><font color="#100D5A">2- Le projet <b>qxBlog</b> du tutoriel a
+        l'arborescence suivante :</font></u></a><br>
+        <br>
+        <table border="1" style="width: 100%" bgcolor="#FFFFFF">
+          <col><col><col>
+          <tbody>
+            <tr>
+              <td><i>./qxBlog/ <br>
+                ./qxBlog/qxBlog.pro <br>
+                ./qxBlog/qxBlog.sqlite </i> </td>
+              <td><i>./qxBlog/include/precompiled.h <br>
+                ./qxBlog/include/export.h <br>
+                ./qxBlog/include/author.h <br>
+                ./qxBlog/include/blog.h <br>
+                ./qxBlog/include/category.h <br>
+                ./qxBlog/include/comment.h </i> </td>
+              <td><i>./qxBlog/src/author.cpp <br>
+                ./qxBlog/src/blog.cpp <br>
+                ./qxBlog/src/category.cpp <br>
+                ./qxBlog/src/comment.cpp <br>
+                ./qxBlog/src/main.cpp </i> </td>
+            </tr>
+          </tbody>
+        </table>
+        <p><i>Remarque</i> : le code de ce tutoriel est disponible dans le dossier
+        <i>./test/qxBlog/</i> de la distribution de <b>QxOrm</b>.<br>
+        Le fichier <i>qxBlog.sqlite</i> correspond à la base de données du tutoriel au format <a href="http://sqlite.org/" target="_blank"><i>sqlite</i></a>.</p>
+        <p><br>
+        <a name="tuto_3"><u><font color="#100D5A">3- Contenu du fichier <b>qxBlog.pro</b>
+        :</font></u></a><br>
+        <br>
+        Ce fichier permet la compilation du projet par l'outil <i>qmake</i>
+        fourni par la librairie Qt. <br>
+        L'outil <i>qmake</i> est multi-plateforme, ce qui signifie que le
+        projet <b>qxBlog</b> peut être compilé sous Windows, Linux, Mac, etc...
+        <br>
+        Le fichier <i>qxBlog.pro</i> décrit la liste de tous les fichiers du
+        projet (header + source) ainsi que les dépendances du projet. <br>
+        Le projet <b>qxBlog</b> est dépendant de la librarie <b>QxOrm</b> qui est
+        elle-même dépendante des excellentes librairies <b>boost</b> et <b>Qt</b>. <br>
+        Pour simplifier la gestion des dépendances du projet, il est possible
+        d'inclure le fichier <i>QxOrm.pri</i>.<br>
+        Une information importante à renseigner dans le fichier
+        <i>qxBlog.pro</i> est la définition d'une variable indiquant que l'on
+        est en train de compiler le projet (voir le fichier <i>export.h</i>).
+        En effet, tout comme le mécanisme des dll sous Windows, la librairie
+        QxOrm a besoin de cette information pour exporter ou importer certaines
+        classes. Pour notre projet, cette variable se nomme
+        <b><i>_BUILDING_QX_BLOG</i></b>.</p>
+        <p><a href="./resource/qxBlog.qxBlog.pro"><img alt="qxBlog.pro"
+        src="./resource/qxBlog.pro.jpg" width="417" height="551"
+        border="0"></a></p>
+        <p><br>
+        <a name="tuto_4"><u><font color="#100D5A">4- Contenu du fichier <i>export.h</i>
+        :</font></u></a><br>
+        <br>
+        L'écriture d'une <i>dll</i> sous Windows impose d'avoir un fichier de ce type
+        pour la gestion des <i>'export/import'</i> des classes, fonctions,
+        variables, etc... <br>
+        <b>QxOrm</b> utilise ce même mécanisme pour fournir certaines fonctionnalités
+        : le fichier <i>export.h</i> est donc indispensable pour tous les
+        projets dépendants de <b>QxOrm</b>.<br>
+        <br>
+        <i>Remarque</i> : pour simplifier, il est possible de schématiser le mécanisme des <i>dll</i>
+        de la façon suivante : </p>
+        <ul>
+          <li>lorsque la dll est compilée, l'outil de compilation exporte
+            chaque classe</li>
+          <li>lorsque 1 autre dll dépendante de la précédente est compilée,
+            l'outil de compilation importe les classes nécessaires de la dll
+            précédente</li>
+        </ul><br>
+        <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="export.h">
+<pre><span class="pre">#ifndef _QX_BLOG_EXPORT_H_
+#define _QX_BLOG_EXPORT_H_
+
+#ifdef _BUILDING_QX_BLOG
+#define QX_REGISTER_HPP_QX_BLOG   QX_REGISTER_HPP_EXPORT_DLL
+#define QX_REGISTER_CPP_QX_BLOG   QX_REGISTER_CPP_EXPORT_DLL
+#else
+#define QX_REGISTER_HPP_QX_BLOG   QX_REGISTER_HPP_IMPORT_DLL
+#define QX_REGISTER_CPP_QX_BLOG   QX_REGISTER_CPP_IMPORT_DLL
+#endif <span class="comment">// _BUILDING_QX_BLOG</span>
+
+#ifdef Q_OS_WIN
+#define QX_BLOG_DLL_EXPORT   __declspec(dllexport)
+#define QX_BLOG_DLL_IMPORT   __declspec(dllimport)
+#else
+#define QX_BLOG_DLL_EXPORT
+#define QX_BLOG_DLL_IMPORT
+#endif <span class="comment">// Q_OS_WIN</span>
+
+#ifdef Q_OS_WIN
+#ifndef _BUILDING_QX_BLOG
+#undef QX_BLOG_DLL_EXPORT
+#define QX_BLOG_DLL_EXPORT QX_BLOG_DLL_IMPORT
+#endif <span class="comment">// _BUILDING_QX_BLOG</span>
+#endif <span class="comment">// Q_OS_WIN</span>
+
+#endif <span class="comment">// _QX_BLOG_EXPORT_H_
+</span></pre>
+        </td></tr></tbody></table>
+        <br><br>
+        <a name="tuto_5"><u><font color="#100D5A">5- Contenu du fichier <i>precompiled.h</i>
+        :</font></u></a><br>
+        <br>
+        Il s'agit d'un en-tête précompilé (<i>precompiled header</i>) permettant
+        d'optimiser les temps de compilation du projet. <br>
+        En effet, <b>QxOrm</b> utilise les techniques de <b>méta-programmation</b> pour
+        fournir l'ensemble de ses fonctionnalités. <br>
+        La méta-programmation étant couteuse en temps de compilation, votre
+        projet se compilera beaucoup plus vite avec ce fichier
+        <i>precompiled.h</i>. <br>
+        Un autre avantage (et non des moindres) est que le fichier
+        <i>QxOrm.h</i> regroupe les fonctionnalités de base des librairies
+        boost et Qt. <br>
+        Il n'est donc plus nécessaire d'écrire <i>#include
+        &lt;QtCore/QString.h&gt;</i> pour utiliser la classe QString de Qt par
+        exemple. <br>
+        De même, pour utiliser les pointeurs intelligents de boost, il n'est
+        plus nécessaire d'écrire <i>#include
+        &lt;boost/shared_ptr.hpp&gt;</i>.<br>
+        <br>
+        <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="precompiled.h">
+<pre><span class="pre">#ifndef _QX_BLOG_PRECOMPILED_HEADER_H_
+#define _QX_BLOG_PRECOMPILED_HEADER_H_
+
+#include <span class="string">&lt;QxOrm.h&gt;</span>
+
+#include <span class="string">"export.h"</span>
+
+#endif <span class="comment">// _QX_BLOG_PRECOMPILED_HEADER_H_</span>
+</span></pre>
+        </td></tr></tbody></table>
+        <br><br>
+        <a name="tuto_6"><u><font color="#100D5A">6- Contenu des fichiers <i>author.h</i> et
+        <i>author.cpp</i> :</font></u></a><br>
+        <br>
+        1 <i>author</i> est une personne qui peut rédiger plusieurs <i>blog</i>
+        : nous allons ainsi montrer comment utiliser la relation de type
+        <b><i>one-to-many</i></b>. <br>
+        Au niveau base de données, voici les 2 tables qui correspondent : <br>
+        <br>
+        <img alt="qxBlog.table.author" src="./resource/qxBlog.table.author.jpg"
+        width="318" height="118"><br>
+        <br>
+        Dans le code C++, les propriétés de la classe <i>author</i> sont le
+        symétrique des champs de la table <i>author</i> dans la base de
+        données. <br>
+        Donc 1 instance de la classe <i>author</i> dans le code C++ correspond
+        à une ligne de la table <i>author</i> dans la base de données. <br>
+        Ce principe permet d'écrire du code C++ simple de compréhension et
+        facile à maintenir.<br><br>
+        Nous ajoutons 1 méthode à notre classe <i>author</i> : <i>int age()</i> qui calculera l'age en fonction de la
+        date de naissance envoyée par la base de données.<br>
+        Nous définissons également 2 <i>typedef</i> pour représenter un pointeur (<i>smart-pointer</i>) vers un objet <i>author</i> ainsi qu'une collection de <i>author</i>.<br>
+        La classe <i>author</i> a un identifiant de type <i>QString</i> (par défaut, un identifiant dans le contexte <b>QxOrm</b> est de type <i>long</i>) : nous utilisons la macro <b><i>QX_REGISTER_PRIMARY_KEY(author, QString)</i></b> pour spécialiser le template.<br>
+        La classe <i>author</i> s'écrit de la façon suivante :<br>
+        <br>
+        <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="author.h">
+<pre><span class="pre">#ifndef _QX_BLOG_AUTHOR_H_
+#define _QX_BLOG_AUTHOR_H_
+</span><span class="keyword">
+class</span> blog<span class="operator">;</span><span class="keyword">
+
+class</span> QX_BLOG_DLL_EXPORT author<span class="operator">
+{</span><span class="keyword">
+public</span><span class="operator">:</span><span class="comment">
+// -- typedef
+</span><span class="keyword">   typedef</span> boost<span class="operator">::</span>shared_ptr<span class="operator">&lt;</span>blog<span class="operator">&gt;</span> blog_ptr<span class="operator">;</span><span class="keyword">
+   typedef</span> std<span class="operator">::</span>vector<span class="operator">&lt;</span>blog_ptr<span class="operator">&gt;</span> list_blog<span class="operator">;</span><span class="comment">
+// -- enum
+</span><span class="keyword">   enum</span> enum_sex<span class="operator"> {</span> male<span class="operator">,</span> female<span class="operator">,</span> unknown<span class="operator"> };</span><span class="comment">
+// -- properties
+</span>   QString     m_id<span class="operator">;</span>
+   QString     m_name<span class="operator">;</span>
+   QDate       m_birthdate<span class="operator">;</span>
+   enum_sex    m_sex<span class="operator">;</span>
+   list_blog   m_blogX<span class="operator">;</span><span class="comment">
+// -- contructor, virtual destructor
+</span>   author<span class="operator">() :</span> m_id<span class="operator">(</span><span class="int">0</span><span class="operator">),</span> m_sex<span class="operator">(</span>unknown<span class="operator">) { ; }</span><span class="keyword">
+   virtual</span><span class="operator"> ~</span>author<span class="operator">() { ; }</span><span class="comment">
+// -- methods
+</span><span class="type">   int</span> age<span class="operator">()</span><span class="keyword"> const</span><span class="operator">;
+};</span>
+
+QX_REGISTER_PRIMARY_KEY<span class="operator">(</span>author<span class="operator">,</span> QString<span class="operator">)</span>
+QX_REGISTER_HPP_QX_BLOG<span class="operator">(</span>author<span class="operator">,</span> qx<span class="operator">::</span>trait<span class="operator">::</span>no_base_class_defined<span class="operator">,</span><span class="int"> 0</span><span class="operator">)</span><span class="keyword">
+
+typedef</span> boost<span class="operator">::</span>shared_ptr<span class="operator">&lt;</span>author<span class="operator">&gt;</span> author_ptr<span class="operator">;</span><span class="keyword">
+typedef</span> qx<span class="operator">::</span>QxCollection<span class="operator">&lt;</span>QString<span class="operator">,</span> author_ptr<span class="operator">&gt;</span> list_author<span class="operator">;</span><span class="pre">
+
+#endif <span class="comment">// _QX_BLOG_AUTHOR_H_</span>
+</span></pre>
+        </td></tr></tbody></table>
+        <br>
+        <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="author.cpp">
+<pre><span class="pre">#include <span class="string">"../include/precompiled.h"</span>
+
+#include <span class="string">"../include/author.h"</span>
+#include <span class="string">"../include/blog.h"</span>
+
+#include <span class="string">&lt;QxMemLeak.h&gt;</span>
+</span>
+QX_REGISTER_CPP_QX_BLOG<span class="operator">(</span>author<span class="operator">)</span><span class="keyword">
+
+namespace</span> qx<span class="operator"> {</span><span class="keyword">
+template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</span> register_class<span class="operator">(</span>QxClass<span class="operator">&lt;</span>author<span class="operator">&gt; &amp;</span> t<span class="operator">)
+{</span>
+   t<span class="operator">.</span>id<span class="operator">(&amp;</span> author<span class="operator">::</span>m_id<span class="operator">,</span><span class="string"> "author_id"</span><span class="operator">);</span>
+
+   t<span class="operator">.</span>data<span class="operator">(&amp;</span> author<span class="operator">::</span>m_name<span class="operator">,</span><span class="string"> "name"</span><span class="operator">);</span>
+   t<span class="operator">.</span>data<span class="operator">(&amp;</span> author<span class="operator">::</span>m_birthdate<span class="operator">,</span><span class="string"> "birthdate"</span><span class="operator">);</span>
+   t<span class="operator">.</span>data<span class="operator">(&amp;</span> author<span class="operator">::</span>m_sex<span class="operator">,</span><span class="string"> "sex"</span><span class="operator">);</span>
+
+   t<span class="operator">.</span>relationOneToMany<span class="operator">(&amp;</span> author<span class="operator">::</span>m_blogX<span class="operator">,</span><span class="string"> "list_blog"</span><span class="operator">,</span><span class="string"> "author_id"</span><span class="operator">);</span>
+
+   t<span class="operator">.</span>fct_0<span class="operator">&lt;</span><span class="type">int</span><span class="operator">&gt;(&amp;</span> author<span class="operator">::</span>age<span class="operator">,</span><span class="string"> "age"</span><span class="operator">);
+}}</span><span class="type">
+
+int</span> author<span class="operator">::</span>age<span class="operator">()</span><span class="keyword"> const</span><span class="operator">
+{</span><span class="flow">
+   if</span><span class="operator"> (!</span> m_birthdate<span class="operator">.</span>isValid<span class="operator">()) {</span><span class="flow"> return</span><span class="operator"> -</span><span class="int">1</span><span class="operator">; }</span><span class="flow">
+   return</span><span class="operator"> (</span>QDate<span class="operator">::</span>currentDate<span class="operator">().</span>year<span class="operator">() -</span> m_birthdate<span class="operator">.</span>year<span class="operator">());
+}</span>
+</pre>
+        </td></tr></tbody></table>
+        <br><br>
+        <a name="tuto_7"><u><font color="#100D5A">7- Contenu des fichiers <i>comment.h</i> et
+        <i>comment.cpp</i> :</font></u></a><br>
+        <br>
+        1 <i>comment</i> est associé à 1 <i>blog</i> et 1 <i>blog</i> peut
+        contenir plusieurs <i>comment</i> : nous allons ainsi montrer comment
+        utiliser la relation de type <b><i>many-to-one</i></b>. <br>
+        Au niveau base de données, voici les 2 tables qui correspondent (nous
+        reprenons la table <i>blog</i> vue précédemment) : <br>
+        <br>
+        <img alt="qxBlog.table.comment"
+        src="./resource/qxBlog.table.comment.jpg" width="335" height="116"><br>
+        <br>
+        De même que pour la classe <i>author</i>, nous définissons 2 <i>typedef</i>
+        pour représenter un pointeur vers un objet <i>comment</i> ainsi qu'une collection de <i>comment</i>.<br>
+        La classe <i>comment</i> s'écrit de la façon suivante :<br>
+        <br>
+        <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="comment.h">
+<pre><span class="pre">#ifndef _QX_BLOG_COMMENT_H_
+#define _QX_BLOG_COMMENT_H_
+</span><span class="keyword">
+class</span> blog<span class="operator">;</span><span class="keyword">
+
+class</span> QX_BLOG_DLL_EXPORT comment<span class="operator">
+{</span><span class="keyword">
+public</span><span class="operator">:</span><span class="comment">
+// -- typedef
+</span><span class="keyword">   typedef</span> boost<span class="operator">::</span>shared_ptr<span class="operator">&lt;</span>blog<span class="operator">&gt;</span> blog_ptr<span class="operator">;</span><span class="comment">
+// -- properties
+</span><span class="type">   long</span>        m_id<span class="operator">;</span>
+   QString     m_text<span class="operator">;</span>
+   QDateTime   m_dt_create<span class="operator">;</span>
+   blog_ptr    m_blog<span class="operator">;</span><span class="comment">
+// -- contructor, virtual destructor
+</span>   comment<span class="operator">() :</span> m_id<span class="operator">(</span><span class="int">0</span><span class="operator">) { ; }</span><span class="keyword">
+   virtual</span><span class="operator"> ~</span>comment<span class="operator">() { ; }
+};</span>
+
+QX_REGISTER_HPP_QX_BLOG<span class="operator">(</span>comment<span class="operator">,</span> qx<span class="operator">::</span>trait<span class="operator">::</span>no_base_class_defined<span class="operator">,</span><span class="int"> 0</span><span class="operator">)</span><span class="keyword">
+
+typedef</span> boost<span class="operator">::</span>shared_ptr<span class="operator">&lt;</span>comment<span class="operator">&gt;</span> comment_ptr<span class="operator">;</span><span class="keyword">
+typedef</span> QList<span class="operator">&lt;</span>comment_ptr<span class="operator">&gt;</span> list_comment<span class="operator">;</span><span class="pre">
+
+#endif <span class="comment">// _QX_BLOG_COMMENT_H_</span>
+</span></pre>
+        </td></tr></tbody></table>
+        <br>
+        <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="comment.cpp">
+<pre><span class="pre">#include <span class="string">"../include/precompiled.h"</span>
+
+#include <span class="string">"../include/comment.h"</span>
+#include <span class="string">"../include/blog.h"</span>
+
+#include <span class="string">&lt;QxMemLeak.h&gt;</span>
+</span>
+QX_REGISTER_CPP_QX_BLOG<span class="operator">(</span>comment<span class="operator">)</span><span class="keyword">
+
+namespace</span> qx<span class="operator"> {</span><span class="keyword">
+template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</span> register_class<span class="operator">(</span>QxClass<span class="operator">&lt;</span>comment<span class="operator">&gt; &amp;</span> t<span class="operator">)
+{</span>
+   t<span class="operator">.</span>id<span class="operator">(&amp;</span> comment<span class="operator">::</span>m_id<span class="operator">,</span><span class="string"> "comment_id"</span><span class="operator">);</span>
+
+   t<span class="operator">.</span>data<span class="operator">(&amp;</span> comment<span class="operator">::</span>m_text<span class="operator">,</span><span class="string"> "comment_text"</span><span class="operator">);</span>
+   t<span class="operator">.</span>data<span class="operator">(&amp;</span> comment<span class="operator">::</span>m_dt_create<span class="operator">,</span><span class="string"> "date_creation"</span><span class="operator">);</span>
+
+   t<span class="operator">.</span>relationManyToOne<span class="operator">(&amp;</span> comment<span class="operator">::</span>m_blog<span class="operator">,</span><span class="string"> "blog_id"</span><span class="operator">);
+}}</span>
+</pre>
+        </td></tr></tbody></table>
+        <br>
+        <br>
+        <a name="tuto_8"><u><font color="#100D5A">8- Contenu des fichiers <i>category.h</i> et
+        <i>category.cpp</i> :</font></u></a><br>
+        <br>
+        1 <i>category</i> référence plusieurs <i>blog</i> et 1 <i>blog</i> peut
+        appartenir à plusieurs <i>category</i> : nous allons ainsi montrer
+        comment utiliser la relation de type <b><i>many-to-many</i></b>.<br>
+        Ce type de relation implique une table supplémentaire dans la base de
+        données pour stocker la liste des <i>id</i> de chaque côté des
+        relations. <br>
+        Au niveau base de données, voici les 3 tables qui correspondent (nous
+        reprenons la table <i>blog</i> vue précédemment) : <br>
+        <br>
+        <img alt="qxBlog.table.category"
+        src="./resource/qxBlog.table.category.jpg" width="464" height="115"><br>
+        <br>
+        De même que pour les classes <i>author</i> et <i>comment</i>, nous définissons 2 <i>typedef</i>
+        pour représenter un pointeur vers un objet <i>category</i> ainsi qu'une collection de <i>category</i>.<br>
+        La classe <i>category</i> s'écrit de la façon suivante :<br>
+        <br>
+        <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="category.h">
+<pre><span class="pre">#ifndef _QX_BLOG_CATEGORY_H_
+#define _QX_BLOG_CATEGORY_H_
+</span><span class="keyword">
+class</span> blog<span class="operator">;</span><span class="keyword">
+
+class</span> QX_BLOG_DLL_EXPORT category<span class="operator">
+{</span><span class="keyword">
+public</span><span class="operator">:</span><span class="comment">
+// -- typedef
+</span><span class="keyword">   typedef</span> boost<span class="operator">::</span>shared_ptr<span class="operator">&lt;</span>blog<span class="operator">&gt;</span> blog_ptr<span class="operator">;</span><span class="keyword">
+   typedef</span> qx<span class="operator">::</span>QxCollection<span class="operator">&lt;</span><span class="type">long</span><span class="operator">,</span> blog_ptr<span class="operator">&gt;</span> list_blog<span class="operator">;</span><span class="comment">
+// -- properties
+</span><span class="type">   long</span>        m_id<span class="operator">;</span>
+   QString     m_name<span class="operator">;</span>
+   QString     m_desc<span class="operator">;</span>
+   list_blog   m_blogX<span class="operator">;</span><span class="comment">
+// -- contructor, virtual destructor
+</span>   category<span class="operator">() :</span> m_id<span class="operator">(</span><span class="int">0</span><span class="operator">) { ; }</span><span class="keyword">
+   virtual</span><span class="operator"> ~</span>category<span class="operator">() { ; }
+};</span>
+
+QX_REGISTER_HPP_QX_BLOG<span class="operator">(</span>category<span class="operator">,</span> qx<span class="operator">::</span>trait<span class="operator">::</span>no_base_class_defined<span class="operator">,</span><span class="int"> 0</span><span class="operator">)</span><span class="keyword">
+
+typedef</span> QSharedPointer<span class="operator">&lt;</span>category<span class="operator">&gt;</span> category_ptr<span class="operator">;</span><span class="keyword">
+typedef</span> qx<span class="operator">::</span>QxCollection<span class="operator">&lt;</span><span class="type">long</span><span class="operator">,</span> category_ptr<span class="operator">&gt;</span> list_category<span class="operator">;</span><span class="pre">
+
+#endif <span class="comment">// _QX_BLOG_CATEGORY_H_</span>
+</span></pre>
+        </td></tr></tbody></table>
+        <br>
+        <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="category.cpp">
+<pre><span class="pre">#include <span class="string">"../include/precompiled.h"</span>
+
+#include <span class="string">"../include/category.h"</span>
+#include <span class="string">"../include/blog.h"</span>
+
+#include <span class="string">&lt;QxMemLeak.h&gt;</span>
+</span>
+QX_REGISTER_CPP_QX_BLOG<span class="operator">(</span>category<span class="operator">)</span><span class="keyword">
+
+namespace</span> qx<span class="operator"> {</span><span class="keyword">
+template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</span> register_class<span class="operator">(</span>QxClass<span class="operator">&lt;</span>category<span class="operator">&gt; &amp;</span> t<span class="operator">)
+{</span>
+   t<span class="operator">.</span>id<span class="operator">(&amp;</span> category<span class="operator">::</span>m_id<span class="operator">,</span><span class="string"> "category_id"</span><span class="operator">);</span>
+
+   t<span class="operator">.</span>data<span class="operator">(&amp;</span> category<span class="operator">::</span>m_name<span class="operator">,</span><span class="string"> "name"</span><span class="operator">);</span>
+   t<span class="operator">.</span>data<span class="operator">(&amp;</span> category<span class="operator">::</span>m_desc<span class="operator">,</span><span class="string"> "description"</span><span class="operator">);</span>
+
+   t<span class="operator">.</span>relationManyToMany<span class="operator">(&amp;</span> category<span class="operator">::</span>m_blogX<span class="operator">,</span><span class="string"> "list_blog"</span><span class="operator">,</span><span class="string"> "category_blog"</span><span class="operator">,</span><span class="string"> "category_id"</span><span class="operator">,</span><span class="string"> "blog_id"</span><span class="operator">);
+}}</span>
+</pre>
+        </td></tr></tbody></table>
+        <br>
+        <br>
+        <a name="tuto_9"><u><font color="#100D5A">9- Contenu des fichiers <i>blog.h</i> et
+        <i>blog.cpp</i> :</font></u></a><br>
+        <br>
+        1 <i>blog</i> est écrit par 1 <i>author</i>, peut avoir plusieurs
+        <i>comment</i> et peut être associé à plusieurs <i>category</i>. Cette
+        classe contient donc 3 relations : <b><i>one-to-many</i>,
+        <i>many-to-one</i> et <i>many-to-many</i></b>.<br>
+        <br>
+        <i>Remarque</i> : <b>QxOrm</b> gère également le type de relation <b><i>one-to-one</i></b>
+        qui est cependant beaucoup moins utilisée que les autres relations. <br>
+        Un exemple de type de relation <b><i>one-to-one</i></b> est disponible en
+        annexe de ce tutoriel avec la classe/table <i>person</i> : 1
+        <i>person</i> correspond à 1 <i>author</i>. <br>
+        <br>
+        De même que pour les autres classes, nous définissons 2 <i>typedef</i>
+        pour représenter un pointeur vers un objet <i>blog</i> ainsi qu'une collection de <i>blog</i>.<br>
+        La classe <i>blog</i> s'écrit de la façon suivante :<br>
+        <br>
+        <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="blog.h">
+<pre><span class="pre">#ifndef _QX_BLOG_BLOG_H_
+#define _QX_BLOG_BLOG_H_
+
+#include <span class="string">"author.h"</span>
+#include <span class="string">"comment.h"</span>
+#include <span class="string">"category.h"</span>
+</span><span class="keyword">
+class</span> QX_BLOG_DLL_EXPORT blog<span class="operator">
+{</span><span class="keyword">
+public</span><span class="operator">:</span><span class="comment">
+// -- properties
+</span><span class="type">   long</span>           m_id<span class="operator">;</span>
+   QString        m_text<span class="operator">;</span>
+   QDateTime      m_dt_creation<span class="operator">;</span>
+   author_ptr     m_author<span class="operator">;</span>
+   list_comment   m_commentX<span class="operator">;</span>
+   list_category  m_categoryX<span class="operator">;</span><span class="comment">
+// -- contructor, virtual destructor
+</span>   blog<span class="operator">() :</span> m_id<span class="operator">(</span><span class="int">0</span><span class="operator">) { ; }</span><span class="keyword">
+   virtual</span><span class="operator"> ~</span>blog<span class="operator">() { ; }
+};</span>
+
+QX_REGISTER_HPP_QX_BLOG<span class="operator">(</span>blog<span class="operator">,</span> qx<span class="operator">::</span>trait<span class="operator">::</span>no_base_class_defined<span class="operator">,</span><span class="int"> 0</span><span class="operator">)</span><span class="keyword">
+
+typedef</span> boost<span class="operator">::</span>shared_ptr<span class="operator">&lt;</span>blog<span class="operator">&gt;</span> blog_ptr<span class="operator">;</span><span class="keyword">
+typedef</span> std<span class="operator">::</span>vector<span class="operator">&lt;</span>blog_ptr<span class="operator">&gt;</span> list_blog<span class="operator">;</span><span class="pre">
+
+#endif <span class="comment">// _QX_BLOG_BLOG_H_</span>
+</span></pre>
+        </td></tr></tbody></table>
+        <br>
+        <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="blog.cpp">
+<pre><span class="pre">#include <span class="string">"../include/precompiled.h"</span>
+
+#include <span class="string">"../include/blog.h"</span>
+
+#include <span class="string">&lt;QxMemLeak.h&gt;</span>
+</span>
+QX_REGISTER_CPP_QX_BLOG<span class="operator">(</span>blog<span class="operator">)</span><span class="keyword">
+
+namespace</span> qx<span class="operator"> {</span><span class="keyword">
+template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</span> register_class<span class="operator">(</span>QxClass<span class="operator">&lt;</span>blog<span class="operator">&gt; &amp;</span> t<span class="operator">)
+{</span>
+   t<span class="operator">.</span>id<span class="operator">(&amp;</span> blog<span class="operator">::</span>m_id<span class="operator">,</span><span class="string"> "blog_id"</span><span class="operator">);</span>
+
+   t<span class="operator">.</span>data<span class="operator">(&amp;</span> blog<span class="operator">::</span>m_text<span class="operator">,</span><span class="string"> "blog_text"</span><span class="operator">);</span>
+   t<span class="operator">.</span>data<span class="operator">(&amp;</span> blog<span class="operator">::</span>m_dt_creation<span class="operator">,</span><span class="string"> "date_creation"</span><span class="operator">);</span>
+
+   t<span class="operator">.</span>relationManyToOne<span class="operator">(&amp;</span> blog<span class="operator">::</span>m_author<span class="operator">,</span><span class="string"> "author_id"</span><span class="operator">);</span>
+   t<span class="operator">.</span>relationOneToMany<span class="operator">(&amp;</span> blog<span class="operator">::</span>m_commentX<span class="operator">,</span><span class="string"> "list_comment"</span><span class="operator">,</span><span class="string"> "blog_id"</span><span class="operator">);</span>
+   t<span class="operator">.</span>relationManyToMany<span class="operator">(&amp;</span> blog<span class="operator">::</span>m_categoryX<span class="operator">,</span><span class="string"> "list_category"</span><span class="operator">,</span><span class="string"> "category_blog"</span><span class="operator">,</span><span class="string"> "blog_id"</span><span class="operator">,</span><span class="string"> "category_id"</span><span class="operator">);
+}}</span>
+</pre>
+        </td></tr></tbody></table>
+        <br>
+        <br>
+        <a name="tuto_10"><u><font color="#100D5A">10- Contenu du fichier <i>main.cpp</i>
+        :</font></u></a><br>
+        <br>
+        <b>QxOrm</b> permet de communiquer de manière simple et performante avec de
+        nombreuses bases de données (<a href="http://doc.trolltech.com/4.6/sql-programming.html" target="_blank">voir la liste des bases de données sur le
+        site de Qt</a>).<br>
+        Outre la <font style="background-color:yellow"><b>persistance</b></font>, <b>QxOrm</b> possède également d'autres
+        fonctionnalités intéressantes liées à la gestion des données :
+        <ul><li>
+        la <font style="background-color:yellow"><b>serialization</b></font> automatique des données ou collections de données au
+        format binaire et xml
+        </li><li>la <font style="background-color:yellow"><b>reflection</b></font> permettant d'accéder à la
+        définition des classes paramétrées dans le contexte QxOrm ainsi que
+        l'appel automatique des méthodes de classes</li></ul><br>
+        <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="main.cpp">
+<pre><span class="pre">#include <span class="string">"../include/precompiled.h"</span>
+
+#include <span class="string">&lt;QtGui/qapplication.h&gt;</span>
+
+#include <span class="string">"../include/blog.h"</span>
+#include <span class="string">"../include/author.h"</span>
+#include <span class="string">"../include/comment.h"</span>
+#include <span class="string">"../include/category.h"</span>
+
+#include <span class="string">&lt;QxMemLeak.h&gt;</span>
+</span><span class="type">
+int</span><span class="keyword"> main</span><span class="operator">(</span><span class="type">int</span> argc<span class="operator">,</span><span class="type"> char</span><span class="operator"> *</span> argv<span class="operator">[])
+{</span><span class="comment">
+   // Qt application
+</span>   QApplication app<span class="operator">(</span>argc<span class="operator">,</span> argv<span class="operator">);</span><span class="comment">
+
+   // Parameters to connect to database
+</span>   qx<span class="operator">::</span>QxSqlDatabase<span class="operator">::</span>getSingleton<span class="operator">()-&gt;</span>setDriverName<span class="operator">(</span><span class="string">"QSQLITE"</span><span class="operator">);</span>
+   qx<span class="operator">::</span>QxSqlDatabase<span class="operator">::</span>getSingleton<span class="operator">()-&gt;</span>setDatabaseName<span class="operator">(</span><span class="string">"./qxBlog.sqlite"</span><span class="operator">);</span>
+   qx<span class="operator">::</span>QxSqlDatabase<span class="operator">::</span>getSingleton<span class="operator">()-&gt;</span>setHostName<span class="operator">(</span><span class="string">"localhost"</span><span class="operator">);</span>
+   qx<span class="operator">::</span>QxSqlDatabase<span class="operator">::</span>getSingleton<span class="operator">()-&gt;</span>setUserName<span class="operator">(</span><span class="string">"root"</span><span class="operator">);</span>
+   qx<span class="operator">::</span>QxSqlDatabase<span class="operator">::</span>getSingleton<span class="operator">()-&gt;</span>setPassword<span class="operator">(</span><span class="string">""</span><span class="operator">);</span><span class="comment">
+
+   // Ensure there is no element in database
+</span>   QSqlError daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<span class="operator">::</span>delete_all<span class="operator">&lt;</span>author<span class="operator">&gt;();</span>
+   daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<span class="operator">::</span>delete_all<span class="operator">&lt;</span>comment<span class="operator">&gt;();</span>
+   daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<span class="operator">::</span>delete_all<span class="operator">&lt;</span>category<span class="operator">&gt;();</span>
+   daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<span class="operator">::</span>delete_all<span class="operator">&lt;</span>blog<span class="operator">&gt;();</span><span class="comment">
+
+   // Create a list of 3 author
+</span>   author_ptr author_1<span class="operator">;</span> author_1<span class="operator">.</span>reset<span class="operator">(</span><span class="keyword">new</span> author<span class="operator">());</span>
+   author_ptr author_2<span class="operator">;</span> author_2<span class="operator">.</span>reset<span class="operator">(</span><span class="keyword">new</span> author<span class="operator">());</span>
+   author_ptr author_3<span class="operator">;</span> author_3<span class="operator">.</span>reset<span class="operator">(</span><span class="keyword">new</span> author<span class="operator">());</span>
+
+   author_1<span class="operator">-&gt;</span>m_id<span class="operator"> =</span><span class="string"> "author_id_1"</span><span class="operator">;</span> author_1<span class="operator">-&gt;</span>m_name<span class="operator"> =</span><span class="string"> "author_1"</span><span class="operator">;</span>
+   author_1<span class="operator">-&gt;</span>m_sex<span class="operator"> =</span> author<span class="operator">::</span>male<span class="operator">;</span> author_1<span class="operator">-&gt;</span>m_birthdate<span class="operator"> =</span> QDate<span class="operator">::</span>currentDate<span class="operator">();</span>
+   author_2<span class="operator">-&gt;</span>m_id<span class="operator"> =</span><span class="string"> "author_id_2"</span><span class="operator">;</span> author_2<span class="operator">-&gt;</span>m_name<span class="operator"> =</span><span class="string"> "author_2"</span><span class="operator">;</span>
+   author_2<span class="operator">-&gt;</span>m_sex<span class="operator"> =</span> author<span class="operator">::</span>female<span class="operator">;</span> author_2<span class="operator">-&gt;</span>m_birthdate<span class="operator"> =</span> QDate<span class="operator">::</span>currentDate<span class="operator">();</span>
+   author_3<span class="operator">-&gt;</span>m_id<span class="operator"> =</span><span class="string"> "author_id_3"</span><span class="operator">;</span> author_3<span class="operator">-&gt;</span>m_name<span class="operator"> =</span><span class="string"> "author_3"</span><span class="operator">;</span>
+   author_3<span class="operator">-&gt;</span>m_sex<span class="operator"> =</span> author<span class="operator">::</span>female<span class="operator">;</span> author_3<span class="operator">-&gt;</span>m_birthdate<span class="operator"> =</span> QDate<span class="operator">::</span>currentDate<span class="operator">();</span>
+
+   list_author authorX<span class="operator">;</span>
+   authorX<span class="operator">.</span>insert<span class="operator">(</span>author_1<span class="operator">-&gt;</span>m_id<span class="operator">,</span> author_1<span class="operator">);</span>
+   authorX<span class="operator">.</span>insert<span class="operator">(</span>author_2<span class="operator">-&gt;</span>m_id<span class="operator">,</span> author_2<span class="operator">);</span>
+   authorX<span class="operator">.</span>insert<span class="operator">(</span>author_3<span class="operator">-&gt;</span>m_id<span class="operator">,</span> author_3<span class="operator">);</span><span class="comment">
+
+   // Insert list of 3 author into database
+</span>   daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<span class="operator">::</span>insert<span class="operator">(</span>authorX<span class="operator">);</span>
+   qAssert<span class="operator">(</span>qx<span class="operator">::</span>dao<span class="operator">::</span>count<span class="operator">&lt;</span>author<span class="operator">&gt;() ==</span><span class="int"> 3</span><span class="operator">);</span><span class="comment">
+
+   // Clone author n°2 : 'author_id_2'
+</span>   author_ptr author_clone<span class="operator"> =</span> qx<span class="operator">::</span>clone<span class="operator">(*</span> author_2<span class="operator">);</span>
+   qAssert<span class="operator">(</span>author_clone<span class="operator">-&gt;</span>m_id<span class="operator"> ==</span><span class="string"> "author_id_2"</span><span class="operator">);</span>
+   qAssert<span class="operator">(</span>author_clone<span class="operator">-&gt;</span>m_sex<span class="operator"> ==</span> author<span class="operator">::</span>female<span class="operator">);</span><span class="comment">
+
+   // Create a query to fetch only female author : 'author_id_2' and 'author_id_3'
+</span>   qx<span class="operator">::</span>QxSqlQuery query<span class="operator">(</span><span class="string">"WHERE author.sex = :sex"</span><span class="operator">);</span>
+   query<span class="operator">.</span>bind<span class="operator">(</span><span class="string">":sex"</span><span class="operator">,</span> author<span class="operator">::</span>female<span class="operator">);</span>
+
+   list_author list_of_female_author<span class="operator">;</span>
+   daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<span class="operator">::</span>fetch_by_query<span class="operator">(</span>query<span class="operator">,</span> list_of_female_author<span class="operator">);</span>
+   qAssert<span class="operator">(</span>list_of_female_author<span class="operator">.</span>count<span class="operator">() ==</span><span class="int"> 2</span><span class="operator">);</span><span class="comment">
+
+   // Dump list of female author (xml serialization)
+</span>   qx<span class="operator">::</span>dump<span class="operator">(</span>list_of_female_author<span class="operator">);</span><span class="comment">
+
+   // Create 3 categories
+</span>   category_ptr category_1<span class="operator"> =</span> category_ptr<span class="operator">(</span><span class="keyword">new</span> category<span class="operator">());</span>
+   category_ptr category_2<span class="operator"> =</span> category_ptr<span class="operator">(</span><span class="keyword">new</span> category<span class="operator">());</span>
+   category_ptr category_3<span class="operator"> =</span> category_ptr<span class="operator">(</span><span class="keyword">new</span> category<span class="operator">());</span>
+
+   category_1<span class="operator">-&gt;</span>m_name<span class="operator"> =</span><span class="string"> "category_1"</span><span class="operator">;</span> category_1<span class="operator">-&gt;</span>m_desc<span class="operator"> =</span><span class="string"> "desc_1"</span><span class="operator">;</span>
+   category_2<span class="operator">-&gt;</span>m_name<span class="operator"> =</span><span class="string"> "category_2"</span><span class="operator">;</span> category_2<span class="operator">-&gt;</span>m_desc<span class="operator"> =</span><span class="string"> "desc_2"</span><span class="operator">;</span>
+   category_3<span class="operator">-&gt;</span>m_name<span class="operator"> =</span><span class="string"> "category_3"</span><span class="operator">;</span> category_3<span class="operator">-&gt;</span>m_desc<span class="operator"> =</span><span class="string"> "desc_3"</span><span class="operator">;
+
+   {</span><span class="comment"> // Create a scope to destroy temporary connexion to database
+
+   // Open a transaction to database
+</span>   QSqlDatabase db<span class="operator"> =</span> qx<span class="operator">::</span>QxSqlDatabase<span class="operator">::</span>getDatabase<span class="operator">();</span><span class="type">
+   bool</span> bCommit<span class="operator"> =</span> db<span class="operator">.</span>transaction<span class="operator">();</span><span class="comment">
+
+   // Insert 3 categories into database, use 'db' parameter for the transaction
+</span>   daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<span class="operator">::</span>insert<span class="operator">(</span>category_1<span class="operator">, (&amp;</span> db<span class="operator">));</span>    bCommit<span class="operator"> = (</span>bCommit<span class="operator"> &amp;&amp; !</span> daoError<span class="operator">.</span>isValid<span class="operator">());</span>
+   daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<span class="operator">::</span>insert<span class="operator">(</span>category_2<span class="operator">, (&amp;</span> db<span class="operator">));</span>    bCommit<span class="operator"> = (</span>bCommit<span class="operator"> &amp;&amp; !</span> daoError<span class="operator">.</span>isValid<span class="operator">());</span>
+   daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<span class="operator">::</span>insert<span class="operator">(</span>category_3<span class="operator">, (&amp;</span> db<span class="operator">));</span>    bCommit<span class="operator"> = (</span>bCommit<span class="operator"> &amp;&amp; !</span> daoError<span class="operator">.</span>isValid<span class="operator">());</span>
+
+   qAssert<span class="operator">(</span>bCommit<span class="operator">);</span>
+   qAssert<span class="operator">(</span>category_1<span class="operator">-&gt;</span>m_id<span class="operator"> !=</span><span class="int"> 0</span><span class="operator">);</span>
+   qAssert<span class="operator">(</span>category_2<span class="operator">-&gt;</span>m_id<span class="operator"> !=</span><span class="int"> 0</span><span class="operator">);</span>
+   qAssert<span class="operator">(</span>category_3<span class="operator">-&gt;</span>m_id<span class="operator"> !=</span><span class="int"> 0</span><span class="operator">);</span><span class="comment">
+
+   // Terminate transaction =&gt; commit or rollback if there is error
+</span><span class="flow">   if</span><span class="operator"> (</span>bCommit<span class="operator">) {</span> db<span class="operator">.</span>commit<span class="operator">(); }</span><span class="flow">
+   else</span><span class="operator"> {</span> db<span class="operator">.</span>rollback<span class="operator">(); }
+
+   }</span><span class="comment"> // End of scope : 'db' is destroyed
+
+   // Create a blog with the class name (factory)
+</span>   boost<span class="operator">::</span>any blog_any<span class="operator"> =</span> qx<span class="operator">::</span>create<span class="operator">(</span><span class="string">"blog"</span><span class="operator">);</span>
+   blog_ptr blog_1<span class="operator"> =</span> boost<span class="operator">::</span>any_cast<span class="operator">&lt;</span>blog_ptr<span class="operator">&gt;(</span>blog_any<span class="operator">);</span>
+   blog_1<span class="operator">-&gt;</span>m_text<span class="operator"> =</span><span class="string"> "blog_text_1"</span><span class="operator">;</span>
+   blog_1<span class="operator">-&gt;</span>m_dt_creation<span class="operator"> =</span> QDateTime<span class="operator">::</span>currentDateTime<span class="operator">();</span>
+   blog_1<span class="operator">-&gt;</span>m_author<span class="operator"> =</span> author_1<span class="operator">;</span><span class="comment">
+
+   // Insert 'blog_1' into database with 'save()' method
+</span>   daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<span class="operator">::</span>save<span class="operator">(</span>blog_1<span class="operator">);</span><span class="comment">
+
+   // Modify 'blog_1' properties and save into database
+</span>   blog_1<span class="operator">-&gt;</span>m_text<span class="operator"> =</span><span class="string"> "update blog_text_1"</span><span class="operator">;</span>
+   blog_1<span class="operator">-&gt;</span>m_author<span class="operator"> =</span> author_2<span class="operator">;</span>
+   daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<span class="operator">::</span>save<span class="operator">(</span>blog_1<span class="operator">);</span><span class="comment">
+
+   // Add 2 comments to 'blog_1'
+</span>   comment_ptr comment_1<span class="operator">;</span> comment_1<span class="operator">.</span>reset<span class="operator">(</span><span class="keyword">new</span> comment<span class="operator">());</span>
+   comment_ptr comment_2<span class="operator">;</span> comment_2<span class="operator">.</span>reset<span class="operator">(</span><span class="keyword">new</span> comment<span class="operator">());</span>
+
+   comment_1<span class="operator">-&gt;</span>m_text<span class="operator"> =</span><span class="string"> "comment_1 text"</span><span class="operator">;</span>
+   comment_1<span class="operator">-&gt;</span>m_dt_create<span class="operator"> =</span> QDateTime<span class="operator">::</span>currentDateTime<span class="operator">();</span>
+   comment_1<span class="operator">-&gt;</span>m_blog<span class="operator"> =</span> blog_1<span class="operator">;</span>
+   comment_2<span class="operator">-&gt;</span>m_text<span class="operator"> =</span><span class="string"> "comment_2 text"</span><span class="operator">;</span>
+   comment_2<span class="operator">-&gt;</span>m_dt_create<span class="operator"> =</span> QDateTime<span class="operator">::</span>currentDateTime<span class="operator">();</span>
+   comment_2<span class="operator">-&gt;</span>m_blog<span class="operator"> =</span> blog_1<span class="operator">;</span>
+
+   daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<span class="operator">::</span>insert<span class="operator">(</span>comment_1<span class="operator">);</span>
+   daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<span class="operator">::</span>insert<span class="operator">(</span>comment_2<span class="operator">);</span>
+   qAssert<span class="operator">(</span>qx<span class="operator">::</span>dao<span class="operator">::</span>count<span class="operator">&lt;</span>comment<span class="operator">&gt;() ==</span><span class="int"> 2</span><span class="operator">);</span><span class="comment">
+
+   // Add 2 categories to 'blog_1' =&gt; must insert into extra-table 'category_blog'
+</span>   blog_1<span class="operator">-&gt;</span>m_categoryX<span class="operator">.</span>insert<span class="operator">(</span>category_1<span class="operator">-&gt;</span>m_id<span class="operator">,</span> category_1<span class="operator">);</span>
+   blog_1<span class="operator">-&gt;</span>m_categoryX<span class="operator">.</span>insert<span class="operator">(</span>category_3<span class="operator">-&gt;</span>m_id<span class="operator">,</span> category_3<span class="operator">);</span>
+   daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<span class="operator">::</span>save_with_relation<span class="operator">(</span><span class="string">"list_category"</span><span class="operator">,</span> blog_1<span class="operator">);</span><span class="comment">
+
+   // Fetch blog into a new variable with all relation : 'author', 'comment' and 'category'
+</span>   blog_ptr blog_tmp<span class="operator">;</span> blog_tmp<span class="operator">.</span>reset<span class="operator">(</span><span class="keyword">new</span> blog<span class="operator">());</span>
+   blog_tmp<span class="operator">-&gt;</span>m_id<span class="operator"> =</span> blog_1<span class="operator">-&gt;</span>m_id<span class="operator">;</span>
+   daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<span class="operator">::</span>fetch_by_id_with_all_relation<span class="operator">(</span>blog_tmp<span class="operator">);</span>
+
+   qAssert<span class="operator">(</span>blog_tmp<span class="operator">-&gt;</span>m_commentX<span class="operator">.</span>count<span class="operator">() ==</span><span class="int"> 2</span><span class="operator">);</span>
+   qAssert<span class="operator">(</span>blog_tmp<span class="operator">-&gt;</span>m_categoryX<span class="operator">.</span>count<span class="operator">() ==</span><span class="int"> 2</span><span class="operator">);</span>
+   qAssert<span class="operator">(</span>blog_tmp<span class="operator">-&gt;</span>m_text<span class="operator"> ==</span><span class="string"> "update blog_text_1"</span><span class="operator">);</span>
+   qAssert<span class="operator">(</span>blog_tmp<span class="operator">-&gt;</span>m_author<span class="operator"> &amp;&amp;</span> blog_tmp<span class="operator">-&gt;</span>m_author<span class="operator">-&gt;</span>m_id<span class="operator"> ==</span><span class="string"> "author_id_2"</span><span class="operator">);</span><span class="comment">
+
+   // Dump 'blog_tmp' result from database (xml serialization)
+</span>   qx<span class="operator">::</span>dump<span class="operator">(</span>blog_tmp<span class="operator">);</span><span class="comment">
+
+   // Call 'age()' method with class name and method name (reflection)
+</span>   qx_bool bInvokeOk<span class="operator"> =</span> qx<span class="operator">::</span>QxClassX<span class="operator">::</span>invoke<span class="operator">(</span><span class="string">"author"</span><span class="operator">,</span><span class="string"> "age"</span><span class="operator">,</span> author_1<span class="operator">);</span>
+   qAssert<span class="operator">(</span>bInvokeOk<span class="operator">);</span><span class="flow">
+
+   return</span><span class="int"> 0</span><span class="operator">;
+}</span>
+</pre>
+        </td></tr></tbody></table>
+        <br>
+        <a href="./resource/qxBlog.main.exec.result.txt"><i>Cliquez ici pour afficher les traces après exécution du programme <b>qxBlog</b>...</i></a>
+        <br><br>
+        <i>Remarque importante</i> : <b>QxOrm</b> n'a pas pour objectif de 'cacher' le code sql (par
+        défaut toutes les requêtes sont tracées). Même si <b>QxOrm</b> simplifie
+        énormément le code C++ et optimise ainsi les temps de développement et
+        de maintenance d'un produit, il est très important d'avoir de bonnes
+        connaissances sql.<br>
+        <b>QxOrm</b> ne résoudra pas toutes les problématiques liées aux bases de
+        données, il sera alors nécessaire d'utiliser directement le module
+        <a href="http://doc.trolltech.com/4.6/sql-programming.html" target="_blank"><i>QtSql</i></a> de Qt en écrivant soi-même les requêtes sql ou les procédures
+        stockées.<br>
+        Enfin, il faut être extrêmement vigileant au nombre de requêtes
+        effectuées entre le programme C++ et la base de données : un trop grand
+        nombre d'appels à la base de données peut écrouler les performances
+        d'une application. Il est important de maîtriser la notion de
+        <i>relation entre les classes</i> (voir le syndrôme <i>n+1</i> que l'on peut
+        rencontrer avec <i>Hibernate</i> ou tout autre ORM).<br>
+        <br>
+        <i>Autre remarque</i> : Il est important de signaler que les méthodes <i>void
+        register_class(...)</i> liées à vos classes sont appelées automatiquement
+        et lorsque c'est nécessaire par la librairie <b>QxOrm</b>. <br>
+        Par rapport à d'autres librairies qui nécessitent un appel pour
+        enregistrer les types de chaque classe, <b>QxOrm</b> permet un enregistrement
+        automatique des classes, ce qui simplifie encore un peu plus le
+        développement d'applications.<br>
+        <br>
+        <br>
+        <a name="tuto_11"><u><font color="#100D5A">11- Annexe - exemple de relation <i>one-to-one</i>
+        avec la classe <i>person</i> :</font></u></a><br>
+        <br>
+        Ajoutons à notre projet la classe <i>person</i> (fichiers <i>person.h</i> et
+        <i>person.cpp</i>) : 1 <i>person</i> correspond à 1 <i>author</i> dans la base de
+        données.<br> Ils partagent donc le même identifiant, c'est ce qu'on
+        appelle une relation de type <b><i>one-to-one</i></b>. <br>
+        Voici les 2 tables de notre base de données (nous reprenons la table
+        <i>author</i> vue précédemment) : <br><br>
+        <img alt="qxBlog.table.person" src="resource/qxBlog.table.person.jpg"
+        width="279" height="118"><br>
+        <br>
+        <i>Remarque</i> : Nous ajoutons à la table <i>person</i> le champ <i>mother_id</i>. Nous pouvons
+        ainsi connaître la mère (de type <i>person</i>) associée à 1 <i>person</i>, ce
+        qui correspond à une relation <i>many-to-one</i> sur la même table <i>person</i>.
+        De plus, si 1 <i>person</i> est une mère, nous pouvons connaître la liste de
+        ses enfants (de type <i>person</i>), ce qui correspond à une relation
+        <i>one-to-many</i> sur la même table <i>person</i>. </p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br><hr style="width: 80%" align="center" size="1" color="#100D5A">
+<table border="0" style="width: 80%" align="center">
+  <col><col>
+  <tbody>
+    <tr>
+      <td align="left" valign="middle"><img alt="QxOrm"
+        src="./resource/logo_qxorm_small.jpg" width="168" height="40"></td>
+      <td align="right" valign="middle"><font size="2">Copyright © 2010 QxOrm France</font> </td>
+    </tr>
+  </tbody>
+</table>
+</body>
+</html>

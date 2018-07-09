@@ -1,0 +1,25 @@
+<std.vector-boost.shared_ptr-drug-- class_id="0" tracking_level="0" version="0">
+	<count>3</count>
+	<item_version>1</item_version>
+	<item class_id="1" tracking_level="0" version="1">
+		<px class_id="2" tracking_level="1" version="1" object_id="_0">
+			<id>1</id>
+			<name class_id="3" tracking_level="0" version="0">name1</name>
+			<desc>desc1</desc>
+		</px>
+	</item>
+	<item>
+		<px class_id_reference="2" object_id="_1">
+			<id>2</id>
+			<name>name2 modified</name>
+			<desc>desc2 modified</desc>
+		</px>
+	</item>
+	<item>
+		<px class_id_reference="2" object_id="_2">
+			<id>3</id>
+			<name>name3</name>
+			<desc>desc3</desc>
+		</px>
+	</item>
+</std.vector-boost.shared_ptr-drug-->

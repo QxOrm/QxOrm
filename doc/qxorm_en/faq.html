@@ -1,0 +1,474 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+  <title>QxOrm - C++ Object Relational Mapping library</title>
+  <meta name="generator" content="Amaya, see http://www.w3.org/Amaya/">
+  <style type="text/css">
+   .comment { color: #008000; font-style: italic; }
+   .pre { color: #000099; }
+   .string { color: #DF0101; }
+   .char { color: #009900; }
+   .float { color: #996600; }
+   .int { color: #999900; }
+   .bool { color: #000000; font-weight: bold; }
+   .type { color: #FF6633; }
+   .flow { color: #FF0000; }
+   .keyword { color: #990000; }
+   .operator { color: #663300; font-weight: bold; }
+   .operator { color: #663300; font-weight: bold; }
+  </style>
+</head>
+<body>
+<table border="0" style="width: 80%" align="center">
+  <col><col>
+  <tbody>
+    <tr>
+      <td><a href="./home.html"><img alt="QxOrm"
+        src="./resource/logo_qxorm.jpg" width="256" align="left" height="61"
+        border="0"></a></td>
+      <td><img alt="C++" src="./resource/logo_cpp.jpg" width="50" align="right"
+        height="50"></td>
+    </tr>
+  </tbody>
+</table>
+<hr style="width: 80%" align="center" size="1" color="#100D5A">
+<table border="0" style="width: 80%" align="center">
+  <col><col><col><col><col><col>
+  <tbody>
+    <tr>
+      <td align="center"><a href="./home.html"><img alt="Home"
+        src="./resource/link_home.jpg" width="120" height="35"
+        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
+      <td align="center"><a href="./download.html"><img alt="Download"
+        src="./resource/link_download.jpg" width="120" height="35"
+        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
+      <td align="center"><a href="./quick_sample.html"><img alt="Quick sample"
+        src="./resource/link_quick_sample.jpg" width="120" height="35"
+        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
+      <td align="center"><a href="./tutorial.html"><img alt="Tutorial"
+        src="./resource/link_tutorial.jpg" width="120" height="35"
+        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
+      <td align="center"><a href="./faq.html"><img alt="Faq"
+        src="./resource/link_faq.jpg" width="120" height="35"
+        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
+      <td align="center"><a href="./link.html"><img alt="Link"
+        src="./resource/link_link.jpg" width="120" height="35"
+        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
+    </tr>
+  </tbody>
+</table>
+<hr style="width: 80%" align="center" size="1" color="#100D5A"><br>
+<table border="1" frame="vsides" rules="cols" style="width: 80%" align="center" cellpadding="6" bgcolor="#F2F2F4">
+  <col>
+  <tbody>
+    <tr>
+      <td align="justify">
+      <ul><li><a href="#faq_10">Qu'est-ce que QxOrm ?</a><br>
+      </li><li><a href="#faq_20">Comment contacter QxOrm pour indiquer un bug ou poser une question ?</a><br>
+      </li><li><a href="#faq_30">Quelle licence pour mon projet : GNU/GPLv3 (gratuite) ou commerciale (payante) ?</a><br>
+      </li><li><a href="#faq_40">Quelles sont les bases de données prises en compte par QxOrm ?</a><br>
+      </li><li><a href="#faq_50">Pourquoi QxOrm est dépendant de 2 librairies : boost et Qt ?</a><br>
+      </li><li><a href="#faq_60">Pourquoi QxOrm nécessite un en-tête précompilé (precompiled header) pour pouvoir être utilisé ?</a><br>
+      </li><li><a href="#faq_70">Est-ce qu'il est possible d'accélérer les temps de compilation de mon projet ?</a><br>
+      </li><li><a href="#faq_80">Pourquoi QxOrm fournit un nouveau type de container <i>qx::QxCollection&lt;Key, Value&gt;</i> ?</a><br>
+      </li><li><a href="#faq_90">Est-ce qu'il faut utiliser <i>QString</i> ou <i>std::string</i> ?</a><br>
+      </li><li><a href="#faq_95">Est-ce qu'il faut utiliser les pointeurs intelligents <i>smart-pointer</i> ?</a><br>
+      </li><li><a href="#faq_100">La clé primaire est de type <i>long</i> par défaut. Est-ce qu'il est possible d'utiliser une clé de type <i>QString</i> ou autre ?</a><br>
+      </li><li><a href="#faq_110">Comment activer/désactiver le module <i>QxMemLeak</i> pour la détection automatique des fuites mémoires ?</a><br>
+      </li></ul>
+      <br>
+      <a name="faq_10"><u><b>Qu'est-ce que QxOrm ?</b></u></a><br><br>
+      <table border="0" style="width: 100%" align="center">
+       <col>
+       <col>
+       <tbody>
+         <tr>
+           <td valign="middle" width="30"></td>
+           <td align="justify">
+           <b>QxOrm France</b> est une micro-entreprise créée avec le statut <b>auto-entrepreneur</b> par <b>Lionel Marty, Ingénieur en développement logiciel</b> depuis 7 ans.<br>
+           <b>QxOrm est une librairie C++ de gestion de données</b>.<br>
+           <b>QxOrm</b> fournit de nombreuses fonctionnalités à partir d'une simple <i>fonction de paramétrage</i> :
+           <ul>
+             <li><font style="background-color:yellow"><b>persistance</b></font> : communication avec de nombreuses bases de données (avec support des relations <i>1-1</i>, <i>1-n</i>, <i>n-1</i> et <i>n-n</i>)
+             </li><li><font style="background-color:yellow"><b>serialization</b></font> des données (flux binaire et xml)
+             </li><li>moteur de <font style="background-color:yellow"><b>reflection</b></font> pour accéder aux classes, attributs et invoquer des méthodes
+             </li>
+           </ul>
+           </td>
+         </tr>
+       </tbody>
+      </table>
+      <br>
+      <a name="faq_20"><u><b>Comment contacter QxOrm pour indiquer un bug ou poser une question ?</b></u></a><br><br>
+      <table border="0" style="width: 100%" align="center">
+       <col>
+       <col>
+       <tbody>
+         <tr>
+           <td valign="middle" width="30"></td>
+           <td align="justify">
+           Si vous trouvez un bug ou si vous avez une question concernant le fonctionnement de la librairie <b>QxOrm</b>, 
+           vous pouvez envoyer un mail à : <u><i>support@qxorm.com</i></u>.<br>
+           <b>QxOrm</b> est également disponible sur le site <a href="http://sourceforge.net/projects/qxorm/files/" target="_blank">SourceForge</a> : plate-forme d'hébergement de projets de développements de logiciels libres.<br>
+           Un forum dédié à <b>QxOrm</b> est disponible <a href="http://sourceforge.net/apps/phpbb/qxorm/" target="_blank">en cliquant ici</a>.
+           </td>
+         </tr>
+       </tbody>
+      </table>
+      <br><br>
+      <a name="faq_30"><u><b>Quelle licence pour mon projet : GNU/GPLv3 (gratuite) ou commerciale (payante) ?</b></u></a><br><br>
+      <table border="0" style="width: 100%" align="center">
+       <col>
+       <col>
+       <tbody>
+         <tr>
+           <td valign="middle" width="30"></td>
+           <td align="justify">
+           Pour savoir quelle licence correspond le mieux à votre projet, vous pouvez nous contacter à l'adresse suivante : <u><i>contact@qxorm.com</i></u><br>
+           La licence open-source de QxOrm permet de distribuer votre application gratuitement sous la condition que votre projet soit également open-source.<br>
+           Vous devez donc fournir les sources de votre application et indiquer les éventuelles modifications apportées à la librairie QxOrm.<br>
+           La licence commerciale de QxOrm permet de distribuer votre application sans restriction.
+           </td>
+         </tr>
+       </tbody>
+      </table>
+      <br><br>
+      <a name="faq_40"><u><b>Quelles sont les bases de données prises en compte par QxOrm ?</b></u></a><br><br>
+      <table border="0" style="width: 100%" align="center">
+       <col>
+       <col>
+       <tbody>
+         <tr>
+           <td valign="middle" width="30"></td>
+           <td align="justify">
+           <b>QxOrm</b> utilise le moteur <a href="http://doc.trolltech.com/4.6/sql-programming.html" target="_blank"><i>QtSql</i></a> de <b>Qt</b> basé sur un système de plugin.<br>
+           Une liste détaillée des bases de données supportées est disponible sur le site de Qt <a href="http://doc.trolltech.com/4.6/sql-driver.html" target="_blank">en cliquant ici</a>.<br>
+           Le plugin <i>ODBC</i> (<i>QODBC</i>) assure un compatibilité avec de nombreuses bases de données.<br>
+           Pour des performances optimales, il est possible d'utiliser un plugin spécifique à une base de données :
+           <ul><li><i>QMYSQL</i> : MySQL
+           </li><li><i>QPSQL</i> : PostgreSQL (versions 7.3 and above)
+           </li><li><i>QOCI</i> : Oracle Call Interface Driver
+           </li><li><i>QSQLITE</i> : SQLite version 3
+           </li><li><i>QDB2</i> : IBM DB2 (version 7.1 and above)
+           </li><li><i>QIBASE</i> : Borland InterBase
+           </li><li><i>QTDS</i> : Sybase Adaptive Server
+           </li></ul>
+           </td>
+         </tr>
+       </tbody>
+      </table>
+      <br>
+      <a name="faq_50"><u><b>Pourquoi QxOrm est dépendant de 2 librairies : boost et Qt ?</b></u></a><br><br>
+      <table border="0" style="width: 100%" align="center">
+       <col>
+       <col>
+       <tbody>
+         <tr>
+           <td valign="middle" width="30"></td>
+           <td align="justify">
+           <b>QxOrm</b> utilise de nombreuses fonctionnalités disponibles dans les excellentes librairies <b>boost</b> et <b>Qt</b>.<br>
+           De plus, ces 2 librairies sont utilisées dans de nombreux projets à la fois professionnels et open-source.<br>
+           Il existe un grand nombre de forums, de tutoriaux, et toute une communauté pour répondre à toutes les problématiques que vous pourriez rencontrer.<br>
+           L'objectif de <b>QxOrm</b> n'est pas de redévelopper des fonctionnalités qui existent déjà mais de fournir un outil performant d'accès aux bases de données 
+           comme il en existe dans d'autres langages (<i>Java</i> avec <i>Hibernate</i>, <i>.Net</i> avec <i>NHibernate</i>, <i>Ruby</i>, <i>Python</i>, etc...).<br><br>
+           <table border="0" style="width: 100%" align="center">
+             <col>
+             <col>
+             <tbody>
+               <tr>
+                 <td valign="middle" width="161" align="center"><a
+                   href="http://www.boost.org/" target="_blank"><img alt="Boost"
+                   src="./resource/logo_boost.jpg" width="161"
+                 height="50" border="0"></a></td>
+                 <td align="justify"><b>boost</b> : de nombreux modules de la
+                   librairie boost font partis de la nouvelle norme C++.<br>
+                   C'est une librairie reconnue pour sa qualité, son code 'C++
+                   moderne', sa documentation, sa portabilité, etc...<br>
+                   QxOrm utilise les fonctionnalités suivantes de boost :
+                   <i>smart_pointer, serialization, type_traits,
+                   multi_index_container, unordered_container, any, tuple,
+                   foreach, function.</i><br>
+                   Il est conseillé d'installer et d'utiliser la dernière version
+                   de boost disponible à l'adresse suivante : <a
+                   href="http://www.boost.org/"
+                   target="_blank">http://www.boost.org/</a></td>
+               </tr>
+             </tbody>
+           </table>
+           <p></p>
+           <table border="0" style="width: 100%" align="center">
+             <col>
+             <col>
+             <tbody>
+               <tr>
+                 <td valign="middle" width="161" align="center"><a
+                   href="http://qt.nokia.com/" target="_blank"><img alt="Qt"
+                   src="./resource/logo_qt.jpg" width="42" height="50" border="0"></a></td>
+                 <td align="justify"><b>Qt</b> : bibliothèque complète : IHM
+                   (<i>QtGui</i>), réseau (<i>QtNetwork</i>), XML (<i>QtXml</i>), base de données
+                   (<i>QtSql</i>), etc...<br>
+                   La documentation est excellente et le code C++ écrit à partir
+                   de cette bibliothèque est à la fois performant et simple de
+                   compréhension.<br>
+                   Depuis le rachat par Nokia et sa nouvelle license LGPL, Qt est
+                   sans contexte la bibliothèque phare du moment.<br>
+                   QxOrm est compatible avec les principaux objets définis par Qt
+                   : <i>QObject, QString, QDate, QTime, QDateTime, QList, QHash,
+                   QSharedPointer, QScopedPointer, etc...</i><br>
+                   Il est conseillé d'installer et d'utiliser la dernière version
+                   de Qt disponible à l'adresse suivante : <a
+                   href="http://qt.nokia.com/"
+                   target="_blank">http://qt.nokia.com/</a></td>
+               </tr>
+             </tbody>
+           </table>
+           </td>
+         </tr>
+       </tbody>
+      </table>
+      <br><br>
+      <a name="faq_60"><u><b>Pourquoi QxOrm nécessite un en-tête précompilé (precompiled header) pour pouvoir être utilisé ?</b></u></a><br><br>
+      <table border="0" style="width: 100%" align="center">
+       <col>
+       <col>
+       <tbody>
+         <tr>
+           <td valign="middle" width="30"></td>
+           <td align="justify">
+           <b>QxOrm</b> utilise les techniques de <b>méta-programmation C++</b> pour fournir une grande partie de ses fonctionnalités.<br>
+           Vous n'avez pas besoin de savoir utiliser la méta-programmation pour travailler avec la librairie QxOrm.<br>
+           En effet, QxOrm se veut simple d'utilisation et un code C++ écrit avec Qt et QxOrm est facile à lire, donc facile à développer et à maintenir.<br><br>
+           Cependant, la méta-programmation est couteuse en temps de compilation.<br>
+           En utilisant un fichier <i>precompiled.h</i>, votre projet se compilera beaucoup plus vite.<br>
+           Un autre avantage (et non des moindres) est que le fichier
+           <i>QxOrm.h</i> regroupe les fonctionnalités de base des librairies
+           boost et Qt. <br>
+           Il n'est donc plus nécessaire d'écrire <i>#include
+           &lt;QtCore/QString.h&gt;</i> pour utiliser la classe QString de Qt par
+           exemple. <br>
+           De même, pour utiliser les pointeurs intelligents de boost, il n'est
+           plus nécessaire d'écrire <i>#include
+           &lt;boost/shared_ptr.hpp&gt;</i>.
+           </td>
+         </tr>
+       </tbody>
+      </table>
+      <br><br>
+      <a name="faq_70"><u><b>Est-ce qu'il est possible d'accélérer les temps de compilation de mon projet ?</b></u></a><br><br>
+      <table border="0" style="width: 100%" align="center">
+       <col>
+       <col>
+       <tbody>
+         <tr>
+           <td valign="middle" width="30"></td>
+           <td align="justify">
+           Oui, si la <i>serialization</i> de vos données au format xml n'est pas utilisée dans votre projet, vous pouvez désactiver cette fonctionnalité.<br>
+           Les temps de compilation seront alors réduits mais vous n'aurez plus accès au namespace <i>qx::serialization:xml</i>.<br>
+           Pour désactiver la <i>serialization xml</i>, il faut ouvrir le fichier <i>QxConfig.h</i> et modifier la constante <b><i>_QX_SERIALIZE_XML</i></b>.<br>
+           Une recompilation de la librairie QxOrm est nécessaire pour prendre en compte cette modification.<br><br>
+           Une autre possibilité est d'utiliser les classes <i>polymorphiques</i> de la librairie <a href="http://www.boost.org/doc/libs/1_42_0/libs/serialization/doc/index.html" target="_blank"><i>boost::serialization</i></a> (à la place des classes <i>template</i>).<br>
+           Cette fonctionnalité réduit les temps de compilation ainsi que la taille de l'éxecutable généré.<br>
+           En contre-partie, la vitesse d'exécution de votre programme sera réduite puisqu'une partie du travail effectué lors de la compilation devra être réalisé à l'exécution de votre application.<br>
+           Pour activer cette fonctionnalité dans <b>QxOrm</b>, vous devez modifier la constante <b><i>_QX_SERIALIZE_POLYMORPHIC</i></b> du fichier <i>QxConfig.h</i>.<br>
+           <b>Attention</b> : les fonctions de <i>serialization</i> seront alors accessibles depuis les <i>namespace</i> suivants : <i>qx::serialization::polymorphic_binary</i>, <i>qx::serialization::polymorphic_text</i> et <i>qx::serialization::polymorphic_xml</i>.<br>
+           Une recompilation de la librairie QxOrm est nécessaire pour prendre en compte cette modification.
+           </td>
+         </tr>
+       </tbody>
+      </table>
+      <br><br>
+      <a name="faq_80"><u><b>Pourquoi QxOrm fournit un nouveau type de container <i>qx::QxCollection&lt;Key, Value&gt;</i> ?</b></u></a><br><br>
+      <table border="0" style="width: 100%" align="center">
+       <col>
+       <col>
+       <tbody>
+         <tr>
+           <td valign="middle" width="30"></td>
+           <td align="justify">
+           Il existe de nombreux <i>container</i> dans les librairies <b>stl</b>, <b>boost</b> et <b>Qt</b>.<br>
+           Il est donc légitime de se poser cette question : à quoi sert <i>qx::QxCollection&lt;Key, Value&gt;</i> ?<br>
+           <i>qx::QxCollection&lt;Key, Value&gt;</i> est un nouveau <i>container</i> (basé sur l'excellente librairie <a href="http://www.boost.org/doc/libs/1_42_0/libs/multi_index/doc/index.html" target="_blank"><i>boost::multi_index_container</i></a>) qui possède les fonctionnalités suivantes :
+           <ul><li>conserve l'ordre d'insertion des éléments dans la liste
+           </li><li>accès rapide à un élément par son index : équivaut à <i>std::vector&lt;T&gt;</i> ou <i>QList&lt;T&gt;</i> par exemple
+           </li><li>accès rapide à un élément par une clé (<i>hash-map</i>) : équivaut à <i>QHash&lt;Key, Value&gt;</i> ou <i>boost::unordered_map&lt;Key, Value&gt;</i> par exemple
+           </li><li>fonctions de tri sur le type <i>Key</i> et sur le type <i>Value</i>
+           </li></ul>
+           <b>Remarque :</b>
+           <i>qx::QxCollection&lt;Key, Value&gt;</i> est compatible avec la macro <i>foreach</i> fournie par la librairie <b>Qt</b> ainsi que par la macro <a href="http://www.boost.org/doc/libs/1_42_0/doc/html/foreach.html" target="_blank"><i>BOOST_FOREACH</i></a> fournie par la librairie <b>boost</b>.<br>
+           Cependant, chaque élément renvoyé par ces 2 macros correspond à un objet de type <i>std::pair&lt;Key, Value&gt;</i>.<br>
+           Pour obtenir un résultat 'plus naturel' et plus lisible, il est conseillé d'utiliser la macro <i>_foreach</i> : cette macro utilise <i>BOOST_FOREACH</i> pour tous les <i>container</i> sauf pour <i>qx::QxCollection&lt;Key, Value&gt;</i>.<br>
+           Dans ce cas, l'élément renvoyé correspond au type <i>Value</i> (voir par la suite l'exemple d'utilisation).<br>
+           La macro <i>_foreach</i> est donc compatible avec tous les <i>container</i> (<b>stl</b>, <b>Qt</b>, <b>boost</b>, etc...) puisqu'elle utilise la macro <i>BOOST_FOREACH</i>.<br><br>
+           <b>Autre Remarque :</b>
+           <i>qx::QxCollection&lt;Key, Value&gt;</i> est particulièrement adapté pour recevoir des données issues d'une base de données.<br>
+           En effet, ces données peuvent être triées (en utilisant <i>ORDER BY</i> dans une requête sql par exemple), il est donc important de conserver l'ordre d'insertion des éléments dans la liste.<br>
+           De plus, chaque donnée issue d'une base de données possède un identifiant unique. Il est donc intéressant de pouvoir accéder à un élément en fonction de cet identifiant unique de manière extrèmement rapide (<i>hash-map</i>).<br><br>
+           <b>Exemple d'utilisation :</b><br>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="comment">/* definition of drug class with 3 properties : code, name, description */</span><span class="keyword">
+class</span> drug<span class="operator"> {</span><span class="keyword"> public</span><span class="operator">:</span> QString code<span class="operator">;</span> QString name<span class="operator">;</span> QString desc<span class="operator">; };</span><span class="comment">
+
+/* smart pointer of drug */</span><span class="keyword">
+typedef</span> boost<span class="operator">::</span>shared_ptr<span class="operator">&lt;</span>drug<span class="operator">&gt;</span> drug_ptr<span class="operator">;</span><span class="comment">
+
+/* collection of drugs by code */</span>
+qx<span class="operator">::</span>QxCollection<span class="operator">&lt;</span>QString<span class="operator">,</span> drug_ptr<span class="operator">&gt;</span> lstDrugs<span class="operator">;</span><span class="comment">
+
+/* create 3 new drugs */</span>
+drug_ptr d1<span class="operator">;</span> d1<span class="operator">.</span>reset<span class="operator">(</span><span class="keyword">new</span> drug<span class="operator">());</span> d1<span class="operator">-&gt;</span>code<span class="operator"> =</span><span class="string"> "code1"</span><span class="operator">;</span> d1<span class="operator">-&gt;</span>name<span class="operator"> =</span><span class="string"> "name1"</span><span class="operator">;</span> d1<span class="operator">-&gt;</span>desc<span class="operator"> =</span><span class="string"> "desc1"</span><span class="operator">;</span>
+drug_ptr d2<span class="operator">;</span> d2<span class="operator">.</span>reset<span class="operator">(</span><span class="keyword">new</span> drug<span class="operator">());</span> d2<span class="operator">-&gt;</span>code<span class="operator"> =</span><span class="string"> "code2"</span><span class="operator">;</span> d2<span class="operator">-&gt;</span>name<span class="operator"> =</span><span class="string"> "name2"</span><span class="operator">;</span> d2<span class="operator">-&gt;</span>desc<span class="operator"> =</span><span class="string"> "desc2"</span><span class="operator">;</span>
+drug_ptr d3<span class="operator">;</span> d3<span class="operator">.</span>reset<span class="operator">(</span><span class="keyword">new</span> drug<span class="operator">());</span> d3<span class="operator">-&gt;</span>code<span class="operator"> =</span><span class="string"> "code3"</span><span class="operator">;</span> d3<span class="operator">-&gt;</span>name<span class="operator"> =</span><span class="string"> "name3"</span><span class="operator">;</span> d3<span class="operator">-&gt;</span>desc<span class="operator"> =</span><span class="string"> "desc3"</span><span class="operator">;</span><span class="comment">
+
+/* insert drugs into the collection */</span>
+lstDrugs<span class="operator">.</span>insert<span class="operator">(</span>d1<span class="operator">-&gt;</span>code<span class="operator">,</span> d1<span class="operator">);</span>
+lstDrugs<span class="operator">.</span>insert<span class="operator">(</span>d2<span class="operator">-&gt;</span>code<span class="operator">,</span> d2<span class="operator">);</span>
+lstDrugs<span class="operator">.</span>insert<span class="operator">(</span>d3<span class="operator">-&gt;</span>code<span class="operator">,</span> d3<span class="operator">);</span><span class="comment">
+
+/* iterate with '_foreach' keyword */</span>
+_foreach<span class="operator">(</span>drug_ptr p<span class="operator">,</span> lstDrugs<span class="operator">)
+{</span> qDebug<span class="operator">() &lt;&lt;</span> qPrintable<span class="operator">(</span>p<span class="operator">-&gt;</span>name<span class="operator">) &lt;&lt;</span><span class="string"> " "</span><span class="operator"> &lt;&lt;</span> qPrintable<span class="operator">(</span>p<span class="operator">-&gt;</span>desc<span class="operator">); }</span><span class="comment">
+
+/* iterate with 'for' keyword */</span><span class="flow">
+for</span><span class="operator"> (</span><span class="type">long</span> l<span class="operator"> =</span><span class="int"> 0</span><span class="operator">;</span> l<span class="operator"> &lt;</span> lstDrugs<span class="operator">.</span>count<span class="operator">(); ++</span>l<span class="operator">)
+{</span>
+   drug_ptr p<span class="operator"> =</span> lstDrugs<span class="operator">.</span>getByIndex<span class="operator">(</span>l<span class="operator">);</span>
+   QString code<span class="operator"> =</span> lstDrugs<span class="operator">.</span>getKeyByIndex<span class="operator">(</span>l<span class="operator">);</span>
+   qDebug<span class="operator">() &lt;&lt;</span> qPrintable<span class="operator">(</span>p<span class="operator">-&gt;</span>name<span class="operator">) &lt;&lt;</span><span class="string"> " "</span><span class="operator"> &lt;&lt;</span> qPrintable<span class="operator">(</span>p<span class="operator">-&gt;</span>desc<span class="operator">);
+}</span><span class="comment">
+
+/* iterate with 'QxCollectionIterator' java style */</span>
+qx<span class="operator">::</span>QxCollectionIterator<span class="operator">&lt;</span>QString<span class="operator">,</span> drug_ptr<span class="operator">&gt;</span> itr<span class="operator">(</span>lstDrugs<span class="operator">);</span><span class="flow">
+while</span><span class="operator"> (</span>itr<span class="operator">.</span>next<span class="operator">())
+{</span>
+   QString code<span class="operator"> =</span> itr<span class="operator">.</span>key<span class="operator">();</span>
+   qDebug<span class="operator">() &lt;&lt;</span> qPrintable<span class="operator">(</span>itr<span class="operator">.</span>value<span class="operator">()-&gt;</span>name<span class="operator">) &lt;&lt;</span><span class="string"> " "</span><span class="operator"> &lt;&lt;</span> qPrintable<span class="operator">(</span>itr<span class="operator">.</span>value<span class="operator">()-&gt;</span>desc<span class="operator">);
+}</span><span class="comment">
+
+/* sort ascending by key and sort descending by value */</span>
+lstDrugs<span class="operator">.</span>sortByKey<span class="operator">(</span><span class="bool">true</span><span class="operator">);</span>
+lstDrugs<span class="operator">.</span>sortByValue<span class="operator">(</span><span class="bool">false</span><span class="operator">);</span><span class="comment">
+
+/* access drug by code */</span>
+drug_ptr p<span class="operator"> =</span> lstDrugs<span class="operator">.</span>getByKey<span class="operator">(</span><span class="string">"code2"</span><span class="operator">);</span><span class="comment">
+
+/* access drug by index */</span>
+drug_ptr p<span class="operator"> =</span> lstDrugs<span class="operator">.</span>getByIndex<span class="operator">(</span><span class="int">2</span><span class="operator">);</span><span class="comment">
+
+/* test if drug exists and if collection is empty */</span><span class="type">
+bool</span> bExist<span class="operator"> =</span> lstDrugs<span class="operator">.</span>exist<span class="operator">(</span><span class="string">"code3"</span><span class="operator">);</span><span class="type">
+bool</span> bEmpty<span class="operator"> =</span> lstDrugs<span class="operator">.</span>empty<span class="operator">();</span><span class="comment">
+
+/* remove the second drug from collection */</span>
+lstDrugs<span class="operator">.</span>removeByIndex<span class="operator">(</span><span class="int">2</span><span class="operator">);</span><span class="comment">
+
+/* remove the drug with "code3" */</span>
+lstDrugs<span class="operator">.</span>removeByKey<span class="operator">(</span><span class="string">"code3"</span><span class="operator">);</span><span class="comment">
+
+/* clear the collection */</span>
+lstDrugs<span class="operator">.</span>clear<span class="operator">();</span></pre>
+           </td></tr></tbody></table>
+           </td>
+         </tr>
+       </tbody>
+      </table>
+      <br><br>
+      <a name="faq_90"><u><b>Est-ce qu'il faut utiliser <i>QString</i> ou <i>std::string</i> ?</b></u></a><br><br>
+      <table border="0" style="width: 100%" align="center">
+       <col>
+       <col>
+       <tbody>
+         <tr>
+           <td valign="middle" width="30"></td>
+           <td align="justify">
+           <b>QxOrm</b> conseille d'utiliser la classe <a href="http://doc.trolltech.com/4.6/qstring.html" target="_blank"><i>QString</i></a> pour la gestion des chaînes de caractères.<br>
+           Même si <b>boost</b> fournit de nombreuses fonctionnalités avec son module <a href="http://www.boost.org/doc/libs/1_42_0/doc/html/string_algo.html" target="_blank"><i>boost::string_algo</i></a>, 
+           la classe <i>QString</i> est plus simple à utiliser et surtout prend en charge automatiquement les différents formats : <i>Ascii, Utf8, Utf16, etc...</i><br>
+           Cependant, <b>QxOrm</b> est compatible avec <i>std::string</i> et <i>std::wstring</i> si vous préférez utiliser ce type de chaîne de caractères.
+           </td>
+         </tr>
+       </tbody>
+      </table>
+      <br><br>
+      <a name="faq_95"><u><b>Est-ce qu'il faut utiliser les pointeurs intelligents <i>smart-pointer</i> ?</b></u></a><br><br>
+      <table border="0" style="width: 100%" align="center">
+       <col>
+       <col>
+       <tbody>
+         <tr>
+           <td valign="middle" width="30"></td>
+           <td align="justify">
+           <b>QxOrm</b> conseille fortement d'utiliser les pointeurs intelligents de <b>boost</b> ou <b>Qt</b>.<br>
+           Le langage C++ ne possède pas de <i>Garbage Collector</i> comme <i>Java</i> ou <i>C#</i> par exemple.<br>
+           L'utilisation des <i>smart-pointer</i> simplifie énormément la gestion de la mémoire en C++.<br>
+           L'idéal dans un programme C++ est de n'avoir aucun appel à <i>delete</i> ou <i>delete[]</i>.<br>
+           De plus, les <i>smart-pointer</i> font partis de la nouvelle norme C++ : <b>C++0x</b>.<br>
+           Il est donc essentiel aujourd'hui de connaître les classes suivantes :
+           <ul><li><a href="http://www.boost.org/doc/libs/1_42_0/libs/smart_ptr/smart_ptr.htm" target="_blank"><i>shared_ptr</i>, <i>scoped_ptr</i> et <i>weak_ptr</i></a> pour les pointeurs intelligents de la librairie <b>boost</b>
+           </li><li><a href="http://qt.nokia.com/doc/4.6/qsharedpointer.html" target="_blank"><i>QSharedPointer</i>, <i>QScopedPointer</i> et <i>QWeakPointer</i></a> pour les pointeurs intelligents de la librairie <b>Qt</b>
+           </li></ul>
+           </td>
+         </tr>
+       </tbody>
+      </table>
+      <br><br>
+      <a name="faq_100"><u><b>La clé primaire est de type <i>long</i> par défaut. Est-ce qu'il est possible d'utiliser une clé de type <i>QString</i> ou autre ?</b></u></a><br><br>
+      <table border="0" style="width: 100%" align="center">
+       <col>
+       <col>
+       <tbody>
+         <tr>
+           <td valign="middle" width="30"></td>
+           <td align="justify">
+           Il est possible de définir un identifiant unique de type <i>QString</i> ou autre avec la librairie <b>QxOrm</b>.<br>
+           Par défaut, l'identifiant unique est de type <i>long</i>.<br>
+           Pour indiquer qu'une classe a un identifiant unique de type <i>QString</i> ou autre, il faut spécialiser le template <i>qx::trait::get_primary_key</i>.<br>
+           Pour simplifier, vous pouvez utiliser la macro : <b><i>QX_REGISTER_PRIMARY_KEY(myClass, QString)</i></b>.<br>
+           <br>
+           <b>Attention :</b> la macro <b><i>QX_REGISTER_PRIMARY_KEY</i></b> doit être utilisée avant la macro <b><i>QX_REGISTER_HPP_...</i></b> dans la définition de votre classe, sinon une erreur de compilation se produit.
+           </td>
+         </tr>
+       </tbody>
+      </table>
+      <br><br>
+      <a name="faq_110"><u><b>Comment activer/désactiver le module <i>QxMemLeak</i> pour la détection automatique des fuites mémoires ?</b></u></a><br><br>
+      <table border="0" style="width: 100%" align="center">
+       <col>
+       <col>
+       <tbody>
+         <tr>
+           <td valign="middle" width="30"></td>
+           <td align="justify">
+           Le module <i>QxMemLeak</i> permet une détection rapide des fuites
+           mémoire en mode <i>Debug</i> une fois l'exécution du programme terminée
+           (avec indication du fichier et de la ligne =&gt; style MFC de
+           Microsoft).<br>
+           Ce module a été développé par <a href="http://wyw.dcweb.cn/leakage.htm" target="_blank">Wu Yongwei</a> et a subi
+           quelques modifications pour être intégré dans <b>QxOrm</b>.<br>
+           Si un autre outil est déjà utilisé dans vos projets (<i>Valgrind</i> par exemple),
+           cette fonctionnalité ne doit pas être activée.<br>
+           Pour activer/désactiver le module <i>QxMemLeak</i>, il suffit de modifier la constante 
+           <b><i>_QX_USE_MEM_LEAK_DETECTION</i></b> définie dans le fichier <i>QxConfig.h</i>.<br>
+           Une recompilation de la librairie QxOrm est nécessaire pour prendre en compte cette modification. 
+           </td>
+         </tr>
+       </tbody>
+      </table>
+      <br><br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br><hr style="width: 80%" align="center" size="1" color="#100D5A">
+<table border="0" style="width: 80%" align="center">
+  <col><col>
+  <tbody>
+    <tr>
+      <td align="left" valign="middle"><img alt="QxOrm"
+        src="./resource/logo_qxorm_small.jpg" width="168" height="40"></td>
+      <td align="right" valign="middle"><font size="2">Copyright © 2010 QxOrm France</font> </td>
+    </tr>
+  </tbody>
+</table>
+</body>
+</html>
