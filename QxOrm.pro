@@ -48,7 +48,7 @@ PRECOMPILED_HEADER = ./include/QxPrecompiled.h
 QT -= gui
 } # !contains(DEFINES, _QX_ENABLE_QT_GUI)
 
-unix { VERSION = 1.4.1 }
+unix { VERSION = 1.4.2 }
 
 contains(DEFINES, _QX_STATIC_BUILD) {
 CONFIG -= dll
@@ -225,6 +225,8 @@ HEADERS += ./include/QxSerialize/QxSerializeInvoker.h
 HEADERS += ./include/QxSerialize/QxSerializeMacro.h
 HEADERS += ./include/QxSerialize/QxSerialize.h
 HEADERS += ./include/QxSerialize/QxSerializeQDataStream.h
+HEADERS += ./include/QxSerialize/QxSerializeCheckInstance.h
+HEADERS += ./include/QxSerialize/QxSerializeQJson.h
 
 HEADERS += ./include/QxSerialize/boost/class_export/qx_boost_class_export.h
 HEADERS += ./include/QxSerialize/boost/portable_binary/portable_archive_exception.hpp
@@ -319,6 +321,61 @@ HEADERS += ./include/QxSerialize/QDataStream/QxSerializeQDataStream_std_unordere
 HEADERS += ./include/QxSerialize/QDataStream/QxSerializeQDataStream_std_unordered_set.h
 HEADERS += ./include/QxSerialize/QDataStream/QxSerializeQDataStream_std_vector.h
 HEADERS += ./include/QxSerialize/QDataStream/QxSerializeQDataStream_qx_registered_class.h
+
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_all_include.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_boost_scoped_ptr.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_boost_shared_ptr.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_boost_tuple.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_boost_unordered_map.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_boost_unordered_set.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_IxParameter.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_IxService.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_IxSqlElement.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_QBrush.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_QColor.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_QFlags.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_QFont.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_QHash.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_QImage.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_QLinkedList.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_QList.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_QMap.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_QMatrix.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_QMultiHash.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_QMultiMap.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_QObject.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_QPair.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_QPicture.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_QPixmap.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_QPoint.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_QRect.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_QRegExp.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_QRegion.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_QScopedPointer.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_QSharedPointer.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_QSize.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_QSqlError.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_QStringList.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_QUrl.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_QVector.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_QWeakPointer.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_qx_registered_class.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_QxCollection.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_QxDaoPointer.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_QxInvalidValue.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_QxInvalidValueX.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_QxSqlQuery.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_QxTransaction.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_std_list.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_std_map.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_std_pair.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_std_set.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_std_shared_ptr.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_std_tuple.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_std_unique_ptr.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_std_unordered_map.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_std_unordered_set.h
+HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_std_vector.h
 
 HEADERS += ./include/QxTraits/get_base_class.h
 HEADERS += ./include/QxTraits/get_primary_key.h
@@ -499,6 +556,8 @@ SOURCES += ./src/QxDao/QxSqlGenerator/QxSqlGenerator_Standard.cpp
 SOURCES += ./src/QxDao/QxRepository/IxRepository.cpp
 SOURCES += ./src/QxDao/QxRepository/QxRepositoryX.cpp
 
+SOURCES += ./src/QxSerialize/QxSerializeCheckInstance.cpp
+
 SOURCES += ./src/QxSerialize/QxBoostSerializeHelper/IxBoostSerializeRegisterHelper.cpp
 SOURCES += ./src/QxSerialize/QxBoostSerializeHelper/QxBoostSerializeRegisterHelperX.cpp
 
@@ -534,6 +593,29 @@ SOURCES += ./src/QxSerialize/QDataStream/QxSerializeQDataStream_QSqlError.cpp
 SOURCES += ./src/QxSerialize/QDataStream/QxSerializeQDataStream_std_string.cpp
 SOURCES += ./src/QxSerialize/QDataStream/QxSerializeQDataStream_qx_registered_class.cpp
 
+SOURCES += ./src/QxSerialize/QJson/QxSerializeQJson_qx_registered_class.cpp
+SOURCES += ./src/QxSerialize/QJson/QxSerializeQJson_IxService.cpp
+SOURCES += ./src/QxSerialize/QJson/QxSerializeQJson_IxSqlElement.cpp
+SOURCES += ./src/QxSerialize/QJson/QxSerializeQJson_QBrush.cpp
+SOURCES += ./src/QxSerialize/QJson/QxSerializeQJson_QColor.cpp
+SOURCES += ./src/QxSerialize/QJson/QxSerializeQJson_QFont.cpp
+SOURCES += ./src/QxSerialize/QJson/QxSerializeQJson_QImage.cpp
+SOURCES += ./src/QxSerialize/QJson/QxSerializeQJson_QMatrix.cpp
+SOURCES += ./src/QxSerialize/QJson/QxSerializeQJson_QObject.cpp
+SOURCES += ./src/QxSerialize/QJson/QxSerializeQJson_QPicture.cpp
+SOURCES += ./src/QxSerialize/QJson/QxSerializeQJson_QPixmap.cpp
+SOURCES += ./src/QxSerialize/QJson/QxSerializeQJson_QPoint.cpp
+SOURCES += ./src/QxSerialize/QJson/QxSerializeQJson_QRect.cpp
+SOURCES += ./src/QxSerialize/QJson/QxSerializeQJson_QRegExp.cpp
+SOURCES += ./src/QxSerialize/QJson/QxSerializeQJson_QRegion.cpp
+SOURCES += ./src/QxSerialize/QJson/QxSerializeQJson_QSize.cpp
+SOURCES += ./src/QxSerialize/QJson/QxSerializeQJson_QSqlError.cpp
+SOURCES += ./src/QxSerialize/QJson/QxSerializeQJson_QStringList.cpp
+SOURCES += ./src/QxSerialize/QJson/QxSerializeQJson_QxInvalidValue.cpp
+SOURCES += ./src/QxSerialize/QJson/QxSerializeQJson_QxInvalidValueX.cpp
+SOURCES += ./src/QxSerialize/QJson/QxSerializeQJson_QxSqlQuery.cpp
+SOURCES += ./src/QxSerialize/QJson/QxSerializeQJson_QxTransaction.cpp
+
 SOURCES += ./src/QxService/IxParameter.cpp
 SOURCES += ./src/QxService/IxService.cpp
 SOURCES += ./src/QxService/QxConnect.cpp
@@ -562,9 +644,11 @@ OTHER_FILES += ./inl/QxCollection/QxCollectionIterator.inl
 
 OTHER_FILES += ./inl/QxConvert/QxConvert_FromString.inl
 OTHER_FILES += ./inl/QxConvert/QxConvert_FromVariant.inl
+OTHER_FILES += ./inl/QxConvert/QxConvert_FromJson.inl
 OTHER_FILES += ./inl/QxConvert/QxConvert_Qt.inl
 OTHER_FILES += ./inl/QxConvert/QxConvert_ToString.inl
 OTHER_FILES += ./inl/QxConvert/QxConvert_ToVariant.inl
+OTHER_FILES += ./inl/QxConvert/QxConvert_ToJson.inl
 OTHER_FILES += ./inl/QxConvert/QxConvert_WithIndex.inl
 
 OTHER_FILES += ./inl/QxDao/QxDao_Count.inl

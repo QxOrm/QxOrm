@@ -66,11 +66,11 @@
     <table cellspacing="0" cellpadding="1"><col><col><tbody>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow">Current version :&nbsp;</font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.1 - <a href="../doxygen/index.html" target="_blank">QxOrm library online class documentation</a></font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.2 - <a href="../doxygen/index.html" target="_blank">QxOrm library online class documentation</a></font></td>
       </tr>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow"></font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.1.8</font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.1.9</font></td>
       </tr>
     </tbody></table>
   </td>
@@ -96,7 +96,7 @@
                  <ul>
                    <li><b><font style="background-color:yellow"><a href="./manual.html#manual_30">persistence</a></font></b> : communication with databases (support <i>1-1</i>, <i>1-n</i>, <i>n-1</i> and <i>n-n</i> relationships) ;
                    </li>
-                   <li><b><font style="background-color:yellow"><a href="./manual.html#manual_60">serialization</a></font></b> : binary and XML format ;
+                   <li><b><font style="background-color:yellow"><a href="./manual.html#manual_60">serialization</a></font></b> : binary, XML and JSON format ;
                    </li>
                    <li><b><font style="background-color:yellow"><a href="./manual.html#manual_70">reflection</a></font></b> (or <b><font style="background-color:yellow"><a href="./manual.html#manual_70">introspection</a></font></b>) : access dynamically to classes definitions, retrieve properties and call classes methods.
                    </li>
@@ -179,7 +179,7 @@
           </li>
           <li><p><b><a href="../doxygen/html/group___qx_collection.html" target="_blank">QxCollection&lt;Key, Value&gt;</a></b> : based on <a href="http://www.boost.org/doc/libs/release/libs/multi_index/doc/index.html" target="_blank"><i>boost::multi_index_container</i></a>, this container has advantages of <i>std::vector&lt;T&gt;</i> (insertion order + quick access by index) and <i>boost::unordered_map&lt;Key, Value&gt;</i> or <i>QHash&lt;Key, Value&gt;</i> (quick access by a key : <i>hash-map</i>). <b>QxCollection&lt;Key, Value&gt;</b> is adapted to contain the items resulting from a database.</p> 
           </li>
-          <li><p><b><a href="../doxygen/html/group___qx_serialize.html" target="_blank">QxSerialize</a></b> : this module is based on Qt <a href="http://doc.qt.io/qt-5/qdatastream.html" target="_blank"><i>QDataStream</i></a> class and <a href="http://www.boost.org/doc/libs/release/libs/serialization/doc/index.html" target="_blank"><i>boost::serialization</i></a> library (<a href="http://www.boost.org/doc/libs/release/libs/serialization/doc/index.html" target="_blank"><i>boost::serialization</i></a> dependency is optional and not required by default). Any class defined by QxOrm can be serialized to binary and XML format. This module also allows to clone all instances of objects. Most of Qt objects (<i>QObject, QString, QDate, QTime, QDateTime, QList, QHash...</i>) are compatible with <i>QxSerialize</i> module.</p> 
+          <li><p><b><a href="../doxygen/html/group___qx_serialize.html" target="_blank">QxSerialize</a></b> : this module is based on Qt <a href="http://doc.qt.io/qt-5/qdatastream.html" target="_blank"><i>QDataStream</i></a> class and <a href="http://www.boost.org/doc/libs/release/libs/serialization/doc/index.html" target="_blank"><i>boost::serialization</i></a> library (<a href="http://www.boost.org/doc/libs/release/libs/serialization/doc/index.html" target="_blank"><i>boost::serialization</i></a> dependency is optional and not required by default). Any class defined by QxOrm can be serialized to binary, XML and JSON format. This module also allows to clone all instances of objects. Most of Qt objects (<i>QObject, QString, QDate, QTime, QDateTime, QList, QHash...</i>) are compatible with <i>QxSerialize</i> module.</p> 
           </li>
           <li><p><b><a href="../doxygen/html/group___qx_traits.html" target="_blank">QxTraits</a></b> : boost library provides several generic traits. QxOrm uses them but needs new functionalities that are not present in boost.</p> 
           </li>
@@ -209,7 +209,7 @@
         <img alt="QxOrm" src="./resource/logo_qxorm_small.png" width="168" height="40">
       </td>
       <td align="center" valign="middle">
-        <font size="2">© 2015 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
+        <font size="2">© 2016 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
       </td>
       <td align="right" valign="middle">
         <form action="https://www.paypal.com/cgi-bin/webscr" method="post">

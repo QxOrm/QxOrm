@@ -28,6 +28,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <QxPrecompiled.h>
 
 #include <QtCore/qdatetime.h>
+#include <QtCore/qdatastream.h>
 #include <QtCore/qcryptographichash.h>
 
 #include <QxCommon/QxSimpleCrypt.h>

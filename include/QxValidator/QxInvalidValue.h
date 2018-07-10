@@ -48,11 +48,17 @@
 #include <boost/serialization/nvp.hpp>
 #endif // _QX_ENABLE_BOOST_SERIALIZATION
 
+#ifndef _QX_NO_JSON
+#include <QtCore/qjsonvalue.h>
+#endif // _QX_NO_JSON
+
 #include <QxSerialize/boost/QxSerialize_shared_ptr.h>
 
 #include <QxSerialize/Qt/QxSerialize_QString.h>
 #include <QxSerialize/Qt/QxSerialize_QVariant.h>
 #include <QxSerialize/Qt/QxSerialize_QHash.h>
+
+#include <QxConvert/QxConvert.h>
 
 #include <QxTraits/get_class_name.h>
 
@@ -65,6 +71,19 @@ class QxInvalidValue;
 
 QX_DLL_EXPORT QDataStream & operator<< (QDataStream & stream, const qx::QxInvalidValue & t) BOOST_USED;
 QX_DLL_EXPORT QDataStream & operator>> (QDataStream & stream, qx::QxInvalidValue & t) BOOST_USED;
+
+#ifndef _QX_NO_JSON
+namespace qx {
+namespace cvt {
+namespace detail {
+template <> struct QxConvert_ToJson< qx::QxInvalidValue >;
+template <> struct QxConvert_FromJson< qx::QxInvalidValue >;
+QX_DLL_EXPORT QJsonValue QxConvert_ToJson_Helper(const qx::QxInvalidValue & t, const QString & format) BOOST_USED;
+QX_DLL_EXPORT qx_bool QxConvert_FromJson_Helper(const QJsonValue & j, qx::QxInvalidValue & t, const QString & format) BOOST_USED;
+} // namespace detail
+} // namespace cvt
+} // namespace qx
+#endif // _QX_NO_JSON
 
 namespace qx {
 
@@ -84,6 +103,13 @@ class QX_DLL_EXPORT QxInvalidValue : public QxPropertyBag
 
    friend QDataStream & ::operator<< (QDataStream & stream, const qx::QxInvalidValue & t);
    friend QDataStream & ::operator>> (QDataStream & stream, qx::QxInvalidValue & t);
+
+#ifndef _QX_NO_JSON
+   friend struct qx::cvt::detail::QxConvert_ToJson< qx::QxInvalidValue >;
+   friend struct qx::cvt::detail::QxConvert_FromJson< qx::QxInvalidValue >;
+   friend QJsonValue qx::cvt::detail::QxConvert_ToJson_Helper(const qx::QxInvalidValue & t, const QString & format);
+   friend qx_bool qx::cvt::detail::QxConvert_FromJson_Helper(const QJsonValue & j, qx::QxInvalidValue & t, const QString & format);
+#endif // _QX_NO_JSON
 
 protected:
 

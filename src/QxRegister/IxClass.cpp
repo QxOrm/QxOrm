@@ -58,6 +58,14 @@ IxValidatorX * IxClass::getAllValidator()
    return m_pAllValidator.get();
 }
 
+IxDataMember * IxClass::getId(bool bRecursive /* = false */) const
+{
+   IxDataMember * pId = (m_pDataMemberX ? m_pDataMemberX->getId() : NULL);
+   if (pId || ! bRecursive) { return pId; }
+   IxClass * pBaseClass = getBaseClass();
+   return (pBaseClass ? pBaseClass->getId(bRecursive) : NULL);
+}
+
 bool IxClass::isKindOf(const QString & sClassName) const
 {
    if (sClassName.isEmpty()) { qAssert(false); return false; }

@@ -32,6 +32,7 @@
 #include <QxPrecompiled.h>
 
 #include <QxDao/QxSqlElement/IxSqlElement.h>
+#include <QxDao/QxSqlElement/QxSqlElement.h>
 
 #include <QxDao/QxSqlDatabase.h>
 
@@ -95,6 +96,25 @@ void IxSqlElement::updateKeys()
       else { sKey = QString(":") + sKey; }
       m_lstKeys.append(sKey);
    }
+}
+
+IxSqlElement_ptr create_sql_element(IxSqlElement::type_class e)
+{
+   IxSqlElement_ptr p;
+   switch (e)
+   {
+      case IxSqlElement::_sql_compare:          p.reset(new QxSqlCompare()); break;
+      case IxSqlElement::_sql_element_temp:     p.reset(new QxSqlElementTemp()); break;
+      case IxSqlElement::_sql_expression:       p.reset(new QxSqlExpression()); break;
+      case IxSqlElement::_sql_free_text:        p.reset(new QxSqlFreeText()); break;
+      case IxSqlElement::_sql_in:               p.reset(new QxSqlIn()); break;
+      case IxSqlElement::_sql_is_between:       p.reset(new QxSqlIsBetween()); break;
+      case IxSqlElement::_sql_is_null:          p.reset(new QxSqlIsNull()); break;
+      case IxSqlElement::_sql_limit:            p.reset(new QxSqlLimit()); break;
+      case IxSqlElement::_sql_sort:             p.reset(new QxSqlSort()); break;
+      default:                                  qAssert(false);
+   }
+   return p;
 }
 
 } // namespace detail

@@ -4,7 +4,7 @@
 /* -- Service Input Parameters -- */
 
 class QX_SERVICE_DLL_EXPORT server_infos_input : public qx::service::IxParameter
-{ QX_SERVICE_IX_PARAMETER_QDATASTREAM_HPP(server_infos_input); };
+{ QX_SERVICE_IX_PARAMETER_SERIALIZATION_HPP(server_infos_input); };
 
 QX_REGISTER_HPP_QX_SERVICE(server_infos_input, qx::service::IxParameter, 0)
 typedef qx_shared_ptr<server_infos_input> server_infos_input_ptr;
@@ -12,7 +12,7 @@ typedef qx_shared_ptr<server_infos_input> server_infos_input_ptr;
 /* -- Service Output Parameters -- */
 
 class QX_SERVICE_DLL_EXPORT server_infos_output : public qx::service::IxParameter
-{ public: QDateTime current_date_time; QX_SERVICE_IX_PARAMETER_QDATASTREAM_HPP(server_infos_output); };
+{ public: QDateTime current_date_time; QX_SERVICE_IX_PARAMETER_SERIALIZATION_HPP(server_infos_output); };
 
 QX_REGISTER_HPP_QX_SERVICE(server_infos_output, qx::service::IxParameter, 0)
 typedef qx_shared_ptr<server_infos_output> server_infos_output_ptr;

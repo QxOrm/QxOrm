@@ -50,6 +50,10 @@
 
 #include <boost/any.hpp>
 
+#ifndef _QX_NO_JSON
+#include <QtCore/qjsonvalue.h>
+#endif // _QX_NO_JSON
+
 #include <QxCommon/QxBool.h>
 #include <QxCommon/QxPropertyBag.h>
 
@@ -197,6 +201,14 @@ public:
 
    inline QVariant toVariant(const void * pOwner, int iIndexName = -1) const           { return this->toVariant(pOwner, m_sFormat, iIndexName); }
    inline qx_bool fromVariant(void * pOwner, const QVariant & v, int iIndexName = -1)  { return this->fromVariant(pOwner, v, m_sFormat, iIndexName); }
+
+#ifndef _QX_NO_JSON
+   virtual QJsonValue toJson(const void * pOwner, const QString & sFormat) const = 0;
+   virtual qx_bool fromJson(void * pOwner, const QJsonValue & j, const QString & sFormat) = 0;
+
+   inline QJsonValue toJson(const void * pOwner) const            { return this->toJson(pOwner, m_sFormat); }
+   inline qx_bool fromJson(void * pOwner, const QJsonValue & j)   { return this->fromJson(pOwner, j, m_sFormat); }
+#endif // _QX_NO_JSON
 
 protected:
 

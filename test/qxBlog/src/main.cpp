@@ -66,7 +66,8 @@ int main(int argc, char * argv[])
    qAssert(list_of_female_author.count() == 2);
 
    // Dump list of female author (xml serialization)
-   qx::dump(list_of_female_author);
+   qx::dump(list_of_female_author, false);
+   qx::dump(list_of_female_author, true);
 
    // Create 3 categories
    category_ptr category_1 = category_ptr(new category());
@@ -157,7 +158,8 @@ int main(int argc, char * argv[])
    qAssert(blog_tmp->m_author && blog_tmp->m_author->m_id == "author_id_2");
 
    // Dump 'blog_tmp' result from database (xml serialization)
-   qx::dump(blog_tmp);
+   qx::dump(blog_tmp, false);
+   qx::dump(blog_tmp, true);
 
    // Fetch relations defining columns to fetch with syntax { col_1, col_2, etc... }
    list_blog lstBlogComplexRelation;
@@ -197,7 +199,8 @@ int main(int argc, char * argv[])
    // Update only property 'm_text' of 'blog_isdirty'
    daoError = qx::dao::update_optimized(blog_isdirty);
    qAssert(! daoError.isValid() && ! blog_isdirty.isDirty());
-   qx::dump(blog_isdirty);
+   qx::dump(blog_isdirty, false);
+   qx::dump(blog_isdirty, true);
 
    // Test 'isDirty()' method with a container
    typedef qx::dao::ptr< QList<author_ptr> > type_lst_author_test_is_dirty;
@@ -220,7 +223,8 @@ int main(int argc, char * argv[])
    // Update only property 'm_name' at position 1, only property 'm_birthdate' at position 2 and nothing at position 0
    daoError = qx::dao::update_optimized(container_isdirty);
    qAssert(! daoError.isValid() && ! container_isdirty.isDirty());
-   qx::dump(container_isdirty);
+   qx::dump(container_isdirty, false);
+   qx::dump(container_isdirty, true);
 
    // Fetch only property 'm_dt_creation' of blog
    QStringList lstColumns = QStringList() << "date_creation";
@@ -229,7 +233,8 @@ int main(int argc, char * argv[])
    qAssert(! daoError.isValid() && (lst_blog_with_only_date_creation.size() > 0));
    if ((lst_blog_with_only_date_creation.size() > 0) && (lst_blog_with_only_date_creation[0].get() != NULL))
    { qAssert(lst_blog_with_only_date_creation[0]->m_text.isEmpty()); }
-   qx::dump(lst_blog_with_only_date_creation);
+   qx::dump(lst_blog_with_only_date_creation, false);
+   qx::dump(lst_blog_with_only_date_creation, true);
 
    // Dump all registered classes into QxOrm context (introspection engine)
    qx::QxClassX::dumpAllClasses();
@@ -245,14 +250,16 @@ int main(int argc, char * argv[])
    authorX.clear();
    daoError = qx::dao::execute_query(testStoredProcBis, authorX);
    qAssert(! daoError.isValid()); qAssert(authorX.count() > 0);
-   qx::dump(authorX);
+   qx::dump(authorX, false);
+   qx::dump(authorX, true);
 
    // Call a custom SQL query or a stored procedure and fetch automatically properties
    qx_query testStoredProcThird("SELECT name, category_id FROM category");
    category_ptr category_tmp = category_ptr(new category());
    daoError = qx::dao::execute_query(testStoredProcThird, category_tmp);
    qAssert(! daoError.isValid()); qAssert(category_tmp->m_id != 0);
-   qx::dump(category_tmp);
+   qx::dump(category_tmp, false);
+   qx::dump(category_tmp, true);
 
    return 0;
 }

@@ -46,13 +46,21 @@ IxParameter::IxParameter() { ; }
 
 IxParameter::~IxParameter() { ; }
 
-void IxParameter::registerClass() const { qAssertMsg(false, "[QxOrm] qx::service::IxParameter::registerClass()", "need to override this method with 'qx::service::QxConnect::serialization_qt'"); }
+void IxParameter::registerClass() const { qAssertMsg(false, "[QxOrm] qx::service::IxParameter::registerClass()", "need to override this method with 'qx::service::QxConnect::serialization_qt' or 'qx::service::QxConnect::serialization_json' (use QX_SERVICE_IX_PARAMETER_SERIALIZATION_HPP and QX_SERVICE_IX_PARAMETER_SERIALIZATION_CPP macro to override)"); }
 
-QString IxParameter::getClassName() const { qAssertMsg(false, "[QxOrm] qx::service::IxParameter::getClassName()", "need to override this method with 'qx::service::QxConnect::serialization_qt'"); return ""; }
+QString IxParameter::getClassName() const { qAssertMsg(false, "[QxOrm] qx::service::IxParameter::getClassName()", "need to override this method with 'qx::service::QxConnect::serialization_qt' or 'qx::service::QxConnect::serialization_json' (use QX_SERVICE_IX_PARAMETER_SERIALIZATION_HPP and QX_SERVICE_IX_PARAMETER_SERIALIZATION_CPP macro to override)"); return ""; }
 
-void IxParameter::save(QDataStream & stream) const { qAssertMsg(false, "[QxOrm] qx::service::IxParameter::save()", "need to override this method with 'qx::service::QxConnect::serialization_qt'"); Q_UNUSED(stream); }
+void IxParameter::save(QDataStream & stream) const { qAssertMsg(false, "[QxOrm] qx::service::IxParameter::save()", "need to override this method with 'qx::service::QxConnect::serialization_qt' (use QX_SERVICE_IX_PARAMETER_SERIALIZATION_HPP and QX_SERVICE_IX_PARAMETER_SERIALIZATION_CPP macro to override)"); Q_UNUSED(stream); }
 
-void IxParameter::load(QDataStream & stream) { qAssertMsg(false, "[QxOrm] qx::service::IxParameter::load()", "need to override this method with 'qx::service::QxConnect::serialization_qt'"); Q_UNUSED(stream); }
+void IxParameter::load(QDataStream & stream) { qAssertMsg(false, "[QxOrm] qx::service::IxParameter::load()", "need to override this method with 'qx::service::QxConnect::serialization_qt' (use QX_SERVICE_IX_PARAMETER_SERIALIZATION_HPP and QX_SERVICE_IX_PARAMETER_SERIALIZATION_CPP macro to override)"); Q_UNUSED(stream); }
+
+#ifndef _QX_NO_JSON
+
+QJsonValue IxParameter::saveToJson() const { qAssertMsg(false, "[QxOrm] qx::service::IxParameter::saveToJson()", "need to override this method with 'qx::service::QxConnect::serialization_json' (use QX_SERVICE_IX_PARAMETER_SERIALIZATION_HPP and QX_SERVICE_IX_PARAMETER_SERIALIZATION_CPP macro to override)"); return QJsonValue(); }
+
+qx_bool IxParameter::loadFromJson(const QJsonValue & val) { qAssertMsg(false, "[QxOrm] qx::service::IxParameter::loadFromJson()", "need to override this method with 'qx::service::QxConnect::serialization_json' (use QX_SERVICE_IX_PARAMETER_SERIALIZATION_HPP and QX_SERVICE_IX_PARAMETER_SERIALIZATION_CPP macro to override)"); Q_UNUSED(val); return qx_bool(); }
+
+#endif // _QX_NO_JSON
 
 } // namespace service
 } // namespace qx

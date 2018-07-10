@@ -186,6 +186,12 @@
     <Filter Include="src\QxSerialize\QDataStream">
       <UniqueIdentifier>{2e2bdef5-224d-401d-849b-b97095663a4e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\QxSerialize\QJson">
+      <UniqueIdentifier>{2d3adf03-3730-4a27-906d-ef83e819cf5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\QxSerialize\QJson">
+      <UniqueIdentifier>{b81914b7-d239-4504-b4e3-752b58d50385}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -493,6 +499,75 @@
     </ClCompile>
     <ClCompile Include="src\QxSerialize\QDataStream\QxSerializeQDataStream_QSqlError.cpp">
       <Filter>src\QxSerialize\QDataStream</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QxSerialize\QJson\QxSerializeQJson_qx_registered_class.cpp">
+      <Filter>src\QxSerialize\QJson</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QxSerialize\QxSerializeCheckInstance.cpp">
+      <Filter>src\QxSerialize</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QxSerialize\QJson\QxSerializeQJson_IxService.cpp">
+      <Filter>src\QxSerialize\QJson</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QxSerialize\QJson\QxSerializeQJson_IxSqlElement.cpp">
+      <Filter>src\QxSerialize\QJson</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QxSerialize\QJson\QxSerializeQJson_QBrush.cpp">
+      <Filter>src\QxSerialize\QJson</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QxSerialize\QJson\QxSerializeQJson_QColor.cpp">
+      <Filter>src\QxSerialize\QJson</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QxSerialize\QJson\QxSerializeQJson_QFont.cpp">
+      <Filter>src\QxSerialize\QJson</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QxSerialize\QJson\QxSerializeQJson_QImage.cpp">
+      <Filter>src\QxSerialize\QJson</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QxSerialize\QJson\QxSerializeQJson_QMatrix.cpp">
+      <Filter>src\QxSerialize\QJson</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QxSerialize\QJson\QxSerializeQJson_QObject.cpp">
+      <Filter>src\QxSerialize\QJson</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QxSerialize\QJson\QxSerializeQJson_QPicture.cpp">
+      <Filter>src\QxSerialize\QJson</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QxSerialize\QJson\QxSerializeQJson_QPixmap.cpp">
+      <Filter>src\QxSerialize\QJson</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QxSerialize\QJson\QxSerializeQJson_QPoint.cpp">
+      <Filter>src\QxSerialize\QJson</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QxSerialize\QJson\QxSerializeQJson_QRect.cpp">
+      <Filter>src\QxSerialize\QJson</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QxSerialize\QJson\QxSerializeQJson_QRegExp.cpp">
+      <Filter>src\QxSerialize\QJson</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QxSerialize\QJson\QxSerializeQJson_QRegion.cpp">
+      <Filter>src\QxSerialize\QJson</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QxSerialize\QJson\QxSerializeQJson_QSize.cpp">
+      <Filter>src\QxSerialize\QJson</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QxSerialize\QJson\QxSerializeQJson_QSqlError.cpp">
+      <Filter>src\QxSerialize\QJson</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QxSerialize\QJson\QxSerializeQJson_QStringList.cpp">
+      <Filter>src\QxSerialize\QJson</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QxSerialize\QJson\QxSerializeQJson_QxInvalidValue.cpp">
+      <Filter>src\QxSerialize\QJson</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QxSerialize\QJson\QxSerializeQJson_QxInvalidValueX.cpp">
+      <Filter>src\QxSerialize\QJson</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QxSerialize\QJson\QxSerializeQJson_QxSqlQuery.cpp">
+      <Filter>src\QxSerialize\QJson</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QxSerialize\QJson\QxSerializeQJson_QxTransaction.cpp">
+      <Filter>src\QxSerialize\QJson</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1390,6 +1465,174 @@
     <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_QSqlError.h">
       <Filter>include\QxSerialize\QDataStream</Filter>
     </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_all_include.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_boost_scoped_ptr.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_boost_shared_ptr.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_boost_tuple.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_boost_unordered_map.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_boost_unordered_set.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_IxParameter.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_IxService.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_IxSqlElement.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QBrush.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QColor.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QFlags.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QFont.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QHash.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QImage.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QLinkedList.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QList.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QMap.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QMatrix.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QMultiHash.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QMultiMap.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QObject.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QPair.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QPicture.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QPixmap.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QPoint.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QRect.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QRegExp.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QRegion.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QScopedPointer.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QSharedPointer.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QSize.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QSqlError.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QStringList.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QUrl.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QVector.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QWeakPointer.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_qx_registered_class.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QxCollection.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QxDaoPointer.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QxInvalidValue.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QxInvalidValueX.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QxSqlQuery.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QxTransaction.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_std_list.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_std_map.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_std_pair.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_std_set.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_std_shared_ptr.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_std_tuple.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_std_unique_ptr.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_std_unordered_map.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_std_unordered_set.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_std_vector.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QxSerializeCheckInstance.h">
+      <Filter>include\QxSerialize</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QxSerializeQJson.h">
+      <Filter>include\QxSerialize</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="inl\QxDataMember\QxDataMember.inl">
@@ -1530,6 +1773,12 @@
       <Filter>inl\QxConvert</Filter>
     </None>
     <None Include="inl\QxConvert\QxConvert_WithIndex.inl">
+      <Filter>inl\QxConvert</Filter>
+    </None>
+    <None Include="inl\QxConvert\QxConvert_FromJson.inl">
+      <Filter>inl\QxConvert</Filter>
+    </None>
+    <None Include="inl\QxConvert\QxConvert_ToJson.inl">
       <Filter>inl\QxConvert</Filter>
     </None>
   </ItemGroup>

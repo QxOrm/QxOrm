@@ -90,6 +90,11 @@ public:
    virtual QVariant toVariant(const void * pOwner, const QString & sFormat, int iIndexName = -1) const            { return qx::cvt::to_variant((* getData(pOwner)), sFormat, iIndexName); }
    virtual qx_bool fromVariant(void * pOwner, const QVariant & v, const QString & sFormat, int iIndexName = -1)   { return qx::cvt::from_variant(v, (* getData(pOwner)), sFormat, iIndexName); }
 
+#ifndef _QX_NO_JSON
+   virtual QJsonValue toJson(const void * pOwner, const QString & sFormat) const             { return qx::cvt::to_json((* getData(pOwner)), sFormat); }
+   virtual qx_bool fromJson(void * pOwner, const QJsonValue & j, const QString & sFormat)    { return qx::cvt::from_json(j, (* getData(pOwner)), sFormat); }
+#endif // _QX_NO_JSON
+
    virtual bool isEqual(const void * pOwner1, const void * pOwner2) const
    {
       if ((pOwner1 == NULL) || (pOwner2 == NULL)) { return false; }

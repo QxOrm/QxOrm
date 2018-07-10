@@ -57,6 +57,7 @@
 #include <QxSerialize/QxArchive.h>
 #include <QxSerialize/QxSerializeQDataStream.h>
 #include <QxSerialize/QDataStream/QxSerializeQDataStream_all_include.h>
+#include <QxSerialize/QJson/QxSerializeQJson_qx_registered_class.h>
 
 #include <QxValidator/QxInvalidValue.h>
 #include <QxValidator/QxInvalidValueX.h>
@@ -145,6 +146,24 @@ struct QxConvertHelper_FromVariant
    static inline qx_bool fromVariant(const QVariant & v, T & t, const QString & format, int index)
    { qAssertMsg(false, "qx::cvt::detail::QxConvertHelper_FromVariant", "template must be specialized"); Q_UNUSED(v); Q_UNUSED(t); Q_UNUSED(format); Q_UNUSED(index); return qx_bool(); }
 };
+
+#ifndef _QX_NO_JSON
+
+template <typename T, typename H>
+struct QxConvertHelper_ToJson
+{
+   static inline QJsonValue toJson(const T & t, const QString & format)
+   { qAssertMsg(false, "qx::cvt::detail::QxConvertHelper_ToJson", "template must be specialized"); Q_UNUSED(t); Q_UNUSED(format); return QJsonValue(); }
+};
+
+template <typename T, typename H>
+struct QxConvertHelper_FromJson
+{
+   static inline qx_bool fromJson(const QJsonValue & j, T & t, const QString & format)
+   { qAssertMsg(false, "qx::cvt::detail::QxConvertHelper_FromJson", "template must be specialized"); Q_UNUSED(j); Q_UNUSED(t); Q_UNUSED(format); return qx_bool(); }
+};
+
+#endif // _QX_NO_JSON
 
 template <typename T>
 struct QxConvertHelper_ToString<T, qx::cvt::detail::helper::QxConvertHelper_Generic>
@@ -235,6 +254,24 @@ private:
 
 };
 
+#ifndef _QX_NO_JSON
+
+template <typename T>
+struct QxConvertHelper_ToJson<T, qx::cvt::detail::helper::QxConvertHelper_Generic>
+{
+   static inline QJsonValue toJson(const T & t, const QString & format)
+   { return QJsonValue::fromVariant(qx::cvt::detail::QxConvertHelper_ToVariant<T, qx::cvt::detail::helper::QxConvertHelper_Generic>::toVariant(t, format, -1)); }
+};
+
+template <typename T>
+struct QxConvertHelper_FromJson<T, qx::cvt::detail::helper::QxConvertHelper_Generic>
+{
+   static inline qx_bool fromJson(const QJsonValue & j, T & t, const QString & format)
+   { QVariant v = j.toVariant(); return qx::cvt::detail::QxConvertHelper_FromVariant<T, qx::cvt::detail::helper::QxConvertHelper_Generic>::fromVariant(v, t, format, -1); }
+};
+
+#endif // _QX_NO_JSON
+
 template <typename T>
 struct QxConvertHelper_ToString<T, qx::cvt::detail::helper::QxConvertHelper_Ptr>
 {
@@ -262,6 +299,24 @@ struct QxConvertHelper_FromVariant<T, qx::cvt::detail::helper::QxConvertHelper_P
    static inline qx_bool fromVariant(const QVariant & v, T & t, const QString & format, int index)
    { if (! t && ! v.isNull()) { qx::trait::construct_ptr<T>::get(t); }; return (t ? qx::cvt::from_variant(v, (* t), format, index) : qx_bool(false)); }
 };
+
+#ifndef _QX_NO_JSON
+
+template <typename T>
+struct QxConvertHelper_ToJson<T, qx::cvt::detail::helper::QxConvertHelper_Ptr>
+{
+   static inline QJsonValue toJson(const T & t, const QString & format)
+   { return (t ? qx::cvt::to_json((* t), format) : QJsonValue()); }
+};
+
+template <typename T>
+struct QxConvertHelper_FromJson<T, qx::cvt::detail::helper::QxConvertHelper_Ptr>
+{
+   static inline qx_bool fromJson(const QJsonValue & j, T & t, const QString & format)
+   { if (! t && ! j.isNull()) { qx::trait::construct_ptr<T>::get(t); }; return (t ? qx::cvt::from_json(j, (* t), format) : qx_bool(false)); }
+};
+
+#endif // _QX_NO_JSON
 
 template <typename T>
 struct QxConvertHelper_ToString<T, qx::cvt::detail::helper::QxConvertHelper_Registered>
@@ -307,6 +362,24 @@ struct QxConvertHelper_FromVariant<T, qx::cvt::detail::helper::QxConvertHelper_R
    }
 };
 
+#ifndef _QX_NO_JSON
+
+template <typename T>
+struct QxConvertHelper_ToJson<T, qx::cvt::detail::helper::QxConvertHelper_Registered>
+{
+   static inline QJsonValue toJson(const T & t, const QString & format)
+   { return qx::cvt::detail::QxSerializeJsonRegistered<T>::save(t, format); }
+};
+
+template <typename T>
+struct QxConvertHelper_FromJson<T, qx::cvt::detail::helper::QxConvertHelper_Registered>
+{
+   static inline qx_bool fromJson(const QJsonValue & j, T & t, const QString & format)
+   { return qx::cvt::detail::QxSerializeJsonRegistered<T>::load(j, t, format); }
+};
+
+#endif // _QX_NO_JSON
+
 template <typename T>
 struct QxConvertHelper_ToString<T, qx::cvt::detail::helper::QxConvertHelper_Container>
 {
@@ -335,6 +408,24 @@ struct QxConvertHelper_FromVariant<T, qx::cvt::detail::helper::QxConvertHelper_C
    { Q_UNUSED(format); Q_UNUSED(index); return QX_CVT_DEFAULT_ARCHIVE::from_string(t, v.toString()); }
 };
 
+#ifndef _QX_NO_JSON
+
+template <typename T>
+struct QxConvertHelper_ToJson<T, qx::cvt::detail::helper::QxConvertHelper_Container>
+{
+   static inline QJsonValue toJson(const T & t, const QString & format)
+   { return QJsonValue::fromVariant(qx::cvt::detail::QxConvertHelper_ToVariant<T, qx::cvt::detail::helper::QxConvertHelper_Container>::toVariant(t, format, -1)); }
+};
+
+template <typename T>
+struct QxConvertHelper_FromJson<T, qx::cvt::detail::helper::QxConvertHelper_Container>
+{
+   static inline qx_bool fromJson(const QJsonValue & j, T & t, const QString & format)
+   { QVariant v = j.toVariant(); return qx::cvt::detail::QxConvertHelper_FromVariant<T, qx::cvt::detail::helper::QxConvertHelper_Container>::fromVariant(v, t, format, -1); }
+};
+
+#endif // _QX_NO_JSON
+
 template <typename T>
 struct QxConvertHelper_ToString<T, qx::cvt::detail::helper::QxConvertHelper_Enum>
 {
@@ -362,6 +453,24 @@ struct QxConvertHelper_FromVariant<T, qx::cvt::detail::helper::QxConvertHelper_E
    static inline qx_bool fromVariant(const QVariant & v, T & t, const QString & format, int index)
    { Q_UNUSED(format); Q_UNUSED(index); bool bOk = false; t = static_cast<T>(static_cast<long>(v.toLongLong(& bOk))); return bOk; }
 };
+
+#ifndef _QX_NO_JSON
+
+template <typename T>
+struct QxConvertHelper_ToJson<T, qx::cvt::detail::helper::QxConvertHelper_Enum>
+{
+   static inline QJsonValue toJson(const T & t, const QString & format)
+   { Q_UNUSED(format); return QJsonValue(static_cast<int>(t)); }
+};
+
+template <typename T>
+struct QxConvertHelper_FromJson<T, qx::cvt::detail::helper::QxConvertHelper_Enum>
+{
+   static inline qx_bool fromJson(const QJsonValue & j, T & t, const QString & format)
+   { Q_UNUSED(format); t = static_cast<T>(static_cast<long>(qRound(j.toDouble()))); return qx_bool(true); }
+};
+
+#endif // _QX_NO_JSON
 
 template <typename T>
 struct QxConvertHelper
@@ -409,6 +518,24 @@ struct QxConvert_FromVariant
    { return qx::cvt::detail::QxConvertHelper_FromVariant<T, typename qx::cvt::detail::QxConvertHelper<T>::type>::fromVariant(v, t, format, index); }
 };
 
+#ifndef _QX_NO_JSON
+
+template <typename T>
+struct QxConvert_ToJson
+{
+   static inline QJsonValue toJson(const T & t, const QString & format)
+   { return qx::cvt::detail::QxConvertHelper_ToJson<T, typename qx::cvt::detail::QxConvertHelper<T>::type>::toJson(t, format); }
+};
+
+template <typename T>
+struct QxConvert_FromJson
+{
+   static inline qx_bool fromJson(const QJsonValue & j, T & t, const QString & format)
+   { return qx::cvt::detail::QxConvertHelper_FromJson<T, typename qx::cvt::detail::QxConvertHelper<T>::type>::fromJson(j, t, format); }
+};
+
+#endif // _QX_NO_JSON
+
 } // namespace detail
 } // namespace cvt
 } // namespace qx
@@ -418,6 +545,8 @@ struct QxConvert_FromVariant
 #include "../../inl/QxConvert/QxConvert_FromString.inl"
 #include "../../inl/QxConvert/QxConvert_ToVariant.inl"
 #include "../../inl/QxConvert/QxConvert_FromVariant.inl"
+#include "../../inl/QxConvert/QxConvert_ToJson.inl"
+#include "../../inl/QxConvert/QxConvert_FromJson.inl"
 #include "../../inl/QxConvert/QxConvert_Qt.inl"
 
 #endif // _QX_CONVERT_IMPL_H_

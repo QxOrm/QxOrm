@@ -43,6 +43,12 @@
  * \brief qx::cvt : namespace to provide global functions to convert any kind of objects to/from QString and QVariant format
  */
 
+#ifndef _QX_NO_JSON
+#include <QtCore/qjsonvalue.h>
+#include <QtCore/qjsonobject.h>
+#include <QtCore/qjsonarray.h>
+#endif // _QX_NO_JSON
+
 #include <QxCommon/QxBool.h>
 
 namespace qx {
@@ -57,6 +63,11 @@ template <typename T> struct QxConvert_WithIndex_ToString;
 template <typename T> struct QxConvert_WithIndex_FromString;
 template <typename T> struct QxConvert_WithIndex_ToVariant;
 template <typename T> struct QxConvert_WithIndex_FromVariant;
+
+#ifndef _QX_NO_JSON
+template <typename T> struct QxConvert_ToJson;
+template <typename T> struct QxConvert_FromJson;
+#endif // _QX_NO_JSON
 
 } // namespace detail
 
@@ -74,6 +85,11 @@ template <typename T> inline QString to_string(const T & t, const QString & form
 template <typename T> inline qx_bool from_string(const QString & s, T & t, const QString & format, int index)    { return qx::cvt::detail::QxConvert_WithIndex_FromString<T>::fromString(t, s, format, index); }
 template <typename T> inline QVariant to_variant(const T & t, const QString & format, int index)                 { return qx::cvt::detail::QxConvert_WithIndex_ToVariant<T>::toVariant(t, format, index); }
 template <typename T> inline qx_bool from_variant(const QVariant & v, T & t, const QString & format, int index)  { return qx::cvt::detail::QxConvert_WithIndex_FromVariant<T>::fromVariant(t, v, format, index); }
+
+#ifndef _QX_NO_JSON
+template <typename T> inline QJsonValue to_json(const T & t, const QString & format = QString())                  { return qx::cvt::detail::QxConvert_ToJson<T>::toJson(t, format); }
+template <typename T> inline qx_bool from_json(const QJsonValue & j, T & t, const QString & format = QString())   { return qx::cvt::detail::QxConvert_FromJson<T>::fromJson(j, t, format); }
+#endif // _QX_NO_JSON
 
 } // namespace cvt
 } // namespace qx

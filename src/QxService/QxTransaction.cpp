@@ -48,6 +48,9 @@
 #include <QxCommon/QxException.h>
 #include <QxCommon/QxExceptionCode.h>
 
+#include <QxSerialize/QxSerializeQJson.h>
+#include <QxSerialize/QJson/QxSerializeQJson_QxTransaction.h>
+
 #include <QxMemLeak/mem_leak.h>
 
 QX_REGISTER_INTERNAL_HELPER_START_FILE_CPP(qx::service::QxTransaction)
@@ -148,6 +151,9 @@ qx_bool QxTransaction::readSocket(QTcpSocket & socket)
 QString QxTransaction::getInfos() const
 {
    QString infos;
+#ifndef _QX_NO_JSON
+   infos += "transaction_content (JSON format) :\n" + qx::serialization::json::to_string(* this) + "\n";
+#else // _QX_NO_JSON
    infos += "transaction_id :\t\t" + m_sTransactionId + "\n";
    infos += "input_transaction_size :\t\t" + QString::number(m_uiInputTransactionSize) + "\n";
    infos += "output_transaction_size :\t\t" + QString::number(m_uiOutputTransactionSize) + "\n";
@@ -164,6 +170,7 @@ QString QxTransaction::getInfos() const
    infos += "service_name :\t\t" + m_sServiceName + "\n";
    infos += "service_method :\t\t" + m_sServiceMethod + "\n";
    infos += "message_return :\t\t" + (m_bMessageReturn ? QString("1") : QString("0")) + (m_bMessageReturn.getDesc().isEmpty() ? QString() : (QString(", ") + m_bMessageReturn.getDesc())) + ((m_bMessageReturn.getValue() == 0) ? QString() : (QString(", value=") + QString::number(m_bMessageReturn.getValue()))) + "\n";
+#endif // _QX_NO_JSON
    return infos;
 }
 

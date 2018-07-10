@@ -63,6 +63,7 @@ private:
    typedef typename QxSqlRelation<DataType, Owner>::type_generic_container type_generic_container;
    typedef typename QxSqlRelation<DataType, Owner>::type_item type_item;
    typedef typename type_generic_container::type_iterator type_iterator;
+   typedef typename type_item::type_value type_value;
 
    enum { is_data_container = QxSqlRelation<DataType, Owner>::is_data_container };
 
@@ -142,7 +143,8 @@ public:
       }
 
       if (! this->callTriggerAfterFetch(item_val, params)) { return NULL; }
-      type_generic_container::insertItem(this->getContainer(params), item);
+      type_value * pValue = type_generic_container::insertItem(this->getContainer(params), item);
+      if (! type_item::is_value_pointer && pValue) { return pValue; }
       return (& item_val);
    }
 

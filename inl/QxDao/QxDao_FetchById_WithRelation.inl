@@ -74,8 +74,9 @@ private:
 
    static inline void fetchById_Complex(T & t, type_dao_helper & dao)
    {
-      while (dao.nextRecord())
-      { type_query_helper::resolveOutput(dao.getSqlRelationLinked(), t, dao.query(), dao.builder()); if (! dao.isValid()) { return; } }
+      if (! dao.nextRecord()) { dao.errNoData(); return; }
+      do { type_query_helper::resolveOutput(dao.getSqlRelationLinked(), t, dao.query(), dao.builder()); if (! dao.isValid()) { return; } }
+      while (dao.nextRecord());
    }
 
 };
@@ -177,8 +178,9 @@ private:
 
       static inline void fetch_Complex(U & item, type_dao_helper & dao)
       {
-         while (dao.nextRecord())
-         { type_query_helper::resolveOutput(dao.getSqlRelationLinked(), item, dao.query(), dao.builder()); if (! dao.isValid()) { return; } }
+         if (! dao.nextRecord()) { dao.errNoData(); return; }
+         do { type_query_helper::resolveOutput(dao.getSqlRelationLinked(), item, dao.query(), dao.builder()); if (! dao.isValid()) { return; } }
+         while (dao.nextRecord());
       }
 
    };

@@ -66,11 +66,11 @@
     <table cellspacing="0" cellpadding="1"><col><col><tbody>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow">Current version :&nbsp;</font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.1 - <a href="../doxygen/index.html" target="_blank">QxOrm library online class documentation</a></font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.2 - <a href="../doxygen/index.html" target="_blank">QxOrm library online class documentation</a></font></td>
       </tr>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow"></font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.1.8</font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.1.9</font></td>
       </tr>
     </tbody></table>
   </td>
@@ -523,7 +523,7 @@ template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</
         =&gt; <font style="background-color:yellow"><b>persistence</b></font>.<br>
         <b>QxOrm</b> provides also 2 other important functionalities :
         <ul>
-          <li><b><font style="background-color:yellow">serialization</font></b> : binary and xml format
+          <li><b><font style="background-color:yellow">serialization</font></b> : binary, XML and JSON format
           </li>
           <li><b><font style="background-color:yellow">reflection</font></b> (or <b><font style="background-color:yellow">introspection</font></b>) : access to classes definitions, retrieve properties and call classes methods
           </li>
@@ -593,7 +593,7 @@ int</span><span class="keyword"> main</span><span class="operator">(</span><span
    daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<span class="operator">::</span>fetch_by_query<span class="operator">(</span>query<span class="operator">,</span> list_of_female_author<span class="operator">);</span>
    qAssert<span class="operator">(</span>list_of_female_author<span class="operator">.</span>count<span class="operator">() ==</span><span class="int"> 2</span><span class="operator">);</span><span class="comment">
 
-   // Dump list of female author (xml serialization)
+   // Dump list of female author (XML or JSON serialization)
 </span>   qx<span class="operator">::</span>dump<span class="operator">(</span>list_of_female_author<span class="operator">);</span><span class="comment">
 
    // Create 3 categories
@@ -672,7 +672,7 @@ int</span><span class="keyword"> main</span><span class="operator">(</span><span
    qAssert<span class="operator">(</span>blog_tmp<span class="operator">-&gt;</span>m_text<span class="operator"> ==</span><span class="string"> "update blog_text_1"</span><span class="operator">);</span>
    qAssert<span class="operator">(</span>blog_tmp<span class="operator">-&gt;</span>m_author<span class="operator"> &amp;&amp;</span> blog_tmp<span class="operator">-&gt;</span>m_author<span class="operator">-&gt;</span>m_id<span class="operator"> ==</span><span class="string"> "author_id_2"</span><span class="operator">);</span><span class="comment">
 
-   // Dump 'blog_tmp' result from database (xml serialization)
+   // Dump 'blog_tmp' result from database (XML or JSON serialization)
 </span>   qx<span class="operator">::</span>dump<span class="operator">(</span>blog_tmp<span class="operator">);</span><span class="comment">
 
    // Call 'age()' method with class name and method name (reflection)
@@ -883,7 +883,7 @@ int</span><span class="keyword"> main</span><span class="operator">(</span><span
         <img alt="QxOrm" src="./resource/logo_qxorm_small.png" width="168" height="40">
       </td>
       <td align="center" valign="middle">
-        <font size="2">© 2015 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
+        <font size="2">© 2016 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
       </td>
       <td align="right" valign="middle">
         <form action="https://www.paypal.com/cgi-bin/webscr" method="post">

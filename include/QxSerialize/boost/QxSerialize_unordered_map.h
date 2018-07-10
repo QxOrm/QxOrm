@@ -37,6 +37,7 @@
 #pragma once
 #endif
 
+#include <boost/version.hpp>
 #include <boost/unordered_map.hpp>
 
 #include <boost/serialization/serialization.hpp>
@@ -48,6 +49,41 @@
 
 namespace boost {
 namespace serialization {
+
+#if (BOOST_VERSION > 105700)
+
+template <class Archive, class Key, class Value>
+inline void save(Archive & ar, const boost::unordered_map<Key, Value> & t, const unsigned int /* file_version */)
+{
+   long lSize = static_cast<long>(t.size());
+   ar << boost::serialization::make_nvp("size", lSize);
+
+   typedef typename boost::unordered_map<Key, Value>::const_iterator type_itr;
+   for (type_itr itr = t.begin(); itr != t.end(); ++itr)
+   {
+      std::pair<Key, Value> pair_key_value = std::make_pair(itr->first, itr->second);
+      ar << boost::serialization::make_nvp("item", pair_key_value);
+   }
+}
+
+template <class Archive, class Key, class Value>
+inline void load(Archive & ar, boost::unordered_map<Key, Value> & t, const unsigned int /* file_version */)
+{
+   long lSize = 0;
+   ar >> boost::serialization::make_nvp("size", lSize);
+
+   t.clear();
+   t.reserve(lSize);
+   std::pair<Key, Value> pair_key_value;
+
+   for (long l = 0; l < lSize; l++)
+   {
+      ar >> boost::serialization::make_nvp("item", pair_key_value);
+      t.insert(pair_key_value);
+   }
+}
+
+#else // (BOOST_VERSION > 105700)
 
 template <class Archive, class Key, class Value>
 inline void save(Archive & ar, const boost::unordered_map<Key, Value> & t, const unsigned int /* file_version */)
@@ -63,11 +99,48 @@ inline void load(Archive & ar, boost::unordered_map<Key, Value> & t, const unsig
       boost::serialization::stl::no_reserve_imp< boost::unordered_map<Key, Value> > >(ar, t);
 }
 
+#endif // (BOOST_VERSION > 105700)
+
 template <class Archive, class Key, class Value>
 inline void serialize(Archive & ar, boost::unordered_map<Key, Value> & t, const unsigned int file_version)
 {
    boost::serialization::split_free(ar, t, file_version);
 }
+
+#if (BOOST_VERSION > 105700)
+
+template <class Archive, class Key, class Value>
+inline void save(Archive & ar, const boost::unordered_multimap<Key, Value> & t, const unsigned int /* file_version */)
+{
+   long lSize = static_cast<long>(t.size());
+   ar << boost::serialization::make_nvp("size", lSize);
+
+   typedef typename boost::unordered_multimap<Key, Value>::const_iterator type_itr;
+   for (type_itr itr = t.begin(); itr != t.end(); ++itr)
+   {
+      std::pair<Key, Value> pair_key_value = std::make_pair(itr->first, itr->second);
+      ar << boost::serialization::make_nvp("item", pair_key_value);
+   }
+}
+
+template <class Archive, class Key, class Value>
+inline void load(Archive & ar, boost::unordered_multimap<Key, Value> & t, const unsigned int /* file_version */)
+{
+   long lSize = 0;
+   ar >> boost::serialization::make_nvp("size", lSize);
+
+   t.clear();
+   t.reserve(lSize);
+   std::pair<Key, Value> pair_key_value;
+
+   for (long l = 0; l < lSize; l++)
+   {
+      ar >> boost::serialization::make_nvp("item", pair_key_value);
+      t.insert(pair_key_value);
+   }
+}
+
+#else // (BOOST_VERSION > 105700)
 
 template <class Archive, class Key, class Value>
 inline void save(Archive & ar, const boost::unordered_multimap<Key, Value> & t, const unsigned int /* file_version */)
@@ -88,6 +161,8 @@ inline void load(Archive & ar, boost::unordered_multimap<Key, Value> & t, const 
       boost::serialization::stl::no_reserve_imp< boost::unordered_multimap<Key, Value> > >(ar, t);
 #endif // (BOOST_VERSION >= 104200)
 }
+
+#endif // (BOOST_VERSION > 105700)
 
 template <class Archive, class Key, class Value>
 inline void serialize(Archive & ar, boost::unordered_multimap<Key, Value> & t, const unsigned int file_version)

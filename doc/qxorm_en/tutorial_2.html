@@ -66,11 +66,11 @@
     <table cellspacing="0" cellpadding="1"><col><col><tbody>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow">Current version :&nbsp;</font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.1 - <a href="../doxygen/index.html" target="_blank">QxOrm library online class documentation</a></font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.2 - <a href="../doxygen/index.html" target="_blank">QxOrm library online class documentation</a></font></td>
       </tr>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow"></font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.1.8</font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.1.9</font></td>
       </tr>
     </tbody></table>
   </td>
@@ -335,7 +335,7 @@ void</span> main_dlg<span class="operator">::</span>onTransactionFinished<span c
         <br>
         All transactions between client and server are schematized by <i>qx::service::QxTransaction_ptr</i> type.<br>
         This class contains all informations needed to execute a service (unique id, date-time, request from client, service to execute, reply from server, error message and error code, etc...).<br>
-        Transaction is serialized to xml format to display it in the field <i>txtTransaction</i>.<br>
+        Transaction is serialized to XML (or JSON) format to display it in the field <i>txtTransaction</i>.<br>
         <br>
         <a name="tuto_106"><u><font color="#100D5A">1.6- Result with <i>qxServer</i> project</font></u></a>
         <br><br>
@@ -647,7 +647,7 @@ void</span> user_service<span class="operator">::</span>get_by_criteria<span cla
         <br>
         <u>As you can see, the client doesn't have to write any specific code to call a service, this is just a call to a classic method</u>.<br>
         You just have to instanciate a service, then call the service method : <i>get_current_date_time()</i>.<br>
-        <i>updateLastTransactionLog()</i> function log into the field the last transaction executed between client and server (xml format).<br>
+        <i>updateLastTransactionLog()</i> function log into the field the last transaction executed between client and server (XML or JSON format).<br>
         If an error occured, then a message box is displayed with an error description.<br>
         To know if a service has been executed without error, you have to use the function : <i>service.getMessageReturn();</i> (of <i>qx_bool</i> type that can contain an error code and an error description).<br>
         Finally, to retrieve the reply from server (so the current date-time), you have to use the function : <i>service.getOutputParameter();</i> (of <i>user_service_output_ptr</i> type).<br>
@@ -753,7 +753,7 @@ void</span> main_dlg<span class="operator">::</span>onDateTimeAsyncFinished<span
         <img alt="QxOrm" src="./resource/logo_qxorm_small.png" width="168" height="40">
       </td>
       <td align="center" valign="middle">
-        <font size="2">© 2015 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
+        <font size="2">© 2016 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
       </td>
       <td align="right" valign="middle">
         <form action="https://www.paypal.com/cgi-bin/webscr" method="post">

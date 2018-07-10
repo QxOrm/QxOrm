@@ -66,11 +66,11 @@
     <table cellspacing="0" cellpadding="1"><col><col><tbody>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow">Version courante :&nbsp;</font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.1 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.2 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
       </tr>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow"></font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.1.8</font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.1.9</font></td>
       </tr>
     </tbody></table>
   </td>
@@ -315,6 +315,9 @@
                               <a href="#manual_600">Moteur QDataStream de Qt</a>
                            </li>
                            <li class="manual_li_title_2">
+                              <a href="#manual_606">Moteur JSON de Qt</a>
+                           </li>
+                           <li class="manual_li_title_2">
                               <a href="#manual_610">Moteur XML de boost::serialization</a>
                            </li>
                            <li class="manual_li_title_2">
@@ -327,7 +330,7 @@
                               <a href="#manual_640">Cloner une instance C++</a>
                            </li>
                            <li class="manual_li_title_2">
-                              <a href="#manual_650">Afficher le détail d'une instance C++ (dump)</a>
+                              <a href="#manual_650">Afficher le détail d'une instance C++ (dump au format XML ou JSON)</a>
                            </li>
                         </ol>
                      </li>
@@ -426,7 +429,7 @@
            À partir d'une simple <i>fonction de paramétrage</i> (que l'on peut comparer avec un fichier de mapping XML <a href="http://hibernate.org/" target="_blank"><i>Hibernate</i></a>), vous aurez accès aux fonctionnalités suivantes :
            <ul>
              <li><font style="background-color:yellow"><b><a href="./manual.html#manual_30">persistance</a></b></font> : communication avec de nombreuses bases de données (avec support des relations <i>1-1</i>, <i>1-n</i>, <i>n-1</i> et <i>n-n</i>) ;
-             </li><li><font style="background-color:yellow"><b><a href="./manual.html#manual_60">sérialisation</a></b></font> des données (flux binaire et XML) ;
+             </li><li><font style="background-color:yellow"><b><a href="./manual.html#manual_60">sérialisation</a></b></font> des données (flux binaire, XML et JSON) ;
              </li><li>moteur de <font style="background-color:yellow"><b><a href="./manual.html#manual_70">réflexion</a></b></font> (ou <font style="background-color:yellow"><b><a href="./manual.html#manual_70">introspection</a></b></font>) pour accéder dynamiquement aux classes, attributs et invoquer des méthodes.
              </li>
            </ul>
@@ -3109,7 +3112,7 @@ bGetOk<span class="operator"> =</span> qx<span class="operator">::</span>cache<s
            Ce mécanisme permet au framework Qt de proposer un moteur d'introspection grâce au pré-compilateur <i>moc</i>.
            Les méta-propriétés peuvent alors être utilisées par exemple par le moteur <i>QML</i>, <i>QtScript</i>, etc.<br>
            <br>
-           La bibliothèque <b>QxOrm</b> nécessite une déclaration de chacune des propriétés d'une classe dans la fonction de mapping <i>void qx::register_class&lt;T&gt;()</i> afin de proposer l'ensemble de ses fonctionnalités (persistance des données, sérialisation XML et binaire, etc.).
+           La bibliothèque <b>QxOrm</b> nécessite une déclaration de chacune des propriétés d'une classe dans la fonction de mapping <i>void qx::register_class&lt;T&gt;()</i> afin de proposer l'ensemble de ses fonctionnalités (persistance des données, sérialisation XML, JSON et binaire, etc.).
            Il est possible de déclarer automatiquement dans le contexte QxOrm l'ensemble des méta-propriétés sans maintenir une fonction de mapping <i>void qx::register_class&lt;T&gt;()</i> : la macro <b>QX_REGISTER_ALL_QT_PROPERTIES()</b> utilise le moteur d'introspection de Qt pour parcourir la liste des méta-propriétés.<br>
            <br>
            Voici un exemple d'utilisation avec la classe <i>TestQtProperty</i> se trouvant dans le dossier <i>./test/qxDllSample/dll1/include/</i> de la distribution QxOrm :<br>
@@ -3217,11 +3220,12 @@ template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</
          Toute classe C++ enregistrée dans le contexte QxOrm peut être sérialisée dans différents formats :
          <ul>
             <li><a href="#manual_600">format binaire avec le moteur QDataStream de Qt</a> ;</li>
+            <li><a href="#manual_606">format JSON avec le moteur QJson de Qt</a> ;</li>
             <li><a href="#manual_610">format XML avec le moteur boost::serialization</a> ;</li>
             <li><a href="#manual_620">format binaire avec le moteur boost::serialization</a> ;</li>
             <li><a href="#manual_630">d'autres formats proposés par le moteur boost::serialization</a>.</li>
          </ul>
-         <b>Remarque :</b> le moteur de sérialisation de la bibliothèque QxOrm permet de proposer des fonctionnalités supplémentaires comme <a href="#manual_640">le clonage d'entités</a>, <a href="#manual_650">le dump d'entités</a> ou encore <a href="#manual_80">le module QxService</a>.
+         <b>Remarque :</b> le moteur de sérialisation de la bibliothèque QxOrm permet de proposer des fonctionnalités supplémentaires comme <a href="#manual_640">le clonage d'entités</a>, <a href="#manual_650">le dump d'entités (format XML ou JSON)</a> ou encore <a href="#manual_80">le module QxService</a>.
          <br><br>
          <b>Autre remarque :</b> par défaut, toutes les propriétés enregistrées dans le contexte QxOrm sont sérialisables. Pour supprimer une propriété du moteur de sérialisation, il est possible d'écrire :<br>
          <br>
@@ -3364,6 +3368,58 @@ template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</
             Pour connaitre la liste des collections supportées, rendez-vous dans le chapitre : <a href="#manual_390">Collections supportées par QxOrm</a>.
             <br><br>
          </div>
+         <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_606">Moteur JSON de Qt</a></p>
+         <div class="manual_div_content">
+            Toute classe C++ enregistrée dans le contexte QxOrm peut être sérialisée en utilisant <a href="http://doc.qt.io/qt-5/json.html" target="_blank">le moteur QJson de Qt</a> (nécessite Qt5).
+            Les fonctions pour utiliser ce type de sérialisation sont disponibles dans l'espace de nom : <a href="../doxygen/html/namespaceqx_1_1serialization_1_1json.html" target="_blank">namespace qx::serialization::json</a>.
+            <ul>
+               <li><a href="../doxygen/html/namespaceqx_1_1serialization_1_1json.html" target="_blank">qx::serialization::json::to_string()</a> : sérialise une instance C++ au format JSON ;</li>
+               <li><a href="../doxygen/html/namespaceqx_1_1serialization_1_1json.html" target="_blank">qx::serialization::json::from_string()</a> : restaure une instance C++ à partir d'un flux JSON ;</li>
+               <li><a href="../doxygen/html/namespaceqx_1_1serialization_1_1json.html" target="_blank">qx::serialization::json::to_file()</a> : sérialisation JSON d'une instance C++ (dont le type est enregistré dans le contexte QxOrm) dans un fichier ;</li>
+               <li><a href="../doxygen/html/namespaceqx_1_1serialization_1_1json.html" target="_blank">qx::serialization::json::from_file()</a> : restauration d'une instance C++ à partir d'un fichier contenant le flux JSON sérialisé ;</li>
+               <li><a href="../doxygen/html/namespaceqx_1_1serialization_1_1json.html" target="_blank">qx::serialization::json::to_file_compressed()</a> : sérialisation JSON d'une instance C++ (dont le type est enregistré dans le contexte QxOrm) dans un fichier compressé ;</li>
+               <li><a href="../doxygen/html/namespaceqx_1_1serialization_1_1json.html" target="_blank">qx::serialization::json::from_file_compressed()</a> : restauration d'une instance C++ à partir d'un fichier compressé contenant le flux JSON sérialisé ;</li>
+               <li><a href="../doxygen/html/namespaceqx_1_1serialization_1_1json.html" target="_blank">qx::serialization::json::to_byte_array()</a> : sérialise une instance C++ (dont le type est enregistré dans le contexte QxOrm) en flux binaire de type <a href="http://doc.qt.io/qt-5/qbytearray.html" target="_blank">QByteArray</a> ;</li>
+               <li><a href="../doxygen/html/namespaceqx_1_1serialization_1_1json.html" target="_blank">qx::serialization::json::from_byte_array()</a> : restaure une instance C++ en fonction d'un flux binaire sérialisé de type <a href="http://doc.qt.io/qt-5/qbytearray.html" target="_blank">QByteArray</a>.</li>
+            </ul>
+            <b>Remarque :</b> le moteur de sérialisation <a href="http://doc.qt.io/qt-5/json.html" target="_blank">JSON</a> est le plus permissif (comparé au <a href="#manual_610">moteur XML</a> par exemple) : en effet, les propriétés d'une instance peuvent être définies dans n'importe quel ordre, les propriétés peuvent être supprimées ou ajoutées.
+            La désérialisation JSON ne retourne jamais d'erreur : elle ignore tout si le format des données est incorrect (le flux JSON doit par contre être valide) ou bien si des propriétés sont absentes : le moteur JSON est donc beaucoup plus flexible que <a href="#manual_610">le moteur XML</a>.
+            <br><br>
+            <b>Autre remarque :</b> la sérialisation <a href="http://doc.qt.io/qt-5/json.html" target="_blank">JSON</a> est basée sur le moteur d'introspection de la bibliothèque QxOrm, elle est moins performante que les sérialisations basées sur le moteur <a href="http://www.boost.org/doc/libs/release/libs/serialization/doc/index.html" target="_blank">boost::serialization</a>.
+            <br><br>
+            <b>Par exemple :</b><br>
+            <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="Qt JSON serialization">
+<pre><span class="comment">   // Fetch a list of authors from database and serialize them to a JSON file
+</span>   list_author list_of_author<span class="operator">;</span>
+   qx<span class="operator">::</span>dao<span class="operator">::</span>fetch_all<span class="operator">(</span>list_of_author<span class="operator">);</span>
+   qx<span class="operator">::</span>serialization<span class="operator">::</span>json<span class="operator">::</span>to_file<span class="operator">(</span>list_of_author<span class="operator">,</span><span class="string"> "list_of_author.json"</span><span class="operator">);</span></pre>
+            </td></tr></tbody></table>
+            <br>
+            L'exemple ci-dessus génère le flux JSON suivant :<br>
+            <div style="width:900px; height:200px; overflow:auto; background-color:white">
+<pre>
+{
+    "author_id_2": {
+        "author_id": "author_id_2",
+        "birthdate": "2016-03-24",
+        "list_blog": [
+        ],
+        "name": "author_2",
+        "sex": 1
+    },
+    "author_id_3": {
+        "author_id": "author_id_3",
+        "birthdate": "2016-03-24",
+        "list_blog": [
+        ],
+        "name": "author_3",
+        "sex": 1
+    }
+}
+</pre>
+            </div>
+            <br><br>
+         </div>
          <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_610">Moteur XML de boost::serialization</a></p>
          <div class="manual_div_content">
             Le moteur XML de <a href="http://www.boost.org/doc/libs/release/libs/serialization/doc/index.html" target="_blank">boost::serialization</a> n'est pas activé par défaut : pour activer cette fonctionnalité, il est nécessaire de définir les options de compilation <b>_QX_ENABLE_BOOST_SERIALIZATION</b> et <b>_QX_ENABLE_BOOST_SERIALIZATION_XML</b> dans <a href="#manual_220">le fichier de configuration QxOrm.pri</a>.
@@ -3438,9 +3494,10 @@ template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</
             </td></tr></tbody></table>
             <br><br>
          </div>
-         <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_650">Afficher le détail d'une instance C++ (dump)</a></p>
+         <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_650">Afficher le détail d'une instance C++ (dump au format XML ou JSON)</a></p>
          <div class="manual_div_content">
-            Si le <a href="#manual_610">moteur XML de boost::serialization</a> est activé, alors il est possible d'afficher un dump sous format XML d'une instance C++ enregistrée dans le contexte QxOrm.
+            Toute instance C++ enregistrée dans le contexte QxOrm peut être affichée <a href="#manual_606">au format JSON</a>.
+            Si le <a href="#manual_610">moteur XML de boost::serialization</a> est activé, alors il est également possible d'afficher un dump sous format XML (paramètre d'entrée de la fonction <i>qx::dump</i>).
             Cette fonctionnalité peut être utile pour faire du débogage par exemple, ou bien pour générer des logs.
             <br><br>
             <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="qx::dump">
@@ -3449,8 +3506,9 @@ template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</
    b<span class="operator">-&gt;</span>id<span class="operator"> =</span><span class="int"> 36</span><span class="operator">;</span>
    qx<span class="operator">::</span>dao<span class="operator">::</span>fetch_by_id_with_all_relation<span class="operator">(</span>b<span class="operator">);</span><span class="comment">
 
-   // Dump 'b' instance result from database (xml serialization)
-</span>   <font style="background-color:yellow">qx<span class="operator">::</span>dump<span class="operator">(</span>b<span class="operator">);</span></font></pre>
+   // Dump 'b' instance result from database (XML or JSON serialization)
+   // Second parameter is optional : 'true' = JSON format, 'false' = XML format
+</span>   <font style="background-color:yellow">qx<span class="operator">::</span>dump<span class="operator">(</span>b, false<span class="operator">);</span></font></pre>
             </td></tr></tbody></table>
             <br>
             Ce qui génère le flux XML suivant :
@@ -4692,7 +4750,7 @@ Item<span class="operator"> {</span>
         <img alt="QxOrm" src="./resource/logo_qxorm_small.png" width="168" height="40">
       </td>
       <td align="center" valign="middle">
-        <font size="2">© 2015 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
+        <font size="2">© 2016 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
       </td>
       <td align="right" valign="middle">
         <form action="https://www.paypal.com/cgi-bin/webscr" method="post">

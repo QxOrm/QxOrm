@@ -66,11 +66,11 @@
     <table cellspacing="0" cellpadding="1"><col><col><tbody>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow">Version courante :&nbsp;</font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.1 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.2 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
       </tr>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow"></font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.1.8</font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.1.9</font></td>
       </tr>
     </tbody></table>
   </td>
@@ -338,7 +338,7 @@ void</span> main_dlg<span class="operator">::</span>onTransactionFinished<span c
         <br>
         Toutes les transactions entre client et serveur sont représentées par la classe <i>qx::service::QxTransaction_ptr</i>.<br>
         Cette classe contient toutes les informations nécessaires à l'exécution d'un service (identifiant unique, date-heure, requête du client, service à exécuter, réponse du serveur, code et message d'erreur, etc.).<br>
-        La transaction est sérialisée au format XML avant d'être affichée à l'utilisateur dans le champ <i>txtTransaction</i>.<br>
+        La transaction est sérialisée au format XML (ou JSON) avant d'être affichée à l'utilisateur dans le champ <i>txtTransaction</i>.<br>
         Cette sérialisation est indépendante de la réponse envoyée au client qui, par défaut, est au format binaire.<br>
         <br>
         <a name="tuto_106"><u><font color="#100D5A">1.6- Résultat obtenu pour le projet <i>qxServer</i></font></u></a>
@@ -654,14 +654,14 @@ void</span> user_service<span class="operator">::</span>get_by_criteria<span cla
    // Création d'une instance de service et appel à la méthode pour recevoir la date-heure courante du serveur
 </span>   server_infos service<span class="operator">;</span>
    service<span class="operator">.</span>get_current_date_time<span class="operator">();</span><span class="comment">
-   // Affiche la dernière transaction au format XML
+   // Affiche la dernière transaction au format XML (ou JSON)
 </span>   updateLastTransactionLog<span class="operator">(</span>service<span class="operator">.</span>getTransaction<span class="operator">());</span><span class="operator">
 }</span></pre>
         </td></tr></tbody></table>
         <br>
         <b>Comme vous pouvez le constater, la partie cliente n'a aucun code spécifique à écrire pour pouvoir appeler un service</b>.<br>
         Il suffit d'instancier un service, puis d'appeler la méthode qui nous intéresse : <i>get_current_date_time()</i>.<br>
-        La méthode <i>updateLastTransactionLog()</i> permet d'afficher la dernière transaction client-serveur (au format XML) exécutée.<br>
+        La méthode <i>updateLastTransactionLog()</i> permet d'afficher la dernière transaction client-serveur (au format XML ou JSON) exécutée.<br>
         Si une erreur s'est produite, alors un message apparaît à l'écran pour le signaler à l'utilisateur.<br>
         Pour savoir si le service s'est exécuté correctement, il faut utiliser la méthode : <i>service.getMessageReturn();</i> (de type <i>qx_bool</i> qui peut contenir un code et un libellé d'une éventuelle erreur).<br>
         Enfin, pour récupérer la réponse du serveur (donc sa date-heure courante), il faut utiliser la méthode : <i>service.getOutputParameter();</i> (de type <i>user_service_output_ptr</i>).<br>
@@ -715,7 +715,7 @@ void</span> main_dlg<span class="operator">::</span>onDateTimeAsyncFinished<span
    // Si la transaction s'est déroulée correctement, on affiche l'identifiant qui vient d'être ajouté en BDD
 </span>   user_ptr output<span class="operator"> = (</span>service<span class="operator">.</span>isValidWithOutput<span class="operator">() ?</span> service<span class="operator">.</span>getOutputParameter<span class="operator">()-&gt;</span>user<span class="operator"> :</span> user_ptr<span class="operator">());</span><span class="flow">
    if</span><span class="operator"> (</span>output<span class="operator">) {</span> fillUser<span class="operator">(</span>output<span class="operator">); }</span><span class="comment">
-   // Affiche la dernière transaction au format XML
+   // Affiche la dernière transaction au format XML (ou JSON)
 </span>   updateLastTransactionLog<span class="operator">(</span>service<span class="operator">.</span>getTransaction<span class="operator">());</span><span class="operator">
 }</span></pre>
         </td></tr></tbody></table>
@@ -739,7 +739,7 @@ void</span> main_dlg<span class="operator">::</span>onDateTimeAsyncFinished<span
    // Si la transaction s'est déroulée correctement, affiche un message avec le nombre d'utilisateurs stockés en BDD
 </span>   list_of_users_ptr output<span class="operator"> = (</span>service<span class="operator">.</span>isValidWithOutput<span class="operator">() ?</span> service<span class="operator">.</span>getOutputParameter<span class="operator">()-&gt;</span>list_of_users<span class="operator"> :</span> list_of_users_ptr<span class="operator">());</span><span class="flow">
    if</span><span class="operator"> (</span>output<span class="operator">) {</span> QMessageBox<span class="operator">::</span>information<span class="operator">(</span><span class="keyword">this</span><span class="operator">,</span><span class="string"> "qxClient - get all users"</span><span class="operator">,</span><span class="string"> "database contains '"</span><span class="operator"> +</span> QString<span class="operator">::</span>number<span class="operator">(</span>output<span class="operator">-&gt;</span>size<span class="operator">()) +</span><span class="string"> "' user(s)."</span><span class="operator">); }</span><span class="comment">
-   // Affiche la dernière transaction au format XML
+   // Affiche la dernière transaction au format XML (ou JSON)
 </span>   updateLastTransactionLog<span class="operator">(</span>service<span class="operator">.</span>getTransaction<span class="operator">());</span><span class="operator">
 }</span></pre>
         </td></tr></tbody></table>
@@ -764,7 +764,7 @@ void</span> main_dlg<span class="operator">::</span>onDateTimeAsyncFinished<span
         <img alt="QxOrm" src="./resource/logo_qxorm_small.png" width="168" height="40">
       </td>
       <td align="center" valign="middle">
-        <font size="2">© 2015 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
+        <font size="2">© 2016 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
       </td>
       <td align="right" valign="middle">
         <form action="https://www.paypal.com/cgi-bin/webscr" method="post">

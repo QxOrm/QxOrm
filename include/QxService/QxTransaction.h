@@ -46,6 +46,10 @@
 
 #include <QtCore/qdatastream.h>
 
+#ifndef _QX_NO_JSON
+#include <QtCore/qjsonvalue.h>
+#endif // _QX_NO_JSON
+
 #include <QtNetwork/qtcpsocket.h>
 
 #include <QxCommon/QxBool.h>
@@ -55,6 +59,8 @@
 #include <QxService/IxService.h>
 #include <QxService/IxParameter.h>
 
+#include <QxConvert/QxConvert.h>
+
 namespace qx {
 namespace service {
 class QxTransaction;
@@ -63,6 +69,19 @@ class QxTransaction;
 
 QX_DLL_EXPORT QDataStream & operator<< (QDataStream & stream, const qx::service::QxTransaction & t) BOOST_USED;
 QX_DLL_EXPORT QDataStream & operator>> (QDataStream & stream, qx::service::QxTransaction & t) BOOST_USED;
+
+#ifndef _QX_NO_JSON
+namespace qx {
+namespace cvt {
+namespace detail {
+template <> struct QxConvert_ToJson< qx::service::QxTransaction >;
+template <> struct QxConvert_FromJson< qx::service::QxTransaction >;
+QX_DLL_EXPORT QJsonValue QxConvert_ToJson_Helper(const qx::service::QxTransaction & t, const QString & format) BOOST_USED;
+QX_DLL_EXPORT qx_bool QxConvert_FromJson_Helper(const QJsonValue & j, qx::service::QxTransaction & t, const QString & format) BOOST_USED;
+} // namespace detail
+} // namespace cvt
+} // namespace qx
+#endif // _QX_NO_JSON
 
 namespace qx {
 namespace service {
@@ -80,6 +99,13 @@ class QX_DLL_EXPORT QxTransaction
 
    friend QDataStream & ::operator<< (QDataStream & stream, const qx::service::QxTransaction & t);
    friend QDataStream & ::operator>> (QDataStream & stream, qx::service::QxTransaction & t);
+
+#ifndef _QX_NO_JSON
+   friend struct qx::cvt::detail::QxConvert_ToJson< qx::service::QxTransaction >;
+   friend struct qx::cvt::detail::QxConvert_FromJson< qx::service::QxTransaction >;
+   friend QJsonValue qx::cvt::detail::QxConvert_ToJson_Helper(const qx::service::QxTransaction & t, const QString & format);
+   friend qx_bool qx::cvt::detail::QxConvert_FromJson_Helper(const QJsonValue & j, qx::service::QxTransaction & t, const QString & format);
+#endif // _QX_NO_JSON
 
 protected:
 

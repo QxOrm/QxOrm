@@ -20,6 +20,11 @@ void CUser::test()
    qx::serialization::xml::from_file(ptrTmp, "pointer_from_CUser.xml");
 #endif // _QX_SERIALIZE_XML
 
+#ifndef _QX_NO_JSON
+   qx::serialization::json::to_file(ptrTmp, "pointer_from_CUser.json");
+   qx::serialization::json::from_file(ptrTmp, "pointer_from_CUser.json");
+#endif // _QX_NO_JSON
+
    qx::test::CPerson person;
    qx::clone(person);
    qx::create("qx::test::CPerson");
@@ -45,6 +50,11 @@ void CUser::test()
    qx::serialization::xml::to_file(person, "person.xml");
    qx::serialization::xml::from_file(person, "person.xml");
 #endif // _QX_SERIALIZE_XML
+
+#ifndef _QX_NO_JSON
+   qx::serialization::json::to_file(person, "person.json");
+   qx::serialization::json::from_file(person, "person.json");
+#endif // _QX_NO_JSON
 
 #if _QX_SERIALIZE_PORTABLE_BINARY
    qx::serialization::portable_binary::to_file(person, "person.bin2", 0);
@@ -88,6 +98,11 @@ void CUser::test()
    qx::serialization::xml::to_file(user, "user.xml");
    qx::serialization::xml::from_file(user, "user.xml");
 #endif // _QX_SERIALIZE_XML
+
+#ifndef _QX_NO_JSON
+   qx::serialization::json::to_file(user, "user.json");
+   qx::serialization::json::from_file(user, "user.json");
+#endif // _QX_NO_JSON
 
 #if _QX_SERIALIZE_PORTABLE_BINARY
    qx::serialization::portable_binary::to_file(user, "user.bin2", 0);

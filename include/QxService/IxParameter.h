@@ -46,6 +46,10 @@
 
 #include <QtCore/qdatastream.h>
 
+#ifndef _QX_NO_JSON
+#include <QtCore/qjsonvalue.h>
+#endif // _QX_NO_JSON
+
 #include <QxRegister/QxRegisterInternalHelper.h>
 
 namespace qx {
@@ -77,12 +81,17 @@ public:
    IxParameter();
    virtual ~IxParameter();
 
-   // Need to override these methods only if you are using 'qx::service::QxConnect::serialization_qt' type (based on QDataStream)
-   // You can use QX_SERVICE_IX_PARAMETER_QDATASTREAM_HPP and QX_SERVICE_IX_PARAMETER_QDATASTREAM_CPP macro to override
+   // Need to override these methods only if you are using 'qx::service::QxConnect::serialization_qt' type (based on QDataStream) or 'qx::service::QxConnect::serialization_json' type (based on QJson engine)
+   // You can use QX_SERVICE_IX_PARAMETER_SERIALIZATION_HPP and QX_SERVICE_IX_PARAMETER_SERIALIZATION_CPP macro to override
    virtual void registerClass() const;
    virtual QString getClassName() const;
    virtual void save(QDataStream & stream) const;
    virtual void load(QDataStream & stream);
+
+#ifndef _QX_NO_JSON
+   virtual QJsonValue saveToJson() const;
+   virtual qx_bool loadFromJson(const QJsonValue & val);
+#endif // _QX_NO_JSON
 
 };
 
@@ -95,16 +104,41 @@ QX_REGISTER_INTERNAL_HELPER_HPP(QX_DLL_EXPORT, qx::service::IxParameter, 0)
 
 #define QX_SERVICE_IX_PARAMETER_QDATASTREAM_HPP(className) \
 public: \
-virtual void registerClass() const; \
-virtual QString getClassName() const; \
 virtual void save(QDataStream & stream) const; \
 virtual void load(QDataStream & stream);
 
 #define QX_SERVICE_IX_PARAMETER_QDATASTREAM_CPP(className) \
-void className::registerClass() const { qx::QxClass< className >::getSingleton(); } \
-QString className::getClassName() const { return #className; } \
 void className::save(QDataStream & stream) const { qx::QxSerializeRegistered< className >::save(stream, (* this)); } \
 void className::load(QDataStream & stream) { qx::QxSerializeRegistered< className >::load(stream, (* this)); }
+
+#ifndef _QX_NO_JSON
+
+#define QX_SERVICE_IX_PARAMETER_QJSON_HPP(className) \
+public: \
+virtual QJsonValue saveToJson() const; \
+virtual qx_bool loadFromJson(const QJsonValue & val);
+
+#define QX_SERVICE_IX_PARAMETER_QJSON_CPP(className) \
+QJsonValue className::saveToJson() const { return qx::cvt::detail::QxSerializeJsonRegistered< className >::save((* this), ""); } \
+qx_bool className::loadFromJson(const QJsonValue & val) { return qx::cvt::detail::QxSerializeJsonRegistered< className >::load(val, (* this), ""); }
+
+#else // _QX_NO_JSON
+#define QX_SERVICE_IX_PARAMETER_QJSON_HPP(className) /* Nothing */
+#define QX_SERVICE_IX_PARAMETER_QJSON_CPP(className) /* Nothing */
+#endif // _QX_NO_JSON
+
+#define QX_SERVICE_IX_PARAMETER_SERIALIZATION_HPP(className) \
+QX_SERVICE_IX_PARAMETER_QDATASTREAM_HPP(className) \
+QX_SERVICE_IX_PARAMETER_QJSON_HPP(className) \
+public: \
+virtual void registerClass() const; \
+virtual QString getClassName() const;
+
+#define QX_SERVICE_IX_PARAMETER_SERIALIZATION_CPP(className) \
+QX_SERVICE_IX_PARAMETER_QDATASTREAM_CPP(className) \
+QX_SERVICE_IX_PARAMETER_QJSON_CPP(className) \
+void className::registerClass() const { qx::QxClass< className >::getSingleton(); } \
+QString className::getClassName() const { return #className; }
 
 #endif // _IX_SERVICE_PARAMETER_H_
 #endif // _QX_ENABLE_QT_NETWORK

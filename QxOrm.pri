@@ -35,7 +35,7 @@
 
 # By default, QxOrm library doesn't depend on boost::serialization shared library, but it is possible to enable it defining the compilation option : _QX_ENABLE_BOOST_SERIALIZATION
 # Without this compilation option, QxOrm is a much lighter library, generated binaries based on QxOrm are smaller, and QxOrm depends only on Qt binaries (and boost header files)
-# But in this case, serialization features are limited (based on QDataStream Qt engine) : limited qx::clone, no qx::dump, no XML serialization, limited binary serialization, limited QxService module (network transactions), etc...
+# But in this case, serialization features are limited (based on QDataStream and QJson engines) : limited qx::clone, no XML serialization, limited binary serialization, limited QxService module (network transactions), etc...
 # If you define _QX_ENABLE_BOOST_SERIALIZATION compilation option, then boost serialization is enabled with XML and binary engine by default (see _QX_ENABLE_BOOST_SERIALIZATION_BINARY and _QX_ENABLE_BOOST_SERIALIZATION_XML for more details)
 # Note : if you are not using serialization functions in projects based on QxOrm library, then you can define or not _QX_ENABLE_BOOST_SERIALIZATION compilation option without changing any line of your source code
 # Other note : to persist containers in database (not relationships, for example : std::vector<int>), without _QX_ENABLE_BOOST_SERIALIZATION it is stored as QByteArray (based on QDataStream engine), with _QX_ENABLE_BOOST_SERIALIZATION it is stored as XML (based on boost serialization XML engine) => so be careful, in this case it is not compatible
@@ -272,3 +272,13 @@ CONFIG += rtti_off
 # Note : on Windows, static mode works with only 1 EXE, it will never work mixing DLL and EXE (because of singleton implementation of boost::serialization and QxOrm libraries)
 
 # DEFINES += _QX_STATIC_BUILD
+
+################################
+# No JSON Serialization Engine #
+################################
+
+# QxOrm library supports JSON serialization : this feature is enabled by default if you are not working with Qt4 (JSON engine requires Qt5)
+# To disable this feature, you can define the compilation option : _QX_NO_JSON
+# Using _QX_NO_JSON compilation option, qx::serialization::json namespace will be not available
+
+# DEFINES += _QX_NO_JSON

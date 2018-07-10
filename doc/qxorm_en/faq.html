@@ -66,11 +66,11 @@
     <table cellspacing="0" cellpadding="1"><col><col><tbody>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow">Current version :&nbsp;</font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.1 - <a href="../doxygen/index.html" target="_blank">QxOrm library online class documentation</a></font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.2 - <a href="../doxygen/index.html" target="_blank">QxOrm library online class documentation</a></font></td>
       </tr>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow"></font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.1.8</font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.1.9</font></td>
       </tr>
     </tbody></table>
   </td>
@@ -149,7 +149,7 @@
            <ul>
              <li><b><font style="background-color:yellow">persistence</font></b> : communication with databases (support <i>1-1</i>, <i>1-n</i>, <i>n-1</i> and <i>n-n</i> relationships)
              </li>
-             <li><b><font style="background-color:yellow">serialization</font></b> : binary and xml format
+             <li><b><font style="background-color:yellow">serialization</font></b> : binary, XML and JSON format
              </li>
              <li><b><font style="background-color:yellow">reflection</font></b> (or <b><font style="background-color:yellow">introspection</font></b>) : access to classes definitions, retrieve properties and call classes methods
              </li>
@@ -332,9 +332,9 @@ A detailed list of supported databases is available on the website of Qt <a href
          <tr>
            <td valign="middle" width="30"></td>
            <td align="justify">
-           Yes, if the <i>serialization</i> of your data in <i>xml</i> format is not used in your project, you can disable this functionality.<br>
+           Yes, if the <i>serialization</i> of your data in <i>XML</i> format is not used in your project, you can disable this functionality.<br>
            The compilation times will be then reduced but you will not have anymore access to the namespace <i>qx::serialization:xml</i>.<br>
-           To disable <i>xml serialization</i>, it is necessary to open the <i>QxOrm.pri</i> config file and to remove (or comment) the compilation option <b><i>_QX_ENABLE_BOOST_SERIALIZATION_XML</i></b>.<br>
+           To disable <i>XML serialization</i>, it is necessary to open the <i>QxOrm.pri</i> config file and to remove (or comment) the compilation option <b><i>_QX_ENABLE_BOOST_SERIALIZATION_XML</i></b>.<br>
            A recompilation of QxOrm library is necessary to take into account this modification.<br>
            <br>
            Another possibility is to use the <i>polymorphic</i> classes of the library <a href="http://www.boost.org/doc/libs/release/libs/serialization/doc/index.html" target="_blank"><i>boost::serialization</i></a> (instead of <i>template</i>).<br>
@@ -367,16 +367,16 @@ A detailed list of supported databases is available on the website of Qt <a href
            <td valign="middle" width="30"></td>
            <td align="justify">
            <b>QxOrm</b> is based on <a href="http://www.boost.org/doc/libs/release/libs/serialization/doc/index.html" target="_blank">boost <i>serialization</i></a> library.<br>
-           There are several types of serialization available : <i>binary, xml, text, etc...</i><br>
+           There are several types of serialization available : <i>binary, XML, text, etc...</i><br>
            <i>QxOrm.pri</i> config file can enable and/or disable some types of serialization.<br>
            <br>
            Each type of serialization has its own characteristics :<br>
            * <b>binary</b> : <i>smallest, fastest, non-portable</i><br>
            * <b>text</b> : <i>larger, slower, portable</i><br>
-           * <b>xml</b> : <i>largest, slowest, portable</i><br>
+           * <b>XML</b> : <i>largest, slowest, portable</i><br>
            <br>
            <b>Note :</b> <b>binary</b> type is not portable, so you can't transfer data between Windows and Unix for example.<br>
-           If you need to transfer data over network between different platforms, you have to use <b>text</b> or <b>xml</b> serialization.<br>
+           If you need to transfer data over network between different platforms, you have to use <b>text</b> or <b>XML</b> serialization.<br>
            <b>QxOrm</b> provides another solution : <b><a href="http://epa.codeplex.com/" target="_blank">portable_binary</a></b> serialization.<br>
            <b>portable_binary</b> has the same characteristics as <b>binary</b> type and can serialize data in a portable way.<br>
            However, <b>portable_binary</b> is not provided officially by <b>boost</b> library, so it's necessary to test before using in a production software.
@@ -2649,7 +2649,7 @@ Item<span class="operator"> {</span>
         <img alt="QxOrm" src="./resource/logo_qxorm_small.png" width="168" height="40">
       </td>
       <td align="center" valign="middle">
-        <font size="2">© 2015 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
+        <font size="2">© 2016 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
       </td>
       <td align="right" valign="middle">
         <form action="https://www.paypal.com/cgi-bin/webscr" method="post">

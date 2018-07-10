@@ -151,6 +151,8 @@
 #include <QxSerialize/QxSerialize.h>
 #include <QxSerialize/QxSerializeQDataStream.h>
 #include <QxSerialize/QDataStream/QxSerializeQDataStream_all_include.h>
+#include <QxSerialize/QJson/QxSerializeQJson_all_include.h>
+#include <QxSerialize/QxSerializeQJson.h>
 #include <QxSerialize/QxClone.h>
 #include <QxSerialize/QxDump.h>
 

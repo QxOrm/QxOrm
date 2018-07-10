@@ -56,6 +56,10 @@
 
 #include <QtCore/qdatastream.h>
 
+#ifndef _QX_NO_JSON
+#include <QtCore/qjsonvalue.h>
+#endif // _QX_NO_JSON
+
 #include <QtSql/qsqlquery.h>
 
 #include <QxCollection/QxCollection.h>
@@ -65,6 +69,8 @@
 #include <QxSerialize/QxSerializeFastCompil.h>
 
 #include <QxTraits/get_class_name.h>
+
+#include <QxConvert/QxConvert.h>
 
 namespace qx {
 class QxSqlQuery;
@@ -83,6 +89,19 @@ template <class Archive> inline void qx_load(Archive & ar, qx::QxSqlQuery & t, c
 
 QX_DLL_EXPORT QDataStream & operator<< (QDataStream & stream, const qx::QxSqlQuery & t) BOOST_USED;
 QX_DLL_EXPORT QDataStream & operator>> (QDataStream & stream, qx::QxSqlQuery & t) BOOST_USED;
+
+#ifndef _QX_NO_JSON
+namespace qx {
+namespace cvt {
+namespace detail {
+template <> struct QxConvert_ToJson< qx::QxSqlQuery >;
+template <> struct QxConvert_FromJson< qx::QxSqlQuery >;
+QX_DLL_EXPORT QJsonValue QxConvert_ToJson_Helper(const qx::QxSqlQuery & t, const QString & format) BOOST_USED;
+QX_DLL_EXPORT qx_bool QxConvert_FromJson_Helper(const QJsonValue & j, qx::QxSqlQuery & t, const QString & format) BOOST_USED;
+} // namespace detail
+} // namespace cvt
+} // namespace qx
+#endif // _QX_NO_JSON
 
 namespace qx {
 
@@ -228,6 +247,13 @@ class QX_DLL_EXPORT QxSqlQuery
 
    friend QDataStream & ::operator<< (QDataStream & stream, const qx::QxSqlQuery & t);
    friend QDataStream & ::operator>> (QDataStream & stream, qx::QxSqlQuery & t);
+
+#ifndef _QX_NO_JSON
+   friend struct qx::cvt::detail::QxConvert_ToJson< qx::QxSqlQuery >;
+   friend struct qx::cvt::detail::QxConvert_FromJson< qx::QxSqlQuery >;
+   friend QJsonValue qx::cvt::detail::QxConvert_ToJson_Helper(const qx::QxSqlQuery & t, const QString & format);
+   friend qx_bool qx::cvt::detail::QxConvert_FromJson_Helper(const QJsonValue & j, qx::QxSqlQuery & t, const QString & format);
+#endif // _QX_NO_JSON
 
 protected:
 

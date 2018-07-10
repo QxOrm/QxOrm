@@ -59,7 +59,7 @@ QDataStream & operator>> (QDataStream & stream, QFlags<T> & t)
 {
    qint64 iFlags = 0;
    stream >> iFlags;
-   t = QFlags<T>(QFlag(static_cast<long>(iFlags)));
+   t = QFlags<T>(QFlag(static_cast<int>(iFlags)));
    return stream;
 }
 

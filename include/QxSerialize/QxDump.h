@@ -40,36 +40,50 @@
  * \file QxDump.h
  * \author Lionel Marty
  * \ingroup QxSerialize
- * \brief Dump all classes registered into QxOrm context using XML serialization engine
+ * \brief Dump all classes registered into QxOrm context using XML and JSON serialization engine
  */
-
-#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 
 #include <QxCommon/QxConfig.h>
 
 #include <QxSerialize/QxSerializeInvoker.h>
+#include <QxSerialize/QxSerializeQJson.h>
 #include <QxSerialize/QxArchive.h>
 
 #include <QxRegister/QxClassName.h>
+
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 
 namespace qx {
 
 /*!
  * \ingroup QxSerialize
- * \brief qx::dump(const T & t) : dump class of type T registered into QxOrm context using XML serialization engine
+ * \brief qx::dump(const T & t, bool bJsonFormat) : dump class of type T registered into QxOrm context using XML and JSON serialization engine
  */
 template <class T>
-void dump(const T & t)
+void dump(const T & t, bool bJsonFormat = false)
 {
+   QString sDump;
+
+   if (bJsonFormat)
+   {
+#ifndef _QX_NO_JSON
+      sDump = qx::serialization::json::to_string(t);
+#else // _QX_NO_JSON
+      sDump = "Unable to dump element in JSON format : you must work with Qt5 and not define _QX_NO_JSON compilation option in 'QxOrm.pri' configuration file";
+#endif // _QX_NO_JSON
+   }
+   else
+   {
 #if _QX_SERIALIZE_POLYMORPHIC
-   QString sDump = qx::serialization::polymorphic_xml::to_string(t);
+      sDump = qx::serialization::polymorphic_xml::to_string(t);
 #elif _QX_SERIALIZE_XML
-   QString sDump = qx::serialization::xml::to_string(t);
+      sDump = qx::serialization::xml::to_string(t);
 #elif _QX_SERIALIZE_WIDE_XML
-   QString sDump = qx::serialization::wide::xml::to_string(t);
+      sDump = qx::serialization::wide::xml::to_string(t);
 #else // _QX_SERIALIZE_POLYMORPHIC
-   QString sDump = "Unable to dump element : you must define '_QX_ENABLE_BOOST_SERIALIZATION' and '_QX_ENABLE_BOOST_SERIALIZATION_XML' (or '_QX_ENABLE_BOOST_SERIALIZATION_WIDE_XML') compilation options in 'QxOrm.pri' configuration file";
+      sDump = "Unable to dump element : you must define '_QX_ENABLE_BOOST_SERIALIZATION' and '_QX_ENABLE_BOOST_SERIALIZATION_XML' (or '_QX_ENABLE_BOOST_SERIALIZATION_WIDE_XML') compilation options in 'QxOrm.pri' configuration file";
 #endif // _QX_SERIALIZE_POLYMORPHIC
+   }
 
    QString sName = qx::QxClassName<T>::get();
    qDebug("[QxOrm] start dump '%s'", qPrintable(sName));
@@ -84,9 +98,19 @@ void dump(const T & t)
 namespace qx {
 
 template <class T>
-void dump(const T & t)
+void dump(const T & t, bool bJsonFormat = true)
 {
-   qDebug("[QxOrm] qx::dump() : %s", "not implemented when _QX_ENABLE_BOOST_SERIALIZATION compilation option is not defined"); Q_UNUSED(t);
+#ifdef _QX_NO_JSON
+   qDebug("[QxOrm] qx::dump() : %s", "not implemented when _QX_ENABLE_BOOST_SERIALIZATION compilation option is not defined (XML format) and _QX_NO_JSON compilation option is defined (JSON format)");
+   Q_UNUSED(t); Q_UNUSED(bJsonFormat);
+#else // _QX_NO_JSON
+   if (! bJsonFormat) { return; }
+   QString sDump = qx::serialization::json::to_string(t);
+   QString sName = qx::QxClassName<T>::get();
+   qDebug("[QxOrm] start dump '%s'", qPrintable(sName));
+   qDebug("%s", qPrintable(sDump));
+   qDebug("[QxOrm] end dump '%s'", qPrintable(sName));
+#endif // _QX_NO_JSON
 }
 
 } // namespace qx

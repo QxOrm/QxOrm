@@ -41,6 +41,11 @@ int main(int argc, char * argv[])
    qx::serialization::xml::from_file(ptrTmp, "pointer_from_main.xml");
 #endif // _QX_SERIALIZE_XML
 
+#ifndef _QX_NO_JSON
+   qx::serialization::json::to_file(ptrTmp, "pointer_from_main.json");
+   qx::serialization::json::from_file(ptrTmp, "pointer_from_main.json");
+#endif // _QX_NO_JSON
+
    //--------------------------------
 
    qx::test::CPerson person;
@@ -68,6 +73,11 @@ int main(int argc, char * argv[])
    qx::serialization::xml::to_file(person, "person.xml");
    qx::serialization::xml::from_file(person, "person.xml");
 #endif // _QX_SERIALIZE_XML
+
+#ifndef _QX_NO_JSON
+   qx::serialization::json::to_file(person, "person.json");
+   qx::serialization::json::from_file(person, "person.json");
+#endif // _QX_NO_JSON
 
 #if _QX_SERIALIZE_PORTABLE_BINARY
    qx::serialization::portable_binary::to_file(person, "person.bin2", 0);
@@ -129,6 +139,11 @@ int main(int argc, char * argv[])
    qx::serialization::xml::from_file(user, "user.xml");
 #endif // _QX_SERIALIZE_XML
 
+#ifndef _QX_NO_JSON
+   qx::serialization::json::to_file(user, "user.json");
+   qx::serialization::json::from_file(user, "user.json");
+#endif // _QX_NO_JSON
+
 #if _QX_SERIALIZE_PORTABLE_BINARY
    qx::serialization::portable_binary::to_file(user, "user.bin2", 0);
    qx::serialization::portable_binary::from_file(user, "user.bin2", 0);
@@ -183,6 +198,10 @@ int main(int argc, char * argv[])
 #if _QX_SERIALIZE_XML
    qx::serialization::xml::to_file(coll, "collection.xml");
 #endif // _QX_SERIALIZE_XML
+
+#ifndef _QX_NO_JSON
+   qx::serialization::json::to_file(coll, "collection.json");
+#endif // _QX_NO_JSON
 
    //--------------------------------
 
@@ -355,10 +374,25 @@ int main(int argc, char * argv[])
    pFoo = pFooX->getByKey(4);                                        qAssert(! pFoo->getBarX() || (pFoo->getBarX()->size() == 0));
    pFoo = pFooX->getByKey(2);                                        qAssert(pFoo->getBarX() && (pFoo->getBarX()->size() == 2));
 
+   {
+      // Test eager fetching an instance (with relationships) which is not a pointer or smart-pointer
+      QList<Foo> pFooX1; daoError = qx::dao::fetch_all_with_all_relation(pFooX1); qAssert(pFooX1.size() == 7);
+      QHash<long, Foo> pFooX2; daoError = qx::dao::fetch_all_with_all_relation(pFooX2); qAssert(pFooX2.size() == 7);
+      qx::QxCollection<long, Foo> pFooX3; daoError = qx::dao::fetch_all_with_all_relation(pFooX3); qAssert(pFooX3.size() == 7);
+#if (BOOST_VERSION >= 105000)
+      boost::unordered_map<long, Foo> pFooX4; daoError = qx::dao::fetch_all_with_all_relation(pFooX4); qAssert(pFooX4.size() == 7);
+#endif // (BOOST_VERSION >= 105000)
+      std::vector<Foo> pFooX5; daoError = qx::dao::fetch_all_with_all_relation(pFooX5); qAssert(pFooX5.size() == 7);
+      QSet<Foo *> pFooX6; daoError = qx::dao::fetch_all_with_all_relation(pFooX6); qAssert(pFooX6.size() == 7); Q_FOREACH(Foo * pFooTemp, pFooX6) { delete pFooTemp; }
+      std::set<Foo_ptr> pFooX7; daoError = qx::dao::fetch_all_with_all_relation(pFooX7); qAssert(pFooX7.size() == 7);
+      boost::unordered_set<Foo_ptr> pFooX8; daoError = qx::dao::fetch_all_with_all_relation(pFooX8); qAssert(pFooX8.size() == 7);
+   }
+
    pBar.reset(new Bar()); pBar->setId(7);
    daoError = qx::dao::fetch_by_id_with_relation("foo_id", pBar);    qAssert(pBar->getFoo() && (pBar->getFoo()->getName() == "name3"));
    pFoo = pBar->getFoo(); if (pFoo) { pFoo->setDate(QDate::currentDate()); pFoo->setTime(QTime::currentTime()); pFoo->setDateTime(QDateTime::currentDateTime()); }
-   qx::dump(pBar);
+   qx::dump(pBar, false);
+   qx::dump(pBar, true);
 
    // Test soft delete behavior
    pBar.reset(new Bar());
@@ -406,7 +440,8 @@ int main(int argc, char * argv[])
    daoError = qx::dao::fetch_by_id(testQtMetaProperty);  qAssert(! daoError.isValid());
    qx::IxDataMember * pQtMetaProperty = qx::QxClassX::getDataMember("TestQtProperty", "desc"); Q_UNUSED(pQtMetaProperty);
    qAssert(pQtMetaProperty && pQtMetaProperty->getValue<QString>(& testQtMetaProperty) == sQtPropertyDesc);
-   qx::dump(testQtMetaProperty);
+   qx::dump(testQtMetaProperty, false);
+   qx::dump(testQtMetaProperty, true);
 
    //--------------------------------
 

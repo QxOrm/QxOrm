@@ -40,6 +40,8 @@
 #include <QxCommon/QxExceptionCode.h>
 
 #include <QxSerialize/QxSerializeQDataStream.h>
+#include <QxSerialize/QxSerializeQJson.h>
+#include <QxSerialize/QJson/QxSerializeQJson_QxTransaction.h>
 
 #include <QxMemLeak/mem_leak.h>
 
@@ -113,6 +115,9 @@ qx_bool QxTools::readSocket(QTcpSocket & socket, QxTransaction & transaction, qu
       case QxConnect::serialization_polymorphic_text:       bDeserializeOk = qx::serialization::polymorphic_text::from_byte_array(transaction, dataSerialized); break;
 #endif // _QX_SERIALIZE_POLYMORPHIC
       case QxConnect::serialization_qt:                     bDeserializeOk = qx::serialization::qt::from_byte_array(transaction, dataSerialized); break;
+#ifndef _QX_NO_JSON
+      case QxConnect::serialization_json:                   bDeserializeOk = qx::serialization::json::from_byte_array(transaction, dataSerialized); break;
+#endif // _QX_NO_JSON
       default:                                              return qx_bool(QX_ERROR_UNKNOWN, "unknown serialization type to read data from socket");
    }
 
@@ -153,6 +158,9 @@ qx_bool QxTools::writeSocket(QTcpSocket & socket, QxTransaction & transaction, q
       case QxConnect::serialization_polymorphic_text:       dataSerialized = qx::serialization::polymorphic_text::to_byte_array(transaction, (& owner)); break;
 #endif // _QX_SERIALIZE_POLYMORPHIC
       case QxConnect::serialization_qt:                     dataSerialized = qx::serialization::qt::to_byte_array(transaction, (& owner)); break;
+#ifndef _QX_NO_JSON
+      case QxConnect::serialization_json:                   dataSerialized = qx::serialization::json::to_byte_array(transaction, (& owner)); break;
+#endif // _QX_NO_JSON
       default:                                              return qx_bool(QX_ERROR_UNKNOWN, "unknown serialization type to write data to socket");
    }
 

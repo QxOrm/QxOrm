@@ -37,6 +37,7 @@
 #pragma once
 #endif
 
+#include <boost/version.hpp>
 #include <boost/unordered_set.hpp>
 
 #include <boost/serialization/serialization.hpp>
@@ -48,6 +49,38 @@
 
 namespace boost {
 namespace serialization {
+
+#if (BOOST_VERSION > 105700)
+
+template <class Archive, class Key>
+inline void save(Archive & ar, const boost::unordered_set<Key> & t, const unsigned int /* file_version */)
+{
+   long lSize = static_cast<long>(t.size());
+   ar << boost::serialization::make_nvp("size", lSize);
+
+   typedef typename boost::unordered_set<Key>::const_iterator type_itr;
+   for (type_itr itr = t.begin(); itr != t.end(); ++itr)
+   { ar << boost::serialization::make_nvp("item", (* itr)); }
+}
+
+template <class Archive, class Key>
+inline void load(Archive & ar, boost::unordered_set<Key> & t, const unsigned int /* file_version */)
+{
+   long lSize = 0;
+   ar >> boost::serialization::make_nvp("size", lSize);
+
+   t.clear();
+   t.reserve(lSize);
+
+   for (long l = 0; l < lSize; l++)
+   {
+      Key item;
+      ar >> boost::serialization::make_nvp("item", item);
+      t.insert(item);
+   }
+}
+
+#else // (BOOST_VERSION > 105700)
 
 template <class Archive, class Key>
 inline void save(Archive & ar, const boost::unordered_set<Key> & t, const unsigned int /* file_version */)
@@ -63,11 +96,45 @@ inline void load(Archive & ar, boost::unordered_set<Key> & t, const unsigned int
       boost::serialization::stl::no_reserve_imp<boost::unordered_set< Key > > >(ar, t);
 }
 
+#endif // (BOOST_VERSION > 105700)
+
 template <class Archive, class Key>
 inline void serialize(Archive & ar, boost::unordered_set<Key> & t, const unsigned int file_version)
 {
    boost::serialization::split_free(ar, t, file_version);
 }
+
+#if (BOOST_VERSION > 105700)
+
+template <class Archive, class Key>
+inline void save(Archive & ar, const boost::unordered_multiset<Key> & t, const unsigned int /* file_version */)
+{
+   long lSize = static_cast<long>(t.size());
+   ar << boost::serialization::make_nvp("size", lSize);
+
+   typedef typename boost::unordered_multiset<Key>::const_iterator type_itr;
+   for (type_itr itr = t.begin(); itr != t.end(); ++itr)
+   { ar << boost::serialization::make_nvp("item", (* itr)); }
+}
+
+template <class Archive, class Key>
+inline void load(Archive & ar, boost::unordered_multiset<Key> & t, const unsigned int /* file_version */)
+{
+   long lSize = 0;
+   ar >> boost::serialization::make_nvp("size", lSize);
+
+   t.clear();
+   t.reserve(lSize);
+
+   for (long l = 0; l < lSize; l++)
+   {
+      Key item;
+      ar >> boost::serialization::make_nvp("item", item);
+      t.insert(item);
+   }
+}
+
+#else // (BOOST_VERSION > 105700)
 
 template <class Archive, class Key>
 inline void save(Archive & ar, const boost::unordered_multiset<Key> & t, const unsigned int /* file_version */)
@@ -88,6 +155,8 @@ inline void load(Archive & ar, boost::unordered_multiset<Key> & t, const unsigne
       boost::serialization::stl::no_reserve_imp< boost::unordered_multiset<Key> > >(ar, t);
 #endif // (BOOST_VERSION >= 104200)
 }
+
+#endif // (BOOST_VERSION > 105700)
 
 template <class Archive, class Key>
 inline void serialize(Archive & ar, boost::unordered_multiset<Key> & t, const unsigned int file_version)

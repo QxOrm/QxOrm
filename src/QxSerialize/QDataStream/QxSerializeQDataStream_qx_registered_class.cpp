@@ -32,6 +32,7 @@
 #include <QxPrecompiled.h>
 
 #include <QxSerialize/QDataStream/QxSerializeQDataStream_qx_registered_class.h>
+#include <QxSerialize/QxSerializeCheckInstance.h>
 
 #include <QxMemLeak/mem_leak.h>
 
@@ -40,7 +41,18 @@ namespace qx {
 QDataStream & QxSerializeRegistered_Helper::save(QDataStream & stream, IxClass * pClass, const void * pOwner)
 {
    if (! pClass || ! pOwner) { qAssert(false); return stream; }
-   stream << (quint32)(13937);
+   stream << (quint32)(13939);
+   bool bJustId = false;
+
+   if (qx::serialization::helper::QxSerializeCheckInstance::contains(pOwner))
+   {
+      bJustId = true; stream << bJustId;
+      qx::IxDataMember * pId = pClass->getId(true); if (! pId) { return stream; }
+      QVariant val = pId->toVariant(pOwner); stream << val;
+      return stream;
+   }
+   qx::serialization::helper::QxSerializeCheckInstance checker(pOwner);
+   stream << bJustId; Q_UNUSED(checker);
 
    do
    {
@@ -56,8 +68,18 @@ QDataStream & QxSerializeRegistered_Helper::load(QDataStream & stream, IxClass *
 {
    if (! pClass || ! pOwner) { qAssert(false); return stream; }
 
+   bool bJustId = false;
    quint32 magic = 0; stream >> magic;
-   if (magic != 13937) { qDebug("[QxOrm] qx::QxSerializeRegistered_Helper::load() : %s", "input binary data is not valid"); return stream; }
+   if ((magic != 13937) && (magic != 13939))
+   { qDebug("[QxOrm] qx::QxSerializeRegistered_Helper::load() : %s", "input binary data is not valid"); return stream; }
+   if (magic > 13937) { stream >> bJustId; }
+
+   if (bJustId)
+   {
+      qx::IxDataMember * pId = pClass->getId(true); if (! pId) { return stream; }
+      QVariant val; stream >> val; pId->fromVariant(pOwner, val);
+      return stream;
+   }
 
    do
    {

@@ -97,6 +97,8 @@ protected:
    QxCollection<QString, IxDataMember *> * m_lstDataMemberPtr;    //!< Optimization : handle to collection of 'IxDataMember'
    IxSqlRelationX * m_lstSqlRelationPtr;                          //!< Optimization : handle to collection of 'IxSqlRelation'
 
+   static bool m_bTraceRelationInit;   //!< Can be useful to debug an issue with relationship initialization
+
 public:
 
    IxSqlRelation(IxDataMember * p) : qx::QxPropertyBag(), QX_CONSTRUCT_IX_RELATION() { ; }
@@ -158,6 +160,8 @@ public:
    virtual QSqlError onAfterSave(QxSqlRelationParams & params) const = 0;
 
    bool verifyOffset(QxSqlRelationParams & params, bool bId) const BOOST_USED;
+
+   static void setTraceRelationInit(bool bTrace);
 
 protected:
 

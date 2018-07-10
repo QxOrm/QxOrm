@@ -56,7 +56,11 @@
 
 namespace qx {
 
+bool IxSqlRelation::m_bTraceRelationInit = false;
+
 IxSqlRelation::~IxSqlRelation() { ; }
+
+void IxSqlRelation::setTraceRelationInit(bool bTrace) { m_bTraceRelationInit = bTrace; }
 
 QString IxSqlRelation::getKey() const
 { return (m_pDataMember ? m_pDataMember->getKey() : ""); }

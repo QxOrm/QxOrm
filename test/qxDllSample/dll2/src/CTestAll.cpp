@@ -79,6 +79,11 @@ void CTestAll::test()
    qx::serialization::portable_binary::from_file(coll, "test_all.bin2", 0);
 #endif // _QX_SERIALIZE_PORTABLE_BINARY
 
+#ifndef _QX_NO_JSON
+   qx::serialization::json::to_file(coll, "test_all.json");
+   qx::serialization::json::from_file(coll, "test_all.json");
+#endif // _QX_NO_JSON
+
    qx::clone(coll);
    qx::create("CTestAll");
 }

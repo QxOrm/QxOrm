@@ -35,6 +35,9 @@
 
 #include <QxRegister/QxClassX.h>
 
+#include <QxConvert/QxConvert.h>
+#include <QxConvert/QxConvert_Impl.h>
+
 #include <QxMemLeak/mem_leak.h>
 
 #define QX_DATA_MEMBER_QOBJECT_IMPL_VIRTUAL_ARCHIVE_CPP(ArchiveInput, ArchiveOutput) \
@@ -88,6 +91,22 @@ qx_bool QxDataMember_QObject::fromVariant(void * pOwner, const QVariant & v, con
    Q_UNUSED(sFormat); Q_UNUSED(iIndexName);
    return m_metaProperty.write(static_cast<QObject *>(pOwner), v);
 }
+
+#ifndef _QX_NO_JSON
+
+QJsonValue QxDataMember_QObject::toJson(const void * pOwner, const QString & sFormat) const
+{
+   Q_UNUSED(sFormat);
+   return QJsonValue::fromVariant(m_metaProperty.read(static_cast<const QObject *>(pOwner)));
+}
+
+qx_bool QxDataMember_QObject::fromJson(void * pOwner, const QJsonValue & j, const QString & sFormat)
+{
+   Q_UNUSED(sFormat);
+   return m_metaProperty.write(static_cast<QObject *>(pOwner), j.toVariant());
+}
+
+#endif // _QX_NO_JSON
 
 boost::any QxDataMember_QObject::getDataPtr(const void * pOwner) const
 {

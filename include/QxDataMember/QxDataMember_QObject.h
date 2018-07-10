@@ -80,6 +80,11 @@ public:
    virtual QVariant toVariant(const void * pOwner, const QString & sFormat, int iIndexName = -1) const;
    virtual qx_bool fromVariant(void * pOwner, const QVariant & v, const QString & sFormat, int iIndexName = -1);
 
+#ifndef _QX_NO_JSON
+   virtual QJsonValue toJson(const void * pOwner, const QString & sFormat) const;
+   virtual qx_bool fromJson(void * pOwner, const QJsonValue & j, const QString & sFormat);
+#endif // _QX_NO_JSON
+
 public:
 
 #ifdef _QX_ENABLE_BOOST_SERIALIZATION

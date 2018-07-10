@@ -142,12 +142,12 @@ struct generic_container_base
 
    QX_TRAIT_GENERIC_CONTAINER_TYPEDEF(Container, qx::trait::no_type, Item)
 
-   static inline long size(const Container & t)                   { return static_cast<long>(t.size()); }
-   static inline void clear(Container & t)                        { t.clear(); }
-   static inline void reserve(Container & t, long l)              { t.reserve(l); }
-   static inline type_item createItem()                           { return type_item(type_item::newKey(), type_item::newValue()); }
-   static inline void insertItem(Container & t, type_item & item) { t.push_back(item.value()); }
-   static inline type_iterator end(Container & t)                 { return t.end(); }
+   static inline long size(const Container & t)                      { return static_cast<long>(t.size()); }
+   static inline void clear(Container & t)                           { t.clear(); }
+   static inline void reserve(Container & t, long l)                 { t.reserve(l); }
+   static inline type_item createItem()                              { return type_item(type_item::newKey(), type_item::newValue()); }
+   static inline Item * insertItem(Container & t, type_item & item)  { t.push_back(item.value()); return (& t.back()); }
+   static inline type_iterator end(Container & t)                    { return t.end(); }
 
    static inline type_iterator begin(Container & t, type_item & item)
    { if (t.size() <= 0) { return t.end(); }; item.value(* t.begin()); return t.begin(); }
@@ -163,12 +163,12 @@ struct generic_container_base_without_reserve
 
    QX_TRAIT_GENERIC_CONTAINER_TYPEDEF(Container, qx::trait::no_type, Item)
 
-   static inline long size(const Container & t)                   { return static_cast<long>(t.size()); }
-   static inline void clear(Container & t)                        { t.clear(); }
-   static inline void reserve(Container & t, long l)              { Q_UNUSED(t); Q_UNUSED(l); }
-   static inline type_item createItem()                           { return type_item(type_item::newKey(), type_item::newValue()); }
-   static inline void insertItem(Container & t, type_item & item) { t.push_back(item.value()); }
-   static inline type_iterator end(Container & t)                 { return t.end(); }
+   static inline long size(const Container & t)                      { return static_cast<long>(t.size()); }
+   static inline void clear(Container & t)                           { t.clear(); }
+   static inline void reserve(Container & t, long l)                 { Q_UNUSED(t); Q_UNUSED(l); }
+   static inline type_item createItem()                              { return type_item(type_item::newKey(), type_item::newValue()); }
+   static inline Item * insertItem(Container & t, type_item & item)  { t.push_back(item.value()); return (& t.back()); }
+   static inline type_iterator end(Container & t)                    { return t.end(); }
 
    static inline type_iterator begin(Container & t, type_item & item)
    { if (t.size() <= 0) { return t.end(); }; item.value(* t.begin()); return t.begin(); }
@@ -184,12 +184,33 @@ struct generic_container_base_set
 
    QX_TRAIT_GENERIC_CONTAINER_TYPEDEF(Container, qx::trait::no_type, Item)
 
-   static inline long size(const Container & t)                   { return static_cast<long>(t.size()); }
-   static inline void clear(Container & t)                        { t.clear(); }
-   static inline void reserve(Container & t, long l)              { Q_UNUSED(t); Q_UNUSED(l); }
-   static inline type_item createItem()                           { return type_item(type_item::newKey(), type_item::newValue()); }
-   static inline void insertItem(Container & t, type_item & item) { t.insert(item.value()); }
-   static inline type_iterator end(Container & t)                 { return t.end(); }
+   static inline long size(const Container & t)                      { return static_cast<long>(t.size()); }
+   static inline void clear(Container & t)                           { t.clear(); }
+   static inline void reserve(Container & t, long l)                 { Q_UNUSED(t); Q_UNUSED(l); }
+   static inline type_item createItem()                              { return type_item(type_item::newKey(), type_item::newValue()); }
+   static inline Item * insertItem(Container & t, type_item & item)  { return const_cast<Item *>(& (* (t.insert(item.value()).first))); }
+   static inline type_iterator end(Container & t)                    { return t.end(); }
+
+   static inline type_iterator begin(Container & t, type_item & item)
+   { if (t.size() <= 0) { return t.end(); }; item.value(* t.begin()); return t.begin(); }
+
+   static inline type_iterator next(Container & t, type_iterator itr, type_item & item)
+   { itr++; if (itr == t.end()) { return t.end(); }; item.value(* itr); return itr; }
+
+};
+
+template <typename Container, typename Item>
+struct generic_container_base_multi_set
+{
+
+   QX_TRAIT_GENERIC_CONTAINER_TYPEDEF(Container, qx::trait::no_type, Item)
+
+   static inline long size(const Container & t)                      { return static_cast<long>(t.size()); }
+   static inline void clear(Container & t)                           { t.clear(); }
+   static inline void reserve(Container & t, long l)                 { Q_UNUSED(t); Q_UNUSED(l); }
+   static inline type_item createItem()                              { return type_item(type_item::newKey(), type_item::newValue()); }
+   static inline Item * insertItem(Container & t, type_item & item)  { return const_cast<Item *>(& (* (t.insert(item.value())))); }
+   static inline type_iterator end(Container & t)                    { return t.end(); }
 
    static inline type_iterator begin(Container & t, type_item & item)
    { if (t.size() <= 0) { return t.end(); }; item.value(* t.begin()); return t.begin(); }
@@ -205,12 +226,33 @@ struct generic_container_base_key_value_std_style
 
    QX_TRAIT_GENERIC_CONTAINER_TYPEDEF(Container, Key, Value)
 
-   static inline long size(const Container & t)                   { return static_cast<long>(t.size()); }
-   static inline void clear(Container & t)                        { t.clear(); }
-   static inline void reserve(Container & t, long l)              { t.reserve(l); }
-   static inline type_item createItem()                           { return type_item(type_item::newKey(), type_item::newValue()); }
-   static inline void insertItem(Container & t, type_item & item) { t.insert(std::make_pair(item.key(), item.value())); }
-   static inline type_iterator end(Container & t)                 { return t.end(); }
+   static inline long size(const Container & t)                      { return static_cast<long>(t.size()); }
+   static inline void clear(Container & t)                           { t.clear(); }
+   static inline void reserve(Container & t, long l)                 { t.reserve(l); }
+   static inline type_item createItem()                              { return type_item(type_item::newKey(), type_item::newValue()); }
+   static inline Value * insertItem(Container & t, type_item & item) { return (& (t.insert(std::make_pair(item.key(), item.value())).first->second)); }
+   static inline type_iterator end(Container & t)                    { return t.end(); }
+
+   static inline type_iterator begin(Container & t, type_item & item)
+   { if (t.size() <= 0) { return t.end(); }; item.value(* t.begin().second); item.key(* t.begin().first); return t.begin(); }
+
+   static inline type_iterator next(Container & t, type_iterator itr, type_item & item)
+   { itr++; if (itr == t.end()) { return t.end(); }; item.value(* itr.second); item.key(* itr.first); return itr; }
+
+};
+
+template <typename Container, typename Key, typename Value>
+struct generic_container_base_key_value_multi_std_style
+{
+
+   QX_TRAIT_GENERIC_CONTAINER_TYPEDEF(Container, Key, Value)
+
+   static inline long size(const Container & t)                      { return static_cast<long>(t.size()); }
+   static inline void clear(Container & t)                           { t.clear(); }
+   static inline void reserve(Container & t, long l)                 { t.reserve(l); }
+   static inline type_item createItem()                              { return type_item(type_item::newKey(), type_item::newValue()); }
+   static inline Value * insertItem(Container & t, type_item & item) { return (& (t.insert(std::make_pair(item.key(), item.value()))->second)); }
+   static inline type_iterator end(Container & t)                    { return t.end(); }
 
    static inline type_iterator begin(Container & t, type_item & item)
    { if (t.size() <= 0) { return t.end(); }; item.value(* t.begin().second); item.key(* t.begin().first); return t.begin(); }
@@ -226,12 +268,12 @@ struct generic_container_base_key_value_qt_style
 
    QX_TRAIT_GENERIC_CONTAINER_TYPEDEF(Container, Key, Value)
 
-   static inline long size(const Container & t)                   { return static_cast<long>(t.size()); }
-   static inline void clear(Container & t)                        { t.clear(); }
-   static inline void reserve(Container & t, long l)              { t.reserve(l); }
-   static inline type_item createItem()                           { return type_item(type_item::newKey(), type_item::newValue()); }
-   static inline void insertItem(Container & t, type_item & item) { t.insert(item.key(), item.value()); }
-   static inline type_iterator end(Container & t)                 { return t.end(); }
+   static inline long size(const Container & t)                      { return static_cast<long>(t.size()); }
+   static inline void clear(Container & t)                           { t.clear(); }
+   static inline void reserve(Container & t, long l)                 { t.reserve(l); }
+   static inline type_item createItem()                              { return type_item(type_item::newKey(), type_item::newValue()); }
+   static inline Value * insertItem(Container & t, type_item & item) { return (& (t.insert(item.key(), item.value()).value())); }
+   static inline type_iterator end(Container & t)                    { return t.end(); }
 
    static inline type_iterator begin(Container & t, type_item & item)
    { if (t.size() <= 0) { return t.end(); }; item.value(* t.begin().value()); item.key(* t.begin().key()); return t.begin(); }
@@ -264,7 +306,7 @@ struct generic_container< boost::unordered_set<T> > : public qx::trait::detail::
 { QX_TRAIT_GENERIC_CONTAINER_TYPEDEF(QX_TEMPLATE_T_P1(boost::unordered_set, T), qx::trait::no_type, T) };
 
 template <typename T>
-struct generic_container< boost::unordered_multiset<T> > : public qx::trait::detail::generic_container_base_set< boost::unordered_multiset<T>, T >
+struct generic_container< boost::unordered_multiset<T> > : public qx::trait::detail::generic_container_base_multi_set< boost::unordered_multiset<T>, T >
 { QX_TRAIT_GENERIC_CONTAINER_TYPEDEF(QX_TEMPLATE_T_P1(boost::unordered_multiset, T), qx::trait::no_type, T) };
 
 template <typename Key, typename Value>
@@ -272,7 +314,7 @@ struct generic_container< boost::unordered_map<Key, Value> > : public qx::trait:
 { QX_TRAIT_GENERIC_CONTAINER_TYPEDEF(QX_TEMPLATE_T_P1_P2(boost::unordered_map, Key, Value), Key, Value) };
 
 template <typename Key, typename Value>
-struct generic_container< boost::unordered_multimap<Key, Value> > : public qx::trait::detail::generic_container_base_key_value_std_style< boost::unordered_multimap<Key, Value>, Key, Value >
+struct generic_container< boost::unordered_multimap<Key, Value> > : public qx::trait::detail::generic_container_base_key_value_multi_std_style< boost::unordered_multimap<Key, Value>, Key, Value >
 { QX_TRAIT_GENERIC_CONTAINER_TYPEDEF(QX_TEMPLATE_T_P1_P2(boost::unordered_multimap, Key, Value), Key, Value) };
 
 #ifdef _QX_CPP_11_CONTAINER
@@ -283,7 +325,7 @@ struct generic_container< std::unordered_set<T> > : public qx::trait::detail::ge
 { QX_TRAIT_GENERIC_CONTAINER_TYPEDEF(QX_TEMPLATE_T_P1(std::unordered_set, T), qx::trait::no_type, T) };
 
 template <typename T>
-struct generic_container< std::unordered_multiset<T> > : public qx::trait::detail::generic_container_base_set< std::unordered_multiset<T>, T >
+struct generic_container< std::unordered_multiset<T> > : public qx::trait::detail::generic_container_base_multi_set< std::unordered_multiset<T>, T >
 { QX_TRAIT_GENERIC_CONTAINER_TYPEDEF(QX_TEMPLATE_T_P1(std::unordered_multiset, T), qx::trait::no_type, T) };
 
 template <typename Key, typename Value>
@@ -291,7 +333,7 @@ struct generic_container< std::unordered_map<Key, Value> > : public qx::trait::d
 { QX_TRAIT_GENERIC_CONTAINER_TYPEDEF(QX_TEMPLATE_T_P1_P2(std::unordered_map, Key, Value), Key, Value) };
 
 template <typename Key, typename Value>
-struct generic_container< std::unordered_multimap<Key, Value> > : public qx::trait::detail::generic_container_base_key_value_std_style< std::unordered_multimap<Key, Value>, Key, Value >
+struct generic_container< std::unordered_multimap<Key, Value> > : public qx::trait::detail::generic_container_base_key_value_multi_std_style< std::unordered_multimap<Key, Value>, Key, Value >
 { QX_TRAIT_GENERIC_CONTAINER_TYPEDEF(QX_TEMPLATE_T_P1_P2(std::unordered_multimap, Key, Value), Key, Value) };
 
 #endif // BOOST_NO_CXX11_STD_UNORDERED
@@ -301,16 +343,26 @@ template <typename T>
 struct generic_container< QVector<T> > : public qx::trait::detail::generic_container_base< QVector<T>, T >
 { QX_TRAIT_GENERIC_CONTAINER_TYPEDEF(QX_TEMPLATE_T_P1(QVector, T), qx::trait::no_type, T) };
 
+#if (QT_VERSION >= 0x040700)
+
+template <typename T>
+struct generic_container< QList<T> > : public qx::trait::detail::generic_container_base< QList<T>, T >
+{ QX_TRAIT_GENERIC_CONTAINER_TYPEDEF(QX_TEMPLATE_T_P1(QList, T), qx::trait::no_type, T) };
+
+#else // (QT_VERSION >= 0x040700)
+
 template <typename T>
 struct generic_container< QList<T> > : public qx::trait::detail::generic_container_base_without_reserve< QList<T>, T >
 { QX_TRAIT_GENERIC_CONTAINER_TYPEDEF(QX_TEMPLATE_T_P1(QList, T), qx::trait::no_type, T) };
+
+#endif // (QT_VERSION >= 0x040700)
 
 template <typename T>
 struct generic_container< QLinkedList<T> > : public qx::trait::detail::generic_container_base_without_reserve< QLinkedList<T>, T >
 { QX_TRAIT_GENERIC_CONTAINER_TYPEDEF(QX_TEMPLATE_T_P1(QLinkedList, T), qx::trait::no_type, T) };
 
 template <typename T>
-struct generic_container< QSet<T> > : public qx::trait::detail::generic_container_base_set< QSet<T>, T >
+struct generic_container< QSet<T> > : public qx::trait::detail::generic_container_base_multi_set< QSet<T>, T >
 { QX_TRAIT_GENERIC_CONTAINER_TYPEDEF(QX_TEMPLATE_T_P1(QSet, T), qx::trait::no_type, T) };
 
 template <typename Key, typename Value>
@@ -335,12 +387,12 @@ struct generic_container< qx::QxCollection<Key, Value> >
 
    QX_TRAIT_GENERIC_CONTAINER_TYPEDEF(QX_TEMPLATE_T_P1_P2(qx::QxCollection, Key, Value), Key, Value)
 
-   static inline long size(const qx::QxCollection<Key, Value> & t)                     { return static_cast<long>(t.size()); }
-   static inline void clear(qx::QxCollection<Key, Value> & t)                          { t.clear(); }
-   static inline void reserve(qx::QxCollection<Key, Value> & t, long l)                { t.reserve(l); }
-   static inline type_item createItem()                                                { return type_item(type_item::newKey(), type_item::newValue()); }
-   static inline void insertItem(qx::QxCollection<Key, Value> & t, type_item & item)   { t.insert(item.key(), item.value()); }
-   static inline type_iterator end(qx::QxCollection<Key, Value> & t)                   { return t.end(); }
+   static inline long size(const qx::QxCollection<Key, Value> & t)                        { return static_cast<long>(t.size()); }
+   static inline void clear(qx::QxCollection<Key, Value> & t)                             { t.clear(); }
+   static inline void reserve(qx::QxCollection<Key, Value> & t, long l)                   { t.reserve(l); }
+   static inline type_item createItem()                                                   { return type_item(type_item::newKey(), type_item::newValue()); }
+   static inline Value * insertItem(qx::QxCollection<Key, Value> & t, type_item & item)   { t.insert(item.key(), item.value()); return const_cast<Value *>(& t.getByKey(item.key())); }
+   static inline type_iterator end(qx::QxCollection<Key, Value> & t)                      { return t.end(); }
 
    static inline type_iterator begin(qx::QxCollection<Key, Value> & t, type_item & item)
    { if (t.size() <= 0) { return t.end(); }; item.value(t.getByIndex(0)); item.key(t.getKeyByIndex(0)); return t.begin(); }

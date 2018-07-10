@@ -26,6 +26,7 @@ void main_dlg::init()
    cboSerializationType->addItem("8- serialization_polymorphic_xml", QVariant((int)qx::service::QxConnect::serialization_polymorphic_xml));
    cboSerializationType->addItem("9- serialization_polymorphic_text", QVariant((int)qx::service::QxConnect::serialization_polymorphic_text));
    cboSerializationType->addItem("10- serialization_qt", QVariant((int)qx::service::QxConnect::serialization_qt));
+   cboSerializationType->addItem("11- serialization_json", QVariant((int)qx::service::QxConnect::serialization_json));
    cboSerializationType->setCurrentIndex(cboSerializationType->findData(QVariant((int)qx::service::QxConnect::getSingleton()->getSerializationType())));
 
    spinPortNumber->setValue(7694);

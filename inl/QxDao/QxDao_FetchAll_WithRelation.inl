@@ -86,6 +86,7 @@ struct QxDao_FetchAll_WithRelation_Container
    typedef qx::trait::generic_container<T> type_generic_container;
    typedef typename type_generic_container::type_item type_item;
    typedef typename type_item::type_value_qx type_value_qx;
+   typedef typename type_item::type_value type_value;
    typedef qx::dao::detail::QxSqlQueryHelper_FetchAll_WithRelation<type_value_qx> type_query_helper;
 
    static QSqlError fetchAll(const QStringList & relation, const qx::QxSqlQuery & query, T & t, QSqlDatabase * pDatabase)
@@ -109,7 +110,7 @@ struct QxDao_FetchAll_WithRelation_Container
          qx::IxDataMember * pId = dao.getDataId(); qAssert(pId);
          if (pId) { QString sId; for (int i = 0; i < pId->getNameCount(); i++) { sId += dao.query().value(i).toString() + "|"; }; vId = sId; }
          void * pItemTmp = (bComplex ? dao.builder().existIdX(0, vId, vId) : NULL);
-         if (! pItemTmp) { insertNewItem(t, dao); continue; }
+         if (! pItemTmp) { insertHelper<type_item::is_value_pointer, 0>::insertNewItem(t, dao); continue; }
          type_value_qx * pItem = static_cast<type_value_qx *>(pItemTmp);
          type_query_helper::resolveOutput(dao.getSqlRelationLinked(), (* pItem), dao.query(), dao.builder());
       }
@@ -120,18 +121,39 @@ struct QxDao_FetchAll_WithRelation_Container
 
 private:
 
-   static void insertNewItem(T & t, type_dao_helper & dao)
+   template <bool bIsPointer /* = false */, int dummy>
+   struct insertHelper
    {
-      type_item item = type_generic_container::createItem();
-      type_value_qx & item_val = item.value_qx();
-      qx::IxDataMember * pId = dao.getDataId(); qAssert(pId);
-      if (pId) { for (int i = 0; i < pId->getNameCount(); i++) { QVariant v = dao.query().value(i); qx::cvt::from_variant(v, item.key(), "", i); } }
-      qx::dao::on_before_fetch<type_value_qx>((& item_val), (& dao)); if (! dao.isValid()) { return; }
-      type_query_helper::resolveOutput(dao.getSqlRelationLinked(), item_val, dao.query(), dao.builder()); if (! dao.isValid()) { return; }
-      qx::dao::on_after_fetch<type_value_qx>((& item_val), (& dao)); if (! dao.isValid()) { return; }
-      type_generic_container::insertItem(t, item);
-      qx::dao::detail::QxDao_Keep_Original<type_item>::backup(item);
-   }
+      static void insertNewItem(T & t, type_dao_helper & dao)
+      {
+         type_item item = type_generic_container::createItem();
+         qx::IxDataMember * pId = dao.getDataId(); qAssert(pId);
+         if (pId) { for (int i = 0; i < pId->getNameCount(); i++) { QVariant v = dao.query().value(i); qx::cvt::from_variant(v, item.key(), "", i); } }
+         type_value * pValue = type_generic_container::insertItem(t, item);
+         type_value_qx & item_val = (pValue ? (* static_cast<type_value_qx *>(pValue)) : item.value_qx());
+         qx::dao::on_before_fetch<type_value_qx>((& item_val), (& dao)); if (! dao.isValid()) { return; }
+         type_query_helper::resolveOutput(dao.getSqlRelationLinked(), item_val, dao.query(), dao.builder()); if (! dao.isValid()) { return; }
+         qx::dao::on_after_fetch<type_value_qx>((& item_val), (& dao)); if (! dao.isValid()) { return; }
+         qx::dao::detail::QxDao_Keep_Original<type_item>::backup(item);
+      }
+   };
+
+   template <int dummy>
+   struct insertHelper<true, dummy>
+   {
+      static void insertNewItem(T & t, type_dao_helper & dao)
+      {
+         type_item item = type_generic_container::createItem();
+         type_value_qx & item_val = item.value_qx();
+         qx::IxDataMember * pId = dao.getDataId(); qAssert(pId);
+         if (pId) { for (int i = 0; i < pId->getNameCount(); i++) { QVariant v = dao.query().value(i); qx::cvt::from_variant(v, item.key(), "", i); } }
+         qx::dao::on_before_fetch<type_value_qx>((& item_val), (& dao)); if (! dao.isValid()) { return; }
+         type_query_helper::resolveOutput(dao.getSqlRelationLinked(), item_val, dao.query(), dao.builder()); if (! dao.isValid()) { return; }
+         qx::dao::on_after_fetch<type_value_qx>((& item_val), (& dao)); if (! dao.isValid()) { return; }
+         type_generic_container::insertItem(t, item);
+         qx::dao::detail::QxDao_Keep_Original<type_item>::backup(item);
+      }
+   };
 
 };
 

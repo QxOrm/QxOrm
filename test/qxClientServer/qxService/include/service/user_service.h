@@ -8,7 +8,7 @@
 
 class QX_SERVICE_DLL_EXPORT user_service_input : public qx::service::IxParameter
 {
-   QX_SERVICE_IX_PARAMETER_QDATASTREAM_HPP(user_service_input);
+   QX_SERVICE_IX_PARAMETER_SERIALIZATION_HPP(user_service_input);
 public:
    user_service_input() : id(0) { ; }
    virtual ~user_service_input() { ; }
@@ -24,7 +24,7 @@ typedef qx_shared_ptr<user_service_input> user_service_input_ptr;
 
 class QX_SERVICE_DLL_EXPORT user_service_output : public qx::service::IxParameter
 {
-   QX_SERVICE_IX_PARAMETER_QDATASTREAM_HPP(user_service_output);
+   QX_SERVICE_IX_PARAMETER_SERIALIZATION_HPP(user_service_output);
 public:
    user_ptr user;
    list_of_users_ptr list_of_users;

@@ -89,7 +89,7 @@ public:
    enum serialization_type { serialization_binary, serialization_xml, serialization_text, serialization_portable_binary, 
                              serialization_wide_binary, serialization_wide_xml, serialization_wide_text, 
                              serialization_polymorphic_binary, serialization_polymorphic_xml, serialization_polymorphic_text, 
-                             serialization_qt };
+                             serialization_qt, serialization_json };
 
 protected:
 

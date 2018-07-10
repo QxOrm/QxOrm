@@ -10,8 +10,8 @@ QX_REGISTER_CPP_QX_SERVICE(user_service_input)
 QX_REGISTER_CPP_QX_SERVICE(user_service_output)
 QX_REGISTER_CPP_QX_SERVICE(user_service)
 
-QX_SERVICE_IX_PARAMETER_QDATASTREAM_CPP(user_service_input)
-QX_SERVICE_IX_PARAMETER_QDATASTREAM_CPP(user_service_output)
+QX_SERVICE_IX_PARAMETER_SERIALIZATION_CPP(user_service_input)
+QX_SERVICE_IX_PARAMETER_SERIALIZATION_CPP(user_service_output)
 
 namespace qx {
 

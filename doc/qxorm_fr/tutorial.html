@@ -66,11 +66,11 @@
     <table cellspacing="0" cellpadding="1"><col><col><tbody>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow">Version courante :&nbsp;</font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.1 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.2 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
       </tr>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow"></font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.1.8</font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.1.9</font></td>
       </tr>
     </tbody></table>
   </td>
@@ -585,7 +585,7 @@ template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</
         fonctionnalités intéressantes liées à la gestion des données :
         <ul><li>
         la <font style="background-color:yellow"><b>sérialisation</b></font> automatique des données ou collections de données au
-        format binaire et XML ;
+        format binaire, XML et JSON ;
         </li><li>la <font style="background-color:yellow"><b>réflexion</b></font> (ou <font style="background-color:yellow"><b>introspection</b></font>) permettant d'accéder à la
         définition des classes paramétrées dans le contexte QxOrm ainsi que
         l'appel automatique des méthodes de classes.</li></ul>
@@ -654,7 +654,7 @@ int</span><span class="keyword"> main</span><span class="operator">(</span><span
    daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<span class="operator">::</span>fetch_by_query<span class="operator">(</span>query<span class="operator">,</span> list_of_female_author<span class="operator">);</span>
    qAssert<span class="operator">(</span>list_of_female_author<span class="operator">.</span>count<span class="operator">() ==</span><span class="int"> 2</span><span class="operator">);</span><span class="comment">
 
-   // Affiche la liste des 'author' de type 'female' dans un flux XML
+   // Affiche la liste des 'author' de type 'female' dans un flux XML (ou JSON)
 </span>   qx<span class="operator">::</span>dump<span class="operator">(</span>list_of_female_author<span class="operator">);</span><span class="comment">
 
    // Création de trois 'category' pour classer les 'blog'
@@ -733,7 +733,7 @@ int</span><span class="keyword"> main</span><span class="operator">(</span><span
    qAssert<span class="operator">(</span>blog_tmp<span class="operator">-&gt;</span>m_text<span class="operator"> ==</span><span class="string"> "update blog_text_1"</span><span class="operator">);</span>
    qAssert<span class="operator">(</span>blog_tmp<span class="operator">-&gt;</span>m_author<span class="operator"> &amp;&amp;</span> blog_tmp<span class="operator">-&gt;</span>m_author<span class="operator">-&gt;</span>m_id<span class="operator"> ==</span><span class="string"> "author_id_2"</span><span class="operator">);</span><span class="comment">
 
-   // Affiche 'blog_tmp' provenant de la base de données dans un flux XML
+   // Affiche 'blog_tmp' provenant de la base de données dans un flux XML (ou JSON)
 </span>   qx<span class="operator">::</span>dump<span class="operator">(</span>blog_tmp<span class="operator">);</span><span class="comment">
 
    // Invoque la méthode 'age()' de la classe 'author' par le mécanisme de réflexion (ou introspection)
@@ -974,7 +974,7 @@ int</span><span class="keyword"> main</span><span class="operator">(</span><span
         <img alt="QxOrm" src="./resource/logo_qxorm_small.png" width="168" height="40">
       </td>
       <td align="center" valign="middle">
-        <font size="2">© 2015 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
+        <font size="2">© 2016 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
       </td>
       <td align="right" valign="middle">
         <form action="https://www.paypal.com/cgi-bin/webscr" method="post">

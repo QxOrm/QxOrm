@@ -1,3 +1,13 @@
+Changes in version 1.4.2:
+- Support JSON serialization : each C++ class registered in QxOrm context can be serialized/deserialized in JSON format (JSON feature requires Qt5)
+- For more details about JSON serialization, read QxOrm manual here : http://www.qxorm.com/qxorm_en/manual.html#manual_606
+- With JSON serialization and QxService module : it is now possible to create REST Web Services to send data to a javascript engine (web pages for example)
+- Fix some compilation errors with recent (and less permissive) compilers and latest versions of boost and Qt
+- Fix relationship initialization assertion with complex, deep and circular relationships in large database schema
+- Improve QDataStream serialization : should be faster now and fix an issue with circular instances dependencies
+- Fix a bug fetching 1-n and n-n relationships when root is a container of stack objects (it worked only with pointers or smart-pointers, for example : QList<blog> vs QList<std::shared_ptr<blog>>)
+- Improve qx::dump() function : possibility to display a C++ instance state in XML or JSON format
+
 Changes in version 1.4.1:
 !!! IMPORTANT NOTE ABOUT THIS VERSION !!! : it is strongly recommended to read the QxOrm.pri configuration file of this new version (compilation options have changed compared to previous versions).
 Now, by default, QxOrm library is a much lighter library : QxOrm depends only on QtCore and QtSql (boost serialization is now optional and not required by default).

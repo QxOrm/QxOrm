@@ -66,11 +66,11 @@
     <table cellspacing="0" cellpadding="1"><col><col><tbody>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow">Version courante :&nbsp;</font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.1 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.2 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
       </tr>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow"></font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.1.8</font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.1.9</font></td>
       </tr>
     </tbody></table>
   </td>
@@ -148,7 +148,7 @@
               À partir d'une simple <i>fonction de paramétrage</i> (que l'on peut comparer avec un fichier de mapping XML <i>Hibernate</i>), vous aurez accès aux fonctionnalités suivantes :
               <ul>
                 <li><font style="background-color:yellow"><b>persistance</b></font> : communication avec de nombreuses bases de données (avec support des relations <i>1-1</i>, <i>1-n</i>, <i>n-1</i> et <i>n-n</i>) ;
-                </li><li><font style="background-color:yellow"><b>sérialisation</b></font> des données (flux binaire et XML) ;
+                </li><li><font style="background-color:yellow"><b>sérialisation</b></font> des données (flux binaire, XML et JSON) ;
                 </li><li>moteur de <font style="background-color:yellow"><b>réflexion</b></font> (ou <font style="background-color:yellow"><b>introspection</b></font>) pour accéder aux classes, attributs et invoquer des méthodes.
                 </li>
               </ul>
@@ -398,7 +398,7 @@
            <td valign="middle" width="30"></td>
            <td align="justify">
            <b>QxOrm</b> utilise le framework de <i>serialization</i> proposé par la bibliothèque <a href="http://www.boost.org/doc/libs/release/libs/serialization/doc/index.html" target="_blank">boost</a>.<br>
-           Il existe plusieurs types de serialization disponibles : <i>binaire, XML, texte, etc.</i><br>
+           Il existe plusieurs types de serialization disponibles : <i>binaire, XML, JSON, texte, etc.</i><br>
            Le fichier de configuration <i>QxOrm.pri</i> permet d'activer et/ou désactiver les différents types de serialization.<br>
            <br>
            Chaque type de serialization possède ses propres caractéristiques :
@@ -1416,7 +1416,7 @@ QString IxClass<span class="operator">::</span>dumpClass<span class="operator">(
            Ce mécanisme permet au framework Qt de proposer un moteur d'introspection grâce au pré-compilateur <i>moc</i>.
            Les méta-propriétés peuvent alors être utilisées par exemple par le moteur <i>QML</i>, <i>QtScript</i>, etc.<br>
            <br>
-           La bibliothèque <b>QxOrm</b> nécessite une déclaration de chacune des propriétés d'une classe dans la fonction de mapping <i>void qx::register_class&lt;T&gt;()</i> afin de proposer l'ensemble de ses fonctionnalités (persistance des données, sérialisation XML et binaire, etc.).
+           La bibliothèque <b>QxOrm</b> nécessite une déclaration de chacune des propriétés d'une classe dans la fonction de mapping <i>void qx::register_class&lt;T&gt;()</i> afin de proposer l'ensemble de ses fonctionnalités (persistance des données, sérialisation XML, JSON et binaire, etc.).
            Il est possible de déclarer automatiquement dans le contexte QxOrm l'ensemble des méta-propriétés sans maintenir une fonction de mapping <i>void qx::register_class&lt;T&gt;()</i> : la macro <b>QX_REGISTER_ALL_QT_PROPERTIES()</b> utilise le moteur d'introspection de Qt pour parcourir la liste des méta-propriétés.<br>
            <br>
            Voici un exemple d'utilisation avec la classe <i>TestQtProperty</i> se trouvant dans le dossier <i>./test/qxDllSample/dll1/include/</i> de la distribution QxOrm :<br>
@@ -2710,7 +2710,7 @@ Item<span class="operator"> {</span>
         <img alt="QxOrm" src="./resource/logo_qxorm_small.png" width="168" height="40">
       </td>
       <td align="center" valign="middle">
-        <font size="2">© 2015 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
+        <font size="2">© 2016 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
       </td>
       <td align="right" valign="middle">
         <form action="https://www.paypal.com/cgi-bin/webscr" method="post">

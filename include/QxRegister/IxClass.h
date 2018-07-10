@@ -108,7 +108,6 @@ public:
    inline IxDataMemberX * getDataMemberX() const                  { return m_pDataMemberX; }
    inline IxFunctionX * getFctMemberX() const                     { return m_pFctMemberX.get(); }
    inline IxFunctionX * getFctStaticX() const                     { return m_pFctStaticX.get(); }
-   inline IxDataMember * getId() const                            { return (m_pDataMemberX ? m_pDataMemberX->getId() : NULL); }
 
    inline void setName(const QString & sName)                                 { m_sName = sName; updateNamePtr(); }
    inline void setDescription(const QString & sDesc)                          { m_sDescription = sDesc; }
@@ -121,6 +120,7 @@ public:
    virtual IxClass * getBaseClass() const = 0;
    virtual IxValidatorX * getAllValidator();
 
+   IxDataMember * getId(bool bRecursive = false) const;
    bool isKindOf(const QString & sClassName) const;
    QString dumpClass() const;
 
