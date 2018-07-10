@@ -78,6 +78,16 @@ private:
    template <typename U>
    static typename boost::mpl::if_c<qx::trait::is_qx_pod<U>::value, char, int>::type removeContainer(const boost::unordered_multiset<U> &);
 
+#if (defined(_QX_CPP_11_CONTAINER) && !defined(BOOST_NO_CXX11_STD_UNORDERED))
+
+   template <typename U>
+   static typename boost::mpl::if_c<qx::trait::is_qx_pod<U>::value, char, int>::type removeContainer(const std::unordered_set<U> &);
+
+   template <typename U>
+   static typename boost::mpl::if_c<qx::trait::is_qx_pod<U>::value, char, int>::type removeContainer(const std::unordered_multiset<U> &);
+
+#endif // (defined(_QX_CPP_11_CONTAINER) && !defined(BOOST_NO_CXX11_STD_UNORDERED))
+
    static int removeContainer(...);
    static T t;
 

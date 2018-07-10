@@ -35,6 +35,8 @@
 
 #include <QxDao/QxSqlGenerator/QxSqlGenerator.h>
 
+#include <boost/type_traits/is_pointer.hpp>
+
 #include <QxMemLeak/mem_leak.h>
 
 QX_DLL_EXPORT_QX_SINGLETON_CPP(qx::QxSqlDatabase)
@@ -85,9 +87,30 @@ QSqlDatabase QxSqlDatabase::getDatabaseByCurrThreadId(QSqlError & dbError)
    return QSqlDatabase::database(sDbKey);
 }
 
+namespace helper {
+
+template <typename T, bool bIsPointer>
+struct CvtQtHandle
+{ static QString toString(T t) { return QString::number(static_cast<qlonglong>(t)); } };
+
+template <typename T>
+struct CvtQtHandle<T, true>
+{
+   static QString toString(T t)
+   {
+      const void * ptr = static_cast<const void *>(t);
+      QString value; QTextStream stream(& value);
+      stream << ptr;
+      return value;
+   }
+};
+
+} // namespace helper
+
 QSqlDatabase QxSqlDatabase::createDatabase(QSqlError & dbError)
 {
    Qt::HANDLE lCurrThreadId = QThread::currentThreadId();
+   QString sCurrThreadId = qx::helper::CvtQtHandle<Qt::HANDLE, boost::is_pointer<Qt::HANDLE>::value>::toString(lCurrThreadId);
    QString sDbKeyNew = QUuid::createUuid().toString();
    dbError = QSqlError();
    bool bError = false;
@@ -108,7 +131,7 @@ QSqlDatabase QxSqlDatabase::createDatabase(QSqlError & dbError)
 
    if (bError) { QSqlDatabase::removeDatabase(sDbKeyNew); return QSqlDatabase(); }
    m_lstDbByThread.insert(lCurrThreadId, sDbKeyNew);
-   qDebug("[QxOrm] qx::QxSqlDatabase : create new database connection in thread '%ld' with key '%s'", (long)(lCurrThreadId), qPrintable(sDbKeyNew));
+   qDebug("[QxOrm] qx::QxSqlDatabase : create new database connection in thread '%s' with key '%s'", qPrintable(sCurrThreadId), qPrintable(sDbKeyNew));
    return QSqlDatabase::database(sDbKeyNew);
 }
 

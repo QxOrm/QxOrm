@@ -346,6 +346,7 @@ void QxClassX::initSqlTypeByClassName()
 
    m_lstSqlTypeByClassName.insert("bool", "SMALLINT");
    m_lstSqlTypeByClassName.insert("qx_bool", "SMALLINT");
+   m_lstSqlTypeByClassName.insert("char", "SMALLINT");
    m_lstSqlTypeByClassName.insert("short", "SMALLINT");
    m_lstSqlTypeByClassName.insert("int", "INTEGER");
    m_lstSqlTypeByClassName.insert("long", "INTEGER");

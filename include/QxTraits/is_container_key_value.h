@@ -72,9 +72,22 @@ private:
                                      qx::trait::is_qt_multi_hash<T>, 
                                      qx::trait::is_qx_collection<T> >::type cond_is_container_key_value_2;
 
+#if (defined(_QX_CPP_11_CONTAINER) && !defined(BOOST_NO_CXX11_STD_UNORDERED))
+
+   typedef typename boost::mpl::or_< typename qx::trait::is_container_key_value<T>::cond_is_container_key_value_2, 
+                                     qx::trait::is_std_unordered_map<T> >::type cond_is_container_key_value_3;
+
+   typedef typename boost::mpl::if_< typename qx::trait::is_container_key_value<T>::cond_is_container_key_value_3, 
+                                     boost::mpl::true_, 
+                                     boost::mpl::false_ >::type type_is_container_key_value;
+
+#else // (defined(_QX_CPP_11_CONTAINER) && !defined(BOOST_NO_CXX11_STD_UNORDERED))
+
    typedef typename boost::mpl::if_< typename qx::trait::is_container_key_value<T>::cond_is_container_key_value_2, 
                                      boost::mpl::true_, 
                                      boost::mpl::false_ >::type type_is_container_key_value;
+
+#endif // (defined(_QX_CPP_11_CONTAINER) && !defined(BOOST_NO_CXX11_STD_UNORDERED))
 
 public:
 

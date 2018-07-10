@@ -53,10 +53,25 @@
 #define qx_container_base_of_test_8() (sizeof(qx::trait::is_container_base_of<B, D>::removeContainer((* b_boost_unordered_set), d)) == sizeof(char))
 #define qx_container_base_of_test_9() (sizeof(qx::trait::is_container_base_of<B, D>::removeContainer((* b_boost_unordered_multi_set), d)) == sizeof(char))
 
+#if (defined(_QX_CPP_11_CONTAINER) && !defined(BOOST_NO_CXX11_STD_UNORDERED))
+
+#define qx_container_base_of_test_10() (sizeof(qx::trait::is_container_base_of<B, D>::removeContainer((* b_std_unordered_set), d)) == sizeof(char))
+#define qx_container_base_of_test_11() (sizeof(qx::trait::is_container_base_of<B, D>::removeContainer((* b_std_unordered_multi_set), d)) == sizeof(char))
+
+#define qx_container_base_of_all_test() \
+qx_container_base_of_test_1() || qx_container_base_of_test_2() || qx_container_base_of_test_3() || \
+qx_container_base_of_test_4() || qx_container_base_of_test_5() || qx_container_base_of_test_6() || \
+qx_container_base_of_test_7() || qx_container_base_of_test_8() || qx_container_base_of_test_9() || \
+qx_container_base_of_test_10() || qx_container_base_of_test_11()
+
+#else // (defined(_QX_CPP_11_CONTAINER) && !defined(BOOST_NO_CXX11_STD_UNORDERED))
+
 #define qx_container_base_of_all_test() \
 qx_container_base_of_test_1() || qx_container_base_of_test_2() || qx_container_base_of_test_3() || \
 qx_container_base_of_test_4() || qx_container_base_of_test_5() || qx_container_base_of_test_6() || \
 qx_container_base_of_test_7() || qx_container_base_of_test_8() || qx_container_base_of_test_9()
+
+#endif // (defined(_QX_CPP_11_CONTAINER) && !defined(BOOST_NO_CXX11_STD_UNORDERED))
 
 namespace qx {
 namespace trait {
@@ -94,6 +109,16 @@ private:
    template <typename V, typename W>
    static typename boost::mpl::if_c<boost::is_base_of<V, W>::value, char, int>::type removeContainer(const boost::unordered_multiset<V> &, const boost::unordered_multiset<W> &);
 
+#if (defined(_QX_CPP_11_CONTAINER) && !defined(BOOST_NO_CXX11_STD_UNORDERED))
+
+   template <typename V, typename W>
+   static typename boost::mpl::if_c<boost::is_base_of<V, W>::value, char, int>::type removeContainer(const std::unordered_set<V> &, const std::unordered_set<W> &);
+
+   template <typename V, typename W>
+   static typename boost::mpl::if_c<boost::is_base_of<V, W>::value, char, int>::type removeContainer(const std::unordered_multiset<V> &, const std::unordered_multiset<W> &);
+
+#endif // (defined(_QX_CPP_11_CONTAINER) && !defined(BOOST_NO_CXX11_STD_UNORDERED))
+
    static int removeContainer(...);
    static B b;
    static D d;
@@ -107,6 +132,13 @@ private:
    static QLinkedList<B> * b_qt_linked_list;
    static boost::unordered_set<B> * b_boost_unordered_set;
    static boost::unordered_multiset<B> * b_boost_unordered_multi_set;
+
+#if (defined(_QX_CPP_11_CONTAINER) && !defined(BOOST_NO_CXX11_STD_UNORDERED))
+
+   static std::unordered_set<B> * b_std_unordered_set;
+   static std::unordered_multiset<B> * b_std_unordered_multi_set;
+
+#endif // (defined(_QX_CPP_11_CONTAINER) && !defined(BOOST_NO_CXX11_STD_UNORDERED))
 
    enum { value_0 = (qx::trait::is_container<D>::value) };
    enum { value_1 = (qx::trait::is_container<B>::value) };

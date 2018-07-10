@@ -2,8 +2,7 @@
 <html>
 <head>
   <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
-  <title>QxOrm : C++ Qt Object Relational Mapping Library (ORM) - QxEntityEditor : C++ Qt Entities Graphic Editor (data model)</title>
-  <meta name="generator" content="Amaya, see http://www.w3.org/Amaya/">
+  <title>QxOrm : C++ Qt ORM Object Relational Mapping database library - QxEntityEditor : C++ Qt entities graphic editor (data model designer and source code generator)</title>
   <link rel='stylesheet' type='text/css' href='./resource/qxorm_style.css'>
   <script type="text/javascript" src="./resource/qxorm_script.js"></script>
 </head>
@@ -56,11 +55,11 @@
     <table cellspacing="0" cellpadding="1"><col><col><tbody>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow">Current version :&nbsp;</font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.3.1 - <a href="../doxygen/index.html" target="_blank">QxOrm library online documentation</a></font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.3.2 - <a href="../doxygen/index.html" target="_blank">QxOrm library online documentation</a></font></td>
       </tr>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow"></font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.1.7</font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.1.8</font></td>
       </tr>
     </tbody></table>
   </td>
@@ -79,7 +78,7 @@
           <col><col>
           <tbody>
             <tr>
-              <td><font class="txt_with_shadow" color="#0B0B61" size="4"><i>Select a tutorial to display : </i></font></td>
+              <td><font class="txt_with_shadow" color="#0B0B61" size="4"><i>Select a tutorial : </i></font></td>
               <td align="left">
                 <a href="./tutorial.html" class="btn_tuto_selected">Tuto n°1 : qxBlog</a>
                 <a href="./tutorial_2.html" class="btn_tuto">Tuto n°2 : qxClientServer</a>
@@ -95,7 +94,7 @@
           <col><col>
           <tbody>
             <tr>
-              <td>In this chapter, we will see a lot of functionalities of <b>QxOrm</b> library with the creation of a C++ project : <b>qxBlog - blog management in C++</b>.<br>
+              <td>In this chapter, we will see several features of <b>QxOrm</b> library with the creation of a C++ project : <b>qxBlog - blog management in C++</b>.<br>
                  <b>qxBlog</b> tutorial step by step :
                  <ul>
                    <li><a href="#tuto_1">1- <b>qxBlog</b> project - blog management in C++</a></li>
@@ -112,12 +111,12 @@
                  </ul>
               </td>
               <td width="200" align="center" valign="top"><a href="./resource/qt_ambassador_logo.png" target="_blank"><img alt="qt_ambassador" src="./resource/qt_ambassador_logo_150x150.png" width="150" height="150" border="0"></a><br>
-                 <b><font size="2">QxOrm library has been accepted into the <a href="http://qt.digia.com/qtambassador/" target="_blank">Qt Ambassador Program</a></font></b>
+                 <b><font size="2">QxOrm library has been accepted into the <a href="http://forum.qt.io/category/24/qt-ambassador-program" target="_blank">Qt Ambassador Program</a></font></b>
               </td>
             </tr>
           </tbody>
         </table>
-        <i>Note :</i> there is a similar project in the directory '<i>./test/qxBlogCompositeKey/</i>' to show how to define an id with multi-columns in database (<i>composite key</i>).<br>
+        <i>Note :</i> there is a similar project in '<i>./test/qxBlogCompositeKey/</i>' directory to show how to define an id with multi-columns in database (<i>composite key</i>).<br>
         For more details about '<i>multi-columns primary key</i>' : <a href="../qxorm_en/faq.html#faq_101">goto the FAQ</a>.<br>
         <br><br>
         <a name="tuto_1"><u><font color="#100D5A">1- <b>qxBlog</b> project - blog management in C++ :</font></u></a> 
@@ -151,19 +150,19 @@
             </tr>
           </tbody>
         </table>
-        <p><i>Note</i> : tutorial source code is available in the folder
-        <i>./test/qxBlog/</i> of your <b>QxOrm</b> directory.<br>
-        <i>qxBlog.sqlite</i> file is the tutorial database in the format <a href="http://sqlite.org/" target="_blank"><i>sqlite</i></a>.</p>
+        <p><i>Note</i> : tutorial source code is available in 
+        <i>./test/qxBlog/</i> folder of your <b>QxOrm</b> package.<br>
+        <i>qxBlog.sqlite</i> file is the tutorial database in the format <a href="http://sqlite.org/" target="_blank"><i>SQLite</i></a>.</p>
         <p><br>
         <a name="tuto_3"><u><font color="#100D5A">3- <i>qxBlog.pro</i> file :</font></u></a><br>
         <br>
         This file is necessary to compile and build the project with the command <i>qmake</i>
         provided by Qt library. <br>
-        The tool <i>qmake</i> is multi-platform, so <b>qxBlog</b> project can be compiled under Windows, Linux, Mac, etc...
+        The tool <i>qmake</i> is multi-platform, so <b>qxBlog</b> project can be compiled under Windows, Linux, Mac OS X, etc...
         <br>
         The file <i>qxBlog.pro</i> contains the list of all files in the project (header + source) and all dependencies
         (<i>QxOrm.pri</i> file contains all dependencies with boost and Qt libraries).<br>
-        <i>qxBlog.pro</i> contains an important constant (<b><i>_BUILDING_QX_BLOG</i></b>) to know if the project is compiling (cf. <i>export.h</i> and dll mechanism under Windows to import or export functions, classes...).
+        <i>qxBlog.pro</i> contains an important constant (<b><i>_BUILDING_QX_BLOG</i></b>) to know if the project is compiling (cf. <i>export.h</i> and DLL mechanism under Windows to import or export functions, classes...).
         </p>
         <p><a href="./resource/qxBlog.qxBlog.pro"><img alt="qxBlog.pro"
         src="./resource/qxBlog.pro.jpg" width="417" height="551"
@@ -171,13 +170,13 @@
         <p><br>
         <a name="tuto_4"><u><font color="#100D5A">4- <i>export.h</i> file :</font></u></a><br>
         <br>
-        A Windows <i>dll</i> needs this file to manage <i>'export/import'</i> of classes, functions... <br>
+        A <i>DLL</i> Windows needs this file to manage <i>'export/import'</i> of classes, functions... <br>
         <b>QxOrm</b> uses the same mechanism to provide some functionalities :
         so the file <i>export.h</i> is necessary to all projects using <b>QxOrm</b> library.<br><br>
-        <i>Note</i> : quick resume of dll mechanism under Windows :</p>
+        <i>Note</i> : quick resume of DLL mechanism under Windows :</p>
         <ul>
-          <li>when a dll is compiling, each class is exported</li>
-          <li>when another dll is compiling, each class of the first dll needs to be imported to be used</li>
+          <li>when a DLL is compiling, each class is exported</li>
+          <li>when another DLL is compiling, each class of the first DLL needs to be imported to be used</li>
         </ul><br>
         <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="export.h">
 <pre><span class="pre">#ifndef _QX_BLOG_EXPORT_H_
@@ -509,7 +508,7 @@ template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</
         <br>
         <a name="tuto_10"><u><font color="#100D5A">10- <i>main.cpp</i> file :</font></u></a><br>
         <br>
-        <b>QxOrm</b> can communicate with many databases (<a href="http://doc.trolltech.com/4.6/sql-programming.html" target="_blank">see the list of databases in Qt web site</a>) 
+        <b>QxOrm</b> can communicate with many databases (<a href="http://doc.qt.io/qt-5/qtsql-index.html" target="_blank">see the list of databases in Qt web site</a>) 
         =&gt; <font style="background-color:yellow"><b>persistence</b></font>.<br>
         <b>QxOrm</b> provides also 2 other important functionalities :
         <ul>
@@ -842,7 +841,7 @@ int</span><span class="keyword"> main</span><span class="operator">(</span><span
         <br><br>
         <i>Important note</i> : <b>QxOrm</b> doesn't want to hide sql query (by default, all sql queries are displayed).<br>
         <b>QxOrm</b> cannot resolve all problems with sql and databases, 
-        so it is sometimes necessary to use <a href="http://doc.trolltech.com/4.6/sql-programming.html" target="_blank"><i>QtSql</i></a> engine of Qt library 
+        so it is sometimes necessary to use <a href="http://doc.qt.io/qt-5/qtsql-index.html" target="_blank"><i>QtSql</i></a> engine of Qt library 
         to write your own sql query or stored procedure.<br>
         <br><br>
         <a name="tuto_11"><u><font color="#100D5A">11- relationship <i>one-to-one</i> with <i>person</i> class :</font></u></a><br>

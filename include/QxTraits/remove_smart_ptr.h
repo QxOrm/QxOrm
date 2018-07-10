@@ -55,6 +55,12 @@
 
 #include <QxDao/QxDaoPointer.h>
 
+#ifdef _QX_CPP_11_SMART_PTR
+#ifndef BOOST_NO_CXX11_SMART_PTR
+#include <memory>
+#endif // BOOST_NO_CXX11_SMART_PTR
+#endif // _QX_CPP_11_SMART_PTR
+
 namespace qx {
 namespace trait {
 
@@ -84,6 +90,18 @@ struct remove_smart_ptr< QScopedPointer<T> > { typedef T type; };
 
 template <typename T>
 struct remove_smart_ptr< qx::dao::ptr<T> > { typedef T type; };
+
+#ifdef _QX_CPP_11_SMART_PTR
+#ifndef BOOST_NO_CXX11_SMART_PTR
+
+template <typename T>
+struct remove_smart_ptr< std::unique_ptr<T> > { typedef T type; };
+
+template <typename T>
+struct remove_smart_ptr< std::shared_ptr<T> > { typedef T type; };
+
+#endif // BOOST_NO_CXX11_SMART_PTR
+#endif // _QX_CPP_11_SMART_PTR
 
 } // namespace trait
 } // namespace qx

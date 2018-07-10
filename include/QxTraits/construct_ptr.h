@@ -55,6 +55,12 @@
 #include <QtCore/qscopedpointer.h>
 #endif // (QT_VERSION >= 0x040600)
 
+#ifdef _QX_CPP_11_SMART_PTR
+#ifndef BOOST_NO_CXX11_SMART_PTR
+#include <memory>
+#endif // BOOST_NO_CXX11_SMART_PTR
+#endif // _QX_CPP_11_SMART_PTR
+
 #include <QxDao/QxDaoPointer.h>
 
 namespace qx {
@@ -114,6 +120,20 @@ struct construct_ptr< QScopedPointer<T> >
 template <typename T>
 struct construct_ptr< qx::dao::ptr<T> >
 { static inline void get(qx::dao::ptr<T> & t) { t = qx::dao::ptr<T>(new T()); } };
+
+#ifdef _QX_CPP_11_SMART_PTR
+#ifndef BOOST_NO_CXX11_SMART_PTR
+
+template <typename T>
+struct construct_ptr< std::unique_ptr<T> >
+{ static inline void get(std::unique_ptr<T> & t) { t.reset(new T()); } };
+
+template <typename T>
+struct construct_ptr< std::shared_ptr<T> >
+{ static inline void get(std::shared_ptr<T> & t) { t.reset(new T()); } };
+
+#endif // BOOST_NO_CXX11_SMART_PTR
+#endif // _QX_CPP_11_SMART_PTR
 
 } // namespace trait
 } // namespace qx

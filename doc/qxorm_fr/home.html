@@ -2,8 +2,7 @@
 <html>
 <head>
   <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
-  <title>QxOrm : C++ Qt Object Relational Mapping Library (ORM) - QxEntityEditor : C++ Qt Entities Graphic Editor (data model)</title>
-  <meta name="generator" content="Amaya, see http://www.w3.org/Amaya/">
+  <title>QxOrm : C++ Qt ORM Object Relational Mapping database library - QxEntityEditor : C++ Qt entities graphic editor (data model designer and source code generator)</title>
   <link rel='stylesheet' type='text/css' href='./resource/qxorm_style.css'>
   <script type="text/javascript" src="./resource/qxorm_script.js"></script>
 </head>
@@ -56,11 +55,11 @@
     <table cellspacing="0" cellpadding="1"><col><col><tbody>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow">Version courante :&nbsp;</font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.3.1 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.3.2 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
       </tr>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow"></font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.1.7</font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.1.8</font></td>
       </tr>
     </tbody></table>
   </td>
@@ -79,7 +78,7 @@
           <col><col>
           <tbody>
             <tr>
-              <td><font class="txt_with_shadow" color="#0B0B61" size="4"><b>QxOrm (le moteur) + QxEntityEditor (l'éditeur graphique) = la meilleure solution pour gérer ses données en C++/Qt !</b></font><br/>
+              <td><h1 class="txt_slogan">QxOrm (le moteur) + QxEntityEditor (l'éditeur graphique) = la meilleure solution pour gérer ses données en C++/Qt !</h1>
                  <br/><hr style="width: 90%" align="center" size="1" color="#100D5A">
                  <b>QxOrm est une bibliothèque C++ de gestion de données.</b><br>
                  A partir d'une simple <b>fonction de paramétrage</b> (que l'on peut
@@ -99,7 +98,7 @@
                  <hr style="width: 90%" align="center" size="1" color="#100D5A">
               </td>
               <td width="200" align="center" valign="top"><a href="./resource/qt_ambassador_logo.png" target="_blank"><img alt="qt_ambassador" src="./resource/qt_ambassador_logo_150x150.png" width="150" height="150" border="0"></a><br>
-                 <b><font size="2">QxOrm library has been accepted into the <a href="http://qt.digia.com/qtambassador/" target="_blank">Qt Ambassador Program</a></font></b>
+                 <b><font size="2">QxOrm library has been accepted into the <a href="http://forum.qt.io/category/24/qt-ambassador-program" target="_blank">Qt Ambassador Program</a></font></b>
               </td>
             </tr>
           </tbody>
@@ -136,7 +135,7 @@
           <li><b>pas de mapping XML</b> ;
           </li>
           <li>1 seul fichier <i>&lt;QxOrm.h&gt;</i> à inclure dans l'en-tête
-            précompilé (<b>precompiled-header</b> nécessaire pour optimiser les temps
+            précompilé (<b>precompiled-header</b> recommandé pour optimiser les temps
             de compilation) ;
           </li>
           <li>aucune nécessité d'utiliser le pré-compilateur 'moc' fourni
@@ -146,7 +145,7 @@
             de <b>méta-programmation</b>) ;
           </li>
           <li>compatible avec <b>Visual C++ 2008, 2010 et 2012</b> sous Windows,
-            <b>GCC 4.4.1</b> sous Linux, <b>Clang</b> sous Mac OS X, et <b>MinGW</b> sous Windows (d'autres environnements et
+            <b>GCC</b> sous Linux, <b>Clang</b> sous Mac OS X, et <b>MinGW</b> sous Windows (d'autres environnements et
             plateformes seront testés prochainement : mobiles, etc...) ;
           </li>
           <li>compatible avec le développement de bibliothèques partagées
@@ -155,7 +154,7 @@
           </li>
         </ul>
         <p align="justify"><b>QxOrm</b> est dépendant des excellentes bibliothèques
-        <a href="http://www.boost.org/" target="_blank"><b>boost</b></a> (compatible à partir de la version 1.38) et <a href="http://qt.digia.com/" target="_blank"><b>Qt</b></a>
+        <a href="http://www.boost.org/" target="_blank"><b>boost</b></a> (compatible à partir de la version 1.38) et <a href="http://www.qt.io/" target="_blank"><b>Qt</b></a>
         (compatible à partir de la version 4.5.0) :</p>
         <p></p>
         <table border="0" style="width: 100%" align="center">
@@ -189,7 +188,7 @@
           <tbody>
             <tr>
               <td valign="middle" width="161" align="center"><a
-                href="http://qt.digia.com/" target="_blank"><img alt="Qt"
+                href="http://www.qt.io/" target="_blank"><img alt="Qt"
                 src="./resource/logo_qt.jpg" width="42" height="50" border="0"></a></td>
               <td align="justify"><b>Qt</b> : bibliothèque complète : IHM
                 (<i>QtGui</i>), réseau (<i>QtNetwork</i>), XML (<i>QtXml</i>), base de données
@@ -203,7 +202,7 @@
                 : <i>QObject, QString, QDate, QTime, QDateTime, QList, QHash,
                 QSharedPointer, QScopedPointer, etc...</i><br>
                 Il est conseillé d'installer et d'utiliser la dernière version
-                de Qt disponible à l'adresse suivante : <a href="http://qt.digia.com/" target="_blank">http://qt.digia.com/</a> </td>
+                de Qt disponible à l'adresse suivante : <a href="http://www.qt.io/" target="_blank">http://www.qt.io/</a> </td>
             </tr>
           </tbody>
         </table>
@@ -211,7 +210,7 @@
         <p></p>
         <p><b>QxOrm</b> est divisé en sous-modules, voici un descriptif rapide :</p>
         <ul>
-          <li><p><b><a href="../doxygen/html/group___qx_dao.html" target="_blank">QxDao</a></b> : basé sur le moteur <a href="http://doc.trolltech.com/4.6/sql-programming.html" target="_blank"><i>QtSql</i></a> de Qt, ce module
+          <li><p><b><a href="../doxygen/html/group___qx_dao.html" target="_blank">QxDao</a></b> : basé sur le moteur <a href="http://doc.qt.io/qt-5/qtsql-index.html" target="_blank"><i>QtSql</i></a> de Qt, ce module
             permet de communiquer (sélection, modification, suppression,
             transaction, etc...) avec de nombreuses bases de données en mappant
             chaque champ d'une table avec les propriétés d'une classe C++. Les
@@ -229,16 +228,16 @@
             QxOrm.</p>
           </li>
           <li><p><b><a href="../doxygen/html/group___qx_model_view.html" target="_blank">QxModelView</a></b> :
-            toute classe enregistrée dans le contexte QxOrm peut être utilisée par <a href="http://qt-project.org/doc/qt-5/modelview.html" target="_blank">le moteur model/view de Qt</a> (Qt widgets et/ou vues QML).
+            toute classe enregistrée dans le contexte QxOrm peut être utilisée par <a href="http://doc.qt.io/qt-5/modelview.html" target="_blank">le moteur model/view de Qt</a> (Qt widgets et/ou vues QML).
             L'interface <a href="../doxygen/html/classqx_1_1_ix_model.html" target="_blank">qx::IxModel</a> expose automatiquement au moteur QML toutes les propriétés définies dans le contexte QxOrm.
             Ce module permet ainsi de faciliter l'intéraction entre QML et les bases de données.</p>
           </li>
-          <li><p><b><a href="../doxygen/html/group___qx_service.html" target="_blank">QxService</a></b> : basé sur le moteur <a href="http://doc-snapshot.qt-project.org/4.8/qtnetwork.html" target="_blank"><i>QtNetwork</i></a> de Qt, ce module
+          <li><p><b><a href="../doxygen/html/group___qx_service.html" target="_blank">QxService</a></b> : basé sur le moteur <a href="http://doc.qt.io/qt-5/qtnetwork-index.html" target="_blank"><i>QtNetwork</i></a> de Qt, ce module
             permet de créer de manière simple et performante <b>un serveur d'applications en C++</b> (notion de <i>services</i> avec <i>demande</i> du client et <i>réponse</i> du serveur). <b>QxService</b> utilise la <i>serialization</i> et l'<i>introspection</i> des données
             et fonctions pour pouvoir faire transiter sur le réseau n'importe quelle classe ou structure. Pour plus d'informations sur ce module, <b>un tutoriel</b> est disponible <a href="./tutorial_2.html">en cliquant ici</a>.
           </p></li>
           <li><p><b><a href="../doxygen/html/group___qx_collection.html" target="_blank">QxCollection&lt;Key, Value&gt;</a></b> : basé sur
-            <a href="http://www.boost.org/doc/libs/1_42_0/libs/multi_index/doc/index.html" target="_blank"><i>boost::multi_index_container</i></a>, cette collection permet de cumuler
+            <a href="http://www.boost.org/doc/libs/release/libs/multi_index/doc/index.html" target="_blank"><i>boost::multi_index_container</i></a>, cette collection permet de cumuler
             les avantages d'un <i>std::vector&lt;T&gt;</i> (conserve l'ordre
             d'insertion + accès rapide par index) et d'un
             <i>boost::unordered_map&lt;Key, Value&gt;</i> ou encore <i>QHash&lt;Key,
@@ -247,7 +246,7 @@
             base de données.</p>
           </li>
           <li><p><b><a href="../doxygen/html/group___qx_serialize.html" target="_blank">QxSerialize</a></b> : ce module s'appuie sur l'excellente
-            bibliothèque <a href="http://www.boost.org/doc/libs/1_42_0/libs/serialization/doc/index.html" target="_blank"><i>boost::serialization</i></a>. Toute classe définie par QxOrm
+            bibliothèque <a href="http://www.boost.org/doc/libs/release/libs/serialization/doc/index.html" target="_blank"><i>boost::serialization</i></a>. Toute classe définie par QxOrm
             peut être sérializée dans un flux binaire et XML. Ce module permet
             également de cloner toutes les instances d'objet. Les principaux
             objets de la bibliothèque Qt (<i>QObject, QString, QDate, QTime,

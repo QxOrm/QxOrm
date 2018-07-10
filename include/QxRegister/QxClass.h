@@ -187,7 +187,7 @@ private:
    IxFunction * insertFct(IxFunction_ptr pFct, const QString & sKey);
    IxFunction * insertFctStatic(IxFunction_ptr pFct, const QString & sKey);
 
-   void registerClass() { qx::register_class(* this); }
+   void registerClass() { qx::register_class< QxClass<T> >(* this); }
 
    void beforeRegisterClass()
    {

@@ -62,6 +62,8 @@
 #include <QxTraits/is_std_map.h>
 #include <QxTraits/is_std_set.h>
 #include <QxTraits/is_std_vector.h>
+#include <QxTraits/is_std_unordered_map.h>
+#include <QxTraits/is_std_unordered_set.h>
 
 namespace qx {
 namespace trait {
@@ -100,9 +102,23 @@ private:
                                      qx::trait::is_std_set<T>, 
                                      qx::trait::is_std_vector<T> >::type cond_is_container_5;
 
+#if (defined(_QX_CPP_11_CONTAINER) && !defined(BOOST_NO_CXX11_STD_UNORDERED))
+
+   typedef typename boost::mpl::or_< typename qx::trait::is_container<T>::cond_is_container_5, 
+                                     qx::trait::is_std_unordered_map<T>, 
+                                     qx::trait::is_std_unordered_set<T> >::type cond_is_container_6;
+
+   typedef typename boost::mpl::if_< typename qx::trait::is_container<T>::cond_is_container_6, 
+                                     boost::mpl::true_, 
+                                     boost::mpl::false_ >::type type_is_container;
+
+#else // (defined(_QX_CPP_11_CONTAINER) && !defined(BOOST_NO_CXX11_STD_UNORDERED))
+
    typedef typename boost::mpl::if_< typename qx::trait::is_container<T>::cond_is_container_5, 
                                      boost::mpl::true_, 
                                      boost::mpl::false_ >::type type_is_container;
+
+#endif // (defined(_QX_CPP_11_CONTAINER) && !defined(BOOST_NO_CXX11_STD_UNORDERED))
 
 public:
 

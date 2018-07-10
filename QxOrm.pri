@@ -169,3 +169,19 @@ LIBS += -l$${QX_BOOST_LIB_SERIALIZATION_RELEASE}
 # Note : there is a side effect disabling precompiled headers => compilation times are considerably increased !
 
 # DEFINES += _QX_NO_PRECOMPILED_HEADER
+
+#######################################
+# C++11 smart pointers and containers #
+#######################################
+
+# By default, QxOrm library supports smart pointers and containers of Qt library and boost library : QHash, QList, QSharedPointer, boost::shared_ptr, boost::unordered_map, etc...
+# QxOrm library supports also by default containers of previous C++03 standard library : std::vector, std::list, std::map, std::set
+# If you want to enable smart pointers and containers of the new C++11 standard library, you can define the compilation options _QX_CPP_11_SMART_PTR, _QX_CPP_11_CONTAINER and _QX_CPP_11_TUPLE :
+# - With _QX_CPP_11_SMART_PTR : std::unique_ptr, std::shared_ptr, std::weak_ptr
+# - With _QX_CPP_11_CONTAINER : std::unordered_map, std::unordered_set, std::unordered_multimap, std::unordered_multiset
+# - With _QX_CPP_11_TUPLE : std::tuple
+
+# CONFIG += c++11
+# DEFINES += _QX_CPP_11_SMART_PTR
+# DEFINES += _QX_CPP_11_CONTAINER
+# DEFINES += _QX_CPP_11_TUPLE

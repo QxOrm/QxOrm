@@ -112,6 +112,31 @@ void unit_test_is_smart_ptr()
    BOOST_STATIC_ASSERT(type_is_smart_ptr_base_of_object_boost_scoped_ptr::value);
    BOOST_STATIC_ASSERT(! qx::trait::is_smart_ptr_to_pod< QWeakPointer<QString> >::value);
    BOOST_STATIC_ASSERT(qx::trait::is_smart_ptr_to_pod< QSharedDataPointer<double> >::value);
+
+#ifdef _QX_CPP_11_SMART_PTR
+#ifndef BOOST_NO_CXX11_SMART_PTR
+
+   BOOST_STATIC_ASSERT(! qx::trait::is_boost_shared_ptr< std::shared_ptr<double> >::value);
+   BOOST_STATIC_ASSERT(qx::trait::is_std_shared_ptr< std::shared_ptr<QObject> >::value);
+   BOOST_STATIC_ASSERT(! qx::trait::is_std_weak_ptr< std::shared_ptr<int> >::value);
+   BOOST_STATIC_ASSERT(qx::trait::is_smart_ptr< std::shared_ptr<QObject> >::value);
+
+   BOOST_STATIC_ASSERT(! qx::trait::is_boost_scoped_ptr< std::weak_ptr<QObject> >::value);
+   BOOST_STATIC_ASSERT(! qx::trait::is_boost_weak_ptr< std::weak_ptr<int> >::value);
+   BOOST_STATIC_ASSERT(! qx::trait::is_qt_shared_data_ptr< std::weak_ptr<int> >::value);
+   BOOST_STATIC_ASSERT(qx::trait::is_std_weak_ptr< std::weak_ptr<QObject> >::value);
+   BOOST_STATIC_ASSERT(qx::trait::is_smart_ptr< std::weak_ptr<QString> >::value);
+   BOOST_STATIC_ASSERT(! qx::trait::is_smart_ptr_to_pod< std::weak_ptr<QString> >::value);
+
+   BOOST_STATIC_ASSERT(! qx::trait::is_boost_intrusive_ptr< std::unique_ptr<QObject> >::value);
+   BOOST_STATIC_ASSERT(qx::trait::is_std_unique_ptr< std::unique_ptr<QObject> >::value);
+   BOOST_STATIC_ASSERT(! qx::trait::is_boost_shared_ptr< std::unique_ptr<QString> >::value);
+   BOOST_STATIC_ASSERT(! qx::trait::is_boost_weak_ptr< std::unique_ptr<QObject> >::value);
+   BOOST_STATIC_ASSERT(! qx::trait::is_qt_shared_data_ptr< std::unique_ptr<QObject> >::value);
+   BOOST_STATIC_ASSERT(! qx::trait::is_qt_shared_ptr< std::unique_ptr<QString> >::value);
+
+#endif // BOOST_NO_CXX11_SMART_PTR
+#endif // _QX_CPP_11_SMART_PTR
 }
 
 } // namespace unit_test

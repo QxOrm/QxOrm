@@ -130,6 +130,12 @@
 #include <QxSerialize/Qx/QxSerialize_QxXmlWriter.h>
 #include <QxSerialize/Qx/QxSerialize_QxDaoPointer.h>
 
+#include <QxSerialize/std/QxSerialize_std_tuple.h>
+#include <QxSerialize/std/QxSerialize_std_shared_ptr.h>
+#include <QxSerialize/std/QxSerialize_std_unique_ptr.h>
+#include <QxSerialize/std/QxSerialize_std_unordered_map.h>
+#include <QxSerialize/std/QxSerialize_std_unordered_set.h>
+
 #include <QxSerialize/QxBoostSerializeHelper/IxBoostSerializeRegisterHelper.h>
 #include <QxSerialize/QxBoostSerializeHelper/QxBoostInitGuid.h>
 #include <QxSerialize/QxBoostSerializeHelper/QxBoostSerializeHelper.h>

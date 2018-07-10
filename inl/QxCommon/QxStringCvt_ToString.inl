@@ -177,6 +177,20 @@ template <typename T> struct QxStringCvt_ToString< boost::unordered_multiset<T> 
 static inline QString toString(const boost::unordered_multiset<T> & t, const QString & format, int index)
 { Q_UNUSED(format); Q_UNUSED(index); return QX_STR_CVT_DEFAULT_ARCHIVE::to_string(t); } };
 
+#ifdef _QX_CPP_11_CONTAINER
+#ifndef BOOST_NO_CXX11_STD_UNORDERED
+
+template <typename T> struct QxStringCvt_ToString< std::unordered_set<T> > {
+static inline QString toString(const std::unordered_set<T> & t, const QString & format, int index)
+{ Q_UNUSED(format); Q_UNUSED(index); return QX_STR_CVT_DEFAULT_ARCHIVE::to_string(t); } };
+
+template <typename T> struct QxStringCvt_ToString< std::unordered_multiset<T> > {
+static inline QString toString(const std::unordered_multiset<T> & t, const QString & format, int index)
+{ Q_UNUSED(format); Q_UNUSED(index); return QX_STR_CVT_DEFAULT_ARCHIVE::to_string(t); } };
+
+#endif // BOOST_NO_CXX11_STD_UNORDERED
+#endif // _QX_CPP_11_CONTAINER
+
 template <typename T> struct QxStringCvt_ToString< QVector<T> > {
 static inline QString toString(const QVector<T> & t, const QString & format, int index)
 { Q_UNUSED(format); Q_UNUSED(index); return QX_STR_CVT_DEFAULT_ARCHIVE::to_string(t); } };
@@ -204,6 +218,20 @@ static inline QString toString(const boost::unordered_map<Key, Value> & t, const
 template <typename Key, typename Value> struct QxStringCvt_ToString< boost::unordered_multimap<Key, Value> > {
 static inline QString toString(const boost::unordered_multimap<Key, Value> & t, const QString & format, int index)
 { Q_UNUSED(format); Q_UNUSED(index); return QX_STR_CVT_DEFAULT_ARCHIVE::to_string(t); } };
+
+#ifdef _QX_CPP_11_CONTAINER
+#ifndef BOOST_NO_CXX11_STD_UNORDERED
+
+template <typename Key, typename Value> struct QxStringCvt_ToString< std::unordered_map<Key, Value> > {
+static inline QString toString(const std::unordered_map<Key, Value> & t, const QString & format, int index)
+{ Q_UNUSED(format); Q_UNUSED(index); return QX_STR_CVT_DEFAULT_ARCHIVE::to_string(t); } };
+
+template <typename Key, typename Value> struct QxStringCvt_ToString< std::unordered_multimap<Key, Value> > {
+static inline QString toString(const std::unordered_multimap<Key, Value> & t, const QString & format, int index)
+{ Q_UNUSED(format); Q_UNUSED(index); return QX_STR_CVT_DEFAULT_ARCHIVE::to_string(t); } };
+
+#endif // BOOST_NO_CXX11_STD_UNORDERED
+#endif // _QX_CPP_11_CONTAINER
 
 template <typename Key, typename Value> struct QxStringCvt_ToString< QHash<Key, Value> > {
 static inline QString toString(const QHash<Key, Value> & t, const QString & format, int index)
@@ -260,6 +288,48 @@ static inline QString toString(const boost::tuple<T1, T2, T3, T4, T5, T6, T7, T8
 template <typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8, typename T9> struct QxStringCvt_ToString< boost::tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9> > {
 static inline QString toString(const boost::tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9> & t, const QString & format, int index)
 { Q_UNUSED(format); Q_UNUSED(index); return QX_STR_CVT_DEFAULT_ARCHIVE::to_string(t); } };
+
+#ifdef _QX_CPP_11_TUPLE
+#ifndef BOOST_NO_CXX11_HDR_TUPLE
+
+template <typename T1> struct QxStringCvt_ToString< std::tuple<T1> > {
+static inline QString toString(const std::tuple<T1> & t, const QString & format, int index)
+{ Q_UNUSED(format); Q_UNUSED(index); return QX_STR_CVT_DEFAULT_ARCHIVE::to_string(t); } };
+
+template <typename T1, typename T2> struct QxStringCvt_ToString< std::tuple<T1, T2> > {
+static inline QString toString(const std::tuple<T1, T2> & t, const QString & format, int index)
+{ Q_UNUSED(format); Q_UNUSED(index); return QX_STR_CVT_DEFAULT_ARCHIVE::to_string(t); } };
+
+template <typename T1, typename T2, typename T3> struct QxStringCvt_ToString< std::tuple<T1, T2, T3> > {
+static inline QString toString(const std::tuple<T1, T2, T3> & t, const QString & format, int index)
+{ Q_UNUSED(format); Q_UNUSED(index); return QX_STR_CVT_DEFAULT_ARCHIVE::to_string(t); } };
+
+template <typename T1, typename T2, typename T3, typename T4> struct QxStringCvt_ToString< std::tuple<T1, T2, T3, T4> > {
+static inline QString toString(const std::tuple<T1, T2, T3, T4> & t, const QString & format, int index)
+{ Q_UNUSED(format); Q_UNUSED(index); return QX_STR_CVT_DEFAULT_ARCHIVE::to_string(t); } };
+
+template <typename T1, typename T2, typename T3, typename T4, typename T5> struct QxStringCvt_ToString< std::tuple<T1, T2, T3, T4, T5> > {
+static inline QString toString(const std::tuple<T1, T2, T3, T4, T5> & t, const QString & format, int index)
+{ Q_UNUSED(format); Q_UNUSED(index); return QX_STR_CVT_DEFAULT_ARCHIVE::to_string(t); } };
+
+template <typename T1, typename T2, typename T3, typename T4, typename T5, typename T6> struct QxStringCvt_ToString< std::tuple<T1, T2, T3, T4, T5, T6> > {
+static inline QString toString(const std::tuple<T1, T2, T3, T4, T5, T6> & t, const QString & format, int index)
+{ Q_UNUSED(format); Q_UNUSED(index); return QX_STR_CVT_DEFAULT_ARCHIVE::to_string(t); } };
+
+template <typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7> struct QxStringCvt_ToString< std::tuple<T1, T2, T3, T4, T5, T6, T7> > {
+static inline QString toString(const std::tuple<T1, T2, T3, T4, T5, T6, T7> & t, const QString & format, int index)
+{ Q_UNUSED(format); Q_UNUSED(index); return QX_STR_CVT_DEFAULT_ARCHIVE::to_string(t); } };
+
+template <typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8> struct QxStringCvt_ToString< std::tuple<T1, T2, T3, T4, T5, T6, T7, T8> > {
+static inline QString toString(const std::tuple<T1, T2, T3, T4, T5, T6, T7, T8> & t, const QString & format, int index)
+{ Q_UNUSED(format); Q_UNUSED(index); return QX_STR_CVT_DEFAULT_ARCHIVE::to_string(t); } };
+
+template <typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8, typename T9> struct QxStringCvt_ToString< std::tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9> > {
+static inline QString toString(const std::tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9> & t, const QString & format, int index)
+{ Q_UNUSED(format); Q_UNUSED(index); return QX_STR_CVT_DEFAULT_ARCHIVE::to_string(t); } };
+
+#endif // BOOST_NO_CXX11_HDR_TUPLE
+#endif // _QX_CPP_11_TUPLE
 
 } // namespace detail
 } // namespace cvt

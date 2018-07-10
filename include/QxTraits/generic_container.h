@@ -272,6 +272,28 @@ template <typename Key, typename Value>
 struct generic_container< boost::unordered_multimap<Key, Value> > : public qx::trait::detail::generic_container_base_key_value_std_style< boost::unordered_multimap<Key, Value>, Key, Value >
 { QX_TRAIT_GENERIC_CONTAINER_TYPEDEF(QX_TEMPLATE_T_P1_P2(boost::unordered_multimap, Key, Value), Key, Value) };
 
+#ifdef _QX_CPP_11_CONTAINER
+#ifndef BOOST_NO_CXX11_STD_UNORDERED
+
+template <typename T>
+struct generic_container< std::unordered_set<T> > : public qx::trait::detail::generic_container_base_set< std::unordered_set<T>, T >
+{ QX_TRAIT_GENERIC_CONTAINER_TYPEDEF(QX_TEMPLATE_T_P1(std::unordered_set, T), qx::trait::no_type, T) };
+
+template <typename T>
+struct generic_container< std::unordered_multiset<T> > : public qx::trait::detail::generic_container_base_set< std::unordered_multiset<T>, T >
+{ QX_TRAIT_GENERIC_CONTAINER_TYPEDEF(QX_TEMPLATE_T_P1(std::unordered_multiset, T), qx::trait::no_type, T) };
+
+template <typename Key, typename Value>
+struct generic_container< std::unordered_map<Key, Value> > : public qx::trait::detail::generic_container_base_key_value_std_style< std::unordered_map<Key, Value>, Key, Value >
+{ QX_TRAIT_GENERIC_CONTAINER_TYPEDEF(QX_TEMPLATE_T_P1_P2(std::unordered_map, Key, Value), Key, Value) };
+
+template <typename Key, typename Value>
+struct generic_container< std::unordered_multimap<Key, Value> > : public qx::trait::detail::generic_container_base_key_value_std_style< std::unordered_multimap<Key, Value>, Key, Value >
+{ QX_TRAIT_GENERIC_CONTAINER_TYPEDEF(QX_TEMPLATE_T_P1_P2(std::unordered_multimap, Key, Value), Key, Value) };
+
+#endif // BOOST_NO_CXX11_STD_UNORDERED
+#endif // _QX_CPP_11_CONTAINER
+
 template <typename T>
 struct generic_container< QVector<T> > : public qx::trait::detail::generic_container_base< QVector<T>, T >
 { QX_TRAIT_GENERIC_CONTAINER_TYPEDEF(QX_TEMPLATE_T_P1(QVector, T), qx::trait::no_type, T) };

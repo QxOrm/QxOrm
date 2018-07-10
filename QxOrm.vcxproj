@@ -232,6 +232,11 @@
     <ClInclude Include="include\QxMemLeak\static_mem_pool.h" />
     <ClInclude Include="include\QxSerialize\Qt\QxSerialize_QFlags.h" />
     <ClInclude Include="include\QxSerialize\Qt\QxSerialize_QSqlError.h" />
+    <ClInclude Include="include\QxSerialize\std\QxSerialize_std_shared_ptr.h" />
+    <ClInclude Include="include\QxSerialize\std\QxSerialize_std_tuple.h" />
+    <ClInclude Include="include\QxSerialize\std\QxSerialize_std_unique_ptr.h" />
+    <ClInclude Include="include\QxSerialize\std\QxSerialize_std_unordered_map.h" />
+    <ClInclude Include="include\QxSerialize\std\QxSerialize_std_unordered_set.h" />
     <ClInclude Include="include\QxSingleton\IxSingleton.h" />
     <ClInclude Include="include\QxSingleton\QxSingleton.h" />
     <ClInclude Include="include\QxSingleton\QxSingletonInit.h" />
@@ -281,7 +286,12 @@
     <ClInclude Include="include\QxTraits\is_std_list.h" />
     <ClInclude Include="include\QxTraits\is_std_map.h" />
     <ClInclude Include="include\QxTraits\is_std_set.h" />
+    <ClInclude Include="include\QxTraits\is_std_shared_ptr.h" />
+    <ClInclude Include="include\QxTraits\is_std_unique_ptr.h" />
+    <ClInclude Include="include\QxTraits\is_std_unordered_map.h" />
+    <ClInclude Include="include\QxTraits\is_std_unordered_set.h" />
     <ClInclude Include="include\QxTraits\is_std_vector.h" />
+    <ClInclude Include="include\QxTraits\is_std_weak_ptr.h" />
     <ClInclude Include="include\QxTraits\is_valid_primary_key.h" />
     <ClInclude Include="include\QxTraits\qt_meta_object.h" />
     <ClInclude Include="include\QxTraits\qx_traits.h" />

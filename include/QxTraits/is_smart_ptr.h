@@ -56,6 +56,9 @@
 #include <QxTraits/is_qt_shared_ptr.h>
 #include <QxTraits/is_qt_weak_ptr.h>
 #include <QxTraits/is_qx_dao_ptr.h>
+#include <QxTraits/is_std_unique_ptr.h>
+#include <QxTraits/is_std_shared_ptr.h>
+#include <QxTraits/is_std_weak_ptr.h>
 
 namespace qx {
 namespace trait {
@@ -80,11 +83,26 @@ private:
                                      qx::trait::is_qt_scoped_ptr<T>, 
                                      qx::trait::is_qt_shared_ptr<T>, 
                                      qx::trait::is_qt_weak_ptr<T>, 
-                                     qx::trait::is_qt_shared_data_ptr<T> >::type cond_is_smart_ptr;
+                                     qx::trait::is_qt_shared_data_ptr<T> >::type cond_is_qt_smart_ptr;
 
-   typedef typename boost::mpl::if_< typename qx::trait::is_smart_ptr<T>::cond_is_smart_ptr, 
+#if (defined(_QX_CPP_11_SMART_PTR) && !defined(BOOST_NO_CXX11_SMART_PTR))
+
+   typedef typename boost::mpl::or_< typename qx::trait::is_smart_ptr<T>::cond_is_qt_smart_ptr, 
+                                     qx::trait::is_std_unique_ptr<T>, 
+                                     qx::trait::is_std_shared_ptr<T>, 
+                                     qx::trait::is_std_weak_ptr<T> >::type cond_is_std_smart_ptr;
+
+   typedef typename boost::mpl::if_< typename qx::trait::is_smart_ptr<T>::cond_is_std_smart_ptr, 
                                      boost::mpl::true_, 
                                      boost::mpl::false_ >::type type_is_smart_ptr;
+
+#else // (defined(_QX_CPP_11_SMART_PTR) && !defined(BOOST_NO_CXX11_SMART_PTR))
+
+   typedef typename boost::mpl::if_< typename qx::trait::is_smart_ptr<T>::cond_is_qt_smart_ptr, 
+                                     boost::mpl::true_, 
+                                     boost::mpl::false_ >::type type_is_smart_ptr;
+
+#endif // (defined(_QX_CPP_11_SMART_PTR) && !defined(BOOST_NO_CXX11_SMART_PTR))
 
 public:
 

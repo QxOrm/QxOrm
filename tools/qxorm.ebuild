@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v3
-# $Header: /var/cvsroot/gentoo-x86/dev-cpp/qxorm/qxorm-1.1.7-r1.ebuild,v 1.1.7-r1 2011/04/04 $
+# $Header: /var/cvsroot/gentoo-x86/dev-cpp/qxorm/qxorm-1.3.2-r1.ebuild,v 1.3.2-r1 2011/04/04 $
 
 EAPI="2"
 

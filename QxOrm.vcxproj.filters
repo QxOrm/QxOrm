@@ -171,6 +171,9 @@
     <Filter Include="src\QxModelView">
       <UniqueIdentifier>{e60398d8-7636-4cdf-bf7b-7467cecff172}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\QxSerialize\std">
+      <UniqueIdentifier>{83e38f72-9a0b-44b6-b52a-eaf85ea46aea}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -1233,6 +1236,36 @@
     </ClInclude>
     <ClInclude Include="include\QxModelView\QxModelService.h">
       <Filter>include\QxModelView</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxTraits\is_std_shared_ptr.h">
+      <Filter>include\QxTraits</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxTraits\is_std_unique_ptr.h">
+      <Filter>include\QxTraits</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxTraits\is_std_unordered_map.h">
+      <Filter>include\QxTraits</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxTraits\is_std_unordered_set.h">
+      <Filter>include\QxTraits</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxTraits\is_std_weak_ptr.h">
+      <Filter>include\QxTraits</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\std\QxSerialize_std_shared_ptr.h">
+      <Filter>include\QxSerialize\std</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\std\QxSerialize_std_tuple.h">
+      <Filter>include\QxSerialize\std</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\std\QxSerialize_std_unique_ptr.h">
+      <Filter>include\QxSerialize\std</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\std\QxSerialize_std_unordered_map.h">
+      <Filter>include\QxSerialize\std</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\std\QxSerialize_std_unordered_set.h">
+      <Filter>include\QxSerialize\std</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

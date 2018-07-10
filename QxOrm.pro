@@ -43,7 +43,7 @@ DEFINES += _QX_BUILDING_QX_ORM
 PRECOMPILED_HEADER = ./include/QxPrecompiled.h
 } # !contains(DEFINES, _QX_NO_PRECOMPILED_HEADER)
 
-unix { VERSION = 1.3.1 }
+unix { VERSION = 1.3.2 }
 
 contains(DEFINES, _QX_STATIC_BUILD) {
 CONFIG -= dll
@@ -273,6 +273,12 @@ HEADERS += ./include/QxSerialize/Qx/QxSerialize_QxXmlReader.h
 HEADERS += ./include/QxSerialize/Qx/QxSerialize_QxXmlWriter.h
 HEADERS += ./include/QxSerialize/Qx/QxSerialize_QxDaoPointer.h
 
+HEADERS += ./include/QxSerialize/std/QxSerialize_std_tuple.h
+HEADERS += ./include/QxSerialize/std/QxSerialize_std_shared_ptr.h
+HEADERS += ./include/QxSerialize/std/QxSerialize_std_unique_ptr.h
+HEADERS += ./include/QxSerialize/std/QxSerialize_std_unordered_map.h
+HEADERS += ./include/QxSerialize/std/QxSerialize_std_unordered_set.h
+
 HEADERS += ./include/QxSerialize/QxBoostSerializeHelper/IxBoostSerializeRegisterHelper.h
 HEADERS += ./include/QxSerialize/QxBoostSerializeHelper/QxBoostInitGuid.h
 HEADERS += ./include/QxSerialize/QxBoostSerializeHelper/QxBoostSerializeHelper.h
@@ -330,6 +336,11 @@ HEADERS += ./include/QxTraits/is_qx_dao_ptr.h
 HEADERS += ./include/QxTraits/is_equal.h
 HEADERS += ./include/QxTraits/qt_meta_object.h
 HEADERS += ./include/QxTraits/qx_traits.h
+HEADERS += ./include/QxTraits/is_std_shared_ptr.h
+HEADERS += ./include/QxTraits/is_std_unique_ptr.h
+HEADERS += ./include/QxTraits/is_std_unordered_map.h
+HEADERS += ./include/QxTraits/is_std_unordered_set.h
+HEADERS += ./include/QxTraits/is_std_weak_ptr.h
 
 HEADERS += ./include/QxFunction/IxFunction.h
 HEADERS += ./include/QxFunction/QxFunction_0.h

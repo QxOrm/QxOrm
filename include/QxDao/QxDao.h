@@ -234,7 +234,7 @@ inline QSqlError destroy_by_query(const qx::QxSqlQuery & query, QSqlDatabase * p
 
 /*!
  * \ingroup QxDao
- * \brief Create a table into database (with all columns) mapped to a C++ class T (registered into QxOrm context)
+ * \brief Create a table into database (with all columns) mapped to a C++ class T (registered into QxOrm context) : be careful, this function can be used only with a SQLite database to create examples or prototypes; For other databases, it is recommended to use QxEntityEditor application or to manage the database schema with an external tool provided by the SGBD (SQLite Manager for SQLite, pgAdmin for PostgreSQL, MySQL Workbench for MySQL, etc...)
  * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class (optional parameter)
  * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
  *

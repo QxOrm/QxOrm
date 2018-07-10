@@ -1,3 +1,9 @@
+Changes in version 1.3.2:
+- Support C++11 types (need to set compilation options in QxOrm.pri config file to enable these features)
+- With _QX_CPP_11_SMART_PTR compilation option : std::unique_ptr, std::shared_ptr, std::weak_ptr
+- With _QX_CPP_11_CONTAINER compilation option : std::unordered_map, std::unordered_set, std::unordered_multimap, std::unordered_multiset
+- With _QX_CPP_11_TUPLE compilation option : std::tuple
+
 Changes in version 1.3.1:
 - New class qx::QxModelService<T, S> in QxModelView module to connect a Qt model to services to execute client-server requests (can be used with QML and QtWidgets views)
 - Add some useful methods to qx::IxModel class and fix several issues with the QxModelView module

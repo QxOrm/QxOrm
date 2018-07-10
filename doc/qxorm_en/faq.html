@@ -2,8 +2,7 @@
 <html>
 <head>
   <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
-  <title>QxOrm : C++ Qt Object Relational Mapping Library (ORM) - QxEntityEditor : C++ Qt Entities Graphic Editor (data model)</title>
-  <meta name="generator" content="Amaya, see http://www.w3.org/Amaya/">
+  <title>QxOrm : C++ Qt ORM Object Relational Mapping database library - QxEntityEditor : C++ Qt entities graphic editor (data model designer and source code generator)</title>
   <link rel='stylesheet' type='text/css' href='./resource/qxorm_style.css'>
   <script type="text/javascript" src="./resource/qxorm_script.js"></script>
 </head>
@@ -56,11 +55,11 @@
     <table cellspacing="0" cellpadding="1"><col><col><tbody>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow">Current version :&nbsp;</font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.3.1 - <a href="../doxygen/index.html" target="_blank">QxOrm library online documentation</a></font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.3.2 - <a href="../doxygen/index.html" target="_blank">QxOrm library online documentation</a></font></td>
       </tr>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow"></font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.1.7</font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.1.8</font></td>
       </tr>
     </tbody></table>
   </td>
@@ -118,7 +117,7 @@
                </li></ul>
               </td>
               <td width="200" align="center" valign="top"><a href="./resource/qt_ambassador_logo.png" target="_blank"><img alt="qt_ambassador" src="./resource/qt_ambassador_logo_150x150.png" width="150" height="150" border="0"></a><br>
-                 <b><font size="2">QxOrm library has been accepted into the <a href="http://qt.digia.com/qtambassador/" target="_blank">Qt Ambassador Program</a></font></b>
+                 <b><font size="2">QxOrm library has been accepted into the <a href="http://forum.qt.io/category/24/qt-ambassador-program" target="_blank">Qt Ambassador Program</a></font></b>
               </td>
             </tr>
           </tbody>
@@ -159,7 +158,7 @@
            <td align="justify">
               <b>QxEntityEditor</b> is a graphic editor for <b>QxOrm</b> library : <b>QxEntityEditor</b> provides a graphic way to manage the data model.<br>
               <b>QxEntityEditor</b> is multi-platform (available for Windows, Linux and Mac OS X) and generate native code for all environments : desktop (Windows, Linux, Mac OS X), embedded and mobile (Android, iOS, Raspberry Pi, etc.).<br>
-              <a href="./tutorial_4.html">A video presentation of <b>QxEntityEditor</b> application is available</a>.<br>
+              <a href="./tutorial_4.html">A presentation video of <b>QxEntityEditor</b> application is available</a>.<br>
               <br>
               <b>QxEntityEditor</b> is based on plugins and provides many ways to import/export your data model :
               <ul>
@@ -211,7 +210,7 @@
            <i>make debug</i><br>
            <i>make release</i><br>
            <br>
-           On <b>Windows</b>, <i>*.vcproj</i> and <i>*.sln</i> files are available for <b>Visual C++ 2008</b> and <b>Visual C++ 2010</b>.<br>
+           On <b>Windows</b>, <i>*.vcproj</i> and <i>*.sln</i> files are available for <b>Visual C++ 2008</b>, <b>Visual C++ 2010</b> and <b>Visual C++ 2012</b>.<br>
            <i>*.pro</i> files are readable by <b>Qt Creator</b>, and some plugins are available to interface to other C++ IDE.<br>
            <i>mingw_build_all_debug.bat</i> and <i>mingw_build_all_release.bat</i> scripts in the directory <i>./tools/</i> can quickly built QxOrm library and all tests with <b>MinGW</b> compiler on Windows.<br>
            <i>gcc_build_all_debug.sh</i> and <i>gcc_build_all_release.sh</i> scripts in the directory <i>./tools/</i> can quickly built QxOrm library and all tests with <b>GCC</b> compiler on <b>Linux</b>.<br>
@@ -235,8 +234,8 @@
          <tr>
            <td valign="middle" width="30"></td>
            <td align="justify">
-           <b>QxOrm</b> uses the engine <a href="http://doc.trolltech.com/4.6/sql-programming.html" target="_blank"><i>QtSql</i></a> of <b>Qt</b> based on a system of plug-in.<br>
-A detailed list of supported databases is available on the website of Qt <a href="http://doc.trolltech.com/4.6/sql-driver.html" target="_blank">here</a>.<br> The plug-in <i>ODBC</i> (<i>QODBC</i>) ensures compatibility with many databases.<br> For optimal performances, it is possible to use a plug-in specific to a database :
+           <b>QxOrm</b> uses the engine <a href="http://doc.qt.io/qt-5/qtsql-index.html" target="_blank"><i>QtSql</i></a> of <b>Qt</b> based on a system of plug-in.<br>
+A detailed list of supported databases is available on the website of Qt <a href="http://doc.qt.io/qt-5/sql-driver.html" target="_blank">here</a>.<br> The plug-in <i>ODBC</i> (<i>QODBC</i>) ensures compatibility with many databases.<br> For optimal performances, it is possible to use a plug-in specific to a database :
            <ul><li><i>QMYSQL</i> : MySQL 
            </li><li><i>QPSQL</i> : PostgreSQL (versions 7.3 and above) 
            </li><li><i>QOCI</i> : Oracle Call Interfaces Driver 
@@ -279,12 +278,12 @@ A detailed list of supported databases is available on the website of Qt <a href
              <col><col>
              <tbody>
                <tr>
-                 <td valign="middle" width="161" align="center"><a href="http://qt.digia.com/" target="_blank"><img alt="Qt" src="./resource/logo_qt.jpg" width="42" height="50" border="0"></a></td>
+                 <td valign="middle" width="161" align="center"><a href="http://www.qt.io/" target="_blank"><img alt="Qt" src="./resource/logo_qt.jpg" width="42" height="50" border="0"></a></td>
                  <td align="justify"><b>Qt</b> : cross-platform application development framework : ihm (<i>QtGui</i>), network (<i>QtNetwork</i>), xml (<i>QtXml</i>), database (<i>QtSql</i>)...<br>
                  Qt provides excellent support and documentation. Using Qt, you can write simple and powerful C++ code.<br>
                  Qt is produced by Digia's Qt Development Frameworks division and is available under LGPL license.<br>
                  QxOrm is compatible with a lot of Qt's objects : <i>QObject, QString, QDate, QTime, QDateTime, QList, QHash, QSharedPointer, QScopedPointer...</i><br>
-                 It is recommended to install the latest version of Qt available at the following address : <a href="http://qt.digia.com/" target="_blank">http://qt.digia.com/</a></td>
+                 It is recommended to install the latest version of Qt available at the following address : <a href="http://www.qt.io/" target="_blank">http://www.qt.io/</a></td>
                </tr>
              </tbody>
            </table>
@@ -324,19 +323,25 @@ A detailed list of supported databases is available on the website of Qt <a href
            <td align="justify">
            Yes, if the <i>serialization</i> of your data in <i>xml</i> format is not used in your project, you can disable this functionality.<br>
            The compilation times will be then reduced but you will not have anymore access to the namespace <i>qx::serialization:xml</i>.<br>
-           To disable <i>xml serialization</i>, it is necessary to open the <i>QxConfig.h</i> file and to modify the constant <b><i>_QX_SERIALIZE_XML</i></b>.<br>
+           To disable <i>xml serialization</i>, it is necessary to open the <i>QxOrm.pri</i> config file and to remove (or comment) the compilation option <b><i>_QX_SERIALIZE_XML_ENABLED</i></b>.<br>
            A recompilation of QxOrm library is necessary to take into account this modification.<br>
            <br>
-           Another possibility is to use the <i>polymorphic</i> classes of the library <a href="http://www.boost.org/doc/libs/1_42_0/libs/serialization/doc/index.html" target="_blank"><i>boost::serialization</i></a> (instead of <i>template</i>).<br>
+           Another possibility is to use the <i>polymorphic</i> classes of the library <a href="http://www.boost.org/doc/libs/release/libs/serialization/doc/index.html" target="_blank"><i>boost::serialization</i></a> (instead of <i>template</i>).<br>
            This feature reduces compilation times and the size of the executable that is generated.<br>
            However, the speed of execution of your program will be reduced since part of the work carried out during compilation will be done during the execution of your application.<br>
-           To activate this feature in <b>QxOrm</b>, you must modify the constant <b><i>_QX_SERIALIZE_POLYMORPHIC</i></b> of the <i>QxConfig.h</i> file.<br>
+           To use this feature with <b>QxOrm</b>, you must enable the compilation option <b><i>_QX_SERIALIZE_POLYMORPHIC_ENABLED</i></b> in the <i>QxOrm.pri</i> config file.<br>
            <b>Warning</b> : the <i>serialization</i> functions will be then accessible from the following <i>namespace</i> : <i>qx::serialization::polymorphic_binary</i>, <i>qx::serialization::polymorphic_text</i> and <i>qx::serialization::polymorphic_xml</i>.<br>
            A recompilation of QxOrm library is necessary to take into account this modification.<br>
            <br>
            It is also possible to use <i>Q_PROPERTY</i> macro to define properties for a class inherited from <i>QObject</i> type.<br>
            In this case, there is two different ways to register properties into QxOrm context and you can reduce noticeably compilation times of your project.<br>
-           For more details about this feature, <a href="./faq.html#faq_200">click here</a>.
+           For more details about this feature, <a href="./faq.html#faq_200">click here</a>.<br>
+           <br>
+           <b>Note :</b> it is important to check if all optimizations provided by the compiler are enabled, for example to compile using several processors :
+           <ul>
+             <li><b>MSVC++</b> : use environment variable <b>SET CL=/MP</b></li>
+             <li><b>GCC</b> and <b>Clang</b> : put processors count as parameter to the <i>make</i> process, for example to use 8 processors : <b>SET MAKE_COMMAND=make -j8</b></li>
+           </ul>
            </td>
          </tr>
        </tbody>
@@ -350,9 +355,9 @@ A detailed list of supported databases is available on the website of Qt <a href
          <tr>
            <td valign="middle" width="30"></td>
            <td align="justify">
-           <b>QxOrm</b> is based on <a href="http://www.boost.org/doc/libs/1_42_0/libs/serialization/doc/index.html" target="_blank">boost <i>serialization</i></a> library.<br>
+           <b>QxOrm</b> is based on <a href="http://www.boost.org/doc/libs/release/libs/serialization/doc/index.html" target="_blank">boost <i>serialization</i></a> library.<br>
            There are several types of serialization available : <i>binary, xml, text, etc...</i><br>
-           <i>QxConfig.h</i> file can enable and/or disable some types of serialization.<br>
+           <i>QxOrm.pri</i> config file can enable and/or disable some types of serialization.<br>
            <br>
            Each type of serialization has its own characteristics :<br>
            * <b>binary</b> : <i>smallest, fastest, non-portable</i><br>
@@ -361,7 +366,7 @@ A detailed list of supported databases is available on the website of Qt <a href
            <br>
            <b>Note :</b> <b>binary</b> type is not portable, so you can't transfer data between Windows and Unix for example.<br>
            If you need to transfer data over network between different platforms, you have to use <b>text</b> or <b>xml</b> serialization.<br>
-           <b>QxOrm</b> provides another solution : <b><a href="http://www.boostpro.com/vault/index.php?directory=serialization" target="_blank">portable_binary</a></b> serialization.<br>
+           <b>QxOrm</b> provides another solution : <b><a href="http://epa.codeplex.com/" target="_blank">portable_binary</a></b> serialization.<br>
            <b>portable_binary</b> has the same characteristics as <b>binary</b> type and can serialize data in a portable way.<br>
            However, <b>portable_binary</b> is not provided officially by <b>boost</b> library, so it's necessary to test before using in a production software.
            </td>
@@ -379,13 +384,13 @@ A detailed list of supported databases is available on the website of Qt <a href
            <td align="justify">
            There are many containers in <b>stl</b>, <b>boost</b> and <b>Qt</b> libraries.<br>
            It is therefore legitimate to ask this question : what is <i>qx::QxCollection&lt;Key, Value&gt;</i> ?<br>
-           <i><a href="../doxygen/html/classqx_1_1_qx_collection.html" target="_blank">qx::QxCollection&lt;Key, Value&gt;</a></i> is a new <i>container</i> (based on the excellent library <a href="http://www.boost.org/doc/libs/1_42_0/libs/multi_index/doc/index.html" target="_blank"><i>boost::multi_index_container</i></a>) which has the following functionalities : 
+           <i><a href="../doxygen/html/classqx_1_1_qx_collection.html" target="_blank">qx::QxCollection&lt;Key, Value&gt;</a></i> is a new <i>container</i> (based on the excellent library <a href="http://www.boost.org/doc/libs/release/libs/multi_index/doc/index.html" target="_blank"><i>boost::multi_index_container</i></a>) which has the following functionalities : 
            <ul><li>preserves the insertion order of elements in the list 
            </li><li>quick access to an element by its index : is equivalent to <i>std::vector&lt;T&gt;</i> or <i>QList&lt;T&gt;</i> for example 
            </li><li>quick access to an element by a key (<i>hash-map</i>) : is equivalent to <i>QHash&lt;Key, Value&gt;</i> or <i>boost::unordered_map&lt;Key, Value&gt;</i> for example 
            </li><li>sort by <i>Key</i> type and by <i>Value</i> type</li>
            </ul>
-           <b>Note :</b> <i>qx::QxCollection&lt;Key, Value&gt;</i> is compatible with the <i>foreach</i> macro provided by <b>Qt</b> library and the <a href="http://www.boost.org/doc/libs/1_42_0/doc/html/foreach.html" target="_blank"><i>BOOST_FOREACH</i></a> macro provided by <b>boost</b> library.<br>
+           <b>Note :</b> <i>qx::QxCollection&lt;Key, Value&gt;</i> is compatible with the <i>foreach</i> macro provided by <b>Qt</b> library and the <a href="http://www.boost.org/doc/libs/release/doc/html/foreach.html" target="_blank"><i>BOOST_FOREACH</i></a> macro provided by <b>boost</b> library.<br>
            However, each element returned by these 2 macros corresponds to an object of type <i>std::pair&lt;Key, Value&gt;</i>.<br>
            To obtain a more natural and more readable result, it is advised to use the <i>_foreach</i> macro : this macro uses <i>BOOST_FOREACH</i> for all the containers except for <i>qx::QxCollection&lt;Key, Value&gt;</i>.<br>
            In this case, the returned element corresponds to the <i>Value</i> type (cf. <i>sample</i>).<br>
@@ -544,8 +549,8 @@ lstDrugs<span class="operator">.</span>clear<span class="operator">();</span></p
          <tr>
            <td valign="middle" width="30"></td>
            <td align="justify">
-           <b>QxOrm</b> advises to use the <a href="http://doc.trolltech.com/4.6/qstring.html" target="_blank"><i>QString</i></a> class for the management of the character strings.<br>
-           Even if <b>boost</b> provides many functionalities with its module <a href="http://www.boost.org/doc/libs/1_42_0/doc/html/string_algo.html" target="_blank"><i>boost::string_algo</i></a>, the <i>QString</i> class is easier to use and supports many formats : <i>ASCII, Utf8, Utf16...</i><br>
+           <b>QxOrm</b> advises to use the <a href="http://doc.qt.io/qt-5/QString.html" target="_blank"><i>QString</i></a> class for the management of the character strings.<br>
+           Even if <b>boost</b> provides many functionalities with its module <a href="http://www.boost.org/doc/libs/release/doc/html/string_algo.html" target="_blank"><i>boost::string_algo</i></a>, the <i>QString</i> class is easier to use and supports many formats : <i>ASCII, Utf8, Utf16...</i><br>
            However, <b>QxOrm</b> is compatible with <i>std::string</i> and <i>std::wstring</i> if you prefer to use this kind of character strings.
            </td> 
          </tr>
@@ -566,8 +571,8 @@ lstDrugs<span class="operator">.</span>clear<span class="operator">();</span></p
            The ideal in a C++ program is not to have any call to <i>delete</i> or <i>delete[]</i>.<br>
            Furthermore, <i>smart-pointer</i> is a new functionality of the new C++ standard : <b>C++1x</b>.<br>
            It is thus essential to know the following classes today : 
-           <ul><li><a href="http://www.boost.org/doc/libs/1_42_0/libs/smart_ptr/smart_ptr.htm" target="_blank"><i>shared_ptr</i>, <i>scoped_ptr</i> and <i>weak_ptr</i></a> for the smart pointers of <b>boost</b> library
-           </li><li><a href="http://doc-snapshot.qt-project.org/4.8/qsharedpointer.html" target="_blank"><i>QSharedPointer</i>, <i>QScopedPointer</i> and <i>QWeakPointer</i></a> for the smart pointers of <b>Qt</b> library
+           <ul><li><a href="http://www.boost.org/doc/libs/release/libs/smart_ptr/smart_ptr.htm" target="_blank"><i>shared_ptr</i>, <i>scoped_ptr</i> and <i>weak_ptr</i></a> for the smart pointers of <b>boost</b> library
+           </li><li><a href="http://doc-snapshots.qt.io/4.8/qsharedpointer.html" target="_blank"><i>QSharedPointer</i>, <i>QScopedPointer</i> and <i>QWeakPointer</i></a> for the smart pointers of <b>Qt</b> library
            </li></ul>
            </td>
          </tr>
@@ -1108,7 +1113,7 @@ daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<s
            QxOrm library can persist every types, not only classes registered into QxOrm context using <i>qx::register_class&lt;T&gt;()</i>.<br>
            <br>
            It's necessary to write serialization functions from boost framework, using the <b>non intrusive</b> method (because source code is not available or is read-only).
-           For more details on boost serialization module, <a href="http://www.boost.org/doc/libs/1_47_0/libs/serialization/doc/index.html" target="_blank">goto official website</a>.<br>
+           For more details on boost serialization module, <a href="http://www.boost.org/doc/libs/release/libs/serialization/doc/index.html" target="_blank">goto official website</a>.<br>
            <br>
            For example, imagine that you have the class '<i>ExtObject3D</i>' from an external library and the source code is not available or is read-only.
            Here is the code to can persist an instance of '<i>ExtObject3D</i>' type into database :<br>
@@ -1345,7 +1350,7 @@ QString IxClass<span class="operator">::</span>dumpClass<span class="operator">(
          <tr>
            <td valign="middle" width="30"></td>
            <td align="justify">
-           All classes inherited from <i>QObject</i> type can use <i><a href="http://doc-snapshot.qt-project.org/4.8/properties.html" target="_blank">Q_PROPERTY</a></i> macro : those properties become meta-properties.
+           All classes inherited from <i>QObject</i> type can use <i><a href="http://doc-snapshots.qt.io/4.8/properties.html" target="_blank">Q_PROPERTY</a></i> macro : those properties become meta-properties.
            This is how Qt framework provides an introspection engine using the <i>moc</i> process.
            Meta-properties can be used for example by <i>QML</i> engine, <i>QtScript</i>, etc.<br>
            <br>
@@ -1589,7 +1594,7 @@ qx<span class="operator">::</span>QxRepository<span class="operator">&lt;</span>
            If a new item is inserted with a key already in the cache, then the old item associated with this key is removed automatically from the cache.<br>
            <br>
            Cache engine of QxOrm library doesn't manage memory : there is no <i>delete</i> called by the cache engine.<br>
-           This is why it's strongly recommended (but not an obligation) to store smart-pointers into the cache : for example, <a href="http://www.boost.org/doc/libs/1_47_0/libs/smart_ptr/shared_ptr.htm" target="_blank"><i>boost::shared_ptr&lt;T&gt;</i></a> of <i>boost</i> library or <a href="http://doc-snapshot.qt-project.org/4.8/qsharedpointer.html" target="_blank"><i>QSharedPointer&lt;T&gt;</i></a> of <i>Qt</i> library.<br>
+           This is why it's strongly recommended (but not an obligation) to store smart-pointers into the cache : for example, <a href="http://www.boost.org/doc/libs/release/libs/smart_ptr/shared_ptr.htm" target="_blank"><i>boost::shared_ptr&lt;T&gt;</i></a> of <i>boost</i> library or <a href="http://doc-snapshots.qt.io/4.8/qsharedpointer.html" target="_blank"><i>QSharedPointer&lt;T&gt;</i></a> of <i>Qt</i> library.<br>
            <br>
            Cache engine can have a max cost to avoid too much memory usage : each item inserted to the cache can be associated with a cost (for example, element's count of a collection).<br>
            When the limit (max cost) of the cache engine is reached, first items inserted to the cache are automatically removed (insertion order) until limit of the cache is ok.<br>
@@ -2525,7 +2530,7 @@ void</span> MyWidget<span class="operator">::</span>onQueryFinished<span class="
          <tr>
            <td valign="middle" width="30"></td>
            <td align="justify">
-           <b><a href="../doxygen/html/group___qx_model_view.html" target="_blank">QxModelView</a></b> module provides an easy way to work with <a href="http://qt-project.org/doc/qt-5/modelview.html" target="_blank">Qt model/view engine</a> with all classes registered into QxOrm context :
+           <b><a href="../doxygen/html/group___qx_model_view.html" target="_blank">QxModelView</a></b> module provides an easy way to work with <a href="http://doc.qt.io/qt-5/modelview.html" target="_blank">Qt model/view engine</a> with all classes registered into QxOrm context :
            <ul>
            <li>Qt widgets : <i>QTableView</i> or <i>QListView</i> for example to display/modify a database table content ;</li>
            <li>QML : each property defined in QxOrm context is exposed to QML engine : <b><a href="../doxygen/html/group___qx_model_view.html" target="_blank">QxModelView</a></b> module makes easier integration between QML and databases.</li>

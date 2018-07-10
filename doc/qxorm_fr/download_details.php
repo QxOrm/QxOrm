@@ -2,8 +2,7 @@
 <html>
 <head>
   <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
-  <title>QxOrm : C++ Qt Object Relational Mapping Library (ORM) - QxEntityEditor : C++ Qt Entities Graphic Editor (data model)</title>
-  <meta name="generator" content="Amaya, see http://www.w3.org/Amaya/">
+  <title>QxOrm : C++ Qt ORM Object Relational Mapping database library - QxEntityEditor : C++ Qt entities graphic editor (data model designer and source code generator)</title>
   <link rel='stylesheet' type='text/css' href='./resource/qxorm_style.css'>
   <script type="text/javascript" src="./resource/qxorm_script.js"></script>
 </head>
@@ -56,11 +55,11 @@
     <table cellspacing="0" cellpadding="1"><col><col><tbody>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow">Version courante :&nbsp;</font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.3.1 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.3.2 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
       </tr>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow"></font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.1.7</font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.1.8</font></td>
       </tr>
     </tbody></table>
   </td>
@@ -98,7 +97,7 @@
                </ul>
                </td>
                <td width="200" align="center" valign="top"><a href="./resource/qt_ambassador_logo.png" target="_blank"><img alt="qt_ambassador" src="./resource/qt_ambassador_logo_150x150.png" width="150" height="150" border="0"></a><br>
-                 <b><font size="2">QxOrm library has been accepted into the <a href="http://qt.digia.com/qtambassador/" target="_blank">Qt Ambassador Program</a></font></b>
+                 <b><font size="2">QxOrm library has been accepted into the <a href="http://forum.qt.io/category/24/qt-ambassador-program" target="_blank">Qt Ambassador Program</a></font></b>
                </td>
              </tr>
            </tbody>
@@ -115,7 +114,7 @@
          <br/>
          Pour toutes questions ou précisions sur les licences, ou bien pour acquérir la licence <b>QXPL</b>, vous pouvez nous contacter à l'adresse suivante : <a href="mailto:contact@qxorm.com">contact@qxorm.com</a>.<br/>
          <br/>
-         <a href="../php/add_download.php5?file_path=QxOrm_1.3.1.zip&file_desc=QxOrm_1.3.1" class="btn_tuto" target="_blank">Télécharger QxOrm 1.3.1</a>
+         <a href="../php/add_download.php5?file_path=QxOrm_1.3.2.zip&file_desc=QxOrm_1.3.2" class="btn_tuto" target="_blank">Télécharger QxOrm 1.3.2</a>
          <br/>
          <!--
          <script type="text/javascript">
@@ -126,7 +125,7 @@ function checkForm(f) { f.submit(); return true; }
             <input type="text" id="created_by" name="created_by" size="50" maxlength="200" /><br/>
             Aidez nous à améliorer la bibliothèque QxOrm en ajoutant vos remarques et suggestions (optionnel) :<br/>
             <textarea id="message_text" name="message_text" rows="3" cols="50"></textarea><br/>
-            <input type="submit" value="            Télécharger QxOrm 1.3.1            " />
+            <input type="submit" value="            Télécharger QxOrm 1.3.2            " />
          </form>
          -->
          <br>

@@ -2,12 +2,12 @@ REM -- QT ENVIRONMENT VARIABLES --
 set QT_DIR=%QT4_MINGW%
 set PATH=%QT_DIR%\bin;%PATH%
 REM -- BOOST ENVIRONMENT VARIABLES --
-set BOOST_INCLUDE=D:\Dvlp\_Libs\Boost\1_54\include
-set BOOST_LIB=D:\Dvlp\_Libs\Boost\1_54\lib_shared
-set BOOST_LIB_SERIALIZATION_DEBUG=libboost_serialization-mgw45-mt-d-1_54
-set BOOST_LIB_SERIALIZATION_RELEASE=libboost_serialization-mgw45-mt-1_54
-set BOOST_LIB_WIDE_SERIALIZATION_DEBUG=libboost_wserialization-mgw45-mt-d-1_54
-set BOOST_LIB_WIDE_SERIALIZATION_RELEASE=libboost_wserialization-mgw45-mt-1_54
+set BOOST_INCLUDE=D:\Dvlp\_Libs\Boost\1_57\include
+set BOOST_LIB=D:\Dvlp\_Libs\Boost\1_57\lib_shared
+set BOOST_LIB_SERIALIZATION_DEBUG=libboost_serialization-mgw45-mt-d-1_57
+set BOOST_LIB_SERIALIZATION_RELEASE=libboost_serialization-mgw45-mt-1_57
+set BOOST_LIB_WIDE_SERIALIZATION_DEBUG=libboost_wserialization-mgw45-mt-d-1_57
+set BOOST_LIB_WIDE_SERIALIZATION_RELEASE=libboost_wserialization-mgw45-mt-1_57
 REM -- MAKE OPTIONS : USE 8 CORE CPU TO REDUCE BUILD TIMES --
 set MAKE_COMMAND=make -j8
 REM -- BUILD QXORM LIBRARY --

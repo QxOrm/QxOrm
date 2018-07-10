@@ -86,5 +86,10 @@
 #include <QxTraits/is_qx_dao_ptr.h>
 #include <QxTraits/is_equal.h>
 #include <QxTraits/qt_meta_object.h>
+#include <QxTraits/is_std_shared_ptr.h>
+#include <QxTraits/is_std_unique_ptr.h>
+#include <QxTraits/is_std_unordered_map.h>
+#include <QxTraits/is_std_unordered_set.h>
+#include <QxTraits/is_std_weak_ptr.h>
 
 #endif // _QX_TRAITS_H_

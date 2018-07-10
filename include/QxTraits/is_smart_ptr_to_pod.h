@@ -86,6 +86,19 @@ private:
    template <typename U>
    static typename boost::mpl::if_c<qx::trait::is_qx_pod<U>::value, char, int>::type removeSmartPtr(const qx::dao::ptr<U> &);
 
+#if (defined(_QX_CPP_11_SMART_PTR) && !defined(BOOST_NO_CXX11_SMART_PTR))
+
+   template <typename U>
+   static typename boost::mpl::if_c<qx::trait::is_qx_pod<U>::value, char, int>::type removeSmartPtr(const std::unique_ptr<U> &);
+
+   template <typename U>
+   static typename boost::mpl::if_c<qx::trait::is_qx_pod<U>::value, char, int>::type removeSmartPtr(const std::shared_ptr<U> &);
+
+   template <typename U>
+   static typename boost::mpl::if_c<qx::trait::is_qx_pod<U>::value, char, int>::type removeSmartPtr(const std::weak_ptr<U> &);
+
+#endif // (defined(_QX_CPP_11_SMART_PTR) && !defined(BOOST_NO_CXX11_SMART_PTR))
+
    static int removeSmartPtr(...);
    static T t;
 

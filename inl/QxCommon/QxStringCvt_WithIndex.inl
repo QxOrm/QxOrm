@@ -162,6 +162,108 @@ private:
    static inline void verifyIndex(int index) { Q_UNUSED(index); qAssert((index >= -1) && (index < 9)); }
 };
 
+#ifdef _QX_CPP_11_TUPLE
+#ifndef BOOST_NO_CXX11_HDR_TUPLE
+
+template <typename T1, typename T2>
+struct QxStringCvt_WithIndex< std::tuple<T1, T2> >
+{
+   typedef std::tuple<T1, T2> T;
+   static inline QString toString(const T & data, const QString & format, int index)                     { verifyIndex(index); return ((index == 1) ? qx::cvt::to_string(std::get<1>(data), format) : ((index == 0) ? qx::cvt::to_string(std::get<0>(data), format) : qx::cvt::to_string(data, format))); }
+   static inline qx_bool fromString(T & data, const QString & s, const QString & format, int index)      { verifyIndex(index); return ((index == 1) ? qx::cvt::from_string(s, std::get<1>(data), format) : ((index == 0) ? qx::cvt::from_string(s, std::get<0>(data), format) : qx::cvt::from_string(s, data, format))); }
+   static inline QVariant toVariant(const T & data, const QString & format, int index)                   { verifyIndex(index); return ((index == 1) ? qx::cvt::to_variant(std::get<1>(data), format) : ((index == 0) ? qx::cvt::to_variant(std::get<0>(data), format) : qx::cvt::to_variant(data, format))); }
+   static inline qx_bool fromVariant(T & data, const QVariant & v, const QString & format, int index)    { verifyIndex(index); return ((index == 1) ? qx::cvt::from_variant(v, std::get<1>(data), format) : ((index == 0) ? qx::cvt::from_variant(v, std::get<0>(data), format) : qx::cvt::from_variant(v, data, format))); }
+private:
+   static inline void verifyIndex(int index) { Q_UNUSED(index); qAssert((index >= -1) && (index < 2)); }
+};
+
+template <typename T1, typename T2, typename T3>
+struct QxStringCvt_WithIndex< std::tuple<T1, T2, T3> >
+{
+   typedef std::tuple<T1, T2, T3> T;
+   static inline QString toString(const T & data, const QString & format, int index)                     { verifyIndex(index); return ((index == 2) ? qx::cvt::to_string(std::get<2>(data), format) : (index == 1) ? qx::cvt::to_string(std::get<1>(data), format) : ((index == 0) ? qx::cvt::to_string(std::get<0>(data), format) : qx::cvt::to_string(data, format))); }
+   static inline qx_bool fromString(T & data, const QString & s, const QString & format, int index)      { verifyIndex(index); return ((index == 2) ? qx::cvt::from_string(s, std::get<2>(data), format) : (index == 1) ? qx::cvt::from_string(s, std::get<1>(data), format) : ((index == 0) ? qx::cvt::from_string(s, std::get<0>(data), format) : qx::cvt::from_string(s, data, format))); }
+   static inline QVariant toVariant(const T & data, const QString & format, int index)                   { verifyIndex(index); return ((index == 2) ? qx::cvt::to_variant(std::get<2>(data), format) : (index == 1) ? qx::cvt::to_variant(std::get<1>(data), format) : ((index == 0) ? qx::cvt::to_variant(std::get<0>(data), format) : qx::cvt::to_variant(data, format))); }
+   static inline qx_bool fromVariant(T & data, const QVariant & v, const QString & format, int index)    { verifyIndex(index); return ((index == 2) ? qx::cvt::from_variant(v, std::get<2>(data), format) : (index == 1) ? qx::cvt::from_variant(v, std::get<1>(data), format) : ((index == 0) ? qx::cvt::from_variant(v, std::get<0>(data), format) : qx::cvt::from_variant(v, data, format))); }
+private:
+   static inline void verifyIndex(int index) { Q_UNUSED(index); qAssert((index >= -1) && (index < 3)); }
+};
+
+template <typename T1, typename T2, typename T3, typename T4>
+struct QxStringCvt_WithIndex< std::tuple<T1, T2, T3, T4> >
+{
+   typedef std::tuple<T1, T2, T3, T4> T;
+   static inline QString toString(const T & data, const QString & format, int index)                     { verifyIndex(index); return ((index == 3) ? qx::cvt::to_string(std::get<3>(data), format) : (index == 2) ? qx::cvt::to_string(std::get<2>(data), format) : (index == 1) ? qx::cvt::to_string(std::get<1>(data), format) : ((index == 0) ? qx::cvt::to_string(std::get<0>(data), format) : qx::cvt::to_string(data, format))); }
+   static inline qx_bool fromString(T & data, const QString & s, const QString & format, int index)      { verifyIndex(index); return ((index == 3) ? qx::cvt::from_string(s, std::get<3>(data), format) : (index == 2) ? qx::cvt::from_string(s, std::get<2>(data), format) : (index == 1) ? qx::cvt::from_string(s, std::get<1>(data), format) : ((index == 0) ? qx::cvt::from_string(s, std::get<0>(data), format) : qx::cvt::from_string(s, data, format))); }
+   static inline QVariant toVariant(const T & data, const QString & format, int index)                   { verifyIndex(index); return ((index == 3) ? qx::cvt::to_variant(std::get<3>(data), format) : (index == 2) ? qx::cvt::to_variant(std::get<2>(data), format) : (index == 1) ? qx::cvt::to_variant(std::get<1>(data), format) : ((index == 0) ? qx::cvt::to_variant(std::get<0>(data), format) : qx::cvt::to_variant(data, format))); }
+   static inline qx_bool fromVariant(T & data, const QVariant & v, const QString & format, int index)    { verifyIndex(index); return ((index == 3) ? qx::cvt::from_variant(v, std::get<3>(data), format) : (index == 2) ? qx::cvt::from_variant(v, std::get<2>(data), format) : (index == 1) ? qx::cvt::from_variant(v, std::get<1>(data), format) : ((index == 0) ? qx::cvt::from_variant(v, std::get<0>(data), format) : qx::cvt::from_variant(v, data, format))); }
+private:
+   static inline void verifyIndex(int index) { Q_UNUSED(index); qAssert((index >= -1) && (index < 4)); }
+};
+
+template <typename T1, typename T2, typename T3, typename T4, typename T5>
+struct QxStringCvt_WithIndex< std::tuple<T1, T2, T3, T4, T5> >
+{
+   typedef std::tuple<T1, T2, T3, T4, T5> T;
+   static inline QString toString(const T & data, const QString & format, int index)                     { verifyIndex(index); return ((index == 4) ? qx::cvt::to_string(std::get<4>(data), format) : (index == 3) ? qx::cvt::to_string(std::get<3>(data), format) : (index == 2) ? qx::cvt::to_string(std::get<2>(data), format) : (index == 1) ? qx::cvt::to_string(std::get<1>(data), format) : ((index == 0) ? qx::cvt::to_string(std::get<0>(data), format) : qx::cvt::to_string(data, format))); }
+   static inline qx_bool fromString(T & data, const QString & s, const QString & format, int index)      { verifyIndex(index); return ((index == 4) ? qx::cvt::from_string(s, std::get<4>(data), format) : (index == 3) ? qx::cvt::from_string(s, std::get<3>(data), format) : (index == 2) ? qx::cvt::from_string(s, std::get<2>(data), format) : (index == 1) ? qx::cvt::from_string(s, std::get<1>(data), format) : ((index == 0) ? qx::cvt::from_string(s, std::get<0>(data), format) : qx::cvt::from_string(s, data, format))); }
+   static inline QVariant toVariant(const T & data, const QString & format, int index)                   { verifyIndex(index); return ((index == 4) ? qx::cvt::to_variant(std::get<4>(data), format) : (index == 3) ? qx::cvt::to_variant(std::get<3>(data), format) : (index == 2) ? qx::cvt::to_variant(std::get<2>(data), format) : (index == 1) ? qx::cvt::to_variant(std::get<1>(data), format) : ((index == 0) ? qx::cvt::to_variant(std::get<0>(data), format) : qx::cvt::to_variant(data, format))); }
+   static inline qx_bool fromVariant(T & data, const QVariant & v, const QString & format, int index)    { verifyIndex(index); return ((index == 4) ? qx::cvt::from_variant(v, std::get<4>(data), format) : (index == 3) ? qx::cvt::from_variant(v, std::get<3>(data), format) : (index == 2) ? qx::cvt::from_variant(v, std::get<2>(data), format) : (index == 1) ? qx::cvt::from_variant(v, std::get<1>(data), format) : ((index == 0) ? qx::cvt::from_variant(v, std::get<0>(data), format) : qx::cvt::from_variant(v, data, format))); }
+private:
+   static inline void verifyIndex(int index) { Q_UNUSED(index); qAssert((index >= -1) && (index < 5)); }
+};
+
+template <typename T1, typename T2, typename T3, typename T4, typename T5, typename T6>
+struct QxStringCvt_WithIndex< std::tuple<T1, T2, T3, T4, T5, T6> >
+{
+   typedef std::tuple<T1, T2, T3, T4, T5, T6> T;
+   static inline QString toString(const T & data, const QString & format, int index)                     { verifyIndex(index); return ((index == 5) ? qx::cvt::to_string(std::get<5>(data), format) : (index == 4) ? qx::cvt::to_string(std::get<4>(data), format) : (index == 3) ? qx::cvt::to_string(std::get<3>(data), format) : (index == 2) ? qx::cvt::to_string(std::get<2>(data), format) : (index == 1) ? qx::cvt::to_string(std::get<1>(data), format) : ((index == 0) ? qx::cvt::to_string(std::get<0>(data), format) : qx::cvt::to_string(data, format))); }
+   static inline qx_bool fromString(T & data, const QString & s, const QString & format, int index)      { verifyIndex(index); return ((index == 5) ? qx::cvt::from_string(s, std::get<5>(data), format) : (index == 4) ? qx::cvt::from_string(s, std::get<4>(data), format) : (index == 3) ? qx::cvt::from_string(s, std::get<3>(data), format) : (index == 2) ? qx::cvt::from_string(s, std::get<2>(data), format) : (index == 1) ? qx::cvt::from_string(s, std::get<1>(data), format) : ((index == 0) ? qx::cvt::from_string(s, std::get<0>(data), format) : qx::cvt::from_string(s, data, format))); }
+   static inline QVariant toVariant(const T & data, const QString & format, int index)                   { verifyIndex(index); return ((index == 5) ? qx::cvt::to_variant(std::get<5>(data), format) : (index == 4) ? qx::cvt::to_variant(std::get<4>(data), format) : (index == 3) ? qx::cvt::to_variant(std::get<3>(data), format) : (index == 2) ? qx::cvt::to_variant(std::get<2>(data), format) : (index == 1) ? qx::cvt::to_variant(std::get<1>(data), format) : ((index == 0) ? qx::cvt::to_variant(std::get<0>(data), format) : qx::cvt::to_variant(data, format))); }
+   static inline qx_bool fromVariant(T & data, const QVariant & v, const QString & format, int index)    { verifyIndex(index); return ((index == 5) ? qx::cvt::from_variant(v, std::get<5>(data), format) : (index == 4) ? qx::cvt::from_variant(v, std::get<4>(data), format) : (index == 3) ? qx::cvt::from_variant(v, std::get<3>(data), format) : (index == 2) ? qx::cvt::from_variant(v, std::get<2>(data), format) : (index == 1) ? qx::cvt::from_variant(v, std::get<1>(data), format) : ((index == 0) ? qx::cvt::from_variant(v, std::get<0>(data), format) : qx::cvt::from_variant(v, data, format))); }
+private:
+   static inline void verifyIndex(int index) { Q_UNUSED(index); qAssert((index >= -1) && (index < 6)); }
+};
+
+template <typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7>
+struct QxStringCvt_WithIndex< std::tuple<T1, T2, T3, T4, T5, T6, T7> >
+{
+   typedef std::tuple<T1, T2, T3, T4, T5, T6, T7> T;
+   static inline QString toString(const T & data, const QString & format, int index)                     { verifyIndex(index); return ((index == 6) ? qx::cvt::to_string(std::get<6>(data), format) : (index == 5) ? qx::cvt::to_string(std::get<5>(data), format) : (index == 4) ? qx::cvt::to_string(std::get<4>(data), format) : (index == 3) ? qx::cvt::to_string(std::get<3>(data), format) : (index == 2) ? qx::cvt::to_string(std::get<2>(data), format) : (index == 1) ? qx::cvt::to_string(std::get<1>(data), format) : ((index == 0) ? qx::cvt::to_string(std::get<0>(data), format) : qx::cvt::to_string(data, format))); }
+   static inline qx_bool fromString(T & data, const QString & s, const QString & format, int index)      { verifyIndex(index); return ((index == 6) ? qx::cvt::from_string(s, std::get<6>(data), format) : (index == 5) ? qx::cvt::from_string(s, std::get<5>(data), format) : (index == 4) ? qx::cvt::from_string(s, std::get<4>(data), format) : (index == 3) ? qx::cvt::from_string(s, std::get<3>(data), format) : (index == 2) ? qx::cvt::from_string(s, std::get<2>(data), format) : (index == 1) ? qx::cvt::from_string(s, std::get<1>(data), format) : ((index == 0) ? qx::cvt::from_string(s, std::get<0>(data), format) : qx::cvt::from_string(s, data, format))); }
+   static inline QVariant toVariant(const T & data, const QString & format, int index)                   { verifyIndex(index); return ((index == 6) ? qx::cvt::to_variant(std::get<6>(data), format) : (index == 5) ? qx::cvt::to_variant(std::get<5>(data), format) : (index == 4) ? qx::cvt::to_variant(std::get<4>(data), format) : (index == 3) ? qx::cvt::to_variant(std::get<3>(data), format) : (index == 2) ? qx::cvt::to_variant(std::get<2>(data), format) : (index == 1) ? qx::cvt::to_variant(std::get<1>(data), format) : ((index == 0) ? qx::cvt::to_variant(std::get<0>(data), format) : qx::cvt::to_variant(data, format))); }
+   static inline qx_bool fromVariant(T & data, const QVariant & v, const QString & format, int index)    { verifyIndex(index); return ((index == 6) ? qx::cvt::from_variant(v, std::get<6>(data), format) : (index == 5) ? qx::cvt::from_variant(v, std::get<5>(data), format) : (index == 4) ? qx::cvt::from_variant(v, std::get<4>(data), format) : (index == 3) ? qx::cvt::from_variant(v, std::get<3>(data), format) : (index == 2) ? qx::cvt::from_variant(v, std::get<2>(data), format) : (index == 1) ? qx::cvt::from_variant(v, std::get<1>(data), format) : ((index == 0) ? qx::cvt::from_variant(v, std::get<0>(data), format) : qx::cvt::from_variant(v, data, format))); }
+private:
+   static inline void verifyIndex(int index) { Q_UNUSED(index); qAssert((index >= -1) && (index < 7)); }
+};
+
+template <typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8>
+struct QxStringCvt_WithIndex< std::tuple<T1, T2, T3, T4, T5, T6, T7, T8> >
+{
+   typedef std::tuple<T1, T2, T3, T4, T5, T6, T7, T8> T;
+   static inline QString toString(const T & data, const QString & format, int index)                     { verifyIndex(index); return ((index == 7) ? qx::cvt::to_string(std::get<7>(data), format) : (index == 6) ? qx::cvt::to_string(std::get<6>(data), format) : (index == 5) ? qx::cvt::to_string(std::get<5>(data), format) : (index == 4) ? qx::cvt::to_string(std::get<4>(data), format) : (index == 3) ? qx::cvt::to_string(std::get<3>(data), format) : (index == 2) ? qx::cvt::to_string(std::get<2>(data), format) : (index == 1) ? qx::cvt::to_string(std::get<1>(data), format) : ((index == 0) ? qx::cvt::to_string(std::get<0>(data), format) : qx::cvt::to_string(data, format))); }
+   static inline qx_bool fromString(T & data, const QString & s, const QString & format, int index)      { verifyIndex(index); return ((index == 7) ? qx::cvt::from_string(s, std::get<7>(data), format) : (index == 6) ? qx::cvt::from_string(s, std::get<6>(data), format) : (index == 5) ? qx::cvt::from_string(s, std::get<5>(data), format) : (index == 4) ? qx::cvt::from_string(s, std::get<4>(data), format) : (index == 3) ? qx::cvt::from_string(s, std::get<3>(data), format) : (index == 2) ? qx::cvt::from_string(s, std::get<2>(data), format) : (index == 1) ? qx::cvt::from_string(s, std::get<1>(data), format) : ((index == 0) ? qx::cvt::from_string(s, std::get<0>(data), format) : qx::cvt::from_string(s, data, format))); }
+   static inline QVariant toVariant(const T & data, const QString & format, int index)                   { verifyIndex(index); return ((index == 7) ? qx::cvt::to_variant(std::get<7>(data), format) : (index == 6) ? qx::cvt::to_variant(std::get<6>(data), format) : (index == 5) ? qx::cvt::to_variant(std::get<5>(data), format) : (index == 4) ? qx::cvt::to_variant(std::get<4>(data), format) : (index == 3) ? qx::cvt::to_variant(std::get<3>(data), format) : (index == 2) ? qx::cvt::to_variant(std::get<2>(data), format) : (index == 1) ? qx::cvt::to_variant(std::get<1>(data), format) : ((index == 0) ? qx::cvt::to_variant(std::get<0>(data), format) : qx::cvt::to_variant(data, format))); }
+   static inline qx_bool fromVariant(T & data, const QVariant & v, const QString & format, int index)    { verifyIndex(index); return ((index == 7) ? qx::cvt::from_variant(v, std::get<7>(data), format) : (index == 6) ? qx::cvt::from_variant(v, std::get<6>(data), format) : (index == 5) ? qx::cvt::from_variant(v, std::get<5>(data), format) : (index == 4) ? qx::cvt::from_variant(v, std::get<4>(data), format) : (index == 3) ? qx::cvt::from_variant(v, std::get<3>(data), format) : (index == 2) ? qx::cvt::from_variant(v, std::get<2>(data), format) : (index == 1) ? qx::cvt::from_variant(v, std::get<1>(data), format) : ((index == 0) ? qx::cvt::from_variant(v, std::get<0>(data), format) : qx::cvt::from_variant(v, data, format))); }
+private:
+   static inline void verifyIndex(int index) { Q_UNUSED(index); qAssert((index >= -1) && (index < 8)); }
+};
+
+template <typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8, typename T9>
+struct QxStringCvt_WithIndex< std::tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9> >
+{
+   typedef std::tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9> T;
+   static inline QString toString(const T & data, const QString & format, int index)                     { verifyIndex(index); return ((index == 8) ? qx::cvt::to_string(std::get<8>(data), format) : (index == 7) ? qx::cvt::to_string(std::get<7>(data), format) : (index == 6) ? qx::cvt::to_string(std::get<6>(data), format) : (index == 5) ? qx::cvt::to_string(std::get<5>(data), format) : (index == 4) ? qx::cvt::to_string(std::get<4>(data), format) : (index == 3) ? qx::cvt::to_string(std::get<3>(data), format) : (index == 2) ? qx::cvt::to_string(std::get<2>(data), format) : (index == 1) ? qx::cvt::to_string(std::get<1>(data), format) : ((index == 0) ? qx::cvt::to_string(std::get<0>(data), format) : qx::cvt::to_string(data, format))); }
+   static inline qx_bool fromString(T & data, const QString & s, const QString & format, int index)      { verifyIndex(index); return ((index == 8) ? qx::cvt::from_string(s, std::get<8>(data), format) : (index == 7) ? qx::cvt::from_string(s, std::get<7>(data), format) : (index == 6) ? qx::cvt::from_string(s, std::get<6>(data), format) : (index == 5) ? qx::cvt::from_string(s, std::get<5>(data), format) : (index == 4) ? qx::cvt::from_string(s, std::get<4>(data), format) : (index == 3) ? qx::cvt::from_string(s, std::get<3>(data), format) : (index == 2) ? qx::cvt::from_string(s, std::get<2>(data), format) : (index == 1) ? qx::cvt::from_string(s, std::get<1>(data), format) : ((index == 0) ? qx::cvt::from_string(s, std::get<0>(data), format) : qx::cvt::from_string(s, data, format))); }
+   static inline QVariant toVariant(const T & data, const QString & format, int index)                   { verifyIndex(index); return ((index == 8) ? qx::cvt::to_variant(std::get<8>(data), format) : (index == 7) ? qx::cvt::to_variant(std::get<7>(data), format) : (index == 6) ? qx::cvt::to_variant(std::get<6>(data), format) : (index == 5) ? qx::cvt::to_variant(std::get<5>(data), format) : (index == 4) ? qx::cvt::to_variant(std::get<4>(data), format) : (index == 3) ? qx::cvt::to_variant(std::get<3>(data), format) : (index == 2) ? qx::cvt::to_variant(std::get<2>(data), format) : (index == 1) ? qx::cvt::to_variant(std::get<1>(data), format) : ((index == 0) ? qx::cvt::to_variant(std::get<0>(data), format) : qx::cvt::to_variant(data, format))); }
+   static inline qx_bool fromVariant(T & data, const QVariant & v, const QString & format, int index)    { verifyIndex(index); return ((index == 8) ? qx::cvt::from_variant(v, std::get<8>(data), format) : (index == 7) ? qx::cvt::from_variant(v, std::get<7>(data), format) : (index == 6) ? qx::cvt::from_variant(v, std::get<6>(data), format) : (index == 5) ? qx::cvt::from_variant(v, std::get<5>(data), format) : (index == 4) ? qx::cvt::from_variant(v, std::get<4>(data), format) : (index == 3) ? qx::cvt::from_variant(v, std::get<3>(data), format) : (index == 2) ? qx::cvt::from_variant(v, std::get<2>(data), format) : (index == 1) ? qx::cvt::from_variant(v, std::get<1>(data), format) : ((index == 0) ? qx::cvt::from_variant(v, std::get<0>(data), format) : qx::cvt::from_variant(v, data, format))); }
+private:
+   static inline void verifyIndex(int index) { Q_UNUSED(index); qAssert((index >= -1) && (index < 9)); }
+};
+
+#endif // BOOST_NO_CXX11_HDR_TUPLE
+#endif // _QX_CPP_11_TUPLE
+
 } // namespace detail
 } // namespace cvt
 } // namespace qx

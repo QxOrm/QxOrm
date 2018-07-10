@@ -67,9 +67,6 @@ void unit_test_is_container()
    BOOST_STATIC_ASSERT(! qx::trait::is_qt_vector< std::vector<double> >::value);
    BOOST_STATIC_ASSERT(! qx::trait::is_boost_unordered_map< std::vector<double> >::value);
 
-   typedef qx::trait::is_container_base_of<QObject, std_vector_object> is_container_base_of_std_vector_object;
-
-   BOOST_STATIC_ASSERT(is_container_base_of_std_vector_object::value);
    BOOST_STATIC_ASSERT(qx::trait::is_container_to_pod<std_set_int>::value);
    BOOST_STATIC_ASSERT(qx::trait::is_container_key_value<qx_coll_string_to_double>::value);
    BOOST_STATIC_ASSERT(qx::trait::is_container_key_value<boost_unordered_map_string_to_object_ptr>::value);

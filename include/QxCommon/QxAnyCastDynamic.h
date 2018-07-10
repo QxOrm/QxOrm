@@ -50,6 +50,12 @@
 
 #include <QxDao/QxDaoPointer.h>
 
+#ifdef _QX_CPP_11_SMART_PTR
+#ifndef BOOST_NO_CXX11_SMART_PTR
+#include <memory>
+#endif // BOOST_NO_CXX11_SMART_PTR
+#endif // _QX_CPP_11_SMART_PTR
+
 namespace qx {
 
 template <typename T>
@@ -107,6 +113,25 @@ struct any_cast_dynamic< qx::dao::ptr<T> >
       return (* t);
    }
 };
+
+#ifdef _QX_CPP_11_SMART_PTR
+#ifndef BOOST_NO_CXX11_SMART_PTR
+
+template <typename T>
+struct any_cast_dynamic< std::shared_ptr<T> >
+{
+   static std::shared_ptr<T> get(const boost::any & a)
+   {
+      if (a.empty()) { return std::shared_ptr<T>(); }
+      boost::any * b = const_cast<boost::any *>(& a);
+      std::shared_ptr<T> * t = boost::unsafe_any_cast< std::shared_ptr<T> >(b);
+      if (! t) { return std::shared_ptr<T>(); }
+      return (* t);
+   }
+};
+
+#endif // BOOST_NO_CXX11_SMART_PTR
+#endif // _QX_CPP_11_SMART_PTR
 
 } // namespace qx
 

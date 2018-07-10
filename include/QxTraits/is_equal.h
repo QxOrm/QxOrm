@@ -60,6 +60,12 @@
 #include <QtCore/quuid.h>
 #include <QtCore/qsharedpointer.h>
 
+#ifdef _QX_CPP_11_SMART_PTR
+#ifndef BOOST_NO_CXX11_SMART_PTR
+#include <memory>
+#endif // BOOST_NO_CXX11_SMART_PTR
+#endif // _QX_CPP_11_SMART_PTR
+
 #if _QX_ENABLE_QT_GUI_DEPENDENCY
 #include <QtGui/qcolor.h>
 #include <QtGui/qfont.h>
@@ -139,5 +145,12 @@ QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL_TEMPLATE_1(boost::shared_ptr)
 QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL_TEMPLATE_1(QSharedPointer)
 QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL_TEMPLATE_1(QWeakPointer)
 QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL_TEMPLATE_1(qx::dao::ptr)
+
+#ifdef _QX_CPP_11_SMART_PTR
+#ifndef BOOST_NO_CXX11_SMART_PTR
+QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL_TEMPLATE_1(std::shared_ptr)
+QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL_TEMPLATE_1(std::weak_ptr)
+#endif // BOOST_NO_CXX11_SMART_PTR
+#endif // _QX_CPP_11_SMART_PTR
 
 #endif // _QX_TRAIT_IS_EQUAL_H_

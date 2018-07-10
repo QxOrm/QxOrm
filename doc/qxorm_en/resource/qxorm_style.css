@@ -1,3 +1,21 @@
+/* From reset-meyer.css : http://meyerweb.com/eric/tools/css/reset/ */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video
+{
+   font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+}
+
 body
 {
    background: #FFFFFF ;
@@ -60,8 +78,6 @@ hr
    border: 1px solid #3d4385;
    display: inline-block;
    color: #ffffff;
-   font-family: Arial;
-   font-size: 14px;
    font-weight: bold;
    font-style: normal;
    height: 35px;
@@ -114,13 +130,11 @@ hr
    border: 0px solid #242448;
    display: inline-block;
    color: #242448;
-   font-family: Arial;
-   font-size: 14px;
    font-weight: bold;
    font-style: normal;
    height: 35px;
    line-height: 35px;
-   width: 230px;
+   width: 250px;
    text-decoration: none;
    text-align: center;
    box-shadow: 2px 2px 2px #B9B9B9;
@@ -169,13 +183,11 @@ hr
    border: 2px solid #242448;
    display: inline-block;
    color: #242448;
-   font-family: Arial;
-   font-size: 14px;
    font-weight: bold;
    font-style: normal;
    height: 35px;
    line-height: 35px;
-   width: 230px;
+   width: 250px;
    text-decoration: none;
    text-align: center;
 }
@@ -200,6 +212,18 @@ hr
 .txt_with_shadow
 {
    text-shadow: 2px 2px 2px #B9B9B9;
+}
+
+.txt_slogan
+{
+   margin: 0;
+   padding: 0;
+   border: 0;
+   font-size: 120%;
+   vertical-align: baseline;
+   text-shadow: 2px 2px 2px #B9B9B9;
+   color: #0B0B61;
+   font-weight: bold;
 }
 
 .img_with_shadow
@@ -250,7 +274,6 @@ hr
    border: 0px solid #242448;
    display: inline-block;
    color: #242448;
-   font-family: Arial;
    font-size: 12px;
    font-weight: bold;
    font-style: normal;

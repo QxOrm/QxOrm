@@ -84,6 +84,25 @@
 #define BOOST_DLLEXPORT /* Nothing */
 #endif // BOOST_DLLEXPORT
 
+#ifdef _QX_CPP_11_SMART_PTR
+#ifndef BOOST_NO_CXX11_SMART_PTR
+#include <memory>
+#endif // BOOST_NO_CXX11_SMART_PTR
+#endif // _QX_CPP_11_SMART_PTR
+
+#ifdef _QX_CPP_11_CONTAINER
+#ifndef BOOST_NO_CXX11_STD_UNORDERED
+#include <unordered_map>
+#include <unordered_set>
+#endif // BOOST_NO_CXX11_STD_UNORDERED
+#endif // _QX_CPP_11_CONTAINER
+
+#ifdef _QX_CPP_11_TUPLE
+#ifndef BOOST_NO_CXX11_HDR_TUPLE
+#include <tuple>
+#endif // BOOST_NO_CXX11_HDR_TUPLE
+#endif // _QX_CPP_11_TUPLE
+
 #include <boost/version.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>

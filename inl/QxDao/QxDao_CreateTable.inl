@@ -43,6 +43,15 @@ struct QxDao_CreateTable
       qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "create table");
       if (! dao.isValid()) { return dao.error(); }
 
+      if (dao.database().driverName() != "QSQLITE")
+      {
+         QString sWarningMsg = "-- WARNING -- the function qx::dao::create_table<T>() can be used only with a SQLite database to create examples or prototypes, for other databases, it is recommended :";
+         sWarningMsg += "\n\t - to use QxEntityEditor application and its DDL SQL database schema export plugin ;";
+         sWarningMsg += "\n\t - or to manage the database schema with an external tool provided by the SGBD (SQLite Manager for SQLite, pgAdmin for PostgreSQL, MySQL Workbench for MySQL, etc...) ;";
+         sWarningMsg += "\n\t - or to generate database schema using the introspection engine of QxOrm library : go to 'http://www.qxorm.com/qxorm_en/faq.html#faq_230' web page for more details.";
+         qDebug("[QxOrm] %s", qPrintable(sWarningMsg));
+      }
+
       QString sql = dao.builder().createTable().getSqlQuery();
       if (sql.isEmpty()) { return dao.errEmpty(); }
       if (! dao.query().exec(sql)) { return dao.errFailed(); }
