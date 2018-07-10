@@ -41,23 +41,23 @@ void QxClass<T>::init()
 }
 
 template <class T>
-template <typename V>
-IxDataMember * QxClass<T>::data(V T::* pData, const QString & sKey, long lVersion, bool bSerialize, bool bDao)
+template <typename V, typename U>
+IxDataMember * QxClass<T>::data(V U::* pData, const QString & sKey, long lVersion, bool bSerialize, bool bDao)
 { return this->dataMemberX()->add(pData, sKey, lVersion, bSerialize, bDao); }
 
 template <class T>
-template <typename V>
-IxDataMember * QxClass<T>::data(V T::* pData, const QString & sKey, long lVersion, bool bSerialize)
+template <typename V, typename U>
+IxDataMember * QxClass<T>::data(V U::* pData, const QString & sKey, long lVersion, bool bSerialize)
 { return this->dataMemberX()->add(pData, sKey, lVersion, bSerialize); }
 
 template <class T>
-template <typename V>
-IxDataMember * QxClass<T>::data(V T::* pData, const QString & sKey, long lVersion)
+template <typename V, typename U>
+IxDataMember * QxClass<T>::data(V U::* pData, const QString & sKey, long lVersion)
 { return this->dataMemberX()->add(pData, sKey, lVersion); }
 
 template <class T>
-template <typename V>
-IxDataMember * QxClass<T>::data(V T::* pData, const QString & sKey)
+template <typename V, typename U>
+IxDataMember * QxClass<T>::data(V U::* pData, const QString & sKey)
 { return this->dataMemberX()->add(pData, sKey); }
 
 template <class T>
@@ -69,43 +69,43 @@ IxDataMember * QxClass<T>::id(typename QxClass<T>::type_primary_key T::* pDataMe
 { return this->dataMemberX()->id(pDataMemberId, sKey, lVersion); }
 
 template <class T>
-template <typename V>
-IxSqlRelation * QxClass<T>::relationOneToOne(V T::* pData, const QString & sKey)
+template <typename V, typename U>
+IxSqlRelation * QxClass<T>::relationOneToOne(V U::* pData, const QString & sKey)
 { return this->dataMemberX()->relationOneToOne(pData, sKey); }
 
 template <class T>
-template <typename V>
-IxSqlRelation * QxClass<T>::relationOneToOne(V T::* pData, const QString & sKey, long lVersion)
+template <typename V, typename U>
+IxSqlRelation * QxClass<T>::relationOneToOne(V U::* pData, const QString & sKey, long lVersion)
 { return this->dataMemberX()->relationOneToOne(pData, sKey, lVersion); }
 
 template <class T>
-template <typename V>
-IxSqlRelation * QxClass<T>::relationManyToOne(V T::* pData, const QString & sKey)
+template <typename V, typename U>
+IxSqlRelation * QxClass<T>::relationManyToOne(V U::* pData, const QString & sKey)
 { return this->dataMemberX()->relationManyToOne(pData, sKey); }
 
 template <class T>
-template <typename V>
-IxSqlRelation * QxClass<T>::relationManyToOne(V T::* pData, const QString & sKey, long lVersion)
+template <typename V, typename U>
+IxSqlRelation * QxClass<T>::relationManyToOne(V U::* pData, const QString & sKey, long lVersion)
 { return this->dataMemberX()->relationManyToOne(pData, sKey, lVersion); }
 
 template <class T>
-template <typename V>
-IxSqlRelation * QxClass<T>::relationOneToMany(V T::* pData, const QString & sKey, const QString & sForeignKey)
+template <typename V, typename U>
+IxSqlRelation * QxClass<T>::relationOneToMany(V U::* pData, const QString & sKey, const QString & sForeignKey)
 { return this->dataMemberX()->relationOneToMany(pData, sKey, sForeignKey); }
 
 template <class T>
-template <typename V>
-IxSqlRelation * QxClass<T>::relationOneToMany(V T::* pData, const QString & sKey, const QString & sForeignKey, long lVersion)
+template <typename V, typename U>
+IxSqlRelation * QxClass<T>::relationOneToMany(V U::* pData, const QString & sKey, const QString & sForeignKey, long lVersion)
 { return this->dataMemberX()->relationOneToMany(pData, sKey, sForeignKey, lVersion); }
 
 template <class T>
-template <typename V>
-IxSqlRelation * QxClass<T>::relationManyToMany(V T::* pData, const QString & sKey, const QString & sExtraTable, const QString & sForeignKeyOwner, const QString & sForeignKeyDataType)
+template <typename V, typename U>
+IxSqlRelation * QxClass<T>::relationManyToMany(V U::* pData, const QString & sKey, const QString & sExtraTable, const QString & sForeignKeyOwner, const QString & sForeignKeyDataType)
 { return this->dataMemberX()->relationManyToMany(pData, sKey, sExtraTable, sForeignKeyOwner, sForeignKeyDataType); }
 
 template <class T>
-template <typename V>
-IxSqlRelation * QxClass<T>::relationManyToMany(V T::* pData, const QString & sKey, const QString & sExtraTable, const QString & sForeignKeyOwner, const QString & sForeignKeyDataType, long lVersion)
+template <typename V, typename U>
+IxSqlRelation * QxClass<T>::relationManyToMany(V U::* pData, const QString & sKey, const QString & sExtraTable, const QString & sForeignKeyOwner, const QString & sForeignKeyDataType, long lVersion)
 { return this->dataMemberX()->relationManyToMany(pData, sKey, sExtraTable, sForeignKeyOwner, sForeignKeyDataType, lVersion); }
 
 template <class T>

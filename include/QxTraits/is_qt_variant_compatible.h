@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file is_qt_variant_compatible.h
+ * \author Lionel Marty
+ * \ingroup QxTraits
+ * \brief qx::trait::is_qt_variant_compatible<T>::value : return true if T can be host into a QVariant object of Qt library, otherwise return false
+ */
+
 #include <boost/type_traits/is_enum.hpp>
 
 #include <QtCore/qvariant.h>
@@ -37,6 +44,10 @@
 namespace qx {
 namespace trait {
 
+/*!
+ * \ingroup QxTraits
+ * \brief qx::trait::is_qt_variant_compatible<T>::value : return true if T can be host into a QVariant object of Qt library, otherwise return false
+ */
 template <typename T>
 struct is_qt_variant_compatible
 { enum { value = boost::is_enum<T>::value }; };

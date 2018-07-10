@@ -30,12 +30,23 @@
 #pragma once
 #endif
 
+/*!
+ * \file IxSingleton.h
+ * \author Lionel Marty
+ * \ingroup QxSingleton
+ * \brief Common interface for all singleton of QxOrm library
+ */
+
 #include <boost/noncopyable.hpp>
 
 namespace qx {
 
 class QxSingletonX;
 
+/*!
+ * \ingroup QxSingleton
+ * \brief qx::IxSingleton : common interface for all singleton of QxOrm library
+ */
 class QX_DLL_EXPORT IxSingleton : private boost::noncopyable
 {
 
@@ -43,7 +54,7 @@ class QX_DLL_EXPORT IxSingleton : private boost::noncopyable
 
 protected:
 
-   QString m_sKeySingleton;   // Singleton key used by 'QxSingletonX'
+   QString m_sKeySingleton;   //!< Singleton key used by 'QxSingletonX' container
 
 protected:
 

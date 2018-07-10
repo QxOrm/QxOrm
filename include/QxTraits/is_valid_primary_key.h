@@ -30,10 +30,21 @@
 #pragma once
 #endif
 
+/*!
+ * \file is_valid_primary_key.h
+ * \author Lionel Marty
+ * \ingroup QxTraits
+ * \brief qx::trait::is_valid_primary_key<T>(const T & t) : return true if t can be a valid primary key to be inserted into a database, otherwise return false
+ */
+
 namespace qx {
 namespace trait {
 namespace detail {
 
+/*!
+ * \ingroup QxTraits
+ * \brief qx::trait::is_valid_primary_key<T>(const T & t) : return true if t can be a valid primary key to be inserted into a database, otherwise return false
+ */
 template <typename T>
 struct is_valid_primary_key
 { static inline bool get(const T & t) { Q_UNUSED(t); qAssert(false); return false; } };

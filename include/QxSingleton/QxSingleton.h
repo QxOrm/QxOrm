@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file QxSingleton.h
+ * \author Lionel Marty
+ * \ingroup QxSingleton
+ * \brief Concrete class to define a thread-safe singleton of QxOrm library
+ */
+
 #include <QtCore/qmutex.h>
 #include <QtCore/qcoreapplication.h>
 
@@ -37,14 +44,18 @@
 
 namespace qx {
 
+/*!
+ * \ingroup QxSingleton
+ * \brief qx::QxSingleton<T> : concrete class to define a thread-safe singleton of type T
+ */
 template <class T>
 class QxSingleton : public IxSingleton
 {
 
 private:
 
-   static T *     m_pSingleton;        // Singleton -> only 1 instance allowed
-   static QMutex  m_oMutexSingleton;   // Mutex -> 'QxSingleton' is thread-safe
+   static T *     m_pSingleton;        //!< Singleton -> only 1 instance allowed
+   static QMutex  m_oMutexSingleton;   //!< Mutex -> 'QxSingleton' is thread-safe
 
 protected:
 

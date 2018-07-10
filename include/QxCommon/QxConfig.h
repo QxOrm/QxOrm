@@ -30,7 +30,14 @@
 #pragma once
 #endif
 
-#define QX_VERSION   0x010105 // QxOrm version 1.1.5
+/*!
+ * \file QxConfig.h
+ * \author Lionel Marty
+ * \ingroup QxCommon
+ * \brief List of parameters to compile and build QxOrm library
+ */
+
+#define QX_VERSION   0x010106 // QxOrm version 1.1.6
 
 #define _QX_SERIALIZE_POLYMORPHIC            0
 
@@ -59,6 +66,8 @@
 #define _QX_USE_GCC_EXPORT_ALL_SYMBOLS                                  1
 #define _QX_USE_GCC_VISIBILITY                                          0
 #define _QX_USE_ASSERT                                                  1
+#define _QX_ENABLE_QT_GUI_DEPENDENCY                                    1
+#define _QX_ENABLE_QT_NETWORK_DEPENDENCY                                1
 
 #ifdef _MSC_VER
 /* -- Link error with VC++ 9.0 => Qt uses "-Zc:wchar_t-" option to compile and boost serialization library is compiled without this option -- */

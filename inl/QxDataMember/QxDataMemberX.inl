@@ -26,9 +26,11 @@
 namespace qx {
 
 template <class T>
-template <typename V>
-IxDataMember * QxDataMemberX<T>::add(V T::* pData, const QString & sKey, long lVersion, bool bSerialize, bool bDao)
+template <typename V, typename U>
+IxDataMember * QxDataMemberX<T>::add(V U::* pData, const QString & sKey, long lVersion, bool bSerialize, bool bDao)
 {
+   typedef boost::is_base_of<U, T> is_valid_class_tmp;
+   BOOST_STATIC_ASSERT(is_valid_class_tmp::value);
    if (exist_WithDaoStrategy(sKey)) { qAssert(false); return NULL; }
 
    qAssert(lVersion <= getVersion());
@@ -42,18 +44,18 @@ IxDataMember * QxDataMemberX<T>::add(V T::* pData, const QString & sKey, long lV
 }
 
 template <class T>
-template <typename V>
-IxDataMember * QxDataMemberX<T>::add(V T::* pData, const QString & sKey, long lVersion, bool bSerialize)
+template <typename V, typename U>
+IxDataMember * QxDataMemberX<T>::add(V U::* pData, const QString & sKey, long lVersion, bool bSerialize)
 { return add(pData, sKey, lVersion, bSerialize, true); }
 
 template <class T>
-template <typename V>
-IxDataMember * QxDataMemberX<T>::add(V T::* pData, const QString & sKey, long lVersion)
+template <typename V, typename U>
+IxDataMember * QxDataMemberX<T>::add(V U::* pData, const QString & sKey, long lVersion)
 { return add(pData, sKey, lVersion, true, true); }
 
 template <class T>
-template <typename V>
-IxDataMember * QxDataMemberX<T>::add(V T::* pData, const QString & sKey)
+template <typename V, typename U>
+IxDataMember * QxDataMemberX<T>::add(V U::* pData, const QString & sKey)
 { return add(pData, sKey, 0, true, true); }
 
 template <class T>
@@ -81,30 +83,33 @@ IxDataMember * QxDataMemberX<T>::id(typename QxDataMemberX<T>::type_primary_key 
 }
 
 template <class T>
-template <typename V>
-IxSqlRelation * QxDataMemberX<T>::relationOneToOne(V T::* pData, const QString & sKey)
+template <typename V, typename U>
+IxSqlRelation * QxDataMemberX<T>::relationOneToOne(V U::* pData, const QString & sKey)
 { return this->relationOneToOne(pData, sKey, 0); }
 
 template <class T>
-template <typename V>
-IxSqlRelation * QxDataMemberX<T>::relationManyToOne(V T::* pData, const QString & sKey)
+template <typename V, typename U>
+IxSqlRelation * QxDataMemberX<T>::relationManyToOne(V U::* pData, const QString & sKey)
 { return this->relationManyToOne(pData, sKey, 0); }
 
 template <class T>
-template <typename V>
-IxSqlRelation * QxDataMemberX<T>::relationOneToMany(V T::* pData, const QString & sKey, const QString & sForeignKey)
+template <typename V, typename U>
+IxSqlRelation * QxDataMemberX<T>::relationOneToMany(V U::* pData, const QString & sKey, const QString & sForeignKey)
 { return this->relationOneToMany(pData, sKey, sForeignKey, 0); }
 
 template <class T>
-template <typename V>
-IxSqlRelation * QxDataMemberX<T>::relationManyToMany(V T::* pData, const QString & sKey, const QString & sExtraTable, const QString & sForeignKeyOwner, const QString & sForeignKeyDataType)
+template <typename V, typename U>
+IxSqlRelation * QxDataMemberX<T>::relationManyToMany(V U::* pData, const QString & sKey, const QString & sExtraTable, const QString & sForeignKeyOwner, const QString & sForeignKeyDataType)
 { return this->relationManyToMany(pData, sKey, sExtraTable, sForeignKeyOwner, sForeignKeyDataType, 0); }
 
 template <class T>
-template <typename V>
-IxSqlRelation * QxDataMemberX<T>::relationOneToOne(V T::* pData, const QString & sKey, long lVersion)
+template <typename V, typename U>
+IxSqlRelation * QxDataMemberX<T>::relationOneToOne(V U::* pData, const QString & sKey, long lVersion)
 {
+   typedef boost::is_base_of<U, T> is_valid_class_tmp;
+   BOOST_STATIC_ASSERT(is_valid_class_tmp::value);
    if (exist_WithDaoStrategy(sKey)) { qAssert(false); return NULL; }
+
    IxDataMember * pDataMember = this->add(pData, sKey, lVersion);
    IxSqlRelation * pSqlRelation = new QxSqlRelation_OneToOne<V, T>(pDataMember);
    pDataMember->setSqlRelation(pSqlRelation);
@@ -113,10 +118,13 @@ IxSqlRelation * QxDataMemberX<T>::relationOneToOne(V T::* pData, const QString &
 }
 
 template <class T>
-template <typename V>
-IxSqlRelation * QxDataMemberX<T>::relationManyToOne(V T::* pData, const QString & sKey, long lVersion)
+template <typename V, typename U>
+IxSqlRelation * QxDataMemberX<T>::relationManyToOne(V U::* pData, const QString & sKey, long lVersion)
 {
+   typedef boost::is_base_of<U, T> is_valid_class_tmp;
+   BOOST_STATIC_ASSERT(is_valid_class_tmp::value);
    if (exist_WithDaoStrategy(sKey)) { qAssert(false); return NULL; }
+
    IxDataMember * pDataMember = this->add(pData, sKey, lVersion);
    IxSqlRelation * pSqlRelation = new QxSqlRelation_ManyToOne<V, T>(pDataMember);
    pDataMember->setSqlRelation(pSqlRelation);
@@ -125,10 +133,13 @@ IxSqlRelation * QxDataMemberX<T>::relationManyToOne(V T::* pData, const QString 
 }
 
 template <class T>
-template <typename V>
-IxSqlRelation * QxDataMemberX<T>::relationOneToMany(V T::* pData, const QString & sKey, const QString & sForeignKey, long lVersion)
+template <typename V, typename U>
+IxSqlRelation * QxDataMemberX<T>::relationOneToMany(V U::* pData, const QString & sKey, const QString & sForeignKey, long lVersion)
 {
+   typedef boost::is_base_of<U, T> is_valid_class_tmp;
+   BOOST_STATIC_ASSERT(is_valid_class_tmp::value);
    if (exist_WithDaoStrategy(sKey)) { qAssert(false); return NULL; }
+
    IxDataMember * pDataMember = this->add(pData, sKey, lVersion);
    IxSqlRelation * pSqlRelation = new QxSqlRelation_OneToMany<V, T>(pDataMember, sForeignKey);
    pDataMember->setSqlRelation(pSqlRelation);
@@ -137,10 +148,13 @@ IxSqlRelation * QxDataMemberX<T>::relationOneToMany(V T::* pData, const QString 
 }
 
 template <class T>
-template <typename V>
-IxSqlRelation * QxDataMemberX<T>::relationManyToMany(V T::* pData, const QString & sKey, const QString & sExtraTable, const QString & sForeignKeyOwner, const QString & sForeignKeyDataType, long lVersion)
+template <typename V, typename U>
+IxSqlRelation * QxDataMemberX<T>::relationManyToMany(V U::* pData, const QString & sKey, const QString & sExtraTable, const QString & sForeignKeyOwner, const QString & sForeignKeyDataType, long lVersion)
 {
+   typedef boost::is_base_of<U, T> is_valid_class_tmp;
+   BOOST_STATIC_ASSERT(is_valid_class_tmp::value);
    if (exist_WithDaoStrategy(sKey)) { qAssert(false); return NULL; }
+
    IxDataMember * pDataMember = this->add(pData, sKey, lVersion);
    IxSqlRelation * pSqlRelation = new QxSqlRelation_ManyToMany<V, T>(pDataMember, sExtraTable, sForeignKeyOwner, sForeignKeyDataType);
    pDataMember->setSqlRelation(pSqlRelation);

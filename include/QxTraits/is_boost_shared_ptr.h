@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file is_boost_shared_ptr.h
+ * \author Lionel Marty
+ * \ingroup QxTraits
+ * \brief qx::trait::is_boost_shared_ptr<T>::value : return true if T is a boost::shared_ptr<> smart-pointer, otherwise return false
+ */
+
 #include <boost/shared_ptr.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/logical.hpp>
@@ -37,6 +44,10 @@
 namespace qx {
 namespace trait {
 
+/*!
+ * \ingroup QxTraits
+ * \brief qx::trait::is_boost_shared_ptr<T>::value : return true if T is a boost::shared_ptr<> smart-pointer, otherwise return false
+ */
 template <typename T>
 class is_boost_shared_ptr
 {

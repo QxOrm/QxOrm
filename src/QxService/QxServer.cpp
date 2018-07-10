@@ -23,6 +23,8 @@
 **
 ****************************************************************************/
 
+#if _QX_ENABLE_QT_NETWORK_DEPENDENCY
+
 #include <QxPrecompiled.h>
 
 #include <QxService/QxServer.h>
@@ -65,3 +67,5 @@ QxThread * QxServer::getAvailable() const
 
 } // namespace service
 } // namespace qx
+
+#endif // _QX_ENABLE_QT_NETWORK_DEPENDENCY

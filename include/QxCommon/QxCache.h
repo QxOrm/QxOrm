@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file QxCache.h
+ * \author Lionel Marty
+ * \ingroup QxCache
+ * \brief qx::cache : based on singleton pattern, provide basic thread-safe cache feature to backup and restore any kind of objects (for example, object fetched from database)
+ */
+
 #include <boost/any.hpp>
 
 #include <QxCommon/QxBool.h>
@@ -52,10 +59,10 @@ protected:
    typedef std::pair<long, boost::any> type_qx_cache;
    typedef qx::QxCollection<QString, type_qx_cache> type_qx_lst_cache;
 
-   type_qx_lst_cache m_cache;    // List of objects in cache under 'boost::any' format
-   QMutex m_oMutexCache;         // Mutex => 'QxCache' is thread-safe
-   long m_lMaxCost;              // Max cost before deleting object in cache
-   long m_lCurrCost;             // Current cost in cache
+   type_qx_lst_cache m_cache;    //!< List of objects in cache under boost::any format
+   QMutex m_oMutexCache;         //!< Mutex => 'QxCache' is thread-safe
+   long m_lMaxCost;              //!< Max cost before deleting object in cache
+   long m_lCurrCost;             //!< Current cost in cache
 
 public:
 
@@ -85,19 +92,66 @@ private:
 
 } // namespace detail
 
-inline void max_cost(long l)                 { qx::cache::detail::QxCache::getSingleton()->setMaxCost(l); }
-inline long max_cost()                       { return qx::cache::detail::QxCache::getSingleton()->getMaxCost(); }
-inline long current_cost()                   { return qx::cache::detail::QxCache::getSingleton()->getCurrCost(); }
-inline long count()                          { return qx::cache::detail::QxCache::getSingleton()->count(); }
-inline bool is_empty()                       { return qx::cache::detail::QxCache::getSingleton()->isEmpty(); }
-inline void clear()                          { qx::cache::detail::QxCache::getSingleton()->clear(); }
-inline bool exist(const QString & sKey)      { return qx::cache::detail::QxCache::getSingleton()->exist(sKey); }
-inline bool remove(const QString & sKey)     { return qx::cache::detail::QxCache::getSingleton()->remove(sKey); }
+/*!
+ * \ingroup QxCache
+ * \brief Set the maximum allowed total cost of the cache to l. If the current total cost is greater than l, some objects are deleted immediately
+ */
+inline void max_cost(long l) { qx::cache::detail::QxCache::getSingleton()->setMaxCost(l); }
 
+/*!
+ * \ingroup QxCache
+ * \brief Return the maximum allowed total cost of the cache
+ */
+inline long max_cost() { return qx::cache::detail::QxCache::getSingleton()->getMaxCost(); }
+
+/*!
+ * \ingroup QxCache
+ * \brief Return the current cost used by the cache
+ */
+inline long current_cost() { return qx::cache::detail::QxCache::getSingleton()->getCurrCost(); }
+
+/*!
+ * \ingroup QxCache
+ * \brief Return the number of objects in the cache
+ */
+inline long count() { return qx::cache::detail::QxCache::getSingleton()->count(); }
+
+/*!
+ * \ingroup QxCache
+ * \brief Return true if the cache contains no object; otherwise return false
+ */
+inline bool is_empty() { return qx::cache::detail::QxCache::getSingleton()->isEmpty(); }
+
+/*!
+ * \ingroup QxCache
+ * \brief Delete all the objects in the cache
+ */
+inline void clear() { qx::cache::detail::QxCache::getSingleton()->clear(); }
+
+/*!
+ * \ingroup QxCache
+ * \brief Return true if the cache contains an object associated with key sKey; otherwise return false
+ */
+inline bool exist(const QString & sKey) { return qx::cache::detail::QxCache::getSingleton()->exist(sKey); }
+
+/*!
+ * \ingroup QxCache
+ * \brief Delete the object associated with key sKey. Return true if the object was found in the cache; otherwise return false
+ */
+inline bool remove(const QString & sKey) { return qx::cache::detail::QxCache::getSingleton()->remove(sKey); }
+
+/*!
+ * \ingroup QxCache
+ * \brief Insert object t into the cache with key sKey and associated cost lCost. Any object with the same key already in the cache will be removed
+ */
 template <typename T>
 inline bool set(const QString & sKey, const T & t, long lCost = 1)
 { boost::any obj(t); return qx::cache::detail::QxCache::getSingleton()->insert(sKey, obj, lCost); }
 
+/*!
+ * \ingroup QxCache
+ * \brief Return the object of type T associated with key sKey, or return default instance of T() if the key does not exist in the cache
+ */
 template <typename T>
 inline T get(const QString & sKey)
 {
@@ -107,6 +161,10 @@ inline T get(const QString & sKey)
    catch (const boost::bad_any_cast & err) { Q_UNUSED(err); return T(); }
 }
 
+/*!
+ * \ingroup QxCache
+ * \brief Return true if object t can be fetched with associated key sKey; otherwise return false with an error description
+ */
 template <typename T>
 inline qx_bool get(const QString & sKey, T & t)
 {

@@ -23,12 +23,20 @@
 **
 ****************************************************************************/
 
+#if _QX_ENABLE_QT_NETWORK_DEPENDENCY
 #ifndef _QX_SERVICE_TRANSACTION_H_
 #define _QX_SERVICE_TRANSACTION_H_
 
 #ifdef _MSC_VER
 #pragma once
 #endif
+
+/*!
+ * \file QxTransaction.h
+ * \author Lionel Marty
+ * \ingroup QxService
+ * \brief Transaction of QxService module (contains request from client and reply from server)
+ */
 
 #include <QtNetwork/qtcpsocket.h>
 
@@ -42,6 +50,12 @@
 namespace qx {
 namespace service {
 
+/*!
+ * \ingroup QxService
+ * \brief qx::service::QxTransaction : transaction of QxService module (contains request from client and reply from server)
+ *
+ * <a href="http://www.qxorm.com/qxorm_en/tutorial_2.html" target="_blank">Click here to access to a tutorial to explain how to work with QxService module.</a>
+ */
 class QX_DLL_EXPORT QxTransaction
 {
 
@@ -49,25 +63,25 @@ class QX_DLL_EXPORT QxTransaction
 
 protected:
 
-   QString              m_sTransactionId;                   // Transaction id (GUID)
-   quint32              m_uiInputTransactionSize;           // Input transaction size
-   quint32              m_uiOutputTransactionSize;          // Output transaction size
-   QDateTime            m_dtTransactionBegin;               // Date-time transaction begin
-   QDateTime            m_dtTransactionRequestSent;         // Date-time transaction request sent
-   QDateTime            m_dtTransactionRequestReceived;     // Date-time transaction request received
-   QDateTime            m_dtTransactionReplySent;           // Date-time transaction reply sent
-   QDateTime            m_dtTransactionReplyReceived;       // Date-time transaction reply received
-   QDateTime            m_dtTransactionEnd;                 // Date-time transaction end
-   QString              m_sIpSource;                        // Ip address source (request)
-   QString              m_sIpTarget;                        // Ip address target (reply)
-   long                 m_lPortSource;                      // Port number source (request)
-   long                 m_lPortTarget;                      // Port number target (reply)
-   QString              m_sServiceName;                     // Service name to create using 'QxFactory'
-   QString              m_sServiceMethod;                   // Service method to call to execute transaction
-   qx_bool              m_bMessageReturn;                   // Message return to indicate if an error occured
-   IxParameter_ptr      m_pInputParameter;                  // List of input parameters (request)
-   IxParameter_ptr      m_pOutputParameter;                 // List of output parameters (reply)
-   IxService_ptr        m_pServiceInstance;                 // Service instance created by 'm_sServiceName' property
+   QString              m_sTransactionId;                   //!< Transaction id (GUID)
+   quint32              m_uiInputTransactionSize;           //!< Input transaction size
+   quint32              m_uiOutputTransactionSize;          //!< Output transaction size
+   QDateTime            m_dtTransactionBegin;               //!< Date-time transaction begin
+   QDateTime            m_dtTransactionRequestSent;         //!< Date-time transaction request sent
+   QDateTime            m_dtTransactionRequestReceived;     //!< Date-time transaction request received
+   QDateTime            m_dtTransactionReplySent;           //!< Date-time transaction reply sent
+   QDateTime            m_dtTransactionReplyReceived;       //!< Date-time transaction reply received
+   QDateTime            m_dtTransactionEnd;                 //!< Date-time transaction end
+   QString              m_sIpSource;                        //!< Ip address source (request)
+   QString              m_sIpTarget;                        //!< Ip address target (reply)
+   long                 m_lPortSource;                      //!< Port number source (request)
+   long                 m_lPortTarget;                      //!< Port number target (reply)
+   QString              m_sServiceName;                     //!< Service name to create using 'QxFactory'
+   QString              m_sServiceMethod;                   //!< Service method to call to execute transaction
+   qx_bool              m_bMessageReturn;                   //!< Message return to indicate if an error occured
+   IxParameter_ptr      m_pInputParameter;                  //!< List of input parameters (request)
+   IxParameter_ptr      m_pOutputParameter;                 //!< List of output parameters (reply)
+   IxService_ptr        m_pServiceInstance;                 //!< Service instance created by 'm_sServiceName' property
 
 public:
 
@@ -133,3 +147,4 @@ QX_DLL_EXPORT void execute_client(IxService * pService, const QString & sMethod)
 QX_REGISTER_INTERNAL_HELPER_HPP(QX_DLL_EXPORT, qx::service::QxTransaction, 0)
 
 #endif // _QX_SERVICE_TRANSACTION_H_
+#endif // _QX_ENABLE_QT_NETWORK_DEPENDENCY

@@ -26,13 +26,14 @@
  *
  */
 
-/**
- * @file    fast_mutex.h
+/*!
+ * \file    fast_mutex.h
+ * \ingroup QxMemLeak
  *
  * A fast mutex implementation for POSIX and Win32.
  *
- * @version 1.18, 2005/05/06
- * @author  Wu Yongwei
+ * \version 1.18, 2005/05/06
+ * \author  Wu Yongwei
  *
  */
 

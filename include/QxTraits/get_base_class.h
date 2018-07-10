@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file get_base_class.h
+ * \author Lionel Marty
+ * \ingroup QxTraits
+ * \brief qx::trait::get_base_class<T>::type : retrieve base class of type T registered into QxOrm context and return qx::trait::no_base_class_defined if no base class defined
+ */
+
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/logical.hpp>
 #include <boost/type_traits/is_same.hpp>
@@ -42,6 +49,10 @@ namespace trait {
 class no_base_class_defined
 { no_base_class_defined() { ; }; virtual ~no_base_class_defined() { ; }; virtual void dummy() = 0; };
 
+/*!
+ * \ingroup QxTraits
+ * \brief qx::trait::get_base_class<T>::type : retrieve base class of type T registered into QxOrm context and return qx::trait::no_base_class_defined if no base class defined
+ */
 template <class T>
 class get_base_class
 { public: typedef qx::trait::no_base_class_defined type; };

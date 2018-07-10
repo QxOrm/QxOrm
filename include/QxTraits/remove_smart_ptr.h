@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file remove_smart_ptr.h
+ * \author Lionel Marty
+ * \ingroup QxTraits
+ * \brief qx::trait::remove_smart_ptr<T>::type : return a type without smart-pointer attribute from boost, Qt or QxOrm library
+ */
+
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/intrusive_ptr.hpp>
@@ -45,6 +52,10 @@
 namespace qx {
 namespace trait {
 
+/*!
+ * \ingroup QxTraits
+ * \brief qx::trait::remove_smart_ptr<T>::type : return a type without smart-pointer attribute from boost, Qt or QxOrm library
+ */
 template <typename T>
 struct remove_smart_ptr { typedef T type; };
 

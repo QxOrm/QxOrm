@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file QxSqlRelationParams.h
+ * \author Lionel Marty
+ * \ingroup QxDao
+ * \brief Define list of parameters to transfer to relationships to manage SQL queries builded by QxOrm library
+ */
+
 #include <QtSql/qsqldatabase.h>
 #include <QtSql/qsqlquery.h>
 
@@ -37,18 +44,22 @@ namespace qx {
 
 class IxSqlQueryBuilder;
 
+/*!
+ * \ingroup QxDao
+ * \brief qx::QxSqlRelationParams : define list of parameters to transfer to relationships to manage SQL queries builded by QxOrm library
+ */
 class QxSqlRelationParams
 {
 
 protected:
 
-   long                 m_lIndex;      // Current sql relation index
-   long                 m_lOffset;     // Current sql query offset
-   QString *            m_sql;         // Current sql query
-   IxSqlQueryBuilder *  m_builder;     // Current sql query builder
-   QSqlQuery *          m_query;       // Current sql query connected to database
-   QSqlDatabase *       m_database;    // Current sql database connexion
-   void *               m_pOwner;      // Owner to current object to resolve input/output
+   long                 m_lIndex;      //!< Current SQL relation index
+   long                 m_lOffset;     //!< Current SQL query offset
+   QString *            m_sql;         //!< Current SQL query
+   IxSqlQueryBuilder *  m_builder;     //!< Current SQL query builder
+   QSqlQuery *          m_query;       //!< Current SQL query connected to database
+   QSqlDatabase *       m_database;    //!< Current SQL database connexion
+   void *               m_pOwner;      //!< Owner to current object to resolve input/output
 
 public:
 

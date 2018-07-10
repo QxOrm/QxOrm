@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file get_class_name.h
+ * \author Lionel Marty
+ * \ingroup QxTraits
+ * \brief qx::trait::get_class_name<T>::get() : return class name of type T under const char * format, T must be registered with QX_REGISTER_CLASS_NAME(T) macro
+ */
+
 #include <typeinfo>
 
 #include <boost/algorithm/string.hpp>
@@ -85,6 +92,10 @@ static inline const char * get_xml_tag() \
 namespace qx {
 namespace trait {
 
+/*!
+ * \ingroup QxTraits
+ * \brief qx::trait::get_class_name<T>::get() : return class name of type T under const char * format, T must be registered with QX_REGISTER_CLASS_NAME(T) macro
+ */
 template <typename T>
 struct get_class_name
 {

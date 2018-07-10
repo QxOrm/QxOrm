@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file QxDump.h
+ * \author Lionel Marty
+ * \ingroup QxSerialize
+ * \brief Dump all classes registered into QxOrm context using XML serialization engine
+ */
+
 #include <QxCommon/QxConfig.h>
 
 #include <QxSerialize/QxSerializeInvoker.h>
@@ -39,6 +46,10 @@
 
 namespace qx {
 
+/*!
+ * \ingroup QxSerialize
+ * \brief qx::dump(const T & t) : dump class of type T registered into QxOrm context using XML serialization engine
+ */
 template <class T>
 void dump(const T & t)
 {

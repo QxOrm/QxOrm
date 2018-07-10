@@ -26,13 +26,14 @@
  *
  */
 
-/**
- * @file    pctimer.h
+/*!
+ * \file    pctimer.h
+ * \ingroup QxMemLeak
  *
  * Function to get a high-resolution timer for Win32/Cygwin/Unix.
  *
- * @version 1.6, 2004/08/02
- * @author  Wu Yongwei
+ * \version 1.6, 2004/08/02
+ * \author  Wu Yongwei
  *
  */
 

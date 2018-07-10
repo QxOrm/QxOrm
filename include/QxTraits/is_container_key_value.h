@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file is_container_key_value.h
+ * \author Lionel Marty
+ * \ingroup QxTraits
+ * \brief qx::trait::is_container_key_value<T>::value : return true if T is a map or hash-map (with <Key, Value> template format) container from stl, boost, Qt or QxOrm library, otherwise return false
+ */
+
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/or.hpp>
 #include <boost/mpl/logical.hpp>
@@ -39,6 +46,10 @@
 namespace qx {
 namespace trait {
 
+/*!
+ * \ingroup QxTraits
+ * \brief qx::trait::is_container_key_value<T>::value : return true if T is a map or hash-map (with <Key, Value> template format) container from stl, boost, Qt or QxOrm library, otherwise return false
+ */
 template <typename T>
 class is_container_key_value
 {

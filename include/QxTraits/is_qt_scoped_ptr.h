@@ -31,6 +31,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file is_qt_scoped_ptr.h
+ * \author Lionel Marty
+ * \ingroup QxTraits
+ * \brief qx::trait::is_qt_scoped_ptr<T>::value : return true if T is a QScopedPointer<> smart-pointer of Qt library, otherwise return false
+ */
+
 #include <QtCore/qscopedpointer.h>
 
 #include <boost/mpl/if.hpp>
@@ -39,6 +46,10 @@
 namespace qx {
 namespace trait {
 
+/*!
+ * \ingroup QxTraits
+ * \brief qx::trait::is_qt_scoped_ptr<T>::value : return true if T is a QScopedPointer<> smart-pointer of Qt library, otherwise return false
+ */
 template <typename T>
 class is_qt_scoped_ptr
 {

@@ -23,6 +23,8 @@
 **
 ****************************************************************************/
 
+#if _QX_ENABLE_QT_NETWORK_DEPENDENCY
+
 #include <QxPrecompiled.h>
 
 #include <QxService/QxConnect.h>
@@ -38,3 +40,5 @@ QxConnect::~QxConnect() { ; }
 
 } // namespace service
 } // namespace qx
+
+#endif // _QX_ENABLE_QT_NETWORK_DEPENDENCY

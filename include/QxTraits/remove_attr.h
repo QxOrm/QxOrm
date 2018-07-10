@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file remove_attr.h
+ * \author Lionel Marty
+ * \ingroup QxTraits
+ * \brief qx::trait::remove_attr<T>::type : return a type without pointer, const, reference and/or volatile attributes
+ */
+
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/logical.hpp>
 
@@ -41,6 +48,10 @@
 namespace qx {
 namespace trait {
 
+/*!
+ * \ingroup QxTraits
+ * \brief qx::trait::remove_attr<T>::type : return a type without pointer, const, reference and/or volatile attributes
+ */
 template <typename T, bool bRemovePtr = true, bool bRemoveConst = true, bool bRemoveRef = true, bool bRemoveVolatile = true>
 class remove_attr
 {

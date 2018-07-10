@@ -30,12 +30,23 @@
 #pragma once
 #endif
 
+/*!
+ * \file IxSqlQueryBuilder.h
+ * \author Lionel Marty
+ * \ingroup QxDao
+ * \brief Common interface to build SQL queries to communicate with database
+ */
+
 #include <QxDataMember/IxDataMemberX.h>
 
 #include <QxDao/IxSqlRelation.h>
 
 namespace qx {
 
+/*!
+ * \ingroup QxDao
+ * \brief qx::IxSqlQueryBuilder : common interface to build SQL queries to communicate with database
+ */
 class QX_DLL_EXPORT IxSqlQueryBuilder
 {
 
@@ -49,14 +60,14 @@ public:
 
 protected:
 
-   QxCollection<QString, IxDataMember *> * m_lstDataMemberPtr;    // Collection of 'IxDataMember' to build sql query
-   IxSqlRelationX * m_lstSqlRelationPtr;                          // Collection of 'IxSqlRelation' to build sql query
-   IxDataMember * m_pDataMemberId;                                // Data member id for sql query
-   QString m_sSqlQuery;                                           // Current sql query
-   QString m_sTableName;                                          // Sql table name of current object
-   QString m_sHashRelation;                                       // Optimization : hash to retrieve sql query with relation
-   bool m_bCartesianProduct;                                      // Recordset can return cartesian product => same id in multiple records
-   type_lst_ptr_by_id_ptr m_pIdX;                                 // Collection of id (and pointer associated) to avoid multiple fetch on same id (cartesian product)
+   QxCollection<QString, IxDataMember *> * m_lstDataMemberPtr;    //!< Collection of 'IxDataMember' to build sql query
+   IxSqlRelationX * m_lstSqlRelationPtr;                          //!< Collection of 'IxSqlRelation' to build sql query
+   IxDataMember * m_pDataMemberId;                                //!< Data member id for sql query
+   QString m_sSqlQuery;                                           //!< Current sql query
+   QString m_sTableName;                                          //!< Sql table name of current object
+   QString m_sHashRelation;                                       //!< Optimization : hash to retrieve sql query with relation
+   bool m_bCartesianProduct;                                      //!< Recordset can return cartesian product => same id in multiple records
+   type_lst_ptr_by_id_ptr m_pIdX;                                 //!< Collection of id (and pointer associated) to avoid multiple fetch on same id (cartesian product)
 
 public:
 

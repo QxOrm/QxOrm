@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file is_ptr_base_of.h
+ * \author Lionel Marty
+ * \ingroup QxTraits
+ * \brief qx::trait::is_ptr_base_of<B, D>::value : return true if B and D are pointer type and (*B) is a base class of (*D) or if B and D are same type, otherwise return false
+ */
+
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/logical.hpp>
 #include <boost/type_traits/is_pointer.hpp>
@@ -37,6 +44,10 @@
 namespace qx {
 namespace trait {
 
+/*!
+ * \ingroup QxTraits
+ * \brief qx::trait::is_ptr_base_of<B, D>::value : return true if B and D are pointer type and (*B) is a base class of (*D) or if B and D are same type, otherwise return false
+ */
 template <typename B, typename D>
 class is_ptr_base_of
 {

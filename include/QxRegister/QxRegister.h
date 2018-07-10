@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file QxRegister.h
+ * \author Lionel Marty
+ * \ingroup QxRegister
+ * \brief Provide macros to register a class into QxOrm context
+ */
+
 #ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable:4996)
@@ -324,6 +331,14 @@ QX_BOOST_EXPORT_SERIALIZATION_CPP(className)
 #define QX_REGISTER_CPP_IMPORT_DLL(className) \
 QX_REGISTER_COMPLEX_CLASS_NAME_CPP_IMPORT_DLL(className, className)
 #endif // _MSC_VER
+
+#define QX_REGISTER_ABSTRACT_CLASS(className) \
+BOOST_SERIALIZATION_ASSUME_ABSTRACT(className) \
+namespace boost { namespace serialization { \
+template<class Archive> \
+inline void load_construct_data(Archive & ar, className * t, const unsigned int file_version) \
+{ Q_UNUSED(ar); Q_UNUSED(t); Q_UNUSED(file_version); } \
+} } // namespace boost::serialization
 
 /* -- Create your macro (in your precompiled header) replacing "MY_DLL"
 #ifdef _BUILDING_MY_DLL

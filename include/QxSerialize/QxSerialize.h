@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file QxSerialize.h
+ * \author Lionel Marty
+ * \ingroup QxSerialize
+ * \brief Include all files necessary to serialize most used classes defined into stl, boost and Qt libraries
+ */
+
 #include <QxCommon/QxConfig.h>
 
 #include <QxSerialize/QxSerializeFastCompil.h>

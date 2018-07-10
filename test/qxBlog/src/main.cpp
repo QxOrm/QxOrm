@@ -1,6 +1,6 @@
 #include "../include/precompiled.h"
 
-#include <QtGui/qapplication.h>
+#include <QtCore/qcoreapplication.h>
 
 #include "../include/blog.h"
 #include "../include/author.h"
@@ -12,7 +12,7 @@
 int main(int argc, char * argv[])
 {
    // Qt application
-   QApplication app(argc, argv);
+   QCoreApplication app(argc, argv);
    QFile::remove("./qxBlog.sqlite");
 
    // Parameters to connect to database

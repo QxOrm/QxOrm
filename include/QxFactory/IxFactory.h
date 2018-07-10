@@ -30,17 +30,28 @@
 #pragma once
 #endif
 
+/*!
+ * \file IxFactory.h
+ * \author Lionel Marty
+ * \ingroup QxFactory
+ * \brief Common interface for all classes that can be created dynamically using the class name
+ */
+
 #include <boost/noncopyable.hpp>
 #include <boost/any.hpp>
 
 namespace qx {
 
+/*!
+ * \ingroup QxFactory
+ * \brief qx::IxFactory : common interface for all classes that can be created dynamically using the class name
+ */
 class QX_DLL_EXPORT IxFactory : private boost::noncopyable
 {
 
 protected:
 
-   QString m_sKeyFactory;  // Factory key used by 'QxFactoryX'
+   QString m_sKeyFactory;  //!< Factory key used by the collection QxFactoryX
 
 public:
 

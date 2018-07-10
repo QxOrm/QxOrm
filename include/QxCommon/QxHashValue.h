@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file QxHashValue.h
+ * \author Lionel Marty
+ * \ingroup QxCommon
+ * \brief Specialize hash_value function for some Qt and boost types (used for example by qx::QxCollection<Key, Value> container)
+ */
+
 #include <QtCore/qstring.h>
 #include <QtCore/qdatetime.h>
 #include <QtCore/qvariant.h>

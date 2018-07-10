@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file IxFunction.h
+ * \author Lionel Marty
+ * \ingroup QxFunction
+ * \brief Common interface for all functions registered into QxOrm context (used by introspection engine)
+ */
+
 #include <boost/any.hpp>
 #include <boost/function.hpp>
 #include <boost/lexical_cast.hpp>
@@ -47,12 +54,16 @@
 
 namespace qx {
 
+/*!
+ * \ingroup QxFunction
+ * \brief qx::IxFunction : common interface for all functions registered into QxOrm context (used by introspection engine)
+ */
 class IxFunction
 {
 
 protected:
 
-   QString m_sSeparator;   // Separator character(s) for 'QString' parameters type
+   QString m_sSeparator;   //!< Separator character(s) for 'QString' parameters type
 
 public:
 

@@ -30,9 +30,20 @@
 #pragma once
 #endif
 
+/*!
+ * \file get_primary_key.h
+ * \author Lionel Marty
+ * \ingroup QxTraits
+ * \brief qx::trait::get_primary_key<T>::type : return primary key type of T, by default primary key is long type, use QX_REGISTER_PRIMARY_KEY() macro to register another type (for example QX_REGISTER_PRIMARY_KEY(T, QString))
+ */
+
 namespace qx {
 namespace trait {
 
+/*!
+ * \ingroup QxTraits
+ * \brief qx::trait::get_primary_key<T>::type : return primary key type of T, by default primary key is long type, use QX_REGISTER_PRIMARY_KEY() macro to register another type (for example QX_REGISTER_PRIMARY_KEY(T, QString))
+ */
 template <class T>
 class get_primary_key
 { public: typedef long type; };

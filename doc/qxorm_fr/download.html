@@ -63,7 +63,7 @@
   <col><col><col><col><col>
   <tbody><tr>
   <td align="left" valign="top"><font size="2">QxOrm  &gt;&gt;  Téléchargement</font></td>
-  <td align="right" valign="top"><font size="2">Version courante : QxOrm 1.1.5 (LGPL)</font></td>
+  <td align="right" valign="top"><font size="2">Version courante : QxOrm 1.1.6 (LGPL) - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
   <td width="10px"></td>
   <td width="40px" height="30px"><a href="../qxorm_fr/download.html"><img alt="Version française du site" src="./resource/FR.png" width="40" height="30" border="0"></a></td>
   <td width="40px" height="30px"><a href="../qxorm_en/download.html"><img alt="Web site english version" src="./resource/GB.png" width="40" height="30" border="0"></a></td>
@@ -88,14 +88,14 @@
                         href="http://sourceforge.net/projects/qxorm/files/" target="_blank"><img alt="Download QxOrm" src="./resource/download.jpg" width="40" height="48" border="0"></a>
                       </td>
                       <td align="justify">
-                        <a href="http://sourceforge.net/projects/qxorm/files/" target="_blank"><b>Télécharger QxOrm version 1.1.5 (source + test + documentation)</b></a><br>
+                        <a href="http://sourceforge.net/projects/qxorm/files/" target="_blank"><b>Télécharger QxOrm version 1.1.6 (source + test + documentation)</b></a><br>
                         Cette version est compatible avec <b>Visual Studio 2008 ou 2010</b> (Windows), <b>GCC 4.4.1</b> (Linux) et <b>MinGW</b> (Windows)
                       </td>
                     </tr>
                   </tbody>
                  </table>
                  <br>
-                 <i>Remarque : si le lien ci-dessus ne fonctionne pas, vous pouvez essayer de télécharger QxOrm <a href="../version/QxOrm_1.1.5.zip">en cliquant ici</a>.</i><br>
+                 <i>Remarque : si le lien ci-dessus ne fonctionne pas, vous pouvez essayer de télécharger QxOrm <a href="../version/QxOrm_1.1.6.zip">en cliquant ici</a>.</i><br>
                  <p align="justify"><b>QxOrm</b> est dépendant des excellentes librairies
                  <a href="http://www.boost.org/" target="_blank"><b>boost</b></a> (compatible à partir de la version 1.38) et
                  <a href="http://qt.nokia.com/" target="_blank"><b>Qt</b></a>
@@ -166,6 +166,12 @@
           <tbody>
             <tr>
               <td><i>
+Changes in version 1.1.6:<br>
+- QxOrm library online documentation available : 'http://www.qxorm.com/doxygen/index.html'<br>
+- Possibility to disable QtGui dependency using compilation option in 'QxConfig.h' file : _QX_ENABLE_QT_GUI_DEPENDENCY<br>
+- Possibility to disable QtNetwork dependency (so QxService module too) using compilation option in 'QxConfig.h' file : _QX_ENABLE_QT_NETWORK_DEPENDENCY<br>
+- Provide a new macro to register abstract class into QxOrm context : QX_REGISTER_ABSTRACT_CLASS()<br>
+<br>
 Changes in version 1.1.5:<br>
 - New feature available : 'QxService' module to create C++ application server<br>
 - 'QxService' provides an easy and powerful way to create services and to transfer data over network<br>

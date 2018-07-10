@@ -26,13 +26,14 @@
  *
  */
 
-/**
- * @file    debug_new.h
+/*!
+ * \file    debug_new.h
+ * \ingroup QxMemLeak
  *
  * Header file for checking leaks caused by unmatched new/delete.
  *
- * @version 4.4, 2007/12/31
- * @author  Wu Yongwei
+ * \version 4.4, 2007/12/31
+ * \author  Wu Yongwei
  *
  */
 
@@ -98,7 +99,7 @@
 /**
  * @def _DEBUG_NEW_CALLER_ADDRESS
  *
- * The expression to return the caller address.  #print_position will
+ * The expression to return the caller address. print_position will
  * later on use this address to print the position information of memory
  * operation points.
  */

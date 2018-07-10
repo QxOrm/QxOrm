@@ -23,12 +23,22 @@
 **
 ****************************************************************************/
 
+#include <QxCommon/QxConfig.h> // Need to include this file for the 'moc' process
+
+#if _QX_ENABLE_QT_NETWORK_DEPENDENCY
 #ifndef _QX_SERVICE_THREAD_H_
 #define _QX_SERVICE_THREAD_H_
 
 #ifdef _MSC_VER
 #pragma once
 #endif
+
+/*!
+ * \file QxThread.h
+ * \author Lionel Marty
+ * \ingroup QxService
+ * \brief Thread to execute a transaction of QxService module
+ */
 
 #include <QtNetwork/qtcpsocket.h>
 
@@ -39,16 +49,22 @@ namespace service {
 
 class QxThreadPool;
 
+/*!
+ * \ingroup QxService
+ * \brief qx::service::QxThread : thread to execute a transaction of QxService module
+ *
+ * <a href="http://www.qxorm.com/qxorm_en/tutorial_2.html" target="_blank">Click here to access to a tutorial to explain how to work with QxService module.</a>
+ */
 class QX_DLL_EXPORT QxThread : public QThread
 { Q_OBJECT
 
 protected:
 
-   int m_iSocketDescriptor;               // Socket descriptor to retrieve 'QTcpSocket'
-   QxThreadPool * m_pThreadPool;          // Parent thread pool to set available
-   QxTransaction_ptr m_pTransaction;      // Current service transaction
-   bool m_bIsRunning;                     // Set this flag to 'false' to terminate thread
-   QMutex m_mutex;                        // Mutex => 'QxThread' is thread-safe
+   int m_iSocketDescriptor;               //!< Socket descriptor to retrieve 'QTcpSocket'
+   QxThreadPool * m_pThreadPool;          //!< Parent thread pool to set available
+   QxTransaction_ptr m_pTransaction;      //!< Current service transaction
+   bool m_bIsRunning;                     //!< Set this flag to 'false' to terminate thread
+   QMutex m_mutex;                        //!< Mutex => 'QxThread' is thread-safe
 
 public:
 
@@ -80,3 +96,4 @@ Q_SIGNALS:
 } // namespace qx
 
 #endif // _QX_SERVICE_THREAD_H_
+#endif // _QX_ENABLE_QT_NETWORK_DEPENDENCY

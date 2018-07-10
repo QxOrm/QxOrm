@@ -26,16 +26,17 @@
  *
  */
 
-/**
- * @file    object_level_lock.h
+/*!
+ * \file    object_level_lock.h
+ * \ingroup QxMemLeak
  *
  * In essence Loki ObjectLevelLockable re-engineered to use a fast_mutex
  * class.  Check also Andrei Alexandrescu's article <a
  * href="http://www.awprofessional.com/articles/article.asp?p=25298">
  * "Multithreading and the C++ Type System"</a> for the ideas behind.
  *
- * @version 1.4, 2004/05/09
- * @author  Wu Yongwei
+ * \version 1.4, 2004/05/09
+ * \author  Wu Yongwei
  *
  */
 

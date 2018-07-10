@@ -23,6 +23,7 @@
 **
 ****************************************************************************/
 
+#if _QX_ENABLE_QT_NETWORK_DEPENDENCY
 #ifndef _QX_SERVICE_CLIENT_ASYNC_H_
 #define _QX_SERVICE_CLIENT_ASYNC_H_
 
@@ -30,19 +31,32 @@
 #pragma once
 #endif
 
+/*!
+ * \file QxClientAsync.h
+ * \author Lionel Marty
+ * \ingroup QxService
+ * \brief Provide a class helper to easily execute an asynchronous transaction using a multi-thread process
+ */
+
 #include <QxService/IxService.h>
 #include <QxService/QxTransaction.h>
 
 namespace qx {
 namespace service {
 
+/*!
+ * \ingroup QxService
+ * \brief qx::service::QxClientAsync : class helper to easily execute an asynchronous transaction using a multi-thread process
+ *
+ * <a href="http://www.qxorm.com/qxorm_en/tutorial_2.html" target="_blank">Click here to access to a tutorial to explain how to work with QxService module.</a>
+ */
 class QxClientAsync : public QThread
 {
 
 protected:
 
-   IxService_ptr m_pService;     // Service to execute in thread
-   QString m_sServiceMethod;     // Service method to call
+   IxService_ptr m_pService;     //!< Service to execute in thread
+   QString m_sServiceMethod;     //!< Service method to call
 
 public:
 
@@ -64,3 +78,4 @@ typedef boost::shared_ptr<QxClientAsync> QxClientAsync_ptr;
 } // namespace qx
 
 #endif // _QX_SERVICE_CLIENT_ASYNC_H_
+#endif // _QX_ENABLE_QT_NETWORK_DEPENDENCY

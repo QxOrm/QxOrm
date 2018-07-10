@@ -26,13 +26,14 @@
  *
  */
 
-/**
- * @file    static_mem_pool.h
+/*!
+ * \file    static_mem_pool.h
+ * \ingroup QxMemLeak
  *
  * Header file for the `static' memory pool.
  *
- * @version 1.20, 2007/10/20
- * @author  Wu Yongwei
+ * \version 1.20, 2007/10/20
+ * \author  Wu Yongwei
  *
  */
 

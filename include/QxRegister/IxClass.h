@@ -30,30 +30,41 @@
 #pragma once
 #endif
 
+/*!
+ * \file IxClass.h
+ * \author Lionel Marty
+ * \ingroup QxRegister
+ * \brief Common interface for all classes registered into QxOrm context
+ */
+
 #include <QxDataMember/IxDataMemberX.h>
 
 #include <QxFunction/IxFunction.h>
 
 namespace qx {
 
+/*!
+ * \ingroup QxRegister
+ * \brief qx::IxClass : common interface for all classes registered into QxOrm context
+ */
 class QX_DLL_EXPORT IxClass
 {
 
 protected:
 
-   IxDataMemberX * m_pDataMemberX;                    // List of data member
-   IxFunctionX_ptr m_pFctMemberX;                     // List of function member
+   IxDataMemberX * m_pDataMemberX;                    //!< List of data member
+   IxFunctionX_ptr m_pFctMemberX;                     //!< List of function member
 
-   QString m_sKey;                                    // 'IxClass' key <=> class name
-   QString m_sKeyBaseClass;                           // 'IxClass' base class key <=> base class name
-   QString m_sName;                                   // 'IxClass' name <=> database table name (if empty => class name)
-   QString m_sDescription;                            // 'IxClass' description
-   long m_lVersion;                                   // 'IxClass' version
-   bool m_bFinalClass;                                // Class cannot have base class : 'qx::trait::no_base_class_defined' and 'QObject'
-   qx::dao::strategy::inheritance m_eDaoStrategy;     // Dao class strategy to access data member
+   QString m_sKey;                                    //!< 'IxClass' key <=> class name
+   QString m_sKeyBaseClass;                           //!< 'IxClass' base class key <=> base class name
+   QString m_sName;                                   //!< 'IxClass' name <=> database table name (if empty => class name)
+   QString m_sDescription;                            //!< 'IxClass' description
+   long m_lVersion;                                   //!< 'IxClass' version
+   bool m_bFinalClass;                                //!< Class without base class (for example, qx::trait::no_base_class_defined and QObject)
+   qx::dao::strategy::inheritance m_eDaoStrategy;     //!< Dao class strategy to access data member
 
-   QByteArray m_byteName;                             // Optimization to retrieve name under "const char *" format
-   const char * m_pName;                              // Optimization to retrieve name under "const char *" format
+   QByteArray m_byteName;                             //!< Optimization to retrieve name under "const char *" format
+   const char * m_pName;                              //!< Optimization to retrieve name under "const char *" format
 
 protected:
 

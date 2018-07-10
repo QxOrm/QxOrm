@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file IxDataMember.h
+ * \author Lionel Marty
+ * \ingroup QxDataMember
+ * \brief Common interface for all class properties registered into QxOrm context
+ */
+
 #ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable:4996)
@@ -60,39 +67,43 @@ namespace qx {
 
 class IxDataMemberX;
 
+/*!
+ * \ingroup QxDataMember
+ * \brief qx::IxDataMember : common interface for all class properties registered into QxOrm context
+ */
 class QX_DLL_EXPORT IxDataMember
 {
 
 protected:
 
-   QString     m_sKey;              // Data key
-   QString     m_sName;             // Data name <=> database record name (if empty => data key)
-   QString     m_sNameParent;       // Data parent name <=> database table name
-   QString     m_sDescription;      // Data description
-   QString     m_sFormat;           // Data format ('%04d' for example)
-   QString     m_sSqlType;          // Data sql type
-   QString     m_sSqlAlias;         // Data sql alias
-   long        m_lVersion;          // Data version creation
-   bool        m_bSerialize;        // Data must be serialized
-   bool        m_bDao;              // Data is associated with a data source
-   QVariant    m_vDefaultValue;     // Data default value under QVariant format
-   QVariant    m_vMinValue;         // Data minimum value under QVariant format
-   QVariant    m_vMaxValue;         // Data maximum value under QVariant format
-   int         m_iPrecision;        // Data precision for numerics values (double, float, etc...)
-   int         m_iMinLength;        // Data minimum length (-1 <=> no min length)
-   int         m_iMaxLength;        // Data maximum length (-1 <=> no max length)
-   bool        m_bRequired;         // Data is required or optional
-   bool        m_bReadOnly;         // Data is read-only
-   bool        m_bAutoIncrement;    // Data value is auto-generated (auto-increment)
-   bool        m_bNotNull;          // Data can be null or not
-   bool        m_bIsPrimaryKey;     // Data is a primary key
+   QString     m_sKey;              //!< Data key
+   QString     m_sName;             //!< Data name <=> database record name (if empty => data key)
+   QString     m_sNameParent;       //!< Data parent name <=> database table name
+   QString     m_sDescription;      //!< Data description
+   QString     m_sFormat;           //!< Data format ('%04d' for example)
+   QString     m_sSqlType;          //!< Data sql type
+   QString     m_sSqlAlias;         //!< Data sql alias
+   long        m_lVersion;          //!< Data version creation
+   bool        m_bSerialize;        //!< Data must be serialized
+   bool        m_bDao;              //!< Data is associated with a data source
+   QVariant    m_vDefaultValue;     //!< Data default value under QVariant format
+   QVariant    m_vMinValue;         //!< Data minimum value under QVariant format
+   QVariant    m_vMaxValue;         //!< Data maximum value under QVariant format
+   int         m_iPrecision;        //!< Data precision for numerics values (double, float, etc...)
+   int         m_iMinLength;        //!< Data minimum length (-1 <=> no min length)
+   int         m_iMaxLength;        //!< Data maximum length (-1 <=> no max length)
+   bool        m_bRequired;         //!< Data is required or optional
+   bool        m_bReadOnly;         //!< Data is read-only
+   bool        m_bAutoIncrement;    //!< Data value is auto-generated (auto-increment)
+   bool        m_bNotNull;          //!< Data can be null or not
+   bool        m_bIsPrimaryKey;     //!< Data is a primary key
 
-   QByteArray m_byteName;           // Optimization to retrieve name under "const char *" format
-   const char * m_pName;            // Optimization to retrieve name under "const char *" format
-   QStringList m_lstNames;          // Particular case of "boost::tuple<>" data member (multi-column primary key, composite key)
+   QByteArray m_byteName;           //!< Optimization to retrieve name under "const char *" format
+   const char * m_pName;            //!< Optimization to retrieve name under "const char *" format
+   QStringList m_lstNames;          //!< Particular case of "boost::tuple<>" data member (multi-column primary key, composite key)
 
-   boost::scoped_ptr<IxSqlRelation> m_pSqlRelation;   // Sql relation to build/resolve sql query
-   IxDataMemberX * m_pParent;                         // 'IxDataMemberX' parent
+   boost::scoped_ptr<IxSqlRelation> m_pSqlRelation;   //!< Sql relation to build/resolve sql query
+   IxDataMemberX * m_pParent;                         //!< 'IxDataMemberX' parent
 
 public:
 

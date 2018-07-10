@@ -1,4 +1,4 @@
-#include <QtGui/qapplication.h>
+#include <QtCore/qcoreapplication.h>
 
 #include "../include/precompiled.h"
 
@@ -15,7 +15,7 @@ struct test_class_fct { int class_fct() { qDebug("[QxOrm] %s", "'test_class_fct:
 
 int main(int argc, char * argv[])
 {
-   QApplication app(argc, argv);
+   QCoreApplication app(argc, argv);
 
    //--------------------------------
 

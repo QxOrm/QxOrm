@@ -23,6 +23,16 @@
 ##
 #############################################################################
 
+############################
+# Qt GUI module dependency #
+############################
+
+# To remove QtGui dependency :
+#   1- in "./include/QxCommon/QxConfig.h" file, modify "_QX_ENABLE_QT_GUI_DEPENDENCY" constant to : "#define _QX_ENABLE_QT_GUI_DEPENDENCY 0"
+#   2- in "./QxOrm.pri" file, add the following line : "QT -= gui"
+
+# QT -= gui
+
 ###############################
 # boost Library Configuration #
 ###############################
@@ -53,9 +63,12 @@ QT += xml
 QT += sql
 MOC_DIR = ./qt/moc
 RCC_DIR = ./qt/rcc/src
+
+gui {
 UI_DIR = ./qt/ui
 UI_HEADERS_DIR = ./qt/ui/include
 UI_SOURCES_DIR = ./qt/ui/src
+} # gui
 
 #############################
 # Compiler / Linker Options #

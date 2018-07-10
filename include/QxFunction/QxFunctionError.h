@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file QxFunctionError.h
+ * \author Lionel Marty
+ * \ingroup QxFunction
+ * \brief Define all messages when an error occured using QxFunction module of QxOrm library
+ */
+
 #define QX_FUNCTION_ERR_NUMBER_PARAMS              "Incorrect parameters count"
 #define QX_FUNCTION_ERR_INVALID_PARAM              "Invalid parameter at position 'XXX'"
 #define QX_FUNCTION_ERR_INVALID_FCT                "Invalid function"

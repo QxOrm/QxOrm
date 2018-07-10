@@ -23,6 +23,8 @@
 **
 ****************************************************************************/
 
+#if _QX_ENABLE_QT_GUI_DEPENDENCY
+
 #include <QxPrecompiled.h>
 
 #include <QxSerialize/Qt/QxSerialize_QImage.h>
@@ -67,3 +69,5 @@ inline void qx_load(Archive & ar, QImage & t, const unsigned int file_version)
 } // namespace serialization
 
 QX_SERIALIZE_FAST_COMPIL_SAVE_LOAD_CPP(QImage)
+
+#endif // _QX_ENABLE_QT_GUI_DEPENDENCY

@@ -26,13 +26,14 @@
  *
  */
 
-/**
- * @file    static_assert.h
+/*!
+ * \file    static_assert.h
+ * \ingroup QxMemLeak
  *
  * Template class to check validity duing compile time (adapted from Loki).
  *
- * @version 1.2, 2005/11/22
- * @author  Wu Yongwei
+ * \version 1.2, 2005/11/22
+ * \author  Wu Yongwei
  *
  */
 

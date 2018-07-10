@@ -23,6 +23,8 @@
 **
 ****************************************************************************/
 
+#if _QX_ENABLE_QT_NETWORK_DEPENDENCY
+
 #include <QxPrecompiled.h>
 
 #include <QtCore/quuid.h>
@@ -245,3 +247,5 @@ inline void qx_load(Archive & ar, qx::service::QxTransaction & t, const unsigned
 } // namespace serialization
 
 QX_REGISTER_INTERNAL_HELPER_END_FILE_CPP(qx::service::QxTransaction)
+
+#endif // _QX_ENABLE_QT_NETWORK_DEPENDENCY

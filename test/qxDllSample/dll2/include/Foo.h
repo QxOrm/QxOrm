@@ -20,6 +20,8 @@ public:
    Foo() : BaseClassTrigger(), m_pBarX(NULL) { ; }
    virtual ~Foo()                            { reset(); }
 
+   virtual void makeAbstractClass() { ; }
+
    QString getName() const    { return m_sName; }
    QString getDesc() const    { return m_sDesc; }
    BarX * getBarX() const     { return m_pBarX; }

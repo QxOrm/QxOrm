@@ -30,34 +30,56 @@
 #pragma once
 #endif
 
+/*!
+ * \file QxCollectionIterator.h
+ * \author Lionel Marty
+ * \ingroup QxCollection
+ * \brief Java-style iterator to iterate over a qx::QxCollection<Key, Value> container
+ */
+
 #include <boost/noncopyable.hpp>
 
 #include <QxCollection/QxCollection.h>
 
 namespace qx {
 
+/*!
+ * \ingroup QxCollection
+ * \brief qx::QxCollectionIterator : Java-style iterator to iterate over a qx::QxCollection<Key, Value> container
+ *
+ * Quick sample using qx::QxCollectionIterator Java-style iterator :
+ * \code
+// iterate over a drugs container using 'qx::QxCollectionIterator' Java-style iterator
+qx::QxCollectionIterator<QString, drug_ptr> itr(lstDrugs);
+while (itr.next())
+{
+   QString code = itr.key();
+   qDebug() << qPrintable(itr.value()->name) << " " << qPrintable(itr.value()->desc);
+}
+ * \endcode
+ */
 template <typename Key, typename Value>
 class QxCollectionIterator : private boost::noncopyable
 {
 
 private:
 
-   const QxCollection<Key, Value> * m_pCollection;    // Collection to iterate
-   long m_lCurrIndex;                                 // Current index (position) in the collection
+   const QxCollection<Key, Value> * m_pCollection;    //!< Collection to iterate over
+   long m_lCurrIndex;                                 //!< Current index (position) in the collection
 
 public:
 
-   QxCollectionIterator(const QxCollection<Key, Value> & col);
-   ~QxCollectionIterator();
+   QxCollectionIterator(const QxCollection<Key, Value> & col);    //!< Construct an iterator for traversing the collection. The iterator is set to be at the front of the list (before the first item)
+   ~QxCollectionIterator();                                       //!< Destroy the iterator
 
-   inline const Key & key() const;
-   inline const Value & value() const;
+   inline const Key & key() const;        //!< Return the 'key' at current position
+   inline const Value & value() const;    //!< Return the 'value' at current position
 
-   inline void toFirst();
-   inline void toLast();
+   inline void toFirst();                 //!< Move the iterator to the front of the container (before the first item)
+   inline void toLast();                  //!< Move the iterator to the back of the container (after the last item)
 
-   inline bool next();
-   inline bool previous();
+   inline bool next();                    //!< Advance the iterator by one position. Return 'true' if there is at least one item ahead of the iterator, i.e. the iterator is not at the back of the container; otherwise return 'false'
+   inline bool previous();                //!< Move the iterator back by one position. Return 'true' if there is at least one item behind the iterator, i.e. the iterator is not at the front of the container; otherwise return 'false'
 
 };
 

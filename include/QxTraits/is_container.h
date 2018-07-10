@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file is_container.h
+ * \author Lionel Marty
+ * \ingroup QxTraits
+ * \brief qx::trait::is_container<T>::value : return true if T is a container from stl, boost, Qt or QxOrm library, otherwise return false
+ */
+
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/or.hpp>
 #include <boost/mpl/logical.hpp>
@@ -53,6 +60,10 @@
 namespace qx {
 namespace trait {
 
+/*!
+ * \ingroup QxTraits
+ * \brief qx::trait::is_container<T>::value : return true if T is a container from stl, boost, Qt or QxOrm library, otherwise return false
+ */
 template <typename T>
 class is_container
 {

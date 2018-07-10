@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file archive_wide_traits.h
+ * \author Lionel Marty
+ * \ingroup QxTraits
+ * \brief qx::trait::is_archive_wide<T>::value : define if a boost::archive type uses wide string character and stream (for example std::wstring) or not (for example std::string)
+ */
+
 #include <string>
 #include <iostream>
 #include <sstream>
@@ -45,6 +52,10 @@
 namespace qx {
 namespace trait {
 
+/*!
+ * \ingroup QxTraits
+ * \brief qx::trait::is_archive_wide<T>::value : define if a boost::archive type uses wide string character and stream (for example std::wstring) or not (for example std::string)
+ */
 template <typename T> struct is_archive_wide { enum { value = false }; };
 
 #if _QX_SERIALIZE_WIDE_BINARY

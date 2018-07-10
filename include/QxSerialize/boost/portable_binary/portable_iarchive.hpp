@@ -55,7 +55,7 @@
  *       integer type size exception when reading it with version 1.0. Thanks to
  *       Markus Frohnmaier for testing the archives and finding the bug.
  *
- * \copyright The boost software license applies.
+ * \note The boost software license applies.
  */
 /*****************************************************************************/
 
@@ -146,7 +146,7 @@ namespace eos {
    * \note The class is based on the portable binary example by Robert Ramey and
    *	     uses Beman Dawes endian library plus fp_utilities by Johan Rade.
    *
-   * \todo Robert Ramey changed his example in boost 1.36 and no longer inherits
+   * \note Robert Ramey changed his example in boost 1.36 and no longer inherits
    *       from binary_iarchive_impl but goes down to basic_binary_iprimitive!?
    */
    class portable_iarchive : public portable_iarchive_base
@@ -246,7 +246,7 @@ namespace eos {
       * then your floating point numbers will be truncated. This will introduce
       * small rounding off errors. 
       *
-      * \todo treat nan values using fpclassify
+      * \note treat nan values using fpclassify
       */
       template <typename T>
       typename boost::enable_if<boost::is_floating_point<T> >::type

@@ -23,6 +23,7 @@
 **
 ****************************************************************************/
 
+#if _QX_ENABLE_QT_NETWORK_DEPENDENCY
 #ifndef _IX_SERVICE_PARAMETER_H_
 #define _IX_SERVICE_PARAMETER_H_
 
@@ -30,11 +31,24 @@
 #pragma once
 #endif
 
+/*!
+ * \file IxParameter.h
+ * \author Lionel Marty
+ * \ingroup QxService
+ * \brief Common interface for all parameters transfered by QxService module of QxOrm library
+ */
+
 #include <QxRegister/QxRegisterInternalHelper.h>
 
 namespace qx {
 namespace service {
 
+/*!
+ * \ingroup QxService
+ * \brief qx::service::IxParameter : common interface for all parameters transfered by QxService module of QxOrm library
+ *
+ * <a href="http://www.qxorm.com/qxorm_en/tutorial_2.html" target="_blank">Click here to access to a tutorial to explain how to work with QxService module.</a>
+ */
 class QX_DLL_EXPORT IxParameter
 {
 
@@ -53,3 +67,4 @@ typedef boost::shared_ptr<IxParameter> IxParameter_ptr;
 QX_REGISTER_INTERNAL_HELPER_HPP(QX_DLL_EXPORT, qx::service::IxParameter, 0)
 
 #endif // _IX_SERVICE_PARAMETER_H_
+#endif // _QX_ENABLE_QT_NETWORK_DEPENDENCY

@@ -23,12 +23,20 @@
 **
 ****************************************************************************/
 
+#if _QX_ENABLE_QT_NETWORK_DEPENDENCY
 #ifndef _QX_SERVICE_CONNECT_H_
 #define _QX_SERVICE_CONNECT_H_
 
 #ifdef _MSC_VER
 #pragma once
 #endif
+
+/*!
+ * \file QxConnect.h
+ * \author Lionel Marty
+ * \ingroup QxService
+ * \brief Define connection parameters used by QxService module of QxOrm library
+ */
 
 #include <QxSingleton/QxSingleton.h>
 
@@ -53,6 +61,12 @@
 namespace qx {
 namespace service {
 
+/*!
+ * \ingroup QxService
+ * \brief qx::service::QxConnect : define connection parameters used by QxService module of QxOrm library (this class is a singleton)
+ *
+ * <a href="http://www.qxorm.com/qxorm_en/tutorial_2.html" target="_blank">Click here to access to a tutorial to explain how to work with QxService module.</a>
+ */
 class QX_DLL_EXPORT QxConnect : public qx::QxSingleton<QxConnect>
 {
 
@@ -66,12 +80,12 @@ public:
 
 protected:
 
-   QString              m_sIp;                  // Ip address
-   long                 m_lPort;                // Port number
-   serialization_type   m_eSerializationType;   // Serialization type to send data over network
-   long                 m_lThreadCount;         // Thread count to execute all transactions (cf. 'QxThreadPool')
-   int                  m_iMaxWait;             // Max wait in milliseconds for network processes
-   bool                 m_bCompressData;        // Compress data over network
+   QString              m_sIp;                  //!< Ip address
+   long                 m_lPort;                //!< Port number
+   serialization_type   m_eSerializationType;   //!< Serialization type to send data over network
+   long                 m_lThreadCount;         //!< Thread count to execute all transactions (cf. 'QxThreadPool')
+   int                  m_iMaxWait;             //!< Max wait in milliseconds for network processes
+   bool                 m_bCompressData;        //!< Compress data over network
 
 public:
 
@@ -100,3 +114,4 @@ public:
 QX_DLL_EXPORT_QX_SINGLETON_HPP(qx::service::QxConnect)
 
 #endif // _QX_SERVICE_CONNECT_H_
+#endif // _QX_ENABLE_QT_NETWORK_DEPENDENCY

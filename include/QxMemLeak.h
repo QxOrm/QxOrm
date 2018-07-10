@@ -30,6 +30,19 @@
 #pragma once
 #endif
 
+/*!
+ * \file QxMemLeak.h
+ * \author Wu Yongwei
+ * \ingroup QxMemLeak
+ * \brief QxOrm library memory leak detection (by <a href="http://wyw.dcweb.cn/leakage.htm" target="_blank">Wu Yongwei</a>)
+ *
+ * QxMemLeak module provides a fast detection of memory leaks in Debug mode once the execution of the program is finished (with indication of the file and the line => MFC-style from Microsoft).<br>
+ * This module is developed by Wu Yongwei and has undergone some modifications to be integrated into QxOrm library.<br>
+ * If another tool is already used in your projects (Valgrind for example), this functionality should not be activated.<br>
+ * To enable/disable QxMemLeak module, all is needed is to modify the constant _QX_USE_MEM_LEAK_DETECTION defined in the QxConfig.h file.<br>
+ * A recompilation of QxOrm library is necessary to take into account this modification.
+ */
+
 #include <QxMemLeak/mem_leak.h>
 
 #if _QX_INCLUDE_BOOST_SERIALIZE_EXPORT_HPP_INTO_QX_MEM_LEAK_HPP

@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file QxClassX.h
+ * \author Lionel Marty
+ * \ingroup QxRegister
+ * \brief List of all classes registered into QxOrm context
+ */
+
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/or.hpp>
 #include <boost/mpl/logical.hpp>
@@ -47,6 +54,10 @@
 
 namespace qx {
 
+/*!
+ * \ingroup QxRegister
+ * \brief qx::QxClassX : list of all classes registered into QxOrm context (this container is a singleton)
+ */
 class QX_DLL_EXPORT QxClassX : public QxSingleton<QxClassX>
 {
 

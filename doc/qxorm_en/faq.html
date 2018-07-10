@@ -63,7 +63,7 @@
   <col><col><col><col><col>
   <tbody><tr>
   <td align="left" valign="top"><font size="2">QxOrm  &gt;&gt;  Faq</font></td>
-  <td align="right" valign="top"><font size="2">Current version : QxOrm 1.1.5 (LGPL)</font></td>
+  <td align="right" valign="top"><font size="2">Current version : QxOrm 1.1.6 (LGPL) - <a href="../doxygen/index.html" target="_blank">QxOrm library online documentation</a></font></td>
   <td width="10px"></td>
   <td width="40px" height="30px"><a href="../qxorm_fr/faq.html"><img alt="Version française du site" src="./resource/FR.png" width="40" height="30" border="0"></a></td>
   <td width="40px" height="30px"><a href="../qxorm_en/faq.html"><img alt="Web site english version" src="./resource/GB.png" width="40" height="30" border="0"></a></td>
@@ -95,6 +95,8 @@
                </li><li><a href="#faq_110">How to enable/disable the module <i>QxMemLeak</i> for automatic detection of memory leaks ?</a><br>
                </li><li><a href="#faq_120">How to manage inheritance and database ?</a><br>
                </li><li><a href="#faq_130">How to define a '<i>Trigger</i>' with QxOrm ?</a><br>
+               </li><li><a href="#faq_140">How to register an abstract class into QxOrm context ?</a><br>
+               </li><li><a href="#faq_150">How to register a class defined into a namespace into QxOrm context ?</a><br>
                </li></ul>
               </td>
               <td width="200" align="center" valign="top"><a href="./resource/qt_ambassador_logo.png" target="_blank"><img alt="qt_ambassador" src="./resource/qt_ambassador_logo_150x150.png" width="150" height="150" border="0"></a><br>
@@ -811,6 +813,45 @@ void</span> BaseClassTrigger<span class="operator">::</span>onBeforeUpdate<span 
 }</span>
 </pre>
            </td></tr></tbody></table>
+           </td>
+         </tr>
+       </tbody>
+      </table>
+      <br><br>
+      <a name="faq_140"><u><b>How to register an abstract class into QxOrm context ?</b></u></a><br><br>
+      <table border="0" style="width: 100%" align="center">
+       <col>
+       <col>
+       <tbody>
+         <tr>
+           <td valign="middle" width="30"></td>
+           <td align="justify">
+           A C++ abstract class (with at least one pure virtual method) cannot be mapped to a table of a database (because it cannot be instantiated).<br>
+           However, in some case, it can be interesting to define properties into abstract class used by a persistant object (by inheritance).<br>
+           A sample of abstract class registered into QxOrm context is available in the directory <i>./test/qxDllSample/dll2/</i> of QxOrm package with the class <i>BaseClassTrigger</i>.<br>
+           To register an abstract class into QxOrm context, you have to :
+           <ul>
+           <li>register the class with '<i>void register_class</i>' like any other class ;
+           </li><li>use macro <b>QX_REGISTER_ABSTRACT_CLASS(className)</b> just after the class definition.
+           </li></ul>
+           </td>
+         </tr>
+       </tbody>
+      </table>
+      <br><br>
+      <a name="faq_150"><u><b>How to register a class defined into a namespace into QxOrm context ?</b></u></a><br><br>
+      <table border="0" style="width: 100%" align="center">
+       <col>
+       <col>
+       <tbody>
+         <tr>
+           <td valign="middle" width="30"></td>
+           <td align="justify">
+           If a class is defined into a namespace, a compilation error occurs using macros : <b>QX_REGISTER_HPP</b> and <b>QX_REGISTER_CPP</b>.<br>
+           To avoid this compilation error, it is necessary to use followings macros : <b>QX_REGISTER_COMPLEX_CLASS_NAME_HPP</b> and <b>QX_REGISTER_COMPLEX_CLASS_NAME_CPP</b>.<br>
+           You can find a sample in the directory <i>./test/qxDllSample/dll1/</i> of QxOrm package with the class <i>CPerson</i> defined into namespace <i>qx::test</i> :<br>
+           <br>
+           * <i><b>QX_REGISTER_COMPLEX_CLASS_NAME_HPP_QX_DLL1(qx::test::CPerson, QObject, 0, qx_test_CPerson)</b></i>
            </td>
          </tr>
        </tbody>

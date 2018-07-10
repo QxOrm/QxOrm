@@ -30,7 +30,15 @@
 #pragma once
 #endif
 
+/*!
+ * \file QxDataMemberX.h
+ * \author Lionel Marty
+ * \ingroup QxDataMember
+ * \brief Concrete list of class properties registered into QxOrm context
+ */
+
 #include <boost/type_traits/is_integral.hpp>
+#include <boost/type_traits/is_base_of.hpp>
 
 #include <QxDataMember/IxDataMemberX.h>
 #include <QxDataMember/QxDataMember.h>
@@ -47,6 +55,10 @@
 
 namespace qx {
 
+/*!
+ * \ingroup QxDataMember
+ * \brief qx::QxDataMemberX<T> : concrete list of properties registered into QxOrm context for the class T
+ */
 template <class T>
 class QxDataMemberX : public IxDataMemberX, public QxSingleton< QxDataMemberX<T> >
 {
@@ -60,7 +72,7 @@ public:
 
 protected:
 
-   QxDataMember<type_primary_key, T> * m_pDataMemberId;  // Data member id with primary key type
+   QxDataMember<type_primary_key, T> * m_pDataMemberId;  //!< Data member id with primary key type
 
 protected:
 
@@ -80,19 +92,19 @@ public:
    IxDataMember * id(type_primary_key T::* pDataMemberId, const QString & sKey);
    IxDataMember * id(type_primary_key T::* pDataMemberId, const QString & sKey, long lVersion);
 
-   template <typename V> IxDataMember * add(V T::* pData, const QString & sKey);
-   template <typename V> IxDataMember * add(V T::* pData, const QString & sKey, long lVersion);
-   template <typename V> IxDataMember * add(V T::* pData, const QString & sKey, long lVersion, bool bSerialize);
-   template <typename V> IxDataMember * add(V T::* pData, const QString & sKey, long lVersion, bool bSerialize, bool bDao);
+   template <typename V, typename U> IxDataMember * add(V U::* pData, const QString & sKey);
+   template <typename V, typename U> IxDataMember * add(V U::* pData, const QString & sKey, long lVersion);
+   template <typename V, typename U> IxDataMember * add(V U::* pData, const QString & sKey, long lVersion, bool bSerialize);
+   template <typename V, typename U> IxDataMember * add(V U::* pData, const QString & sKey, long lVersion, bool bSerialize, bool bDao);
 
-   template <typename V> IxSqlRelation * relationOneToOne(V T::* pData, const QString & sKey);
-   template <typename V> IxSqlRelation * relationOneToOne(V T::* pData, const QString & sKey, long lVersion);
-   template <typename V> IxSqlRelation * relationManyToOne(V T::* pData, const QString & sKey);
-   template <typename V> IxSqlRelation * relationManyToOne(V T::* pData, const QString & sKey, long lVersion);
-   template <typename V> IxSqlRelation * relationOneToMany(V T::* pData, const QString & sKey, const QString & sForeignKey);
-   template <typename V> IxSqlRelation * relationOneToMany(V T::* pData, const QString & sKey, const QString & sForeignKey, long lVersion);
-   template <typename V> IxSqlRelation * relationManyToMany(V T::* pData, const QString & sKey, const QString & sExtraTable, const QString & sForeignKeyOwner, const QString & sForeignKeyDataType);
-   template <typename V> IxSqlRelation * relationManyToMany(V T::* pData, const QString & sKey, const QString & sExtraTable, const QString & sForeignKeyOwner, const QString & sForeignKeyDataType, long lVersion);
+   template <typename V, typename U> IxSqlRelation * relationOneToOne(V U::* pData, const QString & sKey);
+   template <typename V, typename U> IxSqlRelation * relationOneToOne(V U::* pData, const QString & sKey, long lVersion);
+   template <typename V, typename U> IxSqlRelation * relationManyToOne(V U::* pData, const QString & sKey);
+   template <typename V, typename U> IxSqlRelation * relationManyToOne(V U::* pData, const QString & sKey, long lVersion);
+   template <typename V, typename U> IxSqlRelation * relationOneToMany(V U::* pData, const QString & sKey, const QString & sForeignKey);
+   template <typename V, typename U> IxSqlRelation * relationOneToMany(V U::* pData, const QString & sKey, const QString & sForeignKey, long lVersion);
+   template <typename V, typename U> IxSqlRelation * relationManyToMany(V U::* pData, const QString & sKey, const QString & sExtraTable, const QString & sForeignKeyOwner, const QString & sForeignKeyDataType);
+   template <typename V, typename U> IxSqlRelation * relationManyToMany(V U::* pData, const QString & sKey, const QString & sExtraTable, const QString & sForeignKeyOwner, const QString & sForeignKeyDataType, long lVersion);
 
    template <class Archive> inline void toArchive(const T * pOwner, Archive & ar, const unsigned int file_version) const;
    template <class Archive> inline void fromArchive(T * pOwner, Archive & ar, const unsigned int file_version);

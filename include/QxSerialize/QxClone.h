@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file QxClone.h
+ * \author Lionel Marty
+ * \ingroup QxSerialize
+ * \brief Clone all classes registered into QxOrm context using QxOrm library serialization engine
+ */
+
 #include <string>
 #include <iostream>
 #include <sstream>
@@ -46,6 +53,10 @@
 
 namespace qx {
 
+/*!
+ * \ingroup QxSerialize
+ * \brief qx::clone_to_nude_ptr(const T & obj) : return a nude pointer (be careful with memory leak) of a new instance of type T cloned from obj
+ */
 template <class T>
 T * clone_to_nude_ptr(const T & obj)
 {
@@ -74,10 +85,18 @@ T * clone_to_nude_ptr(const T & obj)
    return (bDeserializeOk ? pClone : NULL);
 }
 
+/*!
+ * \ingroup QxSerialize
+ * \brief qx::clone(const T & obj) : return a boost smart-pointer (boost::shared_ptr<T>) of a new instance of type T cloned from obj
+ */
 template <class T>
 boost::shared_ptr<T> clone(const T & obj)
 { T * ptr = qx::clone_to_nude_ptr<T>(obj); return boost::shared_ptr<T>(ptr); }
 
+/*!
+ * \ingroup QxSerialize
+ * \brief qx::clone_to_qt_shared_ptr(const T & obj) : return a Qt smart-pointer (QSharedPointer<T>) of a new instance of type T cloned from obj
+ */
 template <class T>
 QSharedPointer<T> clone_to_qt_shared_ptr(const T & obj)
 { T * ptr = qx::clone_to_nude_ptr<T>(obj); return QSharedPointer<T>(ptr); }

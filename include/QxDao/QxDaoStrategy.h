@@ -30,9 +30,29 @@
 #pragma once
 #endif
 
+/*!
+ * \file QxDaoStrategy.h
+ * \author Lionel Marty
+ * \ingroup QxDao
+ * \brief Class inheritance strategy and database (Concrete Table Inheritance is the default strategy used by QxOrm library)
+ */
+
 namespace qx {
 namespace dao {
 
+/*!
+ * \ingroup QxDao
+ * \brief Class inheritance strategy and database (Concrete Table Inheritance is the default strategy used by QxOrm library)
+ *
+ * With ORM tools, there is usually 3 strategies to manage inheritance and database :
+ * - Single Table Inheritance
+ * - Class Table Inheritance
+ * - Concrete Table Inheritance
+ *
+ * QxOrm works by default with Concrete Table Inheritance strategy (others are not supported yet).
+ * Many tutorials and forums are available on internet to more details about ORM inheritance and database.
+ * You can find a sample in the directory ./test/qxDllSample/dll2/ with the class BaseClassTrigger.
+ */
 struct strategy
 {
 

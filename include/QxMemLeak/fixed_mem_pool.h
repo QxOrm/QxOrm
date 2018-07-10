@@ -26,8 +26,9 @@
  *
  */
 
-/**
- * @file    fixed_mem_pool.h
+/*!
+ * \file    fixed_mem_pool.h
+ * \ingroup QxMemLeak
  *
  * Definition of a fixed-size memory pool template for structs/classes.
  * This is a easy-to-use class template for pre-allocated memory pools.
@@ -45,8 +46,8 @@
  * - Optionally, call fixed_mem_pool<_Cls>::get_alloc_count to check
  *   memory usage when the program is running
  *
- * @version 1.14, 2005/09/19
- * @author  Wu Yongwei
+ * \version 1.14, 2005/09/19
+ * \author  Wu Yongwei
  *
  */
 

@@ -30,6 +30,22 @@
 #pragma once
 #endif
 
+/*!
+ * \file QxForeach.h
+ * \author Lionel Marty
+ * \ingroup QxCollection
+ * \brief foreach-style (based on BOOST_FOREACH macro) to iterate over all stl, boost and Qt containers + qx::QxCollection<Key, Value> QxOrm library container
+ *
+ * Quick sample using QX_FOREACH (or _foreach) macro :
+ * \code
+// iterate over drugs container using QxOrm '_foreach' keyword
+_foreach(drug_ptr p, lstDrugs)
+{ qDebug() << qPrintable(p->name) << " " << qPrintable(p->desc); }
+ * \endcode
+ *
+ * \note QxOrm library provides also other macros to iterator over all containers : _foreach_reverse, _foreach_if, _foreach_reverse_if
+ */
+
 #include <boost/foreach.hpp>
 
 #ifndef BOOST_FOREACH_ID

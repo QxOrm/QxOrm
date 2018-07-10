@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file QxSingletonX.h
+ * \author Lionel Marty
+ * \ingroup QxSingleton
+ * \brief List of all singleton defined by QxOrm library
+ */
+
 #include <QtCore/qhash.h>
 
 #include <QxSingleton/QxSingleton.h>
@@ -38,6 +45,10 @@
 
 namespace qx {
 
+/*!
+ * \ingroup QxSingleton
+ * \brief qx::QxSingletonX : list of all singleton defined by QxOrm library (this container is also a singleton)
+ */
 class QX_DLL_EXPORT QxSingletonX : public QxSingleton<QxSingletonX>
 {
 
@@ -46,9 +57,9 @@ class QX_DLL_EXPORT QxSingletonX : public QxSingleton<QxSingletonX>
 
 private:
 
-   static QHash<QString, IxSingleton *> m_mapSingletonX; // Collection of all 'IxSingleton' pointer
-   static QMutex m_oMutexSingletonX;                     // Mutex -> 'QxSingletonX' is thread-safe
-   static bool m_bOnClearSingletonX;                     // Clear collection of 'IxSingleton' in event
+   static QHash<QString, IxSingleton *> m_mapSingletonX; //!< Collection of all 'IxSingleton' pointer
+   static QMutex m_oMutexSingletonX;                     //!< Mutex -> 'QxSingletonX' is thread-safe
+   static bool m_bOnClearSingletonX;                     //!< Clear collection of 'IxSingleton' in event
 
 private:
 

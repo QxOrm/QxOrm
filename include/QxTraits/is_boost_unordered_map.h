@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file is_boost_unordered_map.h
+ * \author Lionel Marty
+ * \ingroup QxTraits
+ * \brief qx::trait::is_boost_unordered_map<T>::value : return true if T is a boost::unordered_map<> or boost::unordered_multimap<> container, otherwise return false
+ */
+
 #include <boost/unordered_map.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/logical.hpp>
@@ -37,6 +44,10 @@
 namespace qx {
 namespace trait {
 
+/*!
+ * \ingroup QxTraits
+ * \brief qx::trait::is_boost_unordered_map<T>::value : return true if T is a boost::unordered_map<> or boost::unordered_multimap<> container, otherwise return false
+ */
 template <typename T>
 class is_boost_unordered_map
 {

@@ -26,13 +26,14 @@
  *
  */
 
-/**
- * @file    set_assign.h
+/*!
+ * \file    set_assign.h
+ * \ingroup QxMemLeak
  *
  * Definition of template functions set_assign_union and set_assign_difference.
  *
- * @version 1.5, 2004/07/26
- * @author  Wu Yongwei
+ * \version 1.5, 2004/07/26
+ * \author  Wu Yongwei
  *
  */
 

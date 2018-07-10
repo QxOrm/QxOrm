@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file QxFactory.h
+ * \author Lionel Marty
+ * \ingroup QxFactory
+ * \brief Concrete factory class to create object dynamically using the class name
+ */
+
 #include <boost/shared_ptr.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_abstract.hpp>
@@ -47,6 +54,10 @@ namespace qx {
 template <class T>
 class QxClass;
 
+/*!
+ * \ingroup QxFactory
+ * \brief qx::QxFactory<T> : concrete factory class to create object of type T dynamically using the class name
+ */
 template <class T>
 class QxFactory : public IxFactory
 {

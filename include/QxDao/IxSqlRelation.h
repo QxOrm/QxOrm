@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file IxSqlRelation.h
+ * \author Lionel Marty
+ * \ingroup QxDao
+ * \brief Common interface for all relationships defined between 2 classes (or between 2 tables in database)
+ */
+
 #include <QxDao/QxSqlRelationParams.h>
 
 #include <QxCollection/QxCollection.h>
@@ -42,6 +49,10 @@ class IxSqlRelation;
 
 typedef QxCollection<QString, IxSqlRelation *> IxSqlRelationX;
 
+/*!
+ * \ingroup QxDao
+ * \brief qx::IxSqlRelation : common interface for all relationships defined between 2 classes (or between 2 tables in database)
+ */
 class QX_DLL_EXPORT IxSqlRelation
 {
 
@@ -51,14 +62,14 @@ public:
 
 protected:
 
-   IxDataMember *    m_pDataMember;       // 'IxDataMember' associated wth sql relation
-   IxDataMemberX *   m_pDataMemberX;      // Collection of 'IxDataMember' : parent of 'm_pDataMember'
-   IxDataMember *    m_pDataMemberId;     // 'IxDataMember' id of 'm_pDataMemberX'
-   long              m_lOffsetRelation;   // Generic offset for sql relation
-   join_type         m_eJoinType;         // Join type to build sql query
+   IxDataMember *    m_pDataMember;       //!< 'IxDataMember' associated wth sql relation
+   IxDataMemberX *   m_pDataMemberX;      //!< Collection of 'IxDataMember' : parent of 'm_pDataMember'
+   IxDataMember *    m_pDataMemberId;     //!< 'IxDataMember' id of 'm_pDataMemberX'
+   long              m_lOffsetRelation;   //!< Generic offset for sql relation
+   join_type         m_eJoinType;         //!< Join type to build sql query
 
-   QxCollection<QString, IxDataMember *> * m_lstDataMemberPtr;    // Optimization : handle to collection of 'IxDataMember'
-   IxSqlRelationX * m_lstSqlRelationPtr;                          // Optimization : handle to collection of 'IxSqlRelation'
+   QxCollection<QString, IxDataMember *> * m_lstDataMemberPtr;    //!< Optimization : handle to collection of 'IxDataMember'
+   IxSqlRelationX * m_lstSqlRelationPtr;                          //!< Optimization : handle to collection of 'IxSqlRelation'
 
 public:
 

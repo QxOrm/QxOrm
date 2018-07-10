@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file is_qx_pod.h
+ * \author Lionel Marty
+ * \ingroup QxTraits
+ * \brief qx::trait::is_qx_pod<T>::value : return true if T is a POD type and not a pointer
+ */
+
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/logical.hpp>
 #include <boost/type_traits/is_pod.hpp>
@@ -39,6 +46,10 @@
 namespace qx {
 namespace trait {
 
+/*!
+ * \ingroup QxTraits
+ * \brief qx::trait::is_qx_pod<T>::value : return true if T is a POD type and not a pointer
+ */
 template <typename T>
 struct is_qx_pod
 {

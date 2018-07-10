@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file is_std_set.h
+ * \author Lionel Marty
+ * \ingroup QxTraits
+ * \brief qx::trait::is_std_set<T>::value : return true if T is a std::set<> container of stl library, otherwise return false
+ */
+
 #include <set>
 
 #include <boost/mpl/if.hpp>
@@ -38,6 +45,10 @@
 namespace qx {
 namespace trait {
 
+/*!
+ * \ingroup QxTraits
+ * \brief qx::trait::is_std_set<T>::value : return true if T is a std::set<> container of stl library, otherwise return false
+ */
 template <typename T>
 class is_std_set
 {

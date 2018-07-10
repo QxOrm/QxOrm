@@ -30,10 +30,21 @@
 #pragma once
 #endif
 
+/*!
+ * \file QxSqlRelation_ManyToOne.h
+ * \author Lionel Marty
+ * \ingroup QxDao
+ * \brief Manage a relationship many-to-one defined between 2 classes (or between 2 tables in database)
+ */
+
 #include <QxDao/QxSqlRelation.h>
 
 namespace qx {
 
+/*!
+ * \ingroup QxDao
+ * \brief qx::QxSqlRelation_ManyToOne<DataType, Owner> : manage a relationship many-to-one defined between 2 classes (or between 2 tables in database)
+ */
 template <class DataType, class Owner>
 class QxSqlRelation_ManyToOne : public QxSqlRelation<DataType, Owner>
 {

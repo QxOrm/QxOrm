@@ -26,14 +26,15 @@
  *
  */
 
-/**
- * @file    cont_ptr_utils.h
+/*!
+ * \file    cont_ptr_utils.h
+ * \ingroup QxMemLeak
  *
  * Utility functors for containers of pointers (adapted from Scott
  * Meyers' <em>Effective STL</em>).
  *
- * @version 1.4, 2007/09/12
- * @author  Wu Yongwei
+ * \version 1.4, 2007/09/12
+ * \author  Wu Yongwei
  *
  */
 

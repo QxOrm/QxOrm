@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file QxBool.h
+ * \author Lionel Marty
+ * \ingroup QxCommon
+ * \brief qx_bool : QxOrm library boolean type with code and description message when an error occured
+ */
+
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/nvp.hpp>
 
@@ -39,6 +46,10 @@
 
 namespace qx {
 
+/*!
+ * \ingroup QxCommon
+ * \brief qx_bool : boolean type with code and description message when an error occured
+ */
 class QxBool
 {
 
@@ -46,9 +57,9 @@ class QxBool
 
 private:
 
-   bool m_bValue;    // Data boolean value
-   long m_lCode;     // Error code when value is 'false'
-   QString m_sDesc;  // Error description when value is 'false'
+   bool m_bValue;    //!< Data boolean value
+   long m_lCode;     //!< Error code when value is false
+   QString m_sDesc;  //!< Error description when value is false
 
 public:
 

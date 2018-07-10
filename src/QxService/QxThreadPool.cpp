@@ -23,6 +23,8 @@
 **
 ****************************************************************************/
 
+#if _QX_ENABLE_QT_NETWORK_DEPENDENCY
+
 #include <QxPrecompiled.h>
 
 #include <QtNetwork/qhostaddress.h>
@@ -111,3 +113,5 @@ void QxThreadPool::clearServices()
 
 } // namespace service
 } // namespace qx
+
+#endif // _QX_ENABLE_QT_NETWORK_DEPENDENCY

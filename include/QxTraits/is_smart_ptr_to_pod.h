@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file is_smart_ptr_to_pod.h
+ * \author Lionel Marty
+ * \ingroup QxTraits
+ * \brief qx::trait::is_smart_ptr_to_pod<T>::value : return true if T is a smart-pointer of boost, Qt or QxOrm libraries and (*T) is a POD type (char, int, long, etc.), otherwise return false
+ */
+
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/logical.hpp>
 
@@ -39,6 +46,10 @@
 namespace qx {
 namespace trait {
 
+/*!
+ * \ingroup QxTraits
+ * \brief qx::trait::is_smart_ptr_to_pod<T>::value : return true if T is a smart-pointer of boost, Qt or QxOrm libraries and (*T) is a POD type (char, int, long, etc.), otherwise return false
+ */
 template <typename T>
 class is_smart_ptr_to_pod
 {

@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file is_boost_unordered_set.h
+ * \author Lionel Marty
+ * \ingroup QxTraits
+ * \brief qx::trait::is_boost_unordered_set<T>::value : return true if T is a boost::unordered_set<> or boost::unordered_multiset<> container, otherwise return false
+ */
+
 #include <boost/unordered_set.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/logical.hpp>
@@ -37,6 +44,10 @@
 namespace qx {
 namespace trait {
 
+/*!
+ * \ingroup QxTraits
+ * \brief qx::trait::is_boost_unordered_set<T>::value : return true if T is a boost::unordered_set<> or boost::unordered_multiset<> container, otherwise return false
+ */
 template <typename T>
 class is_boost_unordered_set
 {

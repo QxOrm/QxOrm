@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file QxFactoryX.h
+ * \author Lionel Marty
+ * \ingroup QxFactory
+ * \brief List of all classes registered with QxOrm library factory pattern to create object instance dynamically using the class name
+ */
+
 #include <boost/shared_ptr.hpp>
 
 #include <QtCore/qhash.h>
@@ -44,6 +51,10 @@ namespace qx {
 inline boost::any create(const QString & sKey);
 template <typename T> inline T * create_nude_ptr(const QString & sKey);
 
+/*!
+ * \ingroup QxFactory
+ * \brief qx::QxFactoryX : list of all classes registered with QxOrm library factory pattern to create object instance dynamically using the class name
+ */
 class QX_DLL_EXPORT QxFactoryX : public QxSingleton<QxFactoryX>
 {
 
@@ -54,8 +65,8 @@ class QX_DLL_EXPORT QxFactoryX : public QxSingleton<QxFactoryX>
 
 protected:
 
-   QHash<QString, IxFactory *> m_mapFactoryX;   // Collection of all 'IxFactory' pointer
-   QMutex m_oMutexFactoryX;                     // Mutex -> 'QxFactoryX' is thread-safe
+   QHash<QString, IxFactory *> m_mapFactoryX;   //!< Collection of all 'IxFactory' pointer
+   QMutex m_oMutexFactoryX;                     //!< Mutex -> 'QxFactoryX' is thread-safe
 
 private:
 
@@ -73,9 +84,17 @@ private:
 
 };
 
+/*!
+ * \ingroup QxFactory
+ * \brief Return a smart-pointer new instance of object (boost::shared_ptr<T>) associated by key sKey using boost::any type (for example : qx::create("drug") return a new instance of smart-pointer drug class into boost::any type)
+ */
 inline boost::any create(const QString & sKey)
 { return qx::QxFactoryX::createInstance(sKey); }
 
+/*!
+ * \ingroup QxFactory
+ * \brief Return a nude pointer (be careful with memory leak) of type T associated by key sKey, or return NULL if sKey is not registered into factory engine
+ */
 template <typename T>
 inline T * create_nude_ptr(const QString & sKey)
 { return dynamic_cast<T *>(static_cast<T *>(qx::QxFactoryX::createInstanceNudePtr(sKey))); }

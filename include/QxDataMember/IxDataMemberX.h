@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file IxDataMemberX.h
+ * \author Lionel Marty
+ * \ingroup QxDataMember
+ * \brief Common interface for a list of IxDataMember class properties registered into QxOrm context (for example, list of data member of a class)
+ */
+
 #include <QxDataMember/IxDataMember.h>
 
 #include <QxDao/QxDaoStrategy.h>
@@ -40,13 +47,17 @@ namespace qx {
 
 class IxClass;
 
+/*!
+ * \ingroup QxDataMember
+ * \brief qx::IxDataMemberX : common interface for a list of IxDataMember class properties registered into QxOrm context (for example, list of data member of a class)
+ */
 class QX_DLL_EXPORT IxDataMemberX
 {
 
 protected:
 
-   QxCollection<QString, IxDataMember *> m_lstDataMember;   // Collection of 'IxDataMember'
-   IxClass * m_pClass;                                      // Class definition
+   QxCollection<QString, IxDataMember *> m_lstDataMember;   //!< Collection of IxDataMember
+   IxClass * m_pClass;                                      //!< Class definition
 
 protected:
 

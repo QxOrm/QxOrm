@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file QxSqlDatabase.h
+ * \author Lionel Marty
+ * \ingroup QxDao
+ * \brief Define all parameters to connect to database and retrieve a valid connection by thread
+ */
+
 #include <QtCore/qhash.h>
 #include <QtCore/qmutex.h>
 #include <QtCore/qthread.h>
@@ -43,6 +50,10 @@
 
 namespace qx {
 
+/*!
+ * \ingroup QxDao
+ * \brief qx::QxSqlDatabase : define all parameters to connect to database and retrieve a valid connection by thread (this class is a singleton and is thread-safe)
+ */
 class QX_DLL_EXPORT QxSqlDatabase : public QxSingleton<QxSqlDatabase>
 {
 
@@ -54,18 +65,18 @@ public:
 
 private:
 
-   QHash<Qt::HANDLE, QString> m_lstDbByThread;  // Collection of databases connexions by thread id
-   QMutex m_oDbMutex;                           // Mutex => 'QxSqlDatabase' is thread-safe
-   QString m_sDriverName;                       // Driver name to connect to database
-   QString m_sConnectOptions;                   // Connect options to database
-   QString m_sDatabaseName;                     // Database name
-   QString m_sUserName;                         // Connection's user name
-   QString m_sPassword;                         // Connection's password
-   QString m_sHostName;                         // Connection's host name
-   int m_iPort;                                 // Connection's port number
-   bool m_bTraceSqlQuery;                       // Trace each sql query executed
-   bool m_bTraceSqlRecord;                      // Trace each sql record
-   ph_style m_ePlaceHolderStyle;                // Place holder style to build sql query
+   QHash<Qt::HANDLE, QString> m_lstDbByThread;  //!< Collection of databases connexions by thread id
+   QMutex m_oDbMutex;                           //!< Mutex => 'QxSqlDatabase' is thread-safe
+   QString m_sDriverName;                       //!< Driver name to connect to database
+   QString m_sConnectOptions;                   //!< Connect options to database
+   QString m_sDatabaseName;                     //!< Database name
+   QString m_sUserName;                         //!< Connection's user name
+   QString m_sPassword;                         //!< Connection's password
+   QString m_sHostName;                         //!< Connection's host name
+   int m_iPort;                                 //!< Connection's port number
+   bool m_bTraceSqlQuery;                       //!< Trace each sql query executed
+   bool m_bTraceSqlRecord;                      //!< Trace each sql record
+   ph_style m_ePlaceHolderStyle;                //!< Place holder style to build sql query
 
 private:
 

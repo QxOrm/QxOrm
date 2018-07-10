@@ -26,13 +26,14 @@
  *
  */
 
-/**
- * @file    class_level_lock.h
+/*!
+ * \file    class_level_lock.h
+ * \ingroup QxMemLeak
  *
  * In essence Loki ClassLevelLockable re-engineered to use a fast_mutex class.
  *
- * @version 1.13, 2007/12/30
- * @author  Wu Yongwei
+ * \version 1.13, 2007/12/30
+ * \author  Wu Yongwei
  *
  */
 

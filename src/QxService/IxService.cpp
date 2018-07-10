@@ -23,6 +23,8 @@
 **
 ****************************************************************************/
 
+#if _QX_ENABLE_QT_NETWORK_DEPENDENCY
+
 #include <QxPrecompiled.h>
 
 #include <QxService/IxService.h>
@@ -86,3 +88,5 @@ inline void qx_load(Archive & ar, qx::service::IxService & t, const unsigned int
 } // namespace serialization
 
 QX_REGISTER_INTERNAL_HELPER_END_FILE_CPP(qx::service::IxService)
+
+#endif // _QX_ENABLE_QT_NETWORK_DEPENDENCY

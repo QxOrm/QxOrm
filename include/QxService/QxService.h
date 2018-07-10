@@ -23,12 +23,20 @@
 **
 ****************************************************************************/
 
+#if _QX_ENABLE_QT_NETWORK_DEPENDENCY
 #ifndef _QX_SERVICE_H_
 #define _QX_SERVICE_H_
 
 #ifdef _MSC_VER
 #pragma once
 #endif
+
+/*!
+ * \file QxService.h
+ * \author Lionel Marty
+ * \ingroup QxService
+ * \brief Concrete service class defined with QxService module of QxOrm library
+ */
 
 #include <QxRegister/QxClass.h>
 
@@ -37,6 +45,12 @@
 namespace qx {
 namespace service {
 
+/*!
+ * \ingroup QxService
+ * \brief qx::service::QxService<INPUT, OUTPUT> : concrete service class with INPUT parameters and OUTPUT parameters
+ *
+ * <a href="http://www.qxorm.com/qxorm_en/tutorial_2.html" target="_blank">Click here to access to a tutorial to explain how to work with QxService module.</a>
+ */
 template <class INPUT, class OUTPUT>
 class QxService : public IxService
 {
@@ -68,3 +82,4 @@ public:
 } // namespace qx
 
 #endif // _QX_SERVICE_H_
+#endif // _QX_ENABLE_QT_NETWORK_DEPENDENCY

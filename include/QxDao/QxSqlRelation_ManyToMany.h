@@ -30,10 +30,21 @@
 #pragma once
 #endif
 
+/*!
+ * \file QxSqlRelation_ManyToMany.h
+ * \author Lionel Marty
+ * \ingroup QxDao
+ * \brief Manage a relationship many-to-many defined between 2 classes (or between 2 tables in database)
+ */
+
 #include <QxDao/QxSqlRelation.h>
 
 namespace qx {
 
+/*!
+ * \ingroup QxDao
+ * \brief qx::QxSqlRelation_ManyToMany<DataType, Owner> : manage a relationship many-to-many defined between 2 classes (or between 2 tables in database)
+ */
 template <class DataType, class Owner>
 class QxSqlRelation_ManyToMany : public QxSqlRelation<DataType, Owner>
 {
@@ -51,9 +62,9 @@ private:
 
 protected:
 
-   QString m_sExtraTable;           // Extra table that holds the relationship
-   QString m_sForeignKeyOwner;      // Sql query foreign key for owner
-   QString m_sForeignKeyDataType;   // Sql query foreign key for data type
+   QString m_sExtraTable;           //!< Extra table that holds the relationship
+   QString m_sForeignKeyOwner;      //!< SQL query foreign key for owner
+   QString m_sForeignKeyDataType;   //!< SQL query foreign key for data type
 
 public:
 

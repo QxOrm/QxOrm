@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file get_sql_type.h
+ * \author Lionel Marty
+ * \ingroup QxTraits
+ * \brief qx::trait::get_sql_type<T>::get() : return type name under const char * format used by database engine to map a C++ type T
+ */
+
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/logical.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -79,6 +86,10 @@ struct get_sql_type
 
 } // namespace detail
 
+/*!
+ * \ingroup QxTraits
+ * \brief qx::trait::get_sql_type<T>::get() : return type name under const char * format used by database engine to map a C++ type T
+ */
 template <typename T>
 struct get_sql_type
 {

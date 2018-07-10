@@ -41,10 +41,13 @@ inline void qx_save(Archive & ar, const QVariant & t, const unsigned int file_ve
 
    QString sInvalid; bool b(false); int i(0); uint ui(0); long l(0); unsigned long ul(0);
    double d(0.0); QString s; QDate qdate; QDateTime qdatetime; QTime qtime; QByteArray qbytearray;
-   QColor qcolor; QFont qfont; QImage qimage; QPixmap qpixmap; QPoint qpoint; QRect qrect; QSize qsize;
-   QBrush qbrush; QRegExp qregexp; QRegion qregion; QUrl qurl;
+   QPoint qpoint; QRect qrect; QSize qsize; QRegExp qregexp; QUrl qurl;
    QString sDefault("unknown variant serialize type");
    const char * sTag = "value";
+
+#if _QX_ENABLE_QT_GUI_DEPENDENCY
+   QBrush qbrush; QColor qcolor; QFont qfont; QImage qimage; QPixmap qpixmap; QRegion qregion;
+#endif // _QX_ENABLE_QT_GUI_DEPENDENCY
 
    switch (iType)
    {
@@ -59,17 +62,20 @@ inline void qx_save(Archive & ar, const QVariant & t, const unsigned int file_ve
       case QVariant::DateTime:      qdatetime = t.toDateTime();                        ar << boost::serialization::make_nvp(sTag, qdatetime); break;
       case QVariant::Time:          qtime = t.toTime();                                ar << boost::serialization::make_nvp(sTag, qtime); break;
       case QVariant::ByteArray:     qbytearray = t.toByteArray();                      ar << boost::serialization::make_nvp(sTag, qbytearray); break;
+      case QVariant::Point:         qpoint = t.toPoint();                              ar << boost::serialization::make_nvp(sTag, qpoint); break;
+      case QVariant::Rect:          qrect = t.toRect();                                ar << boost::serialization::make_nvp(sTag, qrect); break;
+      case QVariant::Size:          qsize = t.toSize();                                ar << boost::serialization::make_nvp(sTag, qsize); break;
+      case QVariant::RegExp:        qregexp = t.toRegExp();                            ar << boost::serialization::make_nvp(sTag, qregexp); break;
+      case QVariant::Url:           qurl = t.toUrl();                                  ar << boost::serialization::make_nvp(sTag, qurl); break;
+
+#if _QX_ENABLE_QT_GUI_DEPENDENCY
       case QVariant::Brush:         qbrush = t.value<QBrush>();                        ar << boost::serialization::make_nvp(sTag, qbrush); break;
       case QVariant::Color:         qcolor = t.value<QColor>();                        ar << boost::serialization::make_nvp(sTag, qcolor); break;
       case QVariant::Font:          qfont = t.value<QFont>();                          ar << boost::serialization::make_nvp(sTag, qfont); break;
       case QVariant::Image:         qimage = t.value<QImage>();                        ar << boost::serialization::make_nvp(sTag, qimage); break;
       case QVariant::Pixmap:        qpixmap = t.value<QPixmap>();                      ar << boost::serialization::make_nvp(sTag, qpixmap); break;
-      case QVariant::Point:         qpoint = t.toPoint();                              ar << boost::serialization::make_nvp(sTag, qpoint); break;
-      case QVariant::Rect:          qrect = t.toRect();                                ar << boost::serialization::make_nvp(sTag, qrect); break;
-      case QVariant::Size:          qsize = t.toSize();                                ar << boost::serialization::make_nvp(sTag, qsize); break;
-      case QVariant::RegExp:        qregexp = t.toRegExp();                            ar << boost::serialization::make_nvp(sTag, qregexp); break;
       case QVariant::Region:        qregion = t.value<QRegion>();                      ar << boost::serialization::make_nvp(sTag, qregion); break;
-      case QVariant::Url:           qurl = t.toUrl();                                  ar << boost::serialization::make_nvp(sTag, qurl); break;
+#endif // _QX_ENABLE_QT_GUI_DEPENDENCY
 
       case QVariant::Invalid:       ar << boost::serialization::make_nvp(sTag, sInvalid); break;
       default:                      ar << boost::serialization::make_nvp(sTag, sDefault); break;
@@ -85,9 +91,12 @@ inline void qx_load(Archive & ar, QVariant & t, const unsigned int file_version)
 
    QString sDefault; QString sInvalid; bool b(false); int i(0); uint ui(0); long l(0); unsigned long ul(0);
    double d(0.0); QString s; QDate qdate; QDateTime qdatetime; QTime qtime; QByteArray qbytearray;
-   QColor qcolor; QFont qfont; QImage qimage; QPixmap qpixmap; QPoint qpoint; QRect qrect; QSize qsize;
-   QBrush qbrush; QRegExp qregexp; QRegion qregion; QUrl qurl;
+   QPoint qpoint; QRect qrect; QSize qsize; QRegExp qregexp; QUrl qurl;
    const char * sTag = "value";
+
+#if _QX_ENABLE_QT_GUI_DEPENDENCY
+   QBrush qbrush; QColor qcolor; QFont qfont; QImage qimage; QPixmap qpixmap; QRegion qregion;
+#endif // _QX_ENABLE_QT_GUI_DEPENDENCY
 
    switch (iType)
    {
@@ -102,17 +111,20 @@ inline void qx_load(Archive & ar, QVariant & t, const unsigned int file_version)
       case QVariant::DateTime:      ar >> boost::serialization::make_nvp(sTag, qdatetime);   t = QVariant(qdatetime); break;
       case QVariant::Time:          ar >> boost::serialization::make_nvp(sTag, qtime);       t = QVariant(qtime); break;
       case QVariant::ByteArray:     ar >> boost::serialization::make_nvp(sTag, qbytearray);  t = QVariant(qbytearray); break;
+      case QVariant::Point:         ar >> boost::serialization::make_nvp(sTag, qpoint);      t = QVariant(qpoint); break;
+      case QVariant::Rect:          ar >> boost::serialization::make_nvp(sTag, qrect);       t = QVariant(qrect); break;
+      case QVariant::Size:          ar >> boost::serialization::make_nvp(sTag, qsize);       t = QVariant(qsize); break;
+      case QVariant::RegExp:        ar >> boost::serialization::make_nvp(sTag, qregexp);     t = QVariant(qregexp); break;
+      case QVariant::Url:           ar >> boost::serialization::make_nvp(sTag, qurl);        t = QVariant(qurl); break;
+
+#if _QX_ENABLE_QT_GUI_DEPENDENCY
       case QVariant::Brush:         ar >> boost::serialization::make_nvp(sTag, qbrush);      t = qbrush; break;
       case QVariant::Color:         ar >> boost::serialization::make_nvp(sTag, qcolor);      t = qcolor; break;
       case QVariant::Font:          ar >> boost::serialization::make_nvp(sTag, qfont);       t = qfont; break;
       case QVariant::Image:         ar >> boost::serialization::make_nvp(sTag, qimage);      t = qimage; break;
       case QVariant::Pixmap:        ar >> boost::serialization::make_nvp(sTag, qpixmap);     t = qpixmap; break;
-      case QVariant::Point:         ar >> boost::serialization::make_nvp(sTag, qpoint);      t = QVariant(qpoint); break;
-      case QVariant::Rect:          ar >> boost::serialization::make_nvp(sTag, qrect);       t = QVariant(qrect); break;
-      case QVariant::Size:          ar >> boost::serialization::make_nvp(sTag, qsize);       t = QVariant(qsize); break;
-      case QVariant::RegExp:        ar >> boost::serialization::make_nvp(sTag, qregexp);     t = QVariant(qregexp); break;
       case QVariant::Region:        ar >> boost::serialization::make_nvp(sTag, qregion);     t = qregion; break;
-      case QVariant::Url:           ar >> boost::serialization::make_nvp(sTag, qurl);        t = QVariant(qurl); break;
+#endif // _QX_ENABLE_QT_GUI_DEPENDENCY
 
       case QVariant::Invalid:       ar >> boost::serialization::make_nvp(sTag, sInvalid);    t = QVariant(); break;
       default:                      ar >> boost::serialization::make_nvp(sTag, sDefault);    t = QVariant(); break;

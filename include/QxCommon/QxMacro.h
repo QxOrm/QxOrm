@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file QxMacro.h
+ * \author Lionel Marty
+ * \ingroup QxCommon
+ * \brief List of common macros used by QxOrm library
+ */
+
 #include <QxCommon/QxConfig.h>
 
 #ifndef qAssert

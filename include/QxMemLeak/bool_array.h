@@ -26,13 +26,14 @@
  *
  */
 
-/**
- * @file    bool_array.h
+/*!
+ * \file    bool_array.h
+ * \ingroup QxMemLeak
  *
  * Header file for class bool_array (packed boolean array).
  *
- * @version 3.1, 2005/08/25
- * @author  Wu Yongwei
+ * \version 3.1, 2005/08/25
+ * \author  Wu Yongwei
  *
  */
 

@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file QxParameters.h
+ * \author Lionel Marty
+ * \ingroup QxFunction
+ * \brief qx::function::detail::get_param_X() : provide some helper functions to retrieve parameters for all qx::IxFunction registered into QxOrm context
+ */
+
 #include <QxFunction/IxFunction.h>
 
 namespace qx {

@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file is_equal.h
+ * \author Lionel Marty
+ * \ingroup QxTraits
+ * \brief qx::trait::has_operator_equal_equal<T>::value : return true if T provides operator==() function, T must be registered with QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(T) macro
+ */
+
 #include <string>
 
 #include <boost/shared_ptr.hpp>
@@ -46,18 +53,24 @@
 #include <QtCore/qurl.h>
 #include <QtCore/qsharedpointer.h>
 
+#if _QX_ENABLE_QT_GUI_DEPENDENCY
 #include <QtGui/qcolor.h>
 #include <QtGui/qfont.h>
 #include <QtGui/qimage.h>
 #include <QtGui/qbrush.h>
 #include <QtGui/qmatrix.h>
 #include <QtGui/qregion.h>
+#endif // _QX_ENABLE_QT_GUI_DEPENDENCY
 
 #include <QxDao/QxDaoPointer.h>
 
 namespace qx {
 namespace trait {
 
+/*!
+ * \ingroup QxTraits
+ * \brief qx::trait::has_operator_equal_equal<T>::value : return true if T provides operator==() function, T must be registered with QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(T) macro
+ */
 template <typename T>
 struct has_operator_equal_equal
 { enum { value = boost::is_pointer<T>::value }; };
@@ -94,22 +107,25 @@ QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(std::string)
 QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(std::wstring)
 
 QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(QString)
-QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(QBrush)
 QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(QByteArray)
-QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(QColor)
 QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(QDate)
 QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(QDateTime)
-QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(QFont)
-QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(QImage)
-QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(QMatrix)
 QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(QPoint)
 QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(QRect)
 QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(QRegExp)
-QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(QRegion)
 QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(QSize)
 QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(QTime)
 QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(QUrl)
 QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(QVariant)
+
+#if _QX_ENABLE_QT_GUI_DEPENDENCY
+QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(QColor)
+QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(QFont)
+QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(QImage)
+QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(QBrush)
+QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(QMatrix)
+QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(QRegion)
+#endif // _QX_ENABLE_QT_GUI_DEPENDENCY
 
 QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL_TEMPLATE_1(boost::shared_ptr)
 QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL_TEMPLATE_1(QSharedPointer)

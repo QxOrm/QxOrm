@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file generic_container.h
+ * \author Lionel Marty
+ * \ingroup QxTraits
+ * \brief qx::trait::generic_container<T> : provide some tools to manage all containers without knowing its type
+ */
+
 #include <boost/type_traits/is_pointer.hpp>
 
 #include <QxTraits/is_smart_ptr.h>
@@ -43,6 +50,10 @@ namespace trait {
 class no_type
 { private: void dummy() const { ; } };
 
+/*!
+ * \ingroup QxTraits
+ * \brief qx::trait::generic_container<T> : provide some tools to manage all containers without knowing its type
+ */
 template <class T>
 struct generic_container
 { typedef no_type type_item; typedef no_type type_key; typedef no_type type_value; typedef no_type type_value_qx; typedef no_type type_iterator; };

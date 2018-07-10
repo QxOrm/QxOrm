@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file is_smart_ptr.h
+ * \author Lionel Marty
+ * \ingroup QxTraits
+ * \brief qx::trait::is_smart_ptr<T>::value : return true if T is a smart-pointer of boost, Qt or QxOrm libraries, otherwise return false
+ */
+
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/or.hpp>
 #include <boost/mpl/logical.hpp>
@@ -47,6 +54,10 @@
 namespace qx {
 namespace trait {
 
+/*!
+ * \ingroup QxTraits
+ * \brief qx::trait::is_smart_ptr<T>::value : return true if T is a smart-pointer of boost, Qt or QxOrm libraries, otherwise return false
+ */
 template <typename T>
 class is_smart_ptr
 {

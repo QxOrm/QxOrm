@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file is_qx_dao_ptr.h
+ * \author Lionel Marty
+ * \ingroup QxTraits
+ * \brief qx::trait::is_qx_dao_ptr<T>::value : return true if T is a qx::dao::ptr<> smart-pointer of QxOrm library, otherwise return false
+ */
+
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/logical.hpp>
 
@@ -38,6 +45,10 @@
 namespace qx {
 namespace trait {
 
+/*!
+ * \ingroup QxTraits
+ * \brief qx::trait::is_qx_dao_ptr<T>::value : return true if T is a qx::dao::ptr<> smart-pointer of QxOrm library, otherwise return false
+ */
 template <typename T>
 class is_qx_dao_ptr
 {

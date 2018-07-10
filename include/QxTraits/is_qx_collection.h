@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file is_qx_collection.h
+ * \author Lionel Marty
+ * \ingroup QxTraits
+ * \brief qx::trait::is_qx_collection<T>::value : return true if T is a qx::QxCollection<> container of QxOrm library, otherwise return false
+ */
+
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/logical.hpp>
 #include <boost/type_traits/is_base_of.hpp>
@@ -39,6 +46,10 @@
 namespace qx {
 namespace trait {
 
+/*!
+ * \ingroup QxTraits
+ * \brief qx::trait::is_qx_collection<T>::value : return true if T is a qx::QxCollection<> container of QxOrm library, otherwise return false
+ */
 template <typename T>
 class is_qx_collection
 {

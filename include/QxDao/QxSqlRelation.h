@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file QxSqlRelation.h
+ * \author Lionel Marty
+ * \ingroup QxDao
+ * \brief Base class for all relationships defined between 2 classes (or between 2 tables in database)
+ */
+
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/logical.hpp>
 #include <boost/type_traits/is_same.hpp>
@@ -51,6 +58,10 @@ namespace qx {
 template <class T>
 class QxClass;
 
+/*!
+ * \ingroup QxDao
+ * \brief qx::QxSqlRelation<DataType, Owner> : base class for all relationships defined between 2 classes (or between 2 tables in database)
+ */
 template <class DataType, class Owner>
 class QxSqlRelation : public IxSqlRelation
 {
@@ -73,10 +84,10 @@ protected:
 
 protected:
 
-   static QxCollection<QString, IxDataMember *> m_lstDataMember;     // Optimization : collection of 'IxDataMember'
-   static IxSqlRelationX m_lstSqlRelation;                           // Optimization : collection of 'IxSqlRelation'
-   static QMutex m_oMutex;                                           // Mutex : 'QxSqlRelation' is thread-safe
-   bool m_bInitInEvent;                                              // Class initialisation in progress
+   static QxCollection<QString, IxDataMember *> m_lstDataMember;     //!< Optimization : collection of 'IxDataMember'
+   static IxSqlRelationX m_lstSqlRelation;                           //!< Optimization : collection of 'IxSqlRelation'
+   static QMutex m_oMutex;                                           //!< Mutex : 'QxSqlRelation' is thread-safe
+   bool m_bInitInEvent;                                              //!< Class initialisation in progress
 
 public:
 

@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file is_std_vector.h
+ * \author Lionel Marty
+ * \ingroup QxTraits
+ * \brief qx::trait::is_std_vector<T>::value : return true if T is a std::vector<> container of stl library, otherwise return false
+ */
+
 #include <vector>
 
 #include <boost/mpl/if.hpp>
@@ -38,6 +45,10 @@
 namespace qx {
 namespace trait {
 
+/*!
+ * \ingroup QxTraits
+ * \brief qx::trait::is_std_vector<T>::value : return true if T is a std::vector<> container of stl library, otherwise return false
+ */
 template <typename T>
 class is_std_vector
 {

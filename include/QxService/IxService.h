@@ -23,12 +23,20 @@
 **
 ****************************************************************************/
 
+#if _QX_ENABLE_QT_NETWORK_DEPENDENCY
 #ifndef _IX_SERVICE_H_
 #define _IX_SERVICE_H_
 
 #ifdef _MSC_VER
 #pragma once
 #endif
+
+/*!
+ * \file IxService.h
+ * \author Lionel Marty
+ * \ingroup QxService
+ * \brief Common interface for all services defined with QxService module of QxOrm library
+ */
 
 #include <QxCommon/QxBool.h>
 
@@ -41,16 +49,22 @@ namespace service {
 
 class QxTransaction;
 
+/*!
+ * \ingroup QxService
+ * \brief qx::service::IxService : common interface for all services defined with QxService module of QxOrm library
+ *
+ * <a href="http://www.qxorm.com/qxorm_en/tutorial_2.html" target="_blank">Click here to access to a tutorial to explain how to work with QxService module.</a>
+ */
 class QX_DLL_EXPORT IxService
 {
 
 protected:
 
-   QString m_sServiceName;                            // Service name <=> class name
-   IxParameter_ptr m_pInputParameter;                 // List of input parameters (request)
-   IxParameter_ptr m_pOutputParameter;                // List of output parameters (reply)
-   qx_bool m_bMessageReturn;                          // Message return to indicate if an error occured
-   boost::shared_ptr<QxTransaction> m_pTransaction;   // Current transaction after executing service method
+   QString m_sServiceName;                            //!< Service name <=> class name
+   IxParameter_ptr m_pInputParameter;                 //!< List of input parameters (request)
+   IxParameter_ptr m_pOutputParameter;                //!< List of output parameters (reply)
+   qx_bool m_bMessageReturn;                          //!< Message return to indicate if an error occured
+   boost::shared_ptr<QxTransaction> m_pTransaction;   //!< Current transaction after executing service method
 
 public:
 
@@ -86,3 +100,4 @@ typedef boost::shared_ptr<IxService> IxService_ptr;
 QX_REGISTER_INTERNAL_HELPER_HPP(QX_DLL_EXPORT, qx::service::IxService, 0)
 
 #endif // _IX_SERVICE_H_
+#endif // _QX_ENABLE_QT_NETWORK_DEPENDENCY

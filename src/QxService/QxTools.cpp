@@ -23,6 +23,8 @@
 **
 ****************************************************************************/
 
+#if _QX_ENABLE_QT_NETWORK_DEPENDENCY
+
 #include <QxPrecompiled.h>
 
 #include <QxService/QxTools.h>
@@ -177,3 +179,5 @@ qx_bool QxTools::writeSocket(QTcpSocket & socket, QxTransaction & transaction, q
 
 } // namespace service
 } // namespace qx
+
+#endif // _QX_ENABLE_QT_NETWORK_DEPENDENCY

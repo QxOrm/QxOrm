@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file get_class_name_primitive.h
+ * \author Lionel Marty
+ * \ingroup QxTraits
+ * \brief Register all primitive and useful types of stl, boost and Qt libraries using QX_REGISTER_CLASS_NAME(T) macro
+ */
+
 #include <string>
 #include <vector>
 #include <list>
@@ -63,6 +70,7 @@
 #include <QtCore/qurl.h>
 #include <QtCore/QWeakPointer>
 
+#if _QX_ENABLE_QT_GUI_DEPENDENCY
 #include <QtGui/qcolor.h>
 #include <QtGui/qfont.h>
 #include <QtGui/qimage.h>
@@ -71,6 +79,7 @@
 #include <QtGui/qpicture.h>
 #include <QtGui/qpixmap.h>
 #include <QtGui/qregion.h>
+#endif // _QX_ENABLE_QT_GUI_DEPENDENCY
 
 #if (QT_VERSION >= 0x040600)
 #include <QtCore/qscopedpointer.h>
@@ -99,24 +108,27 @@ QX_REGISTER_CLASS_NAME(std::wstring)
 QX_REGISTER_CLASS_NAME(QObject)
 QX_REGISTER_CLASS_NAME(QString)
 QX_REGISTER_CLASS_NAME(QStringList)
-QX_REGISTER_CLASS_NAME(QBrush)
 QX_REGISTER_CLASS_NAME(QByteArray)
-QX_REGISTER_CLASS_NAME(QColor)
 QX_REGISTER_CLASS_NAME(QDate)
 QX_REGISTER_CLASS_NAME(QDateTime)
-QX_REGISTER_CLASS_NAME(QFont)
-QX_REGISTER_CLASS_NAME(QImage)
-QX_REGISTER_CLASS_NAME(QMatrix)
-QX_REGISTER_CLASS_NAME(QPicture)
-QX_REGISTER_CLASS_NAME(QPixmap)
 QX_REGISTER_CLASS_NAME(QPoint)
 QX_REGISTER_CLASS_NAME(QRect)
 QX_REGISTER_CLASS_NAME(QRegExp)
-QX_REGISTER_CLASS_NAME(QRegion)
 QX_REGISTER_CLASS_NAME(QSize)
 QX_REGISTER_CLASS_NAME(QTime)
 QX_REGISTER_CLASS_NAME(QUrl)
 QX_REGISTER_CLASS_NAME(QVariant)
+
+#if _QX_ENABLE_QT_GUI_DEPENDENCY
+QX_REGISTER_CLASS_NAME(QColor)
+QX_REGISTER_CLASS_NAME(QFont)
+QX_REGISTER_CLASS_NAME(QImage)
+QX_REGISTER_CLASS_NAME(QBrush)
+QX_REGISTER_CLASS_NAME(QMatrix)
+QX_REGISTER_CLASS_NAME(QPicture)
+QX_REGISTER_CLASS_NAME(QPixmap)
+QX_REGISTER_CLASS_NAME(QRegion)
+#endif // _QX_ENABLE_QT_GUI_DEPENDENCY
 
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(std::allocator)
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(std::vector)

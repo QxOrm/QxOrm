@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file QxSqlQueryBuilder.h
+ * \author Lionel Marty
+ * \ingroup QxDao
+ * \brief Concrete SQL query builder by class with a cache mechanism to backup and restore queries already builded by the program
+ */
+
 #include <QtCore/qmutex.h>
 
 #include <QxDao/IxSqlQueryBuilder.h>
@@ -56,6 +63,10 @@ if (! sql.isEmpty()) { setSqlQuery(sql); return (* this); }
 
 namespace qx {
 
+/*!
+ * \ingroup QxDao
+ * \brief qx::QxSqlQueryBuilder<T> : concrete SQL query builder for the class T with a cache mechanism to backup and restore queries already builded by the program
+ */
 template <class T>
 class QxSqlQueryBuilder : public IxSqlQueryBuilder
 {
@@ -71,11 +82,11 @@ public:
 
 protected:
 
-   QxDataMemberX<type_sql> * m_pDataMemberX;                         // 'QxDataMemberX' singleton
+   QxDataMemberX<type_sql> * m_pDataMemberX;                         //!< 'QxDataMemberX' singleton
 
-   static QxCollection<QString, IxDataMember *> m_lstDataMember;     // Collection of 'IxDataMember' to build sql query
-   static IxSqlRelationX m_lstSqlRelation;                           // Collection of 'IxSqlRelation' to build sql query
-   static QMutex m_oMutex;                                           // Mutex => 'QxSqlQueryBuilder' is thread-safe
+   static QxCollection<QString, IxDataMember *> m_lstDataMember;     //!< Collection of 'IxDataMember' to build SQL query
+   static IxSqlRelationX m_lstSqlRelation;                           //!< Collection of 'IxSqlRelation' to build SQL query
+   static QMutex m_oMutex;                                           //!< Mutex => 'QxSqlQueryBuilder' is thread-safe
 
 public:
 

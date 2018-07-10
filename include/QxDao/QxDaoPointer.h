@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file QxDaoPointer.h
+ * \author Lionel Marty
+ * \ingroup QxDao
+ * \brief qx::dao::ptr<T> : provide a classic smart-pointer (like boost::shared_ptr<T> or QSharedPointer<T>) with some features associated with QxDao module of QxOrm library
+ */
+
 #include <QtCore/qsharedpointer.h>
 #include <QtCore/qstringlist.h>
 
@@ -40,14 +47,79 @@ namespace detail {
 template <class T> struct QxDao_IsDirty;
 } // namespace detail
 
+/*!
+ * \ingroup QxDao
+ * \brief qx::dao::ptr<T> : provide a classic smart-pointer (like boost::shared_ptr<T> or QSharedPointer<T>) with some features associated with QxDao module of QxOrm library
+ *
+ * QxOrm can be used with smart-pointers of boost and Qt libraries.
+ * QxOrm smart-pointer is based on QSharedPointer and provides new features with qx::dao::xxx functions of QxDao module.
+ * qx::dao::ptr<T> keeps automatically values from database.
+ * So it's possible to detect if an instance has been modified using the method isDirty() : this method can return list of properties changed.
+ * qx::dao::ptr<T> can also be used with the function qx::dao::update_optimized() to update in database only properties changed.
+ * qx::dao::ptr<T> can be used with a simple object and with many containers : stl, boost, Qt and qx::QxCollection<Key, Value>.
+ *
+ * Quick sample using qx::dao::ptr<T> smart-pointer :
+ * \code
+// Test 'isDirty()' method
+qx::dao::ptr<blog> blog_isdirty = qx::dao::ptr<blog>(new blog());
+blog_isdirty->m_id = blog_1->m_id;
+daoError = qx::dao::fetch_by_id(blog_isdirty);
+qAssert(! daoError.isValid() && ! blog_isdirty.isDirty());
+
+blog_isdirty->m_text = "blog property 'text' modified => blog is dirty !!!";
+QStringList lstDiff; bool bDirty = blog_isdirty.isDirty(lstDiff);
+qAssert(bDirty && (lstDiff.count() == 1) && (lstDiff.at(0) == "blog_text"));
+if (bDirty) { qDebug("[QxOrm] test dirty 1 : blog is dirty => '%s'", qPrintable(lstDiff.join("|"))); }
+
+// Update only property 'm_text' of 'blog_isdirty'
+daoError = qx::dao::update_optimized(blog_isdirty);
+qAssert(! daoError.isValid() && ! blog_isdirty.isDirty());
+qx::dump(blog_isdirty);
+
+// Test 'isDirty()' method with a container
+typedef qx::dao::ptr< QList<author_ptr> > type_lst_author_test_is_dirty;
+
+type_lst_author_test_is_dirty container_isdirty = type_lst_author_test_is_dirty(new QList<author_ptr>());
+daoError = qx::dao::fetch_all(container_isdirty);
+qAssert(! daoError.isValid() && ! container_isdirty.isDirty() && (container_isdirty->count() == 3));
+
+author_ptr author_ptr_dirty = container_isdirty->at(1);
+author_ptr_dirty->m_name = "author name modified at index 1 => container is dirty !!!";
+bDirty = container_isdirty.isDirty(lstDiff);
+qAssert(bDirty && (lstDiff.count() == 1));
+if (bDirty) { qDebug("[QxOrm] test dirty 2 : container is dirty => '%s'", qPrintable(lstDiff.join("|"))); }
+
+author_ptr_dirty = container_isdirty->at(2);
+author_ptr_dirty->m_birthdate = QDate(1998, 03, 06);
+bDirty = container_isdirty.isDirty(lstDiff);
+qAssert(bDirty && (lstDiff.count() == 2));
+if (bDirty) { qDebug("[QxOrm] test dirty 3 : container is dirty => '%s'", qPrintable(lstDiff.join("|"))); }
+
+// Update only property 'm_name' at position 1, only property 'm_birthdate' at position 2 and nothing at position 0
+daoError = qx::dao::update_optimized(container_isdirty);
+qAssert(! daoError.isValid() && ! container_isdirty.isDirty());
+qx::dump(container_isdirty);
+
+// Fetch only property 'm_dt_creation' of blog
+QStringList lstColumns = QStringList() << "date_creation";
+list_blog lst_blog_with_only_date_creation;
+daoError = qx::dao::fetch_all(lst_blog_with_only_date_creation, NULL, lstColumns);
+qAssert(! daoError.isValid() && (lst_blog_with_only_date_creation.size() > 0));
+
+if ((lst_blog_with_only_date_creation.size() > 0) && (lst_blog_with_only_date_creation[0] != NULL))
+{ qAssert(lst_blog_with_only_date_creation[0]->m_text.isEmpty()); }
+
+qx::dump(lst_blog_with_only_date_creation);
+ * \endcode
+ */
 template <typename T>
 class ptr
 {
 
 private:
 
-   QSharedPointer<T> m_pWork;       // Default pointer => user works with this pointer
-   QSharedPointer<T> m_pOriginal;   // Keep original pointer containing all values from database
+   QSharedPointer<T> m_pWork;       //!< Default pointer => user works with this pointer
+   QSharedPointer<T> m_pOriginal;   //!< Keep original pointer containing all values from database
 
 public:
 

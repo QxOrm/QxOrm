@@ -23,6 +23,8 @@
 **
 ****************************************************************************/
 
+#if _QX_ENABLE_QT_GUI_DEPENDENCY
+
 #include <QxPrecompiled.h>
 
 #include <QxSerialize/Qt/QxSerialize_QMatrix.h>
@@ -66,3 +68,5 @@ inline void qx_load(Archive & ar, QMatrix & t, const unsigned int file_version)
 } // namespace serialization
 
 QX_SERIALIZE_FAST_COMPIL_SAVE_LOAD_CPP(QMatrix)
+
+#endif // _QX_ENABLE_QT_GUI_DEPENDENCY

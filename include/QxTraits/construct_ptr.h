@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file construct_ptr.h
+ * \author Lionel Marty
+ * \ingroup QxTraits
+ * \brief qx::trait::construct_ptr<T>::get(T & t) : instantiate a new pointer, support both nude-pointer and smart-pointer of boost, Qt and QxOrm libraries
+ */
+
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/intrusive_ptr.hpp>
@@ -47,6 +54,10 @@
 namespace qx {
 namespace trait {
 
+/*!
+ * \ingroup QxTraits
+ * \brief qx::trait::construct_ptr<T>::get(T & t) : instantiate a new pointer, support both nude-pointer and smart-pointer of boost, Qt and QxOrm libraries
+ */
 template <typename T>
 struct construct_ptr
 {

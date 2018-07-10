@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file QxDataMember.h
+ * \author Lionel Marty
+ * \ingroup QxDataMember
+ * \brief Concrete class property registered into QxOrm context
+ */
+
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/nvp.hpp>
 
@@ -49,6 +56,10 @@ virtual void fromArchive(void * pOwner, ArchiveInput & ar)              { QxData
 
 namespace qx {
 
+/*!
+ * \ingroup QxDataMember
+ * \brief qx::QxDataMember<DataType, Owner> : concrete property of type DataType registered into QxOrm context for the class Owner
+ */
 template <typename DataType, class Owner>
 class QxDataMember : public IxDataMember
 {
@@ -57,7 +68,7 @@ protected:
 
    typedef DataType Owner::* type_data_member_ptr;
 
-   type_data_member_ptr m_pData; // Data member under format "& Owner::DataMember"
+   type_data_member_ptr m_pData; //!< Data member under format "& Owner::DataMember"
 
 public:
 

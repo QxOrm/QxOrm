@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file is_smart_ptr_base_of.h
+ * \author Lionel Marty
+ * \ingroup QxTraits
+ * \brief qx::trait::is_smart_ptr_base_of<B, D>::value : return true if B and D are smart-pointers of boost, Qt or QxOrm libraries and if (*B) is a base class of (*D), otherwise return false
+ */
+
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/logical.hpp>
 #include <boost/type_traits/is_base_of.hpp>
@@ -54,6 +61,10 @@ qx_smart_ptr_base_of_test_7() || qx_smart_ptr_base_of_test_8()
 namespace qx {
 namespace trait {
 
+/*!
+ * \ingroup QxTraits
+ * \brief qx::trait::is_smart_ptr_base_of<B, D>::value : return true if B and D are smart-pointers of boost, Qt or QxOrm libraries and if (*B) is a base class of (*D), otherwise return false
+ */
 template <typename B, typename D>
 class is_smart_ptr_base_of
 {

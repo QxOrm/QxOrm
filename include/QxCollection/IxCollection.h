@@ -30,10 +30,21 @@
 #pragma once
 #endif
 
+/*!
+ * \file IxCollection.h
+ * \author Lionel Marty
+ * \ingroup QxCollection
+ * \brief Common interface for all QxOrm containers qx::QxCollection<Key, Value>
+ */
+
 #include <QxTraits/get_class_name.h>
 
 namespace qx {
 
+/*!
+ * \ingroup QxCollection
+ * \brief qx::IxCollection : common interface for all QxOrm containers qx::QxCollection<Key, Value>
+ */
 class QX_DLL_EXPORT IxCollection
 {
 

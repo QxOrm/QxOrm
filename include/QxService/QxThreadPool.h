@@ -23,12 +23,22 @@
 **
 ****************************************************************************/
 
+#include <QxCommon/QxConfig.h> // Need to include this file for the 'moc' process
+
+#if _QX_ENABLE_QT_NETWORK_DEPENDENCY
 #ifndef _QX_SERVICE_THREAD_POOL_H_
 #define _QX_SERVICE_THREAD_POOL_H_
 
 #ifdef _MSC_VER
 #pragma once
 #endif
+
+/*!
+ * \file QxThreadPool.h
+ * \author Lionel Marty
+ * \ingroup QxService
+ * \brief Thread pool to manage list of threads for executing all transactions of QxService module
+ */
 
 #include <QtCore/qqueue.h>
 
@@ -40,15 +50,21 @@ namespace service {
 
 class QxThread;
 
+/*!
+ * \ingroup QxService
+ * \brief qx::service::QxThreadPool : thread-safe thread pool to manage list of threads for executing all transactions of QxService module
+ *
+ * <a href="http://www.qxorm.com/qxorm_en/tutorial_2.html" target="_blank">Click here to access to a tutorial to explain how to work with QxService module.</a>
+ */
 class QX_DLL_EXPORT QxThreadPool : public QThread
 { Q_OBJECT
 
 protected:
 
-   QList<QxThread *> m_lstAllServices;       // List of all services created by 'QxThreadPool'
-   QQueue<QxThread *> m_lstAvailable;        // List of services available to execute process
-   bool m_bIsRunning;                        // Flag to indicate if thread is running
-   QMutex m_mutex;                           // Mutex => 'QxThreadPool' is thread-safe
+   QList<QxThread *> m_lstAllServices;       //!< List of all services created by 'QxThreadPool'
+   QQueue<QxThread *> m_lstAvailable;        //!< List of services available to execute process
+   bool m_bIsRunning;                        //!< Flag to indicate if thread is running
+   QMutex m_mutex;                           //!< Mutex => 'QxThreadPool' is thread-safe
 
 public:
 
@@ -84,3 +100,4 @@ typedef boost::shared_ptr<QxThreadPool> QxThreadPool_ptr;
 } // namespace qx
 
 #endif // _QX_SERVICE_THREAD_POOL_H_
+#endif // _QX_ENABLE_QT_NETWORK_DEPENDENCY

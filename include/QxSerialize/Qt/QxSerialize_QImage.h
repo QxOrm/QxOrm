@@ -23,6 +23,7 @@
 **
 ****************************************************************************/
 
+#if _QX_ENABLE_QT_GUI_DEPENDENCY
 #ifndef _QX_SERIALIZE_QIMAGE_H_
 #define _QX_SERIALIZE_QIMAGE_H_
 
@@ -49,3 +50,4 @@ QX_SERIALIZE_FAST_COMPIL_SAVE_LOAD_HPP(QX_DLL_EXPORT, QImage)
 QX_BOOST_EXPORT_SERIALIZATION_FAST_COMPIL_HPP(QImage)
 
 #endif // _QX_SERIALIZE_QIMAGE_H_
+#endif // _QX_ENABLE_QT_GUI_DEPENDENCY

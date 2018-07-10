@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file is_qt_map.h
+ * \author Lionel Marty
+ * \ingroup QxTraits
+ * \brief qx::trait::is_qt_map<T>::value : return true if T is a QMap<> container of Qt library, otherwise return false
+ */
+
 #include <QtCore/qmap.h>
 
 #include <boost/mpl/if.hpp>
@@ -38,6 +45,10 @@
 namespace qx {
 namespace trait {
 
+/*!
+ * \ingroup QxTraits
+ * \brief qx::trait::is_qt_map<T>::value : return true if T is a QMap<> container of Qt library, otherwise return false
+ */
 template <typename T>
 class is_qt_map
 {

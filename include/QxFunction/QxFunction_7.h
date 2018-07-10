@@ -30,11 +30,22 @@
 #pragma once
 #endif
 
+/*!
+ * \file QxFunction_7.h
+ * \author Lionel Marty
+ * \ingroup QxFunction
+ * \brief Concrete function class registered into QxOrm context with 7 parameters
+ */
+
 #include <QxFunction/IxFunction.h>
 #include <QxFunction/QxParameters.h>
 
 namespace qx {
 
+/*!
+ * \ingroup QxFunction
+ * \brief qx::QxFunction_7<Owner, R, P1, P2, P3, P4, P5, P6, P7> : concrete function registered into QxOrm context defined into class Owner, returning an object of type R and with 7 parameters P1, P2, P3, P4, P5, P6, P7
+ */
 template <class Owner, typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7>
 class QxFunction_7 : public IxFunction
 {

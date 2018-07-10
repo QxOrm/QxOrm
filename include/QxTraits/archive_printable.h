@@ -30,11 +30,22 @@
 #pragma once
 #endif
 
+/*!
+ * \file archive_printable.h
+ * \author Lionel Marty
+ * \ingroup QxTraits
+ * \brief qx::trait::is_archive_printable<T>::value : define if a boost::archive type is readable by a human (for example XML archive) or not (for example binary archive)
+ */
+
 #include <QxSerialize/boost/QxSerializeInclude.h>
 
 namespace qx {
 namespace trait {
 
+/*!
+ * \ingroup QxTraits
+ * \brief qx::trait::is_archive_printable<T>::value : define if a boost::archive type is readable by a human (for example XML archive) or not (for example binary archive)
+ */
 template <typename T> struct is_archive_printable  { enum { value = false }; };
 
 #if _QX_SERIALIZE_POLYMORPHIC

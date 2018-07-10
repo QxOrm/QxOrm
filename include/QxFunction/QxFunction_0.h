@@ -30,11 +30,22 @@
 #pragma once
 #endif
 
+/*!
+ * \file QxFunction_0.h
+ * \author Lionel Marty
+ * \ingroup QxFunction
+ * \brief Concrete function class registered into QxOrm context without parameter
+ */
+
 #include <QxFunction/IxFunction.h>
 #include <QxFunction/QxParameters.h>
 
 namespace qx {
 
+/*!
+ * \ingroup QxFunction
+ * \brief qx::QxFunction_0<Owner, R> : concrete function registered into QxOrm context defined into class Owner, returning an object of type R and without parameter
+ */
 template <class Owner, typename R>
 class QxFunction_0 : public IxFunction
 {

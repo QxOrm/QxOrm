@@ -30,10 +30,21 @@
 #pragma once
 #endif
 
+/*!
+ * \file QxSqlRelation_OneToMany.h
+ * \author Lionel Marty
+ * \ingroup QxDao
+ * \brief Manage a relationship one-to-many defined between 2 classes (or between 2 tables in database)
+ */
+
 #include <QxDao/QxSqlRelation.h>
 
 namespace qx {
 
+/*!
+ * \ingroup QxDao
+ * \brief qx::QxSqlRelation_OneToMany<DataType, Owner> : manage a relationship one-to-many defined between 2 classes (or between 2 tables in database)
+ */
 template <class DataType, class Owner>
 class QxSqlRelation_OneToMany : public QxSqlRelation<DataType, Owner>
 {
@@ -50,7 +61,7 @@ private:
 
 protected:
 
-   QString m_sForeignKey;  // Sql query foreign key
+   QString m_sForeignKey;  //!< SQL query foreign key
 
 public:
 

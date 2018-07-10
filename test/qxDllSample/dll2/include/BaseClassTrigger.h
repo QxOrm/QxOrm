@@ -19,6 +19,8 @@ public:
    BaseClassTrigger() : m_id(0)  { ; }
    virtual ~BaseClassTrigger()   { ; }
 
+   virtual void makeAbstractClass() = 0;
+
    long getId() const                     { return m_id; }
    QDateTime getDateCreation() const      { return m_dateCreation; }
    QDateTime getDateModification() const  { return m_dateModification; }
@@ -36,6 +38,7 @@ public:
 
 };
 
+QX_REGISTER_ABSTRACT_CLASS(BaseClassTrigger)
 QX_REGISTER_HPP_QX_DLL2(BaseClassTrigger, qx::trait::no_base_class_defined, 0)
 
 namespace qx {

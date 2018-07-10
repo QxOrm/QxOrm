@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file is_qt_hash.h
+ * \author Lionel Marty
+ * \ingroup QxTraits
+ * \brief qx::trait::is_qt_hash<T>::value : return true if T is a QHash<> container of Qt library, otherwise return false
+ */
+
 #include <QtCore/qhash.h>
 
 #include <boost/mpl/if.hpp>
@@ -38,6 +45,10 @@
 namespace qx {
 namespace trait {
 
+/*!
+ * \ingroup QxTraits
+ * \brief qx::trait::is_qt_hash<T>::value : return true if T is a QHash<> container of Qt library, otherwise return false
+ */
 template <typename T>
 class is_qt_hash
 {

@@ -25,6 +25,8 @@ public:
    Bar() : BaseClassTrigger() { ; }
    virtual ~Bar()             { ; }
 
+   virtual void makeAbstractClass() { ; }
+
    QString getCode() const    { return m_sCode; }
    QString getValue() const   { return m_sValue; }
    Foo_ptr getFoo() const     { return m_pFoo; }

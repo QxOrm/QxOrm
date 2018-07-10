@@ -23,6 +23,7 @@
 **
 ****************************************************************************/
 
+#if _QX_ENABLE_QT_GUI_DEPENDENCY
 #ifndef _QX_SERIALIZE_QCOLOR_H_
 #define _QX_SERIALIZE_QCOLOR_H_
 
@@ -44,3 +45,4 @@ BOOST_CLASS_VERSION(QColor, 0)
 QX_SERIALIZE_FAST_COMPIL_SAVE_LOAD_HPP(QX_DLL_EXPORT, QColor)
 
 #endif // _QX_SERIALIZE_QCOLOR_H_
+#endif // _QX_ENABLE_QT_GUI_DEPENDENCY

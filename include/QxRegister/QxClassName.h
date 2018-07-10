@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file QxClassName.h
+ * \author Lionel Marty
+ * \ingroup QxRegister
+ * \brief Provide a class helper to retrieve the class name under const char * format
+ */
+
 #include <QxTraits/get_class_name.h>
 #include <QxTraits/is_qx_registered.h>
 
@@ -37,6 +44,10 @@
 
 namespace qx {
 
+/*!
+ * \ingroup QxRegister
+ * \brief qx::QxClassName<T> : class helper to retrieve the class name of type T under const char * format
+ */
 template <typename T>
 class QxClassName
 {

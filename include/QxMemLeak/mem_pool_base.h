@@ -26,13 +26,14 @@
  *
  */
 
-/**
- * @file    mem_pool_base.h
+/*!
+ * \file    mem_pool_base.h
+ * \ingroup QxMemLeak
  *
  * Header file for the memory pool base.
  *
- * @version 1.1, 2004/07/26
- * @author  Wu Yongwei
+ * \version 1.1, 2004/07/26
+ * \author  Wu Yongwei
  *
  */
 

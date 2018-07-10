@@ -30,9 +30,20 @@
 #pragma once
 #endif
 
+/*!
+ * \file is_qx_registered.h
+ * \author Lionel Marty
+ * \ingroup QxTraits
+ * \brief qx::trait::is_qx_registered<T>::value : return true if T is registered into QxOrm context to provide persitence (ORM), serialization and introspection features
+ */
+
 namespace qx {
 namespace trait {
 
+/*!
+ * \ingroup QxTraits
+ * \brief qx::trait::is_qx_registered<T>::value : return true if T is registered into QxOrm context to provide persitence (ORM), serialization and introspection features
+ */
 template <typename T>
 struct is_qx_registered { enum { value = false }; };
 

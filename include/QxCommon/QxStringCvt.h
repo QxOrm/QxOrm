@@ -30,6 +30,13 @@
 #pragma once
 #endif
 
+/*!
+ * \file QxStringCvt.h
+ * \author Lionel Marty
+ * \ingroup QxCommon
+ * \brief qx::cvt : namespace to provide global functions to convert any kind of objects to/from QString and QVariant format
+ */
+
 #include <QxCommon/QxBool.h>
 
 namespace qx {
