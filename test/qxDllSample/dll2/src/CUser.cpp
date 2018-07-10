@@ -6,7 +6,7 @@
 
 void CUser::test()
 {
-   boost::shared_ptr<QObject> ptrTmp;
+   qx_shared_ptr<QObject> ptrTmp;
    ptrTmp.reset(new CUser());
    qx::clone(ptrTmp);
 
@@ -51,9 +51,15 @@ void CUser::test()
    qx::serialization::portable_binary::from_file(person, "person.bin2", 0);
 #endif // _QX_SERIALIZE_PORTABLE_BINARY
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
    qx::serialization::to_string(person);
    qx::serialization::to_file_compressed(person, "person.zip");
    qx::serialization::from_file_compressed(person, "person.zip");
+#else // _QX_ENABLE_BOOST_SERIALIZATION
+   qx::serialization::qt::to_string(person);
+   qx::serialization::qt::to_file_compressed(person, "person.zip");
+   qx::serialization::qt::from_file_compressed(person, "person.zip");
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
    //--------------------------------
 
@@ -88,9 +94,15 @@ void CUser::test()
    qx::serialization::portable_binary::from_file(user, "user.bin2", 0);
 #endif // _QX_SERIALIZE_PORTABLE_BINARY
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
    qx::serialization::to_string(user);
    qx::serialization::to_file_compressed(user, "user.zip");
    qx::serialization::from_file_compressed(user, "user.zip");
+#else // _QX_ENABLE_BOOST_SERIALIZATION
+   qx::serialization::qt::to_string(user);
+   qx::serialization::qt::to_file_compressed(user, "user.zip");
+   qx::serialization::qt::from_file_compressed(user, "user.zip");
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
    //--------------------------------
 

@@ -29,6 +29,7 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #ifndef _QX_EXPORT_DLL_MACRO_CPP_H_
 #define _QX_EXPORT_DLL_MACRO_CPP_H_
 
@@ -240,3 +241,4 @@ QX_BOOST_EXPORT_SERIALIZATION_WIDE_XML_CPP(T)
 
 #endif // _QX_USE_EXPORT_DLL_BOOST_SERIALIZATION_SINGLETON
 #endif // _QX_EXPORT_DLL_MACRO_CPP_H_
+#endif // _QX_ENABLE_BOOST_SERIALIZATION

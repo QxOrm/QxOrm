@@ -159,6 +159,20 @@ int main(int argc, char * argv[])
    // Dump 'blog_tmp' result from database (xml serialization)
    qx::dump(blog_tmp);
 
+   // Fetch relations defining columns to fetch with syntax { col_1, col_2, etc... }
+   list_blog lstBlogComplexRelation;
+   daoError = qx::dao::fetch_all_with_relation(QStringList() << "{ blog_text }" << "author_id { name, birthdate }" << "list_comment { comment_text } -> blog_id -> *", lstBlogComplexRelation);
+   qx::dump(lstBlogComplexRelation);
+   qAssert(lstBlogComplexRelation.size() > 0);
+   qAssert(lstBlogComplexRelation[0]->m_text != ""); // Fetched
+   qAssert(lstBlogComplexRelation[0]->m_dt_creation.isNull()); // Not fetched
+   qAssert(lstBlogComplexRelation[0]->m_author->m_sex == author::unknown); // Not fetched
+   qAssert(lstBlogComplexRelation[0]->m_author->m_name != ""); // Fetched
+   qAssert(lstBlogComplexRelation[0]->m_commentX.size() > 0);
+   qAssert(lstBlogComplexRelation[0]->m_commentX[0]->m_dt_create.isNull()); // Not fetched
+   qAssert(lstBlogComplexRelation[0]->m_commentX[0]->m_text != ""); // Fetched
+   qAssert(lstBlogComplexRelation[0]->m_commentX[0]->m_blog);
+
    // Check qx::dao::save_with_relation_recursive() function
    daoError = qx::dao::save_with_relation_recursive(blog_tmp);
    qAssert(! daoError.isValid());

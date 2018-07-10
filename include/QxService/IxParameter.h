@@ -29,7 +29,7 @@
 **
 ****************************************************************************/
 
-#if _QX_ENABLE_QT_NETWORK_DEPENDENCY
+#ifdef _QX_ENABLE_QT_NETWORK
 #ifndef _IX_SERVICE_PARAMETER_H_
 #define _IX_SERVICE_PARAMETER_H_
 
@@ -44,7 +44,18 @@
  * \brief Common interface for all parameters transfered by QxService module of QxOrm library
  */
 
+#include <QtCore/qdatastream.h>
+
 #include <QxRegister/QxRegisterInternalHelper.h>
+
+namespace qx {
+namespace service {
+class IxParameter;
+} // namespace service
+} // namespace qx
+
+QX_DLL_EXPORT QDataStream & operator<< (QDataStream & stream, const qx::service::IxParameter & t) BOOST_USED;
+QX_DLL_EXPORT QDataStream & operator>> (QDataStream & stream, qx::service::IxParameter & t) BOOST_USED;
 
 namespace qx {
 namespace service {
@@ -58,19 +69,42 @@ namespace service {
 class QX_DLL_EXPORT IxParameter
 {
 
+   friend QDataStream & ::operator<< (QDataStream & stream, const qx::service::IxParameter & t);
+   friend QDataStream & ::operator>> (QDataStream & stream, qx::service::IxParameter & t);
+
 public:
 
    IxParameter();
    virtual ~IxParameter();
 
+   // Need to override these methods only if you are using 'qx::service::QxConnect::serialization_qt' type (based on QDataStream)
+   // You can use QX_SERVICE_IX_PARAMETER_QDATASTREAM_HPP and QX_SERVICE_IX_PARAMETER_QDATASTREAM_CPP macro to override
+   virtual void registerClass() const;
+   virtual QString getClassName() const;
+   virtual void save(QDataStream & stream) const;
+   virtual void load(QDataStream & stream);
+
 };
 
-typedef boost::shared_ptr<IxParameter> IxParameter_ptr;
+typedef qx_shared_ptr<IxParameter> IxParameter_ptr;
 
 } // namespace service
 } // namespace qx
 
 QX_REGISTER_INTERNAL_HELPER_HPP(QX_DLL_EXPORT, qx::service::IxParameter, 0)
 
+#define QX_SERVICE_IX_PARAMETER_QDATASTREAM_HPP(className) \
+public: \
+virtual void registerClass() const; \
+virtual QString getClassName() const; \
+virtual void save(QDataStream & stream) const; \
+virtual void load(QDataStream & stream);
+
+#define QX_SERVICE_IX_PARAMETER_QDATASTREAM_CPP(className) \
+void className::registerClass() const { qx::QxClass< className >::getSingleton(); } \
+QString className::getClassName() const { return #className; } \
+void className::save(QDataStream & stream) const { qx::QxSerializeRegistered< className >::save(stream, (* this)); } \
+void className::load(QDataStream & stream) { qx::QxSerializeRegistered< className >::load(stream, (* this)); }
+
 #endif // _IX_SERVICE_PARAMETER_H_
-#endif // _QX_ENABLE_QT_NETWORK_DEPENDENCY
+#endif // _QX_ENABLE_QT_NETWORK

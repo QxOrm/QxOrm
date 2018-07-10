@@ -66,7 +66,7 @@ class QX_DLL_EXPORT QxSqlRelationParams
 
 public:
 
-   typedef boost::shared_ptr<QxSqlRelationLinked> type_relation_linked_ptr;
+   typedef qx_shared_ptr<QxSqlRelationLinked> type_relation_linked_ptr;
    typedef QHash<QString, type_relation_linked_ptr> type_lst_relation_linked;
 
 protected:
@@ -86,6 +86,7 @@ protected:
    qx::dao::save_mode::e_save_mode  m_eSaveMode;            //!< Used to improve performance, if you know that you are just inserting or updating items in database
    bool                             m_bRecursiveMode;       //!< Recursive mode to iterate over each level of relationship
    QSet<void *>                     m_lstRecursiveItems;    //!< Used by recursive process to avoid infinite loop
+   QPair<QSet<QString>, long> *     m_pColumns;             //!< List of relation columns to fetch (syntax : my_relation { column_1, column_2, etc... }), if empty then fetch all columns
 
 public:
 
@@ -113,6 +114,10 @@ public:
    inline qx::dao::save_mode::e_save_mode saveMode() const  { return m_eSaveMode; }
    inline bool recursiveMode() const                        { return m_bRecursiveMode; }
    inline bool existRecursiveItem(void * p) const           { return m_lstRecursiveItems.contains(p); }
+   inline QSet<QString> getColumns() const                  { return (m_pColumns ? m_pColumns->first : QSet<QString>()); }
+   inline bool checkColumns(const QString & s) const        { return (! m_pColumns || m_pColumns->first.isEmpty() || m_pColumns->first.contains(s)); }
+   inline long getColumnsCount() const                      { return (m_pColumns ? m_pColumns->first.count() : 0); }
+   inline long getColumnsOffset() const                     { return (m_pColumns ? m_pColumns->second : 0); }
 
    inline void setId(const QVariant & vId)                     { m_vId = vId; }
    inline void setIndex(long lIndex)                           { m_lIndex = lIndex; }
@@ -129,6 +134,8 @@ public:
    inline void setSaveMode(qx::dao::save_mode::e_save_mode e)  { m_eSaveMode = e; }
    inline void setRecursiveMode(bool b)                        { m_bRecursiveMode = b; }
    inline void insertRecursiveItem(void * p)                   { if (p) { m_lstRecursiveItems.insert(p); } }
+   inline void setColumns(QPair<QSet<QString>, long> * p)      { m_pColumns = p; }
+   inline void setColumnsOffset(long l)                        { if (m_pColumns) { m_pColumns->second = l; } }
 
 };
 

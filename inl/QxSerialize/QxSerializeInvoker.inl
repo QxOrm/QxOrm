@@ -29,6 +29,8 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
+
 namespace boost {
 namespace serialization {
 
@@ -38,3 +40,5 @@ inline void serialize(Archive & ar, qx::trait::no_base_class_defined & t, const 
 
 } // namespace serialization
 } // namespace boost
+
+#endif // _QX_ENABLE_BOOST_SERIALIZATION

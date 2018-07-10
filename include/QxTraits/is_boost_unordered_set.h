@@ -55,25 +55,31 @@ namespace trait {
  * \brief qx::trait::is_boost_unordered_set<T>::value : return true if T is a boost::unordered_set<> or boost::unordered_multiset<> container, otherwise return false
  */
 template <typename T>
-class is_boost_unordered_set
-{
+struct is_boost_unordered_set : public boost::mpl::false_ { ; };
 
-private:
+template <typename T>
+struct is_boost_unordered_set< boost::unordered_set<T> > : public boost::mpl::true_ { ; };
 
-   template <typename V> static char isContainer(const boost::unordered_set<V> &);
-   template <typename V> static char isContainer(const boost::unordered_multiset<V> &);
-   static int isContainer(...);
-   static T t;
+template <typename T>
+struct is_boost_unordered_set< boost::unordered_set<T> & > : public boost::mpl::true_ { ; };
 
-public:
+template <typename T>
+struct is_boost_unordered_set< const boost::unordered_set<T> > : public boost::mpl::true_ { ; };
 
-   enum { value = (sizeof(qx::trait::is_boost_unordered_set<T>::isContainer(t)) == sizeof(char)) };
+template <typename T>
+struct is_boost_unordered_set< const boost::unordered_set<T> & > : public boost::mpl::true_ { ; };
 
-   typedef typename boost::mpl::if_c<qx::trait::is_boost_unordered_set<T>::value, 
-                                     boost::mpl::true_, 
-                                     boost::mpl::false_>::type type;
+template <typename T>
+struct is_boost_unordered_set< boost::unordered_multiset<T> > : public boost::mpl::true_ { ; };
 
-};
+template <typename T>
+struct is_boost_unordered_set< boost::unordered_multiset<T> & > : public boost::mpl::true_ { ; };
+
+template <typename T>
+struct is_boost_unordered_set< const boost::unordered_multiset<T> > : public boost::mpl::true_ { ; };
+
+template <typename T>
+struct is_boost_unordered_set< const boost::unordered_multiset<T> & > : public boost::mpl::true_ { ; };
 
 } // namespace trait
 } // namespace qx

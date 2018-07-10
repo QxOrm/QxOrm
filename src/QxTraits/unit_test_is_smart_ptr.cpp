@@ -29,6 +29,8 @@
 **
 ****************************************************************************/
 
+#ifndef _QX_MODE_RELEASE
+
 #include <QxPrecompiled.h>
 
 #include <boost/static_assert.hpp>
@@ -40,8 +42,8 @@
 #include <QxTraits/is_ptr_to_pod.h>
 #include <QxTraits/is_qx_registered.h>
 
-#include <QxCommon/QxStringCvt.h>
-#include <QxCommon/QxStringCvt_Impl.h>
+#include <QxConvert/QxConvert.h>
+#include <QxConvert/QxConvert_Impl.h>
 
 #include <QxDao/QxDao.h>
 #include <QxDao/QxDao_Impl.h>
@@ -141,3 +143,5 @@ void unit_test_is_smart_ptr()
 
 } // namespace unit_test
 } // namespace qx
+
+#endif // _QX_MODE_RELEASE

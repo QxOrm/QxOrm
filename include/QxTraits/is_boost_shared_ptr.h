@@ -55,24 +55,19 @@ namespace trait {
  * \brief qx::trait::is_boost_shared_ptr<T>::value : return true if T is a boost::shared_ptr<> smart-pointer, otherwise return false
  */
 template <typename T>
-class is_boost_shared_ptr
-{
+struct is_boost_shared_ptr : public boost::mpl::false_ { ; };
 
-private:
+template <typename T>
+struct is_boost_shared_ptr< boost::shared_ptr<T> > : public boost::mpl::true_ { ; };
 
-   template <typename V> static char isSmartPtr(boost::shared_ptr<V>);
-   static int isSmartPtr(...);
-   static T t;
+template <typename T>
+struct is_boost_shared_ptr< boost::shared_ptr<T> & > : public boost::mpl::true_ { ; };
 
-public:
+template <typename T>
+struct is_boost_shared_ptr< const boost::shared_ptr<T> > : public boost::mpl::true_ { ; };
 
-   enum { value = (sizeof(qx::trait::is_boost_shared_ptr<T>::isSmartPtr(t)) == sizeof(char)) };
-
-   typedef typename boost::mpl::if_c<qx::trait::is_boost_shared_ptr<T>::value, 
-                                     boost::mpl::true_, 
-                                     boost::mpl::false_>::type type;
-
-};
+template <typename T>
+struct is_boost_shared_ptr< const boost::shared_ptr<T> & > : public boost::mpl::true_ { ; };
 
 } // namespace trait
 } // namespace qx

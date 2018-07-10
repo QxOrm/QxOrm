@@ -125,12 +125,13 @@ public:
       { QVariant v = query.value(lOffsetOld + i); qx::cvt::from_variant(v, item.key(), "", i); }
       for (int i = 0; i < pId->getNameCount(); i++)
       { QVariant v = query.value(lOffsetOld + i); pId->fromVariant((& item_val), v, "", i); }
+      long lOffsetRelation = (lOffsetOld + lOffsetId); long lCurrIndex = 0;
       while ((p = this->nextData(lIndex)))
-      { p->fromVariant((& item_val), query.value(lIndex + lOffsetOld + lOffsetId - 1)); }
+      { if (params.checkColumns(p->getKey())) { p->fromVariant((& item_val), query.value(lCurrIndex + lOffsetRelation)); lCurrIndex++; } }
 
       if (params.relationX())
       {
-         long lOffsetCurrent = (lIndex + lOffsetOld + lOffsetId);
+         long lOffsetCurrent = (lCurrIndex + lOffsetRelation);
          long lIndexOwnerOld = params.indexOwner(); params.setIndexOwner(params.index());
          void * pOwnerOld = params.owner(); params.setOwner(& item_val);
          lOffsetOld = params.offset(); params.setOffset(lOffsetCurrent);

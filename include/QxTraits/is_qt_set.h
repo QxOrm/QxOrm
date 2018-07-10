@@ -56,24 +56,19 @@ namespace trait {
  * \brief qx::trait::is_qt_set<T>::value : return true if T is a QSet<> container of Qt library, otherwise return false
  */
 template <typename T>
-class is_qt_set
-{
+struct is_qt_set : public boost::mpl::false_ { ; };
 
-private:
+template <typename T>
+struct is_qt_set< QSet<T> > : public boost::mpl::true_ { ; };
 
-   template <typename V> static char isContainer(const QSet<V> &);
-   static int isContainer(...);
-   static T t;
+template <typename T>
+struct is_qt_set< QSet<T> & > : public boost::mpl::true_ { ; };
 
-public:
+template <typename T>
+struct is_qt_set< const QSet<T> > : public boost::mpl::true_ { ; };
 
-   enum { value = (sizeof(qx::trait::is_qt_set<T>::isContainer(t)) == sizeof(char)) };
-
-   typedef typename boost::mpl::if_c<qx::trait::is_qt_set<T>::value, 
-                                     boost::mpl::true_, 
-                                     boost::mpl::false_>::type type;
-
-};
+template <typename T>
+struct is_qt_set< const QSet<T> & > : public boost::mpl::true_ { ; };
 
 } // namespace trait
 } // namespace qx

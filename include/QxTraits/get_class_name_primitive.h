@@ -100,7 +100,7 @@
 
 #include <QtSql/qsqlerror.h>
 
-#if _QX_ENABLE_QT_GUI_DEPENDENCY
+#ifdef _QX_ENABLE_QT_GUI
 #include <QtGui/qcolor.h>
 #include <QtGui/qfont.h>
 #include <QtGui/qimage.h>
@@ -109,7 +109,7 @@
 #include <QtGui/qpicture.h>
 #include <QtGui/qpixmap.h>
 #include <QtGui/qregion.h>
-#endif // _QX_ENABLE_QT_GUI_DEPENDENCY
+#endif // _QX_ENABLE_QT_GUI
 
 #if (QT_VERSION >= 0x040600)
 #include <QtCore/qscopedpointer.h>
@@ -151,7 +151,7 @@ QX_REGISTER_CLASS_NAME(QVariant)
 QX_REGISTER_CLASS_NAME(QUuid)
 QX_REGISTER_CLASS_NAME(QSqlError)
 
-#if _QX_ENABLE_QT_GUI_DEPENDENCY
+#ifdef _QX_ENABLE_QT_GUI
 QX_REGISTER_CLASS_NAME(QColor)
 QX_REGISTER_CLASS_NAME(QFont)
 QX_REGISTER_CLASS_NAME(QImage)
@@ -160,7 +160,7 @@ QX_REGISTER_CLASS_NAME(QMatrix)
 QX_REGISTER_CLASS_NAME(QPicture)
 QX_REGISTER_CLASS_NAME(QPixmap)
 QX_REGISTER_CLASS_NAME(QRegion)
-#endif // _QX_ENABLE_QT_GUI_DEPENDENCY
+#endif // _QX_ENABLE_QT_GUI
 
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(std::allocator)
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(std::vector)

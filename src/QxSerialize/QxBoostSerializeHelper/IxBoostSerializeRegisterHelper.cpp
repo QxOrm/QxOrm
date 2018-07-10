@@ -29,6 +29,8 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
+
 #include <QxPrecompiled.h>
 
 #include <QxSerialize/QxBoostSerializeHelper/IxBoostSerializeRegisterHelper.h>
@@ -50,3 +52,5 @@ IxBoostSerializeRegisterHelper::~IxBoostSerializeRegisterHelper()
 }
 
 } // namespace qx
+
+#endif // _QX_ENABLE_BOOST_SERIALIZATION

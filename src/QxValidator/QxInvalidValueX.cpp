@@ -122,3 +122,17 @@ void QxInvalidValueX::insert(const QxInvalidValueX & other)
 }
 
 } // namespace qx
+
+QDataStream & operator<< (QDataStream & stream, const qx::QxInvalidValueX & t)
+{
+   stream << t.m_lstInvalidValues;
+   stream << t.m_sCurrentPath;
+   return stream;
+}
+
+QDataStream & operator>> (QDataStream & stream, qx::QxInvalidValueX & t)
+{
+   stream >> t.m_lstInvalidValues;
+   stream >> t.m_sCurrentPath;
+   return stream;
+}

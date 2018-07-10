@@ -29,15 +29,17 @@
 **
 ****************************************************************************/
 
-#include <QxPrecompiled.h>
+#ifdef _QX_ENABLE_QT_NETWORK
 
-#if _QX_ENABLE_QT_NETWORK_DEPENDENCY
+#include <QxPrecompiled.h>
 
 #include <QxService/QxTools.h>
 #include <QxService/QxConnect.h>
 
 #include <QxCommon/QxSimpleCrypt.h>
 #include <QxCommon/QxExceptionCode.h>
+
+#include <QxSerialize/QxSerializeQDataStream.h>
 
 #include <QxMemLeak/mem_leak.h>
 
@@ -110,6 +112,7 @@ qx_bool QxTools::readSocket(QTcpSocket & socket, QxTransaction & transaction, qu
       case QxConnect::serialization_polymorphic_xml:        bDeserializeOk = qx::serialization::polymorphic_xml::from_byte_array(transaction, dataSerialized); break;
       case QxConnect::serialization_polymorphic_text:       bDeserializeOk = qx::serialization::polymorphic_text::from_byte_array(transaction, dataSerialized); break;
 #endif // _QX_SERIALIZE_POLYMORPHIC
+      case QxConnect::serialization_qt:                     bDeserializeOk = qx::serialization::qt::from_byte_array(transaction, dataSerialized); break;
       default:                                              return qx_bool(QX_ERROR_UNKNOWN, "unknown serialization type to read data from socket");
    }
 
@@ -149,6 +152,7 @@ qx_bool QxTools::writeSocket(QTcpSocket & socket, QxTransaction & transaction, q
       case QxConnect::serialization_polymorphic_xml:        dataSerialized = qx::serialization::polymorphic_xml::to_byte_array(transaction, (& owner)); break;
       case QxConnect::serialization_polymorphic_text:       dataSerialized = qx::serialization::polymorphic_text::to_byte_array(transaction, (& owner)); break;
 #endif // _QX_SERIALIZE_POLYMORPHIC
+      case QxConnect::serialization_qt:                     dataSerialized = qx::serialization::qt::to_byte_array(transaction, (& owner)); break;
       default:                                              return qx_bool(QX_ERROR_UNKNOWN, "unknown serialization type to write data to socket");
    }
 
@@ -210,4 +214,4 @@ qx_bool QxTools::writeSocket(QTcpSocket & socket, QxTransaction & transaction, q
 } // namespace service
 } // namespace qx
 
-#endif // _QX_ENABLE_QT_NETWORK_DEPENDENCY
+#endif // _QX_ENABLE_QT_NETWORK

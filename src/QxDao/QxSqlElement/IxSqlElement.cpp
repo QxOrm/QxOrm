@@ -100,3 +100,26 @@ void IxSqlElement::updateKeys()
 } // namespace detail
 } // namespace dao
 } // namespace qx
+
+QDataStream & operator<< (QDataStream & stream, const qx::dao::detail::IxSqlElement & t)
+{
+   QString sExtraSettings = t.getExtraSettings();
+   stream << t.m_iIndex;
+   stream << t.m_lstColumns;
+   stream << t.m_lstKeys;
+   stream << t.m_lstValues;
+   stream << sExtraSettings;
+   return stream;
+}
+
+QDataStream & operator>> (QDataStream & stream, qx::dao::detail::IxSqlElement & t)
+{
+   QString sExtraSettings;
+   stream >> t.m_iIndex;
+   stream >> t.m_lstColumns;
+   stream >> t.m_lstKeys;
+   stream >> t.m_lstValues;
+   stream >> sExtraSettings;
+   t.setExtraSettings(sExtraSettings);
+   return stream;
+}

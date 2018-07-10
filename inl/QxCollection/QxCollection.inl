@@ -361,33 +361,33 @@ inline void QxCollection<Key, Value>::sortByValue(bool bAscending /* = true */)
 } // namespace qx
 
 template <typename Key, typename Value>
-QDataStream & operator >> (QDataStream & stream, qx::QxCollection<Key, Value> & coll)
+QDataStream & operator<< (QDataStream & stream, const qx::QxCollection<Key, Value> & t)
 {
-   qint32 lCount = 0;
-   stream >> lCount;
-   coll.clear();
-   coll.reserve(lCount);
+   long lCount = t.count();
+   stream << (qint32)(lCount);
 
-   for (qint32 l = 0; l < lCount; l++)
+   for (long l = 0; l < lCount; l++)
    {
-      Key key;       stream >> key;
-      Value value;   stream >> value;
-      coll.insert(key, value);
+      stream << t.getKeyByIndex(l);
+      stream << t.getByIndex(l);
    }
 
    return stream;
 }
 
 template <typename Key, typename Value>
-QDataStream & operator << (QDataStream & stream, const qx::QxCollection<Key, Value> & coll)
+QDataStream & operator>> (QDataStream & stream, qx::QxCollection<Key, Value> & t)
 {
-   long lCount = coll.count();
-   stream << (qint32)(lCount);
+   qint32 lCount = 0;
+   stream >> lCount;
+   t.clear();
+   t.reserve(lCount);
 
-   for (long l = 0; l < lCount; l++)
+   for (qint32 l = 0; l < lCount; l++)
    {
-      stream << coll.getKeyByIndex(l);
-      stream << coll.getByIndex(l);
+      Key key;       stream >> key;
+      Value value;   stream >> value;
+      t.insert(key, value);
    }
 
    return stream;

@@ -142,7 +142,7 @@ public:
       for (int i = 0; i < pForeign->getNameCount(); i++)
       { QVariant v = query.value(lOffsetOld + lOffsetId + i); pForeign->fromVariant((& item_val), v, "", i); }
       while ((p = this->nextData(lIndex)))
-      { if (p != pForeign) { p->fromVariant((& item_val), query.value(lOffsetRelation++)); } }
+      { if ((p != pForeign) && (params.checkColumns(p->getKey()))) { p->fromVariant((& item_val), query.value(lOffsetRelation++)); } }
 
       if (params.relationX())
       {

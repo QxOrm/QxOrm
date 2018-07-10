@@ -29,6 +29,8 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
+
 #include <QxPrecompiled.h>
 
 #include <QxSerialize/Qt/QxSerialize_QPoint.h>
@@ -50,3 +52,5 @@ inline void qx_serialize(Archive & ar, QPoint & t, const unsigned int file_versi
 } // namespace serialization
 
 QX_SERIALIZE_FAST_COMPIL_SERIALIZE_CPP(QPoint)
+
+#endif // _QX_ENABLE_BOOST_SERIALIZATION

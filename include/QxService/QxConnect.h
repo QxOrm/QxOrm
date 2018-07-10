@@ -29,7 +29,7 @@
 **
 ****************************************************************************/
 
-#if _QX_ENABLE_QT_NETWORK_DEPENDENCY
+#ifdef _QX_ENABLE_QT_NETWORK
 #ifndef _QX_SERVICE_CONNECT_H_
 #define _QX_SERVICE_CONNECT_H_
 
@@ -64,6 +64,10 @@
 #define QX_SERVICE_DEFAULT_SERIALIZATION_TYPE serialization_wide_xml
 #endif // _QX_SERIALIZE_BINARY
 
+#ifndef QX_SERVICE_DEFAULT_SERIALIZATION_TYPE
+#define QX_SERVICE_DEFAULT_SERIALIZATION_TYPE serialization_qt
+#endif // QX_SERVICE_DEFAULT_SERIALIZATION_TYPE
+
 #define QX_SERVICE_DEFAULT_ENCRYPT_KEY Q_UINT64_C(0x0f2aac3b24358a1a)
 
 namespace qx {
@@ -84,7 +88,8 @@ public:
 
    enum serialization_type { serialization_binary, serialization_xml, serialization_text, serialization_portable_binary, 
                              serialization_wide_binary, serialization_wide_xml, serialization_wide_text, 
-                             serialization_polymorphic_binary, serialization_polymorphic_xml, serialization_polymorphic_text };
+                             serialization_polymorphic_binary, serialization_polymorphic_xml, serialization_polymorphic_text, 
+                             serialization_qt };
 
 protected:
 
@@ -127,4 +132,4 @@ public:
 QX_DLL_EXPORT_QX_SINGLETON_HPP(qx::service::QxConnect)
 
 #endif // _QX_SERVICE_CONNECT_H_
-#endif // _QX_ENABLE_QT_NETWORK_DEPENDENCY
+#endif // _QX_ENABLE_QT_NETWORK

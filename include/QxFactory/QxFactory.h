@@ -90,15 +90,17 @@ public:
    virtual void * createObjectNudePtr() const
    { QxClass<T>::getSingleton(); return qxCreateInstance<boost::is_abstract<T>::value, 0>::createNudePtr(); }
 
+#ifndef _QX_NO_RTTI
    virtual const std::type_info & typeInfo() const
    { return typeid(T); }
+#endif // _QX_NO_RTTI
 
 private:
 
    template <bool bIsAbstract /* = false */, int dummy>
    struct qxCreateInstance
    {
-      static inline boost::any create()      { boost::shared_ptr<T> ptr; ptr.reset(new T()); return boost::any(ptr); }
+      static inline boost::any create()      { qx_shared_ptr<T> ptr; ptr.reset(new T()); return boost::any(ptr); }
       static inline void * createNudePtr()   { return static_cast<void *>(new T()); }
    };
 

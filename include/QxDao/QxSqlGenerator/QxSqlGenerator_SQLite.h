@@ -67,7 +67,7 @@ private:
 
 };
 
-typedef boost::shared_ptr<QxSqlGenerator_SQLite> QxSqlGenerator_SQLite_ptr;
+typedef qx_shared_ptr<QxSqlGenerator_SQLite> QxSqlGenerator_SQLite_ptr;
 
 } // namespace detail
 } // namespace dao

@@ -45,10 +45,22 @@
 
 #include <QtCore/qsharedpointer.h>
 #include <QtCore/qstringlist.h>
+#include <QtCore/qdatastream.h>
+
+#include <QxSerialize/QDataStream/QxSerializeQDataStream_QSharedPointer.h>
 
 namespace qx {
 template <class T> QSharedPointer<T> clone_to_qt_shared_ptr(const T & obj);
 } // namespace qx
+
+namespace qx {
+namespace dao {
+template <typename T> class ptr;
+} // namespace dao
+} // namespace qx
+
+template <typename T> QDataStream & operator<< (QDataStream & stream, const qx::dao::ptr<T> & t);
+template <typename T> QDataStream & operator>> (QDataStream & stream, qx::dao::ptr<T> & t);
 
 namespace qx {
 namespace dao {
@@ -126,6 +138,9 @@ template <typename T>
 class ptr
 {
 
+   template <class U> friend QDataStream & ::operator<< (QDataStream & stream, const qx::dao::ptr<U> & t);
+   template <class U> friend QDataStream & ::operator>> (QDataStream & stream, qx::dao::ptr<U> & t);
+
 private:
 
    QSharedPointer<T> m_pWork;       //!< Default pointer => user works with this pointer
@@ -173,10 +188,10 @@ public:
    inline void reset()                                         { m_pWork.clear(); m_pOriginal.clear(); }
    inline void reset(const QSharedPointer<T> & ptr)            { m_pWork = ptr; m_pOriginal.clear(); }
    inline void resetOriginal(const QSharedPointer<T> & ptr)    { m_pOriginal = ptr; }
-   inline void saveToOriginal()                                { m_pOriginal.clear(); if (m_pWork) { m_pOriginal = qx::clone_to_qt_shared_ptr(* m_pWork); } }
-   inline void restoreFromOriginal()                           { m_pWork.clear(); if (m_pOriginal) { m_pWork = qx::clone_to_qt_shared_ptr(* m_pOriginal); } }
    inline bool isDirty() const                                 { QStringList lstDiff; return isDirty(lstDiff); }
    inline QSharedPointer<T> toQtSharedPointer() const          { return m_pWork; }
+   inline void saveToOriginal()                                { m_pOriginal.clear(); if (m_pWork) { m_pOriginal = qx::clone_to_qt_shared_ptr(* m_pWork); } }
+   inline void restoreFromOriginal()                           { m_pWork.clear(); if (m_pOriginal) { m_pWork = qx::clone_to_qt_shared_ptr(* m_pOriginal); } }
 
    template <class X> qx::dao::ptr<X> staticCast() const       { return qx::dao::ptr<X>(m_pWork.template staticCast<X>(), m_pOriginal.template staticCast<X>()); }
    template <class X> qx::dao::ptr<X> dynamicCast() const      { return qx::dao::ptr<X>(m_pWork.template dynamicCast<X>(), m_pOriginal.template dynamicCast<X>()); }
@@ -202,5 +217,21 @@ template<class T, class X> bool operator==(const qx::dao::ptr<T> & ptr1, const X
 template<class T, class X> bool operator!=(const qx::dao::ptr<T> & ptr1, const X * ptr2)                 { return (ptr1.toQtSharedPointer() != ptr2); }
 template<class T, class X> bool operator==(const T * ptr1, const qx::dao::ptr<X> & ptr2)                 { return (ptr1 == ptr2.toQtSharedPointer()); }
 template<class T, class X> bool operator!=(const T * ptr1, const qx::dao::ptr<X> & ptr2)                 { return (ptr1 != ptr2.toQtSharedPointer()); }
+
+template <typename T>
+QDataStream & operator<< (QDataStream & stream, const qx::dao::ptr<T> & t)
+{
+   stream << t.m_pWork;
+   stream << t.m_pOriginal;
+   return stream;
+}
+
+template <typename T>
+QDataStream & operator>> (QDataStream & stream, qx::dao::ptr<T> & t)
+{
+   stream >> t.m_pWork;
+   stream >> t.m_pOriginal;
+   return stream;
+}
 
 #endif // _QX_DAO_POINTER_H_

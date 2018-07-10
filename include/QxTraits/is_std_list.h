@@ -56,24 +56,19 @@ namespace trait {
  * \brief qx::trait::is_std_list<T>::value : return true if T is a std::list<> container of stl library, otherwise return false
  */
 template <typename T>
-class is_std_list
-{
+struct is_std_list : public boost::mpl::false_ { ; };
 
-private:
+template <typename T>
+struct is_std_list< std::list<T> > : public boost::mpl::true_ { ; };
 
-   template <typename V> static char isContainer(const std::list<V> &);
-   static int isContainer(...);
-   static T t;
+template <typename T>
+struct is_std_list< std::list<T> & > : public boost::mpl::true_ { ; };
 
-public:
+template <typename T>
+struct is_std_list< const std::list<T> > : public boost::mpl::true_ { ; };
 
-   enum { value = (sizeof(qx::trait::is_std_list<T>::isContainer(t)) == sizeof(char)) };
-
-   typedef typename boost::mpl::if_c<qx::trait::is_std_list<T>::value, 
-                                     boost::mpl::true_, 
-                                     boost::mpl::false_>::type type;
-
-};
+template <typename T>
+struct is_std_list< const std::list<T> & > : public boost::mpl::true_ { ; };
 
 } // namespace trait
 } // namespace qx

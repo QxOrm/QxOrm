@@ -29,7 +29,8 @@
 **
 ****************************************************************************/
 
-#if _QX_ENABLE_QT_GUI_DEPENDENCY
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
+#ifdef _QX_ENABLE_QT_GUI
 #ifndef _QX_SERIALIZE_QPIXMAP_H_
 #define _QX_SERIALIZE_QPIXMAP_H_
 
@@ -56,4 +57,5 @@ QX_SERIALIZE_FAST_COMPIL_SAVE_LOAD_HPP(QX_DLL_EXPORT, QPixmap)
 QX_BOOST_EXPORT_SERIALIZATION_FAST_COMPIL_HPP(QPixmap)
 
 #endif // _QX_SERIALIZE_QPIXMAP_H_
-#endif // _QX_ENABLE_QT_GUI_DEPENDENCY
+#endif // _QX_ENABLE_QT_GUI
+#endif // _QX_ENABLE_BOOST_SERIALIZATION

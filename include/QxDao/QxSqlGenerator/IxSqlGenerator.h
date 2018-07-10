@@ -88,7 +88,7 @@ public:
 
 };
 
-typedef boost::shared_ptr<IxSqlGenerator> IxSqlGenerator_ptr;
+typedef qx_shared_ptr<IxSqlGenerator> IxSqlGenerator_ptr;
 
 } // namespace detail
 } // namespace dao

@@ -15,7 +15,7 @@ public:
    static QString str_composite_key() { return "author_id_0|author_id_1|author_id_2"; }
 
 // -- typedef
-   typedef boost::shared_ptr<blog> blog_ptr;
+   typedef qx_shared_ptr<blog> blog_ptr;
    typedef std::vector<blog_ptr> list_blog;
 
 // -- enum
@@ -51,7 +51,7 @@ public:
 QX_REGISTER_PRIMARY_KEY(author, author::type_composite_key)
 QX_REGISTER_HPP_QX_BLOG(author, qx::trait::no_base_class_defined, 0)
 
-typedef boost::shared_ptr<author> author_ptr;
+typedef qx_shared_ptr<author> author_ptr;
 typedef qx::QxCollection<author::type_composite_key, author_ptr> list_author;
 
 #endif // _QX_BLOG_AUTHOR_H_

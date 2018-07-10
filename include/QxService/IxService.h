@@ -29,7 +29,7 @@
 **
 ****************************************************************************/
 
-#if _QX_ENABLE_QT_NETWORK_DEPENDENCY
+#ifdef _QX_ENABLE_QT_NETWORK
 #ifndef _IX_SERVICE_H_
 #define _IX_SERVICE_H_
 
@@ -44,6 +44,8 @@
  * \brief Common interface for all services defined with QxService module of QxOrm library
  */
 
+#include <QtCore/qdatastream.h>
+
 #include <QxCommon/QxBool.h>
 
 #include <QxRegister/QxRegisterInternalHelper.h>
@@ -52,8 +54,16 @@
 
 namespace qx {
 namespace service {
-
 class QxTransaction;
+class IxService;
+} // namespace service
+} // namespace qx
+
+QX_DLL_EXPORT QDataStream & operator<< (QDataStream & stream, const qx::service::IxService & t) BOOST_USED;
+QX_DLL_EXPORT QDataStream & operator>> (QDataStream & stream, qx::service::IxService & t) BOOST_USED;
+
+namespace qx {
+namespace service {
 
 /*!
  * \ingroup QxService
@@ -64,6 +74,9 @@ class QxTransaction;
 class QX_DLL_EXPORT IxService
 {
 
+   friend QDataStream & ::operator<< (QDataStream & stream, const qx::service::IxService & t);
+   friend QDataStream & ::operator>> (QDataStream & stream, qx::service::IxService & t);
+
 protected:
 
    QString m_sServiceName;                            //!< Service name <=> class name
@@ -71,7 +84,7 @@ protected:
    IxParameter_ptr m_pInputParameter;                 //!< List of input parameters (request)
    IxParameter_ptr m_pOutputParameter;                //!< List of output parameters (reply)
    qx_bool m_bMessageReturn;                          //!< Message return to indicate if an error occured
-   boost::shared_ptr<QxTransaction> m_pTransaction;   //!< Current transaction after executing service method
+   qx_shared_ptr<QxTransaction> m_pTransaction;       //!< Current transaction after executing service method
 
 public:
 
@@ -84,7 +97,7 @@ public:
    IxParameter_ptr getInputParameter_BaseClass() const         { return m_pInputParameter; }
    IxParameter_ptr getOutputParameter_BaseClass() const        { return m_pOutputParameter; }
    qx_bool getMessageReturn() const                            { return m_bMessageReturn; }
-   boost::shared_ptr<QxTransaction> getTransaction() const;
+   qx_shared_ptr<QxTransaction> getTransaction() const;
 
    void setServiceName(const QString & s)                               { qAssert(! s.isEmpty()); m_sServiceName = s; }
    void setServiceMethodName(const QString & s)                         { qAssert(! s.isEmpty()); m_sServiceMethodName = s; }
@@ -92,7 +105,7 @@ public:
    void setOutputParameter(IxParameter_ptr p)                           { m_pOutputParameter = p; }
    void setMessageReturn(const qx_bool & b)                             { m_bMessageReturn = b; }
    void setMessageReturn(long l, const QString & s)                     { m_bMessageReturn = qx_bool(l, s); }
-   void setTransaction(const boost::shared_ptr<QxTransaction> & p);
+   void setTransaction(const qx_shared_ptr<QxTransaction> & p);
 
    bool isValid() const             { return m_bMessageReturn.getValue(); }
    bool isValidWithOutput() const   { return (isValid() && (m_pOutputParameter.get() != NULL)); }
@@ -103,7 +116,7 @@ public:
 
 };
 
-typedef boost::shared_ptr<IxService> IxService_ptr;
+typedef qx_shared_ptr<IxService> IxService_ptr;
 
 } // namespace service
 } // namespace qx
@@ -111,4 +124,4 @@ typedef boost::shared_ptr<IxService> IxService_ptr;
 QX_REGISTER_INTERNAL_HELPER_HPP(QX_DLL_EXPORT, qx::service::IxService, 0)
 
 #endif // _IX_SERVICE_H_
-#endif // _QX_ENABLE_QT_NETWORK_DEPENDENCY
+#endif // _QX_ENABLE_QT_NETWORK

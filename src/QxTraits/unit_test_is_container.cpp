@@ -29,6 +29,8 @@
 **
 ****************************************************************************/
 
+#ifndef _QX_MODE_RELEASE
+
 #include <QxPrecompiled.h>
 
 #include <boost/static_assert.hpp>
@@ -74,3 +76,5 @@ void unit_test_is_container()
 
 } // namespace unit_test
 } // namespace qx
+
+#endif // _QX_MODE_RELEASE

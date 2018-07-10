@@ -48,6 +48,8 @@
 
 #include <QxSerialize/Qx/QxSerialize_QxCollection.h>
 
+#include <QxSerialize/QDataStream/QxSerializeQDataStream_all_include.h>
+
 #include <QxMemLeak/mem_leak.h>
 
 namespace qx {
@@ -537,6 +539,11 @@ QxSqlQuery & QxSqlQuery::isLessThanOrEqualTo(const QVariant & val)
    return addSqlCompare(val, qx::dao::detail::QxSqlCompare::_is_less_than_or_equal_to);
 }
 
+QxSqlQuery & QxSqlQuery::customOperator(const QString & sCustomOperator, const QVariant & val)
+{
+   return addSqlCompare(val, qx::dao::detail::QxSqlCompare::_custom_operator, sCustomOperator);
+}
+
 QxSqlQuery & QxSqlQuery::in(const QVariantList & values)
 {
    return addSqlIn(values, qx::dao::detail::QxSqlIn::_in);
@@ -688,13 +695,13 @@ QxSqlQuery & QxSqlQuery::addSqlExpression(const QString & column, qx::dao::detai
    return (* this);
 }
 
-QxSqlQuery & QxSqlQuery::addSqlCompare(const QVariant & val, qx::dao::detail::QxSqlCompare::type type)
+QxSqlQuery & QxSqlQuery::addSqlCompare(const QVariant & val, qx::dao::detail::QxSqlCompare::type type, const QString & sCustomOperator /* = QString() */)
 {
    if (! m_pSqlElementTemp)
    { qDebug("[QxOrm] qx::QxSqlQuery : '%s'", "invalid SQL query, need a column name"); qAssert(false); return (* this); }
 
    qx::dao::detail::QxSqlCompare_ptr p;
-   p.reset(new qx::dao::detail::QxSqlCompare(m_iSqlElementIndex++, type));
+   p.reset(new qx::dao::detail::QxSqlCompare(m_iSqlElementIndex++, type, sCustomOperator));
    p->clone(m_pSqlElementTemp.get());
    p->setValue(val);
 
@@ -802,6 +809,8 @@ qx::dao::detail::IxSqlElement_ptr qx_create_sql_element(qx::dao::detail::IxSqlEl
    return p;
 }
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
+
 namespace boost {
 namespace serialization {
 
@@ -867,7 +876,7 @@ inline void qx_load(Archive & ar, qx::QxSqlQuery & t, const unsigned int file_ve
    t.m_pSqlResult.reset();
    if ((lstResultPosByKey.count() > 0) || (lstResultValues.count() > 0))
    {
-      t.m_pSqlResult = boost::shared_ptr<qx::QxSqlQuery::QxSqlResult>(new qx::QxSqlQuery::QxSqlResult());
+      t.m_pSqlResult = qx_shared_ptr<qx::QxSqlQuery::QxSqlResult>(new qx::QxSqlQuery::QxSqlResult());
       t.m_pSqlResult->positionByKey = lstResultPosByKey;
       t.m_pSqlResult->values = lstResultValues;
    }
@@ -902,3 +911,100 @@ inline void qx_load(Archive & ar, qx::QxSqlQuery & t, const unsigned int file_ve
 } // namespace boost
 
 QX_SERIALIZE_FAST_COMPIL_SAVE_LOAD_CPP(qx::QxSqlQuery)
+
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
+
+QDataStream & operator<< (QDataStream & stream, const qx::QxSqlQuery & t)
+{
+   QHash<QString, int> lstResultPosByKey;
+   QVector< QVector<QVariant> > lstResultValues;
+   qx::dao::detail::IxSqlElement::type_class eNoSqlType = qx::dao::detail::IxSqlElement::_no_type;
+
+   if (t.m_pSqlResult)
+   {
+      lstResultPosByKey = t.m_pSqlResult->positionByKey;
+      lstResultValues = t.m_pSqlResult->values;
+   }
+
+   stream << t.m_sQuery;
+   stream << t.m_lstValue;
+   stream << t.m_iSqlElementIndex;
+   stream << t.m_iParenthesisCount;
+   stream << t.m_bDistinct;
+   stream << lstResultPosByKey;
+   stream << lstResultValues;
+
+   if (! t.m_pSqlElementTemp)
+   {
+      stream << (qint32)(eNoSqlType);
+   }
+   else
+   {
+      qx::dao::detail::IxSqlElement::type_class eTypeSqlElement = t.m_pSqlElementTemp->getTypeClass();
+      stream << (qint32)(eTypeSqlElement);
+      stream << (* t.m_pSqlElementTemp);
+   }
+
+   long lSqlElementCount = t.m_lstSqlElement.count();
+   stream << (qint64)(lSqlElementCount);
+   Q_FOREACH(qx::dao::detail::IxSqlElement_ptr pSqlElement, t.m_lstSqlElement)
+   {
+      if (! pSqlElement) { stream << (qint32)(eNoSqlType); continue; }
+      qx::dao::detail::IxSqlElement::type_class eTypeSqlElement = pSqlElement->getTypeClass();
+      stream << (qint32)(eTypeSqlElement);
+      stream << (* pSqlElement);
+   }
+
+   return stream;
+}
+
+QDataStream & operator>> (QDataStream & stream, qx::QxSqlQuery & t)
+{
+   QHash<QString, int> lstResultPosByKey;
+   QVector< QVector<QVariant> > lstResultValues;
+   qint32 i32Temp = 0;
+
+   stream >> t.m_sQuery;
+   stream >> t.m_lstValue;
+   stream >> t.m_iSqlElementIndex;
+   stream >> t.m_iParenthesisCount;
+   stream >> t.m_bDistinct;
+   stream >> lstResultPosByKey;
+   stream >> lstResultValues;
+
+   t.m_pSqlResult.reset();
+   if ((lstResultPosByKey.count() > 0) || (lstResultValues.count() > 0))
+   {
+      t.m_pSqlResult = qx_shared_ptr<qx::QxSqlQuery::QxSqlResult>(new qx::QxSqlQuery::QxSqlResult());
+      t.m_pSqlResult->positionByKey = lstResultPosByKey;
+      t.m_pSqlResult->values = lstResultValues;
+   }
+
+   t.m_pSqlElementTemp.reset();
+   qx::dao::detail::IxSqlElement::type_class eTypeSqlElement = qx::dao::detail::IxSqlElement::_no_type;
+   stream >> i32Temp; eTypeSqlElement = static_cast<qx::dao::detail::IxSqlElement::type_class>(i32Temp);
+   if (eTypeSqlElement != qx::dao::detail::IxSqlElement::_no_type)
+   {
+      t.m_pSqlElementTemp = qx_create_sql_element(eTypeSqlElement); qAssert(t.m_pSqlElementTemp);
+      if (t.m_pSqlElementTemp) { stream >> (* t.m_pSqlElementTemp); }
+   }
+
+   t.m_lstSqlElement.clear();
+   qint64 lSqlElementCount = 0;
+   stream >> lSqlElementCount;
+   t.m_lstSqlElement.reserve(static_cast<long>(lSqlElementCount));
+   for (long l = 0; l < static_cast<long>(lSqlElementCount); l++)
+   {
+      qx::dao::detail::IxSqlElement_ptr pSqlElement;
+      eTypeSqlElement = qx::dao::detail::IxSqlElement::_no_type;
+      stream >> i32Temp; eTypeSqlElement = static_cast<qx::dao::detail::IxSqlElement::type_class>(i32Temp);
+      if (eTypeSqlElement != qx::dao::detail::IxSqlElement::_no_type)
+      {
+         pSqlElement = qx_create_sql_element(eTypeSqlElement); qAssert(pSqlElement);
+         if (pSqlElement) { stream >> (* pSqlElement); }
+      }
+      t.m_lstSqlElement.append(pSqlElement);
+   }
+
+   return stream;
+}

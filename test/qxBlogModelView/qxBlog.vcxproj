@@ -61,15 +61,15 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(Configuration)\</OutDir>
     <IntDir>$(Configuration)\</IntDir>
-    <NMakeBuildCommandLine>qmake &amp; nmake debug</NMakeBuildCommandLine>
-    <NMakeReBuildCommandLine>qmake &amp; nmake debug</NMakeReBuildCommandLine>
+    <NMakeBuildCommandLine>qmake %QXORM_QMAKE_PARAMS% &amp; nmake debug</NMakeBuildCommandLine>
+    <NMakeReBuildCommandLine>qmake %QXORM_QMAKE_PARAMS% &amp; nmake debug</NMakeReBuildCommandLine>
     <NMakeCleanCommandLine>nmake clean</NMakeCleanCommandLine>
     <NMakeOutput>../_bin/qxBlogModelViewd.exe</NMakeOutput>
     <NMakePreprocessorDefinitions>WIN32;_DEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <NMakeBuildCommandLine>qmake &amp; nmake debug</NMakeBuildCommandLine>
-    <NMakeReBuildCommandLine>qmake &amp; nmake debug</NMakeReBuildCommandLine>
+    <NMakeBuildCommandLine>qmake %QXORM_QMAKE_PARAMS% &amp; nmake debug</NMakeBuildCommandLine>
+    <NMakeReBuildCommandLine>qmake %QXORM_QMAKE_PARAMS% &amp; nmake debug</NMakeReBuildCommandLine>
     <NMakeCleanCommandLine>nmake clean</NMakeCleanCommandLine>
     <NMakeOutput>../_bin/qxBlogModelViewd.exe</NMakeOutput>
     <NMakePreprocessorDefinitions>WIN32;_DEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
@@ -77,15 +77,15 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(Configuration)\</OutDir>
     <IntDir>$(Configuration)\</IntDir>
-    <NMakeBuildCommandLine>qmake &amp; nmake release</NMakeBuildCommandLine>
-    <NMakeReBuildCommandLine>qmake &amp; nmake release</NMakeReBuildCommandLine>
+    <NMakeBuildCommandLine>qmake %QXORM_QMAKE_PARAMS% &amp; nmake release</NMakeBuildCommandLine>
+    <NMakeReBuildCommandLine>qmake %QXORM_QMAKE_PARAMS% &amp; nmake release</NMakeReBuildCommandLine>
     <NMakeCleanCommandLine>nmake clean</NMakeCleanCommandLine>
     <NMakeOutput>../_bin/qxBlogModelView.exe</NMakeOutput>
     <NMakePreprocessorDefinitions>WIN32;NDEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <NMakeBuildCommandLine>qmake &amp; nmake release</NMakeBuildCommandLine>
-    <NMakeReBuildCommandLine>qmake &amp; nmake release</NMakeReBuildCommandLine>
+    <NMakeBuildCommandLine>qmake %QXORM_QMAKE_PARAMS% &amp; nmake release</NMakeBuildCommandLine>
+    <NMakeReBuildCommandLine>qmake %QXORM_QMAKE_PARAMS% &amp; nmake release</NMakeReBuildCommandLine>
     <NMakeCleanCommandLine>nmake clean</NMakeCleanCommandLine>
     <NMakeOutput>../_bin/qxBlogModelView.exe</NMakeOutput>
     <NMakePreprocessorDefinitions>WIN32;NDEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>

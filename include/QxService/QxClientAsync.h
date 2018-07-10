@@ -29,7 +29,7 @@
 **
 ****************************************************************************/
 
-#if _QX_ENABLE_QT_NETWORK_DEPENDENCY
+#ifdef _QX_ENABLE_QT_NETWORK
 #ifndef _QX_SERVICE_CLIENT_ASYNC_H_
 #define _QX_SERVICE_CLIENT_ASYNC_H_
 
@@ -78,10 +78,10 @@ protected:
 
 };
 
-typedef boost::shared_ptr<QxClientAsync> QxClientAsync_ptr;
+typedef qx_shared_ptr<QxClientAsync> QxClientAsync_ptr;
 
 } // namespace service
 } // namespace qx
 
 #endif // _QX_SERVICE_CLIENT_ASYNC_H_
-#endif // _QX_ENABLE_QT_NETWORK_DEPENDENCY
+#endif // _QX_ENABLE_QT_NETWORK

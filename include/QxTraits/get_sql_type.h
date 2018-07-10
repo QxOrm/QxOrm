@@ -254,7 +254,7 @@ struct get_sql_type< className > \
 { static inline const char * get() { return get_sql_type_by_class_name(#className, sqlType); } }; }}}
 
 QX_REGISTER_TRAIT_GET_SQL_TYPE(bool, "SMALLINT")
-QX_REGISTER_TRAIT_GET_SQL_TYPE(qx_bool, "SMALLINT")
+QX_REGISTER_TRAIT_GET_SQL_TYPE(qx_bool, "TEXT")
 QX_REGISTER_TRAIT_GET_SQL_TYPE(char, "SMALLINT")
 QX_REGISTER_TRAIT_GET_SQL_TYPE(short, "SMALLINT")
 QX_REGISTER_TRAIT_GET_SQL_TYPE(int, "INTEGER")

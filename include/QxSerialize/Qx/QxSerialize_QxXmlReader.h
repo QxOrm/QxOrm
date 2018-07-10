@@ -29,3 +29,6 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
+
+#endif // _QX_ENABLE_BOOST_SERIALIZATION

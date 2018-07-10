@@ -29,6 +29,7 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #ifndef _QX_SERIALIZE_FAST_COMPIL_H_
 #define _QX_SERIALIZE_FAST_COMPIL_H_
 
@@ -298,3 +299,4 @@ QX_SERIALIZE_FAST_COMPIL_SERIALIZE_WIDE_XML_CPP(className) \
 } } // namespace boost::serialization
 
 #endif // _QX_SERIALIZE_FAST_COMPIL_H_
+#endif // _QX_ENABLE_BOOST_SERIALIZATION

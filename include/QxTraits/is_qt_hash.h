@@ -56,24 +56,19 @@ namespace trait {
  * \brief qx::trait::is_qt_hash<T>::value : return true if T is a QHash<> container of Qt library, otherwise return false
  */
 template <typename T>
-class is_qt_hash
-{
+struct is_qt_hash : public boost::mpl::false_ { ; };
 
-private:
+template <typename Key, typename Value>
+struct is_qt_hash< QHash<Key, Value> > : public boost::mpl::true_ { ; };
 
-   template <typename V, typename W> static char isContainer(const QHash<V, W> &);
-   static int isContainer(...);
-   static T t;
+template <typename Key, typename Value>
+struct is_qt_hash< QHash<Key, Value> & > : public boost::mpl::true_ { ; };
 
-public:
+template <typename Key, typename Value>
+struct is_qt_hash< const QHash<Key, Value> > : public boost::mpl::true_ { ; };
 
-   enum { value = (sizeof(qx::trait::is_qt_hash<T>::isContainer(t)) == sizeof(char)) };
-
-   typedef typename boost::mpl::if_c<qx::trait::is_qt_hash<T>::value, 
-                                     boost::mpl::true_, 
-                                     boost::mpl::false_>::type type;
-
-};
+template <typename Key, typename Value>
+struct is_qt_hash< const QHash<Key, Value> & > : public boost::mpl::true_ { ; };
 
 } // namespace trait
 } // namespace qx

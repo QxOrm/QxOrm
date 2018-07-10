@@ -15,7 +15,7 @@ public:
    static QString str_composite_key() { return "comment_id_0|comment_id_1"; }
 
 // -- typedef
-   typedef boost::shared_ptr<blog> blog_ptr;
+   typedef qx_shared_ptr<blog> blog_ptr;
 
 // -- properties
    type_composite_key   m_id;
@@ -41,7 +41,7 @@ public:
 QX_REGISTER_PRIMARY_KEY(comment, comment::type_composite_key)
 QX_REGISTER_HPP_QX_BLOG(comment, qx::trait::no_base_class_defined, 0)
 
-typedef boost::shared_ptr<comment> comment_ptr;
+typedef qx_shared_ptr<comment> comment_ptr;
 typedef QList<comment_ptr> list_comment;
 
 #endif // _QX_BLOG_COMMENT_H_

@@ -51,6 +51,7 @@
 
 #include <QxMemLeak/mem_leak.h>
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #if _QX_INCLUDE_BOOST_SERIALIZE_EXPORT_HPP_INTO_QX_MEM_LEAK_HPP
 #if _QX_USE_MODIFY_BOOST_SERIALIZATION_EXPORT_HPP
 #include <QxSerialize/boost/class_export/qx_boost_class_export.h>
@@ -58,5 +59,6 @@
 #include <boost/serialization/export.hpp>
 #endif // _QX_USE_MODIFY_BOOST_SERIALIZATION_EXPORT_HPP
 #endif // _QX_INCLUDE_BOOST_SERIALIZE_EXPORT_HPP_INTO_QX_MEM_LEAK_HPP
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
 #endif // _QX_MEM_LEAK_H_

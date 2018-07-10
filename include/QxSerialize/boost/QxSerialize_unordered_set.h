@@ -29,6 +29,7 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #ifndef _QX_SERIALIZATION_BOOST_UNORDERED_SET_H_
 #define _QX_SERIALIZATION_BOOST_UNORDERED_SET_H_
 
@@ -98,3 +99,4 @@ inline void serialize(Archive & ar, boost::unordered_multiset<Key> & t, const un
 } // namespace boost
 
 #endif // _QX_SERIALIZATION_BOOST_UNORDERED_SET_H_
+#endif // _QX_ENABLE_BOOST_SERIALIZATION

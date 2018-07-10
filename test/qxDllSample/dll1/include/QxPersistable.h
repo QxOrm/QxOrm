@@ -146,7 +146,7 @@ public:
 
 };
 
-typedef boost::shared_ptr<qx::QxPersistable> QxPersistable_ptr;
+typedef qx_shared_ptr<qx::QxPersistable> QxPersistable_ptr;
 
 } // namespace qx
 

@@ -188,6 +188,7 @@ inline T get(const QString & sKey)
    if (obj.empty()) { return T(); }
    try { return boost::any_cast<T>(obj); }
    catch (const boost::bad_any_cast & err) { Q_UNUSED(err); return T(); }
+   catch (...) { return T(); }
 }
 
 /*!
@@ -203,6 +204,7 @@ inline qx_bool get(const QString & sKey, T & t, QDateTime & dt)
    dt = qx::cache::detail::QxCache::getSingleton()->insertionDateTime(sKey);
    try { t = boost::any_cast<T>(obj); return qx_bool(true); }
    catch (const boost::bad_any_cast & err) { Q_UNUSED(err); return qx_bool(false, 0, "[QxOrm] qx::cache : bad any cast exception"); }
+   catch (...) { return qx_bool(false, 0, "[QxOrm] qx::cache : unknown cast exception"); }
 }
 
 /*!

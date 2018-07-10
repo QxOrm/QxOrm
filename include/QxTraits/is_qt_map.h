@@ -56,24 +56,19 @@ namespace trait {
  * \brief qx::trait::is_qt_map<T>::value : return true if T is a QMap<> container of Qt library, otherwise return false
  */
 template <typename T>
-class is_qt_map
-{
+struct is_qt_map : public boost::mpl::false_ { ; };
 
-private:
+template <typename Key, typename Value>
+struct is_qt_map< QMap<Key, Value> > : public boost::mpl::true_ { ; };
 
-   template <typename V, typename W> static char isContainer(const QMap<V, W> &);
-   static int isContainer(...);
-   static T t;
+template <typename Key, typename Value>
+struct is_qt_map< QMap<Key, Value> & > : public boost::mpl::true_ { ; };
 
-public:
+template <typename Key, typename Value>
+struct is_qt_map< const QMap<Key, Value> > : public boost::mpl::true_ { ; };
 
-   enum { value = (sizeof(qx::trait::is_qt_map<T>::isContainer(t)) == sizeof(char)) };
-
-   typedef typename boost::mpl::if_c<qx::trait::is_qt_map<T>::value, 
-                                     boost::mpl::true_, 
-                                     boost::mpl::false_>::type type;
-
-};
+template <typename Key, typename Value>
+struct is_qt_map< const QMap<Key, Value> & > : public boost::mpl::true_ { ; };
 
 } // namespace trait
 } // namespace qx

@@ -83,7 +83,7 @@ protected:
 
 };
 
-typedef boost::shared_ptr<QxSqlLimit> QxSqlLimit_ptr;
+typedef qx_shared_ptr<QxSqlLimit> QxSqlLimit_ptr;
 
 } // namespace detail
 } // namespace dao

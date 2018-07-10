@@ -35,8 +35,8 @@
 
 #include <QxFactory/QxFactoryX.h>
 
-#include <QxCommon/QxStringCvt.h>
-#include <QxCommon/QxStringCvt_Impl.h>
+#include <QxConvert/QxConvert.h>
+#include <QxConvert/QxConvert_Impl.h>
 
 #include <QxDao/QxDao.h>
 #include <QxDao/QxDao_Impl.h>
@@ -194,11 +194,13 @@ qx_bool QxClassX::invokeStatic(const QString & sClassKey, const QString & sFctKe
    return (pFct ? pFct->invoke(params, ret) : qx_bool(false));
 }
 
+#ifndef _QX_NO_RTTI
 const std::type_info & QxClassX::typeInfo(const QString & sKey) const
 {
    IxClass * pClass = QxClassX::getClass(sKey);
    return (pClass ? pClass->typeInfo() : typeid(void));
 }
+#endif // _QX_NO_RTTI
 
 QxCollection<QString, IxClass *> * QxClassX::getAllClasses()
 {

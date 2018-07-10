@@ -55,25 +55,31 @@ namespace trait {
  * \brief qx::trait::is_boost_unordered_map<T>::value : return true if T is a boost::unordered_map<> or boost::unordered_multimap<> container, otherwise return false
  */
 template <typename T>
-class is_boost_unordered_map
-{
+struct is_boost_unordered_map : public boost::mpl::false_ { ; };
 
-private:
+template <typename Key, typename Value>
+struct is_boost_unordered_map< boost::unordered_map<Key, Value> > : public boost::mpl::true_ { ; };
 
-   template <typename V, typename W> static char isContainer(const boost::unordered_map<V, W> &);
-   template <typename V, typename W> static char isContainer(const boost::unordered_multimap<V, W> &);
-   static int isContainer(...);
-   static T t;
+template <typename Key, typename Value>
+struct is_boost_unordered_map< boost::unordered_map<Key, Value> & > : public boost::mpl::true_ { ; };
 
-public:
+template <typename Key, typename Value>
+struct is_boost_unordered_map< const boost::unordered_map<Key, Value> > : public boost::mpl::true_ { ; };
 
-   enum { value = (sizeof(qx::trait::is_boost_unordered_map<T>::isContainer(t)) == sizeof(char)) };
+template <typename Key, typename Value>
+struct is_boost_unordered_map< const boost::unordered_map<Key, Value> & > : public boost::mpl::true_ { ; };
 
-   typedef typename boost::mpl::if_c<qx::trait::is_boost_unordered_map<T>::value, 
-                                     boost::mpl::true_, 
-                                     boost::mpl::false_>::type type;
+template <typename Key, typename Value>
+struct is_boost_unordered_map< boost::unordered_multimap<Key, Value> > : public boost::mpl::true_ { ; };
 
-};
+template <typename Key, typename Value>
+struct is_boost_unordered_map< boost::unordered_multimap<Key, Value> & > : public boost::mpl::true_ { ; };
+
+template <typename Key, typename Value>
+struct is_boost_unordered_map< const boost::unordered_multimap<Key, Value> > : public boost::mpl::true_ { ; };
+
+template <typename Key, typename Value>
+struct is_boost_unordered_map< const boost::unordered_multimap<Key, Value> & > : public boost::mpl::true_ { ; };
 
 } // namespace trait
 } // namespace qx

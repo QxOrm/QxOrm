@@ -56,24 +56,19 @@ namespace trait {
  * \brief qx::trait::is_qt_linked_list<T>::value : return true if T is a QLinkedList<> container of Qt library, otherwise return false
  */
 template <typename T>
-class is_qt_linked_list
-{
+struct is_qt_linked_list : public boost::mpl::false_ { ; };
 
-private:
+template <typename T>
+struct is_qt_linked_list< QLinkedList<T> > : public boost::mpl::true_ { ; };
 
-   template <typename V> static char isContainer(const QLinkedList<V> &);
-   static int isContainer(...);
-   static T t;
+template <typename T>
+struct is_qt_linked_list< QLinkedList<T> & > : public boost::mpl::true_ { ; };
 
-public:
+template <typename T>
+struct is_qt_linked_list< const QLinkedList<T> > : public boost::mpl::true_ { ; };
 
-   enum { value = (sizeof(qx::trait::is_qt_linked_list<T>::isContainer(t)) == sizeof(char)) };
-
-   typedef typename boost::mpl::if_c<qx::trait::is_qt_linked_list<T>::value, 
-                                     boost::mpl::true_, 
-                                     boost::mpl::false_>::type type;
-
-};
+template <typename T>
+struct is_qt_linked_list< const QLinkedList<T> & > : public boost::mpl::true_ { ; };
 
 } // namespace trait
 } // namespace qx

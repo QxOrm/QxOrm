@@ -29,6 +29,7 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #ifdef _QX_CPP_11_TUPLE
 #ifndef BOOST_NO_CXX11_HDR_TUPLE
 #ifndef _QX_SERIALIZE_STD_TUPLE_H_
@@ -161,3 +162,4 @@ inline void serialize(Archive & ar, std::tuple<T0, T1, T2, T3, T4, T5, T6, T7, T
 #endif // _QX_SERIALIZE_STD_TUPLE_H_
 #endif // BOOST_NO_CXX11_HDR_TUPLE
 #endif // _QX_CPP_11_TUPLE
+#endif // _QX_ENABLE_BOOST_SERIALIZATION

@@ -29,6 +29,8 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
+
 #include <QxPrecompiled.h>
 
 #include <QxSerialize/QxBoostSerializeHelper/QxBoostSerializeRegisterHelperX.h>
@@ -57,3 +59,5 @@ void QxBoostSerializeRegisterHelperX::remove(const QString & sKey)
 }
 
 } // namespace qx
+
+#endif // _QX_ENABLE_BOOST_SERIALIZATION

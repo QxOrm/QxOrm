@@ -43,6 +43,8 @@
  * \brief Dump all classes registered into QxOrm context using XML serialization engine
  */
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
+
 #include <QxCommon/QxConfig.h>
 
 #include <QxSerialize/QxSerializeInvoker.h>
@@ -66,7 +68,7 @@ void dump(const T & t)
 #elif _QX_SERIALIZE_WIDE_XML
    QString sDump = qx::serialization::wide::xml::to_string(t);
 #else // _QX_SERIALIZE_POLYMORPHIC
-   QString sDump = "Unable to dump element : you must activate '_QX_SERIALIZE_XML' or '_QX_SERIALIZE_WIDE_XML' parameter in 'QxConfig.h' file";
+   QString sDump = "Unable to dump element : you must define '_QX_ENABLE_BOOST_SERIALIZATION' and '_QX_ENABLE_BOOST_SERIALIZATION_XML' (or '_QX_ENABLE_BOOST_SERIALIZATION_WIDE_XML') compilation options in 'QxOrm.pri' configuration file";
 #endif // _QX_SERIALIZE_POLYMORPHIC
 
    QString sName = qx::QxClassName<T>::get();
@@ -77,4 +79,17 @@ void dump(const T & t)
 
 } // namespace qx
 
+#else // _QX_ENABLE_BOOST_SERIALIZATION
+
+namespace qx {
+
+template <class T>
+void dump(const T & t)
+{
+   qDebug("[QxOrm] qx::dump() : %s", "not implemented when _QX_ENABLE_BOOST_SERIALIZATION compilation option is not defined"); Q_UNUSED(t);
+}
+
+} // namespace qx
+
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 #endif // _QX_DUMP_H_

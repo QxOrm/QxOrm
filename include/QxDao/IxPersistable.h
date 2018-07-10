@@ -68,7 +68,7 @@ namespace qx {
  * <b>2-</b> into your class definition (<i>myClass.h</i> for example), add <i>QX_PERSISTABLE_HPP(myClass)</i> macro ; <br>
  * <b>3-</b> into your class implementation (<i>myClass.cpp</i> for example), add <i>QX_PERSISTABLE_CPP(myClass)</i> macro.
  *
- * <b>Note :</b> for a list of objects (<i>qxFetchAll()</i> method or <i>qxFetchByQuery()</i> method), use <i>qx::QxCollection<type_primary_key, boost::shared_ptr<my_type>></i> type.
+ * <b>Note :</b> for a list of objects (<i>qxFetchAll()</i> method or <i>qxFetchByQuery()</i> method), use <i>qx::QxCollection<type_primary_key, qx_shared_ptr<my_type>></i> type.
  * Or just use <i>qx::IxPersistableCollection<T>::type</i> to retrieve your persistent collection type.
  * A convenient way to fetch a list of objects is to use following static methods <i>qxFetchAll()</i> and <i>qxFetchByQuery()</i> :
  * \code
@@ -330,11 +330,11 @@ public:
 
 };
 
-typedef boost::shared_ptr<qx::IxPersistable> IxPersistable_ptr;
+typedef qx_shared_ptr<qx::IxPersistable> IxPersistable_ptr;
 
 /*!
  * \ingroup QxDao
- * \brief qx::IxPersistableCollection<T>::type : return the collection type used by qx::IxPersistable interface, qx::QxCollection<type_primary_key, boost::shared_ptr<my_type>>
+ * \brief qx::IxPersistableCollection<T>::type : return the collection type used by qx::IxPersistable interface, qx::QxCollection<type_primary_key, qx_shared_ptr<my_type>>
  */
 template <typename T>
 class IxPersistableCollection
@@ -343,7 +343,7 @@ class IxPersistableCollection
 private:
 
    typedef typename qx::trait::get_primary_key<T>::type qx_type_primary_key;
-   typedef boost::shared_ptr<T> qx_type_ptr;
+   typedef qx_shared_ptr<T> qx_type_ptr;
 
 public:
 
@@ -390,6 +390,14 @@ virtual qx::QxInvalidValueX qxValidate(const QStringList & groups = QStringList(
 virtual qx::IxCollection_ptr qxNewPersistableCollection() const; \
 virtual qx::IxClass * qxClass() const;
 
+#ifdef _QX_NO_RTTI
+#define QX_PERSISTABLE_CAST_COLLECTION(className) \
+qx::IxPersistableCollection< className >::type * list_typed = static_cast< qx::IxPersistableCollection< className >::type * >(& list);
+#else // _QX_NO_RTTI
+#define QX_PERSISTABLE_CAST_COLLECTION(className) \
+qx::IxPersistableCollection< className >::type * list_typed = dynamic_cast< qx::IxPersistableCollection< className >::type * >(& list);
+#endif // _QX_NO_RTTI
+
 #define QX_PERSISTABLE_CPP(className) \
 \
 long className::qxCount(const qx::QxSqlQuery & query, QSqlDatabase * pDatabase) \
@@ -420,9 +428,9 @@ QSqlError className::qxFetchById(const QVariant & id, const QStringList & column
 \
 QSqlError className::qxFetchAll(qx::IxCollection & list, const QStringList & columns, const QStringList & relation, QSqlDatabase * pDatabase) \
 { \
-   qx::IxPersistableCollection< className >::type * list_typed = dynamic_cast< qx::IxPersistableCollection< className >::type * >(& list); \
-   if (! list_typed) { qDebug("[QxOrm] problem with 'qxFetchAll()' method : '%s'", "dynamic_cast failed using collection qx::QxCollection< type_primary_key, boost::shared_ptr<type> >"); qAssert(false); } \
-   if (! list_typed) { return QSqlError("[QxOrm] problem with 'qxFetchAll()' method : 'dynamic_cast failed using collection qx::QxCollection< type_primary_key, boost::shared_ptr<type> >'", "", QSqlError::UnknownError); } \
+   QX_PERSISTABLE_CAST_COLLECTION(className) \
+   if (! list_typed) { qDebug("[QxOrm] problem with 'qxFetchAll()' method : '%s'", "dynamic_cast failed using collection qx::QxCollection< type_primary_key, qx_shared_ptr<type> >"); qAssert(false); } \
+   if (! list_typed) { return QSqlError("[QxOrm] problem with 'qxFetchAll()' method : 'dynamic_cast failed using collection qx::QxCollection< type_primary_key, qx_shared_ptr<type> >'", "", QSqlError::UnknownError); } \
    QSqlError err; \
    if (relation.count() == 0) { err = qx::dao::fetch_all((* list_typed), pDatabase, columns); } \
    else { err = qx::dao::fetch_all_with_relation(relation, (* list_typed), pDatabase); } \
@@ -431,9 +439,9 @@ QSqlError className::qxFetchAll(qx::IxCollection & list, const QStringList & col
 \
 QSqlError className::qxFetchByQuery(const qx::QxSqlQuery & query, qx::IxCollection & list, const QStringList & columns, const QStringList & relation, QSqlDatabase * pDatabase) \
 { \
-   qx::IxPersistableCollection< className >::type * list_typed = dynamic_cast< qx::IxPersistableCollection< className >::type * >(& list); \
-   if (! list_typed) { qDebug("[QxOrm] problem with 'qxFetchByQuery()' method : '%s'", "dynamic_cast failed using collection qx::QxCollection< type_primary_key, boost::shared_ptr<type> >"); qAssert(false); } \
-   if (! list_typed) { return QSqlError("[QxOrm] problem with 'qxFetchByQuery()' method : 'dynamic_cast failed using collection qx::QxCollection< type_primary_key, boost::shared_ptr<type> >'", "", QSqlError::UnknownError); } \
+   QX_PERSISTABLE_CAST_COLLECTION(className) \
+   if (! list_typed) { qDebug("[QxOrm] problem with 'qxFetchByQuery()' method : '%s'", "dynamic_cast failed using collection qx::QxCollection< type_primary_key, qx_shared_ptr<type> >"); qAssert(false); } \
+   if (! list_typed) { return QSqlError("[QxOrm] problem with 'qxFetchByQuery()' method : 'dynamic_cast failed using collection qx::QxCollection< type_primary_key, qx_shared_ptr<type> >'", "", QSqlError::UnknownError); } \
    QSqlError err; \
    if (relation.count() == 0) { err = qx::dao::fetch_by_query(query, (* list_typed), pDatabase, columns); } \
    else { err = qx::dao::fetch_by_query_with_relation(relation, query, (* list_typed), pDatabase); } \
@@ -517,9 +525,9 @@ QSqlError className::qxExecuteQuery(qx::QxSqlQuery & query, QSqlDatabase * pData
 \
 QSqlError className::qxExecuteQuery(qx::QxSqlQuery & query, qx::IxCollection & list, QSqlDatabase * pDatabase) \
 { \
-   qx::IxPersistableCollection< className >::type * list_typed = dynamic_cast< qx::IxPersistableCollection< className >::type * >(& list); \
-   if (! list_typed) { qDebug("[QxOrm] problem with 'qxExecuteQuery()' method : '%s'", "dynamic_cast failed using collection qx::QxCollection< type_primary_key, boost::shared_ptr<type> >"); qAssert(false); } \
-   if (! list_typed) { return QSqlError("[QxOrm] problem with 'qxExecuteQuery()' method : 'dynamic_cast failed using collection qx::QxCollection< type_primary_key, boost::shared_ptr<type> >'", "", QSqlError::UnknownError); } \
+   QX_PERSISTABLE_CAST_COLLECTION(className) \
+   if (! list_typed) { qDebug("[QxOrm] problem with 'qxExecuteQuery()' method : '%s'", "dynamic_cast failed using collection qx::QxCollection< type_primary_key, qx_shared_ptr<type> >"); qAssert(false); } \
+   if (! list_typed) { return QSqlError("[QxOrm] problem with 'qxExecuteQuery()' method : 'dynamic_cast failed using collection qx::QxCollection< type_primary_key, qx_shared_ptr<type> >'", "", QSqlError::UnknownError); } \
    return qx::dao::execute_query(query, (* list_typed), pDatabase); \
 } \
 \

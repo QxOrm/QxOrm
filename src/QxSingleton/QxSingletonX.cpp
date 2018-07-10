@@ -48,28 +48,58 @@ QX_DLL_EXPORT_QX_SINGLETON_CPP(qx::QxSingletonX)
 
 namespace qx {
 
-QHash<QString, IxSingleton *> QxSingletonX::m_mapSingletonX;
-QMutex QxSingletonX::m_oMutexSingletonX;
-bool QxSingletonX::m_bOnClearSingletonX = false;
+/* -- We replaced these static class members by static class methods to avoid (with some compilers) the 'static initialization order fiasco' --
+QHash<QString, IxSingleton *> QxSingletonX::m_mapSingletonX; // replaced by 'getMapSingletonX()'
+QMutex QxSingletonX::m_oMutexSingletonX; // replaced by 'getMutexSingletonX()'
+bool QxSingletonX::m_bOnClearSingletonX = false; // replaced by 'getOnClearSingletonX()'
+*/
 
 QxSingletonX::QxSingletonX() : QxSingleton<QxSingletonX>("qx::QxSingletonX")
 {
 #if _QX_USE_QX_SINGLETON_X
-   int iResult = std::atexit(& QxSingletonX::deleteAllSingleton);
-   qAssert(iResult == 0); Q_UNUSED(iResult);
+   int iResult = std::atexit(& QxSingletonX::deleteAllSingleton); Q_UNUSED(iResult);
+   QString sAssertMsg = QString("cannot register 'qx::QxSingletonX::deleteAllSingleton()' function at exit program (using 'std::atexit')"); Q_UNUSED(sAssertMsg);
+   qAssertMsg((iResult == 0), "[QxOrm] qx::QxSingletonX() constructor", qPrintable(sAssertMsg));
 #endif // _QX_USE_QX_SINGLETON_X
+}
+
+QHash<QString, IxSingleton *> & QxSingletonX::getMapSingletonX()
+{
+   // There is a 'very small' memory leak here : this is to avoid (with some compilers) the 'static initialization order fiasco'
+   // More details here : https://isocpp.org/wiki/faq/ctors#static-init-order
+   static QHash<QString, IxSingleton *> * p = new QHash<QString, IxSingleton *>();
+   return (* p);
+}
+
+QMutex * QxSingletonX::getMutexSingletonX()
+{
+   // There is a 'very small' memory leak here : this is to avoid (with some compilers) the 'static initialization order fiasco'
+   // More details here : https://isocpp.org/wiki/faq/ctors#static-init-order
+   static QMutex * p = new QMutex();
+   return p;
+}
+
+bool & QxSingletonX::getOnClearSingletonX()
+{
+   // There is a 'very small' memory leak here : this is to avoid (with some compilers) the 'static initialization order fiasco'
+   // More details here : https://isocpp.org/wiki/faq/ctors#static-init-order
+   static bool * p = new bool(false);
+   return (* p);
 }
 
 bool QxSingletonX::addSingleton(const QString & sKey, IxSingleton * pSingleton)
 {
 #if _QX_USE_QX_SINGLETON_X
-   QMutexLocker locker(QCoreApplication::instance() ? (& m_oMutexSingletonX) : NULL);
-   bool bExist = m_mapSingletonX.contains(sKey);
-   qAssert(! bExist && ! sKey.isEmpty());
-
+#ifdef _QX_TRACE_CONSTRUCTOR_DESTRUCTOR
+   qDebug("[QxOrm] qx::QxSingletonX::addSingleton() : '%s'", qPrintable(sKey));
+#endif // _QX_TRACE_CONSTRUCTOR_DESTRUCTOR
+   QMutex * pMutex = (QCoreApplication::instance() ? getMutexSingletonX() : NULL);
+   QMutexLocker locker(pMutex);
+   bool bExist = getMapSingletonX().contains(sKey);
+   QString sAssertMsg = QString("singleton key '%1' already exists or is empty").arg(sKey); Q_UNUSED(sAssertMsg);
+   qAssertMsg((! bExist && ! sKey.isEmpty()), "[QxOrm] qx::QxSingletonX::addSingleton()", qPrintable(sAssertMsg));
    if (! pSingleton || bExist || sKey.isEmpty()) { return false; }
-   m_mapSingletonX.insert(sKey, pSingleton);
-
+   getMapSingletonX().insert(sKey, pSingleton);
    return true;
 #else // _QX_USE_QX_SINGLETON_X
    Q_UNUSED(sKey); Q_UNUSED(pSingleton);
@@ -80,13 +110,16 @@ bool QxSingletonX::addSingleton(const QString & sKey, IxSingleton * pSingleton)
 bool QxSingletonX::removeSingleton(const QString & sKey)
 {
 #if _QX_USE_QX_SINGLETON_X
-   if (m_bOnClearSingletonX)
-      return false;
-
-   QMutexLocker locker(QCoreApplication::instance() ? (& m_oMutexSingletonX) : NULL);
-   qAssert(m_mapSingletonX.contains(sKey));
-   bool bRemoveOk = (m_mapSingletonX.remove(sKey) > 0);
-
+   bool & bOnClearSingletonX = getOnClearSingletonX();
+   if (bOnClearSingletonX) { return false; }
+#ifdef _QX_TRACE_CONSTRUCTOR_DESTRUCTOR
+   qDebug("[QxOrm] qx::QxSingletonX::removeSingleton() : '%s'", qPrintable(sKey));
+#endif // _QX_TRACE_CONSTRUCTOR_DESTRUCTOR
+   QMutex * pMutex = (QCoreApplication::instance() ? getMutexSingletonX() : NULL);
+   QMutexLocker locker(pMutex);
+   QString sAssertMsg = QString("singleton key '%1' doesn't exist in the singleton manager").arg(sKey); Q_UNUSED(sAssertMsg);
+   qAssertMsg((getMapSingletonX().contains(sKey)), "[QxOrm] qx::QxSingletonX::removeSingleton()", qPrintable(sAssertMsg));
+   bool bRemoveOk = (getMapSingletonX().remove(sKey) > 0);
    return bRemoveOk;
 #else // _QX_USE_QX_SINGLETON_X
    Q_UNUSED(sKey);
@@ -97,18 +130,24 @@ bool QxSingletonX::removeSingleton(const QString & sKey)
 void QxSingletonX::deleteAllSingleton()
 {
 #if _QX_USE_QX_SINGLETON_X
-   QMutexLocker locker(QCoreApplication::instance() ? (& m_oMutexSingletonX) : NULL);
-   m_bOnClearSingletonX = true;
+#ifdef _QX_TRACE_CONSTRUCTOR_DESTRUCTOR
+   qDebug("[QxOrm] qx::QxSingletonX : %s", "execute deleteAllSingleton() function");
+#endif // _QX_TRACE_CONSTRUCTOR_DESTRUCTOR
+   QMutex * pMutex = (QCoreApplication::instance() ? getMutexSingletonX() : NULL);
+   QMutexLocker locker(pMutex);
+   bool & bOnClearSingletonX = getOnClearSingletonX();
+   bOnClearSingletonX = true;
 
-   _foreach(IxSingleton * pSingleton, m_mapSingletonX)
+   QHash<QString, IxSingleton *> & mapSingletonX = getMapSingletonX();
+   _foreach(IxSingleton * pSingleton, mapSingletonX)
    {
       if (pSingleton && (pSingleton != QxSingletonX::getSingleton()))
          pSingleton->deleteInstance();
    }
 
    QxSingletonX::deleteSingleton();
-   m_mapSingletonX.clear();
-   m_bOnClearSingletonX = false;
+   mapSingletonX.clear();
+   bOnClearSingletonX = false;
 #endif // _QX_USE_QX_SINGLETON_X
 }
 

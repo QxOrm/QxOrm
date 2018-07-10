@@ -88,8 +88,8 @@ class QX_DLL_EXPORT QxSqlRelationLinked
 
 protected:
 
-   typedef boost::shared_ptr<QxSqlRelationLinked> type_ptr;
-   typedef boost::tuple<qx::dao::sql_join::join_type, IxSqlRelation *> type_relation;
+   typedef qx_shared_ptr<QxSqlRelationLinked> type_ptr;
+   typedef boost::tuple<qx::dao::sql_join::join_type, IxSqlRelation *, QPair<QSet<QString>, long> > type_relation;
    typedef qx::QxCollection<QString, type_relation> type_lst_relation;
    typedef QHash<QString, type_ptr> type_lst_relation_linked;
 
@@ -97,6 +97,8 @@ protected:
    type_lst_relation_linked m_relationLinkedX;  //!< List of child to build the hierarchy
    IxSqlRelationX * m_allRelationX;             //!< List of all relationships per level
    bool m_bRoot;                                //!< Root of the hierarchy
+   QSet<QString> m_lstRootColumns;              //!< Root columns to fetch (using syntax { col_1, col_2, etc... } ), if empty then fetch all root columns
+   long m_lRootColumnsOffset;                   //!< Root columns offset to resolve SQL query output
 
 public:
 
@@ -120,6 +122,11 @@ public:
    long getRelationCount() const;
    bool existRelation(const QString & sKey) const;
 
+   bool checkRootColumns(const QString & s) const     { return (m_lstRootColumns.isEmpty() || m_lstRootColumns.contains(s)); }
+   long getRootColumnsCount() const                   { return m_lstRootColumns.count(); }
+   long getRootColumnsOffset() const                  { return m_lRootColumnsOffset; }
+   void setRootColumnsOffset(long l)                  { m_lRootColumnsOffset = l; }
+
 protected:
 
    qx_bool insertRelationToHierarchy(const QStringList & sRelationX, const QString & sKey, qx::dao::sql_join::join_type eJoinType);
@@ -127,7 +134,7 @@ protected:
 
 };
 
-typedef boost::shared_ptr<QxSqlRelationLinked> QxSqlRelationLinked_ptr;
+typedef qx_shared_ptr<QxSqlRelationLinked> QxSqlRelationLinked_ptr;
 
 } // namespace qx
 

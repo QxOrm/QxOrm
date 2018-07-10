@@ -29,6 +29,7 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #ifndef _QX_BOOST_SERIALIZE_REGISTER_HELPER_X_H_
 #define _QX_BOOST_SERIALIZE_REGISTER_HELPER_X_H_
 
@@ -113,3 +114,4 @@ private:
 QX_DLL_EXPORT_QX_SINGLETON_HPP(qx::QxBoostSerializeRegisterHelperX)
 
 #endif // _QX_BOOST_SERIALIZE_REGISTER_HELPER_X_H_
+#endif // _QX_ENABLE_BOOST_SERIALIZATION

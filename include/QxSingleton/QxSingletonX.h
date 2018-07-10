@@ -63,9 +63,9 @@ class QX_DLL_EXPORT QxSingletonX : public QxSingleton<QxSingletonX>
 
 private:
 
-   static QHash<QString, IxSingleton *> m_mapSingletonX; //!< Collection of all 'IxSingleton' pointer
-   static QMutex m_oMutexSingletonX;                     //!< Mutex -> 'QxSingletonX' is thread-safe
-   static bool m_bOnClearSingletonX;                     //!< Clear collection of 'IxSingleton' in event
+   static QHash<QString, IxSingleton *> & getMapSingletonX();     //!< Collection of all 'IxSingleton' pointer
+   static QMutex * getMutexSingletonX();                          //!< Mutex -> 'QxSingletonX' is thread-safe
+   static bool & getOnClearSingletonX();                          //!< Clear collection of 'IxSingleton' in event
 
 private:
 

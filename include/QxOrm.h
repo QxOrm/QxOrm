@@ -51,6 +51,7 @@
  * \defgroup QxModelView QxModelView : All classes registered into QxOrm context can be used with Qt model/view architecture (Qt widgets and/or QML views)
  * \defgroup QxService QxService : QxOrm library services engine to provide easy and powerful way to create C++ application server (to transfer data over network)
  * \defgroup QxCache QxCache : QxOrm library basic thread-safe cache feature to backup and restore any kind of objects (for example, object fetched from database)
+ * \defgroup QxConvert QxConvert : QxOrm library conversion tools to-from QString type and to-from QVariant type
  * \defgroup QxMemLeak QxMemLeak : QxOrm library memory leak detection (by Wu Yongwei)
  */
 
@@ -65,6 +66,7 @@
 #include <QxCommon/QxSimpleCrypt.h>
 #include <QxCommon/QxException.h>
 #include <QxCommon/QxExceptionCode.h>
+#include <QxCommon/QxAnyCastDynamic.h>
 
 #include <QxMemLeak/bool_array.h>
 #include <QxMemLeak/class_level_lock.h>
@@ -101,9 +103,11 @@
 
 #include <QxFunction/QxFunctionInclude.h>
 
+/*
 #include <QxXml/QxXmlReader.h>
 #include <QxXml/QxXmlWriter.h>
 #include <QxXml/QxXml.h>
+*/
 
 #include <QxDao/IxSqlQueryBuilder.h>
 #include <QxDao/QxSqlQueryBuilder.h>
@@ -119,6 +123,7 @@
 #include <QxDao/QxSqlRelation_OneToOne.h>
 #include <QxDao/QxSqlRelation_RawData.h>
 #include <QxDao/QxDao.h>
+#include <QxDao/QxDaoThrowable.h>
 #include <QxDao/QxDao_Impl.h>
 #include <QxDao/QxDaoStrategy.h>
 #include <QxDao/QxDaoPointer.h>
@@ -144,11 +149,14 @@
 #include <QxDao/QxRepository/QxRepositoryX.h>
 
 #include <QxSerialize/QxSerialize.h>
+#include <QxSerialize/QxSerializeQDataStream.h>
+#include <QxSerialize/QDataStream/QxSerializeQDataStream_all_include.h>
+#include <QxSerialize/QxClone.h>
+#include <QxSerialize/QxDump.h>
 
-#include <QxCommon/QxStringCvt.h>
-#include <QxCommon/QxStringCvt_Impl.h>
-#include <QxCommon/QxStringCvt_Export.h>
-#include <QxCommon/QxAnyCastDynamic.h>
+#include <QxConvert/QxConvert.h>
+#include <QxConvert/QxConvert_Impl.h>
+#include <QxConvert/QxConvert_Export.h>
 
 #include <QxRegister/IxClass.h>
 #include <QxRegister/QxClass.h>

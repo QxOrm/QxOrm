@@ -76,7 +76,7 @@ void QxSqlGenerator_MSSQLServer::initSqlTypeByClassName() const
    if (! lstSqlType) { qAssert(false); return; }
 
    lstSqlType->insert("bool", "TINYINT");
-   lstSqlType->insert("qx_bool", "TINYINT");
+   lstSqlType->insert("qx_bool", "TEXT");
    lstSqlType->insert("short", "SMALLINT");
    lstSqlType->insert("int", "INT");
    lstSqlType->insert("long", "INT");

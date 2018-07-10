@@ -75,7 +75,7 @@ protected:
 
 };
 
-typedef boost::shared_ptr<QxSqlFreeText> QxSqlFreeText_ptr;
+typedef qx_shared_ptr<QxSqlFreeText> QxSqlFreeText_ptr;
 
 } // namespace detail
 } // namespace dao

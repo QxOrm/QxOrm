@@ -56,8 +56,8 @@ private:
 
 QX_REGISTER_HPP_QX_DLL2(Foo, BaseClassTrigger, 0)
 
-typedef boost::shared_ptr<Foo> Foo_ptr;
+typedef qx_shared_ptr<Foo> Foo_ptr;
 typedef qx::QxCollection<long, Foo_ptr> FooX;
-typedef boost::shared_ptr<FooX> FooX_ptr;
+typedef qx_shared_ptr<FooX> FooX_ptr;
 
 #endif // _QX_FOO_H_

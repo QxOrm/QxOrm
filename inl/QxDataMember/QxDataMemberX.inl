@@ -203,6 +203,8 @@ IxSqlRelation * QxDataMemberX<T>::relationManyToMany(V U::* pData, const QString
    return pSqlRelation;
 }
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
+
 template <class T>
 template <class Archive>
 inline void QxDataMemberX<T>::toArchive(const T * pOwner, Archive & ar, const unsigned int file_version) const
@@ -220,6 +222,8 @@ inline void QxDataMemberX<T>::fromArchive(T * pOwner, Archive & ar, const unsign
    _foreach_if(IxDataMember * pDataMember, m_lstDataMember, (pDataMember->getSerialize() && (pDataMember->getVersion() <= static_cast<long>(file_version))))
       pDataMember->fromArchive(pOwner, ar);
 }
+
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
 template <> QX_GCC_WORKAROUND_TEMPLATE_SPEC_INLINE
 QxDataMemberX<qx::trait::no_base_class_defined>::QxDataMemberX() : IxDataMemberX(), QxSingleton< QxDataMemberX<qx::trait::no_base_class_defined> >("qx::QxDataMemberX_no_base_class_defined"), m_pDataMemberId(NULL) { ; }

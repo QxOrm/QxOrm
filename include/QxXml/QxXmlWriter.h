@@ -56,7 +56,7 @@ class QX_DLL_EXPORT QxXmlWriter : public QXmlStreamWriter
 
 public:
 
-   typedef boost::shared_ptr<QByteArray> type_byte_arr_ptr;
+   typedef qx_shared_ptr<QByteArray> type_byte_arr_ptr;
    typedef QHash<QString, type_byte_arr_ptr> type_hash_bin_data;
    typedef QHashIterator<QString, type_byte_arr_ptr> type_hash_bin_data_itr;
 

@@ -29,6 +29,8 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
+
 #include <QxPrecompiled.h>
 
 #include <QxSerialize/Qt/QxSerialize_QDate.h>
@@ -59,3 +61,5 @@ inline void qx_load(Archive & ar, QDate & t, const unsigned int file_version)
 } // namespace serialization
 
 QX_SERIALIZE_FAST_COMPIL_SAVE_LOAD_CPP(QDate)
+
+#endif // _QX_ENABLE_BOOST_SERIALIZATION

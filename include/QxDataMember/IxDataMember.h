@@ -192,13 +192,9 @@ public:
    static QString getSqlFromTable(const QString & sTable);
 
    virtual bool isEqual(const void * pOwner1, const void * pOwner2) const = 0;
-   virtual QString toString(const void * pOwner, const QString & sFormat, int iIndexName = -1) const = 0;
-   virtual qx_bool fromString(void * pOwner, const QString & s, const QString & sFormat, int iIndexName = -1) = 0;
    virtual QVariant toVariant(const void * pOwner, const QString & sFormat, int iIndexName = -1) const = 0;
    virtual qx_bool fromVariant(void * pOwner, const QVariant & v, const QString & sFormat, int iIndexName = -1) = 0;
 
-   inline QString toString(const void * pOwner, int iIndexName = -1) const             { return this->toString(pOwner, m_sFormat, iIndexName); }
-   inline qx_bool fromString(void * pOwner, const QString & s, int iIndexName = -1)    { return this->fromString(pOwner, s, m_sFormat, iIndexName); }
    inline QVariant toVariant(const void * pOwner, int iIndexName = -1) const           { return this->toVariant(pOwner, m_sFormat, iIndexName); }
    inline qx_bool fromVariant(void * pOwner, const QVariant & v, int iIndexName = -1)  { return this->fromVariant(pOwner, v, m_sFormat, iIndexName); }
 
@@ -224,6 +220,7 @@ public:
       boost::any a = this->getDataPtr(pOwner);
       try { T * t = boost::any_cast<T *>(a); if (bOk) { (* bOk) = (t != NULL); }; return t; }
       catch (const boost::bad_any_cast & err) { Q_UNUSED(err); qDebug("[QxOrm] qx::IxDataMember::getValuePtr<T>() : '%s'", "bad any cast exception"); return NULL; }
+      catch (...) { qDebug("[QxOrm] qx::IxDataMember::getValuePtr<T>() : '%s'", "unknown cast exception"); return NULL; }
    }
 
    template <typename T>
@@ -267,12 +264,14 @@ private:
    struct qxCannotAccessDataPointer<QString, dummy>
    {
       static inline QString getValue(IxDataMember * pData, void * pOwner, bool * bOk)
-      { if (bOk) { (* bOk) = (pData != NULL); }; return (pData ? pData->toString(pOwner, "") : QString()); }
+      { if (bOk) { (* bOk) = (pData != NULL); }; return (pData ? pData->toVariant(pOwner, "").toString() : QString()); }
       static inline bool setValue(IxDataMember * pData, void * pOwner, const QString & val)
-      { return (pData ? pData->fromString(pOwner, val, "").getValue() : false); }
+      { QVariant tmp(val); return (pData ? pData->fromVariant(pOwner, tmp, "").getValue() : false); }
    };
 
 public:
+
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 
 #if _QX_SERIALIZE_POLYMORPHIC
    QX_IX_DATA_MEMBER_PURE_VIRTUAL_ARCHIVE(boost::archive::polymorphic_iarchive, boost::archive::polymorphic_oarchive)
@@ -306,6 +305,8 @@ public:
    QX_IX_DATA_MEMBER_PURE_VIRTUAL_ARCHIVE(boost::archive::xml_wiarchive, boost::archive::xml_woarchive)
 #endif // _QX_SERIALIZE_WIDE_XML
 
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
+
 private:
 
    inline void updateNamePtr()
@@ -317,12 +318,14 @@ private:
       m_lstNames = (m_sName.isEmpty() ? m_sKey.split("|") : m_sName.split("|"));
    }
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
    template <class Archive>
    void serialize(Archive & ar, const unsigned int version);
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
 };
 
-typedef boost::shared_ptr<IxDataMember> IxDataMember_ptr;
+typedef qx_shared_ptr<IxDataMember> IxDataMember_ptr;
 
 } // namespace qx
 

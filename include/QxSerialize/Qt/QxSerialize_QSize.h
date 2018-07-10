@@ -29,6 +29,7 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #ifndef _QX_SERIALIZE_QSIZE_H_
 #define _QX_SERIALIZE_QSIZE_H_
 
@@ -50,3 +51,4 @@ BOOST_CLASS_VERSION(QSize, 0)
 QX_SERIALIZE_FAST_COMPIL_SERIALIZE_HPP(QX_DLL_EXPORT, QSize)
 
 #endif // _QX_SERIALIZE_QSIZE_H_
+#endif // _QX_ENABLE_BOOST_SERIALIZATION

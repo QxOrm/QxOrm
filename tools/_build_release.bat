@@ -1,4 +1,5 @@
-qmake & nmake release
+qmake %QXORM_QMAKE_PARAMS%
+nmake release
 cd "./release/"
 copy "QxOrm.lib" "../lib/"
 if exist "QxOrm.dll" ( copy "QxOrm.dll" "../lib/" )

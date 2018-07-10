@@ -29,6 +29,8 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
+
 #include <QxPrecompiled.h>
 
 #include <QxSerialize/Qt/QxSerialize_QSize.h>
@@ -50,3 +52,5 @@ inline void qx_serialize(Archive & ar, QSize & t, const unsigned int file_versio
 } // namespace serialization
 
 QX_SERIALIZE_FAST_COMPIL_SERIALIZE_CPP(QSize)
+
+#endif // _QX_ENABLE_BOOST_SERIALIZATION

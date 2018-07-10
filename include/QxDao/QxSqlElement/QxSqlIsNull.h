@@ -83,7 +83,7 @@ protected:
 
 };
 
-typedef boost::shared_ptr<QxSqlIsNull> QxSqlIsNull_ptr;
+typedef qx_shared_ptr<QxSqlIsNull> QxSqlIsNull_ptr;
 
 } // namespace detail
 } // namespace dao

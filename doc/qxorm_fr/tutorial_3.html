@@ -4,14 +4,17 @@
   <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
   <title>QxOrm : C++ Qt ORM Object Relational Mapping database library - QxEntityEditor : C++ Qt entities graphic editor (data model designer and source code generator)</title>
   <link rel='stylesheet' type='text/css' href='./resource/qxorm_style.css'>
+  <script type="text/javascript" src="./resource/jquery.min.js"></script>
   <script type="text/javascript" src="./resource/qxorm_script.js"></script>
 </head>
 <body>
 <table border="0" style="width: 80%" align="center">
-  <col><col><col>
+  <col><col><col><col><col>
   <tbody>
     <tr>
       <td><a href="./home.html"><img alt="QxOrm" src="./resource/logo_qxorm_and_qxee.png"align="left" border="0"></a></td>
+      <td align="right" style="vertical-align:bottom"><div id="qx_search"><gcse:search></gcse:search></div></td>
+      <td width="15"></td>
       <td align="right" style="vertical-align:bottom">
         <img alt="Windows" src="./resource/logo_windows.gif" width="35" height="35">
         <img alt="Linux" src="./resource/logo_linux.gif" width="35" height="35">
@@ -40,7 +43,15 @@
             </div>
          </td></tr></tbody></table>
       </td>
-      <td align="center"><a href="./faq.html" class="btn_nav">Faq (36)</a></td>
+      <td align="center" onmouseover="showHideElementById('menu_manual', true);" onmouseout="showHideElementById('menu_manual', false);">
+         <a href="./manual.html" class="btn_nav">Manuel (2)</a>
+         <table class="table_menu_manual"><tbody><tr><td>
+            <div id="menu_manual" class="div_menu_manual">
+               <a href="./manual.html" class="btn_sub_menu">Manuel QxOrm</a><br/>
+               <a href="./manual_qxee.html" class="btn_sub_menu">Manuel QxEntityEditor</a><br/>
+            </div>
+         </td></tr></tbody></table>
+      </td>
       <td align="center"><a href="./link.html" class="btn_nav">Forum</a></td>
       <td align="center"><a href="./customer.html" class="btn_nav">Nos clients</a></td>
     </tr>
@@ -56,7 +67,7 @@
           <table cellspacing="0" cellpadding="1"><col><col><tbody>
             <tr>
                <td align="right" valign="top"><font size="2" class="txt_with_shadow">Version courante :&nbsp;</font></td>
-               <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.3.2 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
+               <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.1 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
             </tr>
             <tr>
                <td align="right" valign="top"><font size="2" class="txt_with_shadow"></font></td>
@@ -110,7 +121,7 @@
                      <li><a href="#tuto_10">1- Télécharger et installer Qt (Qt4 ou Qt5)</a></li>
                      <li><a href="#tuto_20">2- Ajouter le dossier « bin » de Qt dans le « PATH » de Windows</a></li>
                      <li><a href="#tuto_30">3- Installer la bibliothèque boost</a></li>
-                     <li><a href="#tuto_40">4- Ajouter le dossier « lib_shared » du package boost dans le « PATH » de Windows</a></li>
+                     <li><a href="#tuto_40">4- Ajouter le dossier « lib_shared » du package boost dans le « PATH » de Windows (optionnel)</a></li>
                      <li><a href="#tuto_50">5- Télécharger et installer la bibliothèque QxOrm</a></li>
                      <li><a href="#tuto_60">6- Paramétrer le fichier « QxOrm.pri »</a></li>
                      <li><a href="#tuto_70">7- Ajouter QxOrm dans le « PATH » de Windows</a></li>
@@ -172,6 +183,9 @@
         <br/>
         <b><a name="tuto_30"><u><font color="#100D5A">3- Installer la bibliothèque boost</font></u></a></b>
         <br/><br/>
+        <b>Remarque :</b> par défaut, la bibliothèque QxOrm dépend uniquement des en-têtes <i>*.hpp</i> de boost : la dépendance au module <a href="http://www.boost.org/doc/libs/release/libs/serialization/doc/index.html" target="_blank">boost serialization</a> est optionnelle et non requise avec la configuration par défaut.
+        Certaines étapes de ce tutoriel sur l'installation de boost sont donc optionnelles.<br/>
+        <br/>
         Le plus simple et le plus rapide est de télécharger le package boost fourni sur le site QxOrm.<br/>
         Le package boost le plus récent est disponible à cette adresse : <a href="http://www.qxorm.com/lib/boost_1_57.zip" target="_blank">http://www.qxorm.com/lib/boost_1_57.zip</a><br/>
         <br/>
@@ -184,11 +198,13 @@
            <li>MSVC++ 2012 (fichiers avec un nom contenant <i>vc110</i>) ;</li>
            <li>MinGW GCC 4.5 (fichiers avec un nom contenant <i>mgw45</i>).</li>
         </ul>
-        A la racine du package boost, le fichier « version_1_57.txt » indique les lignes de commande utilisées pour compiler le module « boost::serialization ».<br/>
+        A la racine du package boost, le fichier « version_1_57.txt » indique les lignes de commande utilisées pour compiler le module « boost::serialization » (module optionnel et non requis par défaut).<br/>
         <br/>
         <br/>
-        <b><a name="tuto_40"><u><font color="#100D5A">4- Ajouter le dossier « lib_shared » du package boost dans le « PATH » de Windows</font></u></a></b>
+        <b><a name="tuto_40"><u><font color="#100D5A">4- Ajouter le dossier « lib_shared » du package boost dans le « PATH » de Windows (optionnel)</font></u></a></b>
         <br/><br/>
+        <b>Remarque :</b> cette étape est optionnelle et non requise avec la configuration par défaut : si vous ne souhaitez pas travailler avec les fonctionnalités proposées par le module <a href="http://www.boost.org/doc/libs/release/libs/serialization/doc/index.html" target="_blank">boost serialization</a>, alors vous pouvez aller directement à <a href="#tuto_50">l'étape suivante de ce tutoriel</a>.<br/>
+        <br/>
         Allez dans les « Paramètres système avancés » de Windows, puis cliquez sur le bouton « Variables d'environnements » :<br/>
         <br/>
         <img alt="" src="./resource/tuto_install_qxorm_2.png" style="border:0px solid #100D5A; border-color:#100D5A;">
@@ -221,22 +237,27 @@
         <br/>
         Ouvrez le fichier « QxOrm.pri » avec un éditeur de texte (<i>notepad</i> ou <i>notepad++</i> par exemple), puis modifier les valeurs des paramètres :
         <ul>
-           <li>« QX_BOOST_INCLUDE_PATH » ;</li>
-           <li>« QX_BOOST_LIB_PATH » ;</li>
-           <li>« QX_BOOST_LIB_SERIALIZATION_DEBUG » ;</li>
-           <li>« QX_BOOST_LIB_SERIALIZATION_RELEASE » ;</li>
-           <li>« QX_BOOST_LIB_WIDE_SERIALIZATION_DEBUG » ;</li>
-           <li>« QX_BOOST_LIB_WIDE_SERIALIZATION_RELEASE ».</li>
+           <li>« <b>QX_BOOST_INCLUDE_PATH</b> » (<i>requis</i>) ;</li>
+           <li>« QX_BOOST_LIB_PATH » (<i>optionnel</i>, utilisé seulement si l'option de compilation <i>_QX_ENABLE_BOOST_SERIALIZATION</i> est définie) ;</li>
+           <li>« QX_BOOST_LIB_SERIALIZATION_DEBUG » (<i>optionnel</i>, utilisé seulement si l'option de compilation <i>_QX_ENABLE_BOOST_SERIALIZATION</i> est définie) ;</li>
+           <li>« QX_BOOST_LIB_SERIALIZATION_RELEASE » (<i>optionnel</i>, utilisé seulement si l'option de compilation <i>_QX_ENABLE_BOOST_SERIALIZATION</i> est définie) ;</li>
+           <li>« QX_BOOST_LIB_WIDE_SERIALIZATION_DEBUG » (<i>optionnel</i>, utilisé seulement si l'option de compilation <i>_QX_ENABLE_BOOST_SERIALIZATION</i> est définie) ;</li>
+           <li>« QX_BOOST_LIB_WIDE_SERIALIZATION_RELEASE » (<i>optionnel</i>, utilisé seulement si l'option de compilation <i>_QX_ENABLE_BOOST_SERIALIZATION</i> est définie).</li>
         </ul>
         Par exemple :<br/>
         <br/>
         <table border="1" style="width: 100%" bgcolor="#FFFFFF"><col><tbody><tr><td><i>
 isEmpty(QX_BOOST_INCLUDE_PATH) { QX_BOOST_INCLUDE_PATH = $$quote(<font style="background-color:yellow">D:/Dvlp/_Libs/Boost/1_57/include</font>) }<br/>
+<br/>
+contains(DEFINES, _QX_ENABLE_BOOST_SERIALIZATION) {<br/>
+<br/>
 isEmpty(QX_BOOST_LIB_PATH) { QX_BOOST_LIB_PATH = $$quote(<font style="background-color:yellow">D:/Dvlp/_Libs/Boost/1_57/lib_shared</font>) }<br/>
 isEmpty(QX_BOOST_LIB_SERIALIZATION_DEBUG) { QX_BOOST_LIB_SERIALIZATION_DEBUG = "<font style="background-color:yellow">boost_serialization-vc110-mt-gd-1_57</font>" }<br/>
 isEmpty(QX_BOOST_LIB_SERIALIZATION_RELEASE) { QX_BOOST_LIB_SERIALIZATION_RELEASE = "<font style="background-color:yellow">boost_serialization-vc110-mt-1_57</font>" }<br/>
 # isEmpty(QX_BOOST_LIB_WIDE_SERIALIZATION_DEBUG) { QX_BOOST_LIB_WIDE_SERIALIZATION_DEBUG = "<font style="background-color:yellow">boost_wserialization-vc110-mt-gd-1_57</font>" }<br/>
 # isEmpty(QX_BOOST_LIB_WIDE_SERIALIZATION_RELEASE) { QX_BOOST_LIB_WIDE_SERIALIZATION_RELEASE = "<font style="background-color:yellow">boost_wserialization-vc110-mt-1_57</font>" }<br/>
+<br/>
+} # contains(DEFINES, _QX_ENABLE_BOOST_SERIALIZATION)
         </i></td></tr></tbody></table>
         <br/>
         <b>Remarque :</b> Le fichier « QxOrm.pri » est un fichier de configuration de la bibliothèque QxOrm. Ce fichier devra être inclus dans tous les fichiers projets dépendants de QxOrm en ajoutant la ligne suivante dans le fichier <i>*.pro</i> du projet : <b>include(<i>my_path_to_QxOrm_library</i>/QxOrm.pri)</b><br/>

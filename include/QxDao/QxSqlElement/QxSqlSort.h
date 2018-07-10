@@ -83,7 +83,7 @@ protected:
 
 };
 
-typedef boost::shared_ptr<QxSqlSort> QxSqlSort_ptr;
+typedef qx_shared_ptr<QxSqlSort> QxSqlSort_ptr;
 
 } // namespace detail
 } // namespace dao

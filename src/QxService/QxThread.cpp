@@ -29,9 +29,9 @@
 **
 ****************************************************************************/
 
-#include <QxPrecompiled.h>
+#ifdef _QX_ENABLE_QT_NETWORK
 
-#if _QX_ENABLE_QT_NETWORK_DEPENDENCY
+#include <QxPrecompiled.h>
 
 #include <QxService/QxThread.h>
 #include <QxService/QxThreadPool.h>
@@ -137,4 +137,4 @@ qx_bool QxThread::writeSocket(QTcpSocket & socket)
 } // namespace service
 } // namespace qx
 
-#endif // _QX_ENABLE_QT_NETWORK_DEPENDENCY
+#endif // _QX_ENABLE_QT_NETWORK

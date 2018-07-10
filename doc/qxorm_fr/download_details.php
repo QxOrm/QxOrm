@@ -4,14 +4,17 @@
   <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
   <title>QxOrm : C++ Qt ORM Object Relational Mapping database library - QxEntityEditor : C++ Qt entities graphic editor (data model designer and source code generator)</title>
   <link rel='stylesheet' type='text/css' href='./resource/qxorm_style.css'>
+  <script type="text/javascript" src="./resource/jquery.min.js"></script>
   <script type="text/javascript" src="./resource/qxorm_script.js"></script>
 </head>
 <body>
 <table border="0" style="width: 80%" align="center">
-  <col><col><col>
+  <col><col><col><col><col>
   <tbody>
     <tr>
       <td><a href="./home.html"><img alt="QxOrm" src="./resource/logo_qxorm_and_qxee.png"align="left" border="0"></a></td>
+      <td align="right" style="vertical-align:bottom"><div id="qx_search"><gcse:search></gcse:search></div></td>
+      <td width="15"></td>
       <td align="right" style="vertical-align:bottom">
         <img alt="Windows" src="./resource/logo_windows.gif" width="35" height="35">
         <img alt="Linux" src="./resource/logo_linux.gif" width="35" height="35">
@@ -40,7 +43,15 @@
             </div>
          </td></tr></tbody></table>
       </td>
-      <td align="center"><a href="./faq.html" class="btn_nav">Faq (36)</a></td>
+      <td align="center" onmouseover="showHideElementById('menu_manual', true);" onmouseout="showHideElementById('menu_manual', false);">
+         <a href="./manual.html" class="btn_nav">Manuel (2)</a>
+         <table class="table_menu_manual"><tbody><tr><td>
+            <div id="menu_manual" class="div_menu_manual">
+               <a href="./manual.html" class="btn_sub_menu">Manuel QxOrm</a><br/>
+               <a href="./manual_qxee.html" class="btn_sub_menu">Manuel QxEntityEditor</a><br/>
+            </div>
+         </td></tr></tbody></table>
+      </td>
       <td align="center"><a href="./link.html" class="btn_nav">Forum</a></td>
       <td align="center"><a href="./customer.html" class="btn_nav">Nos clients</a></td>
     </tr>
@@ -55,7 +66,7 @@
     <table cellspacing="0" cellpadding="1"><col><col><tbody>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow">Version courante :&nbsp;</font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.3.2 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.1 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
       </tr>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow"></font></td>
@@ -114,7 +125,7 @@
          <br/>
          Pour toutes questions ou précisions sur les licences, ou bien pour acquérir la licence <b>QXPL</b>, vous pouvez nous contacter à l'adresse suivante : <a href="mailto:contact@qxorm.com">contact@qxorm.com</a>.<br/>
          <br/>
-         <a href="../php/add_download.php5?file_path=QxOrm_1.3.2.zip&file_desc=QxOrm_1.3.2" class="btn_tuto" target="_blank">Télécharger QxOrm 1.3.2</a>
+         <a href="../php/add_download.php5?file_path=QxOrm_1.4.1.zip&file_desc=QxOrm_1.4.1" class="btn_tuto" target="_blank">Télécharger QxOrm 1.4.1</a>
          <br/>
          <!--
          <script type="text/javascript">
@@ -125,7 +136,7 @@ function checkForm(f) { f.submit(); return true; }
             <input type="text" id="created_by" name="created_by" size="50" maxlength="200" /><br/>
             Aidez nous à améliorer la bibliothèque QxOrm en ajoutant vos remarques et suggestions (optionnel) :<br/>
             <textarea id="message_text" name="message_text" rows="3" cols="50"></textarea><br/>
-            <input type="submit" value="            Télécharger QxOrm 1.3.2            " />
+            <input type="submit" value="            Télécharger QxOrm 1.4.1            " />
          </form>
          -->
          <br>

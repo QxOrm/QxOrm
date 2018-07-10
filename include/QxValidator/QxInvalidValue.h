@@ -43,8 +43,10 @@
  * \brief Invalid value when a property fails to pass a constraint
  */
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/nvp.hpp>
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
 #include <QxSerialize/boost/QxSerialize_shared_ptr.h>
 
@@ -57,8 +59,14 @@
 #include <QxCommon/QxPropertyBag.h>
 
 namespace qx {
-
 class IxValidator;
+class QxInvalidValue;
+} // namespace qx
+
+QX_DLL_EXPORT QDataStream & operator<< (QDataStream & stream, const qx::QxInvalidValue & t) BOOST_USED;
+QX_DLL_EXPORT QDataStream & operator>> (QDataStream & stream, qx::QxInvalidValue & t) BOOST_USED;
+
+namespace qx {
 
 /*!
  * \ingroup QxValidator
@@ -70,7 +78,12 @@ class IxValidator;
 class QX_DLL_EXPORT QxInvalidValue : public QxPropertyBag
 {
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
    friend class boost::serialization::access;
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
+
+   friend QDataStream & ::operator<< (QDataStream & stream, const qx::QxInvalidValue & t);
+   friend QDataStream & ::operator>> (QDataStream & stream, qx::QxInvalidValue & t);
 
 protected:
 
@@ -97,6 +110,7 @@ public:
 
 private:
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
    template <class Archive>
    void serialize(Archive & ar, const unsigned int file_version)
    {
@@ -106,6 +120,7 @@ private:
       ar & boost::serialization::make_nvp("path", m_sPath);
       ar & boost::serialization::make_nvp("list_property_bag", this->m_lstPropertyBag);
    }
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
 };
 

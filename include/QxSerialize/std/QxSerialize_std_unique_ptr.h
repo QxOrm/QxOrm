@@ -29,6 +29,7 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #ifdef _QX_CPP_11_SMART_PTR
 #ifndef BOOST_NO_CXX11_SMART_PTR
 #ifndef _QX_SERIALIZE_STD_UNIQUE_PTR_H_
@@ -86,3 +87,4 @@ inline void serialize(Archive & ar, std::unique_ptr<T> & t, const unsigned int f
 #endif // _QX_SERIALIZE_STD_UNIQUE_PTR_H_
 #endif // BOOST_NO_CXX11_SMART_PTR
 #endif // _QX_CPP_11_SMART_PTR
+#endif // _QX_ENABLE_BOOST_SERIALIZATION

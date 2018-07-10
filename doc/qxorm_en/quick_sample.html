@@ -4,14 +4,17 @@
   <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
   <title>QxOrm : C++ Qt ORM Object Relational Mapping database library - QxEntityEditor : C++ Qt entities graphic editor (data model designer and source code generator)</title>
   <link rel='stylesheet' type='text/css' href='./resource/qxorm_style.css'>
+  <script type="text/javascript" src="./resource/jquery.min.js"></script>
   <script type="text/javascript" src="./resource/qxorm_script.js"></script>
 </head>
 <body>
 <table border="0" style="width: 80%" align="center">
-  <col><col><col>
+  <col><col><col><col><col>
   <tbody>
     <tr>
       <td><a href="./home.html"><img alt="QxOrm" src="./resource/logo_qxorm_and_qxee.png"align="left" border="0"></a></td>
+      <td align="right" style="vertical-align:bottom"><div id="qx_search"><gcse:search></gcse:search></div></td>
+      <td width="15"></td>
       <td align="right" style="vertical-align:bottom">
         <img alt="Windows" src="./resource/logo_windows.gif" width="35" height="35">
         <img alt="Linux" src="./resource/logo_linux.gif" width="35" height="35">
@@ -40,7 +43,15 @@
             </div>
          </td></tr></tbody></table>
       </td>
-      <td align="center"><a href="./faq.html" class="btn_nav">Faq (36)</a></td>
+      <td align="center" onmouseover="showHideElementById('menu_manual', true);" onmouseout="showHideElementById('menu_manual', false);">
+         <a href="./manual.html" class="btn_nav">Manual (2)</a>
+         <table class="table_menu_manual"><tbody><tr><td>
+            <div id="menu_manual" class="div_menu_manual">
+               <a href="./manual.html" class="btn_sub_menu">QxOrm manual</a><br/>
+               <a href="./manual_qxee.html" class="btn_sub_menu">QxEntityEditor manual</a><br/>
+            </div>
+         </td></tr></tbody></table>
+      </td>
       <td align="center"><a href="./link.html" class="btn_nav">Forum</a></td>
       <td align="center"><a href="./customer.html" class="btn_nav">Our customers</a></td>
     </tr>
@@ -55,7 +66,7 @@
     <table cellspacing="0" cellpadding="1"><col><col><tbody>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow">Current version :&nbsp;</font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.3.2 - <a href="../doxygen/index.html" target="_blank">QxOrm library online documentation</a></font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.1 - <a href="../doxygen/index.html" target="_blank">QxOrm library online class documentation</a></font></td>
       </tr>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow"></font></td>
@@ -80,12 +91,12 @@
             <tr>
               <td><b>In this chapter, we will see a quick sample with basic functionalities of QxOrm library.</b> <br>
                  <br>
-                 <i>Note :</i> <b>QxOrm</b> library uses the following syntax for C++ source code :
+                 <i>Note :</i> <b>QxOrm</b> library uses the following syntax and naming convention for C++ source code :
                  <ul><li>all classes, functions, properties, etc... are defined under <a href="./resource/qxorm.namespace.qx.jpg"><i>namespace qx</i></a> ;
                  </li><li>all macros of QxOrm library are prefixed by <i>QX_...</i> ;
-                 </li><li>all abstracts classes (or interfaces) start with <i>Ix</i> (for example <i>IxFactory</i> is an interface to create an instance of object) ;
-                 </li><li>other classes start with <i>Qx</i> (for example <i>QxDataMember</i>) ;
-                 </li><li>containers of objects end with <i>X</i> (for example <i>QxDataMemberX</i> is a list of <i>QxDataMember</i>) ;
+                 </li><li>all abstracts classes (or interfaces) start with prefix <i>Ix</i> (for example <i>IxFactory</i> is an interface to create an instance of object) ;
+                 </li><li>other classes start with prefix <i>Qx</i> (for example <i>QxDataMember</i>) ;
+                 </li><li>containers of objects end with suffix <i>X</i> (for example <i>QxDataMemberX</i> is a list of <i>QxDataMember</i>) ;
                  </li><li>functions to interact with databases are under <a href="./resource/qxorm.namespace.qx.dao.jpg"><i>namespace qx::dao</i></a> (for example <i>qx::dao::fetch_by_id()</i>) ;
                  </li><li>functions to <i>serialize</i> are under <a href="./resource/qxorm.namespace.qx.serialization.jpg"><i>namespace qx::serialization</i></a> (for example <i>qx::serialization::xml::to_file()</i>) ;
                  </li><li>the <i>reflection</i> (or <i>introspection</i>) engine can be used with <b><i>qx::QxClassX</i></b> (for example <i>qx::QxClassX::invoke()</i> to call a class method) ;
@@ -191,7 +202,7 @@ int</span><span class="keyword"> main</span><span class="operator">(</span><span
    drug_ptr d3<span class="operator">;</span> d3<span class="operator">.</span>reset<span class="operator">(</span><span class="keyword">new</span> drug<span class="operator">());</span> d3<span class="operator">-&gt;</span>name<span class="operator"> =</span><span class="string"> "name3"</span><span class="operator">;</span> d3<span class="operator">-&gt;</span>description<span class="operator"> =</span><span class="string"> "desc3"</span><span class="operator">;</span><span class="comment">
 
    // Insert drugs into container
-   // It is possible to use a lot of containers from 'std', 'boost', 'Qt' and 'qx::QxCollection&lt;Key, Value&gt;'
+   // It is possible to use many containers from 'std', 'boost', 'Qt' and 'qx::QxCollection&lt;Key, Value&gt;'
 </span><span class="keyword">   typedef</span> std<span class="operator">::</span>vector<span class="operator">&lt;</span>drug_ptr<span class="operator">&gt;</span> type_lst_drug<span class="operator">;</span>
    type_lst_drug lst_drug<span class="operator">;</span>
    lst_drug<span class="operator">.</span>push_back<span class="operator">(</span>d1<span class="operator">);</span>

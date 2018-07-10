@@ -8,6 +8,7 @@
 
 class QX_SERVICE_DLL_EXPORT user_service_input : public qx::service::IxParameter
 {
+   QX_SERVICE_IX_PARAMETER_QDATASTREAM_HPP(user_service_input);
 public:
    user_service_input() : id(0) { ; }
    virtual ~user_service_input() { ; }
@@ -17,19 +18,20 @@ public:
 };
 
 QX_REGISTER_HPP_QX_SERVICE(user_service_input, qx::service::IxParameter, 0)
-typedef boost::shared_ptr<user_service_input> user_service_input_ptr;
+typedef qx_shared_ptr<user_service_input> user_service_input_ptr;
 
 /* -- Service Output Parameters -- */
 
 class QX_SERVICE_DLL_EXPORT user_service_output : public qx::service::IxParameter
 {
+   QX_SERVICE_IX_PARAMETER_QDATASTREAM_HPP(user_service_output);
 public:
    user_ptr user;
    list_of_users_ptr list_of_users;
 };
 
 QX_REGISTER_HPP_QX_SERVICE(user_service_output, qx::service::IxParameter, 0)
-typedef boost::shared_ptr<user_service_output> user_service_output_ptr;
+typedef qx_shared_ptr<user_service_output> user_service_output_ptr;
 
 /* -- Service Definition -- */
 
@@ -49,6 +51,6 @@ public:
 };
 
 QX_REGISTER_HPP_QX_SERVICE(user_service, qx::service::IxService, 0)
-typedef boost::shared_ptr<user_service> user_service_ptr;
+typedef qx_shared_ptr<user_service> user_service_ptr;
 
 #endif // _QX_SERVICE_USER_SERVICE_H_

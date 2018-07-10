@@ -29,6 +29,7 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #ifndef _IX_BOOST_SERIALIZE_REGISTER_HELPER_H_
 #define _IX_BOOST_SERIALIZE_REGISTER_HELPER_H_
 
@@ -101,3 +102,4 @@ public:
 } // namespace qx
 
 #endif // _IX_BOOST_SERIALIZE_REGISTER_HELPER_H_
+#endif // _QX_ENABLE_BOOST_SERIALIZATION

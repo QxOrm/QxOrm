@@ -74,7 +74,7 @@ public:
 
 };
 
-typedef boost::shared_ptr<qx::IxCollection> IxCollection_ptr;
+typedef qx_shared_ptr<qx::IxCollection> IxCollection_ptr;
 
 } // namespace qx
 

@@ -29,6 +29,7 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #ifndef _QX_SERIALIZE_QOBJECT_H_
 #define _QX_SERIALIZE_QOBJECT_H_
 
@@ -54,3 +55,4 @@ QX_BOOST_EXPORT_SERIALIZATION_FAST_COMPIL_HPP(QObject)
 QX_REGISTER_BOOST_SERIALIZE_HELPER(QObject)
 
 #endif // _QX_SERIALIZE_QOBJECT_H_
+#endif // _QX_ENABLE_BOOST_SERIALIZATION

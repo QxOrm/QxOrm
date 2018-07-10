@@ -100,7 +100,7 @@ private:
 
 };
 
-typedef boost::shared_ptr<IxDataMemberX> IxDataMemberX_ptr;
+typedef qx_shared_ptr<IxDataMemberX> IxDataMemberX_ptr;
 
 } // namespace qx
 

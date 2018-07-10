@@ -116,8 +116,10 @@ public:
    template <typename V, typename U> IxSqlRelation * relationManyToMany(V U::* pData, const QString & sKey, const QString & sExtraTable, const QString & sForeignKeyOwner, const QString & sForeignKeyDataType);
    template <typename V, typename U> IxSqlRelation * relationManyToMany(V U::* pData, const QString & sKey, const QString & sExtraTable, const QString & sForeignKeyOwner, const QString & sForeignKeyDataType, long lVersion);
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
    template <class Archive> inline void toArchive(const T * pOwner, Archive & ar, const unsigned int file_version) const;
    template <class Archive> inline void fromArchive(T * pOwner, Archive & ar, const unsigned int file_version);
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
 private:
 

@@ -50,7 +50,7 @@
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/is_base_of.hpp>
 
-#include <QxCommon/QxStringCvt.h>
+#include <QxConvert/QxConvert.h>
 
 #include <QxCollection/QxCollection.h>
 
@@ -91,8 +91,8 @@ template <class T, bool bIsQObject /* = false */>
 struct QxNestedModel_Helper
 {
 
-   static boost::shared_ptr<T> clone(T & t)
-   { boost::shared_ptr<T> p; p.reset(new T()); (* p) = t; return p; }
+   static qx_shared_ptr<T> clone(T & t)
+   { qx_shared_ptr<T> p; p.reset(new T()); (* p) = t; return p; }
 
    static void synchronize(T & t1, T & t2)
    { t1 = t2; }
@@ -103,8 +103,8 @@ template <class T>
 struct QxNestedModel_Helper<T, true>
 {
 
-   static boost::shared_ptr<T> clone(T & t)
-   { boost::shared_ptr<T> p; p.reset(qx::clone_to_nude_ptr(t)); qAssert(p); return p; }
+   static qx_shared_ptr<T> clone(T & t)
+   { qx_shared_ptr<T> p; p.reset(qx::clone_to_nude_ptr(t)); qAssert(p); return p; }
 
    static void synchronize(T & t1, T & t2)
    {

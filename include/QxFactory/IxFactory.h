@@ -43,7 +43,9 @@
  * \brief Common interface for all classes that can be created dynamically using the class name
  */
 
+#ifndef _QX_NO_RTTI
 #include <typeinfo>
+#endif // _QX_NO_RTTI
 
 #include <boost/noncopyable.hpp>
 #include <boost/any.hpp>
@@ -68,7 +70,10 @@ public:
 
    virtual boost::any createObject() const = 0;
    virtual void * createObjectNudePtr() const = 0;
+
+#ifndef _QX_NO_RTTI
    virtual const std::type_info & typeInfo() const = 0;
+#endif // _QX_NO_RTTI
 
 };
 

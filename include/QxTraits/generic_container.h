@@ -45,6 +45,9 @@
 
 #include <boost/type_traits/is_pointer.hpp>
 
+#include <boost/unordered_set.hpp>
+#include <boost/unordered_map.hpp>
+
 #include <QxTraits/is_smart_ptr.h>
 #include <QxTraits/remove_attr.h>
 #include <QxTraits/remove_smart_ptr.h>

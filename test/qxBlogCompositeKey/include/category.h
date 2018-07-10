@@ -15,7 +15,7 @@ public:
    static QString str_composite_key() { return "category_id_0|category_id_1|category_id_2|category_id_3"; }
 
 // -- typedef
-   typedef boost::shared_ptr<blog> blog_ptr;
+   typedef qx_shared_ptr<blog> blog_ptr;
    typedef qx::QxCollection<long, blog_ptr> list_blog;
 
 // -- properties

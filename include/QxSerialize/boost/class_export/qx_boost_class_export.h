@@ -29,6 +29,7 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #ifndef _QX_BOOST_SERIALIZATION_EXPORT_HPP_
 #define _QX_BOOST_SERIALIZATION_EXPORT_HPP_
 
@@ -200,3 +201,4 @@ namespace                                                                       
 
 #endif // _QX_USE_MODIFY_BOOST_SERIALIZATION_EXPORT_HPP
 #endif // _QX_BOOST_SERIALIZATION_EXPORT_HPP_
+#endif // _QX_ENABLE_BOOST_SERIALIZATION

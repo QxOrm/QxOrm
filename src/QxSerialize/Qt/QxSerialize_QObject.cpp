@@ -29,6 +29,8 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
+
 #include <QxPrecompiled.h>
 
 #include <QxSerialize/Qt/QxSerialize_QObject.h>
@@ -77,3 +79,5 @@ inline void qx_load(Archive & ar, QObject & t, const unsigned int file_version)
 
 QX_SERIALIZE_FAST_COMPIL_SAVE_LOAD_CPP(QObject)
 QX_REGISTER_BOOST_SERIALIZE_HELPER_CPP(QObject)
+
+#endif // _QX_ENABLE_BOOST_SERIALIZATION

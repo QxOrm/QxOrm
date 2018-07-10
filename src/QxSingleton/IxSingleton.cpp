@@ -42,18 +42,18 @@ namespace qx {
 
 IxSingleton::IxSingleton(const QString & sKey) : boost::noncopyable(), m_sKeySingleton(sKey)
 {
-#if _QX_USE_TRACE_CONSTRUCTOR_DESTRUCTOR
+#ifdef _QX_TRACE_CONSTRUCTOR_DESTRUCTOR
    qDebug("[QxOrm] qx::IxSingleton constructor '%s'", qPrintable(m_sKeySingleton));
-#endif // _QX_USE_TRACE_CONSTRUCTOR_DESTRUCTOR
+#endif // _QX_TRACE_CONSTRUCTOR_DESTRUCTOR
 
    QxSingletonX::addSingleton(m_sKeySingleton, this);
 }
 
 IxSingleton::~IxSingleton()
 {
-#if _QX_USE_TRACE_CONSTRUCTOR_DESTRUCTOR
+#ifdef _QX_TRACE_CONSTRUCTOR_DESTRUCTOR
    qDebug("[QxOrm] qx::IxSingleton destructor '%s'", qPrintable(m_sKeySingleton));
-#endif // _QX_USE_TRACE_CONSTRUCTOR_DESTRUCTOR
+#endif // _QX_TRACE_CONSTRUCTOR_DESTRUCTOR
 
    QxSingletonX::removeSingleton(m_sKeySingleton);
 }

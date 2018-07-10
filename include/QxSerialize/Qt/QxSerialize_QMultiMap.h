@@ -29,6 +29,7 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #ifndef _QX_SERIALIZE_QMULTIMAP_H_
 #define _QX_SERIALIZE_QMULTIMAP_H_
 
@@ -90,3 +91,4 @@ inline void serialize(Archive & ar, QMultiMap<Key, Value> & t, const unsigned in
 } // namespace serialization
 
 #endif // _QX_SERIALIZE_QMULTIMAP_H_
+#endif // _QX_ENABLE_BOOST_SERIALIZATION

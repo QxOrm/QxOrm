@@ -29,6 +29,7 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #ifndef _QX_SERIALIZE_QBYTEARRAY_H_
 #define _QX_SERIALIZE_QBYTEARRAY_H_
 
@@ -51,3 +52,4 @@ BOOST_CLASS_VERSION(QByteArray, 0)
 QX_SERIALIZE_FAST_COMPIL_SAVE_LOAD_HPP(QX_DLL_EXPORT, QByteArray)
 
 #endif // _QX_SERIALIZE_QBYTEARRAY_H_
+#endif // _QX_ENABLE_BOOST_SERIALIZATION

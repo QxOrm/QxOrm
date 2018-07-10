@@ -70,8 +70,9 @@ class IxFunction : public qx::QxPropertyBag
 
 protected:
 
-   QString m_sKey;         //!< Function key
-   QString m_sSeparator;   //!< Separator character(s) for 'QString' parameters type
+   QString m_sKey;            //!< Function key
+   QString m_sSeparator;      //!< Separator character(s) for 'QString' parameters type
+   QString m_sDescription;    //!< Function description
 
 public:
 
@@ -82,9 +83,13 @@ public:
 
    QString getKey() const                 { return m_sKey; }
    QString getSeparator() const           { return m_sSeparator; }
+   QString getDescription() const         { return m_sDescription; }
 
    void setKey(const QString & s)         { m_sKey = s; }
    void setSeparator(const QString & s)   { m_sSeparator = s; }
+   void setDescription(const QString & s) { m_sDescription = s; }
+
+   virtual int getParamCount() const = 0;
 
    virtual qx_bool invoke(const QString & params = QString(), boost::any * ret = NULL) const = 0;
    virtual qx_bool invoke(const type_any_params & params, boost::any * ret = NULL) const = 0;
@@ -102,7 +107,9 @@ public:
       typedef boost::is_same<T, void> qx_verify_owner_tmp;
       BOOST_STATIC_ASSERT(! qx_verify_owner_tmp::value);
       if (! pOwner) { return qx_bool(false, 0, QX_FUNCTION_ERR_NULL_OWNER); }
+#ifndef _QX_NO_RTTI
       if (! dynamic_cast<T *>(static_cast<T *>(pOwner))) { return qx_bool(false, 0, QX_FUNCTION_ERR_INVALID_OWNER); }
+#endif // _QX_NO_RTTI
       return true;
    }
 
@@ -126,9 +133,9 @@ public:
 
 };
 
-typedef boost::shared_ptr<IxFunction> IxFunction_ptr;
+typedef qx_shared_ptr<IxFunction> IxFunction_ptr;
 typedef QxCollection<QString, IxFunction_ptr> IxFunctionX;
-typedef boost::shared_ptr<IxFunctionX> IxFunctionX_ptr;
+typedef qx_shared_ptr<IxFunctionX> IxFunctionX_ptr;
 
 } // namespace qx
 

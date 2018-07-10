@@ -29,6 +29,7 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #ifndef _QX_SERIALIZE_MACRO_H_
 #define _QX_SERIALIZE_MACRO_H_
 
@@ -39,28 +40,29 @@
 #define QX_ARCHIVE_NAMESPACE_FCT_IMPL(T, INPUT, OUTPUT) \
 \
 template <class T> \
-inline qx_bool to_file(const T & obj, const QString & sFileName, unsigned int flags = boost::archive::no_header) { return qx::QxArchive<T, INPUT, OUTPUT>::toFile(obj, sFileName, flags); }; \
+inline qx_bool to_file(const T & obj, const QString & sFileName, unsigned int flags = boost::archive::no_header) { return qx::QxArchive_ToFile<T, INPUT, OUTPUT>::toFile(obj, sFileName, flags); }; \
 \
 template <class T> \
-inline qx_bool from_file(T & obj, const QString & sFileName, unsigned int flags = boost::archive::no_header) { return qx::QxArchive<T, INPUT, OUTPUT>::fromFile(obj, sFileName, flags); }; \
+inline qx_bool from_file(T & obj, const QString & sFileName, unsigned int flags = boost::archive::no_header) { return qx::QxArchive_FromFile<T, INPUT, OUTPUT>::fromFile(obj, sFileName, flags); }; \
 \
 template <class T> \
-inline qx_bool to_file_compressed(const T & obj, const QString & sFileName, unsigned int flags = boost::archive::no_header, int iCompressionLevel = -1) { return qx::QxArchive<T, INPUT, OUTPUT>::toFileCompressed(obj, sFileName, flags, iCompressionLevel); }; \
+inline qx_bool to_file_compressed(const T & obj, const QString & sFileName, unsigned int flags = boost::archive::no_header, int iCompressionLevel = -1) { return qx::QxArchive_ToFileCompressed<T, INPUT, OUTPUT>::toFileCompressed(obj, sFileName, flags, iCompressionLevel); }; \
 \
 template <class T> \
-inline qx_bool from_file_compressed(T & obj, const QString & sFileName, unsigned int flags = boost::archive::no_header) { return qx::QxArchive<T, INPUT, OUTPUT>::fromFileCompressed(obj, sFileName, flags); }; \
+inline qx_bool from_file_compressed(T & obj, const QString & sFileName, unsigned int flags = boost::archive::no_header) { return qx::QxArchive_FromFileCompressed<T, INPUT, OUTPUT>::fromFileCompressed(obj, sFileName, flags); }; \
 \
 template <class T> \
-inline QString to_string(const T & obj, unsigned int flags = boost::archive::no_header) { return qx::QxArchive<T, INPUT, OUTPUT>::toString(obj, flags); }; \
+inline QString to_string(const T & obj, unsigned int flags = boost::archive::no_header) { return qx::QxArchive_ToString<T, INPUT, OUTPUT>::toString(obj, flags); }; \
 \
 template <class T> \
-inline qx_bool from_string(T & obj, const QString & sString, unsigned int flags = boost::archive::no_header) { return qx::QxArchive<T, INPUT, OUTPUT>::fromString(obj, sString, flags); }; \
+inline qx_bool from_string(T & obj, const QString & sString, unsigned int flags = boost::archive::no_header) { return qx::QxArchive_FromString<T, INPUT, OUTPUT>::fromString(obj, sString, flags); }; \
 \
 template <class T> \
-inline QByteArray to_byte_array(const T & obj, typename qx::trait::archive_wide_traits< INPUT >::type_string * owner = NULL, unsigned int flags = boost::archive::no_header) { return qx::QxArchive<T, INPUT, OUTPUT>::toByteArray(obj, owner, flags); }; \
+inline QByteArray to_byte_array(const T & obj, typename qx::trait::archive_wide_traits< INPUT >::type_string * owner = NULL, unsigned int flags = boost::archive::no_header) { return qx::QxArchive_ToByteArray<T, INPUT, OUTPUT>::toByteArray(obj, owner, flags); }; \
 \
 template <class T> \
-inline qx_bool from_byte_array(T & obj, const QByteArray & data, unsigned int flags = boost::archive::no_header) { return qx::QxArchive<T, INPUT, OUTPUT>::fromByteArray(obj, data, flags); }; \
+inline qx_bool from_byte_array(T & obj, const QByteArray & data, unsigned int flags = boost::archive::no_header) { return qx::QxArchive_FromByteArray<T, INPUT, OUTPUT>::fromByteArray(obj, data, flags); }; \
 \
 
 #endif // _QX_SERIALIZE_MACRO_H_
+#endif // _QX_ENABLE_BOOST_SERIALIZATION

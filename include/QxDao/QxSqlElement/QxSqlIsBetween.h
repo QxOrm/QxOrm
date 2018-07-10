@@ -83,7 +83,7 @@ protected:
 
 };
 
-typedef boost::shared_ptr<QxSqlIsBetween> QxSqlIsBetween_ptr;
+typedef qx_shared_ptr<QxSqlIsBetween> QxSqlIsBetween_ptr;
 
 } // namespace detail
 } // namespace dao

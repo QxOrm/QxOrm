@@ -44,8 +44,11 @@
  */
 
 #include <boost/type_traits/is_enum.hpp>
+#include <boost/type_traits/is_integral.hpp>
 
 #include <QtCore/qvariant.h>
+
+#include <QxCommon/QxConfig.h>
 
 namespace qx {
 namespace trait {
@@ -56,7 +59,7 @@ namespace trait {
  */
 template <typename T>
 struct is_qt_variant_compatible
-{ enum { value = boost::is_enum<T>::value }; };
+{ enum { value = (boost::is_enum<T>::value || boost::is_integral<T>::value) }; };
 
 template <> struct is_qt_variant_compatible<bool>                 { enum { value = true }; };
 template <> struct is_qt_variant_compatible<short>                { enum { value = true }; };
@@ -91,6 +94,15 @@ template <> struct is_qt_variant_compatible<QRect>                { enum { value
 template <> struct is_qt_variant_compatible<QRectF>               { enum { value = true }; };
 template <> struct is_qt_variant_compatible<QUrl>                 { enum { value = true }; };
 template <> struct is_qt_variant_compatible<QVariant>             { enum { value = true }; };
+
+#ifdef _QX_ENABLE_QT_GUI
+template <> struct is_qt_variant_compatible<QBrush>               { enum { value = true }; };
+template <> struct is_qt_variant_compatible<QColor>               { enum { value = true }; };
+template <> struct is_qt_variant_compatible<QFont>                { enum { value = true }; };
+template <> struct is_qt_variant_compatible<QImage>               { enum { value = true }; };
+template <> struct is_qt_variant_compatible<QPixmap>              { enum { value = true }; };
+template <> struct is_qt_variant_compatible<QRegion>              { enum { value = true }; };
+#endif // _QX_ENABLE_QT_GUI
 
 template <> struct is_qt_variant_compatible< QList<QVariant> >             { enum { value = true }; };
 template <> struct is_qt_variant_compatible< QMap<QString, QVariant> >     { enum { value = true }; };

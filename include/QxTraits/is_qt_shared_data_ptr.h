@@ -56,24 +56,19 @@ namespace trait {
  * \brief qx::trait::is_qt_shared_data_ptr<T>::value : return true if T is a QSharedDataPointer<> smart-pointer of Qt library, otherwise return false
  */
 template <typename T>
-class is_qt_shared_data_ptr
-{
+struct is_qt_shared_data_ptr : public boost::mpl::false_ { ; };
 
-private:
+template <typename T>
+struct is_qt_shared_data_ptr< QSharedDataPointer<T> > : public boost::mpl::true_ { ; };
 
-   template <typename V> static char isSmartPtr(QSharedDataPointer<V>);
-   static int isSmartPtr(...);
-   static T t;
+template <typename T>
+struct is_qt_shared_data_ptr< QSharedDataPointer<T> & > : public boost::mpl::true_ { ; };
 
-public:
+template <typename T>
+struct is_qt_shared_data_ptr< const QSharedDataPointer<T> > : public boost::mpl::true_ { ; };
 
-   enum { value = (sizeof(qx::trait::is_qt_shared_data_ptr<T>::isSmartPtr(t)) == sizeof(char)) };
-
-   typedef typename boost::mpl::if_c<qx::trait::is_qt_shared_data_ptr<T>::value, 
-                                     boost::mpl::true_, 
-                                     boost::mpl::false_>::type type;
-
-};
+template <typename T>
+struct is_qt_shared_data_ptr< const QSharedDataPointer<T> & > : public boost::mpl::true_ { ; };
 
 } // namespace trait
 } // namespace qx

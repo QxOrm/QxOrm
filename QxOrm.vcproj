@@ -423,10 +423,6 @@
 					RelativePath=".\src\QxCommon\QxSimpleCrypt.cpp"
 					>
 				</File>
-				<File
-					RelativePath=".\src\QxCommon\QxStringCvt_Export.cpp"
-					>
-				</File>
 			</Filter>
 			<Filter
 				Name="QxRegister"
@@ -496,6 +492,14 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="QxConvert"
+				>
+				<File
+					RelativePath=".\src\QxConvert\QxConvert_Export.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="include"
@@ -555,18 +559,6 @@
 				</File>
 				<File
 					RelativePath=".\include\QxCommon\QxSimpleCrypt.h"
-					>
-				</File>
-				<File
-					RelativePath=".\include\QxCommon\QxStringCvt.h"
-					>
-				</File>
-				<File
-					RelativePath=".\include\QxCommon\QxStringCvt_Export.h"
-					>
-				</File>
-				<File
-					RelativePath=".\include\QxCommon\QxStringCvt_Impl.h"
 					>
 				</File>
 			</Filter>
@@ -1606,6 +1598,22 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="QxConvert"
+				>
+				<File
+					RelativePath=".\include\QxConvert\QxConvert.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\QxConvert\QxConvert_Export.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\QxConvert\QxConvert_Impl.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="inl"
@@ -1791,38 +1799,38 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="QxCommon"
-				>
-				<File
-					RelativePath=".\inl\QxCommon\QxStringCvt_FromString.inl"
-					>
-				</File>
-				<File
-					RelativePath=".\inl\QxCommon\QxStringCvt_FromVariant.inl"
-					>
-				</File>
-				<File
-					RelativePath=".\inl\QxCommon\QxStringCvt_Qt.inl"
-					>
-				</File>
-				<File
-					RelativePath=".\inl\QxCommon\QxStringCvt_ToString.inl"
-					>
-				</File>
-				<File
-					RelativePath=".\inl\QxCommon\QxStringCvt_ToVariant.inl"
-					>
-				</File>
-				<File
-					RelativePath=".\inl\QxCommon\QxStringCvt_WithIndex.inl"
-					>
-				</File>
-			</Filter>
-			<Filter
 				Name="QxRegister"
 				>
 				<File
 					RelativePath=".\inl\QxRegister\QxClass.inl"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="QxConvert"
+				>
+				<File
+					RelativePath=".\inl\QxConvert\QxConvert_FromString.inl"
+					>
+				</File>
+				<File
+					RelativePath=".\inl\QxConvert\QxConvert_FromVariant.inl"
+					>
+				</File>
+				<File
+					RelativePath=".\inl\QxConvert\QxConvert_Qt.inl"
+					>
+				</File>
+				<File
+					RelativePath=".\inl\QxConvert\QxConvert_ToString.inl"
+					>
+				</File>
+				<File
+					RelativePath=".\inl\QxConvert\QxConvert_ToVariant.inl"
+					>
+				</File>
+				<File
+					RelativePath=".\inl\QxConvert\QxConvert_WithIndex.inl"
 					>
 				</File>
 			</Filter>

@@ -29,6 +29,7 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #ifndef _QX_SERIALIZE_QMULTIHASH_H_
 #define _QX_SERIALIZE_QMULTIHASH_H_
 
@@ -91,3 +92,4 @@ inline void serialize(Archive & ar, QMultiHash<Key, Value> & t, const unsigned i
 } // namespace serialization
 
 #endif // _QX_SERIALIZE_QMULTIHASH_H_
+#endif // _QX_ENABLE_BOOST_SERIALIZATION

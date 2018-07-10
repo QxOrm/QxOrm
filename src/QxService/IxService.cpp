@@ -29,12 +29,14 @@
 **
 ****************************************************************************/
 
-#include <QxPrecompiled.h>
+#ifdef _QX_ENABLE_QT_NETWORK
 
-#if _QX_ENABLE_QT_NETWORK_DEPENDENCY
+#include <QxPrecompiled.h>
 
 #include <QxService/IxService.h>
 #include <QxService/QxTransaction.h>
+
+#include <QxFactory/QxFactoryX.h>
 
 #include <QxMemLeak/mem_leak.h>
 
@@ -47,11 +49,13 @@ IxService::IxService() { ; }
 IxService::IxService(const QString & sServiceName) : m_sServiceName(sServiceName) { qAssert(! m_sServiceName.isEmpty()); }
 IxService::~IxService() { ; }
 
-boost::shared_ptr<QxTransaction> IxService::getTransaction() const            { return m_pTransaction; }
-void IxService::setTransaction(const boost::shared_ptr<QxTransaction> & p)    { m_pTransaction = p; }
+qx_shared_ptr<QxTransaction> IxService::getTransaction() const          { return m_pTransaction; }
+void IxService::setTransaction(const qx_shared_ptr<QxTransaction> & p)  { m_pTransaction = p; }
 
 } // namespace service
 } // namespace qx
+
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 
 namespace boost {
 namespace serialization {
@@ -90,9 +94,73 @@ inline void qx_load(Archive & ar, qx::service::IxService & t, const unsigned int
    t.setMessageReturn(bMsgReturn);
 }
 
-} // namespace boost
 } // namespace serialization
+} // namespace boost
+
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
 QX_REGISTER_INTERNAL_HELPER_END_FILE_CPP(qx::service::IxService)
 
-#endif // _QX_ENABLE_QT_NETWORK_DEPENDENCY
+QDataStream & operator<< (QDataStream & stream, const qx::service::IxService & t)
+{
+   stream << t.m_sServiceName;
+   stream << t.m_sServiceMethodName;
+   stream << t.m_bMessageReturn;
+
+   qint16 iIsNull = (t.m_pInputParameter ? 0 : 1);
+   stream << iIsNull;
+   if (t.m_pInputParameter)
+   {
+      t.m_pInputParameter->registerClass();
+      QString sClassName = t.m_pInputParameter->getClassName();
+      stream << sClassName;
+      t.m_pInputParameter->save(stream);
+   }
+
+   iIsNull = (t.m_pOutputParameter ? 0 : 1);
+   stream << iIsNull;
+   if (t.m_pOutputParameter)
+   {
+      t.m_pOutputParameter->registerClass();
+      QString sClassName = t.m_pOutputParameter->getClassName();
+      stream << sClassName;
+      t.m_pOutputParameter->save(stream);
+   }
+
+   return stream;
+}
+
+QDataStream & operator>> (QDataStream & stream, qx::service::IxService & t)
+{
+   stream >> t.m_sServiceName;
+   stream >> t.m_sServiceMethodName;
+   stream >> t.m_bMessageReturn;
+
+   qint16 iIsNull = 0;
+   stream >> iIsNull;
+   if (iIsNull) { t.m_pInputParameter.reset(); }
+   else
+   {
+      QString sClassName; stream >> sClassName;
+      qx::service::IxParameter * ptr = qx::create_nude_ptr<qx::service::IxParameter>(sClassName);
+      if (! ptr) { qAssertMsg(false, "[QxOrm] qx::service::IxService, loading QDataStream", "unable to create nude pointer for input parameter"); }
+      else { ptr->registerClass(); ptr->load(stream); }
+      t.m_pInputParameter.reset(ptr);
+   }
+
+   iIsNull = 0;
+   stream >> iIsNull;
+   if (iIsNull) { t.m_pOutputParameter.reset(); }
+   else
+   {
+      QString sClassName; stream >> sClassName;
+      qx::service::IxParameter * ptr = qx::create_nude_ptr<qx::service::IxParameter>(sClassName);
+      if (! ptr) { qAssertMsg(false, "[QxOrm] qx::service::IxService, loading QDataStream", "unable to create nude pointer for output parameter"); }
+      else { ptr->registerClass(); ptr->load(stream); }
+      t.m_pOutputParameter.reset(ptr);
+   }
+
+   return stream;
+}
+
+#endif // _QX_ENABLE_QT_NETWORK

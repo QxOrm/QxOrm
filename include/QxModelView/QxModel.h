@@ -160,7 +160,7 @@ class QxModel : public qx::IxModel
 
 public:
 
-   typedef boost::shared_ptr<T> type_ptr;
+   typedef qx_shared_ptr<T> type_ptr;
    typedef typename qx::trait::get_primary_key<T>::type type_primary_key;
    typedef qx::QxCollection<type_primary_key, type_ptr> type_collection;
 

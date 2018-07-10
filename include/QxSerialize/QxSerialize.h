@@ -29,6 +29,7 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #ifndef _QX_SERIALIZE_H_
 #define _QX_SERIALIZE_H_
 
@@ -126,9 +127,12 @@
 #include <QxSerialize/Qt/QxSerialize_QSqlError.h>
 
 #include <QxSerialize/Qx/QxSerialize_QxCollection.h>
+#include <QxSerialize/Qx/QxSerialize_QxDaoPointer.h>
+
+/*
 #include <QxSerialize/Qx/QxSerialize_QxXmlReader.h>
 #include <QxSerialize/Qx/QxSerialize_QxXmlWriter.h>
-#include <QxSerialize/Qx/QxSerialize_QxDaoPointer.h>
+*/
 
 #include <QxSerialize/std/QxSerialize_std_tuple.h>
 #include <QxSerialize/std/QxSerialize_std_shared_ptr.h>
@@ -152,3 +156,4 @@
 #endif // _MSC_VER
 
 #endif // _QX_SERIALIZE_H_
+#endif // _QX_ENABLE_BOOST_SERIALIZATION

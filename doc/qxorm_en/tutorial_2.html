@@ -4,14 +4,17 @@
   <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
   <title>QxOrm : C++ Qt ORM Object Relational Mapping database library - QxEntityEditor : C++ Qt entities graphic editor (data model designer and source code generator)</title>
   <link rel='stylesheet' type='text/css' href='./resource/qxorm_style.css'>
+  <script type="text/javascript" src="./resource/jquery.min.js"></script>
   <script type="text/javascript" src="./resource/qxorm_script.js"></script>
 </head>
 <body>
 <table border="0" style="width: 80%" align="center">
-  <col><col><col>
+  <col><col><col><col><col>
   <tbody>
     <tr>
       <td><a href="./home.html"><img alt="QxOrm" src="./resource/logo_qxorm_and_qxee.png"align="left" border="0"></a></td>
+      <td align="right" style="vertical-align:bottom"><div id="qx_search"><gcse:search></gcse:search></div></td>
+      <td width="15"></td>
       <td align="right" style="vertical-align:bottom">
         <img alt="Windows" src="./resource/logo_windows.gif" width="35" height="35">
         <img alt="Linux" src="./resource/logo_linux.gif" width="35" height="35">
@@ -40,7 +43,15 @@
             </div>
          </td></tr></tbody></table>
       </td>
-      <td align="center"><a href="./faq.html" class="btn_nav">Faq (36)</a></td>
+      <td align="center" onmouseover="showHideElementById('menu_manual', true);" onmouseout="showHideElementById('menu_manual', false);">
+         <a href="./manual.html" class="btn_nav">Manual (2)</a>
+         <table class="table_menu_manual"><tbody><tr><td>
+            <div id="menu_manual" class="div_menu_manual">
+               <a href="./manual.html" class="btn_sub_menu">QxOrm manual</a><br/>
+               <a href="./manual_qxee.html" class="btn_sub_menu">QxEntityEditor manual</a><br/>
+            </div>
+         </td></tr></tbody></table>
+      </td>
       <td align="center"><a href="./link.html" class="btn_nav">Forum</a></td>
       <td align="center"><a href="./customer.html" class="btn_nav">Our customers</a></td>
     </tr>
@@ -55,7 +66,7 @@
     <table cellspacing="0" cellpadding="1"><col><col><tbody>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow">Current version :&nbsp;</font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.3.2 - <a href="../doxygen/index.html" target="_blank">QxOrm library online documentation</a></font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.1 - <a href="../doxygen/index.html" target="_blank">QxOrm library online class documentation</a></font></td>
       </tr>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow"></font></td>
@@ -97,8 +108,11 @@
               <td>The main purpose of <b>qxClientServer</b> tutorial is to explain how <b>QxService</b> module of <b>QxOrm</b> library works.<br>
                  <b>QxService</b> module provides an easy and powerful way to create <b>C++ application server</b> (<i>services</i> concept with <i>request</i> from client and <i>reply</i> from server).<br>
                  <b>qxClientServer</b> project source code is available in the directory <i>./test/qxClientServer/</i>.<br>
-                 It is recommended to read <b>qxBlog</b> tutorial before reading this article, in particular <b>QxOrm</b> mapping function by class : <u><i>void qx::register_class(...)</i></u>.<br>
+                 It is recommended to read <b>qxBlog</b> tutorial before reading this article, in particular <b>QxOrm</b> mapping function by class : <u><i>void qx::register_class&lt;T&gt;(...)</i></u>.<br>
                  <br>
+                 <b>Note :</b> to enable <b>QxService</b> module (required to build <b>qxClientServer</b> tutorial source code), it is necessary to define <b>_QX_ENABLE_QT_NETWORK</b> compilation option in <i>QxOrm.pri</i> configuration file.
+                 For more details about compilation options, <a href="./manual.html#manual_220">please read the manual (user guide) of QxOrm library</a>.
+                 <br><br>
                  <b>qxClientServer</b> tutorial contains 2 exec and a service layer :
                  <ul>
                    <li><i>qxServer</i> : C++ application server with a GUI to configure server and a field to display last transaction between client and server.</li>
@@ -233,7 +247,7 @@ private</span> Q_SLOTS<span class="operator">:</span><span class="type">
         <br>
         <i>onClickStartStop()</i> event can start and stop the server.<br>
         Application server must <i>serialize</i> reply to send to clients : you can choose the serialization type with the combobox <i>cboSerializationType</i>.<br>
-        For more information about all serialization types, <a href="../qxorm_en/faq.html#faq_75">see the FAQ</a>.<br>
+        For more information about all serialization types supported by QxOrm library, <a href="../qxorm_en/manual.html#manual_60">read the manual here</a>.<br>
         In most cases, binary serialization is strongly recommended for a network transaction because it is fastest and smallest to limit traffic over network.<br>
         We define also a port number for the application server with the field <i>spinPortNumber</i>.<br>
         An important parameter is the <u>threads count</u> available : this is the <u>clients count that can send a request in same time</u>.<br>
@@ -397,7 +411,7 @@ typedef</span> boost<span class="operator">::</span>shared_ptr<span class="opera
         * <u><i>server_infos_output</i></u> : inherits from <i>qx::service::IxParameter</i> class (reply from server). This class contains only 1 property, the current server date-time.<br>
         * <u><i>server_infos</i></u> : inherits from <i>qx::service::QxService&lt;INPUT, OUTPUT&gt;</i> template and contains all methods to call services : only 1 method for our service to retrieve the current server date-time.<br>
         <br>
-        Those 3 classes must be registered into QxOrm context, like a persitent class (see <b>qxBlog</b> tutorial).<br>
+        Those 3 classes must be registered in QxOrm context, like a persitent class (see <b>qxBlog</b> tutorial).<br>
         This is why we are using the <i>QX_REGISTER_HPP_QX_SERVICE</i> macro for those 3 classes.<br>
         Moreover, to manage memory and avoid memory leaks, we use smart-pointers from boost library : <i>boost::shared_ptr</i>.<br>
         <b>QxService</b> module works with smart-pointers, this is why it is strongly recommended to create some <i>typedef</i> : for example, <i>typedef boost::shared_ptr&lt;server_infos_input&gt; server_infos_input_ptr;</i>.<br>

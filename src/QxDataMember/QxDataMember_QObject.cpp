@@ -123,6 +123,8 @@ void * QxDataMember_QObject::getDataVoidPtr(void * pOwner)
 
 } // namespace qx
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
+
 #if _QX_SERIALIZE_POLYMORPHIC
    QX_DATA_MEMBER_QOBJECT_IMPL_VIRTUAL_ARCHIVE_CPP(boost::archive::polymorphic_iarchive, boost::archive::polymorphic_oarchive)
 #endif // _QX_SERIALIZE_POLYMORPHIC
@@ -154,3 +156,5 @@ void * QxDataMember_QObject::getDataVoidPtr(void * pOwner)
 #if _QX_SERIALIZE_WIDE_XML
    QX_DATA_MEMBER_QOBJECT_IMPL_VIRTUAL_ARCHIVE_CPP(boost::archive::xml_wiarchive, boost::archive::xml_woarchive)
 #endif // _QX_SERIALIZE_WIDE_XML
+
+#endif // _QX_ENABLE_BOOST_SERIALIZATION

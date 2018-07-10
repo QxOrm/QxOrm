@@ -34,17 +34,18 @@
 /*!
  * \mainpage QxOrm - C++ Object Relational Mapping library
  *
- * QxOrm is a C++ library designed to provide Object Relational Mapping (ORM) feature to C++/Qt users (like Hibernate in Java, or NHibernate in .Net).<br>
- * QxOrm engine is based on a simple and non intrusive mapping function by class to provide :
+ * QxOrm is a C++ library designed to provide Object Relational Mapping (ORM) feature to C++/Qt developers (like Hibernate in Java, or NHibernate in .Net).<br>
+ * QxOrm engine is based on a simple and non intrusive mapping function per class to provide :
  *
- * - <b>Persistence</b> (based on QtSql Qt module) ;
- * - <b>Serialization</b> (XML and binary, based on boost serialization) ;
- * - <b>Reflection</b> or <b>Introspection</b> (invoke class methods and access to properties).
+ * - <a href="http://www.qxorm.com/qxorm_en/manual.html#manual_30" target="_blank"><b>Persistence</b></a> (based on QtSql Qt module) ;
+ * - <a href="http://www.qxorm.com/qxorm_en/manual.html#manual_60" target="_blank"><b>Serialization</b></a> (XML and binary, based on Qt and boost serialization engines) ;
+ * - <a href="http://www.qxorm.com/qxorm_en/manual.html#manual_70" target="_blank"><b>Reflection</b></a> or <a href="http://www.qxorm.com/qxorm_en/manual.html#manual_70" target="_blank"><b>Introspection</b></a> (invoke dynamically class methods and access to properties).
  *
  * QxOrm is developed by Lionel Marty, a software development engineer since 2003.<br>
- * QxOrm library has been accepted into the <a href="http://qt.digia.com/qtambassador/" target="_blank">Qt Ambassador Program</a>.
+ * QxOrm library has been accepted into the <a href="http://forum.qt.io/category/24/qt-ambassador-program" target="_blank">Qt Ambassador Program</a>.
  *
- * For more information about QxOrm library (quick sample, tutorial and forum), please visit : <a href="http://www.qxorm.com/" target="_blank">http://www.qxorm.com/</a>.
+ * For more information about QxOrm library (quick sample, tutorial and forum), please visit : <a href="http://www.qxorm.com/" target="_blank">http://www.qxorm.com/</a>.<br>
+ * <a href="http://www.qxorm.com/qxorm_en/manual.html" target="_blank">A manual (user guide) to learn how to work with QxOrm library is available on QxOrm website</a>.
  * <br><br>
  *
  * \section quick_sample Quick sample using QxOrm library

@@ -48,16 +48,27 @@
 #include <sstream>
 #include <exception>
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
+
 #include <boost/archive/archive_exception.hpp>
 
 #include <QxSerialize/boost/QxSerializeInclude.h>
 #include <QxSerialize/QxBoostSerializeHelper/QxBoostSerializeRegisterHelperX.h>
 #include <QxSerialize/QxSerializeInvoker.h>
 
+#else // _QX_ENABLE_BOOST_SERIALIZATION
+
+#include <QxSerialize/QxSerializeQDataStream.h>
+#include <QxSerialize/QDataStream/QxSerializeQDataStream_all_include.h>
+
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
+
 #define QX_STR_CLONE_SERIALIZATION_ERROR "[QxOrm] qx::clone() serialization error : '%s'"
 #define QX_STR_CLONE_DESERIALIZATION_ERROR "[QxOrm] qx::clone() deserialization error : '%s'"
 
 namespace qx {
+
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 
 /*!
  * \ingroup QxSerialize
@@ -91,12 +102,38 @@ T * clone_to_nude_ptr(const T & obj)
    return (bDeserializeOk ? pClone : NULL);
 }
 
+#else // _QX_ENABLE_BOOST_SERIALIZATION
+
 /*!
  * \ingroup QxSerialize
- * \brief qx::clone(const T & obj) : return a boost smart-pointer (boost::shared_ptr<T>) of a new instance of type T cloned from obj
+ * \brief qx::clone_to_nude_ptr(const T & obj) : return a nude pointer (be careful with memory leak) of a new instance of type T cloned from obj (this is a limited clone version which uses Qt QDataStream engine compared to boost::serialization engine)
  */
 template <class T>
-boost::shared_ptr<T> clone(const T & obj)
+T * clone_to_nude_ptr(const T & obj)
+{
+   QByteArray baClone = qx::serialization::qt::to_byte_array(obj);
+   if (baClone.isEmpty()) { qAssertMsg(false, "[QxOrm] qx::clone_to_nude_ptr", "an error occurred during QDataStream serialization process"); return NULL; }
+   T * pClone = new T();
+   qx_bool bOk = qx::serialization::qt::from_byte_array((* pClone), baClone);
+   return (bOk ? pClone : NULL);
+}
+
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
+
+/*!
+ * \ingroup QxSerialize
+ * \brief qx::clone(const T & obj) : return a boost smart-pointer (qx_shared_ptr<T>) of a new instance of type T cloned from obj
+ */
+template <class T>
+qx_shared_ptr<T> clone(const T & obj)
+{ T * ptr = qx::clone_to_nude_ptr<T>(obj); return qx_shared_ptr<T>(ptr); }
+
+/*!
+ * \ingroup QxSerialize
+ * \brief qx::clone_to_boost_shared_ptr(const T & obj) : return a boost smart-pointer (boost::shared_ptr<T>) of a new instance of type T cloned from obj
+ */
+template <class T>
+boost::shared_ptr<T> clone_to_boost_shared_ptr(const T & obj)
 { T * ptr = qx::clone_to_nude_ptr<T>(obj); return boost::shared_ptr<T>(ptr); }
 
 /*!

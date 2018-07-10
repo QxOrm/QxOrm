@@ -29,9 +29,11 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
+
 #include <QxPrecompiled.h>
 
-#if _QX_ENABLE_QT_GUI_DEPENDENCY
+#ifdef _QX_ENABLE_QT_GUI
 
 #include <QxSerialize/Qt/QxSerialize_QPicture.h>
 
@@ -79,4 +81,5 @@ inline void qx_load(Archive & ar, QPicture & t, const unsigned int file_version)
 
 QX_SERIALIZE_FAST_COMPIL_SAVE_LOAD_CPP(QPicture)
 
-#endif // _QX_ENABLE_QT_GUI_DEPENDENCY
+#endif // _QX_ENABLE_QT_GUI
+#endif // _QX_ENABLE_BOOST_SERIALIZATION

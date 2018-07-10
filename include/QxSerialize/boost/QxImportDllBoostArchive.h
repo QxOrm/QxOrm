@@ -29,6 +29,7 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #ifndef _QX_IMPORT_DLL_BOOST_ARCHIVE_H_
 #define _QX_IMPORT_DLL_BOOST_ARCHIVE_H_
 
@@ -80,3 +81,4 @@ QX_DLL_EXPORT_TEMPLATE_T_P1_HPP(class, boost::archive::detail::archive_pointer_o
 
 #endif // _QX_USE_EXPORT_DLL_BOOST_SERIALIZATION_SINGLETON
 #endif // _QX_IMPORT_DLL_BOOST_ARCHIVE_H_
+#endif // _QX_ENABLE_BOOST_SERIALIZATION

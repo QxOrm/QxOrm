@@ -4,14 +4,17 @@
   <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
   <title>QxOrm : C++ Qt ORM Object Relational Mapping database library - QxEntityEditor : C++ Qt entities graphic editor (data model designer and source code generator)</title>
   <link rel='stylesheet' type='text/css' href='./resource/qxorm_style.css'>
+  <script type="text/javascript" src="./resource/jquery.min.js"></script>
   <script type="text/javascript" src="./resource/qxorm_script.js"></script>
 </head>
 <body>
 <table border="0" style="width: 80%" align="center">
-  <col><col><col>
+  <col><col><col><col><col>
   <tbody>
     <tr>
       <td><a href="./home.html"><img alt="QxOrm" src="./resource/logo_qxorm_and_qxee.png"align="left" border="0"></a></td>
+      <td align="right" style="vertical-align:bottom"><div id="qx_search"><gcse:search></gcse:search></div></td>
+      <td width="15"></td>
       <td align="right" style="vertical-align:bottom">
         <img alt="Windows" src="./resource/logo_windows.gif" width="35" height="35">
         <img alt="Linux" src="./resource/logo_linux.gif" width="35" height="35">
@@ -40,7 +43,15 @@
             </div>
          </td></tr></tbody></table>
       </td>
-      <td align="center"><a href="./faq.html" class="btn_nav">Faq (36)</a></td>
+      <td align="center" onmouseover="showHideElementById('menu_manual', true);" onmouseout="showHideElementById('menu_manual', false);">
+         <a href="./manual.html" class="btn_nav">Manuel (2)</a>
+         <table class="table_menu_manual"><tbody><tr><td>
+            <div id="menu_manual" class="div_menu_manual">
+               <a href="./manual.html" class="btn_sub_menu">Manuel QxOrm</a><br/>
+               <a href="./manual_qxee.html" class="btn_sub_menu">Manuel QxEntityEditor</a><br/>
+            </div>
+         </td></tr></tbody></table>
+      </td>
       <td align="center"><a href="./link.html" class="btn_nav">Forum</a></td>
       <td align="center"><a href="./customer.html" class="btn_nav">Nos clients</a></td>
     </tr>
@@ -55,7 +66,7 @@
     <table cellspacing="0" cellpadding="1"><col><col><tbody>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow">Version courante :&nbsp;</font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.3.2 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.1 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
       </tr>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow"></font></td>
@@ -158,7 +169,7 @@
            <td valign="middle" width="30"></td>
            <td align="justify">
               <b>QxEntityEditor</b> est un éditeur graphique pour la bibliothèque <b>QxOrm</b> : <b>QxEntityEditor</b> permet de gérer graphiquement le modèle d'entités.<br>
-              <b>QxEntityEditor</b> est multi-plateforme (disponible pour Windows, Linux et Mac OS X) et génère du code natif pour tous les environnements : bureau (Windows, Linux, Mac OS X), embarqué et mobile (Android, iOS, Raspberry Pi, etc.).<br>
+              <b>QxEntityEditor</b> est multi-plateforme (disponible pour Windows, Linux et Mac OS X) et génère du code natif pour tous les environnements : bureau (Windows, Linux, Mac OS X), embarqué et mobile (Android, iOS, Windows Phone, Raspberry Pi, etc.).<br>
               <a href="./tutorial_4.html">Une vidéo de présentation de l'application <b>QxEntityEditor</b> est disponible</a>.<br>
               <br>
               <b>QxEntityEditor</b> est basé sur un système de plugins et propose diverses fonctionnalités pour importer/exporter le modèle de données :
@@ -275,31 +286,6 @@
              <tbody>
                <tr>
                  <td valign="middle" width="161" align="center"><a
-                   href="http://www.boost.org/" target="_blank"><img alt="boost"
-                   src="./resource/logo_boost.jpg" width="161"
-                 height="50" border="0"></a></td>
-                 <td align="justify"><b>boost</b> : de nombreux modules de la
-                   bibliothèque boost font partie de la nouvelle norme C++.<br>
-                   C'est une bibliothèque reconnue pour sa qualité, son code 'C++
-                   moderne', sa documentation, sa portabilité, etc.<br>
-                   QxOrm utilise les fonctionnalités suivantes de boost :
-                   <i>smart_pointer, serialization, type_traits,
-                   multi_index_container, unordered_container, any, tuple,
-                   foreach, function.</i><br>
-                   Il est conseillé d'installer et d'utiliser la dernière version
-                   de boost disponible à l'adresse suivante : <a
-                   href="http://www.boost.org/"
-                   target="_blank">http://www.boost.org/</a></td>
-               </tr>
-             </tbody>
-           </table>
-           <p></p>
-           <table border="0" style="width: 100%" align="center">
-             <col>
-             <col>
-             <tbody>
-               <tr>
-                 <td valign="middle" width="161" align="center"><a
                    href="http://www.qt.io/" target="_blank"><img alt="Qt"
                    src="./resource/logo_qt.jpg" width="42" height="50" border="0"></a></td>
                  <td align="justify"><b>Qt</b> : bibliothèque complète : IHM
@@ -317,6 +303,31 @@
                    de Qt disponible à l'adresse suivante : <a
                    href="http://www.qt.io/"
                    target="_blank">http://www.qt.io/</a></td>
+               </tr>
+             </tbody>
+           </table>
+           <p></p>
+           <table border="0" style="width: 100%" align="center">
+             <col>
+             <col>
+             <tbody>
+               <tr>
+                 <td valign="middle" width="161" align="center"><a
+                   href="http://www.boost.org/" target="_blank"><img alt="boost"
+                   src="./resource/logo_boost.jpg" width="161"
+                 height="50" border="0"></a></td>
+                 <td align="justify"><b>boost</b> : de nombreux modules de la
+                   bibliothèque boost font partie de la nouvelle norme C++.<br>
+                   C'est une bibliothèque reconnue pour sa qualité, son code 'C++
+                   moderne', sa documentation, sa portabilité, etc.<br>
+                   QxOrm utilise les fonctionnalités suivantes de boost :
+                   <i>smart_pointer, serialization, type_traits,
+                   multi_index_container, unordered_container, any, tuple,
+                   foreach, function.</i><br>
+                   Il est conseillé d'installer et d'utiliser la dernière version
+                   de boost disponible à l'adresse suivante : <a
+                   href="http://www.boost.org/"
+                   target="_blank">http://www.boost.org/</a></td>
                </tr>
              </tbody>
            </table>
@@ -354,13 +365,13 @@
            <td align="justify">
            Oui, si la <i>serialization</i> des données au format XML n'est pas utilisée dans le projet, vous pouvez désactiver cette fonctionnalité.<br>
            Les temps de compilation seront alors réduits mais vous n'aurez plus accès au namespace <i>qx::serialization:xml</i>.<br>
-           Pour désactiver la <i>serialization XML</i>, il faut ouvrir le fichier de configuration <i>QxOrm.pri</i> et supprimer (ou mettre en commentaire) l'option de compilation <b><i>_QX_SERIALIZE_XML_ENABLED</i></b>.<br>
+           Pour désactiver la <i>serialization XML</i>, il faut ouvrir le fichier de configuration <i>QxOrm.pri</i> et supprimer (ou mettre en commentaire) l'option de compilation <b><i>_QX_ENABLE_BOOST_SERIALIZATION_XML</i></b>.<br>
            Une recompilation de la bibliothèque QxOrm est nécessaire pour prendre en compte cette modification.<br>
            <br>
            Une autre possibilité est d'utiliser les classes <i>polymorphiques</i> de la bibliothèque <a href="http://www.boost.org/doc/libs/release/libs/serialization/doc/index.html" target="_blank"><i>boost::serialization</i></a> (à la place des classes <i>template</i>).<br>
            Cette fonctionnalité réduit les temps de compilation ainsi que la taille de l'éxecutable généré.<br>
            En contre-partie, la vitesse d'exécution du programme sera réduite puisqu'une partie du travail effectué lors de la compilation devra être réalisé à l'exécution de l'application.<br>
-           Pour utiliser cette fonctionnalité dans <b>QxOrm</b>, vous devez activer l'option de compilation <b><i>_QX_SERIALIZE_POLYMORPHIC_ENABLED</i></b> dans le fichier de configuration <i>QxOrm.pri</i>.<br>
+           Pour utiliser cette fonctionnalité dans <b>QxOrm</b>, vous devez activer l'option de compilation <b><i>_QX_ENABLE_BOOST_SERIALIZATION_POLYMORPHIC</i></b> dans le fichier de configuration <i>QxOrm.pri</i>.<br>
            <b>Attention</b> : les fonctions de <i>serialization</i> seront alors accessibles depuis les <i>namespace</i> suivants : <i>qx::serialization::polymorphic_binary</i>, <i>qx::serialization::polymorphic_text</i> et <i>qx::serialization::polymorphic_xml</i>.<br>
            Une recompilation de la bibliothèque QxOrm est nécessaire pour prendre en compte cette modification.<br>
            <br>
@@ -1237,11 +1248,11 @@ BOOST_SERIALIZATION_SPLIT_FREE<span class="operator">(</span>ExtObject3D<span cl
 namespace</span> cvt<span class="operator"> {</span><span class="keyword">
 namespace</span> detail<span class="operator"> {</span><span class="keyword">
 
-template</span><span class="operator"> &lt;&gt;</span><span class="keyword"> struct</span> QxStringCvt_ToVariant<span class="operator">&lt;</span> ExtObject3D<span class="operator"> &gt; {</span><span class="keyword">
+template</span><span class="operator"> &lt;&gt;</span><span class="keyword"> struct</span> QxConvert_ToVariant<span class="operator">&lt;</span> ExtObject3D<span class="operator"> &gt; {</span><span class="keyword">
 static inline</span> QVariant toVariant<span class="operator">(</span><span class="keyword">const</span> ExtObject3D<span class="operator"> &amp;</span> t<span class="operator">,</span><span class="keyword"> const</span> QString<span class="operator"> &amp;</span> format<span class="operator">,</span><span class="type"> int</span> index<span class="operator">)
 {</span><span class="comment"> /* Ici je convertis ExtObject3D en QVariant */</span><span class="operator"> } };</span><span class="keyword">
 
-template</span><span class="operator"> &lt;&gt;</span><span class="keyword"> struct</span> QxStringCvt_FromVariant<span class="operator">&lt;</span> ExtObject3D<span class="operator"> &gt; {</span><span class="keyword">
+template</span><span class="operator"> &lt;&gt;</span><span class="keyword"> struct</span> QxConvert_FromVariant<span class="operator">&lt;</span> ExtObject3D<span class="operator"> &gt; {</span><span class="keyword">
 static inline</span> qx_bool fromVariant<span class="operator">(</span><span class="keyword">const</span> QVariant<span class="operator"> &amp;</span> v<span class="operator">,</span> ExtObject3D<span class="operator"> &amp;</span> t<span class="operator">,</span><span class="keyword"> const</span> QString<span class="operator"> &amp;</span> format<span class="operator">,</span><span class="type"> int</span> index<span class="operator">)
 {</span><span class="comment"> /* Ici je convertis QVariant en ExtObject3D */</span><span class="operator">;</span><span class="flow"> return</span> qx_bool<span class="operator">(</span><span class="bool">true</span><span class="operator">); } };
 

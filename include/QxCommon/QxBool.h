@@ -43,12 +43,23 @@
  * \brief qx_bool : QxOrm library boolean type with code and description message when an error occured
  */
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/nvp.hpp>
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
+
+#include <QtCore/qdatastream.h>
 
 #include <QxSerialize/Qt/QxSerialize_QString.h>
 
 #include <QxTraits/get_class_name.h>
+
+namespace qx {
+class QxBool;
+} // namespace qx
+
+QX_DLL_EXPORT QDataStream & operator<< (QDataStream & stream, const qx::QxBool & t) BOOST_USED;
+QX_DLL_EXPORT QDataStream & operator>> (QDataStream & stream, qx::QxBool & t) BOOST_USED;
 
 namespace qx {
 
@@ -59,7 +70,12 @@ namespace qx {
 class QxBool
 {
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
    friend class boost::serialization::access;
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
+
+   friend QDataStream & ::operator<< (QDataStream & stream, const qx::QxBool & t);
+   friend QDataStream & ::operator>> (QDataStream & stream, qx::QxBool & t);
 
 private:
 
@@ -99,8 +115,22 @@ public:
    inline bool operator||(const QxBool & other) const    { return (m_bValue || other.getValue()); }
    inline bool operator||(const bool b) const            { qAssert(checkInitialized(b)); return (m_bValue || b); }
 
+   QString toString() const { return (QString(m_bValue ? "1" : "0") + "|" + QString::number(static_cast<qlonglong>(m_lCode)) + "|" + m_sDesc); }
+
+   void fromString(const QString & s)
+   {
+      if (s.trimmed().isEmpty()) { (* this) = QxBool(); return; }
+      bool bValue = ((s.left(1) == "1") ? true : false);
+      int iPos = s.indexOf("|", 2);
+      if (iPos == -1) { (* this) = QxBool(bValue); return; }
+      long lCode = s.mid(2, (iPos - 2)).toLong();
+      QString sDesc = s.right(s.size() - (iPos + 1));
+      (* this) = QxBool(bValue, lCode, sDesc);
+   }
+
 private:
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
    template <class Archive>
    void serialize(Archive & ar, const unsigned int file_version)
    {
@@ -109,19 +139,13 @@ private:
       ar & boost::serialization::make_nvp("code", m_lCode);
       ar & boost::serialization::make_nvp("desc", m_sDesc);
    }
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
    inline bool checkInitialized(const bool b) const { return ((static_cast<int>(b) == 0) || (static_cast<int>(b) == 1)); }
 
 };
 
 } // namespace qx
-
-/*
-inline bool operator==(const bool b1, const qx::QxBool & b2) { return (b1 == b2.getValue()); }
-inline bool operator!=(const bool b1, const qx::QxBool & b2) { return (b1 != b2.getValue()); }
-inline bool operator&&(const bool b1, const qx::QxBool & b2) { return (b1 && b2.getValue()); }
-inline bool operator||(const bool b1, const qx::QxBool & b2) { return (b1 || b2.getValue()); }
-*/
 
 typedef qx::QxBool qx_bool;
 QX_REGISTER_CLASS_NAME(qx_bool)

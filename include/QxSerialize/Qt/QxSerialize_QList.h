@@ -29,6 +29,7 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #ifndef _QX_SERIALIZE_QLIST_H_
 #define _QX_SERIALIZE_QLIST_H_
 
@@ -84,3 +85,4 @@ inline void serialize(Archive & ar, QList<T> & t, const unsigned int file_versio
 } // namespace serialization
 
 #endif // _QX_SERIALIZE_QLIST_H_
+#endif // _QX_ENABLE_BOOST_SERIALIZATION

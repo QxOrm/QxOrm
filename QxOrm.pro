@@ -29,6 +29,7 @@
 ##
 #############################################################################
 
+# Include QxOrm library configuration file (should be included by all projects which depend on QxOrm)
 include(./QxOrm.pri)
 
 ######################
@@ -43,7 +44,11 @@ DEFINES += _QX_BUILDING_QX_ORM
 PRECOMPILED_HEADER = ./include/QxPrecompiled.h
 } # !contains(DEFINES, _QX_NO_PRECOMPILED_HEADER)
 
-unix { VERSION = 1.3.2 }
+!contains(DEFINES, _QX_ENABLE_QT_GUI) {
+QT -= gui
+} # !contains(DEFINES, _QX_ENABLE_QT_GUI)
+
+unix { VERSION = 1.4.1 }
 
 contains(DEFINES, _QX_STATIC_BUILD) {
 CONFIG -= dll
@@ -125,14 +130,15 @@ HEADERS += ./include/QxCommon/QxMacro.h
 HEADERS += ./include/QxCommon/QxHashValue.h
 HEADERS += ./include/QxCommon/QxBool.h
 HEADERS += ./include/QxCommon/QxCache.h
-HEADERS += ./include/QxCommon/QxStringCvt.h
-HEADERS += ./include/QxCommon/QxStringCvt_Impl.h
-HEADERS += ./include/QxCommon/QxStringCvt_Export.h
 HEADERS += ./include/QxCommon/QxPropertyBag.h
 HEADERS += ./include/QxCommon/QxSimpleCrypt.h
 HEADERS += ./include/QxCommon/QxAnyCastDynamic.h
 HEADERS += ./include/QxCommon/QxException.h
 HEADERS += ./include/QxCommon/QxExceptionCode.h
+
+HEADERS += ./include/QxConvert/QxConvert.h
+HEADERS += ./include/QxConvert/QxConvert_Impl.h
+HEADERS += ./include/QxConvert/QxConvert_Export.h
 
 HEADERS += ./include/QxRegister/IxClass.h
 HEADERS += ./include/QxRegister/QxClass.h
@@ -184,6 +190,7 @@ HEADERS += ./include/QxDao/QxSqlJoin.h
 HEADERS += ./include/QxDao/QxSqlRelationLinked.h
 HEADERS += ./include/QxDao/QxDaoAsync.h
 HEADERS += ./include/QxDao/QxSqlSaveMode.h
+HEADERS += ./include/QxDao/QxDaoThrowable.h
 
 HEADERS += ./include/QxDao/QxSqlElement/IxSqlElement.h
 HEADERS += ./include/QxDao/QxSqlElement/QxSqlCompare.h
@@ -217,6 +224,7 @@ HEADERS += ./include/QxSerialize/QxSerializeFastCompil.h
 HEADERS += ./include/QxSerialize/QxSerializeInvoker.h
 HEADERS += ./include/QxSerialize/QxSerializeMacro.h
 HEADERS += ./include/QxSerialize/QxSerialize.h
+HEADERS += ./include/QxSerialize/QxSerializeQDataStream.h
 
 HEADERS += ./include/QxSerialize/boost/class_export/qx_boost_class_export.h
 HEADERS += ./include/QxSerialize/boost/portable_binary/portable_archive_exception.hpp
@@ -269,9 +277,9 @@ HEADERS += ./include/QxSerialize/Qt/QxSerialize_QStringList.h
 HEADERS += ./include/QxSerialize/Qt/QxSerialize_QSqlError.h
 
 HEADERS += ./include/QxSerialize/Qx/QxSerialize_QxCollection.h
-HEADERS += ./include/QxSerialize/Qx/QxSerialize_QxXmlReader.h
-HEADERS += ./include/QxSerialize/Qx/QxSerialize_QxXmlWriter.h
 HEADERS += ./include/QxSerialize/Qx/QxSerialize_QxDaoPointer.h
+#HEADERS += ./include/QxSerialize/Qx/QxSerialize_QxXmlReader.h
+#HEADERS += ./include/QxSerialize/Qx/QxSerialize_QxXmlWriter.h
 
 HEADERS += ./include/QxSerialize/std/QxSerialize_std_tuple.h
 HEADERS += ./include/QxSerialize/std/QxSerialize_std_shared_ptr.h
@@ -284,6 +292,33 @@ HEADERS += ./include/QxSerialize/QxBoostSerializeHelper/QxBoostInitGuid.h
 HEADERS += ./include/QxSerialize/QxBoostSerializeHelper/QxBoostSerializeHelper.h
 HEADERS += ./include/QxSerialize/QxBoostSerializeHelper/QxBoostSerializeRegisterHelper.h
 HEADERS += ./include/QxSerialize/QxBoostSerializeHelper/QxBoostSerializeRegisterHelperX.h
+
+HEADERS += ./include/QxSerialize/QDataStream/QxSerializeQDataStream_all_include.h
+HEADERS += ./include/QxSerialize/QDataStream/QxSerializeQDataStream_boost_optional.h
+HEADERS += ./include/QxSerialize/QDataStream/QxSerializeQDataStream_boost_scoped_ptr.h
+HEADERS += ./include/QxSerialize/QDataStream/QxSerializeQDataStream_boost_shared_ptr.h
+HEADERS += ./include/QxSerialize/QDataStream/QxSerializeQDataStream_boost_tuple.h
+HEADERS += ./include/QxSerialize/QDataStream/QxSerializeQDataStream_boost_unordered_map.h
+HEADERS += ./include/QxSerialize/QDataStream/QxSerializeQDataStream_boost_unordered_set.h
+HEADERS += ./include/QxSerialize/QDataStream/QxSerializeQDataStream_primitive_type.h
+HEADERS += ./include/QxSerialize/QDataStream/QxSerializeQDataStream_QFlags.h
+HEADERS += ./include/QxSerialize/QDataStream/QxSerializeQDataStream_QObject.h
+HEADERS += ./include/QxSerialize/QDataStream/QxSerializeQDataStream_QScopedPointer.h
+HEADERS += ./include/QxSerialize/QDataStream/QxSerializeQDataStream_QSharedPointer.h
+HEADERS += ./include/QxSerialize/QDataStream/QxSerializeQDataStream_QSqlError.h
+HEADERS += ./include/QxSerialize/QDataStream/QxSerializeQDataStream_QWeakPointer.h
+HEADERS += ./include/QxSerialize/QDataStream/QxSerializeQDataStream_std_list.h
+HEADERS += ./include/QxSerialize/QDataStream/QxSerializeQDataStream_std_map.h
+HEADERS += ./include/QxSerialize/QDataStream/QxSerializeQDataStream_std_pair.h
+HEADERS += ./include/QxSerialize/QDataStream/QxSerializeQDataStream_std_set.h
+HEADERS += ./include/QxSerialize/QDataStream/QxSerializeQDataStream_std_shared_ptr.h
+HEADERS += ./include/QxSerialize/QDataStream/QxSerializeQDataStream_std_string.h
+HEADERS += ./include/QxSerialize/QDataStream/QxSerializeQDataStream_std_tuple.h
+HEADERS += ./include/QxSerialize/QDataStream/QxSerializeQDataStream_std_unique_ptr.h
+HEADERS += ./include/QxSerialize/QDataStream/QxSerializeQDataStream_std_unordered_map.h
+HEADERS += ./include/QxSerialize/QDataStream/QxSerializeQDataStream_std_unordered_set.h
+HEADERS += ./include/QxSerialize/QDataStream/QxSerializeQDataStream_std_vector.h
+HEADERS += ./include/QxSerialize/QDataStream/QxSerializeQDataStream_qx_registered_class.h
 
 HEADERS += ./include/QxTraits/get_base_class.h
 HEADERS += ./include/QxTraits/get_primary_key.h
@@ -369,9 +404,9 @@ HEADERS += ./include/QxService/QxThreadPool.h
 HEADERS += ./include/QxService/QxTools.h
 HEADERS += ./include/QxService/QxTransaction.h
 
-HEADERS += ./include/QxXml/QxXmlReader.h
-HEADERS += ./include/QxXml/QxXmlWriter.h
-HEADERS += ./include/QxXml/QxXml.h
+#HEADERS += ./include/QxXml/QxXmlReader.h
+#HEADERS += ./include/QxXml/QxXmlWriter.h
+#HEADERS += ./include/QxXml/QxXml.h
 
 HEADERS += ./include/QxValidator/IxValidator.h
 HEADERS += ./include/QxValidator/IxValidatorX.h
@@ -408,9 +443,11 @@ SOURCES += ./src/QxFactory/QxFactoryX.cpp
 
 SOURCES += ./src/QxCollection/QxCollection.cpp
 
+SOURCES += ./src/QxCommon/QxBool.cpp
 SOURCES += ./src/QxCommon/QxCache.cpp
-SOURCES += ./src/QxCommon/QxStringCvt_Export.cpp
 SOURCES += ./src/QxCommon/QxSimpleCrypt.cpp
+
+SOURCES += ./src/QxConvert/QxConvert_Export.cpp
 
 SOURCES += ./src/QxRegister/IxClass.cpp
 SOURCES += ./src/QxRegister/QxClassX.cpp
@@ -422,8 +459,8 @@ SOURCES += ./src/QxDataMember/QxDataMember_QObject.cpp
 SOURCES += ./src/QxTraits/unit_test_is_smart_ptr.cpp
 SOURCES += ./src/QxTraits/unit_test_is_container.cpp
 
-SOURCES += ./src/QxXml/QxXmlReader.cpp
-SOURCES += ./src/QxXml/QxXmlWriter.cpp
+#SOURCES += ./src/QxXml/QxXmlReader.cpp
+#SOURCES += ./src/QxXml/QxXmlWriter.cpp
 
 SOURCES += ./src/QxDao/IxSqlQueryBuilder.cpp
 SOURCES += ./src/QxDao/QxSqlDatabase.cpp
@@ -436,6 +473,9 @@ SOURCES += ./src/QxDao/QxSqlRelationLinked.cpp
 SOURCES += ./src/QxDao/QxDaoAsync.cpp
 SOURCES += ./src/QxDao/QxSqlRelationParams.cpp
 SOURCES += ./src/QxDao/QxSoftDelete.cpp
+SOURCES += ./src/QxDao/QxDateNeutral.cpp
+SOURCES += ./src/QxDao/QxDateTimeNeutral.cpp
+SOURCES += ./src/QxDao/QxTimeNeutral.cpp
 
 SOURCES += ./src/QxDao/QxSqlElement/IxSqlElement.cpp
 SOURCES += ./src/QxDao/QxSqlElement/QxSqlCompare.cpp
@@ -488,6 +528,12 @@ SOURCES += ./src/QxSerialize/Qt/QxSerialize_QUuid.cpp
 SOURCES += ./src/QxSerialize/Qt/QxSerialize_QVariant.cpp
 SOURCES += ./src/QxSerialize/Qt/QxSerialize_QSqlError.cpp
 
+SOURCES += ./src/QxSerialize/QDataStream/QxSerializeQDataStream_primitive_type.cpp
+SOURCES += ./src/QxSerialize/QDataStream/QxSerializeQDataStream_QObject.cpp
+SOURCES += ./src/QxSerialize/QDataStream/QxSerializeQDataStream_QSqlError.cpp
+SOURCES += ./src/QxSerialize/QDataStream/QxSerializeQDataStream_std_string.cpp
+SOURCES += ./src/QxSerialize/QDataStream/QxSerializeQDataStream_qx_registered_class.cpp
+
 SOURCES += ./src/QxService/IxParameter.cpp
 SOURCES += ./src/QxService/IxService.cpp
 SOURCES += ./src/QxService/QxConnect.cpp
@@ -506,3 +552,62 @@ SOURCES += ./src/QxModelView/IxModel.cpp
 SOURCES += ./src/QxModelView/QxNestedModel.cpp
 
 SOURCES += ./src/main.cpp
+
+###############
+# Other Files #
+###############
+
+OTHER_FILES += ./inl/QxCollection/QxCollection.inl
+OTHER_FILES += ./inl/QxCollection/QxCollectionIterator.inl
+
+OTHER_FILES += ./inl/QxConvert/QxConvert_FromString.inl
+OTHER_FILES += ./inl/QxConvert/QxConvert_FromVariant.inl
+OTHER_FILES += ./inl/QxConvert/QxConvert_Qt.inl
+OTHER_FILES += ./inl/QxConvert/QxConvert_ToString.inl
+OTHER_FILES += ./inl/QxConvert/QxConvert_ToVariant.inl
+OTHER_FILES += ./inl/QxConvert/QxConvert_WithIndex.inl
+
+OTHER_FILES += ./inl/QxDao/QxDao_Count.inl
+OTHER_FILES += ./inl/QxDao/QxDao_CreateTable.inl
+OTHER_FILES += ./inl/QxDao/QxDao_DeleteAll.inl
+OTHER_FILES += ./inl/QxDao/QxDao_DeleteById.inl
+OTHER_FILES += ./inl/QxDao/QxDao_ExecuteQuery.inl
+OTHER_FILES += ./inl/QxDao/QxDao_Exist.inl
+OTHER_FILES += ./inl/QxDao/QxDao_FetchAll.inl
+OTHER_FILES += ./inl/QxDao/QxDao_FetchAll_WithRelation.inl
+OTHER_FILES += ./inl/QxDao/QxDao_FetchById.inl
+OTHER_FILES += ./inl/QxDao/QxDao_FetchById_WithRelation.inl
+OTHER_FILES += ./inl/QxDao/QxDao_Helper.inl
+OTHER_FILES += ./inl/QxDao/QxDao_Helper_Container.inl
+OTHER_FILES += ./inl/QxDao/QxDao_Insert.inl
+OTHER_FILES += ./inl/QxDao/QxDao_Insert_WithRelation.inl
+OTHER_FILES += ./inl/QxDao/QxDao_Save.inl
+OTHER_FILES += ./inl/QxDao/QxDao_Save_WithRelation.inl
+OTHER_FILES += ./inl/QxDao/QxDao_Save_WithRelation_Recursive.inl
+OTHER_FILES += ./inl/QxDao/QxDao_Trigger.inl
+OTHER_FILES += ./inl/QxDao/QxDao_Update.inl
+OTHER_FILES += ./inl/QxDao/QxDao_Update_Optimized.inl
+OTHER_FILES += ./inl/QxDao/QxDao_Update_WithRelation.inl
+OTHER_FILES += ./inl/QxDao/QxSqlQueryHelper_CreateTable.inl
+OTHER_FILES += ./inl/QxDao/QxSqlQueryHelper_DeleteById.inl
+OTHER_FILES += ./inl/QxDao/QxSqlQueryHelper_Exist.inl
+OTHER_FILES += ./inl/QxDao/QxSqlQueryHelper_FetchAll.inl
+OTHER_FILES += ./inl/QxDao/QxSqlQueryHelper_FetchAll_WithRelation.inl
+OTHER_FILES += ./inl/QxDao/QxSqlQueryHelper_FetchById.inl
+OTHER_FILES += ./inl/QxDao/QxSqlQueryHelper_FetchById_WithRelation.inl
+OTHER_FILES += ./inl/QxDao/QxSqlQueryHelper_Insert.inl
+OTHER_FILES += ./inl/QxDao/QxSqlQueryHelper_Update.inl
+
+OTHER_FILES += ./inl/QxDataMember/QxDataMember.inl
+OTHER_FILES += ./inl/QxDataMember/QxDataMemberX.inl
+
+OTHER_FILES += ./inl/QxFactory/QxFactory.inl
+
+OTHER_FILES += ./inl/QxRegister/QxClass.inl
+
+OTHER_FILES += ./inl/QxSerialize/QxArchive.inl
+OTHER_FILES += ./inl/QxSerialize/QxSerializeInvoker.inl
+
+OTHER_FILES += ./inl/QxSingleton/QxSingleton.inl
+
+#OTHER_FILES += ./inl/QxXml/QxXml.inl

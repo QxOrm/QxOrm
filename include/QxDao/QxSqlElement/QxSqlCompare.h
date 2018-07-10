@@ -60,16 +60,17 @@ public:
 
    enum type { _is_equal_to, _is_not_equal_to, _is_greater_than, 
                _is_greater_than_or_equal_to, _is_less_than, _is_less_than_or_equal_to, 
-               _like, _not_like, _starts_with, _ends_with, _contains_string };
+               _like, _not_like, _starts_with, _ends_with, _contains_string, _custom_operator };
 
 protected:
 
-   QxSqlCompare::type m_type;
+   QxSqlCompare::type m_type;    //!< Compare type
+   QString m_sCustomOperator;    //!< Possibility to define a custom operator with enum _custom_operator (for example <@ for PostgreSQL ltree type)
 
 public:
 
    QxSqlCompare();
-   QxSqlCompare(int index, QxSqlCompare::type t);
+   QxSqlCompare(int index, QxSqlCompare::type t, const QString & sCustomOperator = QString());
    virtual ~QxSqlCompare();
 
    virtual QString toString() const;
@@ -85,7 +86,7 @@ protected:
 
 };
 
-typedef boost::shared_ptr<QxSqlCompare> QxSqlCompare_ptr;
+typedef qx_shared_ptr<QxSqlCompare> QxSqlCompare_ptr;
 
 } // namespace detail
 } // namespace dao

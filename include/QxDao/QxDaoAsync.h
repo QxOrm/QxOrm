@@ -89,7 +89,7 @@ struct QxDaoAsyncParams
 
 };
 
-typedef boost::shared_ptr<QxDaoAsyncParams> QxDaoAsyncParams_ptr;
+typedef qx_shared_ptr<QxDaoAsyncParams> QxDaoAsyncParams_ptr;
 
 /*!
  * \ingroup QxDao
@@ -211,7 +211,7 @@ private Q_SLOTS:
 
 };
 
-typedef boost::shared_ptr<QxDaoAsync> QxDaoAsync_ptr;
+typedef qx_shared_ptr<QxDaoAsync> QxDaoAsync_ptr;
 
 } // namespace qx
 

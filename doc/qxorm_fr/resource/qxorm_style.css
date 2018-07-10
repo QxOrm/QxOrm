@@ -249,6 +249,24 @@ hr
    position: absolute;
 }
 
+.table_menu_manual
+{
+   width: 140px;
+   border-spacing: 0px;
+   padding: 0px;
+}
+
+.table_menu_manual td
+{
+   display: none;
+}
+
+.div_menu_manual
+{
+   display: none;
+   position: absolute;
+}
+
 .btn_sub_menu
 {
    background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #c4c5d9), color-stop(1, #efeef4));
@@ -301,4 +319,101 @@ hr
 {
    position: relative;
    top: 1px;
+}
+
+#qx_search .cse .gsc-control-cse, #qx_search .gsc-control-cse
+{
+   background-color: transparent;
+   border: 0px;
+   height: 20px;
+   width: 200px;
+}
+
+#qx_search .gsc-search-box-tools .gsc-search-box .gsc-input
+{
+   padding-right: 0px;
+}
+
+#qx_search .gsc-search-button, #qx_search input.gsc-search-button, #qx_search .gsc-search-button-v2
+{
+   width: 15px;
+   min-width: 15px;
+   margin-top: 0px;
+   margin-left: 0px;
+   padding: 6px;
+   border-radius: 6px;
+}
+
+.manual_li_title_1
+{
+   margin-bottom: 15px;
+}
+
+.manual_li_title_2
+{
+   margin-top: 2px;
+   margin-bottom: 2px;
+}
+
+.manual_li_title_1 > a
+{
+   font-size: 130%;
+}
+
+.manual_li_title_2 > a
+{
+   font-size: 100%;
+}
+
+.manual_li_title_3 > a
+{
+   font-size: 80%;
+}
+
+.manual_a_title_1
+{
+   margin-left: 20px;
+   font-size: 180%;
+   font-weight: bold;
+   vertical-align: baseline;
+   text-shadow: 2px 2px 2px #B9B9B9;
+   color: #0B0B61;
+}
+
+.manual_a_title_2
+{
+   margin-left: 60px;
+   font-size: 140%;
+   font-weight: bold;
+   vertical-align: baseline;
+   text-shadow: 2px 2px 2px #B9B9B9;
+   color: #0B0B61;
+}
+
+.manual_a_title_3
+{
+   margin-left: 100px;
+   font-size: 120%;
+   font-weight: bold;
+   vertical-align: baseline;
+   text-shadow: 2px 2px 2px #B9B9B9;
+   color: #0B0B61;
+}
+
+.manual_p_title_1
+{
+   margin-top: 50px;
+}
+
+.manual_div_content_1
+{
+   margin-left: 20px;
+   margin-right: 20px;
+}
+
+.logo_customer
+{
+   width: 100%;
+   max-width: 200px;
+   border-width: 0px;
 }

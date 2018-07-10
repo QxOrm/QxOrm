@@ -29,6 +29,7 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #ifndef _QX_BOOST_INIT_GUID_H_
 #define _QX_BOOST_INIT_GUID_H_
 
@@ -75,3 +76,4 @@ private:
 } // namespace qx
 
 #endif // _QX_BOOST_INIT_GUID_H_
+#endif // _QX_ENABLE_BOOST_SERIALIZATION

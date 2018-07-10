@@ -72,9 +72,9 @@ public:
 
    typedef QPair<QString, QString> type_id;
    typedef QHash<type_id, void *> type_ptr_by_id;
-   typedef boost::shared_ptr<type_ptr_by_id> type_ptr_by_id_ptr;
+   typedef qx_shared_ptr<type_ptr_by_id> type_ptr_by_id_ptr;
    typedef QList<type_ptr_by_id_ptr> type_lst_ptr_by_id;
-   typedef boost::shared_ptr<type_lst_ptr_by_id> type_lst_ptr_by_id_ptr;
+   typedef qx_shared_ptr<type_lst_ptr_by_id> type_lst_ptr_by_id_ptr;
 
 protected:
 
@@ -146,7 +146,7 @@ public:
 
 };
 
-typedef boost::shared_ptr<IxSqlQueryBuilder> IxSqlQueryBuilder_ptr;
+typedef qx_shared_ptr<IxSqlQueryBuilder> IxSqlQueryBuilder_ptr;
 
 } // namespace qx
 

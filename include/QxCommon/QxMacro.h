@@ -53,6 +53,14 @@
 #endif // _QX_USE_ASSERT
 #endif // qAssert
 
+#ifndef qAssertMsg
+#if _QX_USE_ASSERT
+#define qAssertMsg(test, where, what) Q_ASSERT_X(test, where, what)
+#else // _QX_USE_ASSERT
+#define qAssertMsg(test, where, what) /* Nothing */
+#endif // _QX_USE_ASSERT
+#endif // qAssertMsg
+
 #ifndef QX_PRAGMA
 #ifdef __GNUC__
 #define QX_PRAGMA(x) _Pragma( #x )

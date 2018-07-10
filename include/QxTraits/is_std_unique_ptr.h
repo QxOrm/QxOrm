@@ -58,24 +58,19 @@ namespace trait {
  * \brief qx::trait::is_std_unique_ptr<T>::value : return true if T is a std::unique_ptr<> smart-pointer, otherwise return false
  */
 template <typename T>
-class is_std_unique_ptr
-{
+struct is_std_unique_ptr : public boost::mpl::false_ { ; };
 
-private:
+template <typename T>
+struct is_std_unique_ptr< std::unique_ptr<T> > : public boost::mpl::true_ { ; };
 
-   template <typename V> static char isSmartPtr(const std::unique_ptr<V> &);
-   static int isSmartPtr(...);
-   static T t;
+template <typename T>
+struct is_std_unique_ptr< std::unique_ptr<T> & > : public boost::mpl::true_ { ; };
 
-public:
+template <typename T>
+struct is_std_unique_ptr< const std::unique_ptr<T> > : public boost::mpl::true_ { ; };
 
-   enum { value = (sizeof(qx::trait::is_std_unique_ptr<T>::isSmartPtr(t)) == sizeof(char)) };
-
-   typedef typename boost::mpl::if_c<qx::trait::is_std_unique_ptr<T>::value, 
-                                     boost::mpl::true_, 
-                                     boost::mpl::false_>::type type;
-
-};
+template <typename T>
+struct is_std_unique_ptr< const std::unique_ptr<T> & > : public boost::mpl::true_ { ; };
 
 } // namespace trait
 } // namespace qx

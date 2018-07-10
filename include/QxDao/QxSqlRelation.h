@@ -59,6 +59,8 @@
 #include <QxTraits/is_valid_primary_key.h>
 #include <QxTraits/is_qx_registered.h>
 
+#include <QxRegister/IxClass.h>
+
 namespace qx {
 
 template <class T>

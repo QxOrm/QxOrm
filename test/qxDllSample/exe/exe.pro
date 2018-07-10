@@ -5,6 +5,9 @@ DEFINES += _QX_BUILDING_EXE
 INCLUDEPATH += ../../../../QxOrm/include/
 DESTDIR = ../../../../QxOrm/test/_bin/
 
+QT += gui
+greaterThan(QT_MAJOR_VERSION, 4) { QT += widgets }
+
 !contains(DEFINES, _QX_NO_PRECOMPILED_HEADER) {
 PRECOMPILED_HEADER = ./include/precompiled.h
 } # !contains(DEFINES, _QX_NO_PRECOMPILED_HEADER)

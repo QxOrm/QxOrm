@@ -64,15 +64,27 @@
 #include <QxSerialize/QxBoostSerializeHelper/QxBoostSerializeRegisterHelper.h>
 #include <QxSerialize/boost/QxExportDllMacroHpp.h>
 #include <QxSerialize/boost/QxExportDllMacroCpp.h>
+#include <QxSerialize/QDataStream/QxSerializeQDataStream_qx_registered_class.h>
 
 #include <QxTraits/is_qx_registered.h>
 
 #define QX_REGISTER_CLASS_MAPPING_FCT_HPP(dllImportExport, className) \
 namespace qx { template <> dllImportExport void register_class(QxClass< className > & t) BOOST_USED; }
 
+#define QX_REGISTER_SERIALIZE_QDATASTREAM_HPP(dllImportExport, className) \
+dllImportExport QDataStream & operator<< (QDataStream & stream, const className & t) BOOST_USED; \
+dllImportExport QDataStream & operator>> (QDataStream & stream, className & t) BOOST_USED;
+
+#define QX_REGISTER_SERIALIZE_QDATASTREAM_CPP(className) \
+QDataStream & operator<< (QDataStream & stream, const className & t) \
+{ return qx::QxSerializeRegistered< className >::save(stream, t); } \
+QDataStream & operator>> (QDataStream & stream, className & t) \
+{ return qx::QxSerializeRegistered< className >::load(stream, t); }
+
 #define QX_REGISTER_CLASS_MAPPING_FCT_EMPTY_CPP(className) \
 namespace qx { template <> void register_class(QxClass< className > & t) { Q_UNUSED(t); } }
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #define QX_SERIALIZE_IMPLEMENT_ARCHIVE_CPP(Archive, className) \
 namespace boost { namespace serialization { \
 inline void serialize(Archive & ar, className & t, const unsigned int file_version) \
@@ -81,24 +93,32 @@ inline void serialize(Archive & ar, className & t, const unsigned int file_versi
    typedef boost::mpl::if_c< Archive::is_saving::value, qx::serialization::detail::saver< Archive, className >, qx::serialization::detail::loader< Archive, className > >::type type_invoker; \
    type_invoker::invoke(ar, t, file_version); \
 } } } // namespace boost::serialization
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #define QX_SERIALIZE_ARCHIVE_HPP(dllImportExport, Archive, className) \
 namespace boost { namespace serialization { \
 dllImportExport void serialize(Archive & ar, className & t, const unsigned int file_version) BOOST_USED; \
 } } // namespace boost::serialization
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #define QX_SERIALIZE_IMPLEMENT_ARCHIVE_EMPTY_CPP(Archive, className) \
 namespace boost { namespace serialization { \
 inline void serialize(Archive & ar, className & t, const unsigned int file_version) \
 { Q_UNUSED(ar); Q_UNUSED(t); Q_UNUSED(file_version); \
 } } } // namespace boost::serialization
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #define QX_SERIALIZE_ARCHIVE_TEMPLATE_HPP(className) \
 namespace boost { namespace serialization { \
 template <class Archive> \
 void serialize(Archive & ar, className & t, const unsigned int file_version); \
 } } // namespace boost::serialization
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #if _QX_SERIALIZE_POLYMORPHIC
 #define QX_SERIALIZE_IMPLEMENT_LIST_ARCHIVE_POLYMORPHIC_CPP(className) \
 QX_SERIALIZE_IMPLEMENT_ARCHIVE_CPP(boost::archive::polymorphic_oarchive, className) \
@@ -124,7 +144,9 @@ QX_SERIALIZE_ARCHIVE_TEMPLATE_HPP(className)
 #define QX_SERIALIZE_IMPLEMENT_LIST_ARCHIVE_POLYMORPHIC_CPP(className) /* Nothing */
 #define QX_SERIALIZE_LIST_ARCHIVE_POLYMORPHIC_HPP(dllImportExport, className) /* Nothing */
 #endif // _QX_SERIALIZE_POLYMORPHIC
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #if _QX_SERIALIZE_BINARY
 #define QX_SERIALIZE_IMPLEMENT_LIST_ARCHIVE_BINARY_CPP(className) \
 QX_SERIALIZE_IMPLEMENT_ARCHIVE_CPP(boost::archive::binary_oarchive, className) \
@@ -137,7 +159,9 @@ QX_SERIALIZE_ARCHIVE_HPP(dllImportExport, boost::archive::binary_iarchive, class
 #define QX_SERIALIZE_IMPLEMENT_LIST_ARCHIVE_BINARY_CPP(className) /* Nothing */
 #define QX_SERIALIZE_LIST_ARCHIVE_BINARY_HPP(dllImportExport, className) /* Nothing */
 #endif // _QX_SERIALIZE_BINARY
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #if _QX_SERIALIZE_TEXT
 #define QX_SERIALIZE_IMPLEMENT_LIST_ARCHIVE_TEXT_CPP(className) \
 QX_SERIALIZE_IMPLEMENT_ARCHIVE_CPP(boost::archive::text_oarchive, className) \
@@ -150,7 +174,9 @@ QX_SERIALIZE_ARCHIVE_HPP(dllImportExport, boost::archive::text_iarchive, classNa
 #define QX_SERIALIZE_IMPLEMENT_LIST_ARCHIVE_TEXT_CPP(className) /* Nothing */
 #define QX_SERIALIZE_LIST_ARCHIVE_TEXT_HPP(dllImportExport, className) /* Nothing */
 #endif // _QX_SERIALIZE_TEXT
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #if _QX_SERIALIZE_XML
 #define QX_SERIALIZE_IMPLEMENT_LIST_ARCHIVE_XML_CPP(className) \
 QX_SERIALIZE_IMPLEMENT_ARCHIVE_CPP(boost::archive::xml_oarchive, className) \
@@ -163,7 +189,9 @@ QX_SERIALIZE_ARCHIVE_HPP(dllImportExport, boost::archive::xml_iarchive, classNam
 #define QX_SERIALIZE_IMPLEMENT_LIST_ARCHIVE_XML_CPP(className) /* Nothing */
 #define QX_SERIALIZE_LIST_ARCHIVE_XML_HPP(dllImportExport, className) /* Nothing */
 #endif // _QX_SERIALIZE_XML
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #if _QX_SERIALIZE_PORTABLE_BINARY
 #define QX_SERIALIZE_IMPLEMENT_LIST_ARCHIVE_PORTABLE_BINARY_CPP(className) \
 QX_SERIALIZE_IMPLEMENT_ARCHIVE_CPP(eos::portable_oarchive, className) \
@@ -176,7 +204,9 @@ QX_SERIALIZE_ARCHIVE_HPP(dllImportExport, eos::portable_iarchive, className)
 #define QX_SERIALIZE_IMPLEMENT_LIST_ARCHIVE_PORTABLE_BINARY_CPP(className) /* Nothing */
 #define QX_SERIALIZE_LIST_ARCHIVE_PORTABLE_BINARY_HPP(dllImportExport, className) /* Nothing */
 #endif // _QX_SERIALIZE_PORTABLE_BINARY
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #if _QX_SERIALIZE_WIDE_BINARY
 #define QX_SERIALIZE_IMPLEMENT_LIST_ARCHIVE_WIDE_BINARY_CPP(className) \
 QX_SERIALIZE_IMPLEMENT_ARCHIVE_CPP(boost::archive::binary_woarchive, className) \
@@ -189,7 +219,9 @@ QX_SERIALIZE_ARCHIVE_HPP(dllImportExport, boost::archive::binary_wiarchive, clas
 #define QX_SERIALIZE_IMPLEMENT_LIST_ARCHIVE_WIDE_BINARY_CPP(className) /* Nothing */
 #define QX_SERIALIZE_LIST_ARCHIVE_WIDE_BINARY_HPP(dllImportExport, className) /* Nothing */
 #endif // _QX_SERIALIZE_WIDE_BINARY
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #if _QX_SERIALIZE_WIDE_TEXT
 #define QX_SERIALIZE_IMPLEMENT_LIST_ARCHIVE_WIDE_TEXT_CPP(className) \
 QX_SERIALIZE_IMPLEMENT_ARCHIVE_CPP(boost::archive::text_woarchive, className) \
@@ -202,7 +234,9 @@ QX_SERIALIZE_ARCHIVE_HPP(dllImportExport, boost::archive::text_wiarchive, classN
 #define QX_SERIALIZE_IMPLEMENT_LIST_ARCHIVE_WIDE_TEXT_CPP(className) /* Nothing */
 #define QX_SERIALIZE_LIST_ARCHIVE_WIDE_TEXT_HPP(dllImportExport, className) /* Nothing */
 #endif // _QX_SERIALIZE_WIDE_TEXT
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #if _QX_SERIALIZE_WIDE_XML
 #define QX_SERIALIZE_IMPLEMENT_LIST_ARCHIVE_WIDE_XML_CPP(className) \
 QX_SERIALIZE_IMPLEMENT_ARCHIVE_CPP(boost::archive::xml_woarchive, className) \
@@ -215,7 +249,9 @@ QX_SERIALIZE_ARCHIVE_HPP(dllImportExport, boost::archive::xml_wiarchive, classNa
 #define QX_SERIALIZE_IMPLEMENT_LIST_ARCHIVE_WIDE_XML_CPP(className) /* Nothing */
 #define QX_SERIALIZE_LIST_ARCHIVE_WIDE_XML_HPP(dllImportExport, className) /* Nothing */
 #endif // _QX_SERIALIZE_WIDE_XML
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #define QX_SERIALIZE_IMPLEMENT_LIST_ARCHIVE_CPP(className) \
 QX_SERIALIZE_IMPLEMENT_LIST_ARCHIVE_POLYMORPHIC_CPP(className) \
 QX_SERIALIZE_IMPLEMENT_LIST_ARCHIVE_BINARY_CPP(className) \
@@ -225,7 +261,9 @@ QX_SERIALIZE_IMPLEMENT_LIST_ARCHIVE_PORTABLE_BINARY_CPP(className) \
 QX_SERIALIZE_IMPLEMENT_LIST_ARCHIVE_WIDE_BINARY_CPP(className) \
 QX_SERIALIZE_IMPLEMENT_LIST_ARCHIVE_WIDE_TEXT_CPP(className) \
 QX_SERIALIZE_IMPLEMENT_LIST_ARCHIVE_WIDE_XML_CPP(className)
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #define QX_SERIALIZE_LIST_ARCHIVE_HPP(dllImportExport, className) \
 QX_SERIALIZE_LIST_ARCHIVE_POLYMORPHIC_HPP(dllImportExport, className) \
 QX_SERIALIZE_LIST_ARCHIVE_BINARY_HPP(dllImportExport, className) \
@@ -235,18 +273,23 @@ QX_SERIALIZE_LIST_ARCHIVE_PORTABLE_BINARY_HPP(dllImportExport, className) \
 QX_SERIALIZE_LIST_ARCHIVE_WIDE_BINARY_HPP(dllImportExport, className) \
 QX_SERIALIZE_LIST_ARCHIVE_WIDE_TEXT_HPP(dllImportExport, className) \
 QX_SERIALIZE_LIST_ARCHIVE_WIDE_XML_HPP(dllImportExport, className)
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #if _QX_WRITE_BOOST_CLASS_EXPORT_IN_HPP_FILE
 #define QX_BOOST_CLASS_EXPORT_HPP(className) BOOST_CLASS_EXPORT_GUID(className, #className)
 #else
 #define QX_BOOST_CLASS_EXPORT_HPP(className) /* Nothing */
 #endif // _QX_WRITE_BOOST_CLASS_EXPORT_IN_HPP_FILE
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #if _QX_WRITE_BOOST_CLASS_EXPORT_IN_CPP_FILE
 #define QX_BOOST_CLASS_EXPORT_CPP(className) BOOST_CLASS_EXPORT_GUID(className, #className)
 #else
 #define QX_BOOST_CLASS_EXPORT_CPP(className) /* Nothing */
 #endif // _QX_WRITE_BOOST_CLASS_EXPORT_IN_CPP_FILE
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
 #define QX_REGISTER_FRIEND_CLASS(className) \
 template <class T> friend void qx::register_class(T & t);
@@ -263,6 +306,7 @@ QX_DLL_EXPORT_TEMPLATE_CPP(class, qx::QxSingleton< qx::QxDataMemberX< className 
 QX_DLL_EXPORT_TEMPLATE_CPP(class, qx::QxClass< className >) \
 QX_DLL_EXPORT_TEMPLATE_CPP(class, qx::QxSingleton< qx::QxClass< className > >)
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #define QX_REGISTER_COMPLEX_CLASS_NAME_HPP(className, baseClass, version, classNameFormatted) \
 QX_SET_REGISTERED(className) \
 QX_REGISTER_CLASS_NAME(className) \
@@ -271,24 +315,40 @@ QX_REGISTER_FACTORY_COMPLEX_CLASS_NAME_HPP(className, classNameFormatted) \
 QX_REGISTER_BOOST_SERIALIZE_HELPER_COMPLEX_CLASS_NAME(className, classNameFormatted) \
 QX_BOOST_CLASS_EXPORT_HPP(className) \
 BOOST_CLASS_VERSION(className, version)
+#else // _QX_ENABLE_BOOST_SERIALIZATION
+#define QX_REGISTER_COMPLEX_CLASS_NAME_HPP(className, baseClass, version, classNameFormatted) \
+QX_SET_REGISTERED(className) \
+QX_REGISTER_CLASS_NAME(className) \
+QX_REGISTER_BASE_CLASS(className, baseClass) \
+QX_REGISTER_FACTORY_COMPLEX_CLASS_NAME_HPP(className, classNameFormatted) \
+BOOST_CLASS_VERSION(className, version)
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
 #define QX_REGISTER_HPP(className, baseClass, version) \
 QX_REGISTER_COMPLEX_CLASS_NAME_HPP(className, baseClass, version, className)
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #define QX_REGISTER_COMPLEX_CLASS_NAME_CPP(className, classNameFormatted) \
 QX_BOOST_CLASS_EXPORT_CPP(className) \
 QX_REGISTER_FACTORY_COMPLEX_CLASS_NAME_CPP(className, classNameFormatted) \
 QX_REGISTER_BOOST_SERIALIZE_HELPER_COMPLEX_CLASS_NAME_CPP(className, classNameFormatted) \
 QX_SERIALIZE_IMPLEMENT_LIST_ARCHIVE_CPP(className)
+#else // _QX_ENABLE_BOOST_SERIALIZATION
+#define QX_REGISTER_COMPLEX_CLASS_NAME_CPP(className, classNameFormatted) \
+QX_REGISTER_FACTORY_COMPLEX_CLASS_NAME_CPP(className, classNameFormatted)
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
 #define QX_REGISTER_CPP(className) \
 QX_REGISTER_COMPLEX_CLASS_NAME_CPP(className, className)
+
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 
 #ifdef _MSC_VER
 #define QX_REGISTER_COMPLEX_CLASS_NAME_HPP_EXPORT_DLL(className, baseClass, version, classNameFormatted) \
 QX_REGISTER_COMPLEX_CLASS_NAME_HPP(className, baseClass, version, classNameFormatted) \
 QX_SERIALIZE_LIST_ARCHIVE_HPP(QX_DLL_EXPORT_HELPER, className) \
-QX_REGISTER_CLASS_MAPPING_FCT_HPP(QX_DLL_EXPORT_HELPER, className)
+QX_REGISTER_CLASS_MAPPING_FCT_HPP(QX_DLL_EXPORT_HELPER, className) \
+QX_REGISTER_SERIALIZE_QDATASTREAM_HPP(QX_DLL_EXPORT_HELPER, className)
 // ---
 #define QX_REGISTER_HPP_EXPORT_DLL(className, baseClass, version) \
 QX_REGISTER_COMPLEX_CLASS_NAME_HPP_EXPORT_DLL(className, baseClass, version, className)
@@ -298,26 +358,67 @@ QX_REGISTER_COMPLEX_CLASS_NAME_HPP(className, baseClass, version, classNameForma
 QX_DLL_EXPORT_TEMPLATE_QX_CLASS_HPP(className) \
 QX_BOOST_EXPORT_SERIALIZATION_HPP(className) \
 QX_SERIALIZE_LIST_ARCHIVE_HPP(QX_DLL_EXPORT_HELPER, className) \
-QX_REGISTER_CLASS_MAPPING_FCT_HPP(QX_DLL_EXPORT_HELPER, className)
+QX_REGISTER_CLASS_MAPPING_FCT_HPP(QX_DLL_EXPORT_HELPER, className) \
+QX_REGISTER_SERIALIZE_QDATASTREAM_HPP(QX_DLL_EXPORT_HELPER, className)
 // ---
 #define QX_REGISTER_HPP_EXPORT_DLL(className, baseClass, version) \
 QX_REGISTER_COMPLEX_CLASS_NAME_HPP_EXPORT_DLL(className, baseClass, version, className)
 #endif // _MSC_VER
 
+#else // _QX_ENABLE_BOOST_SERIALIZATION
+
+#ifdef _MSC_VER
+#define QX_REGISTER_COMPLEX_CLASS_NAME_HPP_EXPORT_DLL(className, baseClass, version, classNameFormatted) \
+QX_REGISTER_COMPLEX_CLASS_NAME_HPP(className, baseClass, version, classNameFormatted) \
+QX_REGISTER_CLASS_MAPPING_FCT_HPP(QX_DLL_EXPORT_HELPER, className) \
+QX_REGISTER_SERIALIZE_QDATASTREAM_HPP(QX_DLL_EXPORT_HELPER, className)
+// ---
+#define QX_REGISTER_HPP_EXPORT_DLL(className, baseClass, version) \
+QX_REGISTER_COMPLEX_CLASS_NAME_HPP_EXPORT_DLL(className, baseClass, version, className)
+#else // _MSC_VER
+#define QX_REGISTER_COMPLEX_CLASS_NAME_HPP_EXPORT_DLL(className, baseClass, version, classNameFormatted) \
+QX_REGISTER_COMPLEX_CLASS_NAME_HPP(className, baseClass, version, classNameFormatted) \
+QX_DLL_EXPORT_TEMPLATE_QX_CLASS_HPP(className) \
+QX_REGISTER_CLASS_MAPPING_FCT_HPP(QX_DLL_EXPORT_HELPER, className) \
+QX_REGISTER_SERIALIZE_QDATASTREAM_HPP(QX_DLL_EXPORT_HELPER, className)
+// ---
+#define QX_REGISTER_HPP_EXPORT_DLL(className, baseClass, version) \
+QX_REGISTER_COMPLEX_CLASS_NAME_HPP_EXPORT_DLL(className, baseClass, version, className)
+#endif // _MSC_VER
+
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
+
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #define QX_REGISTER_COMPLEX_CLASS_NAME_HPP_IMPORT_DLL(className, baseClass, version, classNameFormatted) \
 QX_REGISTER_COMPLEX_CLASS_NAME_HPP(className, baseClass, version, classNameFormatted) \
 QX_DLL_EXPORT_TEMPLATE_QX_CLASS_HPP(className) \
 QX_BOOST_EXPORT_SERIALIZATION_HPP(className) \
 QX_SERIALIZE_LIST_ARCHIVE_HPP(QX_DLL_IMPORT_HELPER, className) \
-QX_REGISTER_CLASS_MAPPING_FCT_HPP(QX_DLL_IMPORT_HELPER, className)
+QX_REGISTER_CLASS_MAPPING_FCT_HPP(QX_DLL_IMPORT_HELPER, className) \
+QX_REGISTER_SERIALIZE_QDATASTREAM_HPP(QX_DLL_IMPORT_HELPER, className)
+#else // _QX_ENABLE_BOOST_SERIALIZATION
+#define QX_REGISTER_COMPLEX_CLASS_NAME_HPP_IMPORT_DLL(className, baseClass, version, classNameFormatted) \
+QX_REGISTER_COMPLEX_CLASS_NAME_HPP(className, baseClass, version, classNameFormatted) \
+QX_DLL_EXPORT_TEMPLATE_QX_CLASS_HPP(className) \
+QX_REGISTER_CLASS_MAPPING_FCT_HPP(QX_DLL_IMPORT_HELPER, className) \
+QX_REGISTER_SERIALIZE_QDATASTREAM_HPP(QX_DLL_IMPORT_HELPER, className)
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
 #define QX_REGISTER_HPP_IMPORT_DLL(className, baseClass, version) \
 QX_REGISTER_COMPLEX_CLASS_NAME_HPP_IMPORT_DLL(className, baseClass, version, className)
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #define QX_REGISTER_COMPLEX_CLASS_NAME_CPP_EXPORT_DLL(className, classNameFormatted) \
 QX_REGISTER_COMPLEX_CLASS_NAME_CPP(className, classNameFormatted) \
 QX_DLL_EXPORT_TEMPLATE_QX_CLASS_CPP(className) \
-QX_BOOST_EXPORT_SERIALIZATION_CPP(className)
+QX_BOOST_EXPORT_SERIALIZATION_CPP(className) \
+QX_REGISTER_SERIALIZE_QDATASTREAM_CPP(className)
+#else // _QX_ENABLE_BOOST_SERIALIZATION
+#define QX_REGISTER_COMPLEX_CLASS_NAME_CPP_EXPORT_DLL(className, classNameFormatted) \
+QX_REGISTER_COMPLEX_CLASS_NAME_CPP(className, classNameFormatted) \
+QX_DLL_EXPORT_TEMPLATE_QX_CLASS_CPP(className) \
+QX_REGISTER_SERIALIZE_QDATASTREAM_CPP(className)
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
 #define QX_REGISTER_CPP_EXPORT_DLL(className) \
 QX_REGISTER_COMPLEX_CLASS_NAME_CPP_EXPORT_DLL(className, className)
@@ -329,15 +430,22 @@ QX_REGISTER_COMPLEX_CLASS_NAME_CPP(className, classNameFormatted)
 #define QX_REGISTER_CPP_IMPORT_DLL(className) \
 QX_REGISTER_COMPLEX_CLASS_NAME_CPP_IMPORT_DLL(className, className)
 #else // _MSC_VER
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #define QX_REGISTER_COMPLEX_CLASS_NAME_CPP_IMPORT_DLL(className, classNameFormatted) \
 QX_REGISTER_COMPLEX_CLASS_NAME_CPP(className, classNameFormatted) \
 QX_DLL_EXPORT_TEMPLATE_QX_CLASS_CPP(className) \
 QX_BOOST_EXPORT_SERIALIZATION_CPP(className)
+#else // _QX_ENABLE_BOOST_SERIALIZATION
+#define QX_REGISTER_COMPLEX_CLASS_NAME_CPP_IMPORT_DLL(className, classNameFormatted) \
+QX_REGISTER_COMPLEX_CLASS_NAME_CPP(className, classNameFormatted) \
+QX_DLL_EXPORT_TEMPLATE_QX_CLASS_CPP(className)
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 // ---
 #define QX_REGISTER_CPP_IMPORT_DLL(className) \
 QX_REGISTER_COMPLEX_CLASS_NAME_CPP_IMPORT_DLL(className, className)
 #endif // _MSC_VER
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #define QX_REGISTER_ABSTRACT_CLASS(className) \
 BOOST_SERIALIZATION_ASSUME_ABSTRACT(className) \
 namespace boost { namespace serialization { \
@@ -345,6 +453,9 @@ template<class Archive> \
 inline void load_construct_data(Archive & ar, className * t, const unsigned int file_version) \
 { Q_UNUSED(ar); Q_UNUSED(t); Q_UNUSED(file_version); } \
 } } // namespace boost::serialization
+#else // _QX_ENABLE_BOOST_SERIALIZATION
+#define QX_REGISTER_ABSTRACT_CLASS(className) /* Nothing */
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
 /* -- Create your macro (in your precompiled header) replacing "MY_DLL"
 #ifdef _BUILDING_MY_DLL

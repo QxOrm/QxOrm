@@ -29,6 +29,7 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #ifndef _QX_EXPORT_DLL_BOOST_ARCHIVE_H_
 #define _QX_EXPORT_DLL_BOOST_ARCHIVE_H_
 
@@ -223,3 +224,4 @@ inline void xml_oarchive_impl<xml_oarchive>::save(std::basic_string< unsigned sh
 #endif // (! _QX_BUILDING_QX_ORM)
 #endif // _QX_USE_EXPORT_DLL_BOOST_SERIALIZATION_SINGLETON
 #endif // _QX_EXPORT_DLL_BOOST_ARCHIVE_H_
+#endif // _QX_ENABLE_BOOST_SERIALIZATION

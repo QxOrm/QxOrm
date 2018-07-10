@@ -37,6 +37,9 @@
 
 #include <QxDataMember/IxDataMember.h>
 
+#include <QxSerialize/QDataStream/QxSerializeQDataStream_boost_shared_ptr.h>
+#include <QxSerialize/QDataStream/QxSerializeQDataStream_std_shared_ptr.h>
+
 #include <QxMemLeak/mem_leak.h>
 
 namespace qx {
@@ -58,3 +61,21 @@ QString QxInvalidValue::getFullName() const
 }
 
 } // namespace qx
+
+QDataStream & operator<< (QDataStream & stream, const qx::QxInvalidValue & t)
+{
+   stream << t.m_sMessage;
+   stream << t.m_sPropertyName;
+   stream << t.m_sPath;
+   stream << t.m_lstPropertyBag;
+   return stream;
+}
+
+QDataStream & operator>> (QDataStream & stream, qx::QxInvalidValue & t)
+{
+   stream >> t.m_sMessage;
+   stream >> t.m_sPropertyName;
+   stream >> t.m_sPath;
+   stream >> t.m_lstPropertyBag;
+   return stream;
+}

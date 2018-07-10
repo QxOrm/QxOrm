@@ -29,7 +29,7 @@
 **
 ****************************************************************************/
 
-#if _QX_ENABLE_QT_NETWORK_DEPENDENCY
+#ifdef _QX_ENABLE_QT_NETWORK
 #ifndef _QX_SERVICE_TOOLS_H_
 #define _QX_SERVICE_TOOLS_H_
 
@@ -69,4 +69,4 @@ public:
 } // namespace qx
 
 #endif // _QX_SERVICE_TOOLS_H_
-#endif // _QX_ENABLE_QT_NETWORK_DEPENDENCY
+#endif // _QX_ENABLE_QT_NETWORK

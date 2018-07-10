@@ -225,7 +225,7 @@ public:
       QString sql;
       if (columns.count() <= 0) { return fetchAll(); }
       if (columns.at(0) == "*") { return fetchAll(); }
-      if (! verifyColumns(columns)) { qAssert(false); return (* this); }
+      if (! verifyColumns(columns)) { return (* this); }
       qx::dao::detail::QxSqlQueryHelper_FetchAll<type_sql>::sql(sql, (* this), columns);
       setSqlQuery(sql);
       return (* this);
@@ -236,7 +236,7 @@ public:
       QString sql;
       if (columns.count() <= 0) { return fetchById(); }
       if (columns.at(0) == "*") { return fetchById(); }
-      if (! verifyColumns(columns)) { qAssert(false); return (* this); }
+      if (! verifyColumns(columns)) { return (* this); }
       if (! getDataId()) { qDebug("[QxOrm] %s", QX_SQL_ERR_NO_ID_REGISTERED); qAssert(false); return (* this); }
       qx::dao::detail::QxSqlQueryHelper_FetchById<type_sql>::sql(sql, (* this), columns);
       setSqlQuery(sql);
@@ -248,7 +248,7 @@ public:
       QString sql;
       if (columns.count() <= 0) { return update(); }
       if (columns.at(0) == "*") { return update(); }
-      if (! verifyColumns(columns)) { qAssert(false); return (* this); }
+      if (! verifyColumns(columns)) { return (* this); }
       if (! getDataId()) { qDebug("[QxOrm] %s", QX_SQL_ERR_NO_ID_REGISTERED); qAssert(false); return (* this); }
       qx::dao::detail::QxSqlQueryHelper_Update<type_sql>::sql(sql, (* this), columns);
       setSqlQuery(sql);
@@ -293,9 +293,17 @@ private:
 #ifndef _QX_MODE_RELEASE
    inline bool verifyColumns(const QStringList & columns) const
    {
-      if (! m_pDataMemberX) { return false; }
+      if (! m_pDataMemberX) { qAssert(false); return false; }
       for (int i = 0; i < columns.count(); i++)
-      { if (! m_pDataMemberX->exist_WithDaoStrategy(columns.at(i))) { return false; } }
+      {
+         if (! m_pDataMemberX->exist_WithDaoStrategy(columns.at(i)))
+         {
+            QString sErrorMsg = QString("column '%1' not found in table '%2'").arg(columns.at(i), m_sTableName);
+            qDebug("[QxOrm] Error in qx::QxSqlQueryBuilder<T>::verifyColumns() : %s", qPrintable(sErrorMsg));
+            qAssertMsg(false, "[QxOrm] qx::QxSqlQueryBuilder<T>::verifyColumns()", qPrintable(sErrorMsg));
+            return false;
+         }
+      }
       return true;
    }
 #else // _QX_MODE_RELEASE

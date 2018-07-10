@@ -91,17 +91,23 @@ private:
 
    boost::any createObject(const QString & sKey) const;
    void * createObjectNudePtr(const QString & sKey) const;
+
+#ifndef _QX_NO_RTTI
    const std::type_info & typeInfo(const QString & sKey) const;
+#endif // _QX_NO_RTTI
 
    static inline boost::any createInstance(const QString & sKey)           { return QxFactoryX::getSingleton()->createObject(sKey); }
    static inline void * createInstanceNudePtr(const QString & sKey)        { return QxFactoryX::getSingleton()->createObjectNudePtr(sKey); }
+
+#ifndef _QX_NO_RTTI
    static inline const std::type_info & getTypeInfo(const QString & sKey)  { return QxFactoryX::getSingleton()->typeInfo(sKey); }
+#endif // _QX_NO_RTTI
 
 };
 
 /*!
  * \ingroup QxFactory
- * \brief Return a smart-pointer new instance of object (boost::shared_ptr<T>) associated by key sKey using boost::any type (for example : qx::create("drug") return a new instance of smart-pointer drug class into boost::any type)
+ * \brief Return a smart-pointer new instance of object (qx_shared_ptr<T>) associated by key sKey using boost::any type (for example : qx::create("drug") return a new instance of smart-pointer drug class into boost::any type)
  */
 inline boost::any create(const QString & sKey)
 { return qx::QxFactoryX::createInstance(sKey); }
@@ -112,7 +118,11 @@ inline boost::any create(const QString & sKey)
  */
 template <typename T>
 inline T * create_nude_ptr(const QString & sKey)
+#ifdef _QX_NO_RTTI
+{ return static_cast<T *>(qx::QxFactoryX::createInstanceNudePtr(sKey)); }
+#else // _QX_NO_RTTI
 { return dynamic_cast<T *>(static_cast<T *>(qx::QxFactoryX::createInstanceNudePtr(sKey))); }
+#endif // _QX_NO_RTTI
 
 /*!
  * \ingroup QxFactory

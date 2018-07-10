@@ -27,7 +27,7 @@ int main(int argc, char * argv[])
 
    //--------------------------------
 
-   boost::shared_ptr<QObject> ptrTmp;
+   qx_shared_ptr<QObject> ptrTmp;
    ptrTmp.reset(new CUser());
    qx::clone(ptrTmp);
 
@@ -44,7 +44,7 @@ int main(int argc, char * argv[])
    //--------------------------------
 
    qx::test::CPerson person;
-   boost::shared_ptr<qx::test::CPerson> personClone = qx::clone(person);
+   qx_shared_ptr<qx::test::CPerson> personClone = qx::clone(person);
    boost::any a = qx::create("qx::test::CPerson");
 
 #if _QX_SERIALIZE_POLYMORPHIC
@@ -74,14 +74,20 @@ int main(int argc, char * argv[])
    qx::serialization::portable_binary::from_file(person, "person.bin2", 0);
 #endif // _QX_SERIALIZE_PORTABLE_BINARY
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
    qx::serialization::to_string(person);
    qx::serialization::to_file_compressed(person, "person.zip");
    qx::serialization::from_file_compressed(person, "person.zip");
+#else // _QX_ENABLE_BOOST_SERIALIZATION
+   qx::serialization::qt::to_string(person);
+   qx::serialization::qt::to_file_compressed(person, "person.zip");
+   qx::serialization::qt::from_file_compressed(person, "person.zip");
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
    //--------------------------------
 
    CUser user;
-   boost::shared_ptr<CUser> userClone = qx::clone(user);
+   qx_shared_ptr<CUser> userClone = qx::clone(user);
    qx::create("CUserXXX");
 
    qx::cache::max_cost(2);
@@ -89,11 +95,11 @@ int main(int argc, char * argv[])
    qx::cache::set("object", ptrTmp);
    qx::cache::set("person", personClone);
    qAssert(qx::cache::count() == 2);
-   ptrTmp = qx::cache::get< boost::shared_ptr<QObject> >("object");
+   ptrTmp = qx::cache::get< qx_shared_ptr<QObject> >("object");
    qx_bool bCacheOk = qx::cache::get("user", userClone);
    qAssert(! bCacheOk && (ptrTmp.get() != NULL));
 
-   boost::shared_ptr<qx::test::CPerson> personValidate = qx::clone(person);
+   qx_shared_ptr<qx::test::CPerson> personValidate = qx::clone(person);
    if (! personValidate) { personValidate.reset(new qx::test::CPerson()); }
    personValidate->setLastName("admin");
    personValidate->setDouble(305.86);
@@ -128,9 +134,15 @@ int main(int argc, char * argv[])
    qx::serialization::portable_binary::from_file(user, "user.bin2", 0);
 #endif // _QX_SERIALIZE_PORTABLE_BINARY
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
    qx::serialization::to_string(user);
    qx::serialization::to_file_compressed(user, "user.zip");
    qx::serialization::from_file_compressed(user, "user.zip");
+#else // _QX_ENABLE_BOOST_SERIALIZATION
+   qx::serialization::qt::to_string(user);
+   qx::serialization::qt::to_file_compressed(user, "user.zip");
+   qx::serialization::qt::from_file_compressed(user, "user.zip");
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
    //--------------------------------
 
@@ -140,6 +152,14 @@ int main(int argc, char * argv[])
    qx_bool bInvokeOk = qx::QxClass<CUser>::invoke("fct_getPersonId", pUser);                          qAssert(bInvokeOk);
    bInvokeOk = qx::QxClassX::invoke("CUser", "fct_getPersonId", pUser);                               qAssert(bInvokeOk);
    bInvokeOk = qx::QxClassX::invokeStatic("CUser", "fct_testStaticFct", "182", (& resultInvoke));     qAssert(bInvokeOk.getValue() && (boost::any_cast<int>(resultInvoke) == 182));
+
+   // Other way to invoke a function with parameters encapsulated in a list of boost::any : std::vector<boost::any>
+   resultInvoke = boost::any();
+   std::vector<boost::any> lstParams;
+   QString invokeParam1 = "238";
+   lstParams.push_back(invokeParam1);
+   bInvokeOk = qx::QxClassX::invokeStatic("CUser", "fct_testStaticFct", lstParams, (& resultInvoke));
+   qAssert(bInvokeOk.getValue() && (boost::any_cast<int>(resultInvoke) == 238));
 
    //--------------------------------
 
@@ -187,7 +207,7 @@ int main(int argc, char * argv[])
    sTestCvt = qx::cvt::to_string(QDateTime::currentDateTime());
    sTestCvt = qx::cvt::to_string(pUser);
    sTestCvt = qx::cvt::to_string(p1, "%08d");
-   QObject dummy_01; sTestCvt = qx::cvt::to_string(dummy_01);
+   QObject dummy_01; Q_UNUSED(dummy_01); // sTestCvt = qx::cvt::to_string(dummy_01);
    CTestAll dummy_02; sTestCvt = qx::cvt::to_string(dummy_02);
 
    qx_bool bCvtOk = qx::cvt::from_string("34", pUser);
@@ -196,10 +216,10 @@ int main(int argc, char * argv[])
    QVariant sTestCvtVar = qx::cvt::to_variant(QTime::currentTime());
    QVariant dummy_03; bCvtOk = qx::cvt::from_variant(dummy_03, p1);
 
-   QVector< boost::shared_ptr<CUser> > lstCvtTest;
-   boost::shared_ptr<CUser> pp1; pp1.reset(new CUser()); lstCvtTest.push_back(pp1);
-   boost::shared_ptr<CUser> pp2; lstCvtTest.push_back(pp2);
-   boost::shared_ptr<CUser> pp3; pp3.reset(new CUser()); lstCvtTest.push_back(pp3);
+   QVector< qx_shared_ptr<CUser> > lstCvtTest;
+   qx_shared_ptr<CUser> pp1; pp1.reset(new CUser()); lstCvtTest.push_back(pp1);
+   qx_shared_ptr<CUser> pp2; lstCvtTest.push_back(pp2);
+   qx_shared_ptr<CUser> pp3; pp3.reset(new CUser()); lstCvtTest.push_back(pp3);
    sTestCvt = qx::cvt::to_string(lstCvtTest);
    lstCvtTest.remove(1);
    bCvtOk = qx::cvt::from_string(sTestCvt, lstCvtTest);
@@ -248,11 +268,11 @@ int main(int argc, char * argv[])
    bDaoExist = qx::dao::exist(pUser);                                   qAssert(! bDaoExist);
    pUser->setBrother(NULL);
 
-   typedef qx::QxCollection< long, boost::shared_ptr<CUser> > type_lstUser;
-   boost::shared_ptr<CUser> ppp1; ppp1.reset(new CUser(53));
+   typedef qx::QxCollection< long, qx_shared_ptr<CUser> > type_lstUser;
+   qx_shared_ptr<CUser> ppp1; ppp1.reset(new CUser(53));
    ppp1->setProfil("profil n°10");
    ppp1->setLastName("ppp1 lastname");
-   boost::shared_ptr<CUser> ppp2; ppp2.reset(new CUser(108));
+   qx_shared_ptr<CUser> ppp2; ppp2.reset(new CUser(108));
    ppp2->setDateModif(QDateTime::currentDateTime());
    ppp2->setLastName("ppp1 lastname");
    type_lstUser lstUser;

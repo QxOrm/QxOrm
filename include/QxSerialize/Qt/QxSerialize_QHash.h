@@ -29,6 +29,7 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #ifndef _QX_SERIALIZE_QHASH_H_
 #define _QX_SERIALIZE_QHASH_H_
 
@@ -91,3 +92,4 @@ inline void serialize(Archive & ar, QHash<Key, Value> & t, const unsigned int fi
 } // namespace serialization
 
 #endif // _QX_SERIALIZE_QHASH_H_
+#endif // _QX_ENABLE_BOOST_SERIALIZATION

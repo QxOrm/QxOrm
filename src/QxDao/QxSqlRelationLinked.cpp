@@ -42,9 +42,9 @@
 
 namespace qx {
 
-QxSqlRelationLinked::QxSqlRelationLinked() : m_allRelationX(NULL), m_bRoot(true) { ; }
+QxSqlRelationLinked::QxSqlRelationLinked() : m_allRelationX(NULL), m_bRoot(true), m_lRootColumnsOffset(0) { ; }
 
-QxSqlRelationLinked::QxSqlRelationLinked(bool bRoot) : m_allRelationX(NULL), m_bRoot(bRoot) { ; }
+QxSqlRelationLinked::QxSqlRelationLinked(bool bRoot) : m_allRelationX(NULL), m_bRoot(bRoot), m_lRootColumnsOffset(0) { ; }
 
 QxSqlRelationLinked::~QxSqlRelationLinked() { ; }
 
@@ -102,19 +102,43 @@ qx_bool QxSqlRelationLinked::buildHierarchy(IxSqlRelationX * pRelationX, const Q
 
 qx_bool QxSqlRelationLinked::insertRelationToHierarchy(const QStringList & sRelationX, const QString & sKey, qx::dao::sql_join::join_type eJoinType)
 {
-   if (! m_allRelationX || ! m_allRelationX->exist(sKey))
-   { qAssert(false); return qx_bool(false, QString("invalid relation key : '") + sKey + QString("'")); }
-   IxSqlRelation * pRelation = m_allRelationX->getByKey(sKey);
+   QStringList columns; QString sKeyTemp = sKey;
+   if (sKey.contains("{") && sKey.contains("}"))
+   {
+      int iPos1 = sKey.indexOf("{"); int iPos2 = sKey.indexOf("}");
+      if (iPos1 >= iPos2) { return qx_bool(false, QString("invalid relation : character '}' before than character '{' (") + sKey + ")"); }
+      sKeyTemp = sKey.left(iPos1); sKeyTemp = sKeyTemp.trimmed();
+      QString sColumns = sKey.mid((iPos1 + 1), (iPos2 - iPos1 - 1));
+      columns = sColumns.split(",");
+      for (long l = 0; l < columns.count(); l++) { columns[l] = columns.at(l).trimmed(); }
+      if ((columns.count() == 1) && ((columns.at(0) == "*") || (columns.at(0) == ""))) { columns = QStringList(); }
+   }
+
+   if (m_bRoot && sKeyTemp.isEmpty() && (columns.count() > 0))
+   { m_lstRootColumns = columns.toSet(); return qx_bool(true); }
+   else if (m_bRoot && sKeyTemp.isEmpty() && (columns.count() == 0))
+   { return qx_bool(true); }
+
+   if (! m_allRelationX || ! m_allRelationX->exist(sKeyTemp))
+   { qAssert(false); return qx_bool(false, QString("invalid relation key : '") + sKeyTemp + "' (" + sKey + ")"); }
+   IxSqlRelation * pRelation = m_allRelationX->getByKey(sKeyTemp);
    if (! pRelation) { qAssert(false); return qx_bool(false, QString("invalid relation pointer : 'NULL pointer'")); }
 
-   if (! m_relationX.exist(sKey)) { m_relationX.insert(sKey, type_relation(eJoinType, pRelation)); }
+   QString sDataIdKey = (pRelation->getDataId() ? pRelation->getDataId()->getKey() : QString());
+   Q_FOREACH(QString sColumn, columns)
+   {
+      if ((! pRelation->getDataByKey(sColumn)) && (sDataIdKey != sColumn))
+      { return qx_bool(false, QString("invalid relation column : '" + sKeyTemp + "." + sColumn + "' (" + sKey + ")")); }
+   }
+
+   if (! m_relationX.exist(sKeyTemp)) { m_relationX.insert(sKeyTemp, type_relation(eJoinType, pRelation, qMakePair(columns.toSet(), static_cast<long>(0)))); }
    if (sRelationX.count() <= 0) { return qx_bool(true); }
 
-   QxSqlRelationLinked_ptr pRelationLinked = m_relationLinkedX.value(sKey);
+   QxSqlRelationLinked_ptr pRelationLinked = m_relationLinkedX.value(sKeyTemp);
    if (! pRelationLinked)
    {
       pRelationLinked = QxSqlRelationLinked_ptr(new QxSqlRelationLinked(false));
-      m_relationLinkedX.insert(sKey, pRelationLinked);
+      m_relationLinkedX.insert(sKeyTemp, pRelationLinked);
    }
 
    return pRelationLinked->buildHierarchy(pRelation->getLstRelation(), sRelationX);
@@ -131,7 +155,9 @@ void QxSqlRelationLinked::hierarchySelect(QxSqlRelationParams & params)
       params.setJoinType(qx::dao::sql_join::no_join);
       if (! m_relationX.exist(p->getKey()))
       { if (m_bRoot) { p->lazySelect(params); } continue; }
-      params.setJoinType(m_relationX.getByKey(p->getKey()).get<0>());
+      type_relation & temp = const_cast<type_relation &>(m_relationX.getByKey(p->getKey()));
+      params.setJoinType(temp.get<0>());
+      params.setColumns(& temp.get<2>());
       p->eagerSelect(params);
       QxSqlRelationLinked_ptr pRelationLinked = m_relationLinkedX.value(p->getKey());
       if (! pRelationLinked) { continue; }
@@ -153,7 +179,9 @@ void QxSqlRelationLinked::hierarchyFrom(QxSqlRelationParams & params)
       params.setJoinType(qx::dao::sql_join::no_join);
       if (! m_relationX.exist(p->getKey()))
       { if (m_bRoot) { p->lazyFrom(params); } continue; }
-      params.setJoinType(m_relationX.getByKey(p->getKey()).get<0>());
+      type_relation & temp = const_cast<type_relation &>(m_relationX.getByKey(p->getKey()));
+      params.setJoinType(temp.get<0>());
+      params.setColumns(& temp.get<2>());
       p->eagerFrom(params);
       QxSqlRelationLinked_ptr pRelationLinked = m_relationLinkedX.value(p->getKey());
       if (! pRelationLinked) { continue; }
@@ -175,7 +203,9 @@ void QxSqlRelationLinked::hierarchyJoin(QxSqlRelationParams & params)
       params.setJoinType(qx::dao::sql_join::no_join);
       if (! m_relationX.exist(p->getKey()))
       { if (m_bRoot) { p->lazyJoin(params); } continue; }
-      params.setJoinType(m_relationX.getByKey(p->getKey()).get<0>());
+      type_relation & temp = const_cast<type_relation &>(m_relationX.getByKey(p->getKey()));
+      params.setJoinType(temp.get<0>());
+      params.setColumns(& temp.get<2>());
       p->eagerJoin(params);
       QxSqlRelationLinked_ptr pRelationLinked = m_relationLinkedX.value(p->getKey());
       if (! pRelationLinked) { continue; }
@@ -197,7 +227,9 @@ void QxSqlRelationLinked::hierarchyWhereSoftDelete(QxSqlRelationParams & params)
       params.setJoinType(qx::dao::sql_join::no_join);
       if (! m_relationX.exist(p->getKey()))
       { if (m_bRoot) { p->lazyWhereSoftDelete(params); } continue; }
-      params.setJoinType(m_relationX.getByKey(p->getKey()).get<0>());
+      type_relation & temp = const_cast<type_relation &>(m_relationX.getByKey(p->getKey()));
+      params.setJoinType(temp.get<0>());
+      params.setColumns(& temp.get<2>());
       p->eagerWhereSoftDelete(params);
       QxSqlRelationLinked_ptr pRelationLinked = m_relationLinkedX.value(p->getKey());
       if (! pRelationLinked) { continue; }
@@ -221,7 +253,7 @@ void QxSqlRelationLinked::hierarchyResolveOutput(QxSqlRelationParams & params)
       params.setRelationX(& m_relationLinkedX);
       params.setJoinType(qx::dao::sql_join::no_join);
       bool bEager = m_relationX.exist(p->getKey());
-      if (bEager) { params.setJoinType(m_relationX.getByKey(p->getKey()).get<0>()); }
+      if (bEager) { type_relation & temp = const_cast<type_relation &>(m_relationX.getByKey(p->getKey())); params.setJoinType(temp.get<0>()); params.setColumns(& temp.get<2>()); }
       if (bComplex) { vIdRelation = ((m_bRoot || bEager) ? p->getIdFromQuery(bEager, params) : QVariant()); }
       bool bValidId = (bComplex && qx::trait::is_valid_primary_key(vIdRelation));
       void * pFetched = (bValidId ? params.builder().existIdX(params.index(), params.id(), vIdRelation) : NULL);
@@ -258,21 +290,21 @@ void QxSqlRelationLinked::hierarchyResolveOutput(QxSqlRelationParams & params)
 
 QSqlError QxSqlRelationLinked::hierarchyOnBeforeSave(QxSqlRelationParams & params)
 {
-   _foreach_if(type_relation item, m_relationX, (item.get<1>() != NULL))
+   _foreach_if(const type_relation & item, m_relationX, (item.get<1>() != NULL))
    { QSqlError err = item.get<1>()->onBeforeSave(params); if (err.isValid()) { return err; } }
    return QSqlError();
 }
 
 QSqlError QxSqlRelationLinked::hierarchyOnAfterSave(QxSqlRelationParams & params)
 {
-   _foreach_if(type_relation item, m_relationX, (item.get<1>() != NULL))
+   _foreach_if(const type_relation & item, m_relationX, (item.get<1>() != NULL))
    { QSqlError err = item.get<1>()->onAfterSave(params); if (err.isValid()) { return err; } }
    return QSqlError();
 }
 
 bool QxSqlRelationLinked::getCartesianProduct() const
 {
-   _foreach_if(type_relation item, m_relationX, (item.get<1>() != NULL))
+   _foreach_if(const type_relation & item, m_relationX, (item.get<1>() != NULL))
    { if (item.get<1>()->getCartesianProduct()) { return true; } }
    Q_FOREACH(QxSqlRelationLinked_ptr pRelationLinked, m_relationLinkedX)
    { if (pRelationLinked && pRelationLinked->getCartesianProduct()) { return true; } }
@@ -303,6 +335,7 @@ void QxSqlRelationLinked::updateOffset(QxSqlRelationParams & params)
    {
       params.setRelationX(& m_relationLinkedX);
       bool bEager = m_relationX.exist(p->getKey());
+      if (bEager) { type_relation & temp = const_cast<type_relation &>(m_relationX.getByKey(p->getKey())); params.setColumns(& temp.get<2>()); } else { params.setColumns(NULL); }
       if (bEager) { p->updateOffset(true, params); }
       else if (m_bRoot) { p->updateOffset(false, params); }
       QxSqlRelationLinked_ptr pRelationLinked = m_relationLinkedX.value(p->getKey());

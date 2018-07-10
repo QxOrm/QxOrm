@@ -258,20 +258,4 @@ void QxClass<qx::trait::no_base_class_defined>::beforeRegisterClass() { ; }
 template <> QX_GCC_WORKAROUND_TEMPLATE_SPEC_INLINE
 void QxClass<QObject>::beforeRegisterClass() { ; }
 
-template <> QX_GCC_WORKAROUND_TEMPLATE_SPEC_INLINE
-qx_bool QxClass<qx::trait::no_base_class_defined>::invokeHelper(const QString & sKey, qx::trait::no_base_class_defined * pOwner, const QString & params, boost::any * ret)
-{ Q_UNUSED(sKey); Q_UNUSED(pOwner); Q_UNUSED(params); Q_UNUSED(ret); return qx_bool(false); }
-
-template <> QX_GCC_WORKAROUND_TEMPLATE_SPEC_INLINE
-qx_bool QxClass<QObject>::invokeHelper(const QString & sKey, QObject * pOwner, const QString & params, boost::any * ret)
-{ Q_UNUSED(sKey); Q_UNUSED(pOwner); Q_UNUSED(params); Q_UNUSED(ret); return qx_bool(false); }
-
-template <> QX_GCC_WORKAROUND_TEMPLATE_SPEC_INLINE
-qx_bool QxClass<qx::trait::no_base_class_defined>::invokeHelper(const QString & sKey, qx::trait::no_base_class_defined * pOwner, const type_any_params & params, boost::any * ret)
-{ Q_UNUSED(sKey); Q_UNUSED(pOwner); Q_UNUSED(params); Q_UNUSED(ret); return qx_bool(false); }
-
-template <> QX_GCC_WORKAROUND_TEMPLATE_SPEC_INLINE
-qx_bool QxClass<QObject>::invokeHelper(const QString & sKey, QObject * pOwner, const type_any_params & params, boost::any * ret)
-{ Q_UNUSED(sKey); Q_UNUSED(pOwner); Q_UNUSED(params); Q_UNUSED(ret); return qx_bool(false); }
-
 } // namespace qx

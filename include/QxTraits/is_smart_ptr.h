@@ -68,49 +68,161 @@ namespace trait {
  * \brief qx::trait::is_smart_ptr<T>::value : return true if T is a smart-pointer of boost, Qt or QxOrm libraries, otherwise return false
  */
 template <typename T>
-class is_smart_ptr
-{
+struct is_smart_ptr : public boost::mpl::false_ { ; };
 
-private:
+template <typename T>
+struct is_smart_ptr< boost::shared_ptr<T> > : public boost::mpl::true_ { ; };
 
-   typedef typename boost::mpl::or_< qx::trait::is_qx_dao_ptr<T>, 
-                                     qx::trait::is_boost_intrusive_ptr<T>, 
-                                     qx::trait::is_boost_scoped_ptr<T>, 
-                                     qx::trait::is_boost_shared_ptr<T>, 
-                                     qx::trait::is_boost_weak_ptr<T> >::type cond_is_boost_smart_ptr;
+template <typename T>
+struct is_smart_ptr< boost::shared_ptr<T> & > : public boost::mpl::true_ { ; };
 
-   typedef typename boost::mpl::or_< typename qx::trait::is_smart_ptr<T>::cond_is_boost_smart_ptr, 
-                                     qx::trait::is_qt_scoped_ptr<T>, 
-                                     qx::trait::is_qt_shared_ptr<T>, 
-                                     qx::trait::is_qt_weak_ptr<T>, 
-                                     qx::trait::is_qt_shared_data_ptr<T> >::type cond_is_qt_smart_ptr;
+template <typename T>
+struct is_smart_ptr< const boost::shared_ptr<T> > : public boost::mpl::true_ { ; };
 
-#if (defined(_QX_CPP_11_SMART_PTR) && !defined(BOOST_NO_CXX11_SMART_PTR))
+template <typename T>
+struct is_smart_ptr< const boost::shared_ptr<T> & > : public boost::mpl::true_ { ; };
 
-   typedef typename boost::mpl::or_< typename qx::trait::is_smart_ptr<T>::cond_is_qt_smart_ptr, 
-                                     qx::trait::is_std_unique_ptr<T>, 
-                                     qx::trait::is_std_shared_ptr<T>, 
-                                     qx::trait::is_std_weak_ptr<T> >::type cond_is_std_smart_ptr;
+template <typename T>
+struct is_smart_ptr< boost::intrusive_ptr<T> > : public boost::mpl::true_ { ; };
 
-   typedef typename boost::mpl::if_< typename qx::trait::is_smart_ptr<T>::cond_is_std_smart_ptr, 
-                                     boost::mpl::true_, 
-                                     boost::mpl::false_ >::type type_is_smart_ptr;
+template <typename T>
+struct is_smart_ptr< boost::intrusive_ptr<T> & > : public boost::mpl::true_ { ; };
 
-#else // (defined(_QX_CPP_11_SMART_PTR) && !defined(BOOST_NO_CXX11_SMART_PTR))
+template <typename T>
+struct is_smart_ptr< const boost::intrusive_ptr<T> > : public boost::mpl::true_ { ; };
 
-   typedef typename boost::mpl::if_< typename qx::trait::is_smart_ptr<T>::cond_is_qt_smart_ptr, 
-                                     boost::mpl::true_, 
-                                     boost::mpl::false_ >::type type_is_smart_ptr;
+template <typename T>
+struct is_smart_ptr< const boost::intrusive_ptr<T> & > : public boost::mpl::true_ { ; };
 
-#endif // (defined(_QX_CPP_11_SMART_PTR) && !defined(BOOST_NO_CXX11_SMART_PTR))
+template <typename T>
+struct is_smart_ptr< boost::scoped_ptr<T> > : public boost::mpl::true_ { ; };
 
-public:
+template <typename T>
+struct is_smart_ptr< boost::scoped_ptr<T> & > : public boost::mpl::true_ { ; };
 
-   enum { value = qx::trait::is_smart_ptr<T>::type_is_smart_ptr::value };
+template <typename T>
+struct is_smart_ptr< const boost::scoped_ptr<T> > : public boost::mpl::true_ { ; };
 
-   typedef typename qx::trait::is_smart_ptr<T>::type_is_smart_ptr type;
+template <typename T>
+struct is_smart_ptr< const boost::scoped_ptr<T> & > : public boost::mpl::true_ { ; };
 
-};
+template <typename T>
+struct is_smart_ptr< boost::weak_ptr<T> > : public boost::mpl::true_ { ; };
+
+template <typename T>
+struct is_smart_ptr< boost::weak_ptr<T> & > : public boost::mpl::true_ { ; };
+
+template <typename T>
+struct is_smart_ptr< const boost::weak_ptr<T> > : public boost::mpl::true_ { ; };
+
+template <typename T>
+struct is_smart_ptr< const boost::weak_ptr<T> & > : public boost::mpl::true_ { ; };
+
+#if (QT_VERSION >= 0x040600)
+
+template <typename T>
+struct is_smart_ptr< QScopedPointer<T> > : public boost::mpl::true_ { ; };
+
+template <typename T>
+struct is_smart_ptr< QScopedPointer<T> & > : public boost::mpl::true_ { ; };
+
+template <typename T>
+struct is_smart_ptr< const QScopedPointer<T> > : public boost::mpl::true_ { ; };
+
+template <typename T>
+struct is_smart_ptr< const QScopedPointer<T> & > : public boost::mpl::true_ { ; };
+
+#endif // (QT_VERSION >= 0x040600)
+
+template <typename T>
+struct is_smart_ptr< QSharedDataPointer<T> > : public boost::mpl::true_ { ; };
+
+template <typename T>
+struct is_smart_ptr< QSharedDataPointer<T> & > : public boost::mpl::true_ { ; };
+
+template <typename T>
+struct is_smart_ptr< const QSharedDataPointer<T> > : public boost::mpl::true_ { ; };
+
+template <typename T>
+struct is_smart_ptr< const QSharedDataPointer<T> & > : public boost::mpl::true_ { ; };
+
+template <typename T>
+struct is_smart_ptr< QSharedPointer<T> > : public boost::mpl::true_ { ; };
+
+template <typename T>
+struct is_smart_ptr< QSharedPointer<T> & > : public boost::mpl::true_ { ; };
+
+template <typename T>
+struct is_smart_ptr< const QSharedPointer<T> > : public boost::mpl::true_ { ; };
+
+template <typename T>
+struct is_smart_ptr< const QSharedPointer<T> & > : public boost::mpl::true_ { ; };
+
+template <typename T>
+struct is_smart_ptr< QWeakPointer<T> > : public boost::mpl::true_ { ; };
+
+template <typename T>
+struct is_smart_ptr< QWeakPointer<T> & > : public boost::mpl::true_ { ; };
+
+template <typename T>
+struct is_smart_ptr< const QWeakPointer<T> > : public boost::mpl::true_ { ; };
+
+template <typename T>
+struct is_smart_ptr< const QWeakPointer<T> & > : public boost::mpl::true_ { ; };
+
+template <typename T>
+struct is_smart_ptr< qx::dao::ptr<T> > : public boost::mpl::true_ { ; };
+
+template <typename T>
+struct is_smart_ptr< qx::dao::ptr<T> & > : public boost::mpl::true_ { ; };
+
+template <typename T>
+struct is_smart_ptr< const qx::dao::ptr<T> > : public boost::mpl::true_ { ; };
+
+template <typename T>
+struct is_smart_ptr< const qx::dao::ptr<T> & > : public boost::mpl::true_ { ; };
+
+#ifdef _QX_CPP_11_SMART_PTR
+#ifndef BOOST_NO_CXX11_SMART_PTR
+
+template <typename T>
+struct is_smart_ptr< std::shared_ptr<T> > : public boost::mpl::true_ { ; };
+
+template <typename T>
+struct is_smart_ptr< std::shared_ptr<T> & > : public boost::mpl::true_ { ; };
+
+template <typename T>
+struct is_smart_ptr< const std::shared_ptr<T> > : public boost::mpl::true_ { ; };
+
+template <typename T>
+struct is_smart_ptr< const std::shared_ptr<T> & > : public boost::mpl::true_ { ; };
+
+template <typename T>
+struct is_smart_ptr< std::unique_ptr<T> > : public boost::mpl::true_ { ; };
+
+template <typename T>
+struct is_smart_ptr< std::unique_ptr<T> & > : public boost::mpl::true_ { ; };
+
+template <typename T>
+struct is_smart_ptr< const std::unique_ptr<T> > : public boost::mpl::true_ { ; };
+
+template <typename T>
+struct is_smart_ptr< const std::unique_ptr<T> & > : public boost::mpl::true_ { ; };
+
+template <typename T>
+struct is_smart_ptr< std::weak_ptr<T> > : public boost::mpl::true_ { ; };
+
+template <typename T>
+struct is_smart_ptr< std::weak_ptr<T> & > : public boost::mpl::true_ { ; };
+
+template <typename T>
+struct is_smart_ptr< const std::weak_ptr<T> > : public boost::mpl::true_ { ; };
+
+template <typename T>
+struct is_smart_ptr< const std::weak_ptr<T> & > : public boost::mpl::true_ { ; };
+
+#endif // BOOST_NO_CXX11_SMART_PTR
+#endif // _QX_CPP_11_SMART_PTR
 
 } // namespace trait
 } // namespace qx

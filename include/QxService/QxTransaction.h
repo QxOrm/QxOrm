@@ -29,7 +29,7 @@
 **
 ****************************************************************************/
 
-#if _QX_ENABLE_QT_NETWORK_DEPENDENCY
+#ifdef _QX_ENABLE_QT_NETWORK
 #ifndef _QX_SERVICE_TRANSACTION_H_
 #define _QX_SERVICE_TRANSACTION_H_
 
@@ -44,6 +44,8 @@
  * \brief Transaction of QxService module (contains request from client and reply from server)
  */
 
+#include <QtCore/qdatastream.h>
+
 #include <QtNetwork/qtcpsocket.h>
 
 #include <QxCommon/QxBool.h>
@@ -52,6 +54,15 @@
 
 #include <QxService/IxService.h>
 #include <QxService/IxParameter.h>
+
+namespace qx {
+namespace service {
+class QxTransaction;
+} // namespace service
+} // namespace qx
+
+QX_DLL_EXPORT QDataStream & operator<< (QDataStream & stream, const qx::service::QxTransaction & t) BOOST_USED;
+QX_DLL_EXPORT QDataStream & operator>> (QDataStream & stream, qx::service::QxTransaction & t) BOOST_USED;
 
 namespace qx {
 namespace service {
@@ -66,6 +77,9 @@ class QX_DLL_EXPORT QxTransaction
 {
 
    QX_REGISTER_FRIEND_CLASS(qx::service::QxTransaction)
+
+   friend QDataStream & ::operator<< (QDataStream & stream, const qx::service::QxTransaction & t);
+   friend QDataStream & ::operator>> (QDataStream & stream, qx::service::QxTransaction & t);
 
 protected:
 
@@ -137,6 +151,8 @@ public:
    void executeServer();
    void executeClient(IxService * pService, const QString & sMethod);
 
+   QString getInfos() const;
+
 protected:
 
    qx_bool writeSocket(QTcpSocket & socket);
@@ -144,7 +160,7 @@ protected:
 
 };
 
-typedef boost::shared_ptr<QxTransaction> QxTransaction_ptr;
+typedef qx_shared_ptr<QxTransaction> QxTransaction_ptr;
 QX_DLL_EXPORT void execute_client(IxService * pService, const QString & sMethod);
 
 } // namespace service
@@ -153,4 +169,4 @@ QX_DLL_EXPORT void execute_client(IxService * pService, const QString & sMethod)
 QX_REGISTER_INTERNAL_HELPER_HPP(QX_DLL_EXPORT, qx::service::QxTransaction, 0)
 
 #endif // _QX_SERVICE_TRANSACTION_H_
-#endif // _QX_ENABLE_QT_NETWORK_DEPENDENCY
+#endif // _QX_ENABLE_QT_NETWORK

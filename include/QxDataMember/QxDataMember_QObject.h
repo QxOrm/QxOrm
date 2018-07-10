@@ -82,6 +82,8 @@ public:
 
 public:
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
+
 #if _QX_SERIALIZE_POLYMORPHIC
    QX_DATA_MEMBER_QOBJECT_IMPL_VIRTUAL_ARCHIVE_HPP(boost::archive::polymorphic_iarchive, boost::archive::polymorphic_oarchive)
 #endif // _QX_SERIALIZE_POLYMORPHIC
@@ -113,6 +115,8 @@ public:
 #if _QX_SERIALIZE_WIDE_XML
    QX_DATA_MEMBER_QOBJECT_IMPL_VIRTUAL_ARCHIVE_HPP(boost::archive::xml_wiarchive, boost::archive::xml_woarchive)
 #endif // _QX_SERIALIZE_WIDE_XML
+
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
 protected:
 

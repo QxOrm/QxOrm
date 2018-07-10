@@ -84,7 +84,7 @@ protected:
 
 };
 
-typedef boost::shared_ptr<QxSqlExpression> QxSqlExpression_ptr;
+typedef qx_shared_ptr<QxSqlExpression> QxSqlExpression_ptr;
 
 } // namespace detail
 } // namespace dao

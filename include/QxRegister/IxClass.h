@@ -43,7 +43,9 @@
  * \brief Common interface for all classes registered into QxOrm context
  */
 
+#ifndef _QX_NO_RTTI
 #include <typeinfo>
+#endif // _QX_NO_RTTI
 
 #include <QxCommon/QxPropertyBag.h>
 
@@ -116,13 +118,16 @@ public:
 
    virtual bool isAbstract() const = 0;
    virtual bool implementIxPersistable() const = 0;
-   virtual const std::type_info & typeInfo() const = 0;
    virtual IxClass * getBaseClass() const = 0;
    virtual IxValidatorX * getAllValidator();
 
    bool isKindOf(const QString & sClassName) const;
-   bool isKindOf(const std::type_info & typeInfo) const;
    QString dumpClass() const;
+
+#ifndef _QX_NO_RTTI
+   virtual const std::type_info & typeInfo() const = 0;
+   bool isKindOf(const std::type_info & typeInfo) const;
+#endif // _QX_NO_RTTI
 
 private:
 
@@ -130,7 +135,7 @@ private:
 
 };
 
-typedef boost::shared_ptr<IxClass> IxClass_ptr;
+typedef qx_shared_ptr<IxClass> IxClass_ptr;
 
 } // namespace qx
 

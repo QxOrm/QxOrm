@@ -94,9 +94,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\QxCommon\QxBool.cpp" />
+    <ClCompile Include="src\QxConvert\QxConvert_Export.cpp" />
+    <ClCompile Include="src\QxDao\QxDateNeutral.cpp" />
+    <ClCompile Include="src\QxDao\QxDateTimeNeutral.cpp" />
     <ClCompile Include="src\QxDao\QxSoftDelete.cpp" />
+    <ClCompile Include="src\QxDao\QxTimeNeutral.cpp" />
     <ClCompile Include="src\QxModelView\IxModel.cpp" />
     <ClCompile Include="src\QxModelView\QxNestedModel.cpp" />
+    <ClCompile Include="src\QxSerialize\QDataStream\QxSerializeQDataStream_primitive_type.cpp" />
+    <ClCompile Include="src\QxSerialize\QDataStream\QxSerializeQDataStream_QObject.cpp" />
+    <ClCompile Include="src\QxSerialize\QDataStream\QxSerializeQDataStream_QSqlError.cpp" />
+    <ClCompile Include="src\QxSerialize\QDataStream\QxSerializeQDataStream_qx_registered_class.cpp" />
+    <ClCompile Include="src\QxSerialize\QDataStream\QxSerializeQDataStream_std_string.cpp" />
     <ClCompile Include="src\QxSerialize\Qt\QxSerialize_QSqlError.cpp" />
     <ClCompile Include="src\QxSingleton\IxSingleton.cpp" />
     <ClCompile Include="src\QxSingleton\QxSingletonInit.cpp" />
@@ -171,7 +181,6 @@
     <ClCompile Include="src\QxDao\QxRepository\QxRepositoryX.cpp" />
     <ClCompile Include="src\QxCommon\QxCache.cpp" />
     <ClCompile Include="src\QxCommon\QxSimpleCrypt.cpp" />
-    <ClCompile Include="src\QxCommon\QxStringCvt_Export.cpp" />
     <ClCompile Include="src\QxRegister\IxClass.cpp" />
     <ClCompile Include="src\QxRegister\QxClassX.cpp" />
     <ClCompile Include="src\QxService\IxParameter.cpp" />
@@ -188,6 +197,10 @@
     <ClCompile Include="src\QxValidator\QxInvalidValueX.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\QxConvert\QxConvert.h" />
+    <ClInclude Include="include\QxConvert\QxConvert_Export.h" />
+    <ClInclude Include="include\QxConvert\QxConvert_Impl.h" />
+    <ClInclude Include="include\QxDao\QxDaoThrowable.h" />
     <ClInclude Include="include\QxDao\QxSqlSaveMode.h" />
     <ClInclude Include="include\QxMemLeak.h" />
     <ClInclude Include="include\QxModelView\IxModel.h" />
@@ -206,9 +219,6 @@
     <ClInclude Include="include\QxCommon\QxMacro.h" />
     <ClInclude Include="include\QxCommon\QxPropertyBag.h" />
     <ClInclude Include="include\QxCommon\QxSimpleCrypt.h" />
-    <ClInclude Include="include\QxCommon\QxStringCvt.h" />
-    <ClInclude Include="include\QxCommon\QxStringCvt_Export.h" />
-    <ClInclude Include="include\QxCommon\QxStringCvt_Impl.h" />
     <ClInclude Include="include\QxDataMember\IxDataMember.h" />
     <ClInclude Include="include\QxDataMember\IxDataMemberX.h" />
     <ClInclude Include="include\QxDataMember\QxDataMember.h" />
@@ -230,8 +240,35 @@
     <ClInclude Include="include\QxMemLeak\set_assign.h" />
     <ClInclude Include="include\QxMemLeak\static_assert.h" />
     <ClInclude Include="include\QxMemLeak\static_mem_pool.h" />
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_all_include.h" />
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_boost_optional.h" />
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_boost_scoped_ptr.h" />
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_boost_shared_ptr.h" />
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_boost_tuple.h" />
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_boost_unordered_map.h" />
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_boost_unordered_set.h" />
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_primitive_type.h" />
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_QFlags.h" />
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_QObject.h" />
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_QScopedPointer.h" />
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_QSharedPointer.h" />
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_QSqlError.h" />
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_QWeakPointer.h" />
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_qx_registered_class.h" />
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_std_list.h" />
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_std_map.h" />
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_std_pair.h" />
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_std_set.h" />
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_std_shared_ptr.h" />
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_std_string.h" />
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_std_tuple.h" />
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_std_unique_ptr.h" />
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_std_unordered_map.h" />
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_std_unordered_set.h" />
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_std_vector.h" />
     <ClInclude Include="include\QxSerialize\Qt\QxSerialize_QFlags.h" />
     <ClInclude Include="include\QxSerialize\Qt\QxSerialize_QSqlError.h" />
+    <ClInclude Include="include\QxSerialize\QxSerializeQDataStream.h" />
     <ClInclude Include="include\QxSerialize\std\QxSerialize_std_shared_ptr.h" />
     <ClInclude Include="include\QxSerialize\std\QxSerialize_std_tuple.h" />
     <ClInclude Include="include\QxSerialize\std\QxSerialize_std_unique_ptr.h" />
@@ -460,6 +497,12 @@
     <ClInclude Include="include\QxValidator\QxValidatorX.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="inl\QxConvert\QxConvert_FromString.inl" />
+    <None Include="inl\QxConvert\QxConvert_FromVariant.inl" />
+    <None Include="inl\QxConvert\QxConvert_Qt.inl" />
+    <None Include="inl\QxConvert\QxConvert_ToString.inl" />
+    <None Include="inl\QxConvert\QxConvert_ToVariant.inl" />
+    <None Include="inl\QxConvert\QxConvert_WithIndex.inl" />
     <None Include="inl\QxDao\QxDao_Save_WithRelation_Recursive.inl" />
     <None Include="inl\QxDataMember\QxDataMember.inl" />
     <None Include="inl\QxDataMember\QxDataMemberX.inl" />
@@ -499,12 +542,6 @@
     <None Include="inl\QxXml\QxXml.inl" />
     <None Include="inl\QxSerialize\QxArchive.inl" />
     <None Include="inl\QxSerialize\QxSerializeInvoker.inl" />
-    <None Include="inl\QxCommon\QxStringCvt_FromString.inl" />
-    <None Include="inl\QxCommon\QxStringCvt_FromVariant.inl" />
-    <None Include="inl\QxCommon\QxStringCvt_Qt.inl" />
-    <None Include="inl\QxCommon\QxStringCvt_ToString.inl" />
-    <None Include="inl\QxCommon\QxStringCvt_ToVariant.inl" />
-    <None Include="inl\QxCommon\QxStringCvt_WithIndex.inl" />
     <None Include="inl\QxRegister\QxClass.inl" />
     <None Include="QxOrm.pri" />
     <None Include="QxOrm.pro" />

@@ -43,7 +43,7 @@ namespace detail {
 
 QxSqlCompare::QxSqlCompare() : IxSqlElement(0), m_type(QxSqlCompare::_is_equal_to) { ; }
 
-QxSqlCompare::QxSqlCompare(int index, QxSqlCompare::type t) : IxSqlElement(index), m_type(t) { ; }
+QxSqlCompare::QxSqlCompare(int index, QxSqlCompare::type t, const QString & sCustomOperator /* = QString() */) : IxSqlElement(index), m_type(t), m_sCustomOperator(sCustomOperator) { ; }
 
 QxSqlCompare::~QxSqlCompare() { ; }
 
@@ -57,17 +57,18 @@ QString QxSqlCompare::toString() const
 
    switch (m_type)
    {
-      case _is_equal_to:                     sReturn = sColumn + " = " + sKey;            break;
-      case _is_not_equal_to:                 sReturn = sColumn + " <> " + sKey;           break;
-      case _is_greater_than:                 sReturn = sColumn + " > " + sKey;            break;
-      case _is_greater_than_or_equal_to:     sReturn = sColumn + " >= " + sKey;           break;
-      case _is_less_than:                    sReturn = sColumn + " < " + sKey;            break;
-      case _is_less_than_or_equal_to:        sReturn = sColumn + " <= " + sKey;           break;
-      case _like:                            sReturn = sColumn + " LIKE " + sKey;         break;
-      case _not_like:                        sReturn = sColumn + " NOT LIKE " + sKey;     break;
-      case _starts_with:                     sReturn = sColumn + " LIKE " + sKey;         break;
-      case _ends_with:                       sReturn = sColumn + " LIKE " + sKey;         break;
-      case _contains_string:                 sReturn = sColumn + " LIKE " + sKey;         break;
+      case _is_equal_to:                     sReturn = sColumn + " = " + sKey;                                 break;
+      case _is_not_equal_to:                 sReturn = sColumn + " <> " + sKey;                                break;
+      case _is_greater_than:                 sReturn = sColumn + " > " + sKey;                                 break;
+      case _is_greater_than_or_equal_to:     sReturn = sColumn + " >= " + sKey;                                break;
+      case _is_less_than:                    sReturn = sColumn + " < " + sKey;                                 break;
+      case _is_less_than_or_equal_to:        sReturn = sColumn + " <= " + sKey;                                break;
+      case _like:                            sReturn = sColumn + " LIKE " + sKey;                              break;
+      case _not_like:                        sReturn = sColumn + " NOT LIKE " + sKey;                          break;
+      case _starts_with:                     sReturn = sColumn + " LIKE " + sKey;                              break;
+      case _ends_with:                       sReturn = sColumn + " LIKE " + sKey;                              break;
+      case _contains_string:                 sReturn = sColumn + " LIKE " + sKey;                              break;
+      case _custom_operator:                 sReturn = sColumn + " " + m_sCustomOperator + " " + sKey;         break;
       default:                               qAssert(false);
    }
 
@@ -92,9 +93,15 @@ void QxSqlCompare::resolve(QSqlQuery & query) const
 
 void QxSqlCompare::postProcess(QString & sql) const { Q_UNUSED(sql); }
 
-QString QxSqlCompare::getExtraSettings() const { return QString::number(static_cast<int>(m_type)); }
+QString QxSqlCompare::getExtraSettings() const { return (QString::number(static_cast<int>(m_type)) + "|" + m_sCustomOperator); }
 
-void QxSqlCompare::setExtraSettings(const QString & s) { m_type = static_cast<QxSqlCompare::type>(s.toInt()); }
+void QxSqlCompare::setExtraSettings(const QString & s)
+{
+   int iPos = s.indexOf("|");
+   if (iPos == -1) { m_type = static_cast<QxSqlCompare::type>(s.toInt()); return; }
+   m_type = static_cast<QxSqlCompare::type>(s.left(iPos).toInt());
+   m_sCustomOperator = s.right(s.size() - (iPos + 1));
+}
 
 } // namespace detail
 } // namespace dao

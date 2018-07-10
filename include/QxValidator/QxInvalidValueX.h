@@ -43,8 +43,10 @@
  * \brief List of invalid values
  */
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/nvp.hpp>
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
 #include <QxSerialize/Qt/QxSerialize_QString.h>
 #include <QxSerialize/Qt/QxSerialize_QList.h>
@@ -52,6 +54,13 @@
 #include <QxValidator/QxInvalidValue.h>
 
 #include <QxTraits/get_class_name.h>
+
+namespace qx {
+class QxInvalidValueX;
+} // namespace qx
+
+QX_DLL_EXPORT QDataStream & operator<< (QDataStream & stream, const qx::QxInvalidValueX & t) BOOST_USED;
+QX_DLL_EXPORT QDataStream & operator>> (QDataStream & stream, qx::QxInvalidValueX & t) BOOST_USED;
 
 namespace qx {
 
@@ -65,7 +74,12 @@ namespace qx {
 class QX_DLL_EXPORT QxInvalidValueX
 {
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
    friend class boost::serialization::access;
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
+
+   friend QDataStream & ::operator<< (QDataStream & stream, const qx::QxInvalidValueX & t);
+   friend QDataStream & ::operator>> (QDataStream & stream, qx::QxInvalidValueX & t);
 
 protected:
 
@@ -95,6 +109,7 @@ public:
 
 private:
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
    template <class Archive>
    void serialize(Archive & ar, const unsigned int file_version)
    {
@@ -102,6 +117,7 @@ private:
       ar & boost::serialization::make_nvp("list_invalid_values", m_lstInvalidValues);
       ar & boost::serialization::make_nvp("current_path", m_sCurrentPath);
    }
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
 };
 

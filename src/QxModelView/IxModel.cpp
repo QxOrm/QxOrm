@@ -57,7 +57,14 @@ QString IxModel::getLastErrorAsString() const { return (m_lastError.isValid() ? 
 
 QStringList IxModel::getListOfColumns() const { return m_lstColumns; }
 
-QHash<QString, QString> IxModel::getListOfHeaders() const { return m_lstHeaders; }
+QHash<QString, QString> IxModel::getListOfHeaders() const
+{
+   QHash<QString, QString> lst;
+   QHashIterator<QString, QVariant> itr(m_lstHeadersData);
+   QString sStart = (QString::number(Qt::DisplayRole) + "|");
+   while (itr.hasNext()) { itr.next(); if (itr.key().startsWith(sStart)) { QString sKey = itr.key(); sKey.replace(sStart, ""); lst.insert(sKey, itr.value().toString()); } }
+   return lst;
+}
 
 IxDataMember * IxModel::getDataMember(int column) const { return (((column < 0) || (column >= m_lstDataMember.count())) ? NULL : m_lstDataMember.at(column)); }
 
@@ -85,7 +92,18 @@ void IxModel::setDatabase(const QSqlDatabase & db) { m_database = db; }
 
 void IxModel::setListOfColumns(const QStringList & lst) { m_lstColumns = lst; clear(true); }
 
-void IxModel::setListOfHeaders(const QHash<QString, QString> & lst) { m_lstHeaders = lst; Q_EMIT headerDataChanged(Qt::Horizontal, 0, (m_lstDataMember.count() - 1)); }
+void IxModel::setListOfHeaders(const QHash<QString, QString> & lst)
+{
+   QHashIterator<QString, QString> itr(lst);
+   while (itr.hasNext())
+   {
+      itr.next();
+      QString sHeaderDataKey = (QString::number(Qt::DisplayRole) + "|" + itr.key());
+      QVariant vHeaderDataValue = QVariant(itr.value());
+      m_lstHeadersData.insert(sHeaderDataKey, vHeaderDataValue);
+   }
+   Q_EMIT headerDataChanged(Qt::Horizontal, 0, (m_lstDataMember.count() - 1));
+}
 
 bool IxModel::setModelValue(int row, const QString & column, const QVariant & value)
 {
@@ -242,14 +260,15 @@ bool IxModel::hasChildren(const QModelIndex & parent /* = QModelIndex() */) cons
 
 QVariant IxModel::headerData(int section, Qt::Orientation orientation, int role /* = Qt::DisplayRole */) const
 {
-   if ((orientation != Qt::Horizontal) || (role != Qt::DisplayRole))
-   { return QAbstractItemModel::headerData(section, orientation, role); }
+   if (orientation != Qt::Horizontal) { return QAbstractItemModel::headerData(section, orientation, role); }
    if ((section < 0) || (section >= m_lstDataMember.count()))
    { return QAbstractItemModel::headerData(section, orientation, role); }
    IxDataMember * pDataMember = m_lstDataMember.at(section);
    if (! pDataMember) { return QAbstractItemModel::headerData(section, orientation, role); }
-   if (m_lstHeaders.contains(pDataMember->getKey())) { return m_lstHeaders.value(pDataMember->getKey()); }
-   return pDataMember->getKey();
+   QString sHeaderDataKey = (QString::number(role) + "|" + pDataMember->getKey());
+   if (m_lstHeadersData.contains(sHeaderDataKey)) { return m_lstHeadersData.value(sHeaderDataKey); }
+   if ((role == Qt::DisplayRole) || (role == Qt::EditRole)) { return pDataMember->getKey(); }
+   return QVariant();
 }
 
 Qt::ItemFlags IxModel::flags(const QModelIndex & index) const
@@ -289,13 +308,19 @@ bool IxModel::removeRows(int row, int count, const QModelIndex & parent /* = QMo
 
 bool IxModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant & value, int role /* = Qt::EditRole */)
 {
-   if ((orientation != Qt::Horizontal) || (role != Qt::EditRole))
-   { return QAbstractItemModel::setHeaderData(section, orientation, value, role); }
+   if (orientation != Qt::Horizontal) { return QAbstractItemModel::setHeaderData(section, orientation, value, role); }
    if ((section < 0) || (section >= m_lstDataMember.count())) { return false; }
    IxDataMember * pDataMember = m_lstDataMember.at(section); if (! pDataMember) { return false; }
-   m_lstHeaders.insert(pDataMember->getKey(), value.toString());
+   QString sHeaderDataKey = (QString::number(role) + "|" + pDataMember->getKey());
+   m_lstHeadersData.insert(sHeaderDataKey, value);
    Q_EMIT headerDataChanged(orientation, section, section);
    return true;
+}
+
+bool IxModel::setHeaderData(const QString & sColumnName, const QVariant & value, int role /* = Qt::EditRole */)
+{
+   int section = getColumnIndex(sColumnName);
+   return ((section == -1) ? false : setHeaderData(section, Qt::Horizontal, value, role));
 }
 
 void IxModel::syncNestedModel(int row, const QStringList & relation) { Q_UNUSED(row); Q_UNUSED(relation); }

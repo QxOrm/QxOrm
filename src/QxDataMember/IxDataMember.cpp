@@ -38,7 +38,7 @@
 
 #include <QxSerialize/QxSerialize.h>
 
-#include <QxCommon/QxStringCvt_Impl.h>
+#include <QxConvert/QxConvert_Impl.h>
 
 #include <QxRegister/QxRegister.h>
 #include <QxRegister/IxClass.h>
@@ -51,6 +51,7 @@ namespace qx {
 
 IxDataMember::~IxDataMember() { ; }
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 template<class Archive>
 void IxDataMember::serialize(Archive & ar, const unsigned int version)
 {
@@ -79,6 +80,7 @@ void IxDataMember::serialize(Archive & ar, const unsigned int version)
    ar & boost::serialization::make_nvp("isIndex", m_bIndex);
    ar & boost::serialization::make_nvp("isUnique", m_bUnique);
 }
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
 void IxDataMember::setMinValue(long lMinValue, const QString & sMessage /* = QString() */)
 {

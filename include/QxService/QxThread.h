@@ -31,7 +31,7 @@
 
 #include <QxCommon/QxConfig.h> // Need to include this file for the 'moc' process
 
-#if _QX_ENABLE_QT_NETWORK_DEPENDENCY
+#ifdef _QX_ENABLE_QT_NETWORK
 #ifndef _QX_SERVICE_THREAD_H_
 #define _QX_SERVICE_THREAD_H_
 
@@ -118,4 +118,4 @@ Q_SIGNALS:
 } // namespace qx
 
 #endif // _QX_SERVICE_THREAD_H_
-#endif // _QX_ENABLE_QT_NETWORK_DEPENDENCY
+#endif // _QX_ENABLE_QT_NETWORK

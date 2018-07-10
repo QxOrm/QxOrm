@@ -54,6 +54,8 @@ namespace trait {
  */
 template <typename T> struct is_archive_printable  { enum { value = false }; };
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
+
 #if _QX_SERIALIZE_POLYMORPHIC
 template <> struct is_archive_printable<boost::archive::polymorphic_iarchive> { enum { value = true }; };
 template <> struct is_archive_printable<boost::archive::polymorphic_oarchive> { enum { value = true }; };
@@ -78,6 +80,8 @@ template <> struct is_archive_printable<boost::archive::text_woarchive> { enum {
 template <> struct is_archive_printable<boost::archive::xml_wiarchive>  { enum { value = true }; };
 template <> struct is_archive_printable<boost::archive::xml_woarchive>  { enum { value = true }; };
 #endif // _QX_SERIALIZE_WIDE_XML
+
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
 } // namespace trait
 } // namespace qx

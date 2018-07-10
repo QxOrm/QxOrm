@@ -23,8 +23,8 @@
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="qmake &amp; nmake debug"
-				ReBuildCommandLine="qmake &amp; nmake debug"
+				BuildCommandLine="qmake %QXORM_QMAKE_PARAMS% &amp; nmake debug"
+				ReBuildCommandLine="qmake %QXORM_QMAKE_PARAMS% &amp; nmake debug"
 				CleanCommandLine="nmake clean"
 				Output="../../_bin/exed.exe"
 				PreprocessorDefinitions="WIN32;_DEBUG"
@@ -43,8 +43,8 @@
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="qmake &amp; nmake release"
-				ReBuildCommandLine="qmake &amp; nmake release"
+				BuildCommandLine="qmake %QXORM_QMAKE_PARAMS% &amp; nmake release"
+				ReBuildCommandLine="qmake %QXORM_QMAKE_PARAMS% &amp; nmake release"
 				CleanCommandLine="nmake clean"
 				Output="../../_bin/exe.exe"
 				PreprocessorDefinitions="WIN32;NDEBUG"

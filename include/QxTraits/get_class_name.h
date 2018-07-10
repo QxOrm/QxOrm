@@ -43,7 +43,9 @@
  * \brief qx::trait::get_class_name<T>::get() : return class name of type T under const char * format, T must be registered with QX_REGISTER_CLASS_NAME(T) macro
  */
 
+#ifndef _QX_NO_RTTI
 #include <typeinfo>
+#endif // _QX_NO_RTTI
 
 #include <boost/algorithm/string.hpp>
 
@@ -95,6 +97,10 @@ static inline const char * get_xml_tag() \
    return result_xml.c_str(); \
 }
 
+#ifdef _QX_NO_RTTI
+#define QX_REGISTER_CLASS_NAME_NO_RTTI(className) std::string(#className)
+#endif // _QX_NO_RTTI
+
 namespace qx {
 namespace trait {
 
@@ -110,8 +116,14 @@ struct get_class_name
    {
       static std::string result;
       if (! result.empty()) { return result.c_str(); }
+
+#ifndef _QX_NO_RTTI
       T * dummy = NULL; Q_UNUSED(dummy);
       result = std::string(typeid(dummy).name());
+#else // _QX_NO_RTTI
+      result = QX_REGISTER_CLASS_NAME_NO_RTTI(T);
+#endif // _QX_NO_RTTI
+
       qDebug("[QxOrm] Unable to define correct class name : '%s' => use macro 'QX_REGISTER_CLASS_NAME()' or 'QX_REGISTER_CLASS_NAME_TEMPLATE_X()'", result.c_str());
       qAssert(false);
       return result.c_str();

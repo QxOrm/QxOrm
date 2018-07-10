@@ -43,14 +43,24 @@
  * \brief Helper class to store a date value into database under neutral format (YYYYMMDD) => cross database compatibility
  */
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/nvp.hpp>
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
 #include <QtCore/qdatetime.h>
+#include <QtCore/qdatastream.h>
 
 #include <QxSerialize/Qt/QxSerialize_QString.h>
 
 #include <QxTraits/get_class_name.h>
+
+namespace qx {
+class QxDateNeutral;
+} // namespace qx
+
+QX_DLL_EXPORT QDataStream & operator<< (QDataStream & stream, const qx::QxDateNeutral & t) BOOST_USED;
+QX_DLL_EXPORT QDataStream & operator>> (QDataStream & stream, qx::QxDateNeutral & t) BOOST_USED;
 
 namespace qx {
 
@@ -61,7 +71,12 @@ namespace qx {
 class QxDateNeutral
 {
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
    friend class boost::serialization::access;
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
+
+   friend QDataStream & ::operator<< (QDataStream & stream, const qx::QxDateNeutral & t);
+   friend QDataStream & ::operator>> (QDataStream & stream, qx::QxDateNeutral & t);
 
 private:
 
@@ -96,6 +111,7 @@ private:
       else { qAssert(m_neutral.size() == QString(format()).size()); m_date = QDate::fromString(m_neutral, format()); qAssert(m_date.isValid()); }
    }
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
    template <class Archive>
    void serialize(Archive & ar, const unsigned int file_version)
    {
@@ -103,6 +119,7 @@ private:
       ar & boost::serialization::make_nvp("date_neutral", m_neutral);
       if (Archive::is_loading::value) { m_date = QDate(); update(); }
    }
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
 };
 

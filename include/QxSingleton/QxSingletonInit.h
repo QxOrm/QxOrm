@@ -61,7 +61,7 @@ QX_DLL_EXPORT_QX_SINGLETON_HPP( qx::QxDataMemberX< qx::trait::no_base_class_defi
 QX_DLL_EXPORT_QX_SINGLETON_HPP( qx::QxClass< QObject > )
 QX_DLL_EXPORT_QX_SINGLETON_HPP( qx::QxDataMemberX< QObject > )
 
-#if _QX_ENABLE_QT_NETWORK_DEPENDENCY
+#ifdef _QX_ENABLE_QT_NETWORK
 
 QX_DLL_EXPORT_QX_SINGLETON_HPP( qx::QxClass< qx::service::IxParameter > )
 QX_DLL_EXPORT_QX_SINGLETON_HPP( qx::QxDataMemberX< qx::service::IxParameter > )
@@ -72,6 +72,6 @@ QX_DLL_EXPORT_QX_SINGLETON_HPP( qx::QxDataMemberX< qx::service::IxService > )
 QX_DLL_EXPORT_QX_SINGLETON_HPP( qx::QxClass< qx::service::QxTransaction > )
 QX_DLL_EXPORT_QX_SINGLETON_HPP( qx::QxDataMemberX< qx::service::QxTransaction > )
 
-#endif // _QX_ENABLE_QT_NETWORK_DEPENDENCY
+#endif // _QX_ENABLE_QT_NETWORK
 
 #endif // _QX_SINGLETON_INIT_H_

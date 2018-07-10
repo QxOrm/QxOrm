@@ -29,9 +29,9 @@
 **
 ****************************************************************************/
 
-#include <QxPrecompiled.h>
+#ifdef _QX_ENABLE_QT_NETWORK
 
-#if _QX_ENABLE_QT_NETWORK_DEPENDENCY
+#include <QxPrecompiled.h>
 
 #include <QtCore/quuid.h>
 
@@ -145,6 +145,28 @@ qx_bool QxTransaction::readSocket(QTcpSocket & socket)
    return bReadOk;
 }
 
+QString QxTransaction::getInfos() const
+{
+   QString infos;
+   infos += "transaction_id :\t\t" + m_sTransactionId + "\n";
+   infos += "input_transaction_size :\t\t" + QString::number(m_uiInputTransactionSize) + "\n";
+   infos += "output_transaction_size :\t\t" + QString::number(m_uiOutputTransactionSize) + "\n";
+   infos += "dt_transaction_begin :\t\t" + m_dtTransactionBegin.toString("yyyyMMddhhmmsszzz") + "\n";
+   infos += "dt_transaction_request_sent :\t\t" + m_dtTransactionRequestSent.toString("yyyyMMddhhmmsszzz") + "\n";
+   infos += "dt_transaction_request_received :\t\t" + m_dtTransactionRequestReceived.toString("yyyyMMddhhmmsszzz") + "\n";
+   infos += "dt_transaction_reply_sent :\t\t" + m_dtTransactionReplySent.toString("yyyyMMddhhmmsszzz") + "\n";
+   infos += "dt_transaction_reply_received :\t\t" + m_dtTransactionReplyReceived.toString("yyyyMMddhhmmsszzz") + "\n";
+   infos += "dt_transaction_end :\t\t" + m_dtTransactionEnd.toString("yyyyMMddhhmmsszzz") + "\n";
+   infos += "ip_source :\t\t" + m_sIpSource + "\n";
+   infos += "ip_target :\t\t" + m_sIpTarget + "\n";
+   infos += "port_source :\t\t" + QString::number(m_lPortSource) + "\n";
+   infos += "port_target :\t\t" + QString::number(m_lPortTarget) + "\n";
+   infos += "service_name :\t\t" + m_sServiceName + "\n";
+   infos += "service_method :\t\t" + m_sServiceMethod + "\n";
+   infos += "message_return :\t\t" + (m_bMessageReturn ? QString("1") : QString("0")) + (m_bMessageReturn.getDesc().isEmpty() ? QString() : (QString(", ") + m_bMessageReturn.getDesc())) + ((m_bMessageReturn.getValue() == 0) ? QString() : (QString(", value=") + QString::number(m_bMessageReturn.getValue()))) + "\n";
+   return infos;
+}
+
 void execute_client(IxService * pService, const QString & sMethod)
 {
    if (pService == NULL) { qAssert(false); return; }
@@ -158,6 +180,8 @@ void execute_client(IxService * pService, const QString & sMethod)
 
 } // namespace service
 } // namespace qx
+
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 
 namespace boost {
 namespace serialization {
@@ -256,9 +280,100 @@ inline void qx_load(Archive & ar, qx::service::QxTransaction & t, const unsigned
    t.setOutputParameter(pOutputParameter);
 }
 
-} // namespace boost
 } // namespace serialization
+} // namespace boost
+
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
 QX_REGISTER_INTERNAL_HELPER_END_FILE_CPP(qx::service::QxTransaction)
 
-#endif // _QX_ENABLE_QT_NETWORK_DEPENDENCY
+QDataStream & operator<< (QDataStream & stream, const qx::service::QxTransaction & t)
+{
+   stream << t.m_sTransactionId;
+   stream << t.m_uiInputTransactionSize;
+   stream << t.m_uiOutputTransactionSize;
+   stream << t.m_dtTransactionBegin;
+   stream << t.m_dtTransactionRequestSent;
+   stream << t.m_dtTransactionRequestReceived;
+   stream << t.m_dtTransactionReplySent;
+   stream << t.m_dtTransactionReplyReceived;
+   stream << t.m_dtTransactionEnd;
+   stream << t.m_sIpSource;
+   stream << t.m_sIpTarget;
+   stream << (qint64)(t.m_lPortSource);
+   stream << (qint64)(t.m_lPortTarget);
+   stream << t.m_sServiceName;
+   stream << t.m_sServiceMethod;
+   stream << t.m_bMessageReturn;
+
+   qint16 iIsNull = (t.m_pInputParameter ? 0 : 1);
+   stream << iIsNull;
+   if (t.m_pInputParameter)
+   {
+      t.m_pInputParameter->registerClass();
+      QString sClassName = t.m_pInputParameter->getClassName();
+      stream << sClassName;
+      t.m_pInputParameter->save(stream);
+   }
+
+   iIsNull = (t.m_pOutputParameter ? 0 : 1);
+   stream << iIsNull;
+   if (t.m_pOutputParameter)
+   {
+      t.m_pOutputParameter->registerClass();
+      QString sClassName = t.m_pOutputParameter->getClassName();
+      stream << sClassName;
+      t.m_pOutputParameter->save(stream);
+   }
+
+   return stream;
+}
+
+QDataStream & operator>> (QDataStream & stream, qx::service::QxTransaction & t)
+{
+   qint64 iTemp = 0;
+   stream >> t.m_sTransactionId;
+   stream >> t.m_uiInputTransactionSize;
+   stream >> t.m_uiOutputTransactionSize;
+   stream >> t.m_dtTransactionBegin;
+   stream >> t.m_dtTransactionRequestSent;
+   stream >> t.m_dtTransactionRequestReceived;
+   stream >> t.m_dtTransactionReplySent;
+   stream >> t.m_dtTransactionReplyReceived;
+   stream >> t.m_dtTransactionEnd;
+   stream >> t.m_sIpSource;
+   stream >> t.m_sIpTarget;
+   stream >> iTemp; t.m_lPortSource = static_cast<long>(iTemp);
+   stream >> iTemp; t.m_lPortTarget = static_cast<long>(iTemp);
+   stream >> t.m_sServiceName;
+   stream >> t.m_sServiceMethod;
+   stream >> t.m_bMessageReturn;
+
+   qint16 iIsNull = 0;
+   stream >> iIsNull;
+   if (iIsNull) { t.m_pInputParameter.reset(); }
+   else
+   {
+      QString sClassName; stream >> sClassName;
+      qx::service::IxParameter * ptr = qx::create_nude_ptr<qx::service::IxParameter>(sClassName);
+      if (! ptr) { qAssertMsg(false, "[QxOrm] qx::service::QxTransaction, loading QDataStream", "unable to create nude pointer for input parameter"); }
+      else { ptr->registerClass(); ptr->load(stream); }
+      t.m_pInputParameter.reset(ptr);
+   }
+
+   iIsNull = 0;
+   stream >> iIsNull;
+   if (iIsNull) { t.m_pOutputParameter.reset(); }
+   else
+   {
+      QString sClassName; stream >> sClassName;
+      qx::service::IxParameter * ptr = qx::create_nude_ptr<qx::service::IxParameter>(sClassName);
+      if (! ptr) { qAssertMsg(false, "[QxOrm] qx::service::QxTransaction, loading QDataStream", "unable to create nude pointer for output parameter"); }
+      else { ptr->registerClass(); ptr->load(stream); }
+      t.m_pOutputParameter.reset(ptr);
+   }
+
+   return stream;
+}
+
+#endif // _QX_ENABLE_QT_NETWORK

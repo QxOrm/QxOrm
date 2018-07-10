@@ -29,6 +29,7 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #ifndef _QX_SERIALIZE_QX_DAO_POINTER_H_
 #define _QX_SERIALIZE_QX_DAO_POINTER_H_
 
@@ -76,3 +77,4 @@ inline void serialize(Archive & ar, qx::dao::ptr<T> & t, const unsigned int file
 } // namespace serialization
 
 #endif // _QX_SERIALIZE_QX_DAO_POINTER_H_
+#endif // _QX_ENABLE_BOOST_SERIALIZATION

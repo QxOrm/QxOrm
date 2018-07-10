@@ -41,7 +41,7 @@ QX_DLL_EXPORT_QX_SINGLETON_CPP( qx::QxDataMemberX< qx::trait::no_base_class_defi
 QX_DLL_EXPORT_QX_SINGLETON_CPP( qx::QxClass< QObject > )
 QX_DLL_EXPORT_QX_SINGLETON_CPP( qx::QxDataMemberX< QObject > )
 
-#if _QX_ENABLE_QT_NETWORK_DEPENDENCY
+#ifdef _QX_ENABLE_QT_NETWORK
 
 QX_DLL_EXPORT_QX_SINGLETON_CPP( qx::QxClass< qx::service::IxParameter > )
 QX_DLL_EXPORT_QX_SINGLETON_CPP( qx::QxDataMemberX< qx::service::IxParameter > )
@@ -52,4 +52,4 @@ QX_DLL_EXPORT_QX_SINGLETON_CPP( qx::QxDataMemberX< qx::service::IxService > )
 QX_DLL_EXPORT_QX_SINGLETON_CPP( qx::QxClass< qx::service::QxTransaction > )
 QX_DLL_EXPORT_QX_SINGLETON_CPP( qx::QxDataMemberX< qx::service::QxTransaction > )
 
-#endif // _QX_ENABLE_QT_NETWORK_DEPENDENCY
+#endif // _QX_ENABLE_QT_NETWORK

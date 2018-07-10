@@ -99,7 +99,10 @@ private:
    void clear();
    void initSqlTypeByClassName();
    void initValidatorMessage();
+
+#ifndef _QX_NO_RTTI
    const std::type_info & typeInfo(const QString & sKey) const;
+#endif // _QX_NO_RTTI
 
 public:
 
@@ -121,7 +124,10 @@ public:
    static QHash<QString, QString> * getAllValidatorMessage()               { return (& QxClassX::getSingleton()->m_lstValidatorMessage); }
    static QHash<QString, QString> * getAllSqlTypeByClassName()             { return (& QxClassX::getSingleton()->m_lstSqlTypeByClassName); }
    static QString getSqlTypeByClassName(const QString & sClassName)        { return QxClassX::getAllSqlTypeByClassName()->value(sClassName); }
+
+#ifndef _QX_NO_RTTI
    static const std::type_info & getTypeInfo(const QString & sClassName)   { return QxClassX::getSingleton()->typeInfo(sClassName); }
+#endif // _QX_NO_RTTI
 
    static type_fct_save_qvariant_usertype getFctSaveQVariantUserType()           { return QxClassX::getSingleton()->m_fctSaveQVariantUserType; }
    static type_fct_load_qvariant_usertype getFctLoadQVariantUserType()           { return QxClassX::getSingleton()->m_fctLoadQVariantUserType; }

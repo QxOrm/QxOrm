@@ -83,7 +83,7 @@ void QxSqlGenerator_Oracle::initSqlTypeByClassName() const
    if (! lstSqlType) { qAssert(false); return; }
 
    lstSqlType->insert("bool", "SMALLINT");
-   lstSqlType->insert("qx_bool", "SMALLINT");
+   lstSqlType->insert("qx_bool", "VARCHAR2(4000)");
    lstSqlType->insert("short", "SMALLINT");
    lstSqlType->insert("int", "INTEGER");
    lstSqlType->insert("long", "INTEGER");

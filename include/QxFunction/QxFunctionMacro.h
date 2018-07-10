@@ -74,23 +74,23 @@ virtual qx_bool isValidFct() const \
 #define QX_FUNCTION_CATCH_AND_RETURN_INVOKE() \
 catch (const std::exception & e) { bValid = qx_bool(false, 0, e.what()); } \
 catch (...) { bValid = qx_bool(false, 0, QX_FUNCTION_ERR_UNKNOWN_ERROR); } \
-if (! bValid) { qDebug("[QxOrm] %s", qPrintable(bValid.getDesc())); qAssert(false); } \
+if (! bValid) { QString sMsgDebug = bValid.getDesc(); qDebug("[QxOrm] %s", qPrintable(sMsgDebug)); qAssert(false); } \
 return bValid;
 
 #define QX_FUNCTION_INVOKE_START_WITH_OWNER() \
 if (ret) { (* ret) = boost::any(); } \
 qx_bool bValid = pThis->isValid<T, Owner>(pOwner, params, NULL); \
-if (! bValid) { qDebug("[QxOrm] %s", qPrintable(bValid.getDesc())); qAssert(false); return bValid; }
+if (! bValid) { QString sMsgDebug = bValid.getDesc(); qDebug("[QxOrm] %s", qPrintable(sMsgDebug)); qAssert(false); return bValid; }
 
 #define QX_FUNCTION_INVOKE_START_WITHOUT_OWNER() \
 if (ret) { (* ret) = boost::any(); } \
 qx_bool bValid = pThis->isValid(params); \
-if (! bValid) { qDebug("[QxOrm] %s", qPrintable(bValid.getDesc())); qAssert(false); return bValid; }
+if (! bValid) { QString sMsgDebug = bValid.getDesc(); qDebug("[QxOrm] %s", qPrintable(sMsgDebug)); qAssert(false); return bValid; }
 
 #define QX_FUNCTION_FETCH_PARAM(TYPE, VALUE, FCT) \
 boost::value_initialized< typename boost::remove_const< TYPE >::type > VALUE; \
 { qx_bool bTmp = qx::function::detail::FCT(params, VALUE.data(), pThis); \
-if (! bTmp) { qDebug("[QxOrm] %s", qPrintable(bTmp.getDesc())); qAssert(false); return bTmp; } }
+if (! bTmp) { QString sMsgDebug = bTmp.getDesc(); qDebug("[QxOrm] %s", qPrintable(sMsgDebug)); qAssert(false); return bTmp; } }
 
 #define QX_FUNCTION_GET_PARAM_TYPE_ANY(PARAMCOUNT) \
 Q_UNUSED(qx_fct); \

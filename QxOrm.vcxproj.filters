@@ -159,9 +159,6 @@
     <Filter Include="inl\QxSerialize">
       <UniqueIdentifier>{2e2b7204-ed29-4253-a2a9-22cbc7acad18}</UniqueIdentifier>
     </Filter>
-    <Filter Include="inl\QxCommon">
-      <UniqueIdentifier>{05040201-6341-4ae2-96e8-16162c00de58}</UniqueIdentifier>
-    </Filter>
     <Filter Include="inl\QxRegister">
       <UniqueIdentifier>{f872a156-81e8-4b7d-acbc-72e87496f70d}</UniqueIdentifier>
     </Filter>
@@ -173,6 +170,21 @@
     </Filter>
     <Filter Include="include\QxSerialize\std">
       <UniqueIdentifier>{83e38f72-9a0b-44b6-b52a-eaf85ea46aea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\QxConvert">
+      <UniqueIdentifier>{6dbe25cd-dcec-4686-8ccc-b84d0994dd20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="inl\QxConvert">
+      <UniqueIdentifier>{319af9b1-5b92-4763-acfa-f46f9d882fac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\QxConvert">
+      <UniqueIdentifier>{360c8e69-49e1-4e09-afac-92d17982aa82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\QxSerialize\QDataStream">
+      <UniqueIdentifier>{1ea368f2-e371-4d0d-bbef-e9eff38eac8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\QxSerialize\QDataStream">
+      <UniqueIdentifier>{2e2bdef5-224d-401d-849b-b97095663a4e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -395,9 +407,6 @@
     <ClCompile Include="src\QxCommon\QxSimpleCrypt.cpp">
       <Filter>src\QxCommon</Filter>
     </ClCompile>
-    <ClCompile Include="src\QxCommon\QxStringCvt_Export.cpp">
-      <Filter>src\QxCommon</Filter>
-    </ClCompile>
     <ClCompile Include="src\QxRegister\IxClass.cpp">
       <Filter>src\QxRegister</Filter>
     </ClCompile>
@@ -455,6 +464,36 @@
     <ClCompile Include="src\QxSingleton\QxSingletonInit.cpp">
       <Filter>src\QxSingleton</Filter>
     </ClCompile>
+    <ClCompile Include="src\QxConvert\QxConvert_Export.cpp">
+      <Filter>src\QxConvert</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QxSerialize\QDataStream\QxSerializeQDataStream_QObject.cpp">
+      <Filter>src\QxSerialize\QDataStream</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QxSerialize\QDataStream\QxSerializeQDataStream_primitive_type.cpp">
+      <Filter>src\QxSerialize\QDataStream</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QxSerialize\QDataStream\QxSerializeQDataStream_std_string.cpp">
+      <Filter>src\QxSerialize\QDataStream</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QxCommon\QxBool.cpp">
+      <Filter>src\QxCommon</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QxDao\QxDateNeutral.cpp">
+      <Filter>src\QxDao</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QxDao\QxDateTimeNeutral.cpp">
+      <Filter>src\QxDao</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QxDao\QxTimeNeutral.cpp">
+      <Filter>src\QxDao</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QxSerialize\QDataStream\QxSerializeQDataStream_qx_registered_class.cpp">
+      <Filter>src\QxSerialize\QDataStream</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QxSerialize\QDataStream\QxSerializeQDataStream_QSqlError.cpp">
+      <Filter>src\QxSerialize\QDataStream</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\QxMemLeak.h">
@@ -494,15 +533,6 @@
       <Filter>include\QxCommon</Filter>
     </ClInclude>
     <ClInclude Include="include\QxCommon\QxSimpleCrypt.h">
-      <Filter>include\QxCommon</Filter>
-    </ClInclude>
-    <ClInclude Include="include\QxCommon\QxStringCvt.h">
-      <Filter>include\QxCommon</Filter>
-    </ClInclude>
-    <ClInclude Include="include\QxCommon\QxStringCvt_Export.h">
-      <Filter>include\QxCommon</Filter>
-    </ClInclude>
-    <ClInclude Include="include\QxCommon\QxStringCvt_Impl.h">
       <Filter>include\QxCommon</Filter>
     </ClInclude>
     <ClInclude Include="include\QxDataMember\IxDataMember.h">
@@ -1267,6 +1297,99 @@
     <ClInclude Include="include\QxSerialize\std\QxSerialize_std_unordered_set.h">
       <Filter>include\QxSerialize\std</Filter>
     </ClInclude>
+    <ClInclude Include="include\QxDao\QxDaoThrowable.h">
+      <Filter>include\QxDao</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxConvert\QxConvert.h">
+      <Filter>include\QxConvert</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxConvert\QxConvert_Export.h">
+      <Filter>include\QxConvert</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxConvert\QxConvert_Impl.h">
+      <Filter>include\QxConvert</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QxSerializeQDataStream.h">
+      <Filter>include\QxSerialize</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_all_include.h">
+      <Filter>include\QxSerialize\QDataStream</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_boost_optional.h">
+      <Filter>include\QxSerialize\QDataStream</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_boost_scoped_ptr.h">
+      <Filter>include\QxSerialize\QDataStream</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_boost_shared_ptr.h">
+      <Filter>include\QxSerialize\QDataStream</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_boost_tuple.h">
+      <Filter>include\QxSerialize\QDataStream</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_boost_unordered_map.h">
+      <Filter>include\QxSerialize\QDataStream</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_boost_unordered_set.h">
+      <Filter>include\QxSerialize\QDataStream</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_QScopedPointer.h">
+      <Filter>include\QxSerialize\QDataStream</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_QSharedPointer.h">
+      <Filter>include\QxSerialize\QDataStream</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_QWeakPointer.h">
+      <Filter>include\QxSerialize\QDataStream</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_std_list.h">
+      <Filter>include\QxSerialize\QDataStream</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_std_map.h">
+      <Filter>include\QxSerialize\QDataStream</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_std_pair.h">
+      <Filter>include\QxSerialize\QDataStream</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_std_set.h">
+      <Filter>include\QxSerialize\QDataStream</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_std_shared_ptr.h">
+      <Filter>include\QxSerialize\QDataStream</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_std_tuple.h">
+      <Filter>include\QxSerialize\QDataStream</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_std_unique_ptr.h">
+      <Filter>include\QxSerialize\QDataStream</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_std_unordered_map.h">
+      <Filter>include\QxSerialize\QDataStream</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_std_unordered_set.h">
+      <Filter>include\QxSerialize\QDataStream</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_std_vector.h">
+      <Filter>include\QxSerialize\QDataStream</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_qx_registered_class.h">
+      <Filter>include\QxSerialize\QDataStream</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_QObject.h">
+      <Filter>include\QxSerialize\QDataStream</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_primitive_type.h">
+      <Filter>include\QxSerialize\QDataStream</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_std_string.h">
+      <Filter>include\QxSerialize\QDataStream</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_QFlags.h">
+      <Filter>include\QxSerialize\QDataStream</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_QSqlError.h">
+      <Filter>include\QxSerialize\QDataStream</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="inl\QxDataMember\QxDataMember.inl">
@@ -1383,24 +1506,6 @@
     <None Include="inl\QxSerialize\QxSerializeInvoker.inl">
       <Filter>inl\QxSerialize</Filter>
     </None>
-    <None Include="inl\QxCommon\QxStringCvt_FromString.inl">
-      <Filter>inl\QxCommon</Filter>
-    </None>
-    <None Include="inl\QxCommon\QxStringCvt_FromVariant.inl">
-      <Filter>inl\QxCommon</Filter>
-    </None>
-    <None Include="inl\QxCommon\QxStringCvt_Qt.inl">
-      <Filter>inl\QxCommon</Filter>
-    </None>
-    <None Include="inl\QxCommon\QxStringCvt_ToString.inl">
-      <Filter>inl\QxCommon</Filter>
-    </None>
-    <None Include="inl\QxCommon\QxStringCvt_ToVariant.inl">
-      <Filter>inl\QxCommon</Filter>
-    </None>
-    <None Include="inl\QxCommon\QxStringCvt_WithIndex.inl">
-      <Filter>inl\QxCommon</Filter>
-    </None>
     <None Include="inl\QxRegister\QxClass.inl">
       <Filter>inl\QxRegister</Filter>
     </None>
@@ -1408,6 +1513,24 @@
     <None Include="QxOrm.pro" />
     <None Include="inl\QxDao\QxDao_Save_WithRelation_Recursive.inl">
       <Filter>inl\QxDao</Filter>
+    </None>
+    <None Include="inl\QxConvert\QxConvert_FromString.inl">
+      <Filter>inl\QxConvert</Filter>
+    </None>
+    <None Include="inl\QxConvert\QxConvert_FromVariant.inl">
+      <Filter>inl\QxConvert</Filter>
+    </None>
+    <None Include="inl\QxConvert\QxConvert_Qt.inl">
+      <Filter>inl\QxConvert</Filter>
+    </None>
+    <None Include="inl\QxConvert\QxConvert_ToString.inl">
+      <Filter>inl\QxConvert</Filter>
+    </None>
+    <None Include="inl\QxConvert\QxConvert_ToVariant.inl">
+      <Filter>inl\QxConvert</Filter>
+    </None>
+    <None Include="inl\QxConvert\QxConvert_WithIndex.inl">
+      <Filter>inl\QxConvert</Filter>
     </None>
   </ItemGroup>
 </Project>

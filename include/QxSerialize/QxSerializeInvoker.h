@@ -29,6 +29,7 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #ifndef _QX_SERIALIZE_INVOKER_H_
 #define _QX_SERIALIZE_INVOKER_H_
 
@@ -132,3 +133,4 @@ struct loader
 #endif // _MSC_VER
 
 #endif // _QX_SERIALIZE_INVOKER_H_
+#endif // _QX_ENABLE_BOOST_SERIALIZATION

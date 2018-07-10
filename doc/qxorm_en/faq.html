@@ -4,14 +4,17 @@
   <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
   <title>QxOrm : C++ Qt ORM Object Relational Mapping database library - QxEntityEditor : C++ Qt entities graphic editor (data model designer and source code generator)</title>
   <link rel='stylesheet' type='text/css' href='./resource/qxorm_style.css'>
+  <script type="text/javascript" src="./resource/jquery.min.js"></script>
   <script type="text/javascript" src="./resource/qxorm_script.js"></script>
 </head>
 <body>
 <table border="0" style="width: 80%" align="center">
-  <col><col><col>
+  <col><col><col><col><col>
   <tbody>
     <tr>
       <td><a href="./home.html"><img alt="QxOrm" src="./resource/logo_qxorm_and_qxee.png"align="left" border="0"></a></td>
+      <td align="right" style="vertical-align:bottom"><div id="qx_search"><gcse:search></gcse:search></div></td>
+      <td width="15"></td>
       <td align="right" style="vertical-align:bottom">
         <img alt="Windows" src="./resource/logo_windows.gif" width="35" height="35">
         <img alt="Linux" src="./resource/logo_linux.gif" width="35" height="35">
@@ -40,7 +43,15 @@
             </div>
          </td></tr></tbody></table>
       </td>
-      <td align="center"><a href="./faq.html" class="btn_nav">Faq (36)</a></td>
+      <td align="center" onmouseover="showHideElementById('menu_manual', true);" onmouseout="showHideElementById('menu_manual', false);">
+         <a href="./manual.html" class="btn_nav">Manual (2)</a>
+         <table class="table_menu_manual"><tbody><tr><td>
+            <div id="menu_manual" class="div_menu_manual">
+               <a href="./manual.html" class="btn_sub_menu">QxOrm manual</a><br/>
+               <a href="./manual_qxee.html" class="btn_sub_menu">QxEntityEditor manual</a><br/>
+            </div>
+         </td></tr></tbody></table>
+      </td>
       <td align="center"><a href="./link.html" class="btn_nav">Forum</a></td>
       <td align="center"><a href="./customer.html" class="btn_nav">Our customers</a></td>
     </tr>
@@ -55,7 +66,7 @@
     <table cellspacing="0" cellpadding="1"><col><col><tbody>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow">Current version :&nbsp;</font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.3.2 - <a href="../doxygen/index.html" target="_blank">QxOrm library online documentation</a></font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.1 - <a href="../doxygen/index.html" target="_blank">QxOrm library online class documentation</a></font></td>
       </tr>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow"></font></td>
@@ -106,7 +117,7 @@
                </li><li><a href="#faq_200">How to register automatically Qt meta-properties (using <i>Q_PROPERTY</i> macro) to QxOrm context ?</a><br>
                </li><li><a href="#faq_210">How to build a query without writing SQL with the class <i>qx::QxSqlQuery</i> ?</a><br>
                </li><li><a href="#faq_220">How to use the cache (functions into <i>namespace</i> <i>qx::cache</i>) of QxOrm library ?</a><br>
-               </li><li><a href="#faq_230">How to build SQL schema (create and update tables) based on C++ persistents classes registered into QxOrm context ?</a><br>
+               </li><li><a href="#faq_230">How to build SQL schema (create and update tables) based on C++ persistents classes registered in QxOrm context ?</a><br>
                </li><li><a href="#faq_240">How to associate a SQL type to a C++ class ?</a><br>
                </li><li><a href="#faq_250">How to use <i>QxValidator</i> module to validate automatically an instance ?</a><br>
                </li><li><a href="#faq_260">How to use <i>qx::IxPersistable</i> interface ?</a><br>
@@ -136,7 +147,7 @@
            <br>
            <b>QxOrm</b> provides many functionalities starting from a simple <i>C++ setting function by class</i> :
            <ul>
-             <li><b><font style="background-color:yellow">persistence</font></b> : communication with a lot of databases (with <i>1-1</i>, <i>1-n</i>, <i>n-1</i> and <i>n-n</i> relationships)
+             <li><b><font style="background-color:yellow">persistence</font></b> : communication with databases (support <i>1-1</i>, <i>1-n</i>, <i>n-1</i> and <i>n-n</i> relationships)
              </li>
              <li><b><font style="background-color:yellow">serialization</font></b> : binary and xml format
              </li>
@@ -157,12 +168,12 @@
            <td valign="middle" width="30"></td>
            <td align="justify">
               <b>QxEntityEditor</b> is a graphic editor for <b>QxOrm</b> library : <b>QxEntityEditor</b> provides a graphic way to manage the data model.<br>
-              <b>QxEntityEditor</b> is multi-platform (available for Windows, Linux and Mac OS X) and generate native code for all environments : desktop (Windows, Linux, Mac OS X), embedded and mobile (Android, iOS, Raspberry Pi, etc.).<br>
+              <b>QxEntityEditor</b> is multi-platform (available for Windows, Linux and Mac OS X) and generates native code for all environments : desktop (Windows, Linux, Mac OS X), embedded and mobile (Android, iOS, Windows Phone, Raspberry Pi, etc.).<br>
               <a href="./tutorial_4.html">A presentation video of <b>QxEntityEditor</b> application is available</a>.<br>
               <br>
               <b>QxEntityEditor</b> is based on plugins and provides many ways to import/export your data model :
               <ul>
-                <li>generate C++ persistent classes automatically (registered into QxOrm context) ;</li>
+                <li>generate C++ persistent classes automatically (registered in QxOrm context) ;</li>
                 <li>generate DDL SQL script automatically (database schema) for SQLite, MySQL, PostgreSQL, Oracle and MS SQL Server ;</li>
                 <li>manage schema evolution for each project version (<i>ALTER TABLE</i>, <i>ADD COLUMN</i>, <i>DROP INDEX</i>, etc.) ;</li>
                 <li>transfer your data model over network and create quickly client/server applications, using <a href="../doxygen/html/group___qx_service.html" target="_blank">QxService</a> module ;</li>
@@ -265,11 +276,12 @@ A detailed list of supported databases is available on the website of Qt <a href
              <col><col>
              <tbody>
                <tr>
-                 <td valign="middle" width="161" align="center"><a href="http://www.boost.org/" target="_blank"><img alt="boost" src="./resource/logo_boost.jpg" width="161" height="50" border="0"></a></td>
-                 <td align="justify"><b>boost</b> : many of boost's founders are on the C++ standard committee and several boost libraries have been accepted for incorporation into C++1x (new standard for the C++ programming language).
-                 The boost's libraries are aimed at a wide range of C++ users and application domains.<br>
-                 QxOrm uses the following features of boost : <i>smart_pointer, serialization, type_traits, multi_index_container, unordered_container, any, tuple, foreach, function.</i><br>
-                 It is recommended to install the latest version of boost available at the following address : <a href="http://www.boost.org/" target="_blank">http://www.boost.org/</a></td>
+                 <td valign="middle" width="161" align="center"><a href="http://www.qt.io/" target="_blank"><img alt="Qt" src="./resource/logo_qt.jpg" width="42" height="50" border="0"></a></td>
+                 <td align="justify"><b>Qt</b> : cross-platform application development framework : GUI (<i>QtGui</i>), network (<i>QtNetwork</i>), XML (<i>QtXml</i>), database (<i>QtSql</i>)...<br>
+                 Qt provides excellent support and documentation. Using Qt, you can write simple and powerful C++ code.<br>
+                 Qt is produced by Digia's Qt Development Frameworks division and is available under LGPL license.<br>
+                 QxOrm is compatible with many Qt's objects : <i>QObject, QString, QDate, QTime, QDateTime, QList, QHash, QSharedPointer, QScopedPointer...</i><br>
+                 It is recommended to install the latest version of Qt available at the following address : <a href="http://www.qt.io/" target="_blank">http://www.qt.io/</a></td>
                </tr>
              </tbody>
            </table>
@@ -278,12 +290,11 @@ A detailed list of supported databases is available on the website of Qt <a href
              <col><col>
              <tbody>
                <tr>
-                 <td valign="middle" width="161" align="center"><a href="http://www.qt.io/" target="_blank"><img alt="Qt" src="./resource/logo_qt.jpg" width="42" height="50" border="0"></a></td>
-                 <td align="justify"><b>Qt</b> : cross-platform application development framework : ihm (<i>QtGui</i>), network (<i>QtNetwork</i>), xml (<i>QtXml</i>), database (<i>QtSql</i>)...<br>
-                 Qt provides excellent support and documentation. Using Qt, you can write simple and powerful C++ code.<br>
-                 Qt is produced by Digia's Qt Development Frameworks division and is available under LGPL license.<br>
-                 QxOrm is compatible with a lot of Qt's objects : <i>QObject, QString, QDate, QTime, QDateTime, QList, QHash, QSharedPointer, QScopedPointer...</i><br>
-                 It is recommended to install the latest version of Qt available at the following address : <a href="http://www.qt.io/" target="_blank">http://www.qt.io/</a></td>
+                 <td valign="middle" width="161" align="center"><a href="http://www.boost.org/" target="_blank"><img alt="boost" src="./resource/logo_boost.jpg" width="161" height="50" border="0"></a></td>
+                 <td align="justify"><b>boost</b> : many of boost's founders are on the C++ standard committee and several boost libraries have been accepted for incorporation into C++1x (new standard for the C++ programming language).
+                 The boost's libraries are aimed at a wide range of C++ users and application domains.<br>
+                 QxOrm uses the following boost's features (header files <i>*.hpp</i> only, boost <i>serialization</i> dependency is optional) : <i>smart_pointer, type_traits, multi_index_container, unordered_container, any, tuple, foreach, function.</i><br>
+                 It is recommended to get the latest version of boost available at the following address : <a href="http://www.boost.org/" target="_blank">http://www.boost.org/</a></td>
                </tr>
              </tbody>
            </table>
@@ -323,18 +334,18 @@ A detailed list of supported databases is available on the website of Qt <a href
            <td align="justify">
            Yes, if the <i>serialization</i> of your data in <i>xml</i> format is not used in your project, you can disable this functionality.<br>
            The compilation times will be then reduced but you will not have anymore access to the namespace <i>qx::serialization:xml</i>.<br>
-           To disable <i>xml serialization</i>, it is necessary to open the <i>QxOrm.pri</i> config file and to remove (or comment) the compilation option <b><i>_QX_SERIALIZE_XML_ENABLED</i></b>.<br>
+           To disable <i>xml serialization</i>, it is necessary to open the <i>QxOrm.pri</i> config file and to remove (or comment) the compilation option <b><i>_QX_ENABLE_BOOST_SERIALIZATION_XML</i></b>.<br>
            A recompilation of QxOrm library is necessary to take into account this modification.<br>
            <br>
            Another possibility is to use the <i>polymorphic</i> classes of the library <a href="http://www.boost.org/doc/libs/release/libs/serialization/doc/index.html" target="_blank"><i>boost::serialization</i></a> (instead of <i>template</i>).<br>
            This feature reduces compilation times and the size of the executable that is generated.<br>
            However, the speed of execution of your program will be reduced since part of the work carried out during compilation will be done during the execution of your application.<br>
-           To use this feature with <b>QxOrm</b>, you must enable the compilation option <b><i>_QX_SERIALIZE_POLYMORPHIC_ENABLED</i></b> in the <i>QxOrm.pri</i> config file.<br>
+           To use this feature with <b>QxOrm</b>, you must enable the compilation option <b><i>_QX_ENABLE_BOOST_SERIALIZATION_POLYMORPHIC</i></b> in the <i>QxOrm.pri</i> config file.<br>
            <b>Warning</b> : the <i>serialization</i> functions will be then accessible from the following <i>namespace</i> : <i>qx::serialization::polymorphic_binary</i>, <i>qx::serialization::polymorphic_text</i> and <i>qx::serialization::polymorphic_xml</i>.<br>
            A recompilation of QxOrm library is necessary to take into account this modification.<br>
            <br>
            It is also possible to use <i>Q_PROPERTY</i> macro to define properties for a class inherited from <i>QObject</i> type.<br>
-           In this case, there is two different ways to register properties into QxOrm context and you can reduce noticeably compilation times of your project.<br>
+           In this case, there is two different ways to register properties in QxOrm context and you can reduce noticeably compilation times of your project.<br>
            For more details about this feature, <a href="./faq.html#faq_200">click here</a>.<br>
            <br>
            <b>Note :</b> it is important to check if all optimizations provided by the compiler are enabled, for example to compile using several processors :
@@ -951,7 +962,7 @@ void</span> BaseClassTrigger<span class="operator">::</span>onBeforeUpdate<span 
            <td align="justify">
            A C++ abstract class (with at least one pure virtual method) cannot be mapped to a table of a database (because it cannot be instantiated).<br>
            However, in some case, it can be interesting to define properties into abstract class used by a persistent object (by inheritance).<br>
-           A sample of abstract class registered into QxOrm context is available in the directory <i>./test/qxDllSample/dll2/</i> of QxOrm package with the class <i>BaseClassTrigger</i>.<br>
+           A sample of abstract class registered in QxOrm context is available in the directory <i>./test/qxDllSample/dll2/</i> of QxOrm package with the class <i>BaseClassTrigger</i>.<br>
            To register an abstract class into QxOrm context, you have to :
            <ul>
            <li>register the class with '<i>void register_class</i>' like any other class ;
@@ -1110,7 +1121,7 @@ daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<s
          <tr>
            <td valign="middle" width="30"></td>
            <td align="justify">
-           QxOrm library can persist every types, not only classes registered into QxOrm context using <i>qx::register_class&lt;T&gt;()</i>.<br>
+           QxOrm library can persist every types, not only classes registered in QxOrm context using <i>qx::register_class&lt;T&gt;()</i>.<br>
            <br>
            It's necessary to write serialization functions from boost framework, using the <b>non intrusive</b> method (because source code is not available or is read-only).
            For more details on boost serialization module, <a href="http://www.boost.org/doc/libs/release/libs/serialization/doc/index.html" target="_blank">goto official website</a>.<br>
@@ -1168,7 +1179,7 @@ BOOST_SERIALIZATION_SPLIT_FREE<span class="operator">(</span>ExtObject3D<span cl
 #endif // _PERSIST_EXTOBJECT3D_H_</span></pre>
            </td></tr></tbody></table>
            <br>
-           Now you can persist an instance of '<i>ExtObject3D</i>' type into database : so you can have a '<i>ExtObject3D</i>' property in a persistent class registered into QxOrm context.
+           Now you can persist an instance of '<i>ExtObject3D</i>' type into database : so you can have a '<i>ExtObject3D</i>' property in a persistent class registered in QxOrm context.
            This property can be mapped with a column of type <i>TEXT</i> or <i>VARCHAR</i> into database.<br>
            <br>
            The default behaviour of QxOrm library is : the instance is serialized to XML format before to be inserted or updated into database.
@@ -1186,11 +1197,11 @@ BOOST_SERIALIZATION_SPLIT_FREE<span class="operator">(</span>ExtObject3D<span cl
 namespace</span> cvt<span class="operator"> {</span><span class="keyword">
 namespace</span> detail<span class="operator"> {</span><span class="keyword">
 
-template</span><span class="operator"> &lt;&gt;</span><span class="keyword"> struct</span> QxStringCvt_ToVariant<span class="operator">&lt;</span> ExtObject3D<span class="operator"> &gt; {</span><span class="keyword">
+template</span><span class="operator"> &lt;&gt;</span><span class="keyword"> struct</span> QxConvert_ToVariant<span class="operator">&lt;</span> ExtObject3D<span class="operator"> &gt; {</span><span class="keyword">
 static inline</span> QVariant toVariant<span class="operator">(</span><span class="keyword">const</span> ExtObject3D<span class="operator"> &amp;</span> t<span class="operator">,</span><span class="keyword"> const</span> QString<span class="operator"> &amp;</span> format<span class="operator">,</span><span class="type"> int</span> index<span class="operator">)
 {</span><span class="comment"> /* Ici je convertis ExtObject3D en QVariant */</span><span class="operator"> } };</span><span class="keyword">
 
-template</span><span class="operator"> &lt;&gt;</span><span class="keyword"> struct</span> QxStringCvt_FromVariant<span class="operator">&lt;</span> ExtObject3D<span class="operator"> &gt; {</span><span class="keyword">
+template</span><span class="operator"> &lt;&gt;</span><span class="keyword"> struct</span> QxConvert_FromVariant<span class="operator">&lt;</span> ExtObject3D<span class="operator"> &gt; {</span><span class="keyword">
 static inline</span> qx_bool fromVariant<span class="operator">(</span><span class="keyword">const</span> QVariant<span class="operator"> &amp;</span> v<span class="operator">,</span> ExtObject3D<span class="operator"> &amp;</span> t<span class="operator">,</span><span class="keyword"> const</span> QString<span class="operator"> &amp;</span> format<span class="operator">,</span><span class="type"> int</span> index<span class="operator">)
 {</span><span class="comment"> /* Ici je convertis QVariant en ExtObject3D */</span><span class="operator">;</span><span class="flow"> return</span> qx_bool<span class="operator">(</span><span class="bool">true</span><span class="operator">); } };
 
@@ -1212,15 +1223,15 @@ static inline</span> qx_bool fromVariant<span class="operator">(</span><span cla
          <tr>
            <td valign="middle" width="30"></td>
            <td align="justify">
-           All classes registered into QxOrm context using <i>qx::register_class&lt;T&gt;()</i> function can be used by introspection engine (or reflection engine) of QxOrm library.
+           All classes registered in QxOrm context using <i>qx::register_class&lt;T&gt;()</i> function can be used by introspection engine (or reflection engine) of QxOrm library.
            Introspection engine can provide dynamically (so during program execution) some informations about types.
            Those informations are called <i>meta-datas</i> and can list all classes characteristics (properties, methods, etc.).
            Many programming languages (for example Java or C#) have natively this mechanism, but not C++, that's why QxOrm library emulates an introspection engine.<br>
            <br>
            Here is a list of QxOrm library classes to access to <i>meta-datas</i> :
            <ul>
-             <li><a href="../doxygen/html/classqx_1_1_qx_class_x.html" target="_blank">qx::QxClassX</a> : singleton class to iterate over all classes registered into QxOrm context using <i>qx::register_class&lt;T&gt;()</i> ;</li>
-             <li><a href="../doxygen/html/classqx_1_1_ix_class.html" target="_blank">qx::IxClass</a> : interface for a class registered into QxOrm context ;</li>
+             <li><a href="../doxygen/html/classqx_1_1_qx_class_x.html" target="_blank">qx::QxClassX</a> : singleton class to iterate over all classes registered in QxOrm context using <i>qx::register_class&lt;T&gt;()</i> ;</li>
+             <li><a href="../doxygen/html/classqx_1_1_ix_class.html" target="_blank">qx::IxClass</a> : interface for a class registered in QxOrm context ;</li>
              <li><a href="../doxygen/html/classqx_1_1_ix_data_member_x.html" target="_blank">qx::IxDataMemberX</a> : list of properties associated to a class ;</li>
              <li><a href="../doxygen/html/classqx_1_1_ix_data_member.html" target="_blank">qx::IxDataMember</a> : interface for a class property ;</li>
              <li><a href="../doxygen/html/classqx_1_1_ix_function.html" target="_blank">qx::IxFunctionX</a> : list of methods associated to a class ;</li>
@@ -1237,7 +1248,7 @@ static inline</span> qx_bool fromVariant<span class="operator">(</span><span cla
            </ul>
            <b>Note :</b> <a href="../doxygen/html/group___qx_service.html" target="_blank">QxService</a> module of QxOrm library (<a href="./tutorial_2.html" target="_blank">click here to go to the tutorial</a>) to create easily a C++ application server is based on introspection engine to call dynamically services methods (client request) on server side.<br>
            <br>
-           Here is a sample using introspection engine : how to dump all classes, properties and methods registered into QxOrm context ?<br>
+           Here is a sample using introspection engine : how to dump all classes, properties and methods registered in QxOrm context ?<br>
            <br>
            <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
 <pre>QString QxClassX<span class="operator">::</span>dumpAllClasses<span class="operator">()
@@ -1426,9 +1437,9 @@ template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</
            </td></tr></tbody></table>
            <br>
            <b>Note :</b> the second parameter of <i>QX_REGISTER_ALL_QT_PROPERTIES</i> macro is the name of the property mapped to the primary key into database.
-           If this parameter is empty, then the class doesn't have any primary key or the primary key has been registered into a base class.<br>
+           If this parameter is empty, then the class doesn't have any primary key or the primary key has been registered in a base class.<br>
            <br>
-           All properties defined with <i>Q_PROPERTY</i> macro can be registered into QxOrm context in two different ways :<br>
+           All properties defined with <i>Q_PROPERTY</i> macro can be registered in QxOrm context in two different ways :<br>
            <b>1-</b> with the classic method : <i>t.data(& MyQObject::my_property, "my_property", 0);</i><br>
            <b>2-</b> or without writing the data-member pointer : <i>t.data("my_property", 0);</i><br>
            <br>
@@ -1662,7 +1673,7 @@ bGetOk<span class="operator"> =</span> qx<span class="operator">::</span>cache<s
        </tbody>
       </table>
       <br><br>
-      <a name="faq_230"><u><b>How to build SQL schema (create and update tables) based on C++ persistents classes registered into QxOrm context ?</b></u></a><br><br>
+      <a name="faq_230"><u><b>How to build SQL schema (create and update tables) based on C++ persistents classes registered in QxOrm context ?</b></u></a><br><br>
       <table border="0" style="width: 100%" align="center">
        <col>
        <col>
@@ -1678,7 +1689,7 @@ bGetOk<span class="operator"> =</span> qx<span class="operator">::</span>cache<s
            Moreover, each tool provided by each SGBD can add some optimizations to the database (add some indexes for example).<br>
            <br>
            But sometimes, it can be useful to not have to manage manually tables into database.<br>
-           In this case, it's possible to create a C++ function to iterate over all persistents classes registered into QxOrm context (using introspection engine of QxOrm library) : so you can build a SQL script to create and to update tables into database.<br>
+           In this case, it's possible to create a C++ function to iterate over all persistents classes registered in QxOrm context (using introspection engine of QxOrm library) : so you can build a SQL script to create and to update tables into database.<br>
            <br>
            QxOrm library provides an example of a C++ function : based on this function, you can create your own function to build SQL schema.<br>
            This QxOrm function is written in the file <i><a href="./resource/qxclassx_dump_sql_schema.html" target="_blank">./src/QxRegister/QxClassX.cpp</a></i> and is called <i><a href="./resource/qxclassx_dump_sql_schema.html" target="_blank">QString qx::QxClassX::dumpSqlSchema()</a></i>.<br>
@@ -1767,7 +1778,7 @@ template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</
     // Execute each SQL process with "query" variable
 </span>    QSqlQuery query<span class="operator">(</span>db<span class="operator">);</span><span class="comment">
 
-    // Fetch all C++ persistents classes registered into QxOrm context
+    // Fetch all C++ persistents classes registered in QxOrm context
 </span>    qx<span class="operator">::</span>QxCollection<span class="operator">&lt;</span>QString<span class="operator">,</span> qx<span class="operator">::</span>IxClass<span class="operator"> *&gt; *</span> pAllClasses<span class="operator"> =</span> qx<span class="operator">::</span>QxClassX<span class="operator">::</span>getAllClasses<span class="operator">();</span><span class="flow">
     if</span><span class="operator"> (!</span> pAllClasses<span class="operator">) {</span> qAssert<span class="operator">(</span><span class="bool">false</span><span class="operator">);</span><span class="flow"> return</span><span class="operator">; }</span><span class="comment">
 
@@ -1857,7 +1868,7 @@ template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</
            </td></tr></tbody></table>
            <br>
            <b>Note :</b> this code (like <a href="./resource/qxclassx_dump_sql_schema.html" target="_blank"><i>qx::QxClassX::dumpSqlSchema()</i></a> function) can be modified to provide more features.<br>
-           For example, it could be interesting to create by default another table (like <i>DatabaseVersion</i> table) to store the list of all persistents classes registered into QxOrm context : instead of using "<i>db.tables()</i>" Qt function, it could be possible to fetch all tables with more informations (version number for each table, columns count registered into QxOrm context, table description, etc.).
+           For example, it could be interesting to create by default another table (like <i>DatabaseVersion</i> table) to store the list of all persistents classes registered in QxOrm context : instead of using "<i>db.tables()</i>" Qt function, it could be possible to fetch all tables with more informations (version number for each table, columns count registered in QxOrm context, table description, etc.).
            <br>
            </td>
          </tr>
@@ -1944,7 +1955,7 @@ template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</
          <tr>
            <td valign="middle" width="30"></td>
            <td align="justify">
-            <b><a href="../doxygen/html/group___qx_validator.html" target="_blank">QxValidator</a></b> module of <b>QxOrm</b> library provides a validation engine for classes registered into QxOrm context.<br>
+            <b><a href="../doxygen/html/group___qx_validator.html" target="_blank">QxValidator</a></b> module of <b>QxOrm</b> library provides a validation engine for classes registered in QxOrm context.<br>
             To use this validation engine, you have to define your constraints into the mapping function per class : <i>void qx::register_class</i>.<br>
             If for an instance of class, at least one constraint violation is detected, then the instance is invalid : the object cannot be saved into database (<i>INSERT</i> or <i>UPDATE</i>).<br>
             <br>
@@ -1954,7 +1965,7 @@ template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</
             Here is a description of some classes defined into <b>QxValidator</b> module :
             <ul>
                 <li><a href="../doxygen/html/classqx_1_1_ix_validator.html" target="_blank">qx::IxValidator</a> : each constraint defined into <i>void qx::register_class</i> function is associated with an interface of type <i>qx::IxValidator</i> ;</li>
-                <li><a href="../doxygen/html/classqx_1_1_ix_validator_x.html" target="_blank">qx::IxValidatorX</a> : list of constraints is associated with an interface of type <i>qx::IxValidatorX</i>. You can iterate over this collection during program execution : it could be interesting for example to generate SQL schema and take into account some validation rules into database (see the FAQ : <a href="./faq.html#faq_230" target="_blank">How to build SQL schema (create and update tables) based on C++ persistents classes registered into QxOrm context ?</a>) ;</li>
+                <li><a href="../doxygen/html/classqx_1_1_ix_validator_x.html" target="_blank">qx::IxValidatorX</a> : list of constraints is associated with an interface of type <i>qx::IxValidatorX</i>. You can iterate over this collection during program execution : it could be interesting for example to generate SQL schema and take into account some validation rules into database (see the FAQ : <a href="./faq.html#faq_230" target="_blank">How to build SQL schema (create and update tables) based on C++ persistents classes registered in QxOrm context ?</a>) ;</li>
                 <li><a href="../doxygen/html/classqx_1_1_qx_invalid_value_x.html" target="_blank">qx::QxInvalidValueX</a> : when an instance is invalid, list of constraints violation are inserted into a <i>qx::QxInvalidValueX</i> collection ;</li>
                 <li><a href="../doxygen/html/classqx_1_1_qx_invalid_value.html" target="_blank">qx::QxInvalidValue</a> : each item into this collection is type of <i>qx::QxInvalidValue</i> and contains an error message (description to explain why the instance is not valid).</li>
             </ul>
@@ -2136,7 +2147,7 @@ qDebug<span class="operator">(</span><span class="string">"[QxOrm] test 'QxValid
            Using <i>qx::IxPersistable</i>, you will have a common base class to call all persistents functions without knowing the real type of current instance (polymorphism concept).<br>
            QxOrm library doesn't force developers to work with a base class to register a persistent type into QxOrm context, however it's sometimes useful to have an interface to write some generic algorithms.<br>
            <br>
-           <i>qx::IxPersistable</i> class provides following virtual methods (for more details about those methods, goto <a href="../doxygen/index.html" target="_blank">QxOrm library online documentation</a>) :<br>
+           <i>qx::IxPersistable</i> class provides following virtual methods (for more details about those methods, goto <a href="../doxygen/index.html" target="_blank">QxOrm library online class documentation</a>) :<br>
            <br>
            <div style="width:900px; height:290px; overflow:auto; background-color:white">
 <pre><span class="keyword">virtual</span><span class="type"> long</span> qxCount<span class="operator">(</span><span class="keyword">const</span> qx<span class="operator">::</span>QxSqlQuery<span class="operator"> &amp;</span> query<span class="operator"> =</span> qx<span class="operator">::</span>QxSqlQuery<span class="operator">(),</span> QSqlDatabase<span class="operator"> *</span> pDatabase<span class="operator"> =</span> NULL<span class="operator">);</span><span class="keyword">
@@ -2270,7 +2281,7 @@ int</span> author<span class="operator">::</span>age<span class="operator">()</s
          <tr>
            <td valign="middle" width="30"></td>
            <td align="justify">
-           QxOrm library supports 4 kind of relationships to link C++ classes registered into QxOrm context : <i>one-to-one</i>, <i>one-to-many</i>, <i>many-to-one</i> and <i>many-to-many</i>.<br>
+           QxOrm library supports 4 kind of relationships to link C++ classes registered in QxOrm context : <i>one-to-one</i>, <i>one-to-many</i>, <i>many-to-one</i> and <i>many-to-many</i>.<br>
            For more details to define relationships, you can take a look at <a href="./tutorial.html" target="_blank">qxBlog tutorial</a>.<br>
            We will explain here how to fetch datas from many tables (<a href="../doxygen/html/group___qx_dao.html" target="_blank">QxDao</a> module, functions of <a href="../doxygen/html/namespaceqx_1_1dao.html" target="_blank">qx::dao</a> namespace) :
            <ul>
@@ -2419,7 +2430,7 @@ WHERE blog.blog_id = :blog_id</span></pre>
            The first parameter of those functions, of <i><a href="../doxygen/html/classqx_1_1_qx_sql_query.html" target="_blank">qx::QxSqlQuery</a></i> type (or <i>qx_query</i>), contains the stored procedure or the custom SQL query to execute.<br>
            For more informations about <i><a href="../doxygen/html/classqx_1_1_qx_sql_query.html" target="_blank">qx::QxSqlQuery</a></i> class, goto here : <a href="./faq.html#faq_210">How to build a query without writing SQL with the class <i>qx::QxSqlQuery</i> ?</a><br>
            <br>
-           <a href="../doxygen/html/namespaceqx_1_1dao.html" target="_blank">qx::dao::execute_query&lt;T&gt;()</a> function is a <i>template</i> function : T type must be registered into QxOrm context (<i>qx::register_class&lt;T&gt;</i> function).<br>
+           <a href="../doxygen/html/namespaceqx_1_1dao.html" target="_blank">qx::dao::execute_query&lt;T&gt;()</a> function is a <i>template</i> function : T type must be registered in QxOrm context (<i>qx::register_class&lt;T&gt;</i> function).<br>
            All datas returned by the stored procedure or the custom SQL query which could be associated with members of the C++ class (of T type) will be fetched automatically.<br>
            An automatic search is done on the name of each fields returned by the query.<br>
            Here is an example from qxBlog project of QxOrm package :<br>
@@ -2530,12 +2541,12 @@ void</span> MyWidget<span class="operator">::</span>onQueryFinished<span class="
          <tr>
            <td valign="middle" width="30"></td>
            <td align="justify">
-           <b><a href="../doxygen/html/group___qx_model_view.html" target="_blank">QxModelView</a></b> module provides an easy way to work with <a href="http://doc.qt.io/qt-5/modelview.html" target="_blank">Qt model/view engine</a> with all classes registered into QxOrm context :
+           <b><a href="../doxygen/html/group___qx_model_view.html" target="_blank">QxModelView</a></b> module provides an easy way to work with <a href="http://doc.qt.io/qt-5/modelview.html" target="_blank">Qt model/view engine</a> with all classes registered in QxOrm context :
            <ul>
            <li>Qt widgets : <i>QTableView</i> or <i>QListView</i> for example to display/modify a database table content ;</li>
            <li>QML : each property defined in QxOrm context is exposed to QML engine : <b><a href="../doxygen/html/group___qx_model_view.html" target="_blank">QxModelView</a></b> module makes easier integration between QML and databases.</li>
            </ul>
-           <a href="../doxygen/html/classqx_1_1_ix_model.html" target="_blank">qx::IxModel</a> interface provides a generic way for all models linked to persistents classes registered into QxOrm context. All methods of this class prefixed by '<i>qx</i>' call functions from '<i>qx::dao</i>' namespace and then communicate with database.<br/>
+           <a href="../doxygen/html/classqx_1_1_ix_model.html" target="_blank">qx::IxModel</a> interface provides a generic way for all models linked to persistents classes registered in QxOrm context. All methods of this class prefixed by '<i>qx</i>' call functions from '<i>qx::dao</i>' namespace and then communicate with database.<br/>
            <br/>
            The <i>qxBlogModelView</i> sample project in <i>./test/</i> directory of QxOrm package shows how to create quickly a model and associate it to the Qt <i>model/view</i> engine (first with a Qt widget, then with a QML view).<br/>
            <br/>
@@ -2616,7 +2627,7 @@ Item<span class="operator"> {</span>
            <br/>
            <img alt="qx_model_view_02" src="./resource/qx_model_view_02.png" border="0" /><br/>
            <br/>
-           As you can see in the '<i>main.qml</i>' file, '<i>author_id</i>' and '<i>name</i>' properties of '<i>author</i>' model (<i>myModel</i> variable) can be automatically read and write (because they are registered into QxOrm context).<br/>
+           As you can see in the '<i>main.qml</i>' file, '<i>author_id</i>' and '<i>name</i>' properties of '<i>author</i>' model (<i>myModel</i> variable) can be automatically read and write (because they are registered in QxOrm context).<br/>
            Moreover, <a href="../doxygen/html/classqx_1_1_ix_model.html" target="_blank">qx::IxModel</a> interface provides a list of methods for QML side (<i>Q_INVOKABLE</i>) to communicate with database : for example, the '<i>Save</i>' button will save the model in database without having to write a C++ function.<br/>
            <br/>
            <b>Note :</b> a <b>QxEntityEditor</b> plugin generates automatically the code to manage models with relationships. Then it is possible to work with nested C++ models.<br/>

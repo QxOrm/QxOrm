@@ -68,6 +68,7 @@ public:
    typedef typename qx::trait::remove_attr<P7, false>::type type_P7;
    QX_FUNCTION_CLASS_MEMBER_FCT(QxFunction_7);
 
+   virtual int getParamCount() const                                    { return 7; }
    virtual qx_bool isValidParams(const QString & params) const          { Q_UNUSED(params); return true; }
    virtual qx_bool isValidParams(const type_any_params & params) const  { Q_UNUSED(params); return true; }
 
@@ -127,6 +128,7 @@ public:
    typedef typename qx::trait::remove_attr<P7, false>::type type_P7;
    QX_FUNCTION_CLASS_FCT(QxFunction_7);
 
+   virtual int getParamCount() const                                    { return 7; }
    virtual qx_bool isValidParams(const QString & params) const          { Q_UNUSED(params); return true; }
    virtual qx_bool isValidParams(const type_any_params & params) const  { Q_UNUSED(params); return true; }
 

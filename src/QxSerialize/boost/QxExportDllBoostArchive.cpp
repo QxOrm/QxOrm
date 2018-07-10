@@ -29,13 +29,15 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
+
 #include <QxPrecompiled.h>
 
 #if _QX_USE_EXPORT_DLL_BOOST_SERIALIZATION_SINGLETON
 
 #include <QxSerialize/QxSerialize.h>
 
-#include <QxCommon/QxStringCvt_Impl.h>
+#include <QxConvert/QxConvert_Impl.h>
 
 #include <QxMemLeak.h>
 
@@ -206,3 +208,4 @@ QX_BOOST_EXPORT_ARCHIVE_COMMON_CPP(ArchiveIn, ArchiveOut)
 #endif // _QX_SERIALIZE_WIDE_XML
 
 #endif // _QX_USE_EXPORT_DLL_BOOST_SERIALIZATION_SINGLETON
+#endif // _QX_ENABLE_BOOST_SERIALIZATION

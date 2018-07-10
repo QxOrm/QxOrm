@@ -5,6 +5,15 @@
 #pragma once
 #endif
 
+#include <QtGui/qcolor.h>
+#include <QtGui/qfont.h>
+#include <QtGui/qimage.h>
+#include <QtGui/qbrush.h>
+#include <QtGui/qmatrix.h>
+#include <QtGui/qpicture.h>
+#include <QtGui/qpixmap.h>
+#include <QtGui/qregion.h>
+
 #include "../../dll1/include/CPerson.h"
 #include "../../dll2/include/CUser.h"
 
@@ -26,7 +35,7 @@ protected:
 
    boost::tuple<QTime, QPoint, QUrl> m_oBoostTuple;
    boost::scoped_ptr<QSize> m_oBoostScopedPtr;
-   boost::shared_ptr<QObject> m_oBoostSharedPtr;
+   qx_shared_ptr<QObject> m_oBoostSharedPtr;
    boost::weak_ptr<CTestAll> m_oBoostWeakPtr;
    boost::unordered_map<long, std::string> m_oBoostUnorderedMap;
 
@@ -52,7 +61,7 @@ protected:
    QStringList m_oQStringList;
 
    QHash<long, QString> m_oQHash;
-   QMultiHash<QString, boost::shared_ptr<qx::test::CPerson> > m_oQMultiHash;
+   QMultiHash<QString, qx_shared_ptr<qx::test::CPerson> > m_oQMultiHash;
    QMap<double, std::string> m_oQMap;
    QMultiMap<std::string, QSharedPointer<CUser> > m_oQMultiMap;
    qx::QxCollection<QString, boost::tuple<long, qx::test::CPerson *> > m_oQxCollection;
@@ -60,7 +69,7 @@ protected:
    QList<float> m_oQList;
    QLinkedList<QString> m_oQLinkedList;
    QVector<CUser *> m_oQVector;
-   QSharedPointer<boost::tuple<int, std::string, boost::shared_ptr<qx::test::CPerson> > > m_oQSharedPointer;
+   QSharedPointer<boost::tuple<int, std::string, qx_shared_ptr<qx::test::CPerson> > > m_oQSharedPointer;
    QPair<QString, QPoint> m_oQPair;
 
 public:

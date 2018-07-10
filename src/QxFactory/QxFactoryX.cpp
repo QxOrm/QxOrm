@@ -72,6 +72,7 @@ void * QxFactoryX::createObjectNudePtr(const QString & sKey) const
    return (pFactory ? pFactory->createObjectNudePtr() : NULL);
 }
 
+#ifndef _QX_NO_RTTI
 const std::type_info & QxFactoryX::typeInfo(const QString & sKey) const
 {
    IxFactory * pFactory = (m_mapFactoryX.contains(sKey) ? m_mapFactoryX.value(sKey) : NULL);
@@ -79,5 +80,6 @@ const std::type_info & QxFactoryX::typeInfo(const QString & sKey) const
 
    return (pFactory ? pFactory->typeInfo() : typeid(void));
 }
+#endif // _QX_NO_RTTI
 
 } // namespace qx

@@ -49,7 +49,7 @@ struct QxSqlQueryHelper_FetchAll_WithRelation
       QString table = builder.table();
       sql = "SELECT ";
       if (pId) { sql += (pId->getSqlTablePointNameAsAlias(table) + ", "); }
-      while ((p = builder.nextData(l))) { sql += (p->getSqlTablePointNameAsAlias(table) + ", "); }
+      while ((p = builder.nextData(l))) { if (pRelationX->checkRootColumns(p->getKey())) { sql += (p->getSqlTablePointNameAsAlias(table) + ", "); } }
       if (! oSoftDelete.isEmpty()) { l++; sql += (oSoftDelete.buildSqlTablePointName() + ", "); }
       pRelationX->hierarchySelect(params);
       sql = sql.left(sql.count() - 2); // Remove last ", "
@@ -68,7 +68,7 @@ struct QxSqlQueryHelper_FetchAll_WithRelation
    {
       BOOST_STATIC_ASSERT(qx::trait::is_qx_registered<T>::value);
       if (! pRelationX) { qAssert(false); QxSqlQueryHelper_FetchAll<T>::resolveOutput(t, query, builder); return; }
-      long l(0); QVariant vId;
+      long l(0); long lCurrIndex(0); QVariant vId;
       qx::IxDataMember * p = NULL;
       qx::IxDataMember * pId = builder.getDataId();
       qx::QxSoftDelete oSoftDelete = builder.getSoftDelete();
@@ -80,11 +80,20 @@ struct QxSqlQueryHelper_FetchAll_WithRelation
       if (! bByPass)
       {
          if (pId) { for (int i = 0; i < pId->getNameCount(); i++) { pId->fromVariant((& t), query.value(i), i); } }
-         while ((p = builder.nextData(l))) { p->fromVariant((& t), query.value(l + iOffsetId - 1)); }
+         while ((p = builder.nextData(l))) { if (pRelationX->checkRootColumns(p->getKey())) { p->fromVariant((& t), query.value(lCurrIndex + iOffsetId)); lCurrIndex++; } }
          if (bComplex) { builder.insertIdX(0, vId, vId, (& t)); }
       }
 
       short iOffset = (builder.getDataCount() + iOffsetId + (oSoftDelete.isEmpty() ? 0 : 1));
+      if ((pRelationX->getRootColumnsCount() > 0) && (pRelationX->getRootColumnsOffset() > 0))
+      { iOffset = (iOffset - pRelationX->getRootColumnsOffset()); }
+      else if (pRelationX->getRootColumnsCount() > 0)
+      {
+         l = 0; p = NULL; long lRootColumnsOffset = 0;
+         while ((p = builder.nextData(l))) { if (! pRelationX->checkRootColumns(p->getKey())) { iOffset = (iOffset - 1); lRootColumnsOffset++; } }
+         pRelationX->setRootColumnsOffset(lRootColumnsOffset);
+      }
+
       qx::QxSqlRelationParams params(0, iOffset, NULL, (& builder), (& query), (& t), vId);
       pRelationX->hierarchyResolveOutput(params);
    }

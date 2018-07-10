@@ -163,6 +163,18 @@ int main(int argc, char * argv[])
    // Dump 'blog_tmp' result from database (xml serialization)
    qx::dump(blog_tmp);
 
+   // Fetch relations defining columns to fetch with syntax { col_1, col_2, etc... }
+   list_blog lstBlogComplexRelation;
+   daoError = qx::dao::fetch_all_with_relation(QStringList() << author::str_composite_key() + " { name, birthdate }" << comment::str_composite_key() + " { comment_text } -> " + blog::str_composite_key() + " -> *", lstBlogComplexRelation);
+   qx::dump(lstBlogComplexRelation);
+   qAssert(lstBlogComplexRelation.size() > 0);
+   qAssert(lstBlogComplexRelation[0]->m_author->m_sex == author::unknown); // Not fetched
+   qAssert(lstBlogComplexRelation[0]->m_author->m_name != ""); // Fetched
+   qAssert(lstBlogComplexRelation[0]->m_commentX.size() > 0);
+   qAssert(lstBlogComplexRelation[0]->m_commentX[0]->m_dt_create.isNull()); // Not fetched
+   qAssert(lstBlogComplexRelation[0]->m_commentX[0]->m_text != ""); // Fetched
+   qAssert(lstBlogComplexRelation[0]->m_commentX[0]->m_blog);
+
    // Call 'age()' method with class name and method name (reflexion)
    qx_bool bInvokeOk = qx::QxClassX::invoke("author", "age", author_1);
    qAssert(bInvokeOk);

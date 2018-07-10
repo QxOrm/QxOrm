@@ -61,7 +61,7 @@ class QxPropertyBag
 protected:
 
    typedef QHash<QString, QVariant> type_hash_prop_bag;
-   typedef boost::shared_ptr<type_hash_prop_bag> type_hash_prop_bag_ptr;
+   typedef qx_shared_ptr<type_hash_prop_bag> type_hash_prop_bag_ptr;
 
    type_hash_prop_bag_ptr m_lstPropertyBag;  //!< List of all properties in the bag (meta-data)
 

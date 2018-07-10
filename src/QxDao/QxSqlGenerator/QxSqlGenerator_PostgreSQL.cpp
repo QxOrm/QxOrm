@@ -81,7 +81,7 @@ void QxSqlGenerator_PostgreSQL::initSqlTypeByClassName() const
    if (! lstSqlType) { qAssert(false); return; }
 
    lstSqlType->insert("bool", "BOOLEAN");
-   lstSqlType->insert("qx_bool", "BOOLEAN");
+   lstSqlType->insert("qx_bool", "TEXT");
    lstSqlType->insert("short", "SMALLINT");
    lstSqlType->insert("int", "INTEGER");
    lstSqlType->insert("long", "INTEGER");

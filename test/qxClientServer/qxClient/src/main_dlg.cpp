@@ -43,7 +43,11 @@ void main_dlg::init()
 void main_dlg::updateLastTransactionLog(qx::service::QxTransaction_ptr transaction)
 {
    if (! transaction) { txtTransaction->setPlainText(""); return; }
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION_XML
    QString text = qx::serialization::xml::to_string(* transaction);
+#else // _QX_ENABLE_BOOST_SERIALIZATION_XML
+   QString text = transaction->getInfos();
+#endif // _QX_ENABLE_BOOST_SERIALIZATION_XML
    txtTransaction->setPlainText(text.replace("\t", "    "));
    qx_bool bMsgReturn = transaction->getMessageReturn();
    if (! bMsgReturn.getValue() && ! bMsgReturn.getDesc().isEmpty())

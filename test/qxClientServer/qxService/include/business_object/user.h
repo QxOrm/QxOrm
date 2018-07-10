@@ -16,8 +16,8 @@ public:
 
 QX_REGISTER_HPP_QX_SERVICE(user, qx::trait::no_base_class_defined, 0)
 
-typedef boost::shared_ptr<user> user_ptr;
+typedef qx_shared_ptr<user> user_ptr;
 typedef qx::QxCollection<long, user_ptr> list_of_users;
-typedef boost::shared_ptr<list_of_users> list_of_users_ptr;
+typedef qx_shared_ptr<list_of_users> list_of_users_ptr;
 
 #endif // _QX_SERVICE_BO_USER_H_

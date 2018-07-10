@@ -29,6 +29,7 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #ifndef _QX_SERIALIZE_INCLUDE_H_
 #define _QX_SERIALIZE_INCLUDE_H_
 
@@ -191,3 +192,4 @@
 #endif // QX_CLONE_STRING_STREAM
 
 #endif // _QX_SERIALIZE_INCLUDE_H_
+#endif // _QX_ENABLE_BOOST_SERIALIZATION

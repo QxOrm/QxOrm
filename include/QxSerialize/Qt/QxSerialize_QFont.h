@@ -29,7 +29,8 @@
 **
 ****************************************************************************/
 
-#if _QX_ENABLE_QT_GUI_DEPENDENCY
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
+#ifdef _QX_ENABLE_QT_GUI
 #ifndef _QX_SERIALIZE_QFONT_H_
 #define _QX_SERIALIZE_QFONT_H_
 
@@ -52,4 +53,5 @@ BOOST_CLASS_VERSION(QFont, 0)
 QX_SERIALIZE_FAST_COMPIL_SAVE_LOAD_HPP(QX_DLL_EXPORT, QFont)
 
 #endif // _QX_SERIALIZE_QFONT_H_
-#endif // _QX_ENABLE_QT_GUI_DEPENDENCY
+#endif // _QX_ENABLE_QT_GUI
+#endif // _QX_ENABLE_BOOST_SERIALIZATION

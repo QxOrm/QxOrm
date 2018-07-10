@@ -1,5 +1,9 @@
 include(../../../QxOrm.pri)
 
+!contains(DEFINES, _QX_ENABLE_QT_NETWORK) {
+error(unable to use QxOrm QxService module : please define _QX_ENABLE_QT_NETWORK compilation option in QxOrm.pri configuration file)
+} # !contains(DEFINES, _QX_ENABLE_QT_NETWORK)
+
 TEMPLATE = lib
 CONFIG += dll
 DEFINES += _BUILDING_QX_SERVICE

@@ -47,10 +47,14 @@
 #include <boost/tuple/tuple_comparison.hpp>
 #include <boost/tuple/tuple_io.hpp>
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/split_free.hpp>
 #include <boost/serialization/version.hpp>
 #include <boost/serialization/nvp.hpp>
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
+
+#include <QtCore/qdatastream.h>
 
 #include <QtSql/qsqlquery.h>
 
@@ -63,11 +67,10 @@
 #include <QxTraits/get_class_name.h>
 
 namespace qx {
-
 class QxSqlQuery;
-
 } // namespace qx
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 namespace boost {
 namespace serialization {
 
@@ -76,6 +79,10 @@ template <class Archive> inline void qx_load(Archive & ar, qx::QxSqlQuery & t, c
 
 } // namespace serialization
 } // namespace boost
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
+
+QX_DLL_EXPORT QDataStream & operator<< (QDataStream & stream, const qx::QxSqlQuery & t) BOOST_USED;
+QX_DLL_EXPORT QDataStream & operator>> (QDataStream & stream, qx::QxSqlQuery & t) BOOST_USED;
 
 namespace qx {
 
@@ -214,8 +221,13 @@ query.dumpSqlResult();
 class QX_DLL_EXPORT QxSqlQuery
 {
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
    template <class Archive> friend inline void boost::serialization::qx_save(Archive & ar, const qx::QxSqlQuery & t, const unsigned int file_version);
    template <class Archive> friend inline void boost::serialization::qx_load(Archive & ar, qx::QxSqlQuery & t, const unsigned int file_version);
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
+
+   friend QDataStream & ::operator<< (QDataStream & stream, const qx::QxSqlQuery & t);
+   friend QDataStream & ::operator>> (QDataStream & stream, qx::QxSqlQuery & t);
 
 protected:
 
@@ -231,7 +243,7 @@ protected:
    int                                       m_iSqlElementIndex;     //!< Current index of SQL element
    int                                       m_iParenthesisCount;    //!< Current parenthesis count
    bool                                      m_bDistinct;            //!< Replace SELECT by SELECT DISTINCT in SQL query
-   boost::shared_ptr<QxSqlResult>            m_pSqlResult;           //!< All results returning by SQL query or stored procedure (after calling qx::dao::call_query function)
+   qx_shared_ptr<QxSqlResult>                m_pSqlResult;           //!< All results returning by SQL query or stored procedure (after calling qx::dao::call_query function)
 
 public:
 
@@ -336,6 +348,7 @@ public:
    virtual QxSqlQuery & isGreaterThanOrEqualTo(const QVariant & val);
    virtual QxSqlQuery & isLessThan(const QVariant & val);
    virtual QxSqlQuery & isLessThanOrEqualTo(const QVariant & val);
+   virtual QxSqlQuery & customOperator(const QString & sCustomOperator, const QVariant & val);
 
    virtual QxSqlQuery & in(const QVariantList & values);
    virtual QxSqlQuery & in(const QVariant & val1);
@@ -373,7 +386,7 @@ public:
 private:
 
    QxSqlQuery & addSqlExpression(const QString & column, qx::dao::detail::QxSqlExpression::type type);
-   QxSqlQuery & addSqlCompare(const QVariant & val, qx::dao::detail::QxSqlCompare::type type);
+   QxSqlQuery & addSqlCompare(const QVariant & val, qx::dao::detail::QxSqlCompare::type type, const QString & sCustomOperator = QString());
    QxSqlQuery & addSqlSort(const QStringList & columns, qx::dao::detail::QxSqlSort::type type);
    QxSqlQuery & addSqlIn(const QVariantList & values, qx::dao::detail::QxSqlIn::type type);
    QxSqlQuery & addSqlIsNull(qx::dao::detail::QxSqlIsNull::type type);
@@ -420,7 +433,9 @@ QX_REGISTER_CLASS_NAME(qx_query)
 
 BOOST_CLASS_VERSION(qx::QxSqlQuery, 0)
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 QX_SERIALIZE_FAST_COMPIL_SAVE_LOAD_HPP(QX_DLL_EXPORT, qx::QxSqlQuery)
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
 #define QX_SQL_QUERY_DERIVED_IMPL_COVARIANT_RETURN_TYPE_HPP(className) \
 public: \
@@ -484,6 +499,7 @@ virtual className & isGreaterThan(const QVariant & val); \
 virtual className & isGreaterThanOrEqualTo(const QVariant & val); \
 virtual className & isLessThan(const QVariant & val); \
 virtual className & isLessThanOrEqualTo(const QVariant & val); \
+virtual className & customOperator(const QString & sCustomOperator, const QVariant & val); \
 \
 virtual className & in(const QVariantList & values); \
 virtual className & in(const QVariant & val1); \
@@ -579,6 +595,7 @@ className & className::isGreaterThan(const QVariant & val) { return static_cast<
 className & className::isGreaterThanOrEqualTo(const QVariant & val) { return static_cast<className &>(qx::QxSqlQuery::isGreaterThanOrEqualTo(val)); } \
 className & className::isLessThan(const QVariant & val) { return static_cast<className &>(qx::QxSqlQuery::isLessThan(val)); } \
 className & className::isLessThanOrEqualTo(const QVariant & val) { return static_cast<className &>(qx::QxSqlQuery::isLessThanOrEqualTo(val)); } \
+className & className::customOperator(const QString & sCustomOperator, const QVariant & val) { return static_cast<className &>(qx::QxSqlQuery::customOperator(sCustomOperator, val)); } \
 \
 className & className::in(const QVariantList & values) { return static_cast<className &>(qx::QxSqlQuery::in(values)); } \
 className & className::in(const QVariant & val1) { return static_cast<className &>(qx::QxSqlQuery::in(val1)); } \

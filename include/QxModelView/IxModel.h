@@ -168,7 +168,7 @@ protected:
    QHash<int, QByteArray> m_lstRoleNames;          //!< List of model's role names to expose data to QML
    QList<IxDataMember *> m_lstDataMember;          //!< List of data member exposed by the model
    QHash<QString, int> m_lstDataMemberByKey;       //!< List of data member key to get column index in model
-   QHash<QString, QString> m_lstHeaders;           //!< List of headers titles to override default data member key value
+   QHash<QString, QVariant> m_lstHeadersData;      //!< List of headers data by role and data member key
    QStringList m_lstColumns;                       //!< List of columns exposed by the model (if empty, all columns)
    QSqlDatabase m_database;                        //!< Database connexion to execute SQL queries (if empty, default database connexion)
    QSqlError m_lastError;                          //!< Last SQL error
@@ -187,7 +187,7 @@ public:
    QSqlError getLastError() const;
    Q_INVOKABLE QString getLastErrorAsString() const;
    Q_INVOKABLE QStringList getListOfColumns() const;
-   QHash<QString, QString> getListOfHeaders() const;
+   QHash<QString, QString> getListOfHeaders() const; //!< Obsolete : use headerData() instead
    IxDataMember * getDataMember(int column) const;
    Q_INVOKABLE QString getDataMemberKey(int column) const;
    Q_INVOKABLE QVariant getModelValue(int row, const QString & column) const;
@@ -197,7 +197,7 @@ public:
 
    void setDatabase(const QSqlDatabase & db);
    Q_INVOKABLE void setListOfColumns(const QStringList & lst);
-   void setListOfHeaders(const QHash<QString, QString> & lst);
+   void setListOfHeaders(const QHash<QString, QString> & lst); //!< Obsolete : use setHeaderData() instead
    Q_INVOKABLE bool setModelValue(int row, const QString & column, const QVariant & value);
    void setParentModel(IxModel * pParent);
    Q_INVOKABLE void setAutoUpdateDatabase_(int i);
@@ -279,6 +279,7 @@ public:
    virtual Qt::DropActions supportedDropActions() const;
    virtual bool removeRows(int row, int count, const QModelIndex & parent = QModelIndex());
    virtual bool setHeaderData(int section, Qt::Orientation orientation, const QVariant & value, int role = Qt::EditRole);
+   bool setHeaderData(const QString & sColumnName, const QVariant & value, int role = Qt::EditRole);
 
 #if (QT_VERSION >= 0x050000)
    virtual QHash<int, QByteArray> roleNames() const;

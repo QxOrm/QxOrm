@@ -59,6 +59,7 @@
  */
 /*****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #if _QX_SERIALIZE_PORTABLE_BINARY
 #ifndef _QX_PORTABLE_BINARY_OARCHIVE_H_
 #define _QX_PORTABLE_BINARY_OARCHIVE_H_
@@ -326,4 +327,5 @@ namespace boost { namespace archive {
 #endif // _MSC_VER
 
 #endif // _QX_PORTABLE_BINARY_OARCHIVE_H_
-#endif //_QX_SERIALIZE_PORTABLE_BINARY
+#endif // _QX_SERIALIZE_PORTABLE_BINARY
+#endif // _QX_ENABLE_BOOST_SERIALIZATION

@@ -4,14 +4,17 @@
   <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
   <title>QxOrm : C++ Qt ORM Object Relational Mapping database library - QxEntityEditor : C++ Qt entities graphic editor (data model designer and source code generator)</title>
   <link rel='stylesheet' type='text/css' href='./resource/qxorm_style.css'>
+  <script type="text/javascript" src="./resource/jquery.min.js"></script>
   <script type="text/javascript" src="./resource/qxorm_script.js"></script>
 </head>
 <body>
 <table border="0" style="width: 80%" align="center">
-  <col><col><col>
+  <col><col><col><col><col>
   <tbody>
     <tr>
       <td><a href="./home.html"><img alt="QxOrm" src="./resource/logo_qxorm_and_qxee.png"align="left" border="0"></a></td>
+      <td align="right" style="vertical-align:bottom"><div id="qx_search"><gcse:search></gcse:search></div></td>
+      <td width="15"></td>
       <td align="right" style="vertical-align:bottom">
         <img alt="Windows" src="./resource/logo_windows.gif" width="35" height="35">
         <img alt="Linux" src="./resource/logo_linux.gif" width="35" height="35">
@@ -40,7 +43,15 @@
             </div>
          </td></tr></tbody></table>
       </td>
-      <td align="center"><a href="./faq.html" class="btn_nav">Faq (36)</a></td>
+      <td align="center" onmouseover="showHideElementById('menu_manual', true);" onmouseout="showHideElementById('menu_manual', false);">
+         <a href="./manual.html" class="btn_nav">Manuel (2)</a>
+         <table class="table_menu_manual"><tbody><tr><td>
+            <div id="menu_manual" class="div_menu_manual">
+               <a href="./manual.html" class="btn_sub_menu">Manuel QxOrm</a><br/>
+               <a href="./manual_qxee.html" class="btn_sub_menu">Manuel QxEntityEditor</a><br/>
+            </div>
+         </td></tr></tbody></table>
+      </td>
       <td align="center"><a href="./link.html" class="btn_nav">Forum</a></td>
       <td align="center"><a href="./customer.html" class="btn_nav">Nos clients</a></td>
     </tr>
@@ -55,7 +66,7 @@
     <table cellspacing="0" cellpadding="1"><col><col><tbody>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow">Version courante :&nbsp;</font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.3.2 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.1 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
       </tr>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow"></font></td>
@@ -82,8 +93,8 @@
          <tbody>
             <!--
             <tr>
-               <td width="500px" align="center">
-                  <a href="http://www.irobot.com/" target="_blank"><img src="http://www.irobot.com/~/media/EU%20Sites/logo.png" alt="iRobot Corporation" border="0px" /></a>
+               <td width="400px" align="center">
+                  <a href="http://www.irobot.com/" target="_blank"><img class="logo_customer" src="http://www.irobot.com/~/media/EU%20Sites/logo.png" alt="iRobot Corporation" /></a>
                </td>
                <td>
                   <b><a href="http://www.irobot.com/" target="_blank">iRobot Corporation</a> :</b><br/>
@@ -95,8 +106,8 @@
             </tr>
             -->
             <tr>
-               <td width="500px" align="center">
-                  <a href="http://www.agcocorp.com/" target="_blank"><img src="http://www.agcocorp.com/etc/designs/agcocorp/img/logo.png" alt="AGCO" border="0px" /></a>
+               <td width="400px" align="center">
+                  <a href="http://www.agcocorp.com/" target="_blank"><img class="logo_customer" src="http://www.agcocorp.com/etc/designs/agcocorp/img/logo.png" alt="AGCO" /></a>
                </td>
                <td>
                   <b><a href="http://www.agcocorp.com/" target="_blank">AGCO</a> :</b><br/>
@@ -106,8 +117,8 @@
                </td>
             </tr>
             <tr>
-               <td width="500px" align="center">
-                  <a href="http://www.ensco.com/" target="_blank"><img src="http://www.ensco.com/IMAGES/ENSCO/v3/ENSCOLogo.gif" alt="ENSCO" border="0px" /></a>
+               <td width="400px" align="center">
+                  <a href="http://www.ensco.com/" target="_blank"><img class="logo_customer" src="http://www.ensco.com/IMAGES/ENSCO/v3/ENSCOLogo.gif" alt="ENSCO" /></a>
                </td>
                <td>
                   <b><a href="http://www.ensco.com/" target="_blank">ENSCO</a> :</b><br/>
@@ -117,8 +128,8 @@
                </td>
             </tr>
             <tr>
-               <td width="500px" align="center">
-                  <a href="http://www.smithsdetection.com/" target="_blank"><img src="http://www.smithsdetection.com/templates/blank/images/logo.png" alt="Smiths Detection" border="0px" /></a>
+               <td width="400px" align="center">
+                  <a href="http://www.smithsdetection.com/" target="_blank"><img class="logo_customer" src="http://www.smithsdetection.com/templates/blank/images/logo.png" alt="Smiths Detection" /></a>
                </td>
                <td>
                   <b><a href="http://www.smithsdetection.com/" target="_blank">Smiths Detection</a> :</b><br/>
@@ -129,19 +140,24 @@
                </td>
             </tr>
             <tr>
-               <td width="500px" align="center">
-                  <a href="http://intermountainhealthcare.org" target="_blank"><img src="http://intermountainhealthcare.org/images/root/ui/logos/ih-logo-194x33.png" alt="Intermountain Healthcare" border="0px" /></a>
+               <td width="400px" align="center">
+                  <a href="http://www.veranmedical.com/" target="_blank"><img class="logo_customer" src="http://www.veranmedical.com/images/logo-veran-medical-technologies.png" alt="Veran Medical" /></a>
                </td>
                <td>
-                  <b><a href="http://intermountainhealthcare.org" target="_blank">Intermountain Healthcare</a> :</b><br/>
-                  Intermountain Health Care, Inc., officially doing business as Intermountain Healthcare, is a non-profit healthcare system and is the largest healthcare provider in the Intermountain West. Until 2005 it was known as Intermountain Health Care or more commonly IHC; it is now often referred to as simply Intermountain for short. Intermountain Healthcare provides hospital and other medical services in Utah and Idaho and also offers integrated managed care under the insurance brand SelectHealth. Intermountain Healthcare is headquartered in Salt Lake City, Utah, and (as of 2014) employed over 33,000 people.
-                  <br/><a href="http://en.wikipedia.org/wiki/Intermountain_Healthcare" target="_blank"><font size="2"><i>[Description based on Wikipedia webpage]</i></font></a>
+                  <b><a href="http://www.veranmedical.com/" target="_blank">Veran Medical</a> :</b><br/>
+                  Veran Medical Technologies is focused on comprehensive oncology program.
+                  Veran's technology is defining the new standard in early definitive diagnosis of cancer, providing your hospital with a comprehensive navigation solution.
+                  Established in 2005, Veran Medical Technologies is a privately held soft tissue navigation company focused on the early diagnosis of cancer.
+                  <br/>
+                  Veran's mission is to extend life through earlier diagnosis and the delivery of minimally invasive therapies for interventional oncology procedures with unique navigation technologies.
+                  <br/>
+                  Veran is dedicated to increasing patient survival while providing cost effective healthcare solutions that defined the next standard of care.
                   <br/><br/>
                </td>
             </tr>
             <tr>
-               <td width="500px" align="center">
-                  <a href="http://www.altran-ais.com.br" target="_blank"><img src="http://www.altran.fr/fileadmin/templates/main/media/logo/logo_altran.png" alt="Altran AIS" border="0px" width="100px" /></a>
+               <td width="400px" align="center">
+                  <a href="http://www.altran-ais.com.br" target="_blank"><img class="logo_customer" src="http://www.altran.fr/fileadmin/templates/main/media/logo/logo_altran.png" alt="Altran AIS" /></a>
                </td>
                <td>
                   <b><a href="http://www.altran-ais.com.br" target="_blank">Altran AIS</a> :</b><br/>
@@ -151,8 +167,19 @@
                </td>
             </tr>
             <tr>
-               <td width="500px" align="center">
-                  <a href="http://www.gsi-electronics.com/" target="_blank"><img src="http://www.gsi-electronics.com/images/GSI Electronics.png" alt="GSI Electronics Inc." border="0px" /></a>
+               <td width="400px" align="center">
+                  <a href="http://intermountainhealthcare.org" target="_blank"><img class="logo_customer" src="https://upload.wikimedia.org/wikipedia/en/thumb/e/e9/Intermountain_Healthcare_2005_logo.svg/1280px-Intermountain_Healthcare_2005_logo.svg.png" alt="Intermountain Healthcare" /></a>
+               </td>
+               <td>
+                  <b><a href="http://intermountainhealthcare.org" target="_blank">Intermountain Healthcare</a> :</b><br/>
+                  Intermountain Health Care, Inc., officially doing business as Intermountain Healthcare, is a non-profit healthcare system and is the largest healthcare provider in the Intermountain West. Until 2005 it was known as Intermountain Health Care or more commonly IHC; it is now often referred to as simply Intermountain for short. Intermountain Healthcare provides hospital and other medical services in Utah and Idaho and also offers integrated managed care under the insurance brand SelectHealth. Intermountain Healthcare is headquartered in Salt Lake City, Utah, and (as of 2014) employed over 33,000 people.
+                  <br/><a href="http://en.wikipedia.org/wiki/Intermountain_Healthcare" target="_blank"><font size="2"><i>[Description based on Wikipedia webpage]</i></font></a>
+                  <br/><br/>
+               </td>
+            </tr>
+            <tr>
+               <td width="400px" align="center">
+                  <a href="http://www.gsi-electronics.com/" target="_blank"><img class="logo_customer" src="http://www.gsi-electronics.com/images/GSI Electronics.png" alt="GSI Electronics Inc." /></a>
                </td>
                <td>
                   <b><a href="http://www.gsi-electronics.com/" target="_blank">GSI Electronics Inc.</a> :</b><br/>
@@ -161,8 +188,8 @@
                </td>
             </tr>
             <tr>
-               <td width="500px" align="center">
-                  <a href="http://www.sagemcom.com/" target="_blank"><img src="http://www.sagemcom.com/fileadmin/private/custom-theme/images/sagemcom-logo.png" alt="Sagemcom" border="0px" /></a>
+               <td width="400px" align="center">
+                  <a href="http://www.sagemcom.com/" target="_blank"><img class="logo_customer" src="http://www.sagemcom.com/fileadmin/private/custom-theme/images/sagemcom-logo.png" alt="Sagemcom" /></a>
                </td>
                <td>
                   <b><a href="http://www.sagemcom.com/" target="_blank">Sagemcom</a> :</b><br/>
@@ -170,9 +197,25 @@
                   <br/><br/>
                </td>
             </tr>
+            <!--
             <tr>
-               <td width="500px" align="center">
-                  <a href="http://www.motius.de/" target="_blank"><img src="https://www.motius.de/static/images/logo-square.png" alt="Motius" border="0px" width="100px" /></a>
+               <td width="400px" align="center">
+                  <a href="http://www.bytechplanet.com/" target="_blank"><img class="logo_customer" src="http://www.bytechplanet.com/images-web/by-logo-home@2x.png" alt="By Techdesign S.L." style="width:100px;" /></a>
+               </td>
+               <td>
+                  <b><a href="http://www.bytechplanet.com/" target="_blank">By Techdesign S.L.</a> :</b><br/>
+                  By Techdesign S.L. is a company with 100% Spanish capital specialized in researching, designing and manufacturing high-end products for Security and Access Control.
+                  By Techdesign S.L. experience is credited with more than 30 years doing this work in order to achieve excellence in innovation.
+                  <br/>
+                  The innovation of By solutions is the result of the talent and experience of the professionals that make up the team.
+                  By believes in the value of people, in the creativity of the young and the experience of the elderly, all of them provide the added value needed to turn By a leading company in the development of innovative high-tech solutions for security, being one of the largest ICT firms in the country.
+                  <br/><br/>
+               </td>
+            </tr>
+            -->
+            <tr>
+               <td width="400px" align="center">
+                  <a href="http://www.motius.de/" target="_blank"><img class="logo_customer" src="https://www.motius.de/static/images/logo-square.png" alt="Motius" style="width:100px;" /></a>
                </td>
                <td>
                   <b><a href="http://www.motius.de/" target="_blank">Motius</a> :</b><br/>
@@ -181,8 +224,8 @@
                </td>
             </tr>
             <tr>
-               <td width="500px" align="center">
-                  <a href="http://www.gsvitec.com/" target="_blank"><img src="http://www.gsvitec.com/GSVitec/EN_Ueber_uns_2_files/gsvitec_logo_%20weiss_frei.png" alt="GSVitec" border="0px" /></a>
+               <td width="400px" align="center">
+                  <a href="http://www.gsvitec.com/" target="_blank"><img class="logo_customer" src="http://www.gsvitec.com/GSVitec/EN_Ueber_uns_2_files/gsvitec_logo_%20weiss_frei.png" alt="GSVitec" style="background-color:grey;" /></a>
                </td>
                <td>
                   <b><a href="http://www.gsvitec.com/" target="_blank">GSVitec</a> :</b><br/>
@@ -193,8 +236,33 @@
                </td>
             </tr>
             <tr>
-               <td width="500px" align="center">
-                  <a href="http://www.nauchpribor.ru/" target="_blank"><img src="http://www.nauchpribor.ru/images/top_02.jpg" alt="NauchPribor" border="0px" /></a>
+               <td width="400px" align="center">
+                  <a href="http://promenadesoftware.com/" target="_blank"><img class="logo_customer" src="http://uploads.webflow.com/557d0c4ae62c1b7951b5d7ce/557d15ebe62c1b7951b5d88d_logo.png" alt="Promenade Software" /></a>
+               </td>
+               <td>
+                  <b><a href="http://promenadesoftware.com/" target="_blank">Promenade Software</a> :</b><br/>
+                  Promenade Software is a company comprised of highly skilled, experienced software engineers.
+                  Whether it is for a medical device, avionics test system, or other sensitive system, Promenade Software knows that their work is critical.
+                  Critical to your company, your customer, and everyone involved. Promenade Software has the skills and ready-made tools to deliver your product reliably and efficiently.
+                  <br/>
+                  Unlike other software service providers, Promenade Software took the time to create the ready-made libraries and test tools that increase your system's quality, while saving you money and development time.
+                  <br/><br/>
+               </td>
+            </tr>
+            <tr>
+               <td width="400px" align="center">
+                  <a href="http://www.ivembh.de/index.php/home-en" target="_blank"><img class="logo_customer" src="http://www.iaf-messe.com/tl_files/pictures/firmenlogos/i/ive_logo.jpg" alt="IVE mbH" style="width:150px;" /></a>
+               </td>
+               <td>
+                  <b><a href="http://www.ivembh.de/index.php/home-en" target="_blank">IVE mbH</a> :</b><br/>
+                  Since founding IVE mbH, Consulting Company for Traffic and Railway Engineering Ltd., in 1998 IVE proficiently supports clients from the development of first ideas to the final realisation and the practical use of projects.
+                  Based on transport and railway expertise, IVE mbH derives concepts and future-oriented sustainable solutions responding to the problems of clients, strengthening their position and preparing them for the global competition.
+                  <br/><br/>
+               </td>
+            </tr>
+            <tr>
+               <td width="400px" align="center">
+                  <a href="http://www.nauchpribor.ru/" target="_blank"><img class="logo_customer" src="http://www.nauchpribor.ru/images/top_02.jpg" alt="NauchPribor" style="width:100px;" /></a>
                </td>
                <td>
                   <b><a href="http://www.nauchpribor.ru/" target="_blank">NauchPribor</a> :</b><br/>
@@ -205,8 +273,8 @@
                </td>
             </tr>
             <tr>
-               <td width="500px" align="center">
-                  <a href="http://www.tang.nu/" target="_blank"><img src="http://www.tang.nu/images/tang/logo64x64.png" alt="Tang" border="0px" /><img src="http://www.tang.nu/images/tang/title.png" alt="Tang" border="0px" /></a>
+               <td width="400px" align="center">
+                  <a href="http://www.tang.nu/" target="_blank"><img class="logo_customer" src="http://www.vetnet.nu/wp-content/uploads/2015/04/tanglogo.png" alt="Tang" /></a>
                </td>
                <td>
                   <b><a href="http://www.tang.nu/" target="_blank">Tang</a> :</b><br/>

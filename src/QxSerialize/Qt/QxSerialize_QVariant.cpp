@@ -29,6 +29,8 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
+
 #include <QxPrecompiled.h>
 
 #include <QxSerialize/Qt/QxSerialize_QVariant.h>
@@ -80,7 +82,7 @@ inline void qx_save(Archive & ar, const QVariant & t, const unsigned int file_ve
    { QRegExp qregexp; qregexp = t.toRegExp(); ar << boost::serialization::make_nvp(sTag, qregexp); }
    else if (iType == QVariant::Url)
    { QUrl qurl; qurl = t.toUrl(); ar << boost::serialization::make_nvp(sTag, qurl); }
-#if _QX_ENABLE_QT_GUI_DEPENDENCY
+#ifdef _QX_ENABLE_QT_GUI
    else if (iType == QVariant::Brush)
    { QBrush qbrush; qbrush = t.value<QBrush>(); ar << boost::serialization::make_nvp(sTag, qbrush); } /* if you crash on this line, please check in your main() function if you have created a QApplication and not a QCoreApplication ! */
    else if (iType == QVariant::Color)
@@ -93,7 +95,7 @@ inline void qx_save(Archive & ar, const QVariant & t, const unsigned int file_ve
    { QPixmap qpixmap; qpixmap = t.value<QPixmap>(); ar << boost::serialization::make_nvp(sTag, qpixmap); } /* if you crash on this line, please check in your main() function if you have created a QApplication and not a QCoreApplication ! */
    else if (iType == QVariant::Region)
    { QRegion qregion; qregion = t.value<QRegion>(); ar << boost::serialization::make_nvp(sTag, qregion); } /* if you crash on this line, please check in your main() function if you have created a QApplication and not a QCoreApplication ! */
-#endif // _QX_ENABLE_QT_GUI_DEPENDENCY
+#endif // _QX_ENABLE_QT_GUI
    else if (iType == QVariant::Invalid)
    { QString sInvalid; ar << boost::serialization::make_nvp(sTag, sInvalid); }
    else
@@ -146,7 +148,7 @@ inline void qx_load(Archive & ar, QVariant & t, const unsigned int file_version)
    { QRegExp qregexp; ar >> boost::serialization::make_nvp(sTag, qregexp); t = QVariant(qregexp); }
    else if (iType == QVariant::Url)
    { QUrl qurl; ar >> boost::serialization::make_nvp(sTag, qurl); t = QVariant(qurl); }
-#if _QX_ENABLE_QT_GUI_DEPENDENCY
+#ifdef _QX_ENABLE_QT_GUI
    else if (iType == QVariant::Brush)
    { QBrush qbrush; ar >> boost::serialization::make_nvp(sTag, qbrush); t = qbrush; } /* if you crash on this line, please check in your main() function if you have created a QApplication and not a QCoreApplication ! */
    else if (iType == QVariant::Color)
@@ -159,7 +161,7 @@ inline void qx_load(Archive & ar, QVariant & t, const unsigned int file_version)
    { QPixmap qpixmap; ar >> boost::serialization::make_nvp(sTag, qpixmap); t = qpixmap; } /* if you crash on this line, please check in your main() function if you have created a QApplication and not a QCoreApplication ! */
    else if (iType == QVariant::Region)
    { QRegion qregion; ar >> boost::serialization::make_nvp(sTag, qregion); t = qregion; } /* if you crash on this line, please check in your main() function if you have created a QApplication and not a QCoreApplication ! */
-#endif // _QX_ENABLE_QT_GUI_DEPENDENCY
+#endif // _QX_ENABLE_QT_GUI
    else if (iType == QVariant::Invalid)
    { QString sInvalid; ar >> boost::serialization::make_nvp(sTag, sInvalid); t = QVariant(); }
    else
@@ -177,3 +179,5 @@ inline void qx_load(Archive & ar, QVariant & t, const unsigned int file_version)
 } // namespace boost
 
 QX_SERIALIZE_FAST_COMPIL_SAVE_LOAD_CPP(QVariant)
+
+#endif // _QX_ENABLE_BOOST_SERIALIZATION

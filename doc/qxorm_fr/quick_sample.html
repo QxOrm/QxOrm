@@ -4,14 +4,17 @@
   <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
   <title>QxOrm : C++ Qt ORM Object Relational Mapping database library - QxEntityEditor : C++ Qt entities graphic editor (data model designer and source code generator)</title>
   <link rel='stylesheet' type='text/css' href='./resource/qxorm_style.css'>
+  <script type="text/javascript" src="./resource/jquery.min.js"></script>
   <script type="text/javascript" src="./resource/qxorm_script.js"></script>
 </head>
 <body>
 <table border="0" style="width: 80%" align="center">
-  <col><col><col>
+  <col><col><col><col><col>
   <tbody>
     <tr>
       <td><a href="./home.html"><img alt="QxOrm" src="./resource/logo_qxorm_and_qxee.png"align="left" border="0"></a></td>
+      <td align="right" style="vertical-align:bottom"><div id="qx_search"><gcse:search></gcse:search></div></td>
+      <td width="15"></td>
       <td align="right" style="vertical-align:bottom">
         <img alt="Windows" src="./resource/logo_windows.gif" width="35" height="35">
         <img alt="Linux" src="./resource/logo_linux.gif" width="35" height="35">
@@ -40,7 +43,15 @@
             </div>
          </td></tr></tbody></table>
       </td>
-      <td align="center"><a href="./faq.html" class="btn_nav">Faq (36)</a></td>
+      <td align="center" onmouseover="showHideElementById('menu_manual', true);" onmouseout="showHideElementById('menu_manual', false);">
+         <a href="./manual.html" class="btn_nav">Manuel (2)</a>
+         <table class="table_menu_manual"><tbody><tr><td>
+            <div id="menu_manual" class="div_menu_manual">
+               <a href="./manual.html" class="btn_sub_menu">Manuel QxOrm</a><br/>
+               <a href="./manual_qxee.html" class="btn_sub_menu">Manuel QxEntityEditor</a><br/>
+            </div>
+         </td></tr></tbody></table>
+      </td>
       <td align="center"><a href="./link.html" class="btn_nav">Forum</a></td>
       <td align="center"><a href="./customer.html" class="btn_nav">Nos clients</a></td>
     </tr>
@@ -55,7 +66,7 @@
     <table cellspacing="0" cellpadding="1"><col><col><tbody>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow">Version courante :&nbsp;</font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.3.2 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.1 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
       </tr>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow"></font></td>
@@ -85,9 +96,9 @@
                  <i>Remarque :</i> la bibliothèque <b>QxOrm</b> utilise les <b>conventions d'écriture de code C++</b> suivantes :
                  <ul><li>toutes les classes, fonctions, variables, etc... sont définies sous le <a href="./resource/qxorm.namespace.qx.jpg"><i>namespace qx</i></a>
                  </li><li>les macro de QxOrm sont écrites sous la forme <i>QX_...</i>
-                 </li><li>les classes abstraites (ou interfaces) commencent par <i>Ix</i> (par exemple <i>IxFactory</i> est une interface pour la création d'instances)
-                 </li><li>les autres classes commencent par <i>Qx</i> (par exemple <i>QxDataMember</i>)
-                 </li><li>les collections d'objets se terminent par <i>X</i> (par exemple <i>QxDataMemberX</i> est une collection de <i>QxDataMember</i>)
+                 </li><li>les classes abstraites (ou interfaces) sont préfixées par <i>Ix</i> (par exemple <i>IxFactory</i> est une interface pour la création d'instances)
+                 </li><li>les autres classes sont préfixées par <i>Qx</i> (par exemple <i>QxDataMember</i>)
+                 </li><li>les collections d'objets ont pour suffixe <i>X</i> (par exemple <i>QxDataMemberX</i> est une collection de <i>QxDataMember</i>)
                  </li><li>les fonctions pour communiquer avec les bases de données se trouvent sous le <a href="./resource/qxorm.namespace.qx.dao.jpg"><i>namespace qx::dao</i></a> (par exemple <i>qx::dao::fetch_by_id()</i>)
                  </li><li>les fonctions pour la <i>serialization</i> des données se trouvent sous le <a href="./resource/qxorm.namespace.qx.serialization.jpg"><i>namespace qx::serialization</i></a> (par exemple <i>qx::serialization::xml::to_file()</i>)
                  </li><li>le moteur de <i>reflection</i> est accessible depuis la classe <b><i>qx::QxClassX</i></b> (par exemple <i>qx::QxClassX::invoke()</i> pour invoquer une méthode de classe)

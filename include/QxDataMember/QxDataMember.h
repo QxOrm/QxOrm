@@ -43,8 +43,10 @@
  * \brief Concrete class property registered into QxOrm context
  */
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/nvp.hpp>
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
 #include <boost/tuple/tuple.hpp>
 #include <boost/tuple/tuple_comparison.hpp>
@@ -52,7 +54,7 @@
 
 #include <QxDataMember/IxDataMember.h>
 
-#include <QxCommon/QxStringCvt.h>
+#include <QxConvert/QxConvert.h>
 
 #include <QxTraits/is_equal.h>
 
@@ -85,8 +87,6 @@ public:
    inline DataType * getData(void * pOwner) const              { return (pOwner ? (& ((static_cast<Owner *>(pOwner))->*m_pData)) : NULL); }
    inline const DataType * getData(const void * pOwner) const  { return (pOwner ? (& ((static_cast<const Owner *>(pOwner))->*m_pData)) : NULL); }
 
-   virtual QString toString(const void * pOwner, const QString & sFormat, int iIndexName = -1) const              { return qx::cvt::to_string((* getData(pOwner)), sFormat, iIndexName); }
-   virtual qx_bool fromString(void * pOwner, const QString & s, const QString & sFormat, int iIndexName = -1)     { return qx::cvt::from_string(s, (* getData(pOwner)), sFormat, iIndexName); }
    virtual QVariant toVariant(const void * pOwner, const QString & sFormat, int iIndexName = -1) const            { return qx::cvt::to_variant((* getData(pOwner)), sFormat, iIndexName); }
    virtual qx_bool fromVariant(void * pOwner, const QVariant & v, const QString & sFormat, int iIndexName = -1)   { return qx::cvt::from_variant(v, (* getData(pOwner)), sFormat, iIndexName); }
 
@@ -105,6 +105,8 @@ protected:
    virtual void * getDataVoidPtr(void * pOwner)                { return static_cast<void *>(getData(pOwner)); }
 
 public:
+
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 
 #if _QX_SERIALIZE_POLYMORPHIC
    QX_DATA_MEMBER_IMPL_VIRTUAL_ARCHIVE(boost::archive::polymorphic_iarchive, boost::archive::polymorphic_oarchive)
@@ -138,7 +140,11 @@ public:
    QX_DATA_MEMBER_IMPL_VIRTUAL_ARCHIVE(boost::archive::xml_wiarchive, boost::archive::xml_woarchive)
 #endif // _QX_SERIALIZE_WIDE_XML
 
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
+
 private:
+
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 
    template <class Archive>
    static inline void toArchive(Archive & ar, const char * sName, const DataType * pData)
@@ -148,13 +154,15 @@ private:
    static inline void fromArchive(Archive & ar, const char * sName, DataType * pData)
    { ar >> boost::serialization::make_nvp(sName, (* pData)); }
 
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
+
 private:
 
    template <bool bCanCompare /* = false */, int dummy>
    struct qxCompareDataMember
    {
       static inline bool isEqual(const QxDataMember<DataType, Owner> & dataMember, const void * pOwner1, const void * pOwner2)
-      { return (dataMember.toString(pOwner1, "") == dataMember.toString(pOwner2, "")); }
+      { return (dataMember.toVariant(pOwner1, "") == dataMember.toVariant(pOwner2, "")); }
    };
 
    template <int dummy>

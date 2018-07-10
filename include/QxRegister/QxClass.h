@@ -150,10 +150,10 @@ public:
    template <typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8> IxFunction * fctStatic_8(const typename QxFunction_8<void, R, P1, P2, P3, P4, P5, P6, P7, P8>::type_fct & fct, const QString & sKey);
    template <typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8, typename P9> IxFunction * fctStatic_9(const typename QxFunction_9<void, R, P1, P2, P3, P4, P5, P6, P7, P8, P9>::type_fct & fct, const QString & sKey);
 
-   static qx_bool invoke(const QString & sKey, T * pOwner, const QString & params = QString(), boost::any * ret = NULL) { return QxClass<T>::getSingleton()->invokeHelper(sKey, pOwner, params, ret); }
-   static qx_bool invoke(const QString & sKey, T * pOwner, const type_any_params & params, boost::any * ret = NULL)     { return QxClass<T>::getSingleton()->invokeHelper(sKey, pOwner, params, ret); }
-   static qx_bool invokeStatic(const QString & sKey, const QString & params = QString(), boost::any * ret = NULL)       { return QxClass<T>::getSingleton()->invokeHelper(sKey, params, ret); }
-   static qx_bool invokeStatic(const QString & sKey, const type_any_params & params, boost::any * ret = NULL)           { return QxClass<T>::getSingleton()->invokeHelper(sKey, params, ret); }
+   static qx_bool invoke(const QString & sKey, T * pOwner, const QString & params = QString(), boost::any * ret = NULL) { IxFunctionX * pFctX = QxClass<T>::getSingleton()->fctMemberX(); IxFunction_ptr pFct = ((pFctX && pFctX->exist(sKey)) ? pFctX->getByKey(sKey) : IxFunction_ptr()); return invokeHelper<T, type_base_class, 0>::invoke(sKey, pOwner, params, ret, pFct); }
+   static qx_bool invoke(const QString & sKey, T * pOwner, const type_any_params & params, boost::any * ret = NULL)     { IxFunctionX * pFctX = QxClass<T>::getSingleton()->fctMemberX(); IxFunction_ptr pFct = ((pFctX && pFctX->exist(sKey)) ? pFctX->getByKey(sKey) : IxFunction_ptr()); return invokeHelper<T, type_base_class, 0>::invoke(sKey, pOwner, params, ret, pFct); }
+   static qx_bool invokeStatic(const QString & sKey, const QString & params = QString(), boost::any * ret = NULL)       { IxFunctionX * pFctX = QxClass<T>::getSingleton()->fctStaticX(); IxFunction_ptr pFct = ((pFctX && pFctX->exist(sKey)) ? pFctX->getByKey(sKey) : IxFunction_ptr()); return invokeHelper<T, type_base_class, 0>::invoke(sKey, params, ret, pFct); }
+   static qx_bool invokeStatic(const QString & sKey, const type_any_params & params, boost::any * ret = NULL)           { IxFunctionX * pFctX = QxClass<T>::getSingleton()->fctStaticX(); IxFunction_ptr pFct = ((pFctX && pFctX->exist(sKey)) ? pFctX->getByKey(sKey) : IxFunction_ptr()); return invokeHelper<T, type_base_class, 0>::invoke(sKey, params, ret, pFct); }
 
    virtual bool isAbstract() const
    { return boost::is_abstract<T>::value; }
@@ -161,8 +161,10 @@ public:
    virtual bool implementIxPersistable() const
    { return implementIxPersistable_Helper<T, 0>::get(); }
 
+#ifndef _QX_NO_RTTI
    virtual const std::type_info & typeInfo() const
    { return typeid(T); }
+#endif // _QX_NO_RTTI
 
    virtual IxClass * getBaseClass() const
    { return (boost::is_same<type_base_class, qx::trait::no_base_class_defined>::value ? NULL : QxClass<type_base_class>::getSingleton()); }
@@ -199,17 +201,69 @@ private:
       if (bNeedReg) { registerClass(); }
    }
 
-   qx_bool invokeHelper(const QString & sKey, T * pOwner, const QString & params, boost::any * ret)
-   { return ((pOwner && m_pFctMemberX && m_pFctMemberX->exist(sKey)) ? m_pFctMemberX->getByKey(sKey)->invoke(pOwner, params, ret) : QxClass<type_base_class>::invoke(sKey, dynamic_cast<type_base_class *>(pOwner), params, ret)); }
+   template <typename U, typename V, int dummy>
+   struct invokeHelper
+   {
+      static qx_bool invoke(const QString & sKey, U * pOwner, const QString & params, boost::any * ret, IxFunction_ptr pFct)
+      { return ((pOwner && pFct) ? pFct->invoke(pOwner, params, ret) : QxClass<V>::invoke(sKey, static_cast<V *>(pOwner), params, ret)); }
 
-   qx_bool invokeHelper(const QString & sKey, T * pOwner, const type_any_params & params, boost::any * ret)
-   { return ((pOwner && m_pFctMemberX && m_pFctMemberX->exist(sKey)) ? m_pFctMemberX->getByKey(sKey)->invoke(pOwner, params, ret) : QxClass<type_base_class>::invoke(sKey, dynamic_cast<type_base_class *>(pOwner), params, ret)); }
+      static qx_bool invoke(const QString & sKey, U * pOwner, const type_any_params & params, boost::any * ret, IxFunction_ptr pFct)
+      { return ((pOwner && pFct) ? pFct->invoke(pOwner, params, ret) : QxClass<V>::invoke(sKey, static_cast<V *>(pOwner), params, ret)); }
 
-   qx_bool invokeHelper(const QString & sKey, const QString & params, boost::any * ret)
-   { return ((m_pFctStaticX && m_pFctStaticX->exist(sKey)) ? m_pFctStaticX->getByKey(sKey)->invoke(params, ret) : QxClass<type_base_class>::invokeStatic(sKey, params, ret)); }
+      static qx_bool invoke(const QString & sKey, const QString & params, boost::any * ret, IxFunction_ptr pFct)
+      { return (pFct ? pFct->invoke(params, ret) : QxClass<V>::invokeStatic(sKey, params, ret)); }
 
-   qx_bool invokeHelper(const QString & sKey, const type_any_params & params, boost::any * ret)
-   { return ((m_pFctStaticX && m_pFctStaticX->exist(sKey)) ? m_pFctStaticX->getByKey(sKey)->invoke(params, ret) : QxClass<type_base_class>::invokeStatic(sKey, params, ret)); }
+      static qx_bool invoke(const QString & sKey, const type_any_params & params, boost::any * ret, IxFunction_ptr pFct)
+      { return (pFct ? pFct->invoke(params, ret) : QxClass<V>::invokeStatic(sKey, params, ret)); }
+   };
+
+   template <typename U, int dummy>
+   struct invokeHelper<U, qx::trait::no_base_class_defined, dummy>
+   {
+      static qx_bool invoke(const QString & sKey, U * pOwner, const QString & params, boost::any * ret, IxFunction_ptr pFct)
+      { Q_UNUSED(sKey); return ((pOwner && pFct) ? pFct->invoke(pOwner, params, ret) : qx_bool(false)); }
+
+      static qx_bool invoke(const QString & sKey, U * pOwner, const type_any_params & params, boost::any * ret, IxFunction_ptr pFct)
+      { Q_UNUSED(sKey); return ((pOwner && pFct) ? pFct->invoke(pOwner, params, ret) : qx_bool(false)); }
+
+      static qx_bool invoke(const QString & sKey, const QString & params, boost::any * ret, IxFunction_ptr pFct)
+      { Q_UNUSED(sKey); return (pFct ? pFct->invoke(params, ret) : qx_bool(false)); }
+
+      static qx_bool invoke(const QString & sKey, const type_any_params & params, boost::any * ret, IxFunction_ptr pFct)
+      { Q_UNUSED(sKey); return (pFct ? pFct->invoke(params, ret) : qx_bool(false)); }
+   };
+
+   template <int dummy>
+   struct invokeHelper<qx::trait::no_base_class_defined, qx::trait::no_base_class_defined, dummy>
+   {
+      static qx_bool invoke(const QString & sKey, qx::trait::no_base_class_defined * pOwner, const QString & params, boost::any * ret, IxFunction_ptr pFct)
+      { Q_UNUSED(sKey); Q_UNUSED(pOwner); Q_UNUSED(params); Q_UNUSED(ret); Q_UNUSED(pFct); return qx_bool(false); }
+
+      static qx_bool invoke(const QString & sKey, qx::trait::no_base_class_defined * pOwner, const type_any_params & params, boost::any * ret, IxFunction_ptr pFct)
+      { Q_UNUSED(sKey); Q_UNUSED(pOwner); Q_UNUSED(params); Q_UNUSED(ret); Q_UNUSED(pFct); return qx_bool(false); }
+
+      static qx_bool invoke(const QString & sKey, const QString & params, boost::any * ret, IxFunction_ptr pFct)
+      { Q_UNUSED(sKey); Q_UNUSED(params); Q_UNUSED(ret); Q_UNUSED(pFct); return qx_bool(false); }
+
+      static qx_bool invoke(const QString & sKey, const type_any_params & params, boost::any * ret, IxFunction_ptr pFct)
+      { Q_UNUSED(sKey); Q_UNUSED(params); Q_UNUSED(ret); Q_UNUSED(pFct); return qx_bool(false); }
+   };
+
+   template <int dummy>
+   struct invokeHelper<QObject, qx::trait::no_base_class_defined, dummy>
+   {
+      static qx_bool invoke(const QString & sKey, QObject * pOwner, const QString & params, boost::any * ret, IxFunction_ptr pFct)
+      { Q_UNUSED(sKey); Q_UNUSED(pOwner); Q_UNUSED(params); Q_UNUSED(ret); Q_UNUSED(pFct); return qx_bool(false); }
+
+      static qx_bool invoke(const QString & sKey, QObject * pOwner, const type_any_params & params, boost::any * ret, IxFunction_ptr pFct)
+      { Q_UNUSED(sKey); Q_UNUSED(pOwner); Q_UNUSED(params); Q_UNUSED(ret); Q_UNUSED(pFct); return qx_bool(false); }
+
+      static qx_bool invoke(const QString & sKey, const QString & params, boost::any * ret, IxFunction_ptr pFct)
+      { Q_UNUSED(sKey); Q_UNUSED(params); Q_UNUSED(ret); Q_UNUSED(pFct); return qx_bool(false); }
+
+      static qx_bool invoke(const QString & sKey, const type_any_params & params, boost::any * ret, IxFunction_ptr pFct)
+      { Q_UNUSED(sKey); Q_UNUSED(params); Q_UNUSED(ret); Q_UNUSED(pFct); return qx_bool(false); }
+   };
 
 private:
 

@@ -29,7 +29,7 @@
 **
 ****************************************************************************/
 
-#if _QX_ENABLE_QT_NETWORK_DEPENDENCY
+#ifdef _QX_ENABLE_QT_NETWORK
 #ifndef _QX_SERVICE_H_
 #define _QX_SERVICE_H_
 
@@ -69,16 +69,21 @@ protected:
    enum { is_output_registered = qx::trait::is_qx_registered<OUTPUT>::value };
    enum { is_valid_parameter = (is_input_parameter && is_output_parameter && is_input_registered && is_output_registered) };
 
-   typedef boost::shared_ptr<INPUT> INPUT_ptr;
-   typedef boost::shared_ptr<OUTPUT> OUTPUT_ptr;
+   typedef qx_shared_ptr<INPUT> INPUT_ptr;
+   typedef qx_shared_ptr<OUTPUT> OUTPUT_ptr;
 
 public:
 
    QxService(const QString & sServiceName) : IxService(sServiceName) { BOOST_STATIC_ASSERT(is_valid_parameter); }
    virtual ~QxService() { ; }
 
+#if (defined(_QX_CPP_11_SMART_PTR) && !defined(BOOST_NO_CXX11_SMART_PTR))
+   INPUT_ptr getInputParameter() const    { return std::static_pointer_cast<INPUT>(m_pInputParameter); }
+   OUTPUT_ptr getOutputParameter() const  { return std::static_pointer_cast<OUTPUT>(m_pOutputParameter); }
+#else // (defined(_QX_CPP_11_SMART_PTR) && !defined(BOOST_NO_CXX11_SMART_PTR))
    INPUT_ptr getInputParameter() const    { return boost::static_pointer_cast<INPUT>(m_pInputParameter); }
    OUTPUT_ptr getOutputParameter() const  { return boost::static_pointer_cast<OUTPUT>(m_pOutputParameter); }
+#endif // (defined(_QX_CPP_11_SMART_PTR) && !defined(BOOST_NO_CXX11_SMART_PTR))
 
    virtual void registerClass() const { qx::QxClass<INPUT>::getSingleton(); qx::QxClass<OUTPUT>::getSingleton(); }
 
@@ -88,4 +93,4 @@ public:
 } // namespace qx
 
 #endif // _QX_SERVICE_H_
-#endif // _QX_ENABLE_QT_NETWORK_DEPENDENCY
+#endif // _QX_ENABLE_QT_NETWORK

@@ -61,6 +61,7 @@ public:
    typedef boost::function<R (Owner *)> type_fct;
    QX_FUNCTION_CLASS_MEMBER_FCT(QxFunction_0);
 
+   virtual int getParamCount() const                                    { return 0; }
    virtual qx_bool isValidParams(const QString & params) const          { Q_UNUSED(params); return true; }
    virtual qx_bool isValidParams(const type_any_params & params) const  { Q_UNUSED(params); return true; }
 
@@ -99,6 +100,7 @@ public:
    typedef boost::function<R ()> type_fct;
    QX_FUNCTION_CLASS_FCT(QxFunction_0);
 
+   virtual int getParamCount() const                                    { return 0; }
    virtual qx_bool isValidParams(const QString & params) const          { Q_UNUSED(params); return true; }
    virtual qx_bool isValidParams(const type_any_params & params) const  { Q_UNUSED(params); return true; }
 

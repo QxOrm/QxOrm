@@ -25,6 +25,7 @@ void main_dlg::init()
    cboSerializationType->addItem("7- serialization_polymorphic_binary", QVariant((int)qx::service::QxConnect::serialization_polymorphic_binary));
    cboSerializationType->addItem("8- serialization_polymorphic_xml", QVariant((int)qx::service::QxConnect::serialization_polymorphic_xml));
    cboSerializationType->addItem("9- serialization_polymorphic_text", QVariant((int)qx::service::QxConnect::serialization_polymorphic_text));
+   cboSerializationType->addItem("10- serialization_qt", QVariant((int)qx::service::QxConnect::serialization_qt));
    cboSerializationType->setCurrentIndex(cboSerializationType->findData(QVariant((int)qx::service::QxConnect::getSingleton()->getSerializationType())));
 
    spinPortNumber->setValue(7694);
@@ -98,14 +99,22 @@ void main_dlg::onError(const QString & err, qx::service::QxTransaction_ptr trans
 {
    if (err.isEmpty()) { txtError->setPlainText(""); return; }
    QString errText = QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm") + " : " + err;
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION_XML
    if (transaction) { errText += QString("\r\n\r\n") + qx::serialization::xml::to_string(* transaction); }
+#else // _QX_ENABLE_BOOST_SERIALIZATION_XML
+   if (transaction) { errText += QString("\r\n\r\n") + transaction->getInfos(); }
+#endif // _QX_ENABLE_BOOST_SERIALIZATION_XML
    txtError->setPlainText(errText.replace("\t", "    "));
 }
 
 void main_dlg::onTransactionFinished(qx::service::QxTransaction_ptr transaction)
 {
    if (! transaction) { txtTransaction->setPlainText(""); return; }
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION_XML
    QString text = qx::serialization::xml::to_string(* transaction);
+#else // _QX_ENABLE_BOOST_SERIALIZATION_XML
+   QString text = transaction->getInfos();
+#endif // _QX_ENABLE_BOOST_SERIALIZATION_XML
    txtTransaction->setPlainText(text.replace("\t", "    "));
 }
 

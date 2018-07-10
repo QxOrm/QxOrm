@@ -1,4 +1,4 @@
-qmake "./qxServiceClient.pro"
+qmake %QXORM_QMAKE_PARAMS% "./qxServiceClient.pro"
 nmake release
-qmake "./qxServiceServer.pro"
+qmake %QXORM_QMAKE_PARAMS% "./qxServiceServer.pro"
 nmake release

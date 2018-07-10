@@ -74,7 +74,7 @@ protected:
 
 };
 
-typedef boost::shared_ptr<QxSqlElementTemp> QxSqlElementTemp_ptr;
+typedef qx_shared_ptr<QxSqlElementTemp> QxSqlElementTemp_ptr;
 
 } // namespace detail
 } // namespace dao

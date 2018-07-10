@@ -124,12 +124,13 @@ public:
       if (! this->callTriggerBeforeFetch(currData, params)) { return NULL; }
       for (int i = 0; i < pId->getNameCount(); i++)
       { QVariant v = query.value(lOffsetOld + i); pId->fromVariant((& currData), v, i); }
+      long lOffsetRelation = (lOffsetOld + lOffsetId); long lCurrIndex = 0;
       while ((p = this->nextData(lIndex)))
-      { p->fromVariant((& currData), query.value(lIndex + lOffsetOld + lOffsetId - 1)); }
+      { if (params.checkColumns(p->getKey())) { p->fromVariant((& currData), query.value(lCurrIndex + lOffsetRelation)); lCurrIndex++; } }
 
       if (params.relationX())
       {
-         long lOffsetCurrent = (lIndex + lOffsetOld + lOffsetId);
+         long lOffsetCurrent = (lCurrIndex + lOffsetRelation);
          long lIndexOwnerOld = params.indexOwner(); params.setIndexOwner(params.index());
          void * pOwnerOld = params.owner(); params.setOwner(& currData);
          lOffsetOld = params.offset(); params.setOffset(lOffsetCurrent);

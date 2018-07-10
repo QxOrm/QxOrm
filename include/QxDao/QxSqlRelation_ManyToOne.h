@@ -144,7 +144,7 @@ public:
       if (! this->callTriggerBeforeFetch(currData, params)) { return NULL; }
       if (pId) { for (int i = 0; i < pId->getNameCount(); i++) { pId->fromVariant((& currData), query.value(lOffsetOld + lOffsetData + i), i); } }
       while ((p = this->nextData(lIndex)))
-      { p->fromVariant((& currData), query.value(lOffsetRelation++)); }
+      { if (params.checkColumns(p->getKey())) { p->fromVariant((& currData), query.value(lOffsetRelation++)); } }
 
       if (params.relationX())
       {

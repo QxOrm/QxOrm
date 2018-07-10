@@ -1,3 +1,28 @@
+Changes in version 1.4.1:
+!!! IMPORTANT NOTE ABOUT THIS VERSION !!! : it is strongly recommended to read the QxOrm.pri configuration file of this new version (compilation options have changed compared to previous versions).
+Now, by default, QxOrm library is a much lighter library : QxOrm depends only on QtCore and QtSql (boost serialization is now optional and not required by default).
+By default, serialization engine is now based on Qt QDataStream class (but you can still enable boost serialization defining _QX_ENABLE_BOOST_SERIALIZATION compilation option in QxOrm.pri configuration file).
+So now, with default options :
+- QxOrm 1.4.1 is much easier to install because you don't have to deal with boost serialization extra dependency ;
+- QxOrm 1.4.1 shared library is 3X smaller than 1.3.2 version ;
+- Generated binaries which depends on QxOrm library are 25% smaller ;
+- If you are not using serialization functions in current projects based on QxOrm library, then you can define or not _QX_ENABLE_BOOST_SERIALIZATION compilation option without changing any line of your source code.
+
+Here are all other changes of version 1.4.1:
+- Improve relationships engine : possibility to select columns to fetch using syntax : my_relation { col_1, col_2, etc... }
+- Improve QxTraits module to reduce compilation times and build smaller binaries
+- Improve QxOrm website adding possibility to search and replacing the old FAQ by a more organized manual (user guide)
+- New compilation option _QX_ENABLE_BOOST_SERIALIZATION to enable boost serialization dependency (read QxOrm.pri configuration file for more details)
+- New compilation option _QX_ENABLE_QT_NETWORK to enable QxService module (transfer persistent layer over network) : read QxOrm.pri configuration file for more details
+- New compilation option _QX_NO_RTTI to build QxOrm library without C++ RTTI type information
+- Support QDataStream Qt serialization engine (used by default when _QX_ENABLE_BOOST_SERIALIZATION compilation option is not defined)
+- Improve qx_query class (SQL queries) : new method (named customOperator()) which gives the possibility to define a custom operator (for example <@ for PostgreSQL ltree type)
+- Fix a program startup issue due to 'static initialization order fiasco' creating singletons (it was an issue with some compilers during the shared library link process)
+- New namespace qx::dao::throwable : same functions as qx::dao namespace, but they throw a qx::dao::sql_error exception when a SQL error occurred (instead of returning a QSqlError instance)
+- Add a qAssertMsg() macro to put a more explicit error message when throwing an assertion
+- Include all *.inl files (template implementation) in QxOrm.pro project file : QtCreator can now index these *.inl files in its project treeview
+- Rename QxStringCvt to QxConvert : so if you persist custom types to database, you have to rename from QxStringCvt_FromVariant, QxStringCvt_ToVariant to QxConvert_FromVariant, QxConvert_ToVariant
+
 Changes in version 1.3.2:
 - Support C++11 types (need to set compilation options in QxOrm.pri config file to enable these features)
 - With _QX_CPP_11_SMART_PTR compilation option : std::unique_ptr, std::shared_ptr, std::weak_ptr

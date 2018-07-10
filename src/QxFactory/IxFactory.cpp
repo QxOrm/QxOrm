@@ -40,18 +40,18 @@ namespace qx {
 
 IxFactory::IxFactory(const QString & sKey) : boost::noncopyable(), m_sKeyFactory(sKey)
 {
-#if _QX_USE_TRACE_CONSTRUCTOR_DESTRUCTOR
+#ifdef _QX_TRACE_CONSTRUCTOR_DESTRUCTOR
    qDebug("[QxOrm] qx::IxFactory constructor '%s'", qPrintable(m_sKeyFactory));
-#endif // _QX_USE_TRACE_CONSTRUCTOR_DESTRUCTOR
+#endif // _QX_TRACE_CONSTRUCTOR_DESTRUCTOR
 
    QxFactoryX::getSingleton()->registerFactory(m_sKeyFactory, this);
 }
 
 IxFactory::~IxFactory()
 {
-#if _QX_USE_TRACE_CONSTRUCTOR_DESTRUCTOR
+#ifdef _QX_TRACE_CONSTRUCTOR_DESTRUCTOR
    qDebug("[QxOrm] qx::IxFactory destructor '%s'", qPrintable(m_sKeyFactory));
-#endif // _QX_USE_TRACE_CONSTRUCTOR_DESTRUCTOR
+#endif // _QX_TRACE_CONSTRUCTOR_DESTRUCTOR
 
    if (! QxFactoryX::isSingletonNull()) { QxFactoryX::getSingleton()->unregisterFactory(m_sKeyFactory); }
 }

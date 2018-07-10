@@ -63,7 +63,7 @@ public:
    typedef typename qx::QxModel<T>::type_ptr type_ptr;
    typedef typename qx::QxModel<T>::type_primary_key type_primary_key;
    typedef typename qx::QxModel<T>::type_collection type_collection;
-   typedef boost::shared_ptr<type_collection> type_collection_ptr;
+   typedef qx_shared_ptr<type_collection> type_collection_ptr;
 
 public:
 

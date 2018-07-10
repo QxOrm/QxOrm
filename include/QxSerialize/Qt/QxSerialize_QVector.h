@@ -29,6 +29,7 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #ifndef _QX_SERIALIZE_QVECTOR_H_
 #define _QX_SERIALIZE_QVECTOR_H_
 
@@ -85,3 +86,4 @@ inline void serialize(Archive & ar, QVector<T> & t, const unsigned int file_vers
 } // namespace serialization
 
 #endif // _QX_SERIALIZE_QVECTOR_H_
+#endif // _QX_ENABLE_BOOST_SERIALIZATION

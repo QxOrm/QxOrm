@@ -52,10 +52,10 @@ void CTestAll::terminate()
 
 void CTestAll::test()
 {
-   boost::shared_ptr<CTestAll> o1; o1.reset(new CTestAll());
-   boost::shared_ptr<CTestAll> o2; o2.reset(new CTestAll());
+   qx_shared_ptr<CTestAll> o1; o1.reset(new CTestAll());
+   qx_shared_ptr<CTestAll> o2; o2.reset(new CTestAll());
 
-   qx::QxCollection<long, boost::shared_ptr<CTestAll> > coll;
+   qx::QxCollection<long, qx_shared_ptr<CTestAll> > coll;
    coll.insert(0, o1);
    coll.insert(1, o2);
 

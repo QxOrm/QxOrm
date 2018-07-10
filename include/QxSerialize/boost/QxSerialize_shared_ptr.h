@@ -29,6 +29,7 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #ifndef _QX_SERIALIZE_BOOST_SHARED_PTR_H_
 #define _QX_SERIALIZE_BOOST_SHARED_PTR_H_
 
@@ -59,3 +60,4 @@
 #endif // _MSC_VER
 
 #endif // _QX_SERIALIZE_BOOST_SHARED_PTR_H_
+#endif // _QX_ENABLE_BOOST_SERIALIZATION

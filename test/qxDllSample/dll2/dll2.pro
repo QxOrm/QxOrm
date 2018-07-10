@@ -5,6 +5,7 @@ CONFIG += dll
 DEFINES += _QX_BUILDING_DLL2
 INCLUDEPATH += ../../../../QxOrm/include/
 DESTDIR = ../../../../QxOrm/test/_bin/
+QT += gui
 
 !contains(DEFINES, _QX_NO_PRECOMPILED_HEADER) {
 PRECOMPILED_HEADER = ./include/precompiled.h

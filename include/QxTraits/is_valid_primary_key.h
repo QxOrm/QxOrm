@@ -76,6 +76,10 @@ struct is_valid_primary_key<QString>
 { static inline bool get(const QString & t) { return (! t.isEmpty()); } };
 
 template <>
+struct is_valid_primary_key<QByteArray>
+{ static inline bool get(const QByteArray & t) { return (! t.isEmpty()); } };
+
+template <>
 struct is_valid_primary_key<std::string>
 { static inline bool get(const std::string & t) { return (! t.empty()); } };
 
@@ -85,7 +89,14 @@ struct is_valid_primary_key<std::wstring>
 
 template <>
 struct is_valid_primary_key<QVariant>
-{ static inline bool get(const QVariant & t) { return ((t.type() == QVariant::String) ? qx::trait::detail::is_valid_primary_key<QString>::get(t.toString()) : (! t.isNull() && (t.toLongLong() != 0))); } };
+{
+   static inline bool get(const QVariant & t)
+   {
+      if (t.type() == QVariant::ByteArray) { return qx::trait::detail::is_valid_primary_key<QByteArray>::get(t.toByteArray()); }
+      if (t.type() == QVariant::String) { return qx::trait::detail::is_valid_primary_key<QString>::get(t.toString()); }
+      return (! t.isNull() && (t.toLongLong() != 0));
+   }
+};
 
 } // namespace detail
 

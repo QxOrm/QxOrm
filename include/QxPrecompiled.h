@@ -77,6 +77,7 @@
 #endif // _MSC_VER
 
 #include <boost/config.hpp>
+#include <boost/serialization/version.hpp>
 #include <boost/serialization/force_include.hpp>
 
 #ifdef BOOST_DLLEXPORT
@@ -114,11 +115,13 @@
 #include <boost/none.hpp>
 #include <boost/optional.hpp>
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #ifdef _MSC_VER
 #include <boost/serialization/serialization.hpp> /* -- To avoid warning 4100 => header in precompiled header -- */
 #include <boost/archive/detail/iserializer.hpp>
 #include <boost/archive/detail/oserializer.hpp>
 #endif // _MSC_VER
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
 #ifdef _MSC_VER
 #pragma warning(pop)

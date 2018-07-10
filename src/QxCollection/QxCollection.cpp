@@ -51,7 +51,7 @@ void qx_collection_unit_test()
    obj.sortByValue();
 
    typedef boost::tuple<QString, std::string, int> new_type;
-   qx::QxCollection< new_type, boost::shared_ptr<QWidget> > objColTuple;
+   qx::QxCollection< new_type, qx_shared_ptr<QWidget> > objColTuple;
    objColTuple.begin();
    objColTuple.reserve(10);
    objColTuple.clear();

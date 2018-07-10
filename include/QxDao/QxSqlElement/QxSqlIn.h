@@ -84,7 +84,7 @@ protected:
 
 };
 
-typedef boost::shared_ptr<QxSqlIn> QxSqlIn_ptr;
+typedef qx_shared_ptr<QxSqlIn> QxSqlIn_ptr;
 
 } // namespace detail
 } // namespace dao

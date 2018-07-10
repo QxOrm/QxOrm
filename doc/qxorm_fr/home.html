@@ -4,14 +4,17 @@
   <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
   <title>QxOrm : C++ Qt ORM Object Relational Mapping database library - QxEntityEditor : C++ Qt entities graphic editor (data model designer and source code generator)</title>
   <link rel='stylesheet' type='text/css' href='./resource/qxorm_style.css'>
+  <script type="text/javascript" src="./resource/jquery.min.js"></script>
   <script type="text/javascript" src="./resource/qxorm_script.js"></script>
 </head>
 <body>
 <table border="0" style="width: 80%" align="center">
-  <col><col><col>
+  <col><col><col><col><col>
   <tbody>
     <tr>
       <td><a href="./home.html"><img alt="QxOrm" src="./resource/logo_qxorm_and_qxee.png"align="left" border="0"></a></td>
+      <td align="right" style="vertical-align:bottom"><div id="qx_search"><gcse:search></gcse:search></div></td>
+      <td width="15"></td>
       <td align="right" style="vertical-align:bottom">
         <img alt="Windows" src="./resource/logo_windows.gif" width="35" height="35">
         <img alt="Linux" src="./resource/logo_linux.gif" width="35" height="35">
@@ -40,7 +43,15 @@
             </div>
          </td></tr></tbody></table>
       </td>
-      <td align="center"><a href="./faq.html" class="btn_nav">Faq (36)</a></td>
+      <td align="center" onmouseover="showHideElementById('menu_manual', true);" onmouseout="showHideElementById('menu_manual', false);">
+         <a href="./manual.html" class="btn_nav">Manuel (2)</a>
+         <table class="table_menu_manual"><tbody><tr><td>
+            <div id="menu_manual" class="div_menu_manual">
+               <a href="./manual.html" class="btn_sub_menu">Manuel QxOrm</a><br/>
+               <a href="./manual_qxee.html" class="btn_sub_menu">Manuel QxEntityEditor</a><br/>
+            </div>
+         </td></tr></tbody></table>
+      </td>
       <td align="center"><a href="./link.html" class="btn_nav">Forum</a></td>
       <td align="center"><a href="./customer.html" class="btn_nav">Nos clients</a></td>
     </tr>
@@ -55,7 +66,7 @@
     <table cellspacing="0" cellpadding="1"><col><col><tbody>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow">Version courante :&nbsp;</font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.3.2 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.1 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
       </tr>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow"></font></td>
@@ -78,20 +89,20 @@
           <col><col>
           <tbody>
             <tr>
-              <td><h1 class="txt_slogan">QxOrm (le moteur) + QxEntityEditor (l'éditeur graphique) = la meilleure solution pour gérer ses données en C++/Qt !</h1>
+              <td><h1 class="txt_slogan">QxOrm (le moteur) + QxEntityEditor (l'éditeur graphique) = la meilleure solution pour gérer sa couche de données persistante en C++/Qt !</h1>
                  <br/><hr style="width: 90%" align="center" size="1" color="#100D5A">
                  <b>QxOrm est une bibliothèque C++ de gestion de données.</b><br>
                  A partir d'une simple <b>fonction de paramétrage</b> (que l'on peut
-                 comparer avec un fichier de mapping <i>Hibernate</i>), vous
+                 comparer avec un fichier de mapping <a href="http://hibernate.org/" target="_blank"><i>Hibernate</i></a> en Java), vous
                  aurez accès aux fonctionnalités suivantes :<br>
                  <ul>
-                   <li><b><font style="background-color:yellow">persistance</font></b> : communication avec de nombreuses bases de
+                   <li><b><font style="background-color:yellow"><a href="./manual.html#manual_30">persistance</a></font></b> : communication avec de nombreuses bases de
                      données (avec support des relations <i>1-1</i>, <i>1-n</i>, <i>n-1</i> et
                      <i>n-n</i>) ;
                    </li>
-                   <li><b><font style="background-color:yellow">serialization</font></b> des données (flux binaire et XML) ;
+                   <li><b><font style="background-color:yellow"><a href="./manual.html#manual_60">sérialisation</a></font></b> des données (flux binaire et XML) ;
                    </li>
-                   <li><b><font style="background-color:yellow">reflection</font></b> (ou <b><font style="background-color:yellow">introspection</font></b>) pour accéder aux classes, attributs
+                   <li><b><font style="background-color:yellow"><a href="./manual.html#manual_70">réflexion</a></font></b> (ou <b><font style="background-color:yellow"><a href="./manual.html#manual_70">introspection</a></font></b>) pour accéder dynamiquement aux classes, attributs
                      et invoquer des méthodes.
                    </li>
                  </ul>
@@ -104,7 +115,7 @@
           </tbody>
         </table>
         <b>QxEntityEditor</b> est un éditeur graphique pour la bibliothèque <b>QxOrm</b> : <b>QxEntityEditor</b> permet de gérer graphiquement le modèle d'entités.<br>
-        <b>QxEntityEditor</b> est multi-plateforme (disponible pour Windows, Linux et Mac OS X) et génère du code natif pour tous les environnements : bureau (Windows, Linux, Mac OS X), embarqué et mobile (Android, iOS, Raspberry Pi, etc.).<br>
+        <b>QxEntityEditor</b> est multi-plateforme (disponible pour Windows, Linux et Mac OS X) et génère du code natif pour tous les environnements : bureau (Windows, Linux, Mac OS X), embarqué et mobile (Android, iOS, Windows Phone, Raspberry Pi, etc.).<br>
         <a href="./tutorial_4.html">Une vidéo de présentation de l'application <b>QxEntityEditor</b> est disponible</a>.<br>
         <br>
         <b>QxEntityEditor</b> est basé sur un système de plugins et propose diverses fonctionnalités pour importer/exporter le modèle de données :
@@ -144,7 +155,7 @@
           <li>vérification des types à la compilation (utilisation intensive
             de <b>méta-programmation</b>) ;
           </li>
-          <li>compatible avec <b>Visual C++ 2008, 2010 et 2012</b> sous Windows,
+          <li>compatible avec <b>Visual C++</b> sous Windows,
             <b>GCC</b> sous Linux, <b>Clang</b> sous Mac OS X, et <b>MinGW</b> sous Windows (d'autres environnements et
             plateformes seront testés prochainement : mobiles, etc...) ;
           </li>
@@ -153,35 +164,11 @@
             etc...).
           </li>
         </ul>
+        <br>
         <p align="justify"><b>QxOrm</b> est dépendant des excellentes bibliothèques
-        <a href="http://www.boost.org/" target="_blank"><b>boost</b></a> (compatible à partir de la version 1.38) et <a href="http://www.qt.io/" target="_blank"><b>Qt</b></a>
-        (compatible à partir de la version 4.5.0) :</p>
+        <a href="http://www.qt.io/" target="_blank"><b>Qt</b></a> (compatible à partir de la version 4.5.0) et
+        <a href="http://www.boost.org/" target="_blank"><b>boost</b></a> (compatible à partir de la version 1.38, par défaut seuls les fichiers d'en-tête <i>*.hpp</i> sont nécessaires) :</p>
         <p></p>
-        <table border="0" style="width: 100%" align="center">
-          <col>
-          <col>
-          <tbody>
-            <tr>
-              <td valign="middle" width="161" align="center"><a
-                href="http://www.boost.org/" target="_blank"><img alt="boost"
-                src="./resource/logo_boost.jpg" width="161"
-              height="50" border="0"></a></td>
-              <td align="justify"><b>boost</b> : de nombreux modules de la
-                bibliothèque boost font partie de la nouvelle norme C++.<br>
-                C'est une bibliothèque reconnue pour sa qualité, son code 'C++
-                moderne', sa documentation, sa portabilité, etc...<br>
-                QxOrm utilise les fonctionnalités suivantes de boost :
-                <i>smart_pointer, serialization, type_traits,
-                multi_index_container, unordered_container, any, tuple,
-                foreach, function.</i><br>
-                Il est conseillé d'installer et d'utiliser la dernière version
-                de boost disponible à l'adresse suivante : <a href="http://www.boost.org/" target="_blank">http://www.boost.org/</a> </td>
-            </tr>
-          </tbody>
-        </table>
-
-        <p></p>
-
         <table border="0" style="width: 100%" align="center">
           <col>
           <col>
@@ -206,8 +193,31 @@
             </tr>
           </tbody>
         </table>
-
         <p></p>
+        <table border="0" style="width: 100%" align="center">
+          <col>
+          <col>
+          <tbody>
+            <tr>
+              <td valign="middle" width="161" align="center"><a
+                href="http://www.boost.org/" target="_blank"><img alt="boost"
+                src="./resource/logo_boost.jpg" width="161"
+              height="50" border="0"></a></td>
+              <td align="justify"><b>boost</b> : de nombreux modules de la
+                bibliothèque boost font partie de la nouvelle norme C++.<br>
+                C'est une bibliothèque reconnue pour sa qualité, son code 'C++
+                moderne', sa documentation, sa portabilité, etc...<br>
+                QxOrm utilise les fonctionnalités suivantes de boost :
+                <i>smart_pointer, type_traits,
+                multi_index_container, unordered_container, any, tuple,
+                foreach, function.</i> Toutes ces fonctionnalités sont <i>header only</i>, la dépendance au module <i>serialization</i> est optionnelle.<br>
+                Il est conseillé d'installer et d'utiliser la dernière version
+                de boost disponible à l'adresse suivante : <a href="http://www.boost.org/" target="_blank">http://www.boost.org/</a> </td>
+            </tr>
+          </tbody>
+        </table>
+        <p></p>
+        <br>
         <p><b>QxOrm</b> est divisé en sous-modules, voici un descriptif rapide :</p>
         <ul>
           <li><p><b><a href="../doxygen/html/group___qx_dao.html" target="_blank">QxDao</a></b> : basé sur le moteur <a href="http://doc.qt.io/qt-5/qtsql-index.html" target="_blank"><i>QtSql</i></a> de Qt, ce module
@@ -273,7 +283,7 @@
             sur les propriétés enregistrées dans le contexte QxOrm. Ces contraintes sont définies dans la méthode de mapping : <i>void qx::register_class</i>.
             Si pour une instance de classe donnée, au moins une contrainte n'est pas respectée, alors l'instance est considérée comme invalide : 
             l'objet ne peut alors pas être sauvegardé en base de données (<i>INSERT</i> ou <i>UPDATE</i>). Pour plus d'informations sur le module <i>QxValidator</i>, 
-            <a href="./faq.html#faq_250">rendez-vous sur la FAQ de QxOrm</a>.</p>
+            <a href="./manual.html#manual_420">rendez-vous sur le manuel utilisateur de la bibliothèque QxOrm</a>.</p>
           </li>
           <li><p><b><a href="../doxygen/html/group___qx_mem_leak.html" target="_blank">QxMemLeak</a></b> : permet une détection rapide des fuites
             mémoire en mode <i>Debug</i> une fois l'exécution du programme terminée
@@ -286,8 +296,9 @@
           </li>
         </ul>
         <p></p>
-
+        <br>
         <p>Vous pouvez télécharger la dernière version de <b>QxOrm</b> et <b>QxEntityEditor</b> <a href="./download.html">en cliquant ici</a>.<br>
+        Un manuel utilisateur pour apprendre à travailler avec la bibliothèque QxOrm est disponible <a href="./manual.html">en cliquant ici</a>.<br>
         Un exemple rapide d'utilisation de <b>QxOrm</b> montrant les fonctionnalités de base de la bibliothèque 
         est disponible <a href="./quick_sample.html">en cliquant ici</a>.<br>
         Un forum (en anglais) dédié à <b>QxOrm</b> et <b>QxEntityEditor</b> est disponible <a href="http://www.qxorm.com/forum/phpbb/" target="_blank">en cliquant ici</a>.<br>

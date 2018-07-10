@@ -1,4 +1,5 @@
-qmake & nmake debug
+qmake %QXORM_QMAKE_PARAMS%
+nmake debug
 cd "./debug/"
 copy "QxOrmd.lib" "../lib/"
 if exist "QxOrmd.dll" ( copy "QxOrmd.dll" "../lib/" )

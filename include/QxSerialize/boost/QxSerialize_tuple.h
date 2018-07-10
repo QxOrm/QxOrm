@@ -29,6 +29,7 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #ifndef _QX_SERIALIZE_BOOST_TUPLE_H_
 #define _QX_SERIALIZE_BOOST_TUPLE_H_
 
@@ -159,3 +160,4 @@ inline void serialize(Archive & ar, boost::tuple<T0, T1, T2, T3, T4, T5, T6, T7,
 } // namespace serialization
 
 #endif // _QX_SERIALIZE_BOOST_TUPLE_H_
+#endif // _QX_ENABLE_BOOST_SERIALIZATION

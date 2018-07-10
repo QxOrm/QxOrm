@@ -43,10 +43,14 @@
  * \brief Common interface for all SQL elements to build SQL query
  */
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/split_free.hpp>
 #include <boost/serialization/version.hpp>
 #include <boost/serialization/nvp.hpp>
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
+
+#include <QtCore/qdatastream.h>
 
 #include <QtSql/qsqlquery.h>
 
@@ -59,6 +63,17 @@
 namespace qx {
 namespace dao {
 namespace detail {
+class IxSqlElement;
+} // namespace detail
+} // namespace dao
+} // namespace qx
+
+QX_DLL_EXPORT QDataStream & operator<< (QDataStream & stream, const qx::dao::detail::IxSqlElement & t) BOOST_USED;
+QX_DLL_EXPORT QDataStream & operator>> (QDataStream & stream, qx::dao::detail::IxSqlElement & t) BOOST_USED;
+
+namespace qx {
+namespace dao {
+namespace detail {
 
 /*!
  * \ingroup QxDao
@@ -66,6 +81,9 @@ namespace detail {
  */
 class QX_DLL_EXPORT IxSqlElement
 {
+
+   friend QDataStream & ::operator<< (QDataStream & stream, const qx::dao::detail::IxSqlElement & t);
+   friend QDataStream & ::operator>> (QDataStream & stream, qx::dao::detail::IxSqlElement & t);
 
 public:
 
@@ -98,6 +116,7 @@ public:
 
    virtual void clone(IxSqlElement * other);
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
    template <class Archive>
    void qxSave(Archive & ar) const
    {
@@ -108,7 +127,9 @@ public:
       ar << boost::serialization::make_nvp("list_values", m_lstValues);
       ar << boost::serialization::make_nvp("extra_settings", sExtraSettings);
    }
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
    template <class Archive>
    void qxLoad(Archive & ar)
    {
@@ -120,6 +141,7 @@ public:
       ar >> boost::serialization::make_nvp("extra_settings", sExtraSettings);
       setExtraSettings(sExtraSettings);
    }
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
 
 protected:
 
@@ -130,7 +152,7 @@ protected:
 
 };
 
-typedef boost::shared_ptr<IxSqlElement> IxSqlElement_ptr;
+typedef qx_shared_ptr<IxSqlElement> IxSqlElement_ptr;
 
 } // namespace detail
 } // namespace dao

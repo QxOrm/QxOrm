@@ -52,11 +52,11 @@ bool QxXml<T>::fromXml(T * pOwner, const QString & sXml)
 }
 
 template <class T>
-boost::shared_ptr<QxXmlWriter> QxXml<T>::toXmlWriter(T * pOwner)
+qx_shared_ptr<QxXmlWriter> QxXml<T>::toXmlWriter(T * pOwner)
 {
-   if (! pOwner) { return boost::shared_ptr<QxXmlWriter>(); }
+   if (! pOwner) { return qx_shared_ptr<QxXmlWriter>(); }
 
-   boost::shared_ptr<QxXmlWriter> pXmlWriter;
+   qx_shared_ptr<QxXmlWriter> pXmlWriter;
    pXmlWriter.reset(new QxXmlWriter());
    QxDataMemberX<T>::toXml(pOwner, pXmlWriter.get());
 

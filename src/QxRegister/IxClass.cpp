@@ -73,6 +73,7 @@ bool IxClass::isKindOf(const QString & sClassName) const
    return false;
 }
 
+#ifndef _QX_NO_RTTI
 bool IxClass::isKindOf(const std::type_info & typeInfo) const
 {
    if (typeInfo == typeid(void)) { qAssert(false); return false; }
@@ -87,6 +88,7 @@ bool IxClass::isKindOf(const std::type_info & typeInfo) const
 
    return false;
 }
+#endif // _QX_NO_RTTI
 
 QString IxClass::dumpClass() const
 {

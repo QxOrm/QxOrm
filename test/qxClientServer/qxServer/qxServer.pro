@@ -1,10 +1,17 @@
 include(../../../QxOrm.pri)
 
+!contains(DEFINES, _QX_ENABLE_QT_NETWORK) {
+error(unable to use QxOrm QxService module : please define _QX_ENABLE_QT_NETWORK compilation option in QxOrm.pri configuration file)
+} # !contains(DEFINES, _QX_ENABLE_QT_NETWORK)
+
 TEMPLATE = app
 DEFINES += _BUILDING_QX_SERVER
 INCLUDEPATH += ../../../../QxOrm/include/
 DESTDIR = ../../../../QxOrm/test/_bin/
 LIBS += -L"../../../../QxOrm/test/_bin"
+
+QT += gui
+greaterThan(QT_MAJOR_VERSION, 4) { QT += widgets }
 
 !contains(DEFINES, _QX_NO_PRECOMPILED_HEADER) {
 PRECOMPILED_HEADER = ./include/precompiled.h
