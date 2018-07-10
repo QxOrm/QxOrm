@@ -102,10 +102,10 @@ struct QxStringCvtGeneric
    }
 
    static inline QVariant toVariant(const T & t, const QString & format, int index)
-   { return qx::cvt::detail::QxStringCvtGeneric<T>::cvtQVariant<qx::trait::is_qt_variant_compatible<T>::value, 0>::toVariant(t, format, index); }
+   { return cvtQVariant<qx::trait::is_qt_variant_compatible<T>::value, 0>::toVariant(t, format, index); }
 
    static inline qx_bool fromVariant(const QVariant & v, T & t, const QString & format, int index)
-   { return qx::cvt::detail::QxStringCvtGeneric<T>::cvtQVariant<qx::trait::is_qt_variant_compatible<T>::value, 0>::fromVariant(v, t, format, index); }
+   { return cvtQVariant<qx::trait::is_qt_variant_compatible<T>::value, 0>::fromVariant(v, t, format, index); }
 
 private:
 

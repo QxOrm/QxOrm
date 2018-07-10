@@ -58,7 +58,7 @@ private:
 public:
 
    static inline void get(T & t)
-   { qx::trait::construct_ptr<T>::new_ptr<boost::is_abstract<type_ptr>::value, 0>::get(t); }
+   { new_ptr<boost::is_abstract<type_ptr>::value, 0>::get(t); }
 
 private:
 

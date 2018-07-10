@@ -108,6 +108,7 @@ public:
    virtual void lazyUpdate_ResolveInput(QxSqlRelationParams & params) const = 0;
    virtual QSqlError onBeforeSave(QxSqlRelationParams & params) const = 0;
    virtual QSqlError onAfterSave(QxSqlRelationParams & params) const = 0;
+   virtual QSqlError createExtraTable(QxSqlRelationParams & params) const = 0;
 
 #ifndef NDEBUG
    bool verifyOffset(QxSqlRelationParams & params, bool bId) const;

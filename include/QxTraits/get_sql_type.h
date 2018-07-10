@@ -36,6 +36,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/type_traits/is_enum.hpp>
+#include <boost/type_traits/is_same.hpp>
 
 #include <QtCore/qsharedpointer.h>
 
@@ -82,7 +83,7 @@ template <typename T>
 struct get_sql_type
 {
    typedef typename qx::trait::detail::get_sql_type_helper<T>::type type_sql;
-   static inline const char * get() { return qx::trait::detail::get_sql_type<type_sql>::get(); }
+   static inline const char * get() { return (boost::is_same<T, type_sql>::value ? qx::trait::detail::get_sql_type<type_sql>::get() : qx::trait::get_sql_type<type_sql>::get()); }
 };
 
 template <typename T>
@@ -110,6 +111,46 @@ struct get_sql_type< QScopedPointer<T> >
 template <typename T>
 struct get_sql_type< qx::dao::ptr<T> >
 { static inline const char * get() { return qx::trait::get_sql_type<T>::get(); } };
+
+template <typename T1, typename T2>
+struct get_sql_type< std::pair<T1, T2> >
+{ static inline const char * get() { static std::string s; s = (std::string(qx::trait::get_sql_type<T1>::get()) + "|" + std::string(qx::trait::get_sql_type<T2>::get())); return s.c_str(); } };
+
+template <typename T1, typename T2>
+struct get_sql_type< QPair<T1, T2> >
+{ static inline const char * get() { static std::string s; s = (std::string(qx::trait::get_sql_type<T1>::get()) + "|" + std::string(qx::trait::get_sql_type<T2>::get())); return s.c_str(); } };
+
+template <typename T1, typename T2>
+struct get_sql_type< boost::tuple<T1, T2> >
+{ static inline const char * get() { static std::string s; s = (std::string(qx::trait::get_sql_type<T1>::get()) + "|" + std::string(qx::trait::get_sql_type<T2>::get())); return s.c_str(); } };
+
+template <typename T1, typename T2, typename T3>
+struct get_sql_type< boost::tuple<T1, T2, T3> >
+{ static inline const char * get() { static std::string s; s = (std::string(qx::trait::get_sql_type<T1>::get()) + "|" + std::string(qx::trait::get_sql_type<T2>::get()) + "|" + std::string(qx::trait::get_sql_type<T3>::get())); return s.c_str(); } };
+
+template <typename T1, typename T2, typename T3, typename T4>
+struct get_sql_type< boost::tuple<T1, T2, T3, T4> >
+{ static inline const char * get() { static std::string s; s = (std::string(qx::trait::get_sql_type<T1>::get()) + "|" + std::string(qx::trait::get_sql_type<T2>::get()) + "|" + std::string(qx::trait::get_sql_type<T3>::get()) + "|" + std::string(qx::trait::get_sql_type<T4>::get())); return s.c_str(); } };
+
+template <typename T1, typename T2, typename T3, typename T4, typename T5>
+struct get_sql_type< boost::tuple<T1, T2, T3, T4, T5> >
+{ static inline const char * get() { static std::string s; s = (std::string(qx::trait::get_sql_type<T1>::get()) + "|" + std::string(qx::trait::get_sql_type<T2>::get()) + "|" + std::string(qx::trait::get_sql_type<T3>::get()) + "|" + std::string(qx::trait::get_sql_type<T4>::get()) + "|" + std::string(qx::trait::get_sql_type<T5>::get())); return s.c_str(); } };
+
+template <typename T1, typename T2, typename T3, typename T4, typename T5, typename T6>
+struct get_sql_type< boost::tuple<T1, T2, T3, T4, T5, T6> >
+{ static inline const char * get() { static std::string s; s = (std::string(qx::trait::get_sql_type<T1>::get()) + "|" + std::string(qx::trait::get_sql_type<T2>::get()) + "|" + std::string(qx::trait::get_sql_type<T3>::get()) + "|" + std::string(qx::trait::get_sql_type<T4>::get()) + "|" + std::string(qx::trait::get_sql_type<T5>::get()) + "|" + std::string(qx::trait::get_sql_type<T6>::get())); return s.c_str(); } };
+
+template <typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7>
+struct get_sql_type< boost::tuple<T1, T2, T3, T4, T5, T6, T7> >
+{ static inline const char * get() { static std::string s; s = (std::string(qx::trait::get_sql_type<T1>::get()) + "|" + std::string(qx::trait::get_sql_type<T2>::get()) + "|" + std::string(qx::trait::get_sql_type<T3>::get()) + "|" + std::string(qx::trait::get_sql_type<T4>::get()) + "|" + std::string(qx::trait::get_sql_type<T5>::get()) + "|" + std::string(qx::trait::get_sql_type<T6>::get()) + "|" + std::string(qx::trait::get_sql_type<T7>::get())); return s.c_str(); } };
+
+template <typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8>
+struct get_sql_type< boost::tuple<T1, T2, T3, T4, T5, T6, T7, T8> >
+{ static inline const char * get() { static std::string s; s = (std::string(qx::trait::get_sql_type<T1>::get()) + "|" + std::string(qx::trait::get_sql_type<T2>::get()) + "|" + std::string(qx::trait::get_sql_type<T3>::get()) + "|" + std::string(qx::trait::get_sql_type<T4>::get()) + "|" + std::string(qx::trait::get_sql_type<T5>::get()) + "|" + std::string(qx::trait::get_sql_type<T6>::get()) + "|" + std::string(qx::trait::get_sql_type<T7>::get()) + "|" + std::string(qx::trait::get_sql_type<T8>::get())); return s.c_str(); } };
+
+template <typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8, typename T9>
+struct get_sql_type< boost::tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9> >
+{ static inline const char * get() { static std::string s; s = (std::string(qx::trait::get_sql_type<T1>::get()) + "|" + std::string(qx::trait::get_sql_type<T2>::get()) + "|" + std::string(qx::trait::get_sql_type<T3>::get()) + "|" + std::string(qx::trait::get_sql_type<T4>::get()) + "|" + std::string(qx::trait::get_sql_type<T5>::get()) + "|" + std::string(qx::trait::get_sql_type<T6>::get()) + "|" + std::string(qx::trait::get_sql_type<T7>::get()) + "|" + std::string(qx::trait::get_sql_type<T8>::get()) + "|" + std::string(qx::trait::get_sql_type<T9>::get())); return s.c_str(); } };
 
 namespace detail {
 

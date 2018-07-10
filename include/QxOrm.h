@@ -106,6 +106,18 @@
 #include <QxRegister/QxClassX.h>
 #include <QxRegister/QxClassName.h>
 #include <QxRegister/QxRegister.h>
+#include <QxRegister/QxRegisterInternalHelper.h>
 #include <QxRegister/IxTypeInfo.h>
+
+#include <QxService/IxParameter.h>
+#include <QxService/IxService.h>
+#include <QxService/QxClientAsync.h>
+#include <QxService/QxConnect.h>
+#include <QxService/QxServer.h>
+#include <QxService/QxService.h>
+#include <QxService/QxThread.h>
+#include <QxService/QxThreadPool.h>
+#include <QxService/QxTools.h>
+#include <QxService/QxTransaction.h>
 
 #endif // _QX_ORM_H_

@@ -1,0 +1,1 @@
+<RCC version="1.0">   <qresource>      <file alias="stop">./stop.png</file>      <file alias="run">./run.png</file>   </qresource></RCC>

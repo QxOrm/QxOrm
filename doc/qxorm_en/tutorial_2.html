@@ -1,0 +1,689 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+  <title>QxOrm - C++ Object Relational Mapping library</title>
+  <meta name="generator" content="Amaya, see http://www.w3.org/Amaya/">
+  <style type="text/css">
+   .comment { color: #008000; font-style: italic; }
+   .pre { color: #000099; }
+   .string { color: #DF0101; }
+   .char { color: #009900; }
+   .float { color: #996600; }
+   .int { color: #999900; }
+   .bool { color: #000000; font-weight: bold; }
+   .type { color: #FF6633; }
+   .flow { color: #FF0000; }
+   .keyword { color: #990000; }
+   .operator { color: #663300; font-weight: bold; }
+   .operator { color: #663300; font-weight: bold; }
+  </style>
+</head>
+<body>
+<table border="0" style="width: 80%" align="center">
+  <col><col>
+  <tbody>
+    <tr>
+      <td><a href="./home.html"><img alt="QxOrm"
+        src="./resource/logo_qxorm.jpg" width="256" align="left" height="61"
+        border="0"></a></td>
+      <td><img alt="C++" src="./resource/logo_cpp.jpg" width="50" align="right"
+        height="50"></td>
+    </tr>
+  </tbody>
+</table>
+<hr style="width: 80%" align="center" size="1" color="#100D5A">
+<table border="0" style="width: 80%" align="center">
+  <col><col><col><col><col><col>
+  <tbody>
+    <tr>
+      <td align="center"><a href="./home.html"><img alt="Home"
+        src="./resource/link_home.jpg" width="120" height="35"
+        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
+      <td align="center"><a href="./download.html"><img alt="Download"
+        src="./resource/link_download.jpg" width="120" height="35"
+        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
+      <td align="center"><a href="./quick_sample.html"><img alt="Quick sample"
+        src="./resource/link_quick_sample.jpg" width="120" height="35"
+        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
+      <td align="center"><a href="./tutorial.html"><img alt="Tutorial"
+        src="./resource/link_tutorial.jpg" width="120" height="35"
+        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
+      <td align="center"><a href="./faq.html"><img alt="Faq"
+        src="./resource/link_faq.jpg" width="120" height="35"
+        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
+      <td align="center"><a href="./link.html"><img alt="Link"
+        src="./resource/link_link.jpg" width="120" height="35"
+        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
+    </tr>
+  </tbody>
+</table>
+<hr style="width: 80%" align="center" size="1" color="#100D5A">
+<table border="0" style="width: 80%" align="center">
+  <col><col><col><col><col>
+  <tbody><tr>
+  <td align="left" valign="top"><font size="2">QxOrm  &gt;&gt;  Tutorial  &gt;&gt;  qxClientServer</font></td>
+  <td align="right" valign="top"><font size="2">Current version : QxOrm 1.1.5 (LGPL)</font></td>
+  <td width="10px"></td>
+  <td width="40px" height="30px"><a href="../qxorm_fr/tutorial_2.html"><img alt="Version française du site" src="./resource/FR.png" width="40" height="30" border="0"></a></td>
+  <td width="40px" height="30px"><a href="../qxorm_en/tutorial_2.html"><img alt="Web site english version" src="./resource/GB.png" width="40" height="30" border="0"></a></td>
+  </tr></tbody>
+</table>
+<table border="1" frame="vsides" rules="cols" style="width: 80%" align="center" cellpadding="6" bgcolor="#F2F2F4">
+  <col>
+  <tbody>
+    <tr>
+      <td align="justify">
+        <table border="0">
+          <col><col><col>
+          <tbody>
+            <tr>
+              <td><i>Select tutorial to display : </i></td>
+              <td><a href="./tutorial.html"><img alt="Tuto n°1 : qxBlog" src="./resource/tuto_01_qxBlog.jpg" width="200" height="30" style="border:0px solid #100D5A; border-color:#100D5A;"></a></td>
+              <td><a href="./tutorial_2.html"><img alt="Tuto n°2 : qxClientServer" src="./resource/tuto_02_qxClientServer.jpg" width="200" height="30" style="border:2px solid #100D5A; border-color:#100D5A;"></a></td>
+            </tr>
+          </tbody>
+        </table>
+        <hr style="width: 100%" align="center" size="1" color="#100D5A">
+        <br>
+        <table border="0" style="width: 100%" align="center">
+          <col><col>
+          <tbody>
+            <tr>
+              <td>The main purpose of <b>qxClientServer</b> tutorial is to explain how <b>QxService</b> module of <b>QxOrm</b> library works.<br>
+                 <b>QxService</b> module provides an easy and powerful way to create <b>C++ application server</b> (<i>services</i> concept with <i>request</i> from client and <i>reply</i> from server).<br>
+                 <b>qxClientServer</b> project source code is available in the directory <i>./test/qxClientServer/</i>.<br>
+                 It is recommended to read <b>qxBlog</b> tutorial before reading this article, in particular <b>QxOrm</b> mapping function by class : <u><i>void qx::register_class(...)</i></u>.<br>
+                 <br>
+                 <b>qxClientServer</b> tutorial contains 2 exec and a service layer :
+                 <ul>
+                   <li><i>qxServer</i> : C++ application server with a GUI to configure server and a field to display last transaction between client and server.</li>
+                   <li><i>qxClient</i> : GUI with buttons to execute some requests to server and to call services.</li>
+                   <li><i>qxService</i> : the service layer, server and client share the same service layer to transfer data and call services.</li>
+                 </ul>
+                 <b>qxClientServer</b> tutorial step by step :
+                 <ul>
+                   <li><a href="#tuto_10">1- server GUI : <i>qxServer</i></a></li>
+                   <li><a href="#tuto_20">2- service layer : <i>qxService</i></a></li>
+                   <li><a href="#tuto_30">3- client GUI : <i>qxClient</i></a></li>
+                 </ul>
+              </td>
+              <td width="200" align="center" valign="top"><a href="./resource/qt_ambassador_logo.png" target="_blank"><img alt="qt_ambassador" src="./resource/qt_ambassador_logo_150x150.png" width="150" height="150" border="0"></a><br>
+                 <b><font size="2">QxOrm library has been accepted into the <a href="http://qt.nokia.com/qt-in-use/ambassadors/qtambassador/" target="_blank">Qt Ambassador Program</a></font></b>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <br>
+        <img alt="gui_qxClientServer" src="./resource/gui_qxClientServer.jpg" width="1242" height="855" style="border:0px solid #100D5A; border-color:#100D5A;">
+        <br><br>
+        <b>Note :</b> for more information about socket, thread, network, etc... <b>Qt</b> website provides tutorials about <a href="http://doc.qt.nokia.com/4.7/qtnetwork.html" target="_blank"><i>QtNetwork</i></a> module :
+        <ul>
+          <li><a href="http://doc.qt.nokia.com/4.7-snapshot/network-fortuneclient.html" target="_blank"><i>Fortune Client Example</i></a></li>
+          <li><a href="http://doc.qt.nokia.com/4.7-snapshot/network-blockingfortuneclient.html" target="_blank"><i>Blocking Fortune Client Example</i></a></li>
+          <li><a href="http://doc.qt.nokia.com/4.7-snapshot/network-fortuneserver.html" target="_blank"><i>Fortune Server Example</i></a></li>
+          <li><a href="http://doc.qt.nokia.com/4.7-snapshot/network-threadedfortuneserver.html" target="_blank"><i>Threaded Fortune Server Example</i></a></li>
+        </ul>
+        <br>
+        <a name="tuto_10"><u><font color="#100D5A">1- server GUI : <i>qxServer</i></font></u></a>
+        <br><br>
+        <i>qxServer</i> contains only 1 window : GUI has been designed with <b>Qt Designer</b> tool of Qt library.<br>
+        The main purpose of this window is to display to user the last transaction between client and server, and to configure some server parameters.<br>
+        For a real project (a production software), it is strongly recommended to provide a log system instead of a GUI.<br>
+        A minimal user interface (or no user interface) is the optimal solution for an application server.<br>
+        <i>main_dlg.h</i> and <i>main_dlg.cpp</i> files implements <i>qxServer</i> GUI :<br>
+        <br>
+        <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="main_dlg.h">
+<pre><span class="pre">#ifndef _QX_SERVER_MAIN_DLG_H_
+#define _QX_SERVER_MAIN_DLG_H_
+
+#include "../qt/ui/include/ui_qxServer.h"
+</span><span class="keyword">
+class</span> main_dlg<span class="operator"> :</span><span class="keyword"> public</span> QWidget<span class="operator">,</span><span class="keyword"> private</span> Ui<span class="operator">::</span>dlgServer<span class="operator">
+{</span> Q_OBJECT<span class="keyword">
+
+private</span><span class="operator">:</span>
+
+   qx<span class="operator">::</span>service<span class="operator">::</span>QxThreadPool_ptr m_pThreadPool<span class="operator">;</span><span class="comment"> // Server thread pool to receive all requests
+</span><span class="keyword">
+public</span><span class="operator">:</span>
+
+   main_dlg<span class="operator">(</span>QWidget<span class="operator"> *</span> parent<span class="operator"> =</span> NULL<span class="operator">) :</span> QWidget<span class="operator">(</span>parent<span class="operator">),</span> Ui<span class="operator">::</span>dlgServer<span class="operator">() {</span> main_dlg<span class="operator">::</span>init<span class="operator">(); }</span><span class="keyword">
+   virtual</span><span class="operator"> ~</span>main_dlg<span class="operator">() { ; }</span><span class="keyword">
+
+private</span><span class="operator">:</span><span class="type">
+
+   void</span> init<span class="operator">();</span><span class="type">
+   void</span> loadServices<span class="operator">();</span><span class="keyword">
+
+private</span> Q_SLOTS<span class="operator">:</span><span class="type">
+
+   void</span> onClickStartStop<span class="operator">();</span><span class="type">
+   void</span> onCboIndexChanged<span class="operator">(</span><span class="type">int</span> index<span class="operator">);</span><span class="type">
+   void</span> onError<span class="operator">(</span><span class="keyword">const</span> QString<span class="operator"> &amp;</span> err<span class="operator">,</span> qx<span class="operator">::</span>service<span class="operator">::</span>QxTransaction_ptr transaction<span class="operator">);</span><span class="type">
+   void</span> onServerIsRunning<span class="operator">(</span><span class="type">bool</span> bIsRunning<span class="operator">,</span> qx<span class="operator">::</span>service<span class="operator">::</span>QxServer<span class="operator"> *</span> pServer<span class="operator">);</span><span class="type">
+   void</span> onTransactionFinished<span class="operator">(</span>qx<span class="operator">::</span>service<span class="operator">::</span>QxTransaction_ptr transaction<span class="operator">);
+
+};</span><span class="pre">
+
+#endif // _QX_SERVER_MAIN_DLG_H_</span></pre>
+        </td></tr></tbody></table>
+        <br>
+        <i>m_pThreadPool</i> variable of <i>qx::service::QxThreadPool_ptr</i> type contains application server engine.<br>
+        <b>QxOrm</b> library manages all the logical : thread, request-reply, serialization, call services, etc...<br>
+        <i>init()</i> method initializes default parameters of application server, connects <b>SIGNAL-SLOT</b> events and runs automaticaly the server.<br>
+        <br>
+        <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="main_dlg::init()">
+<pre><span class="type">void</span> main_dlg<span class="operator">::</span>init<span class="operator">()
+{</span>
+   setupUi<span class="operator">(</span><span class="keyword">this</span><span class="operator">);</span>
+
+   QObject<span class="operator">::</span>connect<span class="operator">(</span>btnStartStop<span class="operator">,</span> SIGNAL<span class="operator">(</span>clicked<span class="operator">()),</span><span class="keyword"> this</span><span class="operator">,</span> SLOT<span class="operator">(</span>onClickStartStop<span class="operator">()));</span>
+   QObject<span class="operator">::</span>connect<span class="operator">(</span>cboSerializationType<span class="operator">,</span> SIGNAL<span class="operator">(</span>currentIndexChanged<span class="operator">(</span><span class="type">int</span><span class="operator">)),</span><span class="keyword"> this</span><span class="operator">,</span> SLOT<span class="operator">(</span>onCboIndexChanged<span class="operator">(</span><span class="type">int</span><span class="operator">)));</span>
+
+   cboSerializationType<span class="operator">-&gt;</span>addItem<span class="operator">(</span><span class="string">"0- serialization_binary"</span><span class="operator">,</span> QVariant<span class="operator">((</span><span class="type">int</span><span class="operator">)</span>qx<span class="operator">::</span>service<span class="operator">::</span>QxConnect<span class="operator">::</span>serialization_binary<span class="operator">));</span>
+   cboSerializationType<span class="operator">-&gt;</span>addItem<span class="operator">(</span><span class="string">"1- serialization_xml"</span><span class="operator">,</span> QVariant<span class="operator">((</span><span class="type">int</span><span class="operator">)</span>qx<span class="operator">::</span>service<span class="operator">::</span>QxConnect<span class="operator">::</span>serialization_xml<span class="operator">));</span>
+   cboSerializationType<span class="operator">-&gt;</span>addItem<span class="operator">(</span><span class="string">"2- serialization_text"</span><span class="operator">,</span> QVariant<span class="operator">((</span><span class="type">int</span><span class="operator">)</span>qx<span class="operator">::</span>service<span class="operator">::</span>QxConnect<span class="operator">::</span>serialization_text<span class="operator">));</span>
+   cboSerializationType<span class="operator">-&gt;</span>addItem<span class="operator">(</span><span class="string">"3- serialization_portable_binary"</span><span class="operator">,</span> QVariant<span class="operator">((</span><span class="type">int</span><span class="operator">)</span>qx<span class="operator">::</span>service<span class="operator">::</span>QxConnect<span class="operator">::</span>serialization_portable_binary<span class="operator">));</span>
+   cboSerializationType<span class="operator">-&gt;</span>addItem<span class="operator">(</span><span class="string">"4- serialization_wide_binary"</span><span class="operator">,</span> QVariant<span class="operator">((</span><span class="type">int</span><span class="operator">)</span>qx<span class="operator">::</span>service<span class="operator">::</span>QxConnect<span class="operator">::</span>serialization_wide_binary<span class="operator">));</span>
+   cboSerializationType<span class="operator">-&gt;</span>addItem<span class="operator">(</span><span class="string">"5- serialization_wide_xml"</span><span class="operator">,</span> QVariant<span class="operator">((</span><span class="type">int</span><span class="operator">)</span>qx<span class="operator">::</span>service<span class="operator">::</span>QxConnect<span class="operator">::</span>serialization_wide_xml<span class="operator">));</span>
+   cboSerializationType<span class="operator">-&gt;</span>addItem<span class="operator">(</span><span class="string">"6- serialization_wide_text"</span><span class="operator">,</span> QVariant<span class="operator">((</span><span class="type">int</span><span class="operator">)</span>qx<span class="operator">::</span>service<span class="operator">::</span>QxConnect<span class="operator">::</span>serialization_wide_text<span class="operator">));</span>
+   cboSerializationType<span class="operator">-&gt;</span>addItem<span class="operator">(</span><span class="string">"7- serialization_polymorphic_binary"</span><span class="operator">,</span> QVariant<span class="operator">((</span><span class="type">int</span><span class="operator">)</span>qx<span class="operator">::</span>service<span class="operator">::</span>QxConnect<span class="operator">::</span>serialization_polymorphic_binary<span class="operator">));</span>
+   cboSerializationType<span class="operator">-&gt;</span>addItem<span class="operator">(</span><span class="string">"8- serialization_polymorphic_xml"</span><span class="operator">,</span> QVariant<span class="operator">((</span><span class="type">int</span><span class="operator">)</span>qx<span class="operator">::</span>service<span class="operator">::</span>QxConnect<span class="operator">::</span>serialization_polymorphic_xml<span class="operator">));</span>
+   cboSerializationType<span class="operator">-&gt;</span>addItem<span class="operator">(</span><span class="string">"9- serialization_polymorphic_text"</span><span class="operator">,</span> QVariant<span class="operator">((</span><span class="type">int</span><span class="operator">)</span>qx<span class="operator">::</span>service<span class="operator">::</span>QxConnect<span class="operator">::</span>serialization_polymorphic_text<span class="operator">));</span>
+   cboSerializationType<span class="operator">-&gt;</span>setCurrentIndex<span class="operator">(</span>cboSerializationType<span class="operator">-&gt;</span>findData<span class="operator">(</span>QVariant<span class="operator">((</span><span class="type">int</span><span class="operator">)</span>qx<span class="operator">::</span>service<span class="operator">::</span>QxConnect<span class="operator">::</span>getSingleton<span class="operator">()-&gt;</span>getSerializationType<span class="operator">())));</span>
+
+   spinPortNumber<span class="operator">-&gt;</span>setValue<span class="operator">(</span><span class="int">7694</span><span class="operator">);</span>
+   spinThreadCount<span class="operator">-&gt;</span>setValue<span class="operator">(</span>qx<span class="operator">::</span>service<span class="operator">::</span>QxConnect<span class="operator">::</span>getSingleton<span class="operator">()-&gt;</span>getThreadCount<span class="operator">());</span>
+   onServerIsRunning<span class="operator">(</span><span class="bool">false</span><span class="operator">,</span> NULL<span class="operator">);</span>
+   onClickStartStop<span class="operator">();
+}</span></pre>
+        </td></tr></tbody></table>
+        <br>
+        <i>onClickStartStop()</i> event can start and stop the server.<br>
+        Application server must <i>serialize</i> reply to send to clients : you can choose the serialization type with the combobox <i>cboSerializationType</i>.<br>
+        For more information about all serialization types, <a href="../qxorm_en/faq.html#faq_75">see the FAQ</a>.<br>
+        In most cases, binary serialization is strongly recommended for a network transaction because it is fastest and smallest to limit traffic over network.<br>
+        We define also a port number for the application server with the field <i>spinPortNumber</i>.<br>
+        An important parameter is the <u>threads count</u> available : this is the <u>clients count that can send a request in same time</u>.<br>
+        Default value for this parameter is 30, you can modify this value if you estimate more clients connected simultaneously.<br>
+        If there is more clients than threads available, the request waits for a free thread, then the transaction is normally executed.<br>
+        <br>
+        <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="main_dlg::loadServices()">
+<pre><span class="type">void</span> main_dlg<span class="operator">::</span>loadServices<span class="operator">()
+{</span><span class="comment">
+   // Required to be sure to load all services dll : create a dummy service for each dll
+   // It is also possible to create a 'plugin system' to load services
+</span>   server_infos dummy_01<span class="operator">;</span> Q_UNUSED<span class="operator">(</span>dummy_01<span class="operator">);
+}</span></pre>
+        </td></tr></tbody></table>
+        <br>
+        <i>loadServices()</i> method is the only dependency with services provided by application server.<br>
+        This method creates a ghost instance of a service to be sure that all services containing in dll are loaded when server is running.<br>
+        For a production software, you can provide <u>a plugin mechanism</u> to load all services.<br>
+        <br>
+        <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="main_dlg::onClickStartStop()">
+<pre><span class="type">void</span> main_dlg<span class="operator">::</span>onClickStartStop<span class="operator">()
+{</span>
+   QApplication<span class="operator">::</span>setOverrideCursor<span class="operator">(</span>QCursor<span class="operator">(</span>Qt<span class="operator">::</span>WaitCursor<span class="operator">));</span><span class="flow">
+   if</span><span class="operator"> (</span>m_pThreadPool<span class="operator">)
+   {</span>
+      m_pThreadPool<span class="operator">-&gt;</span>disconnect<span class="operator">();</span>
+      m_pThreadPool<span class="operator">.</span>reset<span class="operator">();</span>
+      txtError<span class="operator">-&gt;</span>setPlainText<span class="operator">(</span><span class="string">""</span><span class="operator">);</span>
+      txtTransaction<span class="operator">-&gt;</span>setPlainText<span class="operator">(</span><span class="string">""</span><span class="operator">);</span>
+      onServerIsRunning<span class="operator">(</span><span class="bool">false</span><span class="operator">,</span> NULL<span class="operator">);
+   }</span><span class="flow">
+   else</span><span class="operator">
+   {</span>
+      qx<span class="operator">::</span>service<span class="operator">::</span>QxConnect<span class="operator">::</span>getSingleton<span class="operator">()-&gt;</span>setPort<span class="operator">(</span>spinPortNumber<span class="operator">-&gt;</span>value<span class="operator">());</span>
+      qx<span class="operator">::</span>service<span class="operator">::</span>QxConnect<span class="operator">::</span>getSingleton<span class="operator">()-&gt;</span>setThreadCount<span class="operator">(</span>spinThreadCount<span class="operator">-&gt;</span>value<span class="operator">());</span>
+      qx<span class="operator">::</span>service<span class="operator">::</span>QxConnect<span class="operator">::</span>getSingleton<span class="operator">()-&gt;</span>setSerializationType<span class="operator">((</span>qx<span class="operator">::</span>service<span class="operator">::</span>QxConnect<span class="operator">::</span>serialization_type<span class="operator">)
+                                                                   (</span>cboSerializationType<span class="operator">-&gt;</span>itemData<span class="operator">(</span>cboSerializationType<span class="operator">-&gt;</span>currentIndex<span class="operator">()).</span>toInt<span class="operator">()));</span>
+      qx<span class="operator">::</span>service<span class="operator">::</span>QxConnect<span class="operator">::</span>getSingleton<span class="operator">()-&gt;</span>setCompressData<span class="operator">(</span>chkCompressData<span class="operator">-&gt;</span>isChecked<span class="operator">());</span>
+
+      m_pThreadPool<span class="operator">.</span>reset<span class="operator">(</span><span class="keyword">new</span> qx<span class="operator">::</span>service<span class="operator">::</span>QxThreadPool<span class="operator">());</span>
+      QObject<span class="operator">::</span>connect<span class="operator">(</span>m_pThreadPool<span class="operator">.</span>get<span class="operator">(),</span> SIGNAL<span class="operator">(</span>error<span class="operator">(</span><span class="keyword">const</span> QString<span class="operator"> &amp;,</span> qx<span class="operator">::</span>service<span class="operator">::</span>QxTransaction_ptr<span class="operator">)),</span><span class="keyword"> this</span><span class="operator">,</span> 
+                                            SLOT<span class="operator">(</span>onError<span class="operator">(</span><span class="keyword">const</span> QString<span class="operator"> &amp;,</span> qx<span class="operator">::</span>service<span class="operator">::</span>QxTransaction_ptr<span class="operator">)));</span>
+      QObject<span class="operator">::</span>connect<span class="operator">(</span>m_pThreadPool<span class="operator">.</span>get<span class="operator">(),</span> SIGNAL<span class="operator">(</span>serverIsRunning<span class="operator">(</span><span class="type">bool</span><span class="operator">,</span> qx<span class="operator">::</span>service<span class="operator">::</span>QxServer<span class="operator"> *)),</span><span class="keyword"> this</span><span class="operator">,</span> 
+                                            SLOT<span class="operator">(</span>onServerIsRunning<span class="operator">(</span><span class="type">bool</span><span class="operator">,</span> qx<span class="operator">::</span>service<span class="operator">::</span>QxServer<span class="operator"> *)));</span>
+      QObject<span class="operator">::</span>connect<span class="operator">(</span>m_pThreadPool<span class="operator">.</span>get<span class="operator">(),</span> SIGNAL<span class="operator">(</span>transactionFinished<span class="operator">(</span>qx<span class="operator">::</span>service<span class="operator">::</span>QxTransaction_ptr<span class="operator">)),</span><span class="keyword"> this</span><span class="operator">,</span> 
+                                            SLOT<span class="operator">(</span>onTransactionFinished<span class="operator">(</span>qx<span class="operator">::</span>service<span class="operator">::</span>QxTransaction_ptr<span class="operator">)));</span>
+      m_pThreadPool<span class="operator">-&gt;</span>start<span class="operator">();
+   }</span>
+   QApplication<span class="operator">::</span>restoreOverrideCursor<span class="operator">();
+}</span></pre>
+        </td></tr></tbody></table>
+        <br>
+        <i>onClickStartStop()</i> is called to start and stop the application server : an instance of <i>qx::service::QxThreadPool_ptr</i> type is created (start server) or destroyed (stop server).<br>
+        If <i>m_pThreadPool</i> exists, then we want to stop the server : <i>m_pThreadPool.reset();</i>.<br>
+        Otherwise, server is not running so we want to start it :<br>
+        <i>m_pThreadPool.reset(new qx::service::QxThreadPool());</i>.<br>
+        <i>m_pThreadPool->start();</i>.<br>
+        <br>
+        Server settings are contained inside the singleton <i>qx::service::QxConnect::getSingleton()</i>.<br>
+        At the end, GUI subscribes to application server events (<b>SIGNAL-SLOT</b> mechanims from Qt library) to retrieve all errors and to display the last transaction between client and server.<br>
+        <br>
+        <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="main_dlg::onError(), main_dlg::onTransactionFinished()">
+        <pre><span class="type">void</span> main_dlg<span class="operator">::</span>onError<span class="operator">(</span><span class="keyword">const</span> QString<span class="operator"> &amp;</span> err<span class="operator">,</span> qx<span class="operator">::</span>service<span class="operator">::</span>QxTransaction_ptr transaction<span class="operator">)
+{</span><span class="flow">
+   if</span><span class="operator"> (</span>err<span class="operator">.</span>isEmpty<span class="operator">()) {</span> txtError<span class="operator">-&gt;</span>setPlainText<span class="operator">(</span><span class="string">""</span><span class="operator">);</span><span class="flow"> return</span><span class="operator">; }</span>
+   QString errText<span class="operator"> =</span> QDateTime<span class="operator">::</span>currentDateTime<span class="operator">().</span>toString<span class="operator">(</span><span class="string">"dd.MM.yyyy hh:mm"</span><span class="operator">) +</span><span class="string"> " : "</span><span class="operator"> +</span> err<span class="operator">;</span><span class="flow">
+   if</span><span class="operator"> (</span>transaction<span class="operator">) {</span> errText<span class="operator"> +=</span> QString<span class="operator">(</span><span class="string">"\r\n\r\n"</span><span class="operator">) +</span> qx<span class="operator">::</span>serialization<span class="operator">::</span>xml<span class="operator">::</span>to_string<span class="operator">(*</span> transaction<span class="operator">); }</span>
+   txtError<span class="operator">-&gt;</span>setPlainText<span class="operator">(</span>errText<span class="operator">.</span>replace<span class="operator">(</span><span class="string">"\t"</span><span class="operator">,</span><span class="string"> "    "</span><span class="operator">));
+}</span><span class="type">
+
+void</span> main_dlg<span class="operator">::</span>onTransactionFinished<span class="operator">(</span>qx<span class="operator">::</span>service<span class="operator">::</span>QxTransaction_ptr transaction<span class="operator">)
+{</span><span class="flow">
+   if</span><span class="operator"> (!</span> transaction<span class="operator">) {</span> txtTransaction<span class="operator">-&gt;</span>setPlainText<span class="operator">(</span><span class="string">""</span><span class="operator">);</span><span class="flow"> return</span><span class="operator">; }</span>
+   QString text<span class="operator"> =</span> qx<span class="operator">::</span>serialization<span class="operator">::</span>xml<span class="operator">::</span>to_string<span class="operator">(*</span> transaction<span class="operator">);</span>
+   txtTransaction<span class="operator">-&gt;</span>setPlainText<span class="operator">(</span>text<span class="operator">.</span>replace<span class="operator">(</span><span class="string">"\t"</span><span class="operator">,</span><span class="string"> "    "</span><span class="operator">));
+}</span></pre>
+        </td></tr></tbody></table>
+        <br>
+        All transactions between client and server are schematized by <i>qx::service::QxTransaction_ptr</i> type.<br>
+        This class contains all informations needed to execute a service (unique id, date-time, request from client, service to execute, reply from server, error message and error code, etc...).<br>
+        Transaction is serialized to xml format to display it in the field <i>txtTransaction</i>.<br>
+        <br>
+        <u><b>And... that's all</b></u> : <b>QxOrm</b> library provides an easy way to create application server.<br>
+        Now your application server is ready to provide all services that you want to clients :<br>
+        <br>
+        <img alt="gui_qxServer" src="./resource/gui_qxServer.jpg" width="560" height="426" style="border:0px solid #100D5A; border-color:#100D5A;">
+        <br>
+        <br><br>
+        <a name="tuto_20"><u><font color="#100D5A">2- service layer : <i>qxService</i></font></u></a>
+        <br><br>
+        The service layer must be shared between client and server.<br>
+        When you build the project <i>qxService</i>, you create 2 dll (or <i>*.so</i> files on Linux) : <i>qxServiceClient</i> and <i>qxServiceServer</i>.<br>
+        The compilation option <i>_QX_SERVICE_MODE_CLIENT</i> is used to know if we are building the client or the server.<br>
+        <i>qmake</i> tool from Qt library and <i>*.pro</i> and <i>*.pri</i> files allow to create easily this kind of architecture :<br>
+        * <a href="./resource/qxService.pri"><i>qxService.pri</i></a> file contains all dependencies and files to compile.<br>
+        * <a href="./resource/qxServiceClient.pro"><i>qxServiceClient.pro</i></a> file is used only by client mode : define <i>_QX_SERVICE_MODE_CLIENT</i> and dll target name.<br>
+        * <a href="./resource/qxServiceServer.pro"><i>qxServiceServer.pro</i></a> file is used only by server mode : define dll target name.<br>
+        So client and server services share the same files.<br>
+        <u>You don't have to write any line of code to call a service</u> : server can deploy <i>headers</i> files, <i>.dll</i> and <i>.lib</i> files (or <i>*.so</i> on Linux).<br>
+        <br>
+        The first service provided by our application server is easy : <u>send the current server date-time to all clients</u>.<br>
+        This service is available by the class <i>server_infos</i> : <i>server_infos.h</i> and <i>server_infos.cpp</i> files.<br>
+        A same class can provide many services : <i>server_infos</i> class could for example send the server name, the processor frequency, etc...<br>
+        Each service class contains input parameters (request from client) and output parameters (reply from server).<br>
+        A parameter class (input or output) must inherit from <b>qx::service::IxParameter</b> class and must be serializable.<br>
+        A service class must inherit from <b>qx::service::QxService&lt;INPUT, OUTPUT&gt;</b> template and must define a list of methods (list of services).<br>
+        It is recommended to write input parameter class, output parameter class and service class in the same file.<br>
+        <br>
+        <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="server_infos.h">
+<pre><span class="pre">#ifndef _QX_SERVICE_SERVER_INFOS_H_
+#define _QX_SERVICE_SERVER_INFOS_H_
+</span><span class="comment">
+/* -- Service Input Parameters -- */</span><span class="keyword">
+
+class</span> QX_SERVICE_DLL_EXPORT server_infos_input<span class="operator"> :</span><span class="keyword"> public</span> qx<span class="operator">::</span>service<span class="operator">::</span>IxParameter<span class="operator">
+{ ; };</span>
+
+QX_REGISTER_HPP_QX_SERVICE<span class="operator">(</span>server_infos_input<span class="operator">,</span> qx<span class="operator">::</span>service<span class="operator">::</span>IxParameter<span class="operator">,</span><span class="int"> 0</span><span class="operator">)</span><span class="keyword">
+typedef</span> boost<span class="operator">::</span>shared_ptr<span class="operator">&lt;</span>server_infos_input<span class="operator">&gt;</span> server_infos_input_ptr<span class="operator">;</span><span class="comment">
+
+/* -- Service Output Parameters -- */</span><span class="keyword">
+
+class</span> QX_SERVICE_DLL_EXPORT server_infos_output<span class="operator"> :</span><span class="keyword"> public</span> qx<span class="operator">::</span>service<span class="operator">::</span>IxParameter<span class="operator">
+{</span><span class="keyword"> public</span><span class="operator">:</span> QDateTime current_date_time<span class="operator">; };</span>
+
+QX_REGISTER_HPP_QX_SERVICE<span class="operator">(</span>server_infos_output<span class="operator">,</span> qx<span class="operator">::</span>service<span class="operator">::</span>IxParameter<span class="operator">,</span><span class="int"> 0</span><span class="operator">)</span><span class="keyword">
+typedef</span> boost<span class="operator">::</span>shared_ptr<span class="operator">&lt;</span>server_infos_output<span class="operator">&gt;</span> server_infos_output_ptr<span class="operator">;</span><span class="comment">
+
+/* -- Service Definition -- */</span><span class="keyword">
+
+typedef</span> qx<span class="operator">::</span>service<span class="operator">::</span>QxService<span class="operator">&lt;</span>server_infos_input<span class="operator">,</span> server_infos_output<span class="operator">&gt;</span> server_infos_base_class<span class="operator">;</span><span class="keyword">
+class</span> QX_SERVICE_DLL_EXPORT server_infos<span class="operator"> :</span><span class="keyword"> public</span> server_infos_base_class<span class="operator">
+{</span><span class="keyword">
+public</span><span class="operator">:</span>
+   server_infos<span class="operator">() :</span> server_infos_base_class<span class="operator">(</span><span class="string">"server_infos"</span><span class="operator">) { ; }</span><span class="keyword">
+   virtual</span><span class="operator"> ~</span>server_infos<span class="operator">() { ; }</span><span class="type">
+   void</span> get_current_date_time<span class="operator">();
+};</span>
+
+QX_REGISTER_HPP_QX_SERVICE<span class="operator">(</span>server_infos<span class="operator">,</span> qx<span class="operator">::</span>service<span class="operator">::</span>IxService<span class="operator">,</span><span class="int"> 0</span><span class="operator">)</span><span class="keyword">
+typedef</span> boost<span class="operator">::</span>shared_ptr<span class="operator">&lt;</span>server_infos<span class="operator">&gt;</span> server_infos_ptr<span class="operator">;</span><span class="pre">
+
+#endif // _QX_SERVICE_SERVER_INFOS_H_</span></pre>
+        </td></tr></tbody></table>
+        <br>
+        <i>server_infos.h</i> file contains 3 classes :<br>
+        * <u><i>server_infos_input</i></u> : inherits from <i>qx::service::IxParameter</i> class (request from client). Our test service doesn't need any input parameter, so this class is empty.<br>
+        * <u><i>server_infos_output</i></u> : inherits from <i>qx::service::IxParameter</i> class (reply from server). This class contains only 1 property, the current server date-time.<br>
+        * <u><i>server_infos</i></u> : inherits from <i>qx::service::QxService&lt;INPUT, OUTPUT&gt;</i> template and contains all methods to call services : only 1 method for our service to retrieve the current server date-time.<br>
+        <br>
+        Those 3 classes must be registered into QxOrm context, like a persitent class (see <b>qxBlog</b> tutorial).<br>
+        This is why we are using the <i>QX_REGISTER_HPP_QX_SERVICE</i> macro for those 3 classes.<br>
+        Moreover, to manage memory and avoid memory leaks, we use smart-pointers from boost library : <i>boost::shared_ptr</i>.<br>
+        <b>QxService</b> module works with smart-pointers, this is why it is strongly recommended to create some <i>typedef</i> : for example, <i>typedef boost::shared_ptr&lt;server_infos_input&gt; server_infos_input_ptr;</i>.<br>
+        Finally, constructor service must provide class name under a string format : this is necessary for the QxOrm <i>introspection</i> engine to create services instances.<br>
+        <br>
+        <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="server_infos.cpp">
+<pre><span class="pre">#include "../../include/precompiled.h"
+
+#include "../../include/service/server_infos.h"
+
+#include &lt;QxMemLeak.h&gt;
+</span>
+QX_REGISTER_CPP_QX_SERVICE<span class="operator">(</span>server_infos_input<span class="operator">)</span>
+QX_REGISTER_CPP_QX_SERVICE<span class="operator">(</span>server_infos_output<span class="operator">)</span>
+QX_REGISTER_CPP_QX_SERVICE<span class="operator">(</span>server_infos<span class="operator">)</span><span class="keyword">
+
+namespace</span> qx<span class="operator"> {</span><span class="keyword">
+
+template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</span> register_class<span class="operator">(</span>QxClass<span class="operator">&lt;</span>server_infos_input<span class="operator">&gt; &amp;</span> t<span class="operator">)
+{</span> Q_UNUSED<span class="operator">(</span>t<span class="operator">); }</span><span class="keyword">
+
+template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</span> register_class<span class="operator">(</span>QxClass<span class="operator">&lt;</span>server_infos_output<span class="operator">&gt; &amp;</span> t<span class="operator">)
+{</span> t<span class="operator">.</span>data<span class="operator">(&amp;</span> server_infos_output<span class="operator">::</span>current_date_time<span class="operator">,</span><span class="string"> "current_date_time"</span><span class="operator">); }</span><span class="keyword">
+
+template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</span> register_class<span class="operator">(</span>QxClass<span class="operator">&lt;</span>server_infos<span class="operator">&gt; &amp;</span> t<span class="operator">)
+{</span> t<span class="operator">.</span>fct_0<span class="operator">&lt;</span><span class="type">void</span><span class="operator">&gt;(&amp;</span> server_infos<span class="operator">::</span>get_current_date_time<span class="operator">,</span><span class="string"> "get_current_date_time"</span><span class="operator">); }
+
+}</span><span class="comment"> // namespace qx
+</span><span class="pre">
+#ifdef _QX_SERVICE_MODE_CLIENT
+</span><span class="type">
+void</span> server_infos<span class="operator">::</span>get_current_date_time<span class="operator">()
+{</span> qx<span class="operator">::</span>service<span class="operator">::</span>execute_client<span class="operator">(</span><span class="keyword">this</span><span class="operator">,</span><span class="string"> "get_current_date_time"</span><span class="operator">); }</span><span class="pre">
+
+#else // _QX_SERVICE_MODE_CLIENT
+</span><span class="type">
+void</span> server_infos<span class="operator">::</span>get_current_date_time<span class="operator">()
+{</span>
+   server_infos_output_ptr output<span class="operator"> =</span> server_infos_output_ptr<span class="operator">(</span><span class="keyword">new</span> server_infos_output<span class="operator">());</span>
+   output<span class="operator">-&gt;</span>current_date_time<span class="operator"> =</span> QDateTime<span class="operator">::</span>currentDateTime<span class="operator">();</span>
+   setOutputParameter<span class="operator">(</span>output<span class="operator">);</span>
+   setMessageReturn<span class="operator">(</span><span class="bool">true</span><span class="operator">);
+}</span><span class="pre">
+
+#endif // _QX_SERVICE_MODE_CLIENT</span></pre>
+        </td></tr></tbody></table>
+        <br>
+        <i>server_infos.cpp</i> file contains the implementation of service for the client mode and server mode.<br>
+        <i>QX_REGISTER_CPP_QX_SERVICE</i> macro registers classes into QxOrm context, like a persistent class (see <b>qxBlog</b> tutorial).<br>
+        Then, we write the mapping function <i>void qx::register_class(...)</i> :<br>
+        * The 2 parameters classes (input and output) register all properties needed to execute a client request (no parameter for our test service), and all properties needed to send a reply (current server date-time : <i>t.data(& server_infos_output::current_date_time, "current_date_time");</i>).<br>
+        * The service class need to register all methods to call services, so in our case : <i>t.fct_0&lt;void&gt;(& server_infos::get_current_date_time, "get_current_date_time");</i>.<br>
+        <br>
+        <b>Note :</b> all services methods need to have the same signature : <u>no return value, and no argument</u> (for example : <i>void my_service()</i>).<br>
+        Indeed, in a service method, all input parameters are available with <i>getInputParameter()</i> function (of <i>server_infos_input_ptr</i> type in our example).<br>
+        Output parameters can be set by <i>setOutputParameter()</i> function (of <i>server_infos_output_ptr</i> type in our example).<br>
+        A return value of <i>qx_bool</i> type is necessary to indicate that the transaction has been executed successfully or with an error (you can set an error code and an error description).<br>
+        It is very important to write <i>setMessageReturn(true);</i> to the end of each service method.<br>
+        <br>
+        The last part of our file contains the implementation of <i>server_infos::get_current_date_time()</i> method for the client mode and server mode.<br>
+        In client mode, it is very easy : <i>qx::service::execute_client(this, "get_current_date_time");</i>.<br>
+        In server mode, we retrieve the current date time, then we set it into output parameter, then we indicate that the transaction has been executed without error.<br>
+        <br>
+        <b>Note :</b> <i>qxService</i> project contains another sample more complex with a persistent class to transfer between client and server (<i>user</i> class), and some basics actions on a database (<i>SELECT, INSERT, UPDATE, DELETE, etc...</i>).<br>
+        This second sample transfer complex structures over network : pointers, smart-pointers, collections, search criterias, etc...<br>
+        <br>
+        <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="user_service.cpp">
+<pre><span class="pre">#include "../../include/precompiled.h"
+
+#include "../../include/service/user_service.h"
+
+#include "../../include/dao/user_manager.h"
+
+#include &lt;QxMemLeak.h&gt;
+</span>
+QX_REGISTER_CPP_QX_SERVICE<span class="operator">(</span>user_service_input<span class="operator">)</span>
+QX_REGISTER_CPP_QX_SERVICE<span class="operator">(</span>user_service_output<span class="operator">)</span>
+QX_REGISTER_CPP_QX_SERVICE<span class="operator">(</span>user_service<span class="operator">)</span><span class="keyword">
+
+namespace</span> qx<span class="operator"> {</span><span class="keyword">
+
+template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</span> register_class<span class="operator">(</span>QxClass<span class="operator">&lt;</span>user_service_input<span class="operator">&gt; &amp;</span> t<span class="operator">)
+{</span>
+   t<span class="operator">.</span>data<span class="operator">(&amp;</span> user_service_input<span class="operator">::</span>id<span class="operator">,</span><span class="string"> "id"</span><span class="operator">);</span>
+   t<span class="operator">.</span>data<span class="operator">(&amp;</span> user_service_input<span class="operator">::</span>user<span class="operator">,</span><span class="string"> "user"</span><span class="operator">);</span>
+   t<span class="operator">.</span>data<span class="operator">(&amp;</span> user_service_input<span class="operator">::</span>criteria<span class="operator">,</span><span class="string"> "criteria"</span><span class="operator">);
+}</span><span class="keyword">
+
+template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</span> register_class<span class="operator">(</span>QxClass<span class="operator">&lt;</span>user_service_output<span class="operator">&gt; &amp;</span> t<span class="operator">)
+{</span>
+   t<span class="operator">.</span>data<span class="operator">(&amp;</span> user_service_output<span class="operator">::</span>user<span class="operator">,</span><span class="string"> "user"</span><span class="operator">);</span>
+   t<span class="operator">.</span>data<span class="operator">(&amp;</span> user_service_output<span class="operator">::</span>list_of_users<span class="operator">,</span><span class="string"> "list_of_users"</span><span class="operator">);
+}</span><span class="keyword">
+
+template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</span> register_class<span class="operator">(</span>QxClass<span class="operator">&lt;</span>user_service<span class="operator">&gt; &amp;</span> t<span class="operator">)
+{</span>
+   t<span class="operator">.</span>fct_0<span class="operator">&lt;</span><span class="type">void</span><span class="operator">&gt;(&amp;</span> user_service<span class="operator">::</span>insert<span class="operator">,</span><span class="string"> "insert"</span><span class="operator">);</span>
+   t<span class="operator">.</span>fct_0<span class="operator">&lt;</span><span class="type">void</span><span class="operator">&gt;(&amp;</span> user_service<span class="operator">::</span>update<span class="operator">,</span><span class="string"> "update"</span><span class="operator">);</span>
+   t<span class="operator">.</span>fct_0<span class="operator">&lt;</span><span class="type">void</span><span class="operator">&gt;(&amp;</span> user_service<span class="operator">::</span>remove<span class="operator">,</span><span class="string"> "remove"</span><span class="operator">);</span>
+   t<span class="operator">.</span>fct_0<span class="operator">&lt;</span><span class="type">void</span><span class="operator">&gt;(&amp;</span> user_service<span class="operator">::</span>remove_all<span class="operator">,</span><span class="string"> "remove_all"</span><span class="operator">);</span>
+   t<span class="operator">.</span>fct_0<span class="operator">&lt;</span><span class="type">void</span><span class="operator">&gt;(&amp;</span> user_service<span class="operator">::</span>fetch_by_id<span class="operator">,</span><span class="string"> "fetch_by_id"</span><span class="operator">);</span>
+   t<span class="operator">.</span>fct_0<span class="operator">&lt;</span><span class="type">void</span><span class="operator">&gt;(&amp;</span> user_service<span class="operator">::</span>fetch_all<span class="operator">,</span><span class="string"> "fetch_all"</span><span class="operator">);</span>
+   t<span class="operator">.</span>fct_0<span class="operator">&lt;</span><span class="type">void</span><span class="operator">&gt;(&amp;</span> user_service<span class="operator">::</span>get_by_criteria<span class="operator">,</span><span class="string"> "get_by_criteria"</span><span class="operator">);
+}
+
+}</span><span class="comment"> // namespace qx
+</span><span class="pre">
+#ifdef _QX_SERVICE_MODE_CLIENT
+</span><span class="type">
+void</span> user_service<span class="operator">::</span>insert<span class="operator">()            {</span> qx<span class="operator">::</span>service<span class="operator">::</span>execute_client<span class="operator">(</span><span class="keyword">this</span><span class="operator">,</span><span class="string"> "insert"</span><span class="operator">); }</span><span class="type">
+void</span> user_service<span class="operator">::</span>update<span class="operator">()            {</span> qx<span class="operator">::</span>service<span class="operator">::</span>execute_client<span class="operator">(</span><span class="keyword">this</span><span class="operator">,</span><span class="string"> "update"</span><span class="operator">); }</span><span class="type">
+void</span> user_service<span class="operator">::</span>remove<span class="operator">()            {</span> qx<span class="operator">::</span>service<span class="operator">::</span>execute_client<span class="operator">(</span><span class="keyword">this</span><span class="operator">,</span><span class="string"> "remove"</span><span class="operator">); }</span><span class="type">
+void</span> user_service<span class="operator">::</span>remove_all<span class="operator">()        {</span> qx<span class="operator">::</span>service<span class="operator">::</span>execute_client<span class="operator">(</span><span class="keyword">this</span><span class="operator">,</span><span class="string"> "remove_all"</span><span class="operator">); }</span><span class="type">
+void</span> user_service<span class="operator">::</span>fetch_by_id<span class="operator">()       {</span> qx<span class="operator">::</span>service<span class="operator">::</span>execute_client<span class="operator">(</span><span class="keyword">this</span><span class="operator">,</span><span class="string"> "fetch_by_id"</span><span class="operator">); }</span><span class="type">
+void</span> user_service<span class="operator">::</span>fetch_all<span class="operator">()         {</span> qx<span class="operator">::</span>service<span class="operator">::</span>execute_client<span class="operator">(</span><span class="keyword">this</span><span class="operator">,</span><span class="string"> "fetch_all"</span><span class="operator">); }</span><span class="type">
+void</span> user_service<span class="operator">::</span>get_by_criteria<span class="operator">()   {</span> qx<span class="operator">::</span>service<span class="operator">::</span>execute_client<span class="operator">(</span><span class="keyword">this</span><span class="operator">,</span><span class="string"> "get_by_criteria"</span><span class="operator">); }</span><span class="pre">
+
+#else // _QX_SERVICE_MODE_CLIENT
+</span><span class="type">
+void</span> user_service<span class="operator">::</span>insert<span class="operator">()
+{</span>
+   user_service_input_ptr input<span class="operator"> =</span> getInputParameter<span class="operator">();</span><span class="flow">
+   if</span><span class="operator"> (!</span> input<span class="operator">) {</span> setMessageReturn<span class="operator">(</span><span class="int">0</span><span class="operator">,</span><span class="string"> "invalid input parameter to call service 'user_service::insert()'"</span><span class="operator">);</span><span class="flow"> return</span><span class="operator">; }</span>
+   QSqlError err<span class="operator"> =</span> user_manager<span class="operator">().</span>insert<span class="operator">(</span>input<span class="operator">-&gt;</span>user<span class="operator">);</span><span class="flow">
+   if</span><span class="operator"> (</span>err<span class="operator">.</span>isValid<span class="operator">()) {</span> setMessageReturn<span class="operator">(</span><span class="int">0</span><span class="operator">,</span> err<span class="operator">.</span>text<span class="operator">());</span><span class="flow"> return</span><span class="operator">; }</span>
+   user_service_output_ptr output<span class="operator"> =</span> user_service_output_ptr<span class="operator">(</span><span class="keyword">new</span> user_service_output<span class="operator">());</span>
+   output<span class="operator">-&gt;</span>user<span class="operator"> =</span> input<span class="operator">-&gt;</span>user<span class="operator">;</span>
+   setOutputParameter<span class="operator">(</span>output<span class="operator">);</span>
+   setMessageReturn<span class="operator">(</span><span class="bool">true</span><span class="operator">);
+}</span><span class="type">
+
+void</span> user_service<span class="operator">::</span>update<span class="operator">()
+{</span>
+   user_service_input_ptr input<span class="operator"> =</span> getInputParameter<span class="operator">();</span><span class="flow">
+   if</span><span class="operator"> (!</span> input<span class="operator">) {</span> setMessageReturn<span class="operator">(</span><span class="int">0</span><span class="operator">,</span><span class="string"> "invalid input parameter to call service 'user_service::update()'"</span><span class="operator">);</span><span class="flow"> return</span><span class="operator">; }</span>
+   QSqlError err<span class="operator"> =</span> user_manager<span class="operator">().</span>update<span class="operator">(</span>input<span class="operator">-&gt;</span>user<span class="operator">);</span><span class="flow">
+   if</span><span class="operator"> (</span>err<span class="operator">.</span>isValid<span class="operator">()) {</span> setMessageReturn<span class="operator">(</span><span class="int">0</span><span class="operator">,</span> err<span class="operator">.</span>text<span class="operator">()); }</span><span class="flow">
+   else</span><span class="operator"> {</span> setMessageReturn<span class="operator">(</span><span class="bool">true</span><span class="operator">); }
+}</span><span class="type">
+
+void</span> user_service<span class="operator">::</span>remove<span class="operator">()
+{</span>
+   user_service_input_ptr input<span class="operator"> =</span> getInputParameter<span class="operator">();</span><span class="flow">
+   if</span><span class="operator"> (!</span> input<span class="operator">) {</span> setMessageReturn<span class="operator">(</span><span class="int">0</span><span class="operator">,</span><span class="string"> "invalid input parameter to call service 'user_service::remove()'"</span><span class="operator">);</span><span class="flow"> return</span><span class="operator">; }</span>
+   user_ptr user_tmp<span class="operator"> =</span> user_ptr<span class="operator">(</span><span class="keyword">new</span> user<span class="operator">());</span>
+   user_tmp<span class="operator">-&gt;</span>id<span class="operator"> =</span> input<span class="operator">-&gt;</span>id<span class="operator">;</span>
+   QSqlError err<span class="operator"> =</span> user_manager<span class="operator">().</span>remove<span class="operator">(</span>user_tmp<span class="operator">);</span><span class="flow">
+   if</span><span class="operator"> (</span>err<span class="operator">.</span>isValid<span class="operator">()) {</span> setMessageReturn<span class="operator">(</span><span class="int">0</span><span class="operator">,</span> err<span class="operator">.</span>text<span class="operator">()); }</span><span class="flow">
+   else</span><span class="operator"> {</span> setMessageReturn<span class="operator">(</span><span class="bool">true</span><span class="operator">); }
+}</span><span class="type">
+
+void</span> user_service<span class="operator">::</span>remove_all<span class="operator">()
+{</span>
+   QSqlError err<span class="operator"> =</span> user_manager<span class="operator">().</span>remove_all<span class="operator">();</span><span class="flow">
+   if</span><span class="operator"> (</span>err<span class="operator">.</span>isValid<span class="operator">()) {</span> setMessageReturn<span class="operator">(</span><span class="int">0</span><span class="operator">,</span> err<span class="operator">.</span>text<span class="operator">()); }</span><span class="flow">
+   else</span><span class="operator"> {</span> setMessageReturn<span class="operator">(</span><span class="bool">true</span><span class="operator">); }
+}</span><span class="type">
+
+void</span> user_service<span class="operator">::</span>fetch_by_id<span class="operator">()
+{</span>
+   user_service_input_ptr input<span class="operator"> =</span> getInputParameter<span class="operator">();</span><span class="flow">
+   if</span><span class="operator"> (!</span> input<span class="operator">) {</span> setMessageReturn<span class="operator">(</span><span class="int">0</span><span class="operator">,</span><span class="string"> "invalid input parameter to call service 'user_service::fetch_by_id()'"</span><span class="operator">);</span><span class="flow"> return</span><span class="operator">; }</span>
+   user_ptr user_output<span class="operator"> =</span> user_ptr<span class="operator">(</span><span class="keyword">new</span> user<span class="operator">());</span>
+   user_output<span class="operator">-&gt;</span>id<span class="operator"> =</span> input<span class="operator">-&gt;</span>id<span class="operator">;</span>
+   QSqlError err<span class="operator"> =</span> user_manager<span class="operator">().</span>fetch_by_id<span class="operator">(</span>user_output<span class="operator">);</span><span class="flow">
+   if</span><span class="operator"> (</span>err<span class="operator">.</span>isValid<span class="operator">()) {</span> setMessageReturn<span class="operator">(</span><span class="int">0</span><span class="operator">,</span> err<span class="operator">.</span>text<span class="operator">());</span><span class="flow"> return</span><span class="operator">; }</span>
+   user_service_output_ptr output<span class="operator"> =</span> user_service_output_ptr<span class="operator">(</span><span class="keyword">new</span> user_service_output<span class="operator">());</span>
+   output<span class="operator">-&gt;</span>user<span class="operator"> =</span> user_output<span class="operator">;</span>
+   setOutputParameter<span class="operator">(</span>output<span class="operator">);</span>
+   setMessageReturn<span class="operator">(</span><span class="bool">true</span><span class="operator">);
+}</span><span class="type">
+
+void</span> user_service<span class="operator">::</span>fetch_all<span class="operator">()
+{</span>
+   list_of_users_ptr list_of_users_output<span class="operator"> =</span> list_of_users_ptr<span class="operator">(</span><span class="keyword">new</span> list_of_users<span class="operator">());</span>
+   QSqlError err<span class="operator"> =</span> user_manager<span class="operator">().</span>fetch_all<span class="operator">(</span>list_of_users_output<span class="operator">);</span><span class="flow">
+   if</span><span class="operator"> (</span>err<span class="operator">.</span>isValid<span class="operator">()) {</span> setMessageReturn<span class="operator">(</span><span class="int">0</span><span class="operator">,</span> err<span class="operator">.</span>text<span class="operator">());</span><span class="flow"> return</span><span class="operator">; }</span>
+   user_service_output_ptr output<span class="operator"> =</span> user_service_output_ptr<span class="operator">(</span><span class="keyword">new</span> user_service_output<span class="operator">());</span>
+   output<span class="operator">-&gt;</span>list_of_users<span class="operator"> =</span> list_of_users_output<span class="operator">;</span>
+   setOutputParameter<span class="operator">(</span>output<span class="operator">);</span>
+   setMessageReturn<span class="operator">(</span><span class="bool">true</span><span class="operator">);
+}</span><span class="type">
+
+void</span> user_service<span class="operator">::</span>get_by_criteria<span class="operator">()
+{</span>
+   user_service_input_ptr input<span class="operator"> =</span> getInputParameter<span class="operator">();</span><span class="flow">
+   if</span><span class="operator"> (!</span> input<span class="operator">) {</span> setMessageReturn<span class="operator">(</span><span class="int">0</span><span class="operator">,</span><span class="string"> "invalid input parameter to call service 'user_service::get_by_criteria()'"</span><span class="operator">);</span><span class="flow"> return</span><span class="operator">; }</span>
+   list_of_users_ptr list_of_users_output<span class="operator"> =</span> list_of_users_ptr<span class="operator">(</span><span class="keyword">new</span> list_of_users<span class="operator">());</span>
+   QSqlError err<span class="operator"> =</span> user_manager<span class="operator">().</span>get_by_criteria<span class="operator">(</span>input<span class="operator">-&gt;</span>criteria<span class="operator">,</span> list_of_users_output<span class="operator">);</span><span class="flow">
+   if</span><span class="operator"> (</span>err<span class="operator">.</span>isValid<span class="operator">()) {</span> setMessageReturn<span class="operator">(</span><span class="int">0</span><span class="operator">,</span> err<span class="operator">.</span>text<span class="operator">());</span><span class="flow"> return</span><span class="operator">; }</span>
+   user_service_output_ptr output<span class="operator"> =</span> user_service_output_ptr<span class="operator">(</span><span class="keyword">new</span> user_service_output<span class="operator">());</span>
+   output<span class="operator">-&gt;</span>list_of_users<span class="operator"> =</span> list_of_users_output<span class="operator">;</span>
+   setOutputParameter<span class="operator">(</span>output<span class="operator">);</span>
+   setMessageReturn<span class="operator">(</span><span class="bool">true</span><span class="operator">);
+}</span><span class="pre">
+
+#endif // _QX_SERVICE_MODE_CLIENT
+</span></pre>
+        </td></tr></tbody></table>
+        <br>
+        Now, our application server is finished and provides multiple services.<br>
+        It's time to write a client to call our services...<br>
+        <br><br>
+        <a name="tuto_30"><u><font color="#100D5A">3- client GUI : <i>qxClient</i></font></u></a>
+        <br><br>
+        Like <i>qxServer</i> project, <i>qxClient</i> project has a GUI designed with <b>Qt Designer</b> tool of Qt library.<br>
+        There is many buttons to call all services provided by our application server.<br>
+        There is also a field to set an <i>ip address</i> and a <i>port number</i> to connect to our application server.<br>
+        <br>
+        <img alt="gui_qxClient" src="./resource/gui_qxClient_01.jpg" width="549" height="405" style="border:0px solid #100D5A; border-color:#100D5A;">
+        <br><br>
+        How to retrieve the current server date-time ?<br>
+        Here is the code executed when a user is clicking on <i>Get Server DateTime</i> button :<br>
+        <br>
+        <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="main_dlg::onClickBtnDateTime()">
+        <pre><span class="type">void</span> main_dlg<span class="operator">::</span>onClickBtnDateTime<span class="operator">()
+{</span>
+   QApplication<span class="operator">::</span>setOverrideCursor<span class="operator">(</span>QCursor<span class="operator">(</span>Qt<span class="operator">::</span>WaitCursor<span class="operator">));</span><span class="comment">
+   // Create service and call method to retrieve current server date-time
+</span>   server_infos service<span class="operator">;</span>
+   service<span class="operator">.</span>get_current_date_time<span class="operator">();</span><span class="comment">
+   // Update transaction log
+</span>   updateLastTransactionLog<span class="operator">(</span>service<span class="operator">.</span>getTransaction<span class="operator">());</span>
+   QApplication<span class="operator">::</span>restoreOverrideCursor<span class="operator">();
+}</span></pre>
+        </td></tr></tbody></table>
+        <br>
+        <u>As you can see, the client doesn't have to write any specific code to call a service, this is just a call to a classic method</u>.<br>
+        You just have to instanciate a service, then call the service method : <i>get_current_date_time()</i>.<br>
+        <i>updateLastTransactionLog()</i> function log into the field the last transaction executed between client and server (xml format).<br>
+        If an error occured, then a message box is displayed with an error description.<br>
+        To know if a service has been executed without error, you have to use the function : <i>service.getMessageReturn();</i> (of <i>qx_bool</i> type that can contain an error code and an error description).<br>
+        Finally, to retrieve the reply from server (so the current date-time), you have to use the function : <i>service.getOutputParameter();</i> (of <i>user_service_output_ptr</i> type).<br>
+        <br>
+        <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="main_dlg::onClickBtnDateTimeAsync(), main_dlg::onDateTimeAsyncFinished()">
+<pre><span class="type">void</span> main_dlg<span class="operator">::</span>onClickBtnDateTimeAsync<span class="operator">()
+{</span><span class="flow">
+   if</span><span class="operator"> (</span>m_pDateTimeAsync<span class="operator">) {</span> qDebug<span class="operator">(</span><span class="string">"[QxOrm] '%s' transaction is already running"</span><span class="operator">,</span><span class="string"> "server_infos::get_current_date_time"</span><span class="operator">);</span><span class="flow"> return</span><span class="operator">; }</span><span class="comment">
+   // Create service and call method to retrieve current server date-time (async mode)
+</span>   server_infos_ptr service<span class="operator"> =</span> server_infos_ptr<span class="operator">(</span><span class="keyword">new</span> server_infos<span class="operator">());</span>
+   m_pDateTimeAsync<span class="operator">.</span>reset<span class="operator">(</span><span class="keyword">new</span> qx<span class="operator">::</span>service<span class="operator">::</span>QxClientAsync<span class="operator">());</span>
+   QObject<span class="operator">::</span>connect<span class="operator">(</span>m_pDateTimeAsync<span class="operator">.</span>get<span class="operator">(),</span> SIGNAL<span class="operator">(</span>finished<span class="operator">()),</span><span class="keyword"> this</span><span class="operator">,</span> SLOT<span class="operator">(</span>onDateTimeAsyncFinished<span class="operator">()));</span>
+   m_pDateTimeAsync<span class="operator">-&gt;</span>setService<span class="operator">(</span>service<span class="operator">,</span><span class="string"> "get_current_date_time"</span><span class="operator">);</span>
+   m_pDateTimeAsync<span class="operator">-&gt;</span>start<span class="operator">();
+}</span><span class="type">
+
+void</span> main_dlg<span class="operator">::</span>onDateTimeAsyncFinished<span class="operator">()
+{</span><span class="flow">
+   if</span><span class="operator"> (!</span> m_pDateTimeAsync<span class="operator"> || !</span> m_pDateTimeAsync<span class="operator">-&gt;</span>getService<span class="operator">()) {</span><span class="flow"> return</span><span class="operator">; }</span>
+   updateLastTransactionLog<span class="operator">(</span>m_pDateTimeAsync<span class="operator">-&gt;</span>getService<span class="operator">()-&gt;</span>getTransaction<span class="operator">());</span>
+   m_pDateTimeAsync<span class="operator">.</span>reset<span class="operator">();
+}</span></pre>
+        </td></tr></tbody></table>
+        <br>
+        The second example is the code executed when a user is clicking on <i>Get Server DateTime Async</i> button.<br>
+        It shows how to call a service in <u>async mode</u>, so <u>without blocking GUI</u> (waiting for a reply from server).<br>
+        <b>QxOrm</b> library provides <i>qx::service::QxClientAsync</i> class to make easier async service call.<br>
+        <br>
+        Aync call with <b>QxService</b> module is very easy :<br>
+        * create an instance of a service<br>
+        * create an instance of <i>qx::service::QxClientAsync</i> type<br>
+        * connect to the <i>finished</i> event (to indicate that a reply from server is available)<br>
+        * set the service and method to call (string format) to <i>qx::service::QxClientAsync</i> object<br>
+        * run the transaction with the method <i>start()</i><br>
+        <br>
+        <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="main_dlg::onClickBtnAddUser()">
+<pre><span class="type">void</span> main_dlg<span class="operator">::</span>onClickBtnAddUser<span class="operator">()
+{</span>
+   QApplication<span class="operator">::</span>setOverrideCursor<span class="operator">(</span>QCursor<span class="operator">(</span>Qt<span class="operator">::</span>WaitCursor<span class="operator">));</span><span class="comment">
+   // Create input parameters with user to add
+</span>   user_service_input_ptr input<span class="operator"> =</span> user_service_input_ptr<span class="operator">(</span><span class="keyword">new</span> user_service_input<span class="operator">());</span>
+   input<span class="operator">-&gt;</span>user<span class="operator"> =</span> fileUser<span class="operator">();</span><span class="comment">
+   // Create service to call and set input parameters
+</span>   user_service service<span class="operator">;</span>
+   service<span class="operator">.</span>setInputParameter<span class="operator">(</span>input<span class="operator">);</span>
+   service<span class="operator">.</span>insert<span class="operator">();</span><span class="comment">
+   // If transaction is ok =&gt; display user with new id added to database
+</span>   user_ptr output<span class="operator"> = (</span>service<span class="operator">.</span>isValidWithOutput<span class="operator">() ?</span> service<span class="operator">.</span>getOutputParameter<span class="operator">()-&gt;</span>user<span class="operator"> :</span> user_ptr<span class="operator">());</span><span class="flow">
+   if</span><span class="operator"> (</span>output<span class="operator">) {</span> fillUser<span class="operator">(</span>output<span class="operator">); }</span><span class="comment">
+   // Update transaction log
+</span>   updateLastTransactionLog<span class="operator">(</span>service<span class="operator">.</span>getTransaction<span class="operator">());</span>
+   QApplication<span class="operator">::</span>restoreOverrideCursor<span class="operator">();
+}</span></pre>
+        </td></tr></tbody></table>
+        <br>
+        The third example is the code executed when then button <i>Add</i> into <i>User transaction</i> section is pressed.<br>
+        It adds a new person (<i>user</i> class) into a database.<br>
+        This sample shows how to pass a structure (<i>user</i> class) into input parameter of a service.<br>
+        <i>fileUser()</i> method creates an instance of <i>user</i> type and set properties from GUI fields.<br>
+        This instance is used for our service's input parameter.<br>
+        If transaction is executed without error, then output parameter (reply from server) contains another instance of <i>user</i> type with the new id added into database.<br>
+        Finally, we write <i>fillUser()</i> method to update GUI and to display the new user id added into database.<br>
+        <br>
+        <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="main_dlg::onClickBtnGetAllUsers()">
+<pre><span class="type">void</span> main_dlg<span class="operator">::</span>onClickBtnGetAllUsers<span class="operator">()
+{</span>
+   QApplication<span class="operator">::</span>setOverrideCursor<span class="operator">(</span>QCursor<span class="operator">(</span>Qt<span class="operator">::</span>WaitCursor<span class="operator">));</span><span class="comment">
+   // Create service to call
+</span>   user_service service<span class="operator">;</span>
+   service<span class="operator">.</span>fetch_all<span class="operator">();</span><span class="comment">
+   // If transaction is ok =&gt; display in a message box the number of users fetched from database
+</span>   list_of_users_ptr output<span class="operator"> = (</span>service<span class="operator">.</span>isValidWithOutput<span class="operator">() ?</span> service<span class="operator">.</span>getOutputParameter<span class="operator">()-&gt;</span>list_of_users<span class="operator"> :</span> list_of_users_ptr<span class="operator">());</span><span class="flow">
+   if</span><span class="operator"> (</span>output<span class="operator">) {</span> QMessageBox<span class="operator">::</span>information<span class="operator">(</span><span class="keyword">this</span><span class="operator">,</span><span class="string"> "qxClient - get all users"</span><span class="operator">,</span><span class="string"> "database contains '"</span><span class="operator"> +</span> QString<span class="operator">::</span>number<span class="operator">(</span>output<span class="operator">-&gt;</span>size<span class="operator">()) +</span><span class="string"> "' user(s)."</span><span class="operator">); }</span><span class="comment">
+   // Update transaction log
+</span>   updateLastTransactionLog<span class="operator">(</span>service<span class="operator">.</span>getTransaction<span class="operator">());</span>
+   QApplication<span class="operator">::</span>restoreOverrideCursor<span class="operator">();
+}</span></pre>
+        </td></tr></tbody></table>
+        <br>
+        The fourth example is the code executed when the button <i>Get All</i> of <i>User transaction</i> section is pressed.<br>
+        It retrieves in a collection all <i>user</i> stored into database.<br>
+        Output parameter is a list of users : <i>stl, boost, Qt ou qx::QxCollection</i>.<br>
+        So, <b>QxService</b> module can share complex data structure between client and server.<br>
+        <br>
+        Now, enjoy with <b>QxOrm QxService module</b>... ;o)
+        <br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br><hr style="width: 80%" align="center" size="1" color="#100D5A">
+<table border="0" style="width: 80%" align="center">
+  <col><col>
+  <tbody>
+    <tr>
+      <td align="left" valign="middle"><img alt="QxOrm"
+        src="./resource/logo_qxorm_small.jpg" width="168" height="40"></td>
+      <td align="right" valign="middle"><font size="2"></font> </td>
+    </tr>
+  </tbody>
+</table>
+</body>
+</html>

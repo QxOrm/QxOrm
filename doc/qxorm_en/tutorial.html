@@ -62,8 +62,8 @@
 <table border="0" style="width: 80%" align="center">
   <col><col><col><col><col>
   <tbody><tr>
-  <td align="left" valign="top"><font size="2">QxOrm  &gt;&gt;  Tutorial</font></td>
-  <td align="right" valign="top"><font size="2">Current version : QxOrm 1.1.4 (LGPL)</font></td>
+  <td align="left" valign="top"><font size="2">QxOrm  &gt;&gt;  Tutorial  &gt;&gt;  qxBlog</font></td>
+  <td align="right" valign="top"><font size="2">Current version : QxOrm 1.1.5 (LGPL)</font></td>
   <td width="10px"></td>
   <td width="40px" height="30px"><a href="../qxorm_fr/tutorial.html"><img alt="Version française du site" src="./resource/FR.png" width="40" height="30" border="0"></a></td>
   <td width="40px" height="30px"><a href="../qxorm_en/tutorial.html"><img alt="Web site english version" src="./resource/GB.png" width="40" height="30" border="0"></a></td>
@@ -74,22 +74,45 @@
   <tbody>
     <tr>
       <td align="justify">
-        In this chapter, we will see a lot of functionalities of <b>QxOrm</b> library with the creation of a C++ project : <b>qxBlog - blog management in C++</b>.<br>
-        <b>qxBlog</b> tutorial step by step :
-        <ul>
-          <li><a href="#tuto_1">1- <b>qxBlog</b> project - blog management in C++</a></li>
-          <li><a href="#tuto_2">2- all files in <b>qxBlog</b> project</a></li>
-          <li><a href="#tuto_3">3- <i>qxBlog.pro</i> file</a></li>
-          <li><a href="#tuto_4">4- <i>export.h</i> file</a></li>
-          <li><a href="#tuto_5">5- <i>precompiled.h</i> file</a></li>
-          <li><a href="#tuto_6">6- <i>author.h</i> and <i>author.cpp</i> (relationship <i>one-to-many</i>)</a></li>
-          <li><a href="#tuto_7">7- <i>comment.h</i> and <i>comment.cpp</i> (relationship <i>many-to-one</i>)</a></li>
-          <li><a href="#tuto_8">8- <i>category.h</i> and <i>category.cpp</i> (relationship <i>many-to-many</i>)</a></li>
-          <li><a href="#tuto_9">9- <i>blog.h</i> and <i>blog.cpp</i> (relationship <i>one-to-many</i>, <i>many-to-one</i> and <i>many-to-many</i>)</a></li>
-          <li><a href="#tuto_10">10- <i>main.cpp</i> file</a></li>
-          <li><a href="#tuto_11">11- relationship <i>one-to-one</i> with <i>person</i> class</a></li>
-        </ul>
-        <i>Note :</i> there is a similar project in the directory '<i>./test/qxBlog_composite_key/</i>' to show how to define an id with multi-columns in database (<i>composite key</i>).<br>
+        <table border="0">
+          <col><col><col>
+          <tbody>
+            <tr>
+              <td><i>Select tutorial to display : </i></td>
+              <td><a href="./tutorial.html"><img alt="Tuto n°1 : qxBlog" src="./resource/tuto_01_qxBlog.jpg" width="200" height="30" style="border:2px solid #100D5A; border-color:#100D5A;"></a></td>
+              <td><a href="./tutorial_2.html"><img alt="Tuto n°2 : qxClientServer" src="./resource/tuto_02_qxClientServer.jpg" width="200" height="30" style="border:0px solid #100D5A; border-color:#100D5A;"></a></td>
+            </tr>
+          </tbody>
+        </table>
+        <hr style="width: 100%" align="center" size="1" color="#100D5A">
+        <br>
+        <table border="0" style="width: 100%" align="center">
+          <col><col>
+          <tbody>
+            <tr>
+              <td>In this chapter, we will see a lot of functionalities of <b>QxOrm</b> library with the creation of a C++ project : <b>qxBlog - blog management in C++</b>.<br>
+                 <b>qxBlog</b> tutorial step by step :
+                 <ul>
+                   <li><a href="#tuto_1">1- <b>qxBlog</b> project - blog management in C++</a></li>
+                   <li><a href="#tuto_2">2- all files in <b>qxBlog</b> project</a></li>
+                   <li><a href="#tuto_3">3- <i>qxBlog.pro</i> file</a></li>
+                   <li><a href="#tuto_4">4- <i>export.h</i> file</a></li>
+                   <li><a href="#tuto_5">5- <i>precompiled.h</i> file</a></li>
+                   <li><a href="#tuto_6">6- <i>author.h</i> and <i>author.cpp</i> (relationship <i>one-to-many</i>)</a></li>
+                   <li><a href="#tuto_7">7- <i>comment.h</i> and <i>comment.cpp</i> (relationship <i>many-to-one</i>)</a></li>
+                   <li><a href="#tuto_8">8- <i>category.h</i> and <i>category.cpp</i> (relationship <i>many-to-many</i>)</a></li>
+                   <li><a href="#tuto_9">9- <i>blog.h</i> and <i>blog.cpp</i> (relationship <i>one-to-many</i>, <i>many-to-one</i> and <i>many-to-many</i>)</a></li>
+                   <li><a href="#tuto_10">10- <i>main.cpp</i> file</a></li>
+                   <li><a href="#tuto_11">11- relationship <i>one-to-one</i> with <i>person</i> class</a></li>
+                 </ul>
+              </td>
+              <td width="200" align="center" valign="top"><a href="./resource/qt_ambassador_logo.png" target="_blank"><img alt="qt_ambassador" src="./resource/qt_ambassador_logo_150x150.png" width="150" height="150" border="0"></a><br>
+                 <b><font size="2">QxOrm library has been accepted into the <a href="http://qt.nokia.com/qt-in-use/ambassadors/qtambassador/" target="_blank">Qt Ambassador Program</a></font></b>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <i>Note :</i> there is a similar project in the directory '<i>./test/qxBlogCompositeKey/</i>' to show how to define an id with multi-columns in database (<i>composite key</i>).<br>
         For more details about '<i>multi-columns primary key</i>' : <a href="../qxorm_en/faq.html#faq_101">goto the FAQ</a>.<br>
         <br><br>
         <a name="tuto_1"><u><font color="#100D5A">1- <b>qxBlog</b> project - blog management in C++ :</font></u></a> 
@@ -487,7 +510,7 @@ template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</
         <ul>
           <li><b><font style="background-color:yellow">serialization</font></b> : binary and xml format
           </li>
-          <li><b><font style="background-color:yellow">reflection</font></b> : access to classes definitions, retrieve properties and call classes methods
+          <li><b><font style="background-color:yellow">reflection</font></b> (or <b><font style="background-color:yellow">introspection</font></b>) : access to classes definitions, retrieve properties and call classes methods
           </li>
         </ul>
         <br>

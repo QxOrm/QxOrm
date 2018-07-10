@@ -134,7 +134,7 @@ struct QxDao_DeleteById_Ptr
 {
 
    static inline QSqlError deleteById(T & t, QSqlDatabase * pDatabase)
-   { qAssert(t != NULL); return (t ? qx::dao::delete_by_id((* t), pDatabase) : QSqlError()); }
+   { return (t ? qx::dao::delete_by_id((* t), pDatabase) : QSqlError()); }
 
 };
 

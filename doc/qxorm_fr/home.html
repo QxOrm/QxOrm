@@ -63,7 +63,7 @@
   <col><col><col><col><col>
   <tbody><tr>
   <td align="left" valign="top"><font size="2">QxOrm  &gt;&gt;  Accueil</font></td>
-  <td align="right" valign="top"><font size="2">Version courante : QxOrm 1.1.4 (LGPL)</font></td>
+  <td align="right" valign="top"><font size="2">Version courante : QxOrm 1.1.5 (LGPL)</font></td>
   <td width="10px"></td>
   <td width="40px" height="30px"><a href="../qxorm_fr/home.html"><img alt="Version française du site" src="./resource/FR.png" width="40" height="30" border="0"></a></td>
   <td width="40px" height="30px"><a href="../qxorm_en/home.html"><img alt="Web site english version" src="./resource/GB.png" width="40" height="30" border="0"></a></td>
@@ -74,26 +74,36 @@
   <tbody>
     <tr>
       <td align="justify">
-        <b>QxOrm est une librairie C++ de gestion de données.</b><br>
-        <b>QxOrm</b> a pour ambition d'être utilisé dans de nombreux projets, à la
-        fois open-source et professionnels.<br>
-        A partir d'une simple <b>fonction de paramétrage</b> (que l'on peut
-        comparer 'modestement' avec un fichier de mapping <i>Hibernate</i>), vous
-        aurez accès aux fonctionnalités suivantes :<br>
-        <ul>
-          <li><b><font style="background-color:yellow">persistance</font></b> : communication avec de nombreuses bases de
-            données (avec support des relations <i>1-1</i>, <i>1-n</i>, <i>n-1</i> et
-            <i>n-n</i>)
-          </li>
-          <li><b><font style="background-color:yellow">serialization</font></b> des données (flux binaire et xml)
-          </li>
-          <li><b><font style="background-color:yellow">reflection</font></b> pour accéder aux classes, attributs
-            et invoquer des méthodes
-          </li>
-        </ul>
-        <b>QxOrm</b> a pour objectif de simplifier le code C++ tout en offrant un
-        maximum de fonctionnalités.<br>
-        Voici les principaux avantages de QxOrm : 
+        <table border="0" style="width: 100%" align="center">
+          <col><col>
+          <tbody>
+            <tr>
+              <td><b>QxOrm est une librairie C++ de gestion de données.</b><br>
+                 <b>QxOrm</b> a pour ambition d'être utilisé dans de nombreux projets, à la
+                 fois open-source et professionnels.<br>
+                 A partir d'une simple <b>fonction de paramétrage</b> (que l'on peut
+                 comparer 'modestement' avec un fichier de mapping <i>Hibernate</i>), vous
+                 aurez accès aux fonctionnalités suivantes :<br>
+                 <ul>
+                   <li><b><font style="background-color:yellow">persistance</font></b> : communication avec de nombreuses bases de
+                     données (avec support des relations <i>1-1</i>, <i>1-n</i>, <i>n-1</i> et
+                     <i>n-n</i>)
+                   </li>
+                   <li><b><font style="background-color:yellow">serialization</font></b> des données (flux binaire et xml)
+                   </li>
+                   <li><b><font style="background-color:yellow">reflection</font></b> (ou <b><font style="background-color:yellow">introspection</font></b>) pour accéder aux classes, attributs
+                     et invoquer des méthodes
+                   </li>
+                 </ul>
+                 <b>QxOrm</b> a pour objectif de simplifier le code C++ tout en offrant un maximum de fonctionnalités.<br>
+                 Voici les principaux avantages de QxOrm : 
+              </td>
+              <td width="200" align="center" valign="top"><a href="./resource/qt_ambassador_logo.png" target="_blank"><img alt="qt_ambassador" src="./resource/qt_ambassador_logo_150x150.png" width="150" height="150" border="0"></a><br>
+                 <b><font size="2">QxOrm library has been accepted into the <a href="http://qt.nokia.com/qt-in-use/ambassadors/qtambassador/" target="_blank">Qt Ambassador Program</a></font></b>
+              </td>
+            </tr>
+          </tbody>
+        </table>
         <ul>
           <li><b>non intrusif</b> : la <i>fonction de paramétrage</i> se trouve à
             l'extérieur des classes. La signature des classes n'est donc pas
@@ -197,10 +207,14 @@
           </li>
           <li><p><b>QxRegister, QxDataMember et QxFunction</b> : même si
             ce n'est pas le but 1er de QxOrm, il est nécessaire d'émuler le
-            mécanisme de <i>reflection</i> présent nativement dans d'autres langages
+            mécanisme de <i>reflection</i> (ou <i>introspection</i>) présent nativement dans d'autres langages
             (Java, C#, etc...) pour utiliser toutes les fonctionnalités de
             QxOrm.</p>
           </li>
+          <li><p><b>QxService</b> : basé sur le moteur <a href="http://doc.qt.nokia.com/4.7/qtnetwork.html" target="_blank"><i>QtNetwork</i></a> de Qt, ce module
+            permet de créer de manière simple et performante <b>un serveur d'applications en C++</b> (notion de <i>services</i> avec <i>demande</i> du client et <i>réponse</i> du serveur). <b>QxService</b> utilise la <i>serialization</i> et l'<i>introspection</i> des données
+            et fonctions pour pouvoir faire transiter sur le réseau n'importe quelle classe ou structure. Pour plus d'informations sur ce module, <b>un tutoriel</b> est disponible <a href="./tutorial_2.html">en cliquant ici</a>.
+          </p></li>
           <li><p><b>QxCollection&lt;Key, Value&gt;</b> : basé sur
             <a href="http://www.boost.org/doc/libs/1_42_0/libs/multi_index/doc/index.html" target="_blank"><i>boost::multi_index_container</i></a>, cette collection permet de cumuler
             les avantages d'un <i>std::vector&lt;T&gt;</i> (conserve l'ordre

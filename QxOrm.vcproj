@@ -308,6 +308,42 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="QxService"
+				>
+				<File
+					RelativePath=".\src\QxService\IxParameter.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\QxService\IxService.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\QxService\QxConnect.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\QxService\QxServer.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\QxService\QxThread.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\QxService\QxThreadPool.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\QxService\QxTools.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\QxService\QxTransaction.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="include"
@@ -1147,6 +1183,54 @@
 				</File>
 				<File
 					RelativePath=".\include\QxRegister\QxRegister.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\QxRegister\QxRegisterInternalHelper.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="QxService"
+				>
+				<File
+					RelativePath=".\include\QxService\IxParameter.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\QxService\IxService.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\QxService\QxClientAsync.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\QxService\QxConnect.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\QxService\QxServer.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\QxService\QxService.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\QxService\QxThread.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\QxService\QxThreadPool.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\QxService\QxTools.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\QxService\QxTransaction.h"
 					>
 				</File>
 			</Filter>

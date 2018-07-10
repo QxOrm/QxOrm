@@ -142,7 +142,7 @@ struct QxDao_Update_Ptr
 {
 
    static inline QSqlError update(T & t, QSqlDatabase * pDatabase, const QStringList & columns)
-   { qAssert(t != NULL); return (t ? qx::dao::update((* t), pDatabase, columns) : QSqlError()); }
+   { return (t ? qx::dao::update((* t), pDatabase, columns) : QSqlError()); }
 
 };
 

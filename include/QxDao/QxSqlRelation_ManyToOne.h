@@ -57,6 +57,7 @@ public:
    virtual void lazyFetch_ResolveInput(QxSqlRelationParams & params) const    { Q_UNUSED(params); }
    virtual void eagerFetch_ResolveInput(QxSqlRelationParams & params) const   { Q_UNUSED(params); }
    virtual QSqlError onBeforeSave(QxSqlRelationParams & params) const         { Q_UNUSED(params); return QSqlError(); }
+   virtual QSqlError createExtraTable(QxSqlRelationParams & params) const     { Q_UNUSED(params); return QSqlError(); }
 
    virtual QSqlError onAfterSave(QxSqlRelationParams & params) const
    { return qx::dao::save(this->getData(params), (& params.database())); }

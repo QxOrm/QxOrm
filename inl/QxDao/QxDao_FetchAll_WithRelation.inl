@@ -127,7 +127,7 @@ struct QxDao_FetchAll_WithRelation_Ptr
 {
 
    static inline QSqlError fetchAll(const QStringList & relation, const qx::QxSqlQuery & query, T & t, QSqlDatabase * pDatabase)
-   { qAssert(t != NULL); return (t ? qx::dao::fetch_by_query_with_relation(relation, query, (* t), pDatabase) : QSqlError()); }
+   { return (t ? qx::dao::fetch_by_query_with_relation(relation, query, (* t), pDatabase) : QSqlError()); }
 
 };
 

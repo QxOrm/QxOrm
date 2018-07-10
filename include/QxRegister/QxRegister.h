@@ -54,6 +54,12 @@
 
 #include <QxTraits/is_qx_registered.h>
 
+#define QX_REGISTER_CLASS_MAPPING_FCT_HPP(dllImportExport, className) \
+namespace qx { template <> dllImportExport void register_class(QxClass< className > & t) BOOST_USED; }
+
+#define QX_REGISTER_CLASS_MAPPING_FCT_EMPTY_CPP(className) \
+namespace qx { template <> void register_class(QxClass< className > & t) { Q_UNUSED(t); } }
+
 #define QX_SERIALIZE_IMPLEMENT_ARCHIVE_CPP(Archive, className) \
 namespace boost { namespace serialization { \
 inline void serialize(Archive & ar, className & t, const unsigned int file_version) \
@@ -269,7 +275,7 @@ QX_REGISTER_COMPLEX_CLASS_NAME_CPP(className, className)
 #define QX_REGISTER_COMPLEX_CLASS_NAME_HPP_EXPORT_DLL(className, baseClass, version, classNameFormatted) \
 QX_REGISTER_COMPLEX_CLASS_NAME_HPP(className, baseClass, version, classNameFormatted) \
 QX_SERIALIZE_LIST_ARCHIVE_HPP(QX_DLL_EXPORT_HELPER, className) \
-namespace qx { template <> QX_DLL_EXPORT_HELPER void register_class(QxClass< className > & t) BOOST_USED; }
+QX_REGISTER_CLASS_MAPPING_FCT_HPP(QX_DLL_EXPORT_HELPER, className)
 // ---
 #define QX_REGISTER_HPP_EXPORT_DLL(className, baseClass, version) \
 QX_REGISTER_COMPLEX_CLASS_NAME_HPP_EXPORT_DLL(className, baseClass, version, className)
@@ -279,7 +285,7 @@ QX_REGISTER_COMPLEX_CLASS_NAME_HPP(className, baseClass, version, classNameForma
 QX_DLL_EXPORT_TEMPLATE_QX_CLASS_HPP(className) \
 QX_BOOST_EXPORT_SERIALIZATION_HPP(className) \
 QX_SERIALIZE_LIST_ARCHIVE_HPP(QX_DLL_EXPORT_HELPER, className) \
-namespace qx { template <> QX_DLL_EXPORT_HELPER void register_class(QxClass< className > & t) BOOST_USED; }
+QX_REGISTER_CLASS_MAPPING_FCT_HPP(QX_DLL_EXPORT_HELPER, className)
 // ---
 #define QX_REGISTER_HPP_EXPORT_DLL(className, baseClass, version) \
 QX_REGISTER_COMPLEX_CLASS_NAME_HPP_EXPORT_DLL(className, baseClass, version, className)
@@ -290,7 +296,7 @@ QX_REGISTER_COMPLEX_CLASS_NAME_HPP(className, baseClass, version, classNameForma
 QX_DLL_EXPORT_TEMPLATE_QX_CLASS_HPP(className) \
 QX_BOOST_EXPORT_SERIALIZATION_HPP(className) \
 QX_SERIALIZE_LIST_ARCHIVE_HPP(QX_DLL_IMPORT_HELPER, className) \
-namespace qx { template <> QX_DLL_IMPORT_HELPER void register_class(QxClass< className > & t) BOOST_USED; }
+QX_REGISTER_CLASS_MAPPING_FCT_HPP(QX_DLL_IMPORT_HELPER, className)
 
 #define QX_REGISTER_HPP_IMPORT_DLL(className, baseClass, version) \
 QX_REGISTER_COMPLEX_CLASS_NAME_HPP_IMPORT_DLL(className, baseClass, version, className)

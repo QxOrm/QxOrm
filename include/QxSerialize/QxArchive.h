@@ -65,6 +65,8 @@ class QxArchive
 
 public:
 
+   typedef typename qx::trait::archive_wide_traits<ArchiveInput>::type_string type_string;
+
    static qx_bool toFile(const T & obj, const QString & sFileName, unsigned int flags = boost::archive::no_header);
    static qx_bool fromFile(T & obj, const QString & sFileName, unsigned int flags = boost::archive::no_header);
 
@@ -74,11 +76,8 @@ public:
    static QString toString(const T & obj, unsigned int flags = boost::archive::no_header);
    static qx_bool fromString(T & obj, const QString & sString, unsigned int flags = boost::archive::no_header);
 
-   static qx_bool toNetwork(const T & obj, unsigned int flags = boost::archive::no_header);
-   static qx_bool fromNetwork(T & obj, unsigned int flags = boost::archive::no_header);
-
-   static qx_bool toNetworkCompressed(const T & obj, unsigned int flags = boost::archive::no_header);
-   static qx_bool fromNetworkCompressed(T & obj, unsigned int flags = boost::archive::no_header);
+   static QByteArray toByteArray(const T & obj, type_string * owner = NULL, unsigned int flags = boost::archive::no_header);
+   static qx_bool fromByteArray(T & obj, const QByteArray & data, unsigned int flags = boost::archive::no_header);
 
 };
 

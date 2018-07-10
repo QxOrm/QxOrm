@@ -51,16 +51,10 @@ template <class T> \
 inline qx_bool from_string(T & obj, const QString & sString, unsigned int flags = boost::archive::no_header) { return qx::QxArchive<T, INPUT, OUTPUT>::fromString(obj, sString, flags); }; \
 \
 template <class T> \
-inline qx_bool to_network(const T & obj, unsigned int flags = boost::archive::no_header) { return qx::QxArchive<T, INPUT, OUTPUT>::toNetwork(obj, flags); }; \
+inline QByteArray to_byte_array(const T & obj, typename qx::trait::archive_wide_traits< INPUT >::type_string * owner = NULL, unsigned int flags = boost::archive::no_header) { return qx::QxArchive<T, INPUT, OUTPUT>::toByteArray(obj, owner, flags); }; \
 \
 template <class T> \
-inline qx_bool from_network(T & obj, unsigned int flags = boost::archive::no_header) { return qx::QxArchive<T, INPUT, OUTPUT>::fromNetwork(obj, flags); }; \
-\
-template <class T> \
-inline qx_bool to_network_compressed(const T & obj, unsigned int flags = boost::archive::no_header) { return qx::QxArchive<T, INPUT, OUTPUT>::toNetworkCompressed(obj, flags); }; \
-\
-template <class T> \
-inline qx_bool from_network_compressed(T & obj, unsigned int flags = boost::archive::no_header) { return qx::QxArchive<T, INPUT, OUTPUT>::fromNetworkCompressed(obj, flags); }; \
+inline qx_bool from_byte_array(T & obj, const QByteArray & data, unsigned int flags = boost::archive::no_header) { return qx::QxArchive<T, INPUT, OUTPUT>::fromByteArray(obj, data, flags); }; \
 \
 
 #endif // _QX_SERIALIZE_MACRO_H_

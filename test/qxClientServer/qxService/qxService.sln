@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "qxService", "qxService.vcproj", "{400DB491-45AD-449E-BC23-A3C15FD3B09F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{49FC4CBF-3BE2-413B-A424-4E34870EC14A} = {49FC4CBF-3BE2-413B-A424-4E34870EC14A}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "QxOrm", "..\..\..\QxOrm.vcproj", "{49FC4CBF-3BE2-413B-A424-4E34870EC14A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{400DB491-45AD-449E-BC23-A3C15FD3B09F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{400DB491-45AD-449E-BC23-A3C15FD3B09F}.Debug|Win32.Build.0 = Debug|Win32
+		{400DB491-45AD-449E-BC23-A3C15FD3B09F}.Release|Win32.ActiveCfg = Release|Win32
+		{400DB491-45AD-449E-BC23-A3C15FD3B09F}.Release|Win32.Build.0 = Release|Win32
+		{49FC4CBF-3BE2-413B-A424-4E34870EC14A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{49FC4CBF-3BE2-413B-A424-4E34870EC14A}.Debug|Win32.Build.0 = Debug|Win32
+		{49FC4CBF-3BE2-413B-A424-4E34870EC14A}.Release|Win32.ActiveCfg = Release|Win32
+		{49FC4CBF-3BE2-413B-A424-4E34870EC14A}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

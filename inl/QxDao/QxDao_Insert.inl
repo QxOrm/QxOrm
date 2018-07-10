@@ -140,7 +140,7 @@ struct QxDao_Insert_Ptr
 {
 
    static inline QSqlError insert(T & t, QSqlDatabase * pDatabase)
-   { qAssert(t != NULL); return (t ? qx::dao::insert((* t), pDatabase) : QSqlError()); }
+   { return (t ? qx::dao::insert((* t), pDatabase) : QSqlError()); }
 
 };
 

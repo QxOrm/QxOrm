@@ -132,7 +132,7 @@ struct QxDao_Save_Ptr
 {
 
    static inline QSqlError save(T & t, QSqlDatabase * pDatabase)
-   { qAssert(t != NULL); return (t ? qx::dao::save((* t), pDatabase) : QSqlError()); }
+   { return (t ? qx::dao::save((* t), pDatabase) : QSqlError()); }
 
 };
 

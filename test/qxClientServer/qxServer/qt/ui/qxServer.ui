@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>dlgServer</class>
+ <widget class="QWidget" name="dlgServer">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>552</width>
+    <height>392</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>552</width>
+    <height>392</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>552</width>
+    <height>392</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>qxServer</string>
+  </property>
+  <widget class="QGroupBox" name="grpError">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>310</y>
+     <width>531</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Log last server error</string>
+   </property>
+   <widget class="QPlainTextEdit" name="txtError">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>511</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="palette">
+     <palette>
+      <active>
+       <colorrole role="Text">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>170</red>
+          <green>0</green>
+          <blue>0</blue>
+         </color>
+        </brush>
+       </colorrole>
+      </active>
+      <inactive>
+       <colorrole role="Text">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>170</red>
+          <green>0</green>
+          <blue>0</blue>
+         </color>
+        </brush>
+       </colorrole>
+      </inactive>
+      <disabled>
+       <colorrole role="Text">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>112</red>
+          <green>111</green>
+          <blue>113</blue>
+         </color>
+        </brush>
+       </colorrole>
+      </disabled>
+     </palette>
+    </property>
+    <property name="verticalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOn</enum>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="grpServerParams">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>531</width>
+     <height>81</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Server parameters</string>
+   </property>
+   <widget class="QLabel" name="lblThreadCount">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>20</y>
+      <width>81</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>Thread Count</string>
+    </property>
+    <property name="text">
+     <string>Thread Count :</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lblSerializationType">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>50</y>
+      <width>91</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>Serialization Type</string>
+    </property>
+    <property name="text">
+     <string>Serialization Type :</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="cboSerializationType">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>50</y>
+      <width>51</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>Serialization Type</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lblPortNumber">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>81</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>Port Number</string>
+    </property>
+    <property name="text">
+     <string>Port Number :</string>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="spinPortNumber">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>20</y>
+      <width>51</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>Port Number</string>
+    </property>
+    <property name="minimum">
+     <number>1</number>
+    </property>
+    <property name="maximum">
+     <number>32000</number>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="chkCompressData">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>50</y>
+      <width>101</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>Compress Data</string>
+    </property>
+    <property name="text">
+     <string>Compress Data</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnStartStop">
+    <property name="geometry">
+     <rect>
+      <x>330</x>
+      <y>20</y>
+      <width>111</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Start Server /
+Stop Server</string>
+    </property>
+   </widget>
+   <widget class="Line" name="lineServerParams">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>10</y>
+      <width>3</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
+   <widget class="QLabel" name="imgIsRunning">
+    <property name="geometry">
+     <rect>
+      <x>450</x>
+      <y>20</y>
+      <width>71</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>[ is running ? ]</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="spinThreadCount">
+    <property name="geometry">
+     <rect>
+      <x>260</x>
+      <y>20</y>
+      <width>51</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>Thread Count</string>
+    </property>
+    <property name="minimum">
+     <number>1</number>
+    </property>
+    <property name="maximum">
+     <number>999</number>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="grpTransaction">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>100</y>
+     <width>531</width>
+     <height>201</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Log last client-server reply-request transaction</string>
+   </property>
+   <widget class="QPlainTextEdit" name="txtTransaction">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>511</width>
+      <height>171</height>
+     </rect>
+    </property>
+    <property name="verticalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOn</enum>
+    </property>
+    <property name="horizontalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOn</enum>
+    </property>
+    <property name="lineWrapMode">
+     <enum>QPlainTextEdit::NoWrap</enum>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

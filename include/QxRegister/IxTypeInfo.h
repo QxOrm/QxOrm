@@ -37,6 +37,9 @@ class IxTypeInfo
 
 public:
 
+   IxTypeInfo() { ; }
+   virtual ~IxTypeInfo() { ; }
+
    virtual QString className() const = 0;
 
 };

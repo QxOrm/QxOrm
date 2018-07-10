@@ -38,12 +38,12 @@ private:
 
 public:
 
-   static inline void onBeforeInsert(T * t, qx::dao::detail::IxDao_Helper * dao) { qx::dao::detail::QxDao_Trigger<T>::TriggerHelper<is_valid_base_class, 0>::onBeforeInsert(t, dao); }
-   static inline void onBeforeUpdate(T * t, qx::dao::detail::IxDao_Helper * dao) { qx::dao::detail::QxDao_Trigger<T>::TriggerHelper<is_valid_base_class, 0>::onBeforeUpdate(t, dao); }
-   static inline void onBeforeDelete(T * t, qx::dao::detail::IxDao_Helper * dao) { qx::dao::detail::QxDao_Trigger<T>::TriggerHelper<is_valid_base_class, 0>::onBeforeDelete(t, dao); }
-   static inline void onAfterInsert(T * t, qx::dao::detail::IxDao_Helper * dao)  { qx::dao::detail::QxDao_Trigger<T>::TriggerHelper<is_valid_base_class, 0>::onAfterInsert(t, dao); }
-   static inline void onAfterUpdate(T * t, qx::dao::detail::IxDao_Helper * dao)  { qx::dao::detail::QxDao_Trigger<T>::TriggerHelper<is_valid_base_class, 0>::onAfterUpdate(t, dao); }
-   static inline void onAfterDelete(T * t, qx::dao::detail::IxDao_Helper * dao)  { qx::dao::detail::QxDao_Trigger<T>::TriggerHelper<is_valid_base_class, 0>::onAfterDelete(t, dao); }
+   static inline void onBeforeInsert(T * t, qx::dao::detail::IxDao_Helper * dao) { TriggerHelper<is_valid_base_class, 0>::onBeforeInsert(t, dao); }
+   static inline void onBeforeUpdate(T * t, qx::dao::detail::IxDao_Helper * dao) { TriggerHelper<is_valid_base_class, 0>::onBeforeUpdate(t, dao); }
+   static inline void onBeforeDelete(T * t, qx::dao::detail::IxDao_Helper * dao) { TriggerHelper<is_valid_base_class, 0>::onBeforeDelete(t, dao); }
+   static inline void onAfterInsert(T * t, qx::dao::detail::IxDao_Helper * dao)  { TriggerHelper<is_valid_base_class, 0>::onAfterInsert(t, dao); }
+   static inline void onAfterUpdate(T * t, qx::dao::detail::IxDao_Helper * dao)  { TriggerHelper<is_valid_base_class, 0>::onAfterUpdate(t, dao); }
+   static inline void onAfterDelete(T * t, qx::dao::detail::IxDao_Helper * dao)  { TriggerHelper<is_valid_base_class, 0>::onAfterDelete(t, dao); }
 
 private:
 

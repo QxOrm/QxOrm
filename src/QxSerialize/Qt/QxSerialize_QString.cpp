@@ -84,7 +84,7 @@ struct qx_serialize_qstring<true>
    {
       Q_UNUSED(file_version);
       typedef typename qx::trait::archive_wide_traits<Archive>::type_string qx_type_string_tmp;
-      qx_type_string_tmp str = qx::trait::archive_wide_traits<Archive>::fromQString(t);
+      qx_type_string_tmp str; qx::trait::archive_wide_traits<Archive>::fromQString(t, str);
       ar << boost::serialization::make_nvp(NULL, str);
    }
 

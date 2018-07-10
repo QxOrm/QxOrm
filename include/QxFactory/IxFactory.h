@@ -48,6 +48,7 @@ public:
    virtual ~IxFactory();
 
    virtual boost::any createObject() const = 0;
+   virtual void * createObjectNudePtr() const = 0;
 
 };
 

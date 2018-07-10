@@ -107,7 +107,8 @@ public:
       if (! pIdOwner || ! pIdData) { return; }
       QStringList lstForeignKeyOwner = m_sForeignKeyOwner.split("|");
       QStringList lstForeignKeyDataType = m_sForeignKeyDataType.split("|");
-      qAssert((pIdOwner->getNameCount() == lstForeignKeyOwner.count()) && (pIdData->getNameCount() == lstForeignKeyDataType.count()));
+      qAssert(pIdOwner->getNameCount() == lstForeignKeyOwner.count());
+      qAssert(pIdData->getNameCount() == lstForeignKeyDataType.count());
       sql += this->getSqlJoin() + m_sExtraTable + " ON ";
       for (int i = 0; i < pIdOwner->getNameCount(); i++)
       { sql += pIdOwner->getSqlAlias(tableOwner, true, i) + " = " + m_sExtraTable + "." + lstForeignKeyOwner.at(i) + " AND "; }
@@ -147,7 +148,31 @@ public:
       if (daoError.isValid()) { return daoError; }
       daoError = this->insertIntoExtraTable(params);
       if (daoError.isValid()) { return daoError; }
+      return QSqlError();
+   }
 
+   virtual QSqlError createExtraTable(QxSqlRelationParams & params) const
+   {
+      IxDataMember * pIdOwner = params.builder().getDataId(); qAssert(pIdOwner);
+      IxDataMember * pIdData = this->getDataId(); qAssert(pIdData);
+      if (! pIdOwner || ! pIdData) { return QSqlError(); }
+
+      bool bOldPKOwner = pIdOwner->getIsPrimaryKey(); pIdOwner->setIsPrimaryKey(false);
+      bool bOldPKData = pIdData->getIsPrimaryKey(); pIdData->setIsPrimaryKey(false);
+      bool bOldAIOwner = pIdOwner->getAutoIncrement(); pIdOwner->setAutoIncrement(false);
+      bool bOldAIData = pIdData->getAutoIncrement(); pIdData->setAutoIncrement(false);
+
+      QString sql = "CREATE TABLE IF NOT EXISTS " + m_sExtraTable + " (";
+      sql += pIdOwner->getSqlNameAndTypeAndParams(", ", m_sForeignKeyOwner) + ", "; qAssert(! pIdOwner->getSqlType().isEmpty());
+      sql += pIdData->getSqlNameAndTypeAndParams(", ", m_sForeignKeyDataType) + ", "; qAssert(! pIdData->getSqlType().isEmpty());
+      sql = sql.left(sql.count() - 2); // Remove last ", "
+      sql += ")";
+
+      pIdOwner->setIsPrimaryKey(bOldPKOwner); pIdData->setIsPrimaryKey(bOldPKData);
+      pIdOwner->setAutoIncrement(bOldAIOwner); pIdData->setAutoIncrement(bOldAIData);
+      qDebug("[QxOrm] create extra-table (relation many-to-many) : %s", qPrintable(sql));
+      QSqlQuery queryCreateTable(params.database());
+      if (! queryCreateTable.exec(sql)) { return queryCreateTable.lastError(); }
       return QSqlError();
    }
 
@@ -171,7 +196,6 @@ private:
       queryDelete.prepare(sql);
       pIdOwner->setSqlPlaceHolder(queryDelete, params.owner());
       if (! queryDelete.exec()) { return queryDelete.lastError(); }
-
       return QSqlError();
    }
 
@@ -179,9 +203,16 @@ private:
    {
       IxDataMember * pIdOwner = params.builder().getDataId(); qAssert(pIdOwner);
       IxDataMember * pIdData = this->getDataId(); qAssert(pIdData);
+      if (! pIdOwner || ! pIdData) { return QSqlError(); }
+      QStringList lstForeignKeyOwner = m_sForeignKeyOwner.split("|");
+      QStringList lstForeignKeyDataType = m_sForeignKeyDataType.split("|");
+      qAssert(pIdOwner->getNameCount() == lstForeignKeyOwner.count());
+      qAssert(pIdData->getNameCount() == lstForeignKeyDataType.count());
+
       QString sql = "INSERT INTO " + m_sExtraTable + " (";
-      sql += pIdOwner->getSqlName(", ") + ", " + pIdData->getSqlName(", ") + ") VALUES (";
-      sql += pIdOwner->getSqlPlaceHolder("", -1, ", ") + ", " + pIdData->getSqlPlaceHolder("", -1, ", ") + ")";
+      sql += pIdOwner->getSqlName(", ", m_sForeignKeyOwner) + ", " + pIdData->getSqlName(", ", m_sForeignKeyDataType);
+      sql += ") VALUES (";
+      sql += pIdOwner->getSqlPlaceHolder("", -1, ", ", m_sForeignKeyOwner) + ", " + pIdData->getSqlPlaceHolder("", -1, ", ", m_sForeignKeyDataType) + ")";
       qDebug("[QxOrm] sql query (extra-table) : %s", qPrintable(sql));
 
       type_item item;
@@ -193,8 +224,8 @@ private:
 
       while (itr != itr_end)
       {
-         pIdOwner->setSqlPlaceHolder(queryInsert, params.owner());
-         pIdData->setSqlPlaceHolder(queryInsert, (& item.value_qx()));
+         pIdOwner->setSqlPlaceHolder(queryInsert, params.owner(), "", m_sForeignKeyOwner);
+         pIdData->setSqlPlaceHolder(queryInsert, (& item.value_qx()), "", m_sForeignKeyDataType);
          if (! queryInsert.exec()) { return queryInsert.lastError(); }
          itr = type_generic_container::next(container, itr, item);
       }

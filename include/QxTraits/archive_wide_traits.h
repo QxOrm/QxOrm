@@ -84,23 +84,44 @@ public:
    typedef typename boost::mpl::if_c<is_wide, std::wifstream, std::ifstream>::type type_ifstream;
    typedef typename boost::mpl::if_c<is_wide, std::wofstream, std::ofstream>::type type_ofstream;
 
-   static inline QString toQString(const type_string & str)    { return qx::trait::archive_wide_traits<T>::cvtQString<is_wide, 0>::toQString(str); };
-   static inline type_string fromQString(const QString & str)  { return qx::trait::archive_wide_traits<T>::cvtQString<is_wide, 0>::fromQString(str); };
+   static inline QString toQString(const type_string & str)                   { return cvtQString<is_wide, 0>::toQString(str); }
+   static inline void fromQString(const QString & str, type_string & result)  { cvtQString<is_wide, 0>::fromQString(str, result); }
+
+   static inline QByteArray toQByteArray(const type_string & str, type_string * owner) { return cvtQByteArray<is_wide, 0>::toQByteArray(str, owner); }
+   static inline void fromQByteArray(const QByteArray & data, type_string & result)    { cvtQByteArray<is_wide, 0>::fromQByteArray(data, result); }
 
 private:
 
    template <bool isWide /* = false */, int dummy>
    struct cvtQString
    {
-      static inline QString toQString(const std::string & str)    { return QString::fromStdString(str); };
-      static inline std::string fromQString(const QString & str)  { return str.toStdString(); };
+      static inline QString toQString(const std::string & str)                   { return QString::fromStdString(str); }
+      static inline void fromQString(const QString & str, std::string & result)  { result = str.toStdString(); }
    };
 
    template <int dummy>
    struct cvtQString<true, dummy>
    {
-      static inline QString toQString(const std::wstring & str)      { return QString::fromStdWString(str); };
-      static inline std::wstring fromQString(const QString & str)    { return str.toStdWString(); };
+      static inline QString toQString(const std::wstring & str)                     { return QString::fromStdWString(str); }
+      static inline void fromQString(const QString & str, std::wstring & result)    { result = str.toStdWString(); }
+   };
+
+   template <bool isWide /* = false */, int dummy>
+   struct cvtQByteArray
+   {
+      static inline QByteArray toQByteArray(const std::string & str, std::string * owner)
+      { if (owner) { (* owner) = str; }; return (owner ? QByteArray::fromRawData(owner->data(), owner->size()) : QByteArray(str.data(), str.size())); }
+      static inline void fromQByteArray(const QByteArray & data, std::string & result)
+      { result.clear(); result.append(data.constData(), data.size()); }
+   };
+
+   template <int dummy>
+   struct cvtQByteArray<true, dummy>
+   {
+      static inline QByteArray toQByteArray(const std::wstring & str, std::wstring * owner)
+      { Q_UNUSED(owner); return QString::fromStdWString(str).toUtf8(); }
+      static inline void fromQByteArray(const QByteArray & data, std::wstring & result)
+      { result = QString::fromUtf8(data.constData(), data.size()).toStdWString(); }
    };
 
 };

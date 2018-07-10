@@ -169,9 +169,9 @@ qx_bool QxArchive<T, ArchiveInput, ArchiveOutput>::fromString(T & obj, const QSt
    typedef typename qx::trait::archive_wide_traits<ArchiveInput>::type_string qx_type_string;
    typedef typename qx::trait::archive_wide_traits<ArchiveInput>::type_istringstream qx_type_istringstream;
 
-   if (sString.isEmpty()) { return false; }
    qx_type_string str;
-   str = qx::trait::archive_wide_traits<ArchiveInput>::fromQString(sString);
+   if (sString.isEmpty()) { return false; }
+   qx::trait::archive_wide_traits<ArchiveInput>::fromQString(sString, str);
    qx_type_istringstream iss(str, (std::ios_base::binary | std::ios_base::in));
    ArchiveInput iar(iss, flags);
    qx_bool bDeserializeOk = false;
@@ -183,7 +183,54 @@ qx_bool QxArchive<T, ArchiveInput, ArchiveOutput>::fromString(T & obj, const QSt
    catch (const std::exception & e) { bDeserializeOk.setDesc(QString(QX_STR_DESERIALIZATION_ERROR).replace("%ERR%", e.what())); }
    catch (...) { bDeserializeOk.setDesc(QString(QX_STR_DESERIALIZATION_ERROR).replace("%ERR%", "unknown error")); }
 
-   if (! bDeserializeOk.getDesc().isEmpty()) { qDebug("[QxOrm] %s", qPrintable(QString("qx::QxArchive<T>::fromQString() -> ") + bDeserializeOk.getDesc())); }
+   if (! bDeserializeOk.getDesc().isEmpty()) { qDebug("[QxOrm] %s", qPrintable(QString("qx::QxArchive<T>::fromString() -> ") + bDeserializeOk.getDesc())); }
+   qAssert(bDeserializeOk);
+
+   return bDeserializeOk;
+}
+
+template <class T, class ArchiveInput /* = QX_DEFAULT_ARCHIVE_INPUT */, class ArchiveOutput /* = QX_DEFAULT_ARCHIVE_OUTPUT */>
+QByteArray QxArchive<T, ArchiveInput, ArchiveOutput>::toByteArray(const T & obj, type_string * owner /* = NULL */, unsigned int flags /* = boost::archive::no_header */)
+{
+   typedef typename qx::trait::archive_wide_traits<ArchiveOutput>::type_ostringstream qx_type_ostringstream;
+   qx_type_ostringstream oss(std::ios_base::binary | std::ios_base::out | std::ios_base::trunc);
+   ArchiveOutput oar(oss, flags);
+   qx_bool bSerializeOk = false;
+   const char * sTag = QxClassName<T>::get_xml_tag();
+   QxBoostSerializeRegisterHelperX::helper(oar);
+
+   try { oar << boost::serialization::make_nvp(sTag, obj); bSerializeOk = oss.good(); }
+   catch (const boost::archive::archive_exception & e) { bSerializeOk.setDesc(QString(QX_STR_SERIALIZATION_ERROR).replace("%ERR%", e.what())); }
+   catch (const std::exception & e) { bSerializeOk.setDesc(QString(QX_STR_SERIALIZATION_ERROR).replace("%ERR%", e.what())); }
+   catch (...) { bSerializeOk.setDesc(QString(QX_STR_SERIALIZATION_ERROR).replace("%ERR%", "unknown error")); }
+
+   if (! bSerializeOk.getDesc().isEmpty()) { qDebug("[QxOrm] %s", qPrintable(QString("qx::QxArchive<T>::toByteArray() -> ") + bSerializeOk.getDesc())); }
+   qAssert(bSerializeOk);
+
+   return (bSerializeOk ? qx::trait::archive_wide_traits<ArchiveOutput>::toQByteArray(oss.str(), owner) : QByteArray());
+}
+
+template <class T, class ArchiveInput /* = QX_DEFAULT_ARCHIVE_INPUT */, class ArchiveOutput /* = QX_DEFAULT_ARCHIVE_OUTPUT */>
+qx_bool QxArchive<T, ArchiveInput, ArchiveOutput>::fromByteArray(T & obj, const QByteArray & data, unsigned int flags /* = boost::archive::no_header */)
+{
+   typedef typename qx::trait::archive_wide_traits<ArchiveInput>::type_string qx_type_string;
+   typedef typename qx::trait::archive_wide_traits<ArchiveInput>::type_istringstream qx_type_istringstream;
+
+   qx_type_string str;
+   if (data.size() <= 0) { return false; }
+   qx::trait::archive_wide_traits<ArchiveInput>::fromQByteArray(data, str);
+   qx_type_istringstream iss(str, (std::ios_base::binary | std::ios_base::in));
+   ArchiveInput iar(iss, flags);
+   qx_bool bDeserializeOk = false;
+   const char * sTag = QxClassName<T>::get_xml_tag();
+   QxBoostSerializeRegisterHelperX::helper(iar);
+
+   try { iar >> boost::serialization::make_nvp(sTag, obj); bDeserializeOk = true; }
+   catch (const boost::archive::archive_exception & e) { bDeserializeOk.setDesc(QString(QX_STR_DESERIALIZATION_ERROR).replace("%ERR%", e.what())); }
+   catch (const std::exception & e) { bDeserializeOk.setDesc(QString(QX_STR_DESERIALIZATION_ERROR).replace("%ERR%", e.what())); }
+   catch (...) { bDeserializeOk.setDesc(QString(QX_STR_DESERIALIZATION_ERROR).replace("%ERR%", "unknown error")); }
+
+   if (! bDeserializeOk.getDesc().isEmpty()) { qDebug("[QxOrm] %s", qPrintable(QString("qx::QxArchive<T>::fromByteArray() -> ") + bDeserializeOk.getDesc())); }
    qAssert(bDeserializeOk);
 
    return bDeserializeOk;

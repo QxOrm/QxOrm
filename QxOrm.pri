@@ -23,6 +23,22 @@
 ##
 #############################################################################
 
+###############################
+# boost Library Configuration #
+###############################
+
+QX_BOOST_INCLUDE_PATH = $$quote(D:/Dvlp/_Libs/Boost/1_42/include)
+QX_BOOST_LIB_PATH = $$quote(D:/Dvlp/_Libs/Boost/1_42/lib_shared)
+QX_BOOST_LIB_SERIALIZATION_DEBUG = "boost_serialization-vc90-mt-gd-1_42"
+QX_BOOST_LIB_SERIALIZATION_RELEASE = "boost_serialization-vc90-mt-1_42"
+
+unix {
+QX_BOOST_INCLUDE_PATH = $$quote(/usr/include)
+QX_BOOST_LIB_PATH = $$quote(/usr/lib)
+QX_BOOST_LIB_SERIALIZATION_DEBUG = "boost_serialization-mt-d"
+QX_BOOST_LIB_SERIALIZATION_RELEASE = "boost_serialization-mt"
+} # unix
+
 ######################
 # Globals Parameters #
 ######################
@@ -31,6 +47,7 @@ CONFIG += debug_and_release
 CONFIG += precompile_header
 DEPENDPATH += .
 INCLUDEPATH += ./include
+INCLUDEPATH += $${QX_BOOST_INCLUDE_PATH}
 QT += network
 QT += xml
 QT += sql
@@ -59,26 +76,10 @@ win32-g++: QMAKE_LFLAGS += -export-all-symbols
 # Externals Libraries #
 #######################
 
-win32 {
-LIBS += -L"D:/Dvlp/_Libs/Boost/lib"
-} # win32
+LIBS += -L$${QX_BOOST_LIB_PATH}
 
-unix {
-LIBS += -L"/usr/lib"
-} # unix
-
-win32 {
 CONFIG(debug, debug|release) {
-LIBS += -l"boost_serialization-vc90-mt-gd-1_42"
+LIBS += -l$${QX_BOOST_LIB_SERIALIZATION_DEBUG}
 } else {
-LIBS += -l"boost_serialization-vc90-mt-1_42"
+LIBS += -l$${QX_BOOST_LIB_SERIALIZATION_RELEASE}
 } # CONFIG(debug, debug|release)
-} # win32
-
-unix {
-CONFIG(debug, debug|release) {
-LIBS += -l"boost_serialization-mt-d"
-} else {
-LIBS += -l"boost_serialization-mt"
-} # CONFIG(debug, debug|release)
-} # unix

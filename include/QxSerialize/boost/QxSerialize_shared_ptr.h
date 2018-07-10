@@ -32,6 +32,11 @@
 
 #include <QxCommon/QxConfig.h>
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable:4100)
+#endif // _MSC_VER
+
 #if _QX_SUPPORT_BOOST_SERIALIZE_SHARED_PTR_132
 #include <boost/serialization/shared_ptr_132.hpp>
 #else // _QX_SUPPORT_BOOST_SERIALIZE_SHARED_PTR_132
@@ -42,5 +47,9 @@
 
 #include <boost/serialization/shared_ptr.hpp>
 #include <boost/serialization/weak_ptr.hpp>
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif // _MSC_VER
 
 #endif // _QX_SERIALIZE_BOOST_SHARED_PTR_H_

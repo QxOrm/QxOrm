@@ -59,15 +59,24 @@ public:
    virtual boost::any createObject() const
    { QxClass<T>::getSingleton(); return qxCreateInstance<boost::is_abstract<T>::value, 0>::create(); }
 
+   virtual void * createObjectNudePtr() const
+   { QxClass<T>::getSingleton(); return qxCreateInstance<boost::is_abstract<T>::value, 0>::createNudePtr(); }
+
 private:
 
    template <bool bIsAbstract /* = false */, int dummy>
    struct qxCreateInstance
-   { static inline boost::any create() { boost::shared_ptr<T> ptr; ptr.reset(new T()); return boost::any(ptr); } };
+   {
+      static inline boost::any create()      { boost::shared_ptr<T> ptr; ptr.reset(new T()); return boost::any(ptr); }
+      static inline void * createNudePtr()   { return static_cast<void *>(new T()); }
+   };
 
    template <int dummy>
    struct qxCreateInstance<true, dummy>
-   { static inline boost::any create() { qDebug(QX_STR_CANNOT_INSTANTIATE_ABSTRACT_CLASS, qx::trait::get_class_name<T>::get()); return boost::any(); } };
+   {
+      static inline boost::any create()      { qDebug(QX_STR_CANNOT_INSTANTIATE_ABSTRACT_CLASS, qx::trait::get_class_name<T>::get()); return boost::any(); }
+      static inline void * createNudePtr()   { qDebug(QX_STR_CANNOT_INSTANTIATE_ABSTRACT_CLASS, qx::trait::get_class_name<T>::get()); return NULL; }
+   };
 
 };
 

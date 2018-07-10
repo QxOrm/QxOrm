@@ -41,11 +41,16 @@
 
 namespace qx {
 
+inline boost::any create(const QString & sKey);
+template <typename T> inline T * create_nude_ptr(const QString & sKey);
+
 class QX_DLL_EXPORT QxFactoryX : public QxSingleton<QxFactoryX>
 {
 
-   friend class QxSingleton<QxFactoryX>;
    friend class IxFactory;
+   friend class QxSingleton<QxFactoryX>;
+   friend inline boost::any create(const QString & sKey);
+   template <typename T> friend inline T * create_nude_ptr(const QString & sKey);
 
 protected:
 
@@ -60,15 +65,20 @@ private:
    void registerFactory(const QString & sKey, IxFactory * pFactory);
    void unregisterFactory(const QString & sKey);
 
-public:
-
    boost::any createObject(const QString & sKey) const;
+   void * createObjectNudePtr(const QString & sKey) const;
 
-   static inline boost::any createInstance(const QString & sKey) { return QxFactoryX::getSingleton()->createObject(sKey); }
+   static inline boost::any createInstance(const QString & sKey)     { return QxFactoryX::getSingleton()->createObject(sKey); }
+   static inline void * createInstanceNudePtr(const QString & sKey)  { return QxFactoryX::getSingleton()->createObjectNudePtr(sKey); }
 
 };
 
-inline boost::any create(const QString & sKey) { return qx::QxFactoryX::createInstance(sKey); }
+inline boost::any create(const QString & sKey)
+{ return qx::QxFactoryX::createInstance(sKey); }
+
+template <typename T>
+inline T * create_nude_ptr(const QString & sKey)
+{ return dynamic_cast<T *>(static_cast<T *>(qx::QxFactoryX::createInstanceNudePtr(sKey))); }
 
 } // namespace qx
 

@@ -90,6 +90,7 @@ HEADERS += ./include/QxRegister/QxClass.h
 HEADERS += ./include/QxRegister/QxClassX.h
 HEADERS += ./include/QxRegister/QxClassName.h
 HEADERS += ./include/QxRegister/QxRegister.h
+HEADERS += ./include/QxRegister/QxRegisterInternalHelper.h
 HEADERS += ./include/QxRegister/IxTypeInfo.h
 
 HEADERS += ./include/QxCollection/IxCollection.h
@@ -254,6 +255,17 @@ HEADERS += ./include/QxFunction/QxFunctionInclude.h
 HEADERS += ./include/QxFunction/QxFunctionMacro.h
 HEADERS += ./include/QxFunction/QxParameters.h
 
+HEADERS += ./include/QxService/IxParameter.h
+HEADERS += ./include/QxService/IxService.h
+HEADERS += ./include/QxService/QxClientAsync.h
+HEADERS += ./include/QxService/QxConnect.h
+HEADERS += ./include/QxService/QxServer.h
+HEADERS += ./include/QxService/QxService.h
+HEADERS += ./include/QxService/QxThread.h
+HEADERS += ./include/QxService/QxThreadPool.h
+HEADERS += ./include/QxService/QxTools.h
+HEADERS += ./include/QxService/QxTransaction.h
+
 HEADERS += ./include/QxXml/QxXmlReader.h
 HEADERS += ./include/QxXml/QxXmlWriter.h
 HEADERS += ./include/QxXml/QxXml.h
@@ -324,5 +336,14 @@ SOURCES += ./src/QxSerialize/Qt/QxSerialize_QStringList.cpp
 SOURCES += ./src/QxSerialize/Qt/QxSerialize_QTime.cpp
 SOURCES += ./src/QxSerialize/Qt/QxSerialize_QUrl.cpp
 SOURCES += ./src/QxSerialize/Qt/QxSerialize_QVariant.cpp
+
+SOURCES += ./src/QxService/IxParameter.cpp
+SOURCES += ./src/QxService/IxService.cpp
+SOURCES += ./src/QxService/QxConnect.cpp
+SOURCES += ./src/QxService/QxServer.cpp
+SOURCES += ./src/QxService/QxThread.cpp
+SOURCES += ./src/QxService/QxThreadPool.cpp
+SOURCES += ./src/QxService/QxTools.cpp
+SOURCES += ./src/QxService/QxTransaction.cpp
 
 SOURCES += ./src/main.cpp

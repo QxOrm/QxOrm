@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>dlgClient</class>
+ <widget class="QWidget" name="dlgClient">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>541</width>
+    <height>371</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>541</width>
+    <height>371</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>541</width>
+    <height>371</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>qxClient</string>
+  </property>
+  <widget class="QGroupBox" name="grpServerInfos">
+   <property name="geometry">
+    <rect>
+     <x>230</x>
+     <y>10</y>
+     <width>301</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Server infos transaction</string>
+   </property>
+   <widget class="QPushButton" name="btnDateTime">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>121</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>Get Server DateTime</string>
+    </property>
+    <property name="text">
+     <string>Get Server DateTime</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnDateTime_Async">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>20</y>
+      <width>151</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>Get Server DateTime Async</string>
+    </property>
+    <property name="text">
+     <string>Get Server DateTime Async</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="grpTransaction">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>170</y>
+     <width>521</width>
+     <height>191</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Log last client-server reply-request transaction</string>
+   </property>
+   <widget class="QPlainTextEdit" name="txtTransaction">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>501</width>
+      <height>161</height>
+     </rect>
+    </property>
+    <property name="verticalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOn</enum>
+    </property>
+    <property name="horizontalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOn</enum>
+    </property>
+    <property name="lineWrapMode">
+     <enum>QPlainTextEdit::NoWrap</enum>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="grpUser">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>70</y>
+     <width>521</width>
+     <height>91</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>User transaction</string>
+   </property>
+   <widget class="QPushButton" name="btnGetAllUser">
+    <property name="geometry">
+     <rect>
+      <x>380</x>
+      <y>20</y>
+      <width>61</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>Get All Users</string>
+    </property>
+    <property name="text">
+     <string>Get All</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnAddUser">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>51</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>Add User</string>
+    </property>
+    <property name="text">
+     <string>Add</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnUpdateUser">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>20</y>
+      <width>61</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>Update User</string>
+    </property>
+    <property name="text">
+     <string>Update</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnRemoveUser">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>20</y>
+      <width>61</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>Remove User</string>
+    </property>
+    <property name="text">
+     <string>Remove</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnRemoveAllUser">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>20</y>
+      <width>81</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>Remove All Users</string>
+    </property>
+    <property name="text">
+     <string>Remove All</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnFetchUser">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>20</y>
+      <width>71</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>Fetch User</string>
+    </property>
+    <property name="text">
+     <string>Fetch</string>
+    </property>
+   </widget>
+   <widget class="Line" name="lineUser">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>40</y>
+      <width>501</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lblId">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>60</y>
+      <width>21</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>ID</string>
+    </property>
+    <property name="text">
+     <string>ID :</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lblFirstName">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>60</y>
+      <width>61</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>First Name</string>
+    </property>
+    <property name="text">
+     <string>First Name :</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lblLastName">
+    <property name="geometry">
+     <rect>
+      <x>240</x>
+      <y>60</y>
+      <width>61</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>Last Name</string>
+    </property>
+    <property name="text">
+     <string>Last Name :</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lblBirthDate">
+    <property name="geometry">
+     <rect>
+      <x>380</x>
+      <y>60</y>
+      <width>51</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>Birthdate</string>
+    </property>
+    <property name="text">
+     <string>Birthdate :</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="txtId">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>60</y>
+      <width>61</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>ID</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="txtFirstName">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>60</y>
+      <width>71</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>First Name</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="txtLastName">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>60</y>
+      <width>71</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>Last Name</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="txtBirthDate">
+    <property name="geometry">
+     <rect>
+      <x>440</x>
+      <y>60</y>
+      <width>71</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>Birthdate</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnSearchUser">
+    <property name="geometry">
+     <rect>
+      <x>450</x>
+      <y>20</y>
+      <width>61</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>Search Users</string>
+    </property>
+    <property name="text">
+     <string>Search</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="grpServerConnection">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>211</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Server connection</string>
+   </property>
+   <widget class="QLabel" name="lblIp">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>21</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>Ip</string>
+    </property>
+    <property name="text">
+     <string>Ip :</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lblPort">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>20</y>
+      <width>31</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>Port</string>
+    </property>
+    <property name="text">
+     <string>Port :</string>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="spinPort">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>20</y>
+      <width>51</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>Port</string>
+    </property>
+    <property name="minimum">
+     <number>1</number>
+    </property>
+    <property name="maximum">
+     <number>32000</number>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="txtIp">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>20</y>
+      <width>81</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>Ip</string>
+    </property>
+    <property name="text">
+     <string>127.0.0.1</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

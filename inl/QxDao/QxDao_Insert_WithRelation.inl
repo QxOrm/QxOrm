@@ -148,7 +148,7 @@ struct QxDao_Insert_WithRelation_Ptr
 {
 
    static inline QSqlError insert(const QStringList & relation, T & t, QSqlDatabase * pDatabase)
-   { qAssert(t != NULL); return (t ? qx::dao::insert_with_relation(relation, (* t), pDatabase) : QSqlError()); }
+   { return (t ? qx::dao::insert_with_relation(relation, (* t), pDatabase) : QSqlError()); }
 
 };
 

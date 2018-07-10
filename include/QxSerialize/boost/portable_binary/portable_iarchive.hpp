@@ -110,6 +110,14 @@ namespace fp = boost::spirit::math;
 #error "VAX floating point format is not supported!"
 #endif
 
+#if (BOOST_VERSION >= 104400)
+#define QX_ARCHIVE_PORTABLE_BINARY_VERSION_PATCH (boost::archive::library_version_type)(3)
+#elif (BOOST_VERSION >= 104200)
+#define QX_ARCHIVE_PORTABLE_BINARY_VERSION_PATCH (boost::archive::version_type)(3)
+#else // (BOOST_VERSION >= 104200)
+#define QX_ARCHIVE_PORTABLE_BINARY_VERSION_PATCH 3
+#endif // (BOOST_VERSION >= 104200)
+
 namespace eos {
 
    // forward declaration
@@ -277,7 +285,7 @@ namespace eos {
 
          // it is vital to have version information!
          // if we don't have any we assume boost 1.33
-         if (flags & no_header) set_library_version(3);
+         if (flags & no_header) set_library_version(QX_ARCHIVE_PORTABLE_BINARY_VERSION_PATCH);
 
          // extract and check the magic eos byte
          else if (load_signed_char() != magic_byte) throw archive_exception(archive_exception::invalid_signature);

@@ -41,6 +41,12 @@ struct QxDao_CreateTable
       if (sql.isEmpty()) { return dao.errEmpty(); }
       if (! dao.query().exec(sql)) { return dao.errFailed(); }
 
+      long index = 0; qx::IxSqlRelation * pRelation = NULL; qx::QxSqlRelationParams params;
+      QSqlDatabase & database = dao.database(); params.setDatabase(& database);
+      qx::IxSqlQueryBuilder & builder = dao.builder(); params.setBuilder(& builder);
+      while ((pRelation = builder.nextRelation(index)))
+      { QSqlError err = pRelation->createExtraTable(params); if (err.isValid()) { dao.updateError(err); break; } }
+
       return dao.error();
    }
 

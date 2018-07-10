@@ -74,6 +74,7 @@ public:
    virtual void lazyInsert_ResolveInput(QxSqlRelationParams & params) const   { Q_UNUSED(params); }
    virtual void lazyUpdate_ResolveInput(QxSqlRelationParams & params) const   { Q_UNUSED(params); }
    virtual QSqlError onBeforeSave(QxSqlRelationParams & params) const         { Q_UNUSED(params); return QSqlError(); }
+   virtual QSqlError createExtraTable(QxSqlRelationParams & params) const     { Q_UNUSED(params); return QSqlError(); }
 
    virtual QSqlError onAfterSave(QxSqlRelationParams & params) const
    { return qx::dao::save(this->getContainer(params), (& params.database())); }

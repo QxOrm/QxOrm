@@ -134,7 +134,7 @@ struct QxDao_Save_WithRelation_Ptr
 {
 
    static inline QSqlError save(const QStringList & relation, T & t, QSqlDatabase * pDatabase)
-   { qAssert(t != NULL); return (t ? qx::dao::save_with_relation(relation, (* t), pDatabase) : QSqlError()); }
+   { return (t ? qx::dao::save_with_relation(relation, (* t), pDatabase) : QSqlError()); }
 
 };
 

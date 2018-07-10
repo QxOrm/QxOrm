@@ -149,7 +149,7 @@ struct QxDao_Update_WithRelation_Ptr
 {
 
    static inline QSqlError update(const QStringList & relation, T & t, QSqlDatabase * pDatabase)
-   { qAssert(t != NULL); return (t ? qx::dao::update_with_relation(relation, (* t), pDatabase) : QSqlError()); }
+   { return (t ? qx::dao::update_with_relation(relation, (* t), pDatabase) : QSqlError()); }
 
 };
 

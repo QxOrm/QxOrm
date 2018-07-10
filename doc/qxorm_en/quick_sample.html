@@ -63,7 +63,7 @@
   <col><col><col><col><col>
   <tbody><tr>
   <td align="left" valign="top"><font size="2">QxOrm  &gt;&gt;  Quick sample</font></td>
-  <td align="right" valign="top"><font size="2">Current version : QxOrm 1.1.4 (LGPL)</font></td>
+  <td align="right" valign="top"><font size="2">Current version : QxOrm 1.1.5 (LGPL)</font></td>
   <td width="10px"></td>
   <td width="40px" height="30px"><a href="../qxorm_fr/quick_sample.html"><img alt="Version française du site" src="./resource/FR.png" width="40" height="30" border="0"></a></td>
   <td width="40px" height="30px"><a href="../qxorm_en/quick_sample.html"><img alt="Web site english version" src="./resource/GB.png" width="40" height="30" border="0"></a></td>
@@ -73,27 +73,39 @@
   <col>
   <tbody>
     <tr>
-      <td align="justify"><b>In this chapter, we will see a quick sample with the basic functionalities of QxOrm library.</b> <br>
-        <br>
-        <i>Note :</i> <b>QxOrm</b> library uses the following syntax for C++ source code :
-        <ul><li>all classes, functions, properties, etc... are defined under <a href="./resource/qxorm.namespace.qx.jpg"><i>namespace qx</i></a>
-        </li><li>all macros of QxOrm library start with <i>QX_...</i>
-        </li><li>all abstracts classes (or interfaces) start with <i>Ix</i> (for example <i>IxFactory</i> is an interface to create an instance of object)
-        </li><li>other classes start with <i>Qx</i> (for example <i>QxDataMember</i>)
-        </li><li>containers of objects end with <i>X</i> (for example <i>QxDataMemberX</i> is a list of <i>QxDataMember</i>)
-        </li><li>functions to interact with databases are under <a href="./resource/qxorm.namespace.qx.dao.jpg"><i>namespace qx::dao</i></a> (for example <i>qx::dao::fetch_by_id()</i>)
-        </li><li>functions to <i>serialize</i> are under <a href="./resource/qxorm.namespace.qx.serialization.jpg"><i>namespace qx::serialization</i></a> (for example <i>qx::serialization::xml::to_file()</i>)
-        </li><li>the <i>reflection</i> engine can be used with <b><i>qx::QxClassX</i></b> (for example <i>qx::QxClassX::invoke()</i> to call a class method)
-        </li><li>all traits classes are under <a href="./resource/qxorm.namespace.qx.trait.jpg"><i>namespace qx::trait</i></a> (for example <i>qx::trait::is_smart_ptr&lt;T&gt;</i>)
-        </li></ul>
+      <td align="justify">
+        <table border="0" style="width: 100%" align="center">
+          <col><col>
+          <tbody>
+            <tr>
+              <td><b>In this chapter, we will see a quick sample with the basic functionalities of QxOrm library.</b> <br>
+                 <br>
+                 <i>Note :</i> <b>QxOrm</b> library uses the following syntax for C++ source code :
+                 <ul><li>all classes, functions, properties, etc... are defined under <a href="./resource/qxorm.namespace.qx.jpg"><i>namespace qx</i></a>
+                 </li><li>all macros of QxOrm library start with <i>QX_...</i>
+                 </li><li>all abstracts classes (or interfaces) start with <i>Ix</i> (for example <i>IxFactory</i> is an interface to create an instance of object)
+                 </li><li>other classes start with <i>Qx</i> (for example <i>QxDataMember</i>)
+                 </li><li>containers of objects end with <i>X</i> (for example <i>QxDataMemberX</i> is a list of <i>QxDataMember</i>)
+                 </li><li>functions to interact with databases are under <a href="./resource/qxorm.namespace.qx.dao.jpg"><i>namespace qx::dao</i></a> (for example <i>qx::dao::fetch_by_id()</i>)
+                 </li><li>functions to <i>serialize</i> are under <a href="./resource/qxorm.namespace.qx.serialization.jpg"><i>namespace qx::serialization</i></a> (for example <i>qx::serialization::xml::to_file()</i>)
+                 </li><li>the <i>reflection</i> engine can be used with <b><i>qx::QxClassX</i></b> (for example <i>qx::QxClassX::invoke()</i> to call a class method)
+                 </li><li>all traits classes are under <a href="./resource/qxorm.namespace.qx.trait.jpg"><i>namespace qx::trait</i></a> (for example <i>qx::trait::is_smart_ptr&lt;T&gt;</i>)
+                 </li></ul>
+              </td>
+              <td width="200" align="center" valign="top"><a href="./resource/qt_ambassador_logo.png" target="_blank"><img alt="qt_ambassador" src="./resource/qt_ambassador_logo_150x150.png" width="150" height="150" border="0"></a><br>
+                 <b><font size="2">QxOrm library has been accepted into the <a href="http://qt.nokia.com/qt-in-use/ambassadors/qtambassador/" target="_blank">Qt Ambassador Program</a></font></b>
+              </td>
+            </tr>
+          </tbody>
+        </table>
         <i>Additional note :</i> you can find a more complex sample (with inheritance, polymorphism, 
         relationships, collections, shared libraries,
-        memory leak, etc...) in the folder <i>./test/</i> of your QxOrm directory.
-        The <i>./test/</i> folder contains 2 projects of
+        memory leak, etc...) in the folder <i>./test/qxDllSample/</i> of your QxOrm directory.
+        The <i>./test/qxDllSample/</i> folder contains 2 projects of
         dll type and 1 project of exe type : <i>./dll1/</i>,
         <i>./dll2/</i> and <i>./exe/</i>.<br>
 		This solution can be compiled with <b>Visual C++ 2008 or 2010</b> on Windows (open the file 
-        <i>./test/test.sln</i>).<br>
+        <i>./test/qxDllSample/test.sln</i>).<br>
 		This solution can be also compiled with <b>GCC 4.4.1</b> on Linux and <b>MinGW</b> on Windows with <i>qmake</i> command.<br>
         <br>
         Quick sample step by step :

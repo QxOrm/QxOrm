@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Visual C++"
+	Version="9,00"
+	Name="qxClient"
+	ProjectGUID="{39F7E251-9CF3-4D65-95E2-4A361BD80EF9}"
+	Keyword="MakeFileProj"
+	TargetFrameworkVersion="196613"
+	>
+	<Platforms>
+		<Platform
+			Name="Win32"
+		/>
+	</Platforms>
+	<ToolFiles>
+	</ToolFiles>
+	<Configurations>
+		<Configuration
+			Name="Debug|Win32"
+			OutputDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="0"
+			>
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="qmake &amp; nmake debug"
+				ReBuildCommandLine="qmake &amp; nmake debug"
+				CleanCommandLine="nmake clean"
+				Output="../../_bin/qxClientd.exe"
+				PreprocessorDefinitions="WIN32;_DEBUG"
+				IncludeSearchPath=""
+				ForcedIncludes=""
+				AssemblySearchPath=""
+				ForcedUsingAssemblies=""
+				CompileAsManaged=""
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release|Win32"
+			OutputDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="0"
+			>
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="qmake &amp; nmake release"
+				ReBuildCommandLine="qmake &amp; nmake release"
+				CleanCommandLine="nmake clean"
+				Output="../../_bin/qxClient.exe"
+				PreprocessorDefinitions="WIN32;NDEBUG"
+				IncludeSearchPath=""
+				ForcedIncludes=""
+				AssemblySearchPath=""
+				ForcedUsingAssemblies=""
+				CompileAsManaged=""
+			/>
+		</Configuration>
+	</Configurations>
+	<References>
+	</References>
+	<Files>
+		<Filter
+			Name="src"
+			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
+			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
+			>
+			<File
+				RelativePath=".\src\main.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\main_dlg.cpp"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="include"
+			Filter="h;hpp;hxx;hm;inl;inc;xsd"
+			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
+			>
+			<File
+				RelativePath=".\include\export.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\main_dlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\precompiled.h"
+				>
+			</File>
+		</Filter>
+		<File
+			RelativePath=".\qxClient.pro"
+			>
+		</File>
+	</Files>
+	<Globals>
+	</Globals>
+</VisualStudioProject>

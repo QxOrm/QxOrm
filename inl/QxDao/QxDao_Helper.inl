@@ -114,7 +114,7 @@ public:
       qx::IxSqlRelationX * pAllRelation = this->builder().getLstRelation();
       if ((relation.count() == 1) && (relation.at(0) == "*")) { sHashRelation = "*"; (* m_pSqlRelationX) = (* pAllRelation); }
       else if (relation.count() == pAllRelation->count()) { sHashRelation = "*"; (* m_pSqlRelationX) = (* pAllRelation); }
-      else { foreach (QString sKey, relation) { if (pAllRelation->exist(sKey)) { sHashRelation += (sKey + "|"); m_pSqlRelationX->insert(sKey, pAllRelation->getByKey(sKey)); } else { bError = true; } } }
+      else { Q_FOREACH(QString sKey, relation) { if (pAllRelation->exist(sKey)) { sHashRelation += (sKey + "|"); m_pSqlRelationX->insert(sKey, pAllRelation->getByKey(sKey)); } else { bError = true; } } }
       if (bError || (m_pSqlRelationX->count() <= 0)) { m_pSqlRelationX.reset(NULL); }
       if (m_pSqlRelationX) { _foreach(qx::IxSqlRelation * p, (* m_pSqlRelationX)) { m_bCartesianProduct = (m_bCartesianProduct || p->getCartesianProduct()); } }
       if (! bError && m_pQueryBuilder) { m_pQueryBuilder->setHashRelation(sHashRelation); m_pQueryBuilder->setCartesianProduct(m_bCartesianProduct); }

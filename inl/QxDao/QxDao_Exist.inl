@@ -127,7 +127,7 @@ struct QxDao_Exist_Ptr
 {
 
    static inline qx_bool exist(T & t, QSqlDatabase * pDatabase)
-   { qAssert(t != NULL); return (t ? qx::dao::exist((* t), pDatabase) : qx_bool(false)); }
+   { return (t ? qx::dao::exist((* t), pDatabase) : qx_bool(false)); }
 
 };
 

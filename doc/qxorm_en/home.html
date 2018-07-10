@@ -63,7 +63,7 @@
   <col><col><col><col><col>
   <tbody><tr>
   <td align="left" valign="top"><font size="2">QxOrm  &gt;&gt;  Home</font></td>
-  <td align="right" valign="top"><font size="2">Current version : QxOrm 1.1.4 (LGPL)</font></td>
+  <td align="right" valign="top"><font size="2">Current version : QxOrm 1.1.5 (LGPL)</font></td>
   <td width="10px"></td>
   <td width="40px" height="30px"><a href="../qxorm_fr/home.html"><img alt="Version française du site" src="./resource/FR.png" width="40" height="30" border="0"></a></td>
   <td width="40px" height="30px"><a href="../qxorm_en/home.html"><img alt="Web site english version" src="./resource/GB.png" width="40" height="30" border="0"></a></td>
@@ -74,29 +74,39 @@
   <tbody>
     <tr>
       <td align="justify">
-        <b>QxOrm is a C++ library designed to provide <i>Object Relational Mapping (ORM)</i> feature to C++ users.</b><br>
-        With a simple <b>C++ setting function by class</b> (like <i>Hibernate</i> xml mapping file), you will have access to the following features :<br>
-        <ul>
-          <li><b><font style="background-color:yellow">persistence</font></b> : communication with a lot of databases (with <i>1-1</i>, <i>1-n</i>, <i>n-1</i> and <i>n-n</i> relationships)
-          </li>
-          <li><b><font style="background-color:yellow">serialization</font></b> : binary and xml format
-          </li>
-          <li><b><font style="background-color:yellow">reflection</font></b> : access to classes definitions, retrieve properties and call classes methods
-          </li>
-        </ul>
-        <b>QxOrm</b> aims to simplify C++ development and provides a lot of functionalities.<br>
-        Here is a list of advantages of QxOrm :
-        <ul>
-          <li><b>non intrusive</b> : the <i>C++ setting function</i> doesn't modified class definition, QxOrm can be used in existing projects</li>
-          <li><b>no code generation</b></li>
-          <li><b>no xml mapping file</b></li>
-          <li><b>classes doesn't need to inherit from a 'super object'</b></li>
-          <li><b>template meta-programming</b> : no macro hack</li>
-          <li>works with <b>Visual C++ 2008 or 2010</b> on Windows, <b>GCC 4.4.1</b> on Linux and <b>MinGW</b> on Windows (other platforms will be tested soon : Mac, phones...)</li>
-          <li>only one file <i>&lt;QxOrm.h&gt;</i> to include in precompiled-header (need <b>precompiled-header</b> file to reduce compilation times)</li>
-        </ul>
-        <p align="justify">
-        Before you install and compile <b>QxOrm</b>, you need the following libraries : <a href="http://www.boost.org/" target="_blank"><b>boost</b></a> (from version 1.38) and <a href="http://qt.nokia.com/" target="_blank"><b>Qt</b></a> (from version 4.5.0) :</p>
+        <table border="0" style="width: 100%" align="center">
+          <col><col>
+          <tbody>
+            <tr>
+              <td><b>QxOrm is a C++ library designed to provide <i>Object Relational Mapping (ORM)</i> feature to C++ users.</b><br>
+                 With a simple <b>C++ setting function by class</b> (like <i>Hibernate</i> xml mapping file), you will have access to the following features :<br>
+                 <ul>
+                   <li><b><font style="background-color:yellow">persistence</font></b> : communication with a lot of databases (with <i>1-1</i>, <i>1-n</i>, <i>n-1</i> and <i>n-n</i> relationships)
+                   </li>
+                   <li><b><font style="background-color:yellow">serialization</font></b> : binary and xml format
+                   </li>
+                   <li><b><font style="background-color:yellow">reflection</font></b> (or <b><font style="background-color:yellow">introspection</font></b>) : access to classes definitions, retrieve properties and call classes methods
+                   </li>
+                 </ul>
+                 <b>QxOrm</b> aims to simplify C++ development and provides a lot of functionalities.<br>
+                 Here is a list of advantages of QxOrm :
+                 <ul>
+                   <li><b>non intrusive</b> : the <i>C++ setting function</i> doesn't modified class definition, QxOrm can be used in existing projects</li>
+                   <li><b>no code generation</b></li>
+                   <li><b>no xml mapping file</b></li>
+                   <li><b>classes doesn't need to inherit from a 'super object'</b></li>
+                   <li><b>template meta-programming</b> : no macro hack</li>
+                   <li>works with <b>Visual C++ 2008 or 2010</b> on Windows, <b>GCC 4.4.1</b> on Linux and <b>MinGW</b> on Windows (other platforms will be tested soon : Mac, phones...)</li>
+                   <li>only one file <i>&lt;QxOrm.h&gt;</i> to include in precompiled-header (need <b>precompiled-header</b> file to reduce compilation times)</li>
+                 </ul>
+              </td>
+              <td width="200" align="center" valign="top"><a href="./resource/qt_ambassador_logo.png" target="_blank"><img alt="qt_ambassador" src="./resource/qt_ambassador_logo_150x150.png" width="150" height="150" border="0"></a><br>
+                 <b><font size="2">QxOrm library has been accepted into the <a href="http://qt.nokia.com/qt-in-use/ambassadors/qtambassador/" target="_blank">Qt Ambassador Program</a></font></b>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        Before you install and compile <b>QxOrm</b>, you need the following libraries : <a href="http://www.boost.org/" target="_blank"><b>boost</b></a> (from version 1.38) and <a href="http://qt.nokia.com/" target="_blank"><b>Qt</b></a> (from version 4.5.0) :
         <p></p>
         <table border="0" style="width: 100%" align="center">
           <col><col>
@@ -129,7 +139,9 @@
         <ul>
           <li><p><b>QxDao</b> : based on <a href="http://doc.trolltech.com/4.6/sql-programming.html" target="_blank"><i>QtSql</i></a> engine of <b>Qt</b>, this module allows to communicate (select, update, delete, transaction...) with many databases by mapping each field of a table with properties of a C++ class. The relationships <i>1-1</i>, <i>1-n</i>, <i>n-1</i> and <i>n-n</i> are very easy to setup in C++ code. This module supports object-oriented programming : inheritance, polymorphism, modularity. It supports also a lot of containers (<b>stl</b>, <b>boost</b> and <b>Qt</b> : <i>std::vector, std::list, boost::unordered_map, QList, QHash...</i>).</p> 
           </li>
-          <li><p><b>QxRegister, QxDataMember, QxFactory and QxFunction</b> : <b>QxOrm</b> emulates <i>reflection</i> mechanism (like other languages : Java, C#...).</p> 
+          <li><p><b>QxRegister, QxDataMember, QxFactory and QxFunction</b> : <b>QxOrm</b> emulates <i>reflection</i> (or <i>introspection</i>) mechanism (like other languages : Java, C#...).</p> 
+          </li>
+          <li><p><b>QxService</b> : based on <a href="http://doc.qt.nokia.com/4.7/qtnetwork.html" target="_blank"><i>QtNetwork</i></a> engine of Qt library, this module provides an easy and powerful way to create <b>C++ application server</b> (<i>services</i> concept with <i>request</i> from client and <i>reply</i> from server). <b>QxService</b> uses <i>serialization</i> and <i>introspection</i> from QxOrm library to transfer over network any class or structure. For more details on <b>QxService</b> module, <b>a tutorial</b> is available <a href="./tutorial_2.html">here</a>.</p>
           </li>
           <li><p><b>QxCollection&lt;Key, Value&gt;</b> : based on <a href="http://www.boost.org/doc/libs/1_42_0/libs/multi_index/doc/index.html" target="_blank"><i>boost::multi_index_container</i></a>, this collection has advantages of <i>std::vector&lt;T&gt;</i> (insertion order + quick access by index) and <i>boost::unordered_map&lt;Key, Value&gt;</i> or <i>QHash&lt;Key, Value&gt;</i> (quick access by a key : <i>hash-map</i>). <b>QxCollection&lt;Key, Value&gt;</b> is adapted to contain the elements resulting from a database.</p> 
           </li>

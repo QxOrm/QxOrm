@@ -44,6 +44,7 @@
 #include <QxTraits/generic_container.h>
 #include <QxTraits/is_container.h>
 #include <QxTraits/is_valid_primary_key.h>
+#include <QxTraits/is_qx_registered.h>
 
 namespace qx {
 

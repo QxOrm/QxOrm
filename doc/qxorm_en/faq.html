@@ -63,7 +63,7 @@
   <col><col><col><col><col>
   <tbody><tr>
   <td align="left" valign="top"><font size="2">QxOrm  &gt;&gt;  Faq</font></td>
-  <td align="right" valign="top"><font size="2">Current version : QxOrm 1.1.4 (LGPL)</font></td>
+  <td align="right" valign="top"><font size="2">Current version : QxOrm 1.1.5 (LGPL)</font></td>
   <td width="10px"></td>
   <td width="40px" height="30px"><a href="../qxorm_fr/faq.html"><img alt="Version française du site" src="./resource/FR.png" width="40" height="30" border="0"></a></td>
   <td width="40px" height="30px"><a href="../qxorm_en/faq.html"><img alt="Web site english version" src="./resource/GB.png" width="40" height="30" border="0"></a></td>
@@ -74,22 +74,35 @@
   <tbody>
     <tr>
       <td align="justify">
-      <ul><li><a href="#faq_10">What is QxOrm ?</a><br>
-      </li><li><a href="#faq_20">How to contact QxOrm to report a bug or ask a question ?</a><br>
-      </li><li><a href="#faq_40">What are the databases supported by QxOrm ?</a><br>
-      </li><li><a href="#faq_50">Why QxOrm is dependent on two libraries : Boost and Qt ?</a><br>
-      </li><li><a href="#faq_60">Why does QxOrm require a precompiled header to be used ?</a><br>
-      </li><li><a href="#faq_70">Is it possible to accelerate the compilation times of my project ?</a><br>
-      </li><li><a href="#faq_80">Why does QxOrm provide a new type of container <i>qx::QxCollection&lt;Key, Value&gt;</i> ?</a><br>
-      </li><li><a href="#faq_81">Why does QxOrm provide a new smart-pointer <i>qx::dao::ptr&lt;T&gt;</i> ?</a><br>
-      </li><li><a href="#faq_90">Should I use <i>QString</i> or <i>std::string</i> ?</a><br>
-      </li><li><a href="#faq_95">Is it necessary to use <i>smart-pointers</i> ?</a><br>
-      </li><li><a href="#faq_100">The primary key is <i>long</i> type by default. Is it possible to use a key of <i>QString</i> type or other ?</a><br>
-      </li><li><a href="#faq_101">How to define a '<i>multi-columns primary key</i>' (<i>composite key</i>) ?</a><br>
-      </li><li><a href="#faq_110">How to enable/disable the module <i>QxMemLeak</i> for automatic detection of memory leaks ?</a><br>
-      </li><li><a href="#faq_120">How to manage inheritance and database ?</a><br>
-      </li><li><a href="#faq_130">How to define a '<i>Trigger</i>' with QxOrm ?</a><br>
-      </li></ul>
+        <table border="0" style="width: 100%" align="center">
+          <col><col>
+          <tbody>
+            <tr>
+              <td><ul><li><a href="#faq_10">What is QxOrm ?</a><br>
+               </li><li><a href="#faq_20">How to contact QxOrm to report a bug or ask a question ?</a><br>
+               </li><li><a href="#faq_30">How to build QxOrm library ?</a><br>
+               </li><li><a href="#faq_40">What are the databases supported by QxOrm ?</a><br>
+               </li><li><a href="#faq_50">Why QxOrm is dependent on two libraries : boost and Qt ?</a><br>
+               </li><li><a href="#faq_60">Why does QxOrm require a precompiled header to be used ?</a><br>
+               </li><li><a href="#faq_70">Is it possible to accelerate the compilation times of my project ?</a><br>
+               </li><li><a href="#faq_75">What are all types of <i>serialization</i> available ?</a><br>
+               </li><li><a href="#faq_80">Why does QxOrm provide a new type of container <i>qx::QxCollection&lt;Key, Value&gt;</i> ?</a><br>
+               </li><li><a href="#faq_81">Why does QxOrm provide a new smart-pointer <i>qx::dao::ptr&lt;T&gt;</i> ?</a><br>
+               </li><li><a href="#faq_90">Should I use <i>QString</i> or <i>std::string</i> ?</a><br>
+               </li><li><a href="#faq_95">Is it necessary to use <i>smart-pointers</i> ?</a><br>
+               </li><li><a href="#faq_100">The primary key is <i>long</i> type by default. Is it possible to use a key of <i>QString</i> type or other ?</a><br>
+               </li><li><a href="#faq_101">How to define a '<i>multi-columns primary key</i>' (<i>composite key</i>) ?</a><br>
+               </li><li><a href="#faq_110">How to enable/disable the module <i>QxMemLeak</i> for automatic detection of memory leaks ?</a><br>
+               </li><li><a href="#faq_120">How to manage inheritance and database ?</a><br>
+               </li><li><a href="#faq_130">How to define a '<i>Trigger</i>' with QxOrm ?</a><br>
+               </li></ul>
+              </td>
+              <td width="200" align="center" valign="top"><a href="./resource/qt_ambassador_logo.png" target="_blank"><img alt="qt_ambassador" src="./resource/qt_ambassador_logo_150x150.png" width="150" height="150" border="0"></a><br>
+                 <b><font size="2">QxOrm library has been accepted into the <a href="http://qt.nokia.com/qt-in-use/ambassadors/qtambassador/" target="_blank">Qt Ambassador Program</a></font></b>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       <br>
       <a name="faq_10"><u><b>What is QxOrm ?</b></u></a><br><br>
       <table border="0" style="width: 100%" align="center">
@@ -108,7 +121,7 @@
              </li>
              <li><b><font style="background-color:yellow">serialization</font></b> : binary and xml format
              </li>
-             <li><b><font style="background-color:yellow">reflection</font></b> : access to classes definitions, retrieve properties and call classes methods
+             <li><b><font style="background-color:yellow">reflection</font></b> (or <b><font style="background-color:yellow">introspection</font></b>) : access to classes definitions, retrieve properties and call classes methods
              </li>
            </ul>
            </td>
@@ -127,6 +140,36 @@
            If you find a bug or if you have a question about <b>QxOrm</b> library, you can send an e-mail to : <u><i>support@qxorm.com</i></u>.<br>
 <b>QxOrm</b> is also available on the <a href="http://sourceforge.net/projects/qxorm/files/" target="_blank">SourceForge</a> site : platform hosting development projects of free software.<br>
 A forum dedicated to <b>QxOrm</b> is available <a href="http://sourceforge.net/apps/phpbb/qxorm/" target="_blank">by clicking here</a>.
+           </td>
+         </tr>
+       </tbody>
+      </table>
+      <br><br>
+      <a name="faq_30"><u><b>How to build QxOrm library ?</b></u></a><br><br>
+      <table border="0" style="width: 100%" align="center">
+       <col>
+       <col>
+       <tbody>
+         <tr>
+           <td valign="middle" width="30"></td>
+           <td align="justify">
+           <b>QxOrm</b> uses <b>qmake</b> process from <b>Qt</b> library to create <i>makefile</i> and build the project.<br>
+           <b>qmake</b> is portable and multi-platform, so it works perfectly on Windows, Linux (Unix) and Mac.<br>
+           To build <b>QxOrm</b> library, just execute following commands :<br>
+           <i>qmake</i><br>
+           <i>make debug</i><br>
+           <i>make release</i><br>
+           <br>
+           On Windows, <i>*.vcproj</i> and <i>*.sln</i> files are available for <b>Visual C++ 2008</b> and <b>Visual C++ 2010</b>.<br>
+           <i>*.pro</i> files are readable by <b>Qt Creator</b>, and some plugins are available to interface to other C++ IDE.<br>
+           <i>mingw_build_all_debug.bat</i> and <i>mingw_build_all_release.bat</i> scripts in the directory <i>./tools/</i> can quickly built QxOrm library and all tests with <b>MinGW</b> compiler on Windows.<br>
+           <i>gcc_build_all_debug.sh</i> and <i>gcc_build_all_release.sh</i> scripts in the directory <i>./tools/</i> can quickly built QxOrm library and all tests with <b>GCC</b> compiler on Unix.<br>
+           <br>
+           <b>Note :</b> depending on your development environment, it may be necessary to modify <u><b>QxOrm.pri</b></u> file to set <b>boost</b> package configuration :<br>
+           <i>QX_BOOST_INCLUDE_PATH = $$quote(D:/Dvlp/_Libs/Boost/1_42/include)<br>
+           QX_BOOST_LIB_PATH = $$quote(D:/Dvlp/_Libs/Boost/1_42/lib_shared)<br>
+           QX_BOOST_LIB_SERIALIZATION_DEBUG = "boost_serialization-vc90-mt-gd-1_42"<br>
+           QX_BOOST_LIB_SERIALIZATION_RELEASE = "boost_serialization-vc90-mt-1_42"<br></i>
            </td>
          </tr>
        </tbody>
@@ -155,7 +198,7 @@ A detailed list of supported databases is available on the website of Qt <a href
        </tbody>
       </table>
       <br>
-      <a name="faq_50"><u><b>Why QxOrm is dependent on two libraries : Boost and Qt ?</b></u></a><br><br>
+      <a name="faq_50"><u><b>Why QxOrm is dependent on two libraries : boost and Qt ?</b></u></a><br><br>
       <table border="0" style="width: 100%" align="center">
        <col>
        <col>
@@ -163,7 +206,7 @@ A detailed list of supported databases is available on the website of Qt <a href
          <tr>
            <td valign="middle" width="30"></td>
            <td align="justify">
-           <b>QxOrm</b> uses many functionalities available in excellent libraries : <b>Boost</b> and <b>Qt</b>.<br>
+           <b>QxOrm</b> uses many functionalities available in excellent libraries : <b>boost</b> and <b>Qt</b>.<br>
            In addition, these two libraries are used in many projects both professional and open source.<br>
            A large number of forums, tutorials, and a whole community are available to answer any issue that could arise.<br>
            The <b>QxOrm</b> objective is not to redevelop features that already exist but to provide a powerful tool for access to databases such as it exists in other languages (<i>Java</i> with <i>Hibernate</i>, <i>.Net</i> with <i>NHibernate</i>, <i>Ruby</i>, <i>Python</i>, etc...).<br><br>
@@ -237,6 +280,33 @@ A detailed list of supported databases is available on the website of Qt <a href
            To activate this feature in <b>QxOrm</b>, you must modify the constant <b><i>_QX_SERIALIZE_POLYMORPHIC</i></b> of the <i>QxConfig.h</i> file.<br>
            <b>Warning</b> : the <i>serialization</i> functions will be then accessible from the following <i>namespace</i> : <i>qx::serialization::polymorphic_binary</i>, <i>qx::serialization::polymorphic_text</i> and <i>qx::serialization::polymorphic_xml</i>.<br>
            A recompilation of QxOrm library is necessary to take into account this modification.
+           </td>
+         </tr>
+       </tbody>
+      </table>
+      <br><br>
+      <a name="faq_75"><u><b>What are all types of <i>serialization</i> available ?</b></u></a><br><br>
+      <table border="0" style="width: 100%" align="center">
+       <col>
+       <col>
+       <tbody>
+         <tr>
+           <td valign="middle" width="30"></td>
+           <td align="justify">
+           <b>QxOrm</b> is based on <a href="http://www.boost.org/doc/libs/1_42_0/libs/serialization/doc/index.html" target="_blank">boost <i>serialization</i></a> library.<br>
+           There are several types of serialization available : <i>binary, xml, text, etc...</i><br>
+           <i>QxConfig.h</i> file can enable and/or disable some types of serialization.<br>
+           <br>
+           Each type of serialization has its own characteristics :<br>
+           * <b>binary</b> : <i>smallest, fastest, non-portable</i><br>
+           * <b>text</b> : <i>larger, slower, portable</i><br>
+           * <b>xml</b> : <i>largest, slowest, portable</i><br>
+           <br>
+           <b>Note :</b> <b>binary</b> type is not portable, so you can't transfer data between Windows and Unix for example.<br>
+           If you need to transfer data over network between different platforms, you have to use <b>text</b> or <b>xml</b> serialization.<br>
+           <b>QxOrm</b> provides another solution : <b><a href="http://www.boostpro.com/vault/index.php?directory=serialization" target="_blank">portable_binary</a></b> serialization.<br>
+           <b>portable_binary</b> has the same characteristics as <b>binary</b> type and can serialize data in a portable way.<br>
+           However, <b>portable_binary</b> is not provided officially by <b>boost</b> library, so it's necessary to test before using in a production software.
            </td>
          </tr>
        </tbody>
@@ -482,7 +552,7 @@ lstDrugs<span class="operator">.</span>clear<span class="operator">();</span></p
            It is necessary to use the macro <b><i>QX_REGISTER_PRIMARY_KEY()</i></b> to specialize the template and to map class id with multi-columns in database.<br>
            The list of multi-columns names must be defined with '<b>|</b>' character : '<i>column1|column2|column3|etc...</i>'.<br>
            <br>
-           <b>Sample</b> with class '<i>author</i>' from project '<i>qxBlog_composite_key</i>', this class has an id mapped to 3 columns in database :<br>
+           <b>Sample</b> with class '<i>author</i>' from project '<i>qxBlogCompositeKey</i>', this class has an id mapped to 3 columns in database :<br>
            <br>
            <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
 <pre><span class="pre">#ifndef _QX_BLOG_AUTHOR_H_
@@ -612,7 +682,7 @@ int</span> author<span class="operator">::</span>age<span class="operator">()</s
            <br>
            <b>QxOrm</b> works by default with <i>Concrete Table Inheritance</i> strategy (others are not supported yet).<br>
            Many tutorials and forums are available on internet to more details about <i>ORM</i> inheritance and database.<br>
-           You can find a sample in the directory <i>./test/dll2/</i> with the class <i>BaseClassTrigger</i>.
+           You can find a sample in the directory <i>./test/qxDllSample/dll2/</i> with the class <i>BaseClassTrigger</i>.
            </td>
          </tr>
        </tbody>
@@ -627,7 +697,7 @@ int</span> author<span class="operator">::</span>age<span class="operator">()</s
            <td valign="middle" width="30"></td>
            <td align="justify">
            With <b>QxOrm</b> <i>Trigger</i>, it is possible to execute process before and/or after an insert, update or delete query in the database.<br>
-           You can find a sample in the directory <i>./test/dll2/</i> with the class <i>BaseClassTrigger</i>.<br>
+           You can find a sample in the directory <i>./test/qxDllSample/dll2/</i> with the class <i>BaseClassTrigger</i>.<br>
            The class <i>BaseClassTrigger</i> contains 5 properties : <i>m_id</i>, <i>m_dateCreation</i>, <i>m_dateModification</i>, <i>m_userCreation</i> and <i>m_userModification</i>.<br>
            Each property will be automatically auto-updated for all derived classes from <i>BaseClassTrigger</i> (see <i>Foo</i> class and <i>Bar</i> class in the same project).<br>
            It is necessary to specialize '<i>QxDao_Trigger</i>' template to work with this feature.<br>

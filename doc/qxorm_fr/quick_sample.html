@@ -63,7 +63,7 @@
   <col><col><col><col><col>
   <tbody><tr>
   <td align="left" valign="top"><font size="2">QxOrm  &gt;&gt;  Exemple rapide</font></td>
-  <td align="right" valign="top"><font size="2">Version courante : QxOrm 1.1.4 (LGPL)</font></td>
+  <td align="right" valign="top"><font size="2">Version courante : QxOrm 1.1.5 (LGPL)</font></td>
   <td width="10px"></td>
   <td width="40px" height="30px"><a href="../qxorm_fr/quick_sample.html"><img alt="Version française du site" src="./resource/FR.png" width="40" height="30" border="0"></a></td>
   <td width="40px" height="30px"><a href="../qxorm_en/quick_sample.html"><img alt="Web site english version" src="./resource/GB.png" width="40" height="30" border="0"></a></td>
@@ -73,29 +73,41 @@
   <col>
   <tbody>
     <tr>
-      <td align="justify"><b>Dans ce chapitre, nous allons traiter un exemple
-        rapide d'utilisation qui présente les fonctionnalités de base de la
-        librairie QxOrm.</b> <br>
-        <br>
-        <i>Remarque :</i> la librairie <b>QxOrm</b> utilise les <b>conventions d'écriture de code C++</b> suivantes :
-        <ul><li>toutes les classes, fonctions, variables, etc... sont définies sous le <a href="./resource/qxorm.namespace.qx.jpg"><i>namespace qx</i></a>
-        </li><li>les macro de QxOrm sont écrites sous la forme <i>QX_...</i>
-        </li><li>les classes abstraites (ou interfaces) commencent par <i>Ix</i> (par exemple <i>IxFactory</i> est une interface pour la création d'instances)
-        </li><li>les autres classes commencent par <i>Qx</i> (par exemple <i>QxDataMember</i>)
-        </li><li>les collections d'objets se terminent par <i>X</i> (par exemple <i>QxDataMemberX</i> est une collection de <i>QxDataMember</i>)
-        </li><li>les fonctions pour communiquer avec les bases de données se trouvent sous le <a href="./resource/qxorm.namespace.qx.dao.jpg"><i>namespace qx::dao</i></a> (par exemple <i>qx::dao::fetch_by_id()</i>)
-        </li><li>les fonctions pour la <i>serialization</i> des données se trouvent sous le <a href="./resource/qxorm.namespace.qx.serialization.jpg"><i>namespace qx::serialization</i></a> (par exemple <i>qx::serialization::xml::to_file()</i>)
-        </li><li>le moteur de <i>reflection</i> est accessible depuis la classe <b><i>qx::QxClassX</i></b> (par exemple <i>qx::QxClassX::invoke()</i> pour invoquer une méthode de classe)
-        </li><li>les classes de traits se trouvent sous le <a href="./resource/qxorm.namespace.qx.trait.jpg"><i>namespace qx::trait</i></a> (par exemple <i>qx::trait::is_smart_ptr&lt;T&gt;</i>)
-        </li></ul>
+      <td align="justify">
+        <table border="0" style="width: 100%" align="center">
+          <col><col>
+          <tbody>
+            <tr>
+              <td><b>Dans ce chapitre, nous allons traiter un exemple
+                 rapide d'utilisation qui présente les fonctionnalités de base de la
+                 librairie QxOrm.</b> <br>
+                 <br>
+                 <i>Remarque :</i> la librairie <b>QxOrm</b> utilise les <b>conventions d'écriture de code C++</b> suivantes :
+                 <ul><li>toutes les classes, fonctions, variables, etc... sont définies sous le <a href="./resource/qxorm.namespace.qx.jpg"><i>namespace qx</i></a>
+                 </li><li>les macro de QxOrm sont écrites sous la forme <i>QX_...</i>
+                 </li><li>les classes abstraites (ou interfaces) commencent par <i>Ix</i> (par exemple <i>IxFactory</i> est une interface pour la création d'instances)
+                 </li><li>les autres classes commencent par <i>Qx</i> (par exemple <i>QxDataMember</i>)
+                 </li><li>les collections d'objets se terminent par <i>X</i> (par exemple <i>QxDataMemberX</i> est une collection de <i>QxDataMember</i>)
+                 </li><li>les fonctions pour communiquer avec les bases de données se trouvent sous le <a href="./resource/qxorm.namespace.qx.dao.jpg"><i>namespace qx::dao</i></a> (par exemple <i>qx::dao::fetch_by_id()</i>)
+                 </li><li>les fonctions pour la <i>serialization</i> des données se trouvent sous le <a href="./resource/qxorm.namespace.qx.serialization.jpg"><i>namespace qx::serialization</i></a> (par exemple <i>qx::serialization::xml::to_file()</i>)
+                 </li><li>le moteur de <i>reflection</i> est accessible depuis la classe <b><i>qx::QxClassX</i></b> (par exemple <i>qx::QxClassX::invoke()</i> pour invoquer une méthode de classe)
+                 </li><li>les classes de traits se trouvent sous le <a href="./resource/qxorm.namespace.qx.trait.jpg"><i>namespace qx::trait</i></a> (par exemple <i>qx::trait::is_smart_ptr&lt;T&gt;</i>)
+                 </li></ul>
+              </td>
+              <td width="200" align="center" valign="top"><a href="./resource/qt_ambassador_logo.png" target="_blank"><img alt="qt_ambassador" src="./resource/qt_ambassador_logo_150x150.png" width="150" height="150" border="0"></a><br>
+                 <b><font size="2">QxOrm library has been accepted into the <a href="http://qt.nokia.com/qt-in-use/ambassadors/qtambassador/" target="_blank">Qt Ambassador Program</a></font></b>
+              </td>
+            </tr>
+          </tbody>
+        </table>
         <i>Autre Remarque :</i> un exemple plus complet (avec notion d'héritage, de
         relations entre tables, de collections, de libraries partagées, de
-        memory leak, etc...) est présent dans le dossier <i>./test/</i> de la
-        distribution de QxOrm. Ce dossier <i>./test/</i> contient 2 projets de
+        memory leak, etc...) est présent dans le dossier <i>./test/qxDllSample/</i> de la
+        distribution de QxOrm. Ce dossier <i>./test/qxDllSample/</i> contient 2 projets de
         type dll et 1 projet de type exécutable : <i>./dll1/</i>,
         <i>./dll2/</i> et <i>./exe/</i>.<br> La solution complète peut être
         compilée avec <b>Visual C++ 2008 ou 2010</b> sous Windows (ouvrir le fichier
-        <i>./test/test.sln</i>).<br>
+        <i>./test/qxDllSample/test.sln</i>).<br>
 		Elle peut être également compilée avec <b>GCC 4.4.1</b> sous Linux et <b>MinGW</b> sous Windows en utilisant la
         commande <i>qmake</i>. <br>
         <br>

@@ -63,7 +63,7 @@
   <col><col><col><col><col>
   <tbody><tr>
   <td align="left" valign="top"><font size="2">QxOrm  &gt;&gt;  Faq</font></td>
-  <td align="right" valign="top"><font size="2">Version courante : QxOrm 1.1.4 (LGPL)</font></td>
+  <td align="right" valign="top"><font size="2">Version courante : QxOrm 1.1.5 (LGPL)</font></td>
   <td width="10px"></td>
   <td width="40px" height="30px"><a href="../qxorm_fr/faq.html"><img alt="Version française du site" src="./resource/FR.png" width="40" height="30" border="0"></a></td>
   <td width="40px" height="30px"><a href="../qxorm_en/faq.html"><img alt="Web site english version" src="./resource/GB.png" width="40" height="30" border="0"></a></td>
@@ -74,22 +74,35 @@
   <tbody>
     <tr>
       <td align="justify">
-      <ul><li><a href="#faq_10">Qu'est-ce que QxOrm ?</a><br>
-      </li><li><a href="#faq_20">Comment contacter QxOrm pour indiquer un bug ou poser une question ?</a><br>
-      </li><li><a href="#faq_40">Quelles sont les bases de données prises en compte par QxOrm ?</a><br>
-      </li><li><a href="#faq_50">Pourquoi QxOrm est dépendant de 2 librairies : boost et Qt ?</a><br>
-      </li><li><a href="#faq_60">Pourquoi QxOrm nécessite un en-tête précompilé (precompiled header) pour pouvoir être utilisé ?</a><br>
-      </li><li><a href="#faq_70">Est-il possible d'accélérer les temps de compilation de mon projet ?</a><br>
-      </li><li><a href="#faq_80">Pourquoi QxOrm fournit un nouveau type de container <i>qx::QxCollection&lt;Key, Value&gt;</i> ?</a><br>
-      </li><li><a href="#faq_81">Pourquoi QxOrm fournit un nouveau type de pointeur intelligent <i>qx::dao::ptr&lt;T&gt;</i> ?</a><br>
-      </li><li><a href="#faq_90">Faut-il utiliser <i>QString</i> ou <i>std::string</i> ?</a><br>
-      </li><li><a href="#faq_95">Faut-il utiliser les pointeurs intelligents <i>smart-pointer</i> ?</a><br>
-      </li><li><a href="#faq_100">La clé primaire est de type <i>long</i> par défaut. Est-il possible d'utiliser une clé de type <i>QString</i> ou autre ?</a><br>
-      </li><li><a href="#faq_101">Comment définir une clé primaire sur plusieurs colonnes (<i>composite key</i>) ?</a><br>
-      </li><li><a href="#faq_110">Comment activer/désactiver le module <i>QxMemLeak</i> pour la détection automatique des fuites mémoires ?</a><br>
-      </li><li><a href="#faq_120">Comment gérer la notion d'héritage avec la base de données ?</a><br>
-      </li><li><a href="#faq_130">Comment utiliser les <i>Trigger</i> ?</a><br>
-      </li></ul>
+        <table border="0" style="width: 100%" align="center">
+          <col><col>
+          <tbody>
+            <tr>
+              <td><ul><li><a href="#faq_10">Qu'est-ce que QxOrm ?</a><br>
+                </li><li><a href="#faq_20">Comment contacter QxOrm pour indiquer un bug ou poser une question ?</a><br>
+                </li><li><a href="#faq_30">Comment compiler QxOrm ?</a><br>
+                </li><li><a href="#faq_40">Quelles sont les bases de données prises en compte par QxOrm ?</a><br>
+                </li><li><a href="#faq_50">Pourquoi QxOrm est dépendant de 2 librairies : boost et Qt ?</a><br>
+                </li><li><a href="#faq_60">Pourquoi QxOrm nécessite un en-tête précompilé (precompiled header) pour pouvoir être utilisé ?</a><br>
+                </li><li><a href="#faq_70">Est-il possible d'accélérer les temps de compilation de mon projet ?</a><br>
+                </li><li><a href="#faq_75">Quels sont les différents types de <i>serialization</i> disponibles ?</a><br>
+                </li><li><a href="#faq_80">Pourquoi QxOrm fournit un nouveau type de container <i>qx::QxCollection&lt;Key, Value&gt;</i> ?</a><br>
+                </li><li><a href="#faq_81">Pourquoi QxOrm fournit un nouveau type de pointeur intelligent <i>qx::dao::ptr&lt;T&gt;</i> ?</a><br>
+                </li><li><a href="#faq_90">Faut-il utiliser <i>QString</i> ou <i>std::string</i> ?</a><br>
+                </li><li><a href="#faq_95">Faut-il utiliser les pointeurs intelligents <i>smart-pointer</i> ?</a><br>
+                </li><li><a href="#faq_100">La clé primaire est de type <i>long</i> par défaut. Est-il possible d'utiliser une clé de type <i>QString</i> ou autre ?</a><br>
+                </li><li><a href="#faq_101">Comment définir une clé primaire sur plusieurs colonnes (<i>composite key</i>) ?</a><br>
+                </li><li><a href="#faq_110">Comment activer/désactiver le module <i>QxMemLeak</i> pour la détection automatique des fuites mémoires ?</a><br>
+                </li><li><a href="#faq_120">Comment gérer la notion d'héritage avec la base de données ?</a><br>
+                </li><li><a href="#faq_130">Comment utiliser les <i>Trigger</i> ?</a><br>
+                </li></ul>
+              </td>
+              <td width="200" align="center" valign="top"><a href="./resource/qt_ambassador_logo.png" target="_blank"><img alt="qt_ambassador" src="./resource/qt_ambassador_logo_150x150.png" width="150" height="150" border="0"></a><br>
+                 <b><font size="2">QxOrm library has been accepted into the <a href="http://qt.nokia.com/qt-in-use/ambassadors/qtambassador/" target="_blank">Qt Ambassador Program</a></font></b>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       <br>
       <a name="faq_10"><u><b>Qu'est-ce que QxOrm ?</b></u></a><br><br>
       <table border="0" style="width: 100%" align="center">
@@ -104,7 +117,7 @@
            <ul>
              <li><font style="background-color:yellow"><b>persistance</b></font> : communication avec de nombreuses bases de données (avec support des relations <i>1-1</i>, <i>1-n</i>, <i>n-1</i> et <i>n-n</i>)
              </li><li><font style="background-color:yellow"><b>serialization</b></font> des données (flux binaire et xml)
-             </li><li>moteur de <font style="background-color:yellow"><b>reflection</b></font> pour accéder aux classes, attributs et invoquer des méthodes
+             </li><li>moteur de <font style="background-color:yellow"><b>reflection</b></font> (ou <font style="background-color:yellow"><b>introspection</b></font>) pour accéder aux classes, attributs et invoquer des méthodes
              </li>
            </ul>
            </td>
@@ -124,6 +137,36 @@
            vous pouvez envoyer un mail à : <u><i>support@qxorm.com</i></u>.<br>
            <b>QxOrm</b> est également disponible sur le site <a href="http://sourceforge.net/projects/qxorm/files/" target="_blank">SourceForge</a> : plate-forme d'hébergement de projets de développements de logiciels libres.<br>
            Un forum dédié à <b>QxOrm</b> est disponible <a href="http://sourceforge.net/apps/phpbb/qxorm/" target="_blank">en cliquant ici</a>.
+           </td>
+         </tr>
+       </tbody>
+      </table>
+      <br><br>
+      <a name="faq_30"><u><b>Comment compiler QxOrm ?</b></u></a><br><br>
+      <table border="0" style="width: 100%" align="center">
+       <col>
+       <col>
+       <tbody>
+         <tr>
+           <td valign="middle" width="30"></td>
+           <td align="justify">
+           <b>QxOrm</b> utilise le système <b>qmake</b> de la librarie <b>Qt</b> pour générer les <i>makefile</i> et compiler le projet.<br>
+           <b>qmake</b> est multi-plateforme et fonctionne parfaitement sous Windows, Linux (Unix) et Mac.<br>
+           Pour compiler <b>QxOrm</b>, il suffit d'exécuter les commandes suivantes :<br>
+           <i>qmake</i><br>
+           <i>make debug</i><br>
+           <i>make release</i><br>
+           <br>
+           Sous Windows, des fichiers <i>*.vcproj</i> et <i>*.sln</i> sont disponibles pour les éditeurs <b>Visual C++ 2008</b> et <b>Visual C++ 2010</b>.<br>
+           Les fichiers <i>*.pro</i> sont lisibles par l'éditeur <b>Qt Creator</b>, et des plugins existent permettant de s'interfacer avec de nombreux éditeurs C++.<br>
+           Les fichiers <i>mingw_build_all_debug.bat</i> et <i>mingw_build_all_release.bat</i> présents dans le dossier <i>./tools/</i> permettent de compiler rapidement QxOrm ainsi que tous les tests avec le compilateur <b>MinGW</b> sous Windows.<br>
+           Enfin, les fichiers <i>gcc_build_all_debug.sh</i> et <i>gcc_build_all_release.sh</i> présents dans le dossier <i>./tools/</i> permettent de compiler rapidement QxOrm ainsi que tous les tests avec <b>GCC</b> sous Unix.<br>
+           <br>
+           <b>Remarque :</b> suivant l'environnement de développement, il peut être nécessaire de modifier le fichier <u><b>QxOrm.pri</b></u> pour paramétrer la configuration de la librairie <b>boost</b> :<br>
+           <i>QX_BOOST_INCLUDE_PATH = $$quote(D:/Dvlp/_Libs/Boost/1_42/include)<br>
+           QX_BOOST_LIB_PATH = $$quote(D:/Dvlp/_Libs/Boost/1_42/lib_shared)<br>
+           QX_BOOST_LIB_SERIALIZATION_DEBUG = "boost_serialization-vc90-mt-gd-1_42"<br>
+           QX_BOOST_LIB_SERIALIZATION_RELEASE = "boost_serialization-vc90-mt-1_42"<br></i>
            </td>
          </tr>
        </tbody>
@@ -268,6 +311,33 @@
            Pour activer cette fonctionnalité dans <b>QxOrm</b>, vous devez modifier la constante <b><i>_QX_SERIALIZE_POLYMORPHIC</i></b> du fichier <i>QxConfig.h</i>.<br>
            <b>Attention</b> : les fonctions de <i>serialization</i> seront alors accessibles depuis les <i>namespace</i> suivants : <i>qx::serialization::polymorphic_binary</i>, <i>qx::serialization::polymorphic_text</i> et <i>qx::serialization::polymorphic_xml</i>.<br>
            Une recompilation de la librairie QxOrm est nécessaire pour prendre en compte cette modification.
+           </td>
+         </tr>
+       </tbody>
+      </table>
+      <br><br>
+      <a name="faq_75"><u><b>Quels sont les différents types de <i>serialization</i> disponibles ?</b></u></a><br><br>
+      <table border="0" style="width: 100%" align="center">
+       <col>
+       <col>
+       <tbody>
+         <tr>
+           <td valign="middle" width="30"></td>
+           <td align="justify">
+           <b>QxOrm</b> utilise le framework de <i>serialization</i> proposé par la librairie <a href="http://www.boost.org/doc/libs/1_42_0/libs/serialization/doc/index.html" target="_blank">boost</a>.<br>
+           Il existe plusieurs types de serialization disponibles : <i>binaire, xml, texte, etc...</i><br>
+           Le fichier <i>QxConfig.h</i> permet d'activer et/ou désactiver les différents types de serialization.<br>
+           <br>
+           Chaque type de serialization possède ses propres caractéristiques :<br>
+           * <b>binary</b> : <i>smallest, fastest, non-portable</i><br>
+           * <b>text</b> : <i>larger, slower, portable</i><br>
+           * <b>xml</b> : <i>largest, slowest, portable</i><br>
+           <br>
+           <b>Remarque :</b> le type <b>binary</b> n'est pas portable, ce qui signifie que des données ne peuvent pas s'échanger entre un sytème Windows et un système Unix par exemple.<br>
+           Si vous devez faire transiter des données sur un réseau à travers plusieurs systèmes d'exploitation, il faut utiliser le type de serialization <b>text</b> ou <b>xml</b>.<br>
+           <b>QxOrm</b> propose également une autre solution : le type de serialization <b><a href="http://www.boostpro.com/vault/index.php?directory=serialization" target="_blank">portable_binary</a></b>.<br>
+           Le type <b>portable_binary</b> possède les mêmes caractéristiques que le type <b>binary</b> et permet d'échanger des données de manière portable.<br>
+           Cependant, ce type de serialization n'est pas proposé officiellement par la librairie <b>boost</b>, il est donc nécessaire de tester avant de l'utiliser dans un logiciel en production.
            </td>
          </tr>
        </tbody>
@@ -515,7 +585,7 @@ lstDrugs<span class="operator">.</span>clear<span class="operator">();</span></p
            Il est nécessaire d'utiliser la macro <b><i>QX_REGISTER_PRIMARY_KEY()</i></b> pour spécialiser le template et ainsi définir le type d'identifiant sur plusieurs colonnes.<br>
            La liste des noms des colonnes doit être de la forme suivante : '<i>column1|column2|column3|etc...</i>'.<br>
            <br>
-           <b>Exemple d'utilisation</b> avec la classe '<i>author</i>' du projet '<i>qxBlog_composite_key</i>', cette classe possède un identifiant sur 3 colonnes :<br>
+           <b>Exemple d'utilisation</b> avec la classe '<i>author</i>' du projet '<i>qxBlogCompositeKey</i>', cette classe possède un identifiant sur 3 colonnes :<br>
            <br>
            <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
 <pre><span class="pre">#ifndef _QX_BLOG_AUTHOR_H_
@@ -651,7 +721,7 @@ int</span> author<span class="operator">::</span>age<span class="operator">()</s
            <br>
            <b>QxOrm</b> utilise par défaut la stratégie <i>Concrete Table Inheritance</i> (les autres stratégies ne sont pas fonctionnelles à l'heure actuelle).<br>
            De nombreux tutoriaux et forums sont disponibles sur internet pour plus de détails sur cette notion d'héritage.<br>
-           Un exemple d'utilisation avec une classe de base se trouve dans le dossier <i>./test/dll2/</i> avec la classe <i>BaseClassTrigger</i>.
+           Un exemple d'utilisation avec une classe de base se trouve dans le dossier <i>./test/qxDllSample/dll2/</i> avec la classe <i>BaseClassTrigger</i>.
            </td>
          </tr>
        </tbody>
@@ -666,7 +736,7 @@ int</span> author<span class="operator">::</span>age<span class="operator">()</s
            <td valign="middle" width="30"></td>
            <td align="justify">
            Les <i>Trigger</i> de <b>QxOrm</b> permettent d'effectuer divers traitements avant et/ou après une insertion, une mise à jour ou bien une suppression dans la base de données.<br>
-           Un exemple d'utilisation se trouve dans le dossier <i>./test/dll2/</i> avec la classe <i>BaseClassTrigger</i>.<br>
+           Un exemple d'utilisation se trouve dans le dossier <i>./test/qxDllSample/dll2/</i> avec la classe <i>BaseClassTrigger</i>.<br>
            Cette classe contient 5 propriétés : <i>m_id</i>, <i>m_dateCreation</i>, <i>m_dateModification</i>, <i>m_userCreation</i> et <i>m_userModification</i>.<br>
            Ces propriétés se mettront à jour automatiquement pour chaque classe héritant de <i>BaseClassTrigger</i> (cf. les classes <i>Foo</i> et <i>Bar</i> du même projet).<br>
            Il est nécessaire de spécialiser le template '<i>QxDao_Trigger</i>' pour profiter de cette fonctionnalité.<br>

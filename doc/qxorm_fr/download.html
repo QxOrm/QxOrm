@@ -63,7 +63,7 @@
   <col><col><col><col><col>
   <tbody><tr>
   <td align="left" valign="top"><font size="2">QxOrm  &gt;&gt;  Téléchargement</font></td>
-  <td align="right" valign="top"><font size="2">Version courante : QxOrm 1.1.4 (LGPL)</font></td>
+  <td align="right" valign="top"><font size="2">Version courante : QxOrm 1.1.5 (LGPL)</font></td>
   <td width="10px"></td>
   <td width="40px" height="30px"><a href="../qxorm_fr/download.html"><img alt="Version française du site" src="./resource/FR.png" width="40" height="30" border="0"></a></td>
   <td width="40px" height="30px"><a href="../qxorm_en/download.html"><img alt="Web site english version" src="./resource/GB.png" width="40" height="30" border="0"></a></td>
@@ -74,32 +74,40 @@
   <tbody>
     <tr>
       <td align="justify">
-      <b>QxOrm</b> est une librairie C++ disponible sous <a href="./resource/license.lgpl.txt" target="_blank">licence LGPL</a>.<br><br>
-      <table border="0" style="width: 100%" align="center">
-       <col>
-       <col>
-       <tbody>
-         <tr>
-           <td valign="middle" width="80" align="center"><a
-             href="http://sourceforge.net/projects/qxorm/files/" target="_blank"><img alt="Download QxOrm" src="./resource/download.jpg" width="40" height="48" border="0"></a>
-           </td>
-           <td align="justify">
-             <a href="http://sourceforge.net/projects/qxorm/files/" target="_blank"><b>Télécharger QxOrm version 1.1.4 (source + test + documentation)</b></a><br>
-             Cette version est compatible avec <b>Visual Studio 2008 ou 2010</b> (Windows), <b>GCC 4.4.1</b> (Linux) et <b>MinGW</b> (Windows)
-           </td>
-         </tr>
-       </tbody>
-      </table>
-        <br>
-        <i>Remarque : si le lien ci-dessus ne fonctionne pas, vous pouvez essayer de télécharger QxOrm <a href="../version/QxOrm_1.1.4.zip">en cliquant ici</a>.</i>
-        <br>
-        <p align="justify"><b>QxOrm</b> est dépendant des excellentes librairies
-        <a href="http://www.boost.org/" target="_blank"><b>boost</b></a> (compatible à partir de la version 1.38) et
-        <a href="http://qt.nokia.com/" target="_blank"><b>Qt</b></a>
-        (compatible à partir de la version 4.5.0).<br>
-        Vous devez donc télécharger et installer ces 2 librairies avant de pouvoir utiliser QxOrm.
-        </p>
-        <p></p>
+        <table border="0" style="width: 100%" align="center">
+          <col><col>
+          <tbody>
+            <tr>
+              <td><b>QxOrm</b> est une librairie C++ disponible sous <a href="./resource/license.lgpl.txt" target="_blank">licence LGPL</a>.<br><br>
+                 <table border="0" style="width: 100%" align="center">
+                  <col>
+                  <col>
+                  <tbody>
+                    <tr>
+                      <td valign="middle" width="80" align="center"><a
+                        href="http://sourceforge.net/projects/qxorm/files/" target="_blank"><img alt="Download QxOrm" src="./resource/download.jpg" width="40" height="48" border="0"></a>
+                      </td>
+                      <td align="justify">
+                        <a href="http://sourceforge.net/projects/qxorm/files/" target="_blank"><b>Télécharger QxOrm version 1.1.5 (source + test + documentation)</b></a><br>
+                        Cette version est compatible avec <b>Visual Studio 2008 ou 2010</b> (Windows), <b>GCC 4.4.1</b> (Linux) et <b>MinGW</b> (Windows)
+                      </td>
+                    </tr>
+                  </tbody>
+                 </table>
+                 <br>
+                 <i>Remarque : si le lien ci-dessus ne fonctionne pas, vous pouvez essayer de télécharger QxOrm <a href="../version/QxOrm_1.1.5.zip">en cliquant ici</a>.</i><br>
+                 <p align="justify"><b>QxOrm</b> est dépendant des excellentes librairies
+                 <a href="http://www.boost.org/" target="_blank"><b>boost</b></a> (compatible à partir de la version 1.38) et
+                 <a href="http://qt.nokia.com/" target="_blank"><b>Qt</b></a>
+                 (compatible à partir de la version 4.5.0).<br>
+                 Vous devez donc télécharger et installer ces 2 librairies avant de pouvoir utiliser QxOrm.</p>
+              </td>
+              <td width="200" align="center" valign="top"><a href="./resource/qt_ambassador_logo.png" target="_blank"><img alt="qt_ambassador" src="./resource/qt_ambassador_logo_150x150.png" width="150" height="150" border="0"></a><br>
+                 <b><font size="2">QxOrm library has been accepted into the <a href="http://qt.nokia.com/qt-in-use/ambassadors/qtambassador/" target="_blank">Qt Ambassador Program</a></font></b>
+              </td>
+            </tr>
+          </tbody>
+        </table>
         <table border="0" style="width: 100%" align="center">
           <col>
           <col>
@@ -148,6 +156,49 @@
                 de Qt disponible à l'adresse suivante : <a
                 href="http://qt.nokia.com/"
                 target="_blank">http://qt.nokia.com/</a> </td>
+            </tr>
+          </tbody>
+        </table>
+        <p></p>
+        <br>Historique des modifications de la librairie <b>QxOrm</b> :
+        <table border="1" style="width: 100%" bgcolor="#FFFFFF">
+          <col>
+          <tbody>
+            <tr>
+              <td><i>
+Changes in version 1.1.5:<br>
+- New feature available : 'QxService' module to create C++ application server<br>
+- 'QxService' provides an easy and powerful way to create services and to transfer data over network<br>
+- New tutorial available to explain how 'QxService' module works<br>
+- New sample available at './test/qxClientServer' directory<br>
+- QxOrm can be built with 'CONFIG += no_keywords' flag in '*.pro' files<br>
+- Bug fix with 'qx::dao::create_table&lt;&gt;' function and relation 'many-to-many'<br>
+- QxOrm should now build fine with GCC &lt;= 4.2<br>
+<br>
+Changes in version 1.1.4:<br>
+- New parameter in functions 'qx::dao::fetch_by_id', 'qx::dao::fetch_all', 'qx::dao::fetch_by_query' and 'qx::dao::update' to define a list of properties to fetch/update (by default, all properties are fetched/updated)<br>
+- Support multi-columns primary key (composite key) : see sample './test/qxBlogCompositeKey/'<br>
+- Improve strategy of inheritance : QxOrm supports 'Concrete Table Inheritance' strategy ('Concrete Table Inheritance' becomes default strategy)<br>
+- New smart-pointer 'qx::dao::ptr&lt;T&gt;' based on Qt 'QSharedPointer&lt;T&gt;' to provide 2 new features : 'is dirty' and 'update optimized'<br>
+- 'qx::dao::ptr&lt;T&gt;' can be used with a simple object and with many containers (stl, boost, Qt and 'qx::QxCollection' containers)<br>
+- 'qx::dao::ptr&lt;T&gt;' keeps original values from database and provides a 'isDirty()' method to retrieve all properties changed<br>
+- 'qx::dao::update_optimized' must be used with 'qx::dao::ptr&lt;T&gt;' to save into database only properties changed<br>
+<br>
+Changes in version 1.1.3:<br>
+- This version works fine with MinGW on Windows<br>
+<br>
+Changes in version 1.1.2:<br>
+- License LGPL<br>
+- Fix compilation problems on Linux and boost &gt; 1.38<br>
+- Fix sql query with MySql database<br>
+- Disable assert when qx::dao functions return an error<br>
+<br>
+Changes in version 1.1.1:<br>
+- This version supports Visual Studio 2010<br>
+<br>
+Changes in version 1.1.0:<br>
+- First release<br>
+              </i></td>
             </tr>
           </tbody>
         </table>

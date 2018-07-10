@@ -94,7 +94,7 @@ struct QxDao_FetchAll_Ptr
 {
 
    static inline QSqlError fetchAll(const qx::QxSqlQuery & query, T & t, QSqlDatabase * pDatabase, const QStringList & columns)
-   { qAssert(t != NULL); return (t ? qx::dao::fetch_by_query(query, (* t), pDatabase, columns) : QSqlError()); }
+   { return (t ? qx::dao::fetch_by_query(query, (* t), pDatabase, columns) : QSqlError()); }
 
 };
 

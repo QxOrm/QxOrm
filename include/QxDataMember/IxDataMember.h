@@ -102,10 +102,8 @@ public:
 
    inline QString getKey() const                   { return m_sKey; }
    inline QString getName() const                  { return (m_sName.isEmpty() ? m_sKey : m_sName); }
-   inline QString getName(int iIndex) const        { return (((iIndex >= 0) && (iIndex < m_lstNames.count())) ? m_lstNames.at(iIndex) : QString("")); }
    inline int getNameCount() const                 { return m_lstNames.count(); }
    inline QString getNameParent() const            { return m_sNameParent; }
-   inline QString getSqlType() const               { return m_sSqlType; }
    inline const char * getNamePtr() const          { return m_pName; }
    inline QString getDescription() const           { return m_sDescription; }
    inline QString getFormat() const                { return m_sFormat; }
@@ -150,15 +148,17 @@ public:
    inline void setParent(IxDataMemberX * pParent)              { m_pParent = pParent; }
    inline void setSqlRelation(IxSqlRelation * pSqlRelation)    { m_pSqlRelation.reset(pSqlRelation); }
 
+   QString getName(int iIndex, const QString & sOtherName = QString()) const;
    QString getSqlAlias(const QString & sTable = QString(), bool bClauseWhere = false, int iIndexName = 0) const;
-   QString getSqlTypeAndParams() const;
-   QString getSqlPlaceHolder(const QString & sAppend = QString(), int iIndexName = 0, const QString & sSep = QString(", ")) const;
-   void setSqlPlaceHolder(QSqlQuery & query, void * pOwner, const QString & sAppend = QString()) const;
+   QString getSqlType(int iIndexName = -1) const;
+   QString getSqlTypeAndParams(int iIndexName = -1) const;
+   QString getSqlPlaceHolder(const QString & sAppend = QString(), int iIndexName = 0, const QString & sSep = QString(", "), const QString & sOtherName = QString()) const;
+   void setSqlPlaceHolder(QSqlQuery & query, void * pOwner, const QString & sAppend = QString(), const QString & sOtherName = QString()) const;
    QString getSqlAliasEqualToPlaceHolder(const QString & sTable = QString(), bool bClauseWhere = false, const QString & sAppend = QString(), const QString & sSep = QString(" AND ")) const;
    QString getSqlNameEqualToPlaceHolder(const QString & sAppend = QString(), const QString & sSep = QString(" AND ")) const;
    QString getSqlTablePointNameAsAlias(const QString & sTable, const QString & sSep = QString(", ")) const;
-   QString getSqlName(const QString & sSep = QString(", ")) const;
-   QString getSqlNameAndTypeAndParams(const QString & sSep = QString(", ")) const;
+   QString getSqlName(const QString & sSep = QString(", "), const QString & sOtherName = QString()) const;
+   QString getSqlNameAndTypeAndParams(const QString & sSep = QString(", "), const QString & sOtherName = QString()) const;
 
    virtual bool isEqual(const void * pOwner1, const void * pOwner2) const = 0;
    virtual boost::any getDataPtr(const void * pOwner) const = 0;

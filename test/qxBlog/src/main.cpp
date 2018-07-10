@@ -13,6 +13,7 @@ int main(int argc, char * argv[])
 {
    // Qt application
    QApplication app(argc, argv);
+   QFile::remove("./qxBlog.sqlite");
 
    // Parameters to connect to database
    qx::QxSqlDatabase::getSingleton()->setDriverName("QSQLITE");
@@ -21,11 +22,11 @@ int main(int argc, char * argv[])
    qx::QxSqlDatabase::getSingleton()->setUserName("root");
    qx::QxSqlDatabase::getSingleton()->setPassword("");
 
-   // Ensure there is no element in database
-   QSqlError daoError = qx::dao::delete_all<author>();
-   daoError = qx::dao::delete_all<comment>();
-   daoError = qx::dao::delete_all<category>();
-   daoError = qx::dao::delete_all<blog>();
+   // Create all tables in database
+   QSqlError daoError = qx::dao::create_table<author>();
+   daoError = qx::dao::create_table<comment>();
+   daoError = qx::dao::create_table<category>();
+   daoError = qx::dao::create_table<blog>();
 
    // Create a list of 3 author
    author_ptr author_1; author_1.reset(new author());
@@ -193,7 +194,7 @@ int main(int argc, char * argv[])
    list_blog lst_blog_with_only_date_creation;
    daoError = qx::dao::fetch_all(lst_blog_with_only_date_creation, NULL, lstColumns);
    qAssert(! daoError.isValid() && (lst_blog_with_only_date_creation.size() > 0));
-   if ((lst_blog_with_only_date_creation.size() > 0) && (lst_blog_with_only_date_creation[0] != NULL))
+   if ((lst_blog_with_only_date_creation.size() > 0) && (lst_blog_with_only_date_creation[0].get() != NULL))
    { qAssert(lst_blog_with_only_date_creation[0]->m_text.isEmpty()); }
    qx::dump(lst_blog_with_only_date_creation);
 

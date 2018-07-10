@@ -58,4 +58,12 @@ boost::any QxFactoryX::createObject(const QString & sKey) const
    return (pFactory ? pFactory->createObject() : boost::any());
 }
 
+void * QxFactoryX::createObjectNudePtr(const QString & sKey) const
+{
+   IxFactory * pFactory = (m_mapFactoryX.contains(sKey) ? m_mapFactoryX.value(sKey) : NULL);
+   if (! pFactory) { qDebug("[QxOrm] cannot create an instance of type '%s'", qPrintable(sKey)); }
+
+   return (pFactory ? pFactory->createObjectNudePtr() : NULL);
+}
+
 } // namespace qx
