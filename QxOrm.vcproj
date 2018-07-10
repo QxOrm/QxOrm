@@ -284,6 +284,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\QxDao\IxPersistable.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\src\QxDao\IxSqlQueryBuilder.cpp"
 					>
 				</File>
@@ -497,6 +501,10 @@
 			<Filter
 				Name="QxCommon"
 				>
+				<File
+					RelativePath=".\include\QxCommon\QxAnyCastDynamic.h"
+					>
+				</File>
 				<File
 					RelativePath=".\include\QxCommon\QxBool.h"
 					>
@@ -899,6 +907,10 @@
 				>
 				<File
 					RelativePath=".\include\QxDao\IxDao_Helper.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\QxDao\IxPersistable.h"
 					>
 				</File>
 				<File

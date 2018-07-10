@@ -1325,6 +1325,14 @@ inline void on_before_delete(T * t, qx::dao::detail::IxDao_Helper * dao)
 
 /*!
  * \ingroup QxDao
+ * \brief Callback before fetching an object from database (<a href="http://www.qxorm.com/qxorm_en/faq.html#faq_130" target="_blank">here is an example using QxOrm Trigger</a>)
+ */
+template <class T>
+inline void on_before_fetch(T * t, qx::dao::detail::IxDao_Helper * dao)
+{ qx::dao::detail::QxDao_Trigger<T>::onBeforeFetch(t, dao); }
+
+/*!
+ * \ingroup QxDao
  * \brief Callback after inserting an object into database (<a href="http://www.qxorm.com/qxorm_en/faq.html#faq_130" target="_blank">here is an example using QxOrm Trigger</a>)
  */
 template <class T>
@@ -1346,6 +1354,14 @@ inline void on_after_update(T * t, qx::dao::detail::IxDao_Helper * dao)
 template <class T>
 inline void on_after_delete(T * t, qx::dao::detail::IxDao_Helper * dao)
 { qx::dao::detail::QxDao_Trigger<T>::onAfterDelete(t, dao); }
+
+/*!
+ * \ingroup QxDao
+ * \brief Callback after fetching an object from database (<a href="http://www.qxorm.com/qxorm_en/faq.html#faq_130" target="_blank">here is an example using QxOrm trigger</a>)
+ */
+template <class T>
+inline void on_after_fetch(T * t, qx::dao::detail::IxDao_Helper * dao)
+{ qx::dao::detail::QxDao_Trigger<T>::onAfterFetch(t, dao); }
 
 } // namespace dao
 } // namespace qx

@@ -41,10 +41,12 @@ struct QxDao_FetchById_Generic
       if (! dao.getDataId() || sql.isEmpty()) { return dao.errEmpty(); }
 
       dao.query().prepare(sql);
+      qx::dao::on_before_fetch<T>((& t), (& dao));
       qx::dao::detail::QxSqlQueryHelper_FetchById<T>::resolveInput(t, dao.query(), dao.builder(), columns);
       if (! dao.query().exec()) { return dao.errFailed(); }
       if (! dao.nextRecord()) { return dao.errNoData(); }
       qx::dao::detail::QxSqlQueryHelper_FetchById<T>::resolveOutput(t, dao.query(), dao.builder(), columns);
+      qx::dao::on_after_fetch<T>((& t), (& dao));
 
       return dao.error();
    }
@@ -124,10 +126,12 @@ private:
       {
          QStringList columns = dao.getSqlColumns();
          if (! dao.isValidPrimaryKey(item)) { dao.errInvalidId(); return false; }
+         qx::dao::on_before_fetch<U>((& item), (& dao));
          qx::dao::detail::QxSqlQueryHelper_FetchById<U>::resolveInput(item, dao.query(), dao.builder(), columns);
          if (! dao.query().exec()) { dao.errFailed(); return false; }
          if (! dao.nextRecord()) { dao.errNoData(); return false; }
          qx::dao::detail::QxSqlQueryHelper_FetchById<U>::resolveOutput(item, dao.query(), dao.builder(), columns);
+         qx::dao::on_after_fetch<U>((& item), (& dao));
 
          return dao.isValid();
       }

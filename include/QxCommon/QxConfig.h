@@ -37,7 +37,7 @@
  * \brief List of parameters to compile and build QxOrm library
  */
 
-#define QX_VERSION   0x010202 // QxOrm version 1.2.2
+#define QX_VERSION   0x010203 // QxOrm version 1.2.3
 
 #define _QX_SERIALIZE_POLYMORPHIC            0
 
@@ -70,6 +70,7 @@
 #define _QX_ENABLE_QT_GUI_DEPENDENCY                                    1
 #define _QX_ENABLE_QT_NETWORK_DEPENDENCY                                1
 #define _QX_SUPPORT_COVARIANT_RETURN_TYPE                               1
+#define _QX_USE_QX_SINGLETON_X                                          1
 
 #ifdef _MSC_VER
 /* -- Link error with VC++ 9.0 => Qt uses "-Zc:wchar_t-" option to compile and boost serialization library is compiled without this option -- */

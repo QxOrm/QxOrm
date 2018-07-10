@@ -73,6 +73,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\QxPersistable.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\src\TestQtProperty.cpp"
 				>
 			</File>
@@ -92,6 +96,10 @@
 			</File>
 			<File
 				RelativePath=".\include\precompiled.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\QxPersistable.h"
 				>
 			</File>
 			<File

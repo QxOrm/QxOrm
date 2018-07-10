@@ -257,6 +257,13 @@ private:
       static inline bool compareByValueDescending(const type_pair_key_value & v1, const type_pair_key_value & v2) { return ((v1.second && v2.second) ? ((* v1.second) > (* v2.second)) : true); }
    };
 
+public:
+
+   virtual long _count() const               { return this->count(); }
+   virtual void _clear()                     { this->clear(); }
+   virtual bool _remove(long index)          { return this->removeByIndex(index); }
+   virtual boost::any _at(long index) const  { Value val = this->getByIndex(index); return boost::any(val); }
+
 };
 
 } // namespace qx

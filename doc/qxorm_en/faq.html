@@ -65,7 +65,7 @@
   <col><col><col><col><col><col>
   <tbody><tr>
   <td align="left" valign="top"><font size="2">QxOrm  &gt;&gt;  Faq</font></td>
-  <td align="right" valign="top"><font size="2">Current version : QxOrm 1.2.2 (LGPL) - <a href="../doxygen/index.html" target="_blank">QxOrm library online documentation</a></font></td>
+  <td align="right" valign="top"><font size="2">Current version : QxOrm 1.2.3 (LGPL) - <a href="../doxygen/index.html" target="_blank">QxOrm library online documentation</a></font></td>
   <td width="10px"></td>
   <td width="40px" height="30px"><a href="../qxorm_fr/faq.html"><img alt="Version française du site" src="./resource/FR.png" width="40" height="30" border="0"></a></td>
   <td width="40px" height="30px"><a href="../qxorm_en/faq.html"><img alt="Web site english version" src="./resource/GB.png" width="40" height="30" border="0"></a></td>
@@ -110,6 +110,7 @@
                </li><li><a href="#faq_230">How to build SQL schema (create and update tables) based on C++ persistents classes registered into QxOrm context ?</a><br>
                </li><li><a href="#faq_240">How to associate a SQL type to a C++ class ?</a><br>
                </li><li><a href="#faq_250">How to use <i>QxValidator</i> module to validate automatically an instance ?</a><br>
+               </li><li><a href="#faq_260">How to use <i>qx::IxPersistable</i> interface ?</a><br>
                </li></ul>
               </td>
               <td width="200" align="center" valign="top"><a href="./resource/qt_ambassador_logo.png" target="_blank"><img alt="qt_ambassador" src="./resource/qt_ambassador_logo_150x150.png" width="150" height="150" border="0"></a><br>
@@ -802,11 +803,15 @@ struct</span> QxDao_Trigger<span class="operator">&lt;</span>BaseClassTrigger<sp
    {</span><span class="flow"> if</span><span class="operator"> (</span>t<span class="operator">) {</span> t<span class="operator">-&gt;</span>onBeforeUpdate<span class="operator">(</span>dao<span class="operator">); } }</span><span class="keyword">
    static inline</span><span class="type"> void</span> onBeforeDelete<span class="operator">(</span>BaseClassTrigger<span class="operator"> *</span> t<span class="operator">,</span> qx<span class="operator">::</span>dao<span class="operator">::</span>detail<span class="operator">::</span>IxDao_Helper<span class="operator"> *</span> dao<span class="operator">)
    {</span> Q_UNUSED<span class="operator">(</span>t<span class="operator">);</span> Q_UNUSED<span class="operator">(</span>dao<span class="operator">); }</span><span class="keyword">
+   static inline</span><span class="type"> void</span> onBeforeFetch<span class="operator">(</span>BaseClassTrigger<span class="operator"> *</span> t<span class="operator">,</span> qx<span class="operator">::</span>dao<span class="operator">::</span>detail<span class="operator">::</span>IxDao_Helper<span class="operator"> *</span> dao<span class="operator">)
+   {</span> Q_UNUSED<span class="operator">(</span>t<span class="operator">);</span> Q_UNUSED<span class="operator">(</span>dao<span class="operator">); }</span><span class="keyword">
    static inline</span><span class="type"> void</span> onAfterInsert<span class="operator">(</span>BaseClassTrigger<span class="operator"> *</span> t<span class="operator">,</span> qx<span class="operator">::</span>dao<span class="operator">::</span>detail<span class="operator">::</span>IxDao_Helper<span class="operator"> *</span> dao<span class="operator">)
    {</span> Q_UNUSED<span class="operator">(</span>t<span class="operator">);</span> Q_UNUSED<span class="operator">(</span>dao<span class="operator">); }</span><span class="keyword">
    static inline</span><span class="type"> void</span> onAfterUpdate<span class="operator">(</span>BaseClassTrigger<span class="operator"> *</span> t<span class="operator">,</span> qx<span class="operator">::</span>dao<span class="operator">::</span>detail<span class="operator">::</span>IxDao_Helper<span class="operator"> *</span> dao<span class="operator">)
    {</span> Q_UNUSED<span class="operator">(</span>t<span class="operator">);</span> Q_UNUSED<span class="operator">(</span>dao<span class="operator">); }</span><span class="keyword">
    static inline</span><span class="type"> void</span> onAfterDelete<span class="operator">(</span>BaseClassTrigger<span class="operator"> *</span> t<span class="operator">,</span> qx<span class="operator">::</span>dao<span class="operator">::</span>detail<span class="operator">::</span>IxDao_Helper<span class="operator"> *</span> dao<span class="operator">)
+   {</span> Q_UNUSED<span class="operator">(</span>t<span class="operator">);</span> Q_UNUSED<span class="operator">(</span>dao<span class="operator">); }
+   static inline</span><span class="type"> void</span> onAfterFetch<span class="operator">(</span>BaseClassTrigger<span class="operator"> *</span> t<span class="operator">,</span> qx<span class="operator">::</span>dao<span class="operator">::</span>detail<span class="operator">::</span>IxDao_Helper<span class="operator"> *</span> dao<span class="operator">)
    {</span> Q_UNUSED<span class="operator">(</span>t<span class="operator">);</span> Q_UNUSED<span class="operator">(</span>dao<span class="operator">); }
 
 };
@@ -2037,6 +2042,144 @@ It's possible to modify those default messages (for example, a traduction) using
 For example : "<i>lstMessage->insert("min_value", "la valeur '%NAME%' doit être inférieure ou égale à '%CONSTRAINT%'");</i>".<br>
 <i>%NAME%</i> and <i>%CONSTRAINT%</i> fields will be automatically replaced by the good value.<br>
 To modify a message for a specific validator (and not globally), you have to use the optional parameter provided by each function <i>add_XXX()</i> of <i>qx::IxValidatorX</i> class.<br>
+           </td>
+         </tr>
+       </tbody>
+      </table>
+      <br><br>
+      <a name="faq_260"><u><b>How to use <i>qx::IxPersistable</i> interface ?</b></u></a><br><br>
+      <table border="0" style="width: 100%" align="center">
+       <col>
+       <col>
+       <tbody>
+         <tr>
+           <td valign="middle" width="30"></td>
+           <td align="justify">
+           <i><a href="../doxygen/html/classqx_1_1_ix_persistable.html" target="_blank">qx::IxPersistable</a></i> interface (or abstract class) provides only pure virtual methods.<br>
+           Using <i>qx::IxPersistable</i>, you will have a common base class to call all persistents functions without knowing the real type of current instance (polymorphism concept).<br>
+           QxOrm library doesn't force developers to work with a base class to register a persistent type into QxOrm context, however it's sometimes useful to have an interface to write some generic algorithms.<br>
+           <br>
+           <i>qx::IxPersistable</i> class provides following virtual methods (for more details about those methods, goto <a href="../doxygen/index.html" target="_blank">QxOrm library online documentation</a>) :<br>
+           <br>
+           <div style="width:900px; height:290px; overflow:auto; background-color:white">
+<pre><span class="keyword">virtual</span><span class="type"> long</span> qxCount<span class="operator">(</span><span class="keyword">const</span> qx<span class="operator">::</span>QxSqlQuery<span class="operator"> &amp;</span> query<span class="operator"> =</span> qx<span class="operator">::</span>QxSqlQuery<span class="operator">(),</span> QSqlDatabase<span class="operator"> *</span> pDatabase<span class="operator"> =</span> NULL<span class="operator">);</span><span class="keyword">
+virtual</span> QSqlError qxFetchById<span class="operator">(</span><span class="keyword">const</span> QVariant<span class="operator"> &amp;</span> id<span class="operator"> =</span> QVariant<span class="operator">(),</span><span class="keyword"> const</span> QStringList<span class="operator"> &amp;</span> columns<span class="operator"> =</span> QStringList<span class="operator">(),</span><span class="keyword"> const</span> QStringList<span class="operator"> &amp;</span> relation<span class="operator"> =</span> QStringList<span class="operator">(),</span> QSqlDatabase<span class="operator"> *</span> pDatabase<span class="operator"> =</span> NULL<span class="operator">);</span><span class="keyword">
+virtual</span> QSqlError qxFetchAll<span class="operator">(</span>qx<span class="operator">::</span>IxCollection<span class="operator"> &amp;</span> list<span class="operator">,</span><span class="keyword"> const</span> QStringList<span class="operator"> &amp;</span> columns<span class="operator"> =</span> QStringList<span class="operator">(),</span><span class="keyword"> const</span> QStringList<span class="operator"> &amp;</span> relation<span class="operator"> =</span> QStringList<span class="operator">(),</span> QSqlDatabase<span class="operator"> *</span> pDatabase<span class="operator"> =</span> NULL<span class="operator">);</span><span class="keyword">
+virtual</span> QSqlError qxFetchByQuery<span class="operator">(</span><span class="keyword">const</span> qx<span class="operator">::</span>QxSqlQuery<span class="operator"> &amp;</span> query<span class="operator">,</span> qx<span class="operator">::</span>IxCollection<span class="operator"> &amp;</span> list<span class="operator">,</span><span class="keyword"> const</span> QStringList<span class="operator"> &amp;</span> columns<span class="operator"> =</span> QStringList<span class="operator">(),</span><span class="keyword"> const</span> QStringList<span class="operator"> &amp;</span> relation<span class="operator"> =</span> QStringList<span class="operator">(),</span> QSqlDatabase<span class="operator"> *</span> pDatabase<span class="operator"> =</span> NULL<span class="operator">);</span><span class="keyword">
+virtual</span> QSqlError qxInsert<span class="operator">(</span><span class="keyword">const</span> QStringList<span class="operator"> &amp;</span> relation<span class="operator"> =</span> QStringList<span class="operator">(),</span> QSqlDatabase<span class="operator"> *</span> pDatabase<span class="operator"> =</span> NULL<span class="operator">);</span><span class="keyword">
+virtual</span> QSqlError qxUpdate<span class="operator">(</span><span class="keyword">const</span> qx<span class="operator">::</span>QxSqlQuery<span class="operator"> &amp;</span> query<span class="operator"> =</span> qx<span class="operator">::</span>QxSqlQuery<span class="operator">(),</span><span class="keyword"> const</span> QStringList<span class="operator"> &amp;</span> columns<span class="operator"> =</span> QStringList<span class="operator">(),</span><span class="keyword"> const</span> QStringList<span class="operator"> &amp;</span> relation<span class="operator"> =</span> QStringList<span class="operator">(),</span> QSqlDatabase<span class="operator"> *</span> pDatabase<span class="operator"> =</span> NULL<span class="operator">);</span><span class="keyword">
+virtual</span> QSqlError qxSave<span class="operator">(</span><span class="keyword">const</span> QStringList<span class="operator"> &amp;</span> relation<span class="operator"> =</span> QStringList<span class="operator">(),</span> QSqlDatabase<span class="operator"> *</span> pDatabase<span class="operator"> =</span> NULL<span class="operator">);</span><span class="keyword">
+virtual</span> QSqlError qxDeleteById<span class="operator">(</span><span class="keyword">const</span> QVariant<span class="operator"> &amp;</span> id<span class="operator"> =</span> QVariant<span class="operator">(),</span> QSqlDatabase<span class="operator"> *</span> pDatabase<span class="operator"> =</span> NULL<span class="operator">);</span><span class="keyword">
+virtual</span> QSqlError qxDeleteAll<span class="operator">(</span>QSqlDatabase<span class="operator"> *</span> pDatabase<span class="operator"> =</span> NULL<span class="operator">);</span><span class="keyword">
+virtual</span> QSqlError qxDeleteByQuery<span class="operator">(</span><span class="keyword">const</span> qx<span class="operator">::</span>QxSqlQuery<span class="operator"> &amp;</span> query<span class="operator">,</span> QSqlDatabase<span class="operator"> *</span> pDatabase<span class="operator"> =</span> NULL<span class="operator">);</span><span class="keyword">
+virtual</span> QSqlError qxDestroyById<span class="operator">(</span><span class="keyword">const</span> QVariant<span class="operator"> &amp;</span> id<span class="operator"> =</span> QVariant<span class="operator">(),</span> QSqlDatabase<span class="operator"> *</span> pDatabase<span class="operator"> =</span> NULL<span class="operator">);</span><span class="keyword">
+virtual</span> QSqlError qxDestroyAll<span class="operator">(</span>QSqlDatabase<span class="operator"> *</span> pDatabase<span class="operator"> =</span> NULL<span class="operator">);</span><span class="keyword">
+virtual</span> QSqlError qxDestroyByQuery<span class="operator">(</span><span class="keyword">const</span> qx<span class="operator">::</span>QxSqlQuery<span class="operator"> &amp;</span> query<span class="operator">,</span> QSqlDatabase<span class="operator"> *</span> pDatabase<span class="operator"> =</span> NULL<span class="operator">);</span><span class="keyword">
+virtual</span> qx_bool qxExist<span class="operator">(</span><span class="keyword">const</span> QVariant<span class="operator"> &amp;</span> id<span class="operator"> =</span> QVariant<span class="operator">(),</span> QSqlDatabase<span class="operator"> *</span> pDatabase<span class="operator"> =</span> NULL<span class="operator">);</span><span class="keyword">
+virtual</span> qx<span class="operator">::</span>QxInvalidValueX qxValidate<span class="operator">(</span><span class="keyword">const</span> QStringList<span class="operator"> &amp;</span> groups<span class="operator"> =</span> QStringList<span class="operator">());</span><span class="keyword">
+virtual</span> qx<span class="operator">::</span>IxCollection_ptr qxNewPersistableCollection<span class="operator">()</span><span class="keyword"> const</span><span class="operator">;</span><span class="keyword">
+virtual</span> qx<span class="operator">::</span>IxClass<span class="operator"> *</span> qxClass<span class="operator">()</span><span class="keyword"> const</span><span class="operator">;</span></pre>
+           </div>
+           <br>
+           For example, working with a list of <i>qx::IxPersistable</i> pointers, it's possible to save all items into many tables of database, like this :<br>
+           <br>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre>QList<span class="operator">&lt;</span>qx<span class="operator">::</span>IxPersistable<span class="operator"> *&gt;</span> lst<span class="operator"> = ...;</span>
+foreach<span class="operator">(</span>qx<span class="operator">::</span>IxPersistable<span class="operator"> *</span> p<span class="operator">,</span> lst<span class="operator">)
+{</span>
+   QSqlError daoError<span class="operator"> =</span> p<span class="operator">-&gt;</span>qxSave<span class="operator">();</span><span class="flow">
+   if</span><span class="operator"> (</span>daoError<span class="operator">.</span>isValid<span class="operator">()) {</span><span class="comment"> /* an error occured */</span><span class="operator"> }</span><span class="comment">
+   // etc...
+</span><span class="operator">}</span></pre>
+           </td></tr></tbody></table>
+           <br>
+           To implement <i>qx::IxPersistable</i> interface, it's necessary to :
+           <ul>
+           <li>inherit persistent class from <i>qx::IxPersistable</i> ;</li>
+           <li>into class definition (<i>myClass.h</i> for example), add <i>QX_PERSISTABLE_HPP(myClass)</i> macro ;</li>
+           <li>into class implementation (<i>myClass.cpp</i> for example), add <i>QX_PERSISTABLE_CPP(myClass)</i> macro.</li>
+           </ul>
+           For example, to implement <i>qx::IxPersistable</i> interface for <a href="./tutorial.html#tuto_6"><i>author</i></a> class from <i>qxBlog</i> tutorial, you have to write :<br>
+           <br>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="author.h">
+<pre><span class="pre">#ifndef _QX_BLOG_AUTHOR_H_
+#define _QX_BLOG_AUTHOR_H_
+</span><span class="keyword">
+class</span> blog<span class="operator">;</span><span class="keyword">
+
+class</span> QX_BLOG_DLL_EXPORT author : <font style="background-color:yellow"><b>public qx::IxPersistable</b></font><span class="operator">
+{</span>
+   <font style="background-color:yellow"><b>QX_PERSISTABLE_HPP(author)</b></font>
+<span class="keyword">public</span><span class="operator">:</span><span class="comment">
+// -- typedef
+</span><span class="keyword">   typedef</span> boost<span class="operator">::</span>shared_ptr<span class="operator">&lt;</span>blog<span class="operator">&gt;</span> blog_ptr<span class="operator">;</span><span class="keyword">
+   typedef</span> std<span class="operator">::</span>vector<span class="operator">&lt;</span>blog_ptr<span class="operator">&gt;</span> list_blog<span class="operator">;</span><span class="comment">
+// -- enum
+</span><span class="keyword">   enum</span> enum_sex<span class="operator"> {</span> male<span class="operator">,</span> female<span class="operator">,</span> unknown<span class="operator"> };</span><span class="comment">
+// -- properties
+</span>   QString     m_id<span class="operator">;</span>
+   QString     m_name<span class="operator">;</span>
+   QDate       m_birthdate<span class="operator">;</span>
+   enum_sex    m_sex<span class="operator">;</span>
+   list_blog   m_blogX<span class="operator">;</span><span class="comment">
+// -- contructor, virtual destructor
+</span>   author<span class="operator">() :</span> m_id<span class="operator">(</span><span class="int">0</span><span class="operator">),</span> m_sex<span class="operator">(</span>unknown<span class="operator">) { ; }</span><span class="keyword">
+   virtual</span><span class="operator"> ~</span>author<span class="operator">() { ; }</span><span class="comment">
+// -- methods
+</span><span class="type">   int</span> age<span class="operator">()</span><span class="keyword"> const</span><span class="operator">;
+};</span>
+
+QX_REGISTER_PRIMARY_KEY<span class="operator">(</span>author<span class="operator">,</span> QString<span class="operator">)</span>
+QX_REGISTER_HPP_QX_BLOG<span class="operator">(</span>author<span class="operator">,</span> qx<span class="operator">::</span>trait<span class="operator">::</span>no_base_class_defined<span class="operator">,</span><span class="int"> 0</span><span class="operator">)</span><span class="keyword">
+
+typedef</span> boost<span class="operator">::</span>shared_ptr<span class="operator">&lt;</span>author<span class="operator">&gt;</span> author_ptr<span class="operator">;</span><span class="keyword">
+typedef</span> qx<span class="operator">::</span>QxCollection<span class="operator">&lt;</span>QString<span class="operator">,</span> author_ptr<span class="operator">&gt;</span> list_author<span class="operator">;</span><span class="pre">
+
+#endif <span class="comment">// _QX_BLOG_AUTHOR_H_</span>
+</span></pre>
+        </td></tr></tbody></table>
+        <br>
+        <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="author.cpp">
+<pre><span class="pre">#include <span class="string">"../include/precompiled.h"</span>
+
+#include <span class="string">"../include/author.h"</span>
+#include <span class="string">"../include/blog.h"</span>
+
+#include <span class="string">&lt;QxMemLeak.h&gt;</span>
+</span>
+QX_REGISTER_CPP_QX_BLOG<span class="operator">(</span>author<span class="operator">)</span>
+<font style="background-color:yellow"><b>QX_PERSISTABLE_CPP(author)</b></font>
+
+<span class="keyword">namespace</span> qx<span class="operator"> {</span><span class="keyword">
+template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</span> register_class<span class="operator">(</span>QxClass<span class="operator">&lt;</span>author<span class="operator">&gt; &amp;</span> t<span class="operator">)
+{</span>
+   t<span class="operator">.</span>id<span class="operator">(&amp;</span> author<span class="operator">::</span>m_id<span class="operator">,</span><span class="string"> "author_id"</span><span class="operator">);</span>
+
+   t<span class="operator">.</span>data<span class="operator">(&amp;</span> author<span class="operator">::</span>m_name<span class="operator">,</span><span class="string"> "name"</span><span class="operator">);</span>
+   t<span class="operator">.</span>data<span class="operator">(&amp;</span> author<span class="operator">::</span>m_birthdate<span class="operator">,</span><span class="string"> "birthdate"</span><span class="operator">);</span>
+   t<span class="operator">.</span>data<span class="operator">(&amp;</span> author<span class="operator">::</span>m_sex<span class="operator">,</span><span class="string"> "sex"</span><span class="operator">);</span>
+
+   t<span class="operator">.</span>relationOneToMany<span class="operator">(&amp;</span> author<span class="operator">::</span>m_blogX<span class="operator">,</span><span class="string"> "list_blog"</span><span class="operator">,</span><span class="string"> "author_id"</span><span class="operator">);</span>
+
+   t<span class="operator">.</span>fct_0<span class="operator">&lt;</span><span class="type">int</span><span class="operator">&gt;(&amp;</span> author<span class="operator">::</span>age<span class="operator">,</span><span class="string"> "age"</span><span class="operator">);
+}}</span><span class="type">
+
+int</span> author<span class="operator">::</span>age<span class="operator">()</span><span class="keyword"> const</span><span class="operator">
+{</span><span class="flow">
+   if</span><span class="operator"> (!</span> m_birthdate<span class="operator">.</span>isValid<span class="operator">()) {</span><span class="flow"> return</span><span class="operator"> -</span><span class="int">1</span><span class="operator">; }</span><span class="flow">
+   return</span><span class="operator"> (</span>QDate<span class="operator">::</span>currentDate<span class="operator">().</span>year<span class="operator">() -</span> m_birthdate<span class="operator">.</span>year<span class="operator">());
+}</span>
+</pre>
+           </td></tr></tbody></table>
+           <br>
+           <b>Note :</b> project test from <i>./test/qxDllSample/dll1/</i> directory provides a kind of 'super base class' : <i>qx::QxPersistable</i> class implements <i><a href="../doxygen/html/classqx_1_1_ix_persistable.html" target="_blank">qx::IxPersistable</a></i> interface and inherits from <i>QObject</i>.<br>
+           So <i>SIGNAL-SLOT</i> concept from Qt library can be used with this class and could be an interesting way to use QxOrm <a href="./faq.html#faq_130"><i>triggers</i></a>.<br>
+           <i>qx::QxPersistable</i> class provides also some virtual methods to override to manage for example data validation process from <a href="./faq.html#faq_250"><i>QxValidator</i></a> module.<br>
+           For information, <i>qx::QxPersistable</i> class is not a part of QxOrm library, but you can copy-past it into your own project to use all its features :
+           <ul>
+           <li>access to <a href="./resource/qx_persistable_hpp.html" target="_blank"><i>QxPersistable.hpp</i></a> file ;</li>
+           <li>access to <a href="./resource/qx_persistable_cpp.html" target="_blank"><i>QxPersistable.cpp</i></a> file.</li>
+           </ul>
            </td>
          </tr>
        </tbody>

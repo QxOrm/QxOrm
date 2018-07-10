@@ -37,6 +37,8 @@
  * \brief Common interface for all classes that can be created dynamically using the class name
  */
 
+#include <typeinfo>
+
 #include <boost/noncopyable.hpp>
 #include <boost/any.hpp>
 
@@ -60,6 +62,7 @@ public:
 
    virtual boost::any createObject() const = 0;
    virtual void * createObjectNudePtr() const = 0;
+   virtual const std::type_info & typeInfo() const = 0;
 
 };
 

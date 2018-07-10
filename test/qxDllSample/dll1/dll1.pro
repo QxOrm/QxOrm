@@ -25,9 +25,11 @@ HEADERS += ./include/precompiled.h
 HEADERS += ./include/export.h
 HEADERS += ./include/CPerson.h
 HEADERS += ./include/TestQtProperty.h
+HEADERS += ./include/QxPersistable.h
 
 SOURCES += ./qx/CPerson.qx.cpp
 
 SOURCES += ./src/CPerson.cpp
 SOURCES += ./src/TestQtProperty.cpp
+SOURCES += ./src/QxPersistable.cpp
 SOURCES += ./src/main.cpp

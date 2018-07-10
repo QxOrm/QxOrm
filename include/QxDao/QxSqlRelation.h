@@ -195,7 +195,7 @@ private:
 
 template <class DataType, class Owner> QxCollection<QString, IxDataMember *> QxSqlRelation<DataType, Owner>::m_lstDataMember;
 template <class DataType, class Owner> IxSqlRelationX QxSqlRelation<DataType, Owner>::m_lstSqlRelation;
-template <class DataType, class Owner> QMutex QxSqlRelation<DataType, Owner>::m_oMutex;
+template <class DataType, class Owner> QMutex QxSqlRelation<DataType, Owner>::m_oMutex(QMutex::Recursive);
 
 } // namespace qx
 

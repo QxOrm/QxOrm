@@ -1,0 +1,189 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="generator" content="C++2HTML by Jasper Bedaux">
+<style type="text/css">
+   .comment { color: #008000; font-style: italic; }
+   .pre { color: #000099; }
+   .string { color: #DF0101; }
+   .char { color: #009900; }
+   .float { color: #996600; }
+   .int { color: #999900; }
+   .bool { color: #000000; font-weight: bold; }
+   .type { color: #FF6633; }
+   .flow { color: #FF0000; }
+   .keyword { color: #990000; }
+   .operator { color: #663300; font-weight: bold; }
+   .operator { color: #663300; font-weight: bold; }
+</style>
+</head>
+<body>
+<pre><span class="comment">/****************************************************************************
+**
+** http://www.qxorm.com/
+** http://sourceforge.net/projects/qxorm/
+** Original file by Lionel Marty
+**
+** This file is part of the QxOrm library
+**
+** This software is provided 'as-is', without any express or implied
+** warranty. In no event will the authors be held liable for any
+** damages arising from the use of this software.
+**
+** GNU Lesser General Public License Usage
+** This file must be used under the terms of the GNU Lesser
+** General Public License version 2.1 as published by the Free Software
+** Foundation and appearing in the file 'license.lgpl.txt' included in the
+** packaging of this file.  Please review the following information to
+** ensure the GNU Lesser General Public License version 2.1 requirements
+** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+**
+** If you have questions regarding the use of this file, please contact :
+** contact@qxorm.com
+**
+****************************************************************************/</span><span class="pre">
+
+#ifndef _QX_PERSISTABLE_H_
+#define _QX_PERSISTABLE_H_
+
+#ifdef _MSC_VER
+#pragma once
+#endif
+</span><span class="keyword">
+namespace</span> qx<span class="operator"> {</span><span class="keyword">
+
+class</span> QxPersistable<span class="operator">;</span><span class="keyword">
+
+namespace</span> dao<span class="operator"> {</span><span class="keyword">
+namespace</span> detail<span class="operator"> {</span><span class="keyword">
+
+template</span><span class="operator"> &lt;&gt;</span><span class="keyword">
+struct</span> QxDao_Trigger<span class="operator">&lt;</span>qx<span class="operator">::</span>QxPersistable<span class="operator">&gt;;
+
+}</span><span class="comment"> // namespace detail
+</span><span class="operator">}</span><span class="comment"> // namespace dao
+</span><span class="comment">
+/*!
+ * \brief qx::QxPersistable : super base class for persistent classes with many features and methods to override (be careful, don't forget to use QX_PERSISTABLE_HPP() and QX_PERSISTABLE_CPP() macros for each derived class)
+ */</span><span class="keyword">
+class</span> QX_DLL1_EXPORT QxPersistable<span class="operator"> :</span><span class="keyword"> public</span> QObject<span class="operator">,</span><span class="keyword"> public</span> qx<span class="operator">::</span>IxPersistable<span class="operator">
+{</span>
+
+   Q_OBJECT
+   QX_REGISTER_FRIEND_CLASS<span class="operator">(</span>qx<span class="operator">::</span>QxPersistable<span class="operator">)</span>
+   QX_PERSISTABLE_HPP<span class="operator">(</span>qx<span class="operator">::</span>QxPersistable<span class="operator">)</span>
+
+   Q_PROPERTY<span class="operator">(</span><span class="type"> long</span> qxId READ qxGetId WRITE qxSetId<span class="operator"> )</span>
+   Q_PROPERTY<span class="operator">(</span> QDateTime qxDateCreation READ qxGetDateCreation WRITE qxSetDateCreation<span class="operator"> )</span>
+   Q_PROPERTY<span class="operator">(</span> QDateTime qxDateModification READ qxGetDateModification WRITE qxSetDateModification<span class="operator"> )</span><span class="keyword">
+
+   friend struct</span> qx<span class="operator">::</span>dao<span class="operator">::</span>detail<span class="operator">::</span>QxDao_Trigger<span class="operator">&lt;</span>qx<span class="operator">::</span>QxPersistable<span class="operator">&gt;;</span><span class="keyword">
+
+protected</span><span class="operator">:</span><span class="type">
+
+   long</span>                    m_qxId<span class="operator">;</span><span class="comment">                 //!&lt; Id of current instance stored into database
+</span>   qx<span class="operator">::</span>QxDateTimeNeutral   m_qxDateCreation<span class="operator">;</span><span class="comment">       //!&lt; Creation date-time automatically calculated before INSERT query
+</span>   qx<span class="operator">::</span>QxDateTimeNeutral   m_qxDateModification<span class="operator">;</span><span class="comment">   //!&lt; Modification date-time automatically calculated before INSERT and UPDATE queries
+</span><span class="keyword">
+public</span><span class="operator">:</span>
+
+   QxPersistable<span class="operator">();</span><span class="keyword">
+   virtual</span><span class="operator"> ~</span>QxPersistable<span class="operator">();</span><span class="type">
+
+   long</span> qxGetId<span class="operator">()</span><span class="keyword"> const</span><span class="operator">;</span>
+   QDateTime qxGetDateCreation<span class="operator">()</span><span class="keyword"> const</span><span class="operator">;</span>
+   QDateTime qxGetDateModification<span class="operator">()</span><span class="keyword"> const</span><span class="operator">;</span><span class="type">
+
+   void</span> qxSetId<span class="operator">(</span><span class="type">long</span> l<span class="operator">);</span><span class="type">
+   void</span> qxSetDateCreation<span class="operator">(</span><span class="keyword">const</span> QDateTime<span class="operator"> &amp;</span> dt<span class="operator">);</span><span class="type">
+   void</span> qxSetDateModification<span class="operator">(</span><span class="keyword">const</span> QDateTime<span class="operator"> &amp;</span> dt<span class="operator">);</span><span class="keyword">
+
+protected</span><span class="operator">:</span><span class="comment">
+
+   // -- List of useful protected methods to override into derived class -- //
+</span><span class="keyword">
+   virtual</span><span class="type"> void</span> qxIsValid<span class="operator">(</span>qx<span class="operator">::</span>QxInvalidValueX<span class="operator"> &amp;</span> invalidValues<span class="operator">);</span><span class="keyword">
+
+   virtual</span><span class="type"> void</span> qxOnBeforeInsert<span class="operator">(</span>qx<span class="operator">::</span>dao<span class="operator">::</span>detail<span class="operator">::</span>IxDao_Helper<span class="operator"> *</span> dao<span class="operator">);</span><span class="keyword">
+   virtual</span><span class="type"> void</span> qxOnBeforeUpdate<span class="operator">(</span>qx<span class="operator">::</span>dao<span class="operator">::</span>detail<span class="operator">::</span>IxDao_Helper<span class="operator"> *</span> dao<span class="operator">);</span><span class="keyword">
+   virtual</span><span class="type"> void</span> qxOnBeforeDelete<span class="operator">(</span>qx<span class="operator">::</span>dao<span class="operator">::</span>detail<span class="operator">::</span>IxDao_Helper<span class="operator"> *</span> dao<span class="operator">);</span><span class="keyword">
+   virtual</span><span class="type"> void</span> qxOnBeforeFetch<span class="operator">(</span>qx<span class="operator">::</span>dao<span class="operator">::</span>detail<span class="operator">::</span>IxDao_Helper<span class="operator"> *</span> dao<span class="operator">);</span><span class="keyword">
+   virtual</span><span class="type"> void</span> qxOnAfterInsert<span class="operator">(</span>qx<span class="operator">::</span>dao<span class="operator">::</span>detail<span class="operator">::</span>IxDao_Helper<span class="operator"> *</span> dao<span class="operator">);</span><span class="keyword">
+   virtual</span><span class="type"> void</span> qxOnAfterUpdate<span class="operator">(</span>qx<span class="operator">::</span>dao<span class="operator">::</span>detail<span class="operator">::</span>IxDao_Helper<span class="operator"> *</span> dao<span class="operator">);</span><span class="keyword">
+   virtual</span><span class="type"> void</span> qxOnAfterDelete<span class="operator">(</span>qx<span class="operator">::</span>dao<span class="operator">::</span>detail<span class="operator">::</span>IxDao_Helper<span class="operator"> *</span> dao<span class="operator">);</span><span class="keyword">
+   virtual</span><span class="type"> void</span> qxOnAfterFetch<span class="operator">(</span>qx<span class="operator">::</span>dao<span class="operator">::</span>detail<span class="operator">::</span>IxDao_Helper<span class="operator"> *</span> dao<span class="operator">);</span><span class="keyword">
+
+private</span><span class="operator">:</span><span class="type">
+
+   void</span> qxIsValidInternal<span class="operator">(</span>qx<span class="operator">::</span>QxInvalidValueX<span class="operator"> &amp;</span> invalidValues<span class="operator">);</span>
+
+Q_SIGNALS<span class="operator">:</span><span class="type">
+
+   void</span> qxOnBeforeInsert<span class="operator">(</span>qx<span class="operator">::</span>QxPersistable<span class="operator"> *</span> p<span class="operator">);</span><span class="type">
+   void</span> qxOnBeforeUpdate<span class="operator">(</span>qx<span class="operator">::</span>QxPersistable<span class="operator"> *</span> p<span class="operator">);</span><span class="type">
+   void</span> qxOnBeforeDelete<span class="operator">(</span>qx<span class="operator">::</span>QxPersistable<span class="operator"> *</span> p<span class="operator">);</span><span class="type">
+   void</span> qxOnBeforeFetch<span class="operator">(</span>qx<span class="operator">::</span>QxPersistable<span class="operator"> *</span> p<span class="operator">);</span><span class="type">
+   void</span> qxOnAfterInsert<span class="operator">(</span>qx<span class="operator">::</span>QxPersistable<span class="operator"> *</span> p<span class="operator">);</span><span class="type">
+   void</span> qxOnAfterUpdate<span class="operator">(</span>qx<span class="operator">::</span>QxPersistable<span class="operator"> *</span> p<span class="operator">);</span><span class="type">
+   void</span> qxOnAfterDelete<span class="operator">(</span>qx<span class="operator">::</span>QxPersistable<span class="operator"> *</span> p<span class="operator">);</span><span class="type">
+   void</span> qxOnAfterFetch<span class="operator">(</span>qx<span class="operator">::</span>QxPersistable<span class="operator"> *</span> p<span class="operator">);</span><span class="keyword">
+
+public</span><span class="operator">:</span><span class="comment">
+
+   // -- List of useful public methods available from 'qx::IxPersistable' interface (using QX_PERSISTABLE_HPP() and QX_PERSISTABLE_CPP() macros) -- //
+</span><span class="comment">
+/*
+   virtual long qxCount(const qx::QxSqlQuery &amp; query = qx::QxSqlQuery(), QSqlDatabase * pDatabase = NULL);
+   virtual QSqlError qxFetchById(const QVariant &amp; id = QVariant(), const QStringList &amp; columns = QStringList(), const QStringList &amp; relation = QStringList(), QSqlDatabase * pDatabase = NULL);
+   virtual QSqlError qxFetchAll(qx::IxCollection &amp; list, const QStringList &amp; columns = QStringList(), const QStringList &amp; relation = QStringList(), QSqlDatabase * pDatabase = NULL);
+   virtual QSqlError qxFetchByQuery(const qx::QxSqlQuery &amp; query, qx::IxCollection &amp; list, const QStringList &amp; columns = QStringList(), const QStringList &amp; relation = QStringList(), QSqlDatabase * pDatabase = NULL);
+   virtual QSqlError qxInsert(const QStringList &amp; relation = QStringList(), QSqlDatabase * pDatabase = NULL);
+   virtual QSqlError qxUpdate(const qx::QxSqlQuery &amp; query = qx::QxSqlQuery(), const QStringList &amp; columns = QStringList(), const QStringList &amp; relation = QStringList(), QSqlDatabase * pDatabase = NULL);
+   virtual QSqlError qxSave(const QStringList &amp; relation = QStringList(), QSqlDatabase * pDatabase = NULL);
+   virtual QSqlError qxDeleteById(const QVariant &amp; id = QVariant(), QSqlDatabase * pDatabase = NULL);
+   virtual QSqlError qxDeleteAll(QSqlDatabase * pDatabase = NULL);
+   virtual QSqlError qxDeleteByQuery(const qx::QxSqlQuery &amp; query, QSqlDatabase * pDatabase = NULL);
+   virtual QSqlError qxDestroyById(const QVariant &amp; id = QVariant(), QSqlDatabase * pDatabase = NULL);
+   virtual QSqlError qxDestroyAll(QSqlDatabase * pDatabase = NULL);
+   virtual QSqlError qxDestroyByQuery(const qx::QxSqlQuery &amp; query, QSqlDatabase * pDatabase = NULL);
+   virtual qx_bool qxExist(const QVariant &amp; id = QVariant(), QSqlDatabase * pDatabase = NULL);
+   virtual qx::QxInvalidValueX qxValidate(const QStringList &amp; groups = QStringList());
+   virtual qx::IxCollection_ptr qxNewPersistableCollection() const;
+   virtual qx::IxClass * qxClass() const;
+*/</span><span class="operator">
+
+};</span><span class="keyword">
+
+typedef</span> boost<span class="operator">::</span>shared_ptr<span class="operator">&lt;</span>qx<span class="operator">::</span>QxPersistable<span class="operator">&gt;</span> QxPersistable_ptr<span class="operator">;
+
+}</span><span class="comment"> // namespace qx
+</span>
+QX_REGISTER_COMPLEX_CLASS_NAME_HPP_QX_DLL1<span class="operator">(</span>qx<span class="operator">::</span>QxPersistable<span class="operator">,</span> QObject<span class="operator">,</span><span class="int"> 0</span><span class="operator">,</span> qx_QxPersistable<span class="operator">)</span><span class="keyword">
+
+namespace</span> qx<span class="operator"> {</span><span class="keyword">
+namespace</span> dao<span class="operator"> {</span><span class="keyword">
+namespace</span> detail<span class="operator"> {</span><span class="keyword">
+
+template</span><span class="operator"> &lt;&gt;</span><span class="keyword">
+struct</span> QxDao_Trigger<span class="operator">&lt;</span>qx<span class="operator">::</span>QxPersistable<span class="operator">&gt;
+{</span><span class="keyword">
+
+   static inline</span><span class="type"> void</span> onBeforeInsert<span class="operator">(</span>qx<span class="operator">::</span>QxPersistable<span class="operator"> *</span> t<span class="operator">,</span> qx<span class="operator">::</span>dao<span class="operator">::</span>detail<span class="operator">::</span>IxDao_Helper<span class="operator"> *</span> dao<span class="operator">)   {</span><span class="flow"> if</span><span class="operator"> (</span>t<span class="operator">) {</span> t<span class="operator">-&gt;</span>qxOnBeforeInsert<span class="operator">(</span>dao<span class="operator">); } }</span><span class="keyword">
+   static inline</span><span class="type"> void</span> onBeforeUpdate<span class="operator">(</span>qx<span class="operator">::</span>QxPersistable<span class="operator"> *</span> t<span class="operator">,</span> qx<span class="operator">::</span>dao<span class="operator">::</span>detail<span class="operator">::</span>IxDao_Helper<span class="operator"> *</span> dao<span class="operator">)   {</span><span class="flow"> if</span><span class="operator"> (</span>t<span class="operator">) {</span> t<span class="operator">-&gt;</span>qxOnBeforeUpdate<span class="operator">(</span>dao<span class="operator">); } }</span><span class="keyword">
+   static inline</span><span class="type"> void</span> onBeforeDelete<span class="operator">(</span>qx<span class="operator">::</span>QxPersistable<span class="operator"> *</span> t<span class="operator">,</span> qx<span class="operator">::</span>dao<span class="operator">::</span>detail<span class="operator">::</span>IxDao_Helper<span class="operator"> *</span> dao<span class="operator">)   {</span><span class="flow"> if</span><span class="operator"> (</span>t<span class="operator">) {</span> t<span class="operator">-&gt;</span>qxOnBeforeDelete<span class="operator">(</span>dao<span class="operator">); } }</span><span class="keyword">
+   static inline</span><span class="type"> void</span> onBeforeFetch<span class="operator">(</span>qx<span class="operator">::</span>QxPersistable<span class="operator"> *</span> t<span class="operator">,</span> qx<span class="operator">::</span>dao<span class="operator">::</span>detail<span class="operator">::</span>IxDao_Helper<span class="operator"> *</span> dao<span class="operator">)    {</span><span class="flow"> if</span><span class="operator"> (</span>t<span class="operator">) {</span> t<span class="operator">-&gt;</span>qxOnBeforeFetch<span class="operator">(</span>dao<span class="operator">); } }</span><span class="keyword">
+   static inline</span><span class="type"> void</span> onAfterInsert<span class="operator">(</span>qx<span class="operator">::</span>QxPersistable<span class="operator"> *</span> t<span class="operator">,</span> qx<span class="operator">::</span>dao<span class="operator">::</span>detail<span class="operator">::</span>IxDao_Helper<span class="operator"> *</span> dao<span class="operator">)    {</span><span class="flow"> if</span><span class="operator"> (</span>t<span class="operator">) {</span> t<span class="operator">-&gt;</span>qxOnAfterInsert<span class="operator">(</span>dao<span class="operator">); } }</span><span class="keyword">
+   static inline</span><span class="type"> void</span> onAfterUpdate<span class="operator">(</span>qx<span class="operator">::</span>QxPersistable<span class="operator"> *</span> t<span class="operator">,</span> qx<span class="operator">::</span>dao<span class="operator">::</span>detail<span class="operator">::</span>IxDao_Helper<span class="operator"> *</span> dao<span class="operator">)    {</span><span class="flow"> if</span><span class="operator"> (</span>t<span class="operator">) {</span> t<span class="operator">-&gt;</span>qxOnAfterUpdate<span class="operator">(</span>dao<span class="operator">); } }</span><span class="keyword">
+   static inline</span><span class="type"> void</span> onAfterDelete<span class="operator">(</span>qx<span class="operator">::</span>QxPersistable<span class="operator"> *</span> t<span class="operator">,</span> qx<span class="operator">::</span>dao<span class="operator">::</span>detail<span class="operator">::</span>IxDao_Helper<span class="operator"> *</span> dao<span class="operator">)    {</span><span class="flow"> if</span><span class="operator"> (</span>t<span class="operator">) {</span> t<span class="operator">-&gt;</span>qxOnAfterDelete<span class="operator">(</span>dao<span class="operator">); } }</span><span class="keyword">
+   static inline</span><span class="type"> void</span> onAfterFetch<span class="operator">(</span>qx<span class="operator">::</span>QxPersistable<span class="operator"> *</span> t<span class="operator">,</span> qx<span class="operator">::</span>dao<span class="operator">::</span>detail<span class="operator">::</span>IxDao_Helper<span class="operator"> *</span> dao<span class="operator">)     {</span><span class="flow"> if</span><span class="operator"> (</span>t<span class="operator">) {</span> t<span class="operator">-&gt;</span>qxOnAfterFetch<span class="operator">(</span>dao<span class="operator">); } }
+
+};
+
+}</span><span class="comment"> // namespace detail
+</span><span class="operator">}</span><span class="comment"> // namespace dao
+</span><span class="operator">}</span><span class="comment"> // namespace qx
+</span><span class="pre">
+#endif // _QX_PERSISTABLE_H_</span></pre>
+
+
+</body></html>

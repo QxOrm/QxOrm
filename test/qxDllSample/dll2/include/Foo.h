@@ -4,10 +4,11 @@
 #include "../include/BaseClassTrigger.h"
 #include "../include/Bar.h"
 
-class QX_DLL2_EXPORT Foo : public BaseClassTrigger
+class QX_DLL2_EXPORT Foo : public BaseClassTrigger, public qx::IxPersistable
 {
 
    QX_REGISTER_FRIEND_CLASS(Foo)
+   QX_PERSISTABLE_HPP(Foo)
 
 protected:
 

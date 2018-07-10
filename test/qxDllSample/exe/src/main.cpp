@@ -142,6 +142,12 @@ int main(int argc, char * argv[])
    coll.insert(0, p1);
    coll.insert(1, p2);
 
+   {
+      // Test qx::IxCollection interface using a smart-pointer (test also qx::any_cast_dynamic<T>::get(...) function)
+      QSharedPointer<QObject> pTestIxCollection = coll._get< QSharedPointer<QObject> >(1);
+      Q_UNUSED(pTestIxCollection);
+   }
+
 #if _QX_SERIALIZE_POLYMORPHIC
    qx::serialization::polymorphic_xml::to_file(coll, "collection.xml");
 #endif // _QX_SERIALIZE_POLYMORPHIC
@@ -289,6 +295,12 @@ int main(int argc, char * argv[])
    pFoo.reset(new Foo()); pFoo->setName("name5"); pFoo->setDesc("desc5"); daoError = qx::dao::save(pFoo); qAssert(pFoo->getId() == 5);
    pFoo.reset(new Foo()); pFoo->setName("name6"); pFoo->setDesc("desc6"); daoError = qx::dao::save(pFoo); qAssert(pFoo->getId() == 6);
    pFoo.reset(new Foo()); pFoo->setName("name7"); pFoo->setDesc("desc7"); daoError = qx::dao::save(pFoo); qAssert(pFoo->getId() == 7);
+
+   // Test qx::IxPersistable interface
+   daoError = pFoo->qxFetchById();        qAssert(! daoError.isValid());
+   daoError = pFoo->qxUpdate();           qAssert(! daoError.isValid());
+   lDaoCount = pFoo->qxCount();           qAssert(lDaoCount == 7);
+   invalidValues = pFoo->qxValidate();    qAssert(invalidValues.count() == 0);
 
    Bar_ptr pBar;
    pBar.reset(new Bar()); pBar->setCode("code1"); pBar->setValue("value1"); pBar->setFoo(3); daoError = qx::dao::save(pBar); qAssert(pBar->getId() == 1);

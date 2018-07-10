@@ -26,6 +26,7 @@
 #include <QxPrecompiled.h>
 
 #include <QxDao/IxSqlQueryBuilder.h>
+#include <QxDao/QxSqlDatabase.h>
 
 #include <QxMemLeak/mem_leak.h>
 
@@ -83,6 +84,27 @@ void * IxSqlQueryBuilder::existIdX(long lIndex, const QVariant & idOwner, const 
    if (! pHash || ! pHash->contains(idX)) { return NULL; }
 
    return pHash->value(idX);
+}
+
+void IxSqlQueryBuilder::addSqlQueryAlias(const QString & sql, const QString & sqlAlias)
+{
+   m_lstSqlQueryAlias.insert(sql, sqlAlias);
+}
+
+void IxSqlQueryBuilder::replaceSqlQueryAlias(QString & sql) const
+{
+   if (! qx::QxSqlDatabase::getSingleton()->getAutoReplaceSqlAliasIntoQuery()) { return; }
+   if (m_lstSqlQueryAlias.count() <= 0) { return; }
+   QHashIterator<QString, QString> itr(m_lstSqlQueryAlias);
+   sql = (" " + sql);
+   while (itr.hasNext())
+   {
+      itr.next();
+      QString sBefore = (" " + itr.key() + ".");
+      QString sAfter = (" " + itr.value() + ".");
+      sql.replace(sBefore, sAfter);
+   }
+   sql = sql.trimmed();
 }
 
 } // namespace qx

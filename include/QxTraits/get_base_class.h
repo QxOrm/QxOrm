@@ -47,7 +47,7 @@ namespace qx {
 namespace trait {
 
 class no_base_class_defined
-{ no_base_class_defined() { ; }; virtual ~no_base_class_defined() { ; }; virtual void dummy() = 0; };
+{ public: no_base_class_defined() { ; }; virtual ~no_base_class_defined() { ; }; virtual void dummy() = 0; };
 
 /*!
  * \ingroup QxTraits

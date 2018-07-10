@@ -178,15 +178,43 @@ bool IxDao_Helper::nextRecord()
 bool IxDao_Helper::updateSqlRelationX(const QStringList & relation)
 {
    m_bCartesianProduct = false;
-   bool bError = false; QString sHashRelation;
+   bool bError = false;
+   QString sHashRelation;
    m_pSqlRelationX.reset(new IxDao_Helper::type_lst_relation());
    qx::IxSqlRelationX * pAllRelation = this->builder().getLstRelation();
-   if ((relation.count() == 1) && (relation.at(0) == "*")) { sHashRelation = "*"; (* m_pSqlRelationX) = (* pAllRelation); }
-   else if (relation.count() == pAllRelation->count()) { sHashRelation = "*"; (* m_pSqlRelationX) = (* pAllRelation); }
-   else { Q_FOREACH(QString sKey, relation) { if (pAllRelation->exist(sKey)) { sHashRelation += (sKey + "|"); m_pSqlRelationX->insert(sKey, pAllRelation->getByKey(sKey)); } else { bError = true; } } }
-   if (bError || (m_pSqlRelationX->count() <= 0)) { m_pSqlRelationX.reset(NULL); }
-   if (m_pSqlRelationX) { _foreach(qx::IxSqlRelation * p, (* m_pSqlRelationX)) { m_bCartesianProduct = (m_bCartesianProduct || p->getCartesianProduct()); } }
-   if (! bError && m_pQueryBuilder) { m_pQueryBuilder->setHashRelation(sHashRelation); m_pQueryBuilder->setCartesianProduct(m_bCartesianProduct); }
+   bool bAllRelation = ((relation.count() == 1) && (relation.at(0) == "*"));
+   bAllRelation = (bAllRelation || (relation.count() == pAllRelation->count()));
+
+   if (bAllRelation)
+   {
+      sHashRelation = "*";
+      (* m_pSqlRelationX) = (* pAllRelation);
+   }
+   else
+   {
+      Q_FOREACH(QString sKey, relation)
+      {
+         if (pAllRelation->exist(sKey))
+         { sHashRelation += (sKey + "|"); m_pSqlRelationX->insert(sKey, pAllRelation->getByKey(sKey)); }
+         else { bError = true; }
+      }
+   }
+
+   if (bError || (m_pSqlRelationX->count() <= 0))
+   { m_pSqlRelationX.reset(NULL); }
+
+   if (m_pSqlRelationX)
+   {
+      _foreach(qx::IxSqlRelation * p, (* m_pSqlRelationX))
+      { m_bCartesianProduct = (m_bCartesianProduct || p->getCartesianProduct()); }
+   }
+
+   if (! bError && m_pQueryBuilder)
+   {
+      m_pQueryBuilder->setHashRelation(sHashRelation);
+      m_pQueryBuilder->setCartesianProduct(m_bCartesianProduct);
+   }
+
    return (! bError && (m_pSqlRelationX.get() != NULL));
 }
 
@@ -212,6 +240,7 @@ void IxDao_Helper::addQuery(const qx::QxSqlQuery & query, bool bResolve)
    bool bAddSqlCondition = false;
    if (sqlToAdd.left(6).contains("WHERE ", Qt::CaseInsensitive)) { sqlToAdd = sqlToAdd.right(sqlToAdd.size() - 6); bAddSqlCondition = true; }
    else if (sqlToAdd.left(4).contains("AND ", Qt::CaseInsensitive)) { sqlToAdd = sqlToAdd.right(sqlToAdd.size() - 4); bAddSqlCondition = true; }
+   this->builder().replaceSqlQueryAlias(sqlToAdd);
    sql += (bAddSqlCondition ? qx::IxSqlQueryBuilder::addSqlCondition(sql) : QString(" ")) + sqlToAdd;
    if (m_qxQuery.isDistinct() && sql.left(7).contains("SELECT ", Qt::CaseInsensitive))
    { sql = "SELECT DISTINCT " + sql.right(sql.size() - 7); }

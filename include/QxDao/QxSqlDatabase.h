@@ -53,7 +53,8 @@
 #define QX_CONSTRUCT_QX_SQL_DATABASE() \
 m_iPort(-1), m_bTraceSqlQuery(true), m_bTraceSqlRecord(false), \
 m_ePlaceHolderStyle(ph_style_2_point_name), m_bSessionThrowable(false), \
-m_bSessionAutoTransaction(true), m_bValidatorThrowable(false)
+m_bSessionAutoTransaction(true), m_bValidatorThrowable(false), \
+m_bAutoReplaceSqlAliasIntoQuery(true)
 
 namespace qx {
 
@@ -88,6 +89,7 @@ private:
    bool m_bSessionAutoTransaction;                          //!< A transaction is automatically beginned when a qx::QxSession object is instantiated
    bool m_bValidatorThrowable;                              //!< An exception of type qx::validator_error is thrown when invalid values are detected inserting or updating an element into database
    qx::dao::detail::IxSqlGenerator_ptr m_pSqlGenerator;     //!< SQL generator to build SQL query specific for each database
+   bool m_bAutoReplaceSqlAliasIntoQuery;                    //!< Replace all sql alias into sql query automatically
 
 private:
 
@@ -96,19 +98,20 @@ private:
 
 public:
 
-   QString getDriverName() const                { return m_sDriverName; }
-   QString getConnectOptions() const            { return m_sConnectOptions; }
-   QString getDatabaseName() const              { return m_sDatabaseName; }
-   QString getUserName() const                  { return m_sUserName; }
-   QString getPassword() const                  { return m_sPassword; }
-   QString getHostName() const                  { return m_sHostName; }
-   int getPort() const                          { return m_iPort; }
-   bool getTraceSqlQuery() const                { return m_bTraceSqlQuery; }
-   bool getTraceSqlRecord() const               { return m_bTraceSqlRecord; }
-   ph_style getSqlPlaceHolderStyle() const      { return m_ePlaceHolderStyle; }
-   bool getSessionThrowable() const             { return m_bSessionThrowable; }
-   bool getSessionAutoTransaction() const       { return m_bSessionAutoTransaction; }
-   bool getValidatorThrowable() const           { return m_bValidatorThrowable; }
+   QString getDriverName() const                   { return m_sDriverName; }
+   QString getConnectOptions() const               { return m_sConnectOptions; }
+   QString getDatabaseName() const                 { return m_sDatabaseName; }
+   QString getUserName() const                     { return m_sUserName; }
+   QString getPassword() const                     { return m_sPassword; }
+   QString getHostName() const                     { return m_sHostName; }
+   int getPort() const                             { return m_iPort; }
+   bool getTraceSqlQuery() const                   { return m_bTraceSqlQuery; }
+   bool getTraceSqlRecord() const                  { return m_bTraceSqlRecord; }
+   ph_style getSqlPlaceHolderStyle() const         { return m_ePlaceHolderStyle; }
+   bool getSessionThrowable() const                { return m_bSessionThrowable; }
+   bool getSessionAutoTransaction() const          { return m_bSessionAutoTransaction; }
+   bool getValidatorThrowable() const              { return m_bValidatorThrowable; }
+   bool getAutoReplaceSqlAliasIntoQuery() const    { return m_bAutoReplaceSqlAliasIntoQuery; }
 
    void setDriverName(const QString & s)                          { m_sDriverName = s; }
    void setConnectOptions(const QString & s)                      { m_sConnectOptions = s; }
@@ -124,6 +127,7 @@ public:
    void setSessionAutoTransaction(bool b)                         { m_bSessionAutoTransaction = b; }
    void setValidatorThrowable(bool b)                             { m_bValidatorThrowable = b; }
    void setSqlGenerator(qx::dao::detail::IxSqlGenerator_ptr p)    { m_pSqlGenerator = p; }
+   void setAutoReplaceSqlAliasIntoQuery(bool b)                   { m_bAutoReplaceSqlAliasIntoQuery = b; }
 
    static QSqlDatabase getDatabase()         { return qx::QxSqlDatabase::getSingleton()->getDatabaseByCurrThreadId(); }
    static QSqlDatabase getDatabaseCloned()   { return QSqlDatabase::cloneDatabase(qx::QxSqlDatabase::getDatabase(), QUuid::createUuid().toString()); }

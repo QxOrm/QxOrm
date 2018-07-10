@@ -55,6 +55,18 @@ QX_BOOST_LIB_SERIALIZATION_DEBUG = "boost_serialization-mt-d"
 QX_BOOST_LIB_SERIALIZATION_RELEASE = "boost_serialization-mt"
 } # unix
 
+##############################
+# QxOrm Library Static Build #
+##############################
+
+# To create only 1 EXE including Qt, boost serialization and QxOrm libraries without any dependency :
+#   1- be sure to build Qt and boost::serialization using static mode
+#   2- in "./QxOrm.pri" file, add the following line : "DEFINES += _QX_STATIC_BUILD"
+#   3- BUT PLEASE : in your program, add a "readme.txt" file and a "about my program..." window to indicate that your application is based on Qt, boost and QxOrm libraries !
+# Note : on Windows, static mode works with only 1 EXE, it will never work mixing DLL and EXE (because of singleton implementation of boost::serialization and QxOrm libraries)
+
+# DEFINES += _QX_STATIC_BUILD
+
 ######################
 # Globals Parameters #
 ######################

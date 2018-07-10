@@ -70,6 +70,7 @@ protected:
    bool m_bCartesianProduct;                                      //!< Recordset can return cartesian product => same id in multiple records
    type_lst_ptr_by_id_ptr m_pIdX;                                 //!< Collection of id (and pointer associated) to avoid multiple fetch on same id (cartesian product)
    QxSoftDelete m_oSoftDelete;                                    //!< Soft delete (or logical delete) behavior
+   QHash<QString, QString> m_lstSqlQueryAlias;                    //!< List of sql alias to replace into sql query
 
 public:
 
@@ -97,6 +98,8 @@ public:
    void displaySqlQuery(int time_ms = -1) const;
    bool insertIdX(long lIndex, const QVariant & idOwner, const QVariant & idData, void * ptr);
    void * existIdX(long lIndex, const QVariant & idOwner, const QVariant & idData);
+   void addSqlQueryAlias(const QString & sql, const QString & sqlAlias);
+   void replaceSqlQueryAlias(QString & sql) const;
 
    virtual void init() = 0;
    virtual IxDataMemberX * getDataMemberX() const = 0;

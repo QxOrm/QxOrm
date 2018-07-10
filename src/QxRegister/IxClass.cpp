@@ -67,6 +67,21 @@ bool IxClass::isKindOf(const QString & sClassName) const
    return false;
 }
 
+bool IxClass::isKindOf(const std::type_info & typeInfo) const
+{
+   if (typeInfo == typeid(void)) { qAssert(false); return false; }
+   if (typeInfo == this->typeInfo()) { return true; }
+
+   IxClass * p = getBaseClass();
+   while (p != NULL)
+   {
+      if (typeInfo == p->typeInfo()) { return true; }
+      p = p->getBaseClass();
+   }
+
+   return false;
+}
+
 QString IxClass::dumpClass() const
 {
    QString sDump;

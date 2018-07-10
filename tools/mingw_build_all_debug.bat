@@ -5,9 +5,9 @@ mingw32-make debug
 IF NOT EXIST "./debug/QxOrmd.dll" GOTO END
 cd "./debug/"
 copy "libQxOrmd.a" "../lib/"
-copy "QxOrmd.dll" "../lib/"
+if exist "QxOrmd.dll" ( copy "QxOrmd.dll" "../lib/" )
 copy "libQxOrmd.a" "../test/_bin/"
-copy "QxOrmd.dll" "../test/_bin/"
+if exist "QxOrmd.dll" ( copy "QxOrmd.dll" "../test/_bin/" )
 cd "../"
 REM -- BUILD TEST DLL1 --
 cd "./test/qxDllSample/dll1/"

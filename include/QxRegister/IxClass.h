@@ -37,6 +37,8 @@
  * \brief Common interface for all classes registered into QxOrm context
  */
 
+#include <typeinfo>
+
 #include <QxCommon/QxPropertyBag.h>
 
 #include <QxDataMember/IxDataMemberX.h>
@@ -99,10 +101,12 @@ public:
    inline void setDaoStrategy(qx::dao::strategy::inheritance eDaoStrategy)    { m_eDaoStrategy = eDaoStrategy; }
    inline void setSoftDelete(const qx::QxSoftDelete & oSoftDelete)            { m_oSoftDelete = oSoftDelete; if (m_oSoftDelete.getTableName().isEmpty()) { m_oSoftDelete.setTableName(m_sName); } }
 
+   virtual const std::type_info & typeInfo() const = 0;
    virtual IxClass * getBaseClass() const = 0;
    virtual IxValidatorX * getAllValidator();
 
    bool isKindOf(const QString & sClassName) const;
+   bool isKindOf(const std::type_info & typeInfo) const;
    QString dumpClass() const;
 
 private:

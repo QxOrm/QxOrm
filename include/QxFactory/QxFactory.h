@@ -84,6 +84,9 @@ public:
    virtual void * createObjectNudePtr() const
    { QxClass<T>::getSingleton(); return qxCreateInstance<boost::is_abstract<T>::value, 0>::createNudePtr(); }
 
+   virtual const std::type_info & typeInfo() const
+   { return typeid(T); }
+
 private:
 
    template <bool bIsAbstract /* = false */, int dummy>

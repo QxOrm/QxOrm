@@ -33,6 +33,11 @@
 
 #include <QxMemLeak/mem_leak.h>
 
+#ifdef _QX_STATIC_BUILD
+#undef _QX_USE_QX_SINGLETON_X
+#define _QX_USE_QX_SINGLETON_X 0
+#endif // _QX_STATIC_BUILD
+
 QX_DLL_EXPORT_QX_SINGLETON_CPP(qx::QxSingletonX)
 
 namespace qx {
@@ -43,13 +48,16 @@ bool QxSingletonX::m_bOnClearSingletonX = false;
 
 QxSingletonX::QxSingletonX() : QxSingleton<QxSingletonX>("qx::QxSingletonX")
 {
+#if _QX_USE_QX_SINGLETON_X
    int iResult = std::atexit(& QxSingletonX::deleteAllSingleton);
    qAssert(iResult == 0); Q_UNUSED(iResult);
+#endif // _QX_USE_QX_SINGLETON_X
 }
 
 bool QxSingletonX::addSingleton(const QString & sKey, IxSingleton * pSingleton)
 {
-   QMutexLocker locker(& m_oMutexSingletonX);
+#if _QX_USE_QX_SINGLETON_X
+   QMutexLocker locker(QCoreApplication::instance() ? (& m_oMutexSingletonX) : NULL);
    bool bExist = m_mapSingletonX.contains(sKey);
    qAssert(! bExist && ! sKey.isEmpty());
 
@@ -57,22 +65,32 @@ bool QxSingletonX::addSingleton(const QString & sKey, IxSingleton * pSingleton)
    m_mapSingletonX.insert(sKey, pSingleton);
 
    return true;
+#else // _QX_USE_QX_SINGLETON_X
+   Q_UNUSED(sKey); Q_UNUSED(pSingleton);
+   return false;
+#endif // _QX_USE_QX_SINGLETON_X
 }
 
 bool QxSingletonX::removeSingleton(const QString & sKey)
 {
+#if _QX_USE_QX_SINGLETON_X
    if (m_bOnClearSingletonX)
       return false;
 
-   QMutexLocker locker(& m_oMutexSingletonX);
+   QMutexLocker locker(QCoreApplication::instance() ? (& m_oMutexSingletonX) : NULL);
    qAssert(m_mapSingletonX.contains(sKey));
    bool bRemoveOk = (m_mapSingletonX.remove(sKey) > 0);
 
    return bRemoveOk;
+#else // _QX_USE_QX_SINGLETON_X
+   Q_UNUSED(sKey);
+   return false;
+#endif // _QX_USE_QX_SINGLETON_X
 }
 
 void QxSingletonX::deleteAllSingleton()
 {
+#if _QX_USE_QX_SINGLETON_X
    QMutexLocker locker(QCoreApplication::instance() ? (& m_oMutexSingletonX) : NULL);
    m_bOnClearSingletonX = true;
 
@@ -85,6 +103,7 @@ void QxSingletonX::deleteAllSingleton()
    QxSingletonX::deleteSingleton();
    m_mapSingletonX.clear();
    m_bOnClearSingletonX = false;
+#endif // _QX_USE_QX_SINGLETON_X
 }
 
 } // namespace qx

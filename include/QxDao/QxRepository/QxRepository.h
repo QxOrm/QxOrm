@@ -52,6 +52,10 @@
 
 #include <QxTraits/get_primary_key.h>
 
+#define QX_REPOSITORY_COLLECTION_DYNAMIC_CAST_ERROR   QSqlError("[QxOrm] qx::QxRepository<T> : 'invalid collection pointer, dynamic_cast failed'", "", QSqlError::UnknownError)
+#define QX_REPOSITORY_POINTER_DYNAMIC_CAST_ERROR      QSqlError("[QxOrm] qx::QxRepository<T> : 'invalid pointer, dynamic_cast failed'", "", QSqlError::UnknownError)
+#define QX_REPOSITORY_QOBJECT_BASE_CLASS_ERROR        QSqlError("[QxOrm] qx::QxRepository<T> : 'invalid pointer, need to inherit from QObject class to use qx::IxRepository interface'", "", QSqlError::UnknownError)
+
 namespace qx {
 
 template <class T>
@@ -231,19 +235,16 @@ public:
 private:
 
    typedef typename qx::trait::get_primary_key<T>::type type_primary_key;
-   typedef QSharedPointer<T> type_object_ptr;
-   typedef qx::QxCollection<type_primary_key, type_object_ptr> type_collection;
+   typedef qx::QxCollection< type_primary_key, QSharedPointer<T> > type_collection_qt;
+   typedef qx::QxCollection< type_primary_key, boost::shared_ptr<T> > type_collection_boost;
 
    template <bool bIsQObject /* = false */, int dummy>
    struct qxVerifyPointer
-   { static inline T * get(QObject * p) { Q_UNUSED(p); throw qx::dao::sql_error(QSqlError("[QxOrm] qx::QxRepository<T> : 'invalid pointer, need to inherit from QObject class to use qx::IxRepository interface'")); return NULL; } };
+   { static inline T * get(QObject * p) { Q_UNUSED(p); throw qx::dao::sql_error(QX_REPOSITORY_QOBJECT_BASE_CLASS_ERROR); return NULL; } };
 
    template <int dummy>
    struct qxVerifyPointer<true, dummy>
-   { static inline T * get(QObject * p) { T * t = dynamic_cast<T *>(p); if (! t) { throw qx::dao::sql_error(QSqlError("[QxOrm] qx::QxRepository<T> : 'invalid pointer, dynamic_cast failed'")); }; return t; } };
-
-   type_collection * qxVerifyPointer_Collection(qx::IxCollection * p)
-   { type_collection * x = dynamic_cast<type_collection *>(p); if (! x) { throw qx::dao::sql_error(QSqlError("[QxOrm] qx::QxRepository<T> : 'invalid collection pointer, dynamic_cast failed'")); }; return x; }
+   { static inline T * get(QObject * p) { T * t = dynamic_cast<T *>(p); if (! t) { throw qx::dao::sql_error(QX_REPOSITORY_POINTER_DYNAMIC_CAST_ERROR); }; return t; } };
 
 public:
 
@@ -254,49 +255,105 @@ public:
    { return static_cast<void *>(this->fetchById(id, columns, relation)); }
 
    virtual QSqlError _fetchById(QObject * p, const QStringList & columns = QStringList(), const QStringList & relation = QStringList())
-   { T * t = qxVerifyPointer<boost::is_base_of<QObject, T>::value, 0>::get(p); return this->fetchById((* t), columns, relation); }
+   {
+      T * t = qxVerifyPointer<boost::is_base_of<QObject, T>::value, 0>::get(p);
+      return this->fetchById((* t), columns, relation);
+   }
 
    virtual QSqlError _fetchById(qx::IxCollection * p, const QStringList & columns = QStringList(), const QStringList & relation = QStringList())
-   { type_collection * x = qxVerifyPointer_Collection(p); return this->fetchById((* x), columns, relation); }
+   {
+      type_collection_qt * x = dynamic_cast<type_collection_qt *>(p);
+      type_collection_boost * y = (x ? NULL : dynamic_cast<type_collection_boost *>(p));
+      if (! x && ! y) { throw qx::dao::sql_error(QX_REPOSITORY_COLLECTION_DYNAMIC_CAST_ERROR); }
+      return (x ? this->fetchById((* x), columns, relation) : this->fetchById((* y), columns, relation));
+   }
 
    virtual QSqlError _fetchAll(QObject * p, const QStringList & columns = QStringList(), const QStringList & relation = QStringList())
-   { T * t = qxVerifyPointer<boost::is_base_of<QObject, T>::value, 0>::get(p); return this->fetchAll((* t), columns, relation); }
+   {
+      T * t = qxVerifyPointer<boost::is_base_of<QObject, T>::value, 0>::get(p);
+      return this->fetchAll((* t), columns, relation);
+   }
 
    virtual QSqlError _fetchAll(qx::IxCollection * p, const QStringList & columns = QStringList(), const QStringList & relation = QStringList())
-   { type_collection * x = qxVerifyPointer_Collection(p); return this->fetchAll((* x), columns, relation); }
+   {
+      type_collection_qt * x = dynamic_cast<type_collection_qt *>(p);
+      type_collection_boost * y = (x ? NULL : dynamic_cast<type_collection_boost *>(p));
+      if (! x && ! y) { throw qx::dao::sql_error(QX_REPOSITORY_COLLECTION_DYNAMIC_CAST_ERROR); }
+      return (x ? this->fetchAll((* x), columns, relation) : this->fetchAll((* y), columns, relation));
+   }
 
    virtual QSqlError _fetchByQuery(const qx::QxSqlQuery & query, QObject * p, const QStringList & columns = QStringList(), const QStringList & relation = QStringList())
-   { T * t = qxVerifyPointer<boost::is_base_of<QObject, T>::value, 0>::get(p); return this->fetchByQuery(query, (* t), columns, relation); }
+   {
+      T * t = qxVerifyPointer<boost::is_base_of<QObject, T>::value, 0>::get(p);
+      return this->fetchByQuery(query, (* t), columns, relation);
+   }
 
    virtual QSqlError _fetchByQuery(const qx::QxSqlQuery & query, qx::IxCollection * p, const QStringList & columns = QStringList(), const QStringList & relation = QStringList())
-   { type_collection * x = qxVerifyPointer_Collection(p); return this->fetchByQuery(query, (* x), columns, relation); }
+   {
+      type_collection_qt * x = dynamic_cast<type_collection_qt *>(p);
+      type_collection_boost * y = (x ? NULL : dynamic_cast<type_collection_boost *>(p));
+      if (! x && ! y) { throw qx::dao::sql_error(QX_REPOSITORY_COLLECTION_DYNAMIC_CAST_ERROR); }
+      return (x ? this->fetchByQuery(query, (* x), columns, relation) : this->fetchByQuery(query, (* y), columns, relation));
+   }
 
    virtual QSqlError _insert(QObject * p, const QStringList & relation = QStringList())
-   { T * t = qxVerifyPointer<boost::is_base_of<QObject, T>::value, 0>::get(p); return this->insert((* t), relation); }
+   {
+      T * t = qxVerifyPointer<boost::is_base_of<QObject, T>::value, 0>::get(p);
+      return this->insert((* t), relation);
+   }
 
    virtual QSqlError _insert(qx::IxCollection * p, const QStringList & relation = QStringList())
-   { type_collection * x = qxVerifyPointer_Collection(p); return this->insert((* x), relation); }
+   {
+      type_collection_qt * x = dynamic_cast<type_collection_qt *>(p);
+      type_collection_boost * y = (x ? NULL : dynamic_cast<type_collection_boost *>(p));
+      if (! x && ! y) { throw qx::dao::sql_error(QX_REPOSITORY_COLLECTION_DYNAMIC_CAST_ERROR); }
+      return (x ? this->insert((* x), relation) : this->insert((* y), relation));
+   }
 
    virtual QSqlError _update(QObject * p, const qx::QxSqlQuery & query = qx::QxSqlQuery(), const QStringList & columns = QStringList(), const QStringList & relation = QStringList())
-   { T * t = qxVerifyPointer<boost::is_base_of<QObject, T>::value, 0>::get(p); return this->update((* t), query, columns, relation); }
+   {
+      T * t = qxVerifyPointer<boost::is_base_of<QObject, T>::value, 0>::get(p);
+      return this->update((* t), query, columns, relation);
+   }
 
    virtual QSqlError _update(qx::IxCollection * p, const qx::QxSqlQuery & query = qx::QxSqlQuery(), const QStringList & columns = QStringList(), const QStringList & relation = QStringList())
-   { type_collection * x = qxVerifyPointer_Collection(p); return this->update((* x), query, columns, relation); }
+   {
+      type_collection_qt * x = dynamic_cast<type_collection_qt *>(p);
+      type_collection_boost * y = (x ? NULL : dynamic_cast<type_collection_boost *>(p));
+      if (! x && ! y) { throw qx::dao::sql_error(QX_REPOSITORY_COLLECTION_DYNAMIC_CAST_ERROR); }
+      return (x ? this->update((* x), query, columns, relation) : this->update((* y), query, columns, relation));
+   }
 
    virtual QSqlError _save(QObject * p, const QStringList & relation = QStringList())
-   { T * t = qxVerifyPointer<boost::is_base_of<QObject, T>::value, 0>::get(p); return this->save((* t), relation); }
+   {
+      T * t = qxVerifyPointer<boost::is_base_of<QObject, T>::value, 0>::get(p);
+      return this->save((* t), relation);
+   }
 
    virtual QSqlError _save(qx::IxCollection * p, const QStringList & relation = QStringList())
-   { type_collection * x = qxVerifyPointer_Collection(p); return this->save((* x), relation); }
+   {
+      type_collection_qt * x = dynamic_cast<type_collection_qt *>(p);
+      type_collection_boost * y = (x ? NULL : dynamic_cast<type_collection_boost *>(p));
+      if (! x && ! y) { throw qx::dao::sql_error(QX_REPOSITORY_COLLECTION_DYNAMIC_CAST_ERROR); }
+      return (x ? this->save((* x), relation) : this->save((* y), relation));
+   }
 
    virtual QSqlError _deleteById(const QVariant & id)
    { return this->deleteById(id); }
 
    virtual QSqlError _deleteById(QObject * p)
-   { T * t = qxVerifyPointer<boost::is_base_of<QObject, T>::value, 0>::get(p); return this->deleteById(* t); }
+   {
+      T * t = qxVerifyPointer<boost::is_base_of<QObject, T>::value, 0>::get(p);
+      return this->deleteById(* t);
+   }
 
    virtual QSqlError _deleteById(qx::IxCollection * p)
-   { type_collection * x = qxVerifyPointer_Collection(p); return this->deleteById(* x); }
+   {
+      type_collection_qt * x = dynamic_cast<type_collection_qt *>(p);
+      type_collection_boost * y = (x ? NULL : dynamic_cast<type_collection_boost *>(p));
+      if (! x && ! y) { throw qx::dao::sql_error(QX_REPOSITORY_COLLECTION_DYNAMIC_CAST_ERROR); }
+      return (x ? this->deleteById(* x) : this->deleteById(* y));
+   }
 
    virtual QSqlError _deleteAll()
    { return this->deleteAll(); }
@@ -308,10 +365,18 @@ public:
    { return this->destroyById(id); }
 
    virtual QSqlError _destroyById(QObject * p)
-   { T * t = qxVerifyPointer<boost::is_base_of<QObject, T>::value, 0>::get(p); return this->destroyById(* t); }
+   {
+      T * t = qxVerifyPointer<boost::is_base_of<QObject, T>::value, 0>::get(p);
+      return this->destroyById(* t);
+   }
 
    virtual QSqlError _destroyById(qx::IxCollection * p)
-   { type_collection * x = qxVerifyPointer_Collection(p); return this->destroyById(* x); }
+   {
+      type_collection_qt * x = dynamic_cast<type_collection_qt *>(p);
+      type_collection_boost * y = (x ? NULL : dynamic_cast<type_collection_boost *>(p));
+      if (! x && ! y) { throw qx::dao::sql_error(QX_REPOSITORY_COLLECTION_DYNAMIC_CAST_ERROR); }
+      return (x ? this->destroyById(* x) : this->destroyById(* y));
+   }
 
    virtual QSqlError _destroyAll()
    { return this->destroyAll(); }
@@ -320,10 +385,28 @@ public:
    { return this->destroyByQuery(query); }
 
    virtual qx_bool _exist(QObject * p)
-   { T * t = qxVerifyPointer<boost::is_base_of<QObject, T>::value, 0>::get(p); return this->exist(* t); }
+   {
+      T * t = qxVerifyPointer<boost::is_base_of<QObject, T>::value, 0>::get(p);
+      return this->exist(* t);
+   }
 
    virtual qx_bool _exist(qx::IxCollection * p)
-   { type_collection * x = qxVerifyPointer_Collection(p); return this->exist(* x); }
+   {
+      type_collection_qt * x = dynamic_cast<type_collection_qt *>(p);
+      type_collection_boost * y = (x ? NULL : dynamic_cast<type_collection_boost *>(p));
+      if (! x && ! y) { throw qx::dao::sql_error(QX_REPOSITORY_COLLECTION_DYNAMIC_CAST_ERROR); }
+      return (x ? this->exist(* x) : this->exist(* y));
+   }
+
+   virtual qx::IxCollection_ptr _newCollection() const
+   {
+      qx::IxCollection_ptr lst;
+      lst.reset(new type_collection_boost());
+      return lst;
+   }
+
+   virtual qx::IxClass * _getClass() const
+   { return qx::QxClass<T>::getSingleton(); }
 
 public:
 

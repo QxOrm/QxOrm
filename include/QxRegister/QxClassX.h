@@ -93,6 +93,7 @@ private:
    void clear();
    void initSqlTypeByClassName();
    void initValidatorMessage();
+   const std::type_info & typeInfo(const QString & sKey) const;
 
 public:
 
@@ -108,9 +109,10 @@ public:
    static QString dumpAllClasses();
    static QString dumpSqlSchema();
 
-   static QHash<QString, QString> * getAllValidatorMessage()         { return (& QxClassX::getSingleton()->m_lstValidatorMessage); }
-   static QHash<QString, QString> * getAllSqlTypeByClassName()       { return (& QxClassX::getSingleton()->m_lstSqlTypeByClassName); }
-   static QString getSqlTypeByClassName(const QString & sClassName)  { return (QxClassX::getAllSqlTypeByClassName()->value(sClassName)); }
+   static QHash<QString, QString> * getAllValidatorMessage()               { return (& QxClassX::getSingleton()->m_lstValidatorMessage); }
+   static QHash<QString, QString> * getAllSqlTypeByClassName()             { return (& QxClassX::getSingleton()->m_lstSqlTypeByClassName); }
+   static QString getSqlTypeByClassName(const QString & sClassName)        { return QxClassX::getAllSqlTypeByClassName()->value(sClassName); }
+   static const std::type_info & getTypeInfo(const QString & sClassName)   { return QxClassX::getSingleton()->typeInfo(sClassName); }
 
    static type_fct_save_qvariant_usertype getFctSaveQVariantUserType()           { return QxClassX::getSingleton()->m_fctSaveQVariantUserType; }
    static type_fct_load_qvariant_usertype getFctLoadQVariantUserType()           { return QxClassX::getSingleton()->m_fctLoadQVariantUserType; }

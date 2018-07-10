@@ -35,7 +35,7 @@ T * QxSingleton<T>::getSingleton()
       return m_pSingleton;
 
    IxSingleton::initQxSingletonX();
-   QMutexLocker locker(& m_oMutexSingleton);
+   QMutexLocker locker(QCoreApplication::instance() ? (& m_oMutexSingleton) : NULL);
    if (! m_pSingleton) { m_pSingleton = new T(); }
 
    return m_pSingleton;

@@ -147,6 +147,12 @@ qx_bool QxClassX::invokeVoidPtr(const QString & sClassKey, const QString & sFctK
    return ((pOwner && pFct) ? pFct->invoke(pOwner, params, ret) : qx_bool(false));
 }
 
+const std::type_info & QxClassX::typeInfo(const QString & sKey) const
+{
+   IxClass * pClass = QxClassX::getClass(sKey);
+   return (pClass ? pClass->typeInfo() : typeid(void));
+}
+
 QxCollection<QString, IxClass *> * QxClassX::getAllClasses()
 {
    QxClassX::registerAllClasses();

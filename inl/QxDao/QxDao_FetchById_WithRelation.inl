@@ -48,8 +48,10 @@ struct QxDao_FetchById_WithRelation_Generic
       type_query_helper::resolveInput(dao.getSqlRelationX(), t, dao.query(), dao.builder());
       if (! dao.query().exec()) { return dao.errFailed(); }
 
+      qx::dao::on_before_fetch<T>((& t), (& dao));
       if (dao.getCartesianProduct()) { fetchById_Complex(t, dao); }
       else { fetchById_Simple(t, dao); }
+      qx::dao::on_after_fetch<T>((& t), (& dao));
 
       return dao.error();
    }
@@ -150,8 +152,10 @@ private:
          if (! dao.isValidPrimaryKey(item)) { dao.errInvalidId(); return false; }
          type_query_helper::resolveInput(dao.getSqlRelationX(), item, dao.query(), dao.builder());
          if (! dao.query().exec()) { dao.errFailed(); return false; }
+         qx::dao::on_before_fetch<U>((& item), (& dao));
          if (dao.getCartesianProduct()) { fetch_Complex(item, dao); }
          else { fetch_Simple(item, dao); }
+         qx::dao::on_after_fetch<U>((& item), (& dao));
 
          return dao.isValid();
       }

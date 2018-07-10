@@ -88,6 +88,13 @@
 #endif // _QX_USE_GCC_EXPORT_ALL_SYMBOLS
 #endif // __GNUC__
 
+#ifdef _QX_STATIC_BUILD
+#undef QX_DLL_EXPORT_HELPER
+#undef QX_DLL_IMPORT_HELPER
+#define QX_DLL_EXPORT_HELPER /* Nothing */
+#define QX_DLL_IMPORT_HELPER /* Nothing */
+#endif // _QX_STATIC_BUILD
+
 #ifndef QX_DLL_INTERNAL_HELPER
 #if (_QX_USE_GCC_VISIBILITY && (__GNUC__ >= 4))
 #define QX_DLL_INTERNAL_HELPER __attribute__ ((visibility("hidden")))

@@ -50,6 +50,7 @@
 
 namespace qx {
 
+class IxClass;
 class QxSession;
 
 /*!
@@ -109,6 +110,13 @@ public:
    virtual QSqlError _destroyByQuery(const qx::QxSqlQuery & query) = 0;
    virtual qx_bool _exist(QObject * p) = 0;
    virtual qx_bool _exist(qx::IxCollection * p) = 0;
+   virtual qx::IxCollection_ptr _newCollection() const = 0;
+   virtual qx::IxClass * _getClass() const = 0;
+
+public:
+
+   static qx::IxCollection_ptr _fetchAll(const QString & repositoryKey, const QStringList & columns = QStringList(), const QStringList & relation = QStringList());
+   static qx::IxCollection_ptr _fetchByQuery(const QString & repositoryKey, const qx::QxSqlQuery & query, const QStringList & columns = QStringList(), const QStringList & relation = QStringList());
 
 };
 

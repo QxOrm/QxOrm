@@ -1,3 +1,12 @@
+Changes in version 1.2.3:
+- New interface 'qx::IxPersistable' (abstract class) to simplify polymorphism using QxOrm library
+- For more details about this new interface, goto the FAQ : 'How to use qx::IxPersistable interface ?'
+- New methods into 'qx::IxCollection' interface to iterate over each items without knowing its type
+- New option into 'QxOrm.pri' file to build QxOrm library statically (see '_QX_STATIC_BUILD' option)
+- New triggers : 'qx::dao::on_before_fetch' and 'qx::dao::on_after_fetch' (for more details, goto the FAQ : 'How to define a Trigger with QxOrm ?')
+- Add 'std::type_info' class information to introspection engine
+- Some minor bugs fixed ('qx::dao::sql_error' exception message, SQL query column alias, mutex, etc.)
+
 Changes in version 1.2.2:
 - New module to provide a validation engine : QxValidator module
 - For more details about QxValidator module, goto the FAQ of QxOrm library : 'How to use QxValidator module to validate automatically an instance ?'

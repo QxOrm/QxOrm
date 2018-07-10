@@ -57,9 +57,10 @@ if (! sql.isEmpty()) { setSqlQuery(sql); return (* this); }
 
 #define QX_SQL_BUILDER_INIT_FCT_WITH_RELATION() \
 static QHash<QString, QString> sqlX; \
+static QHash<QString, QHash<QString, QString> > sqlAliasX; \
 QMutexLocker locker(& QxSqlQueryBuilder<T>::m_oMutex); \
 QString sql = sqlX.value(m_sHashRelation); \
-if (! sql.isEmpty()) { setSqlQuery(sql); return (* this); }
+if (! sql.isEmpty()) { setSqlQuery(sql); m_lstSqlQueryAlias = sqlAliasX.value(m_sHashRelation); return (* this); }
 
 namespace qx {
 
@@ -197,6 +198,7 @@ public:
       QX_SQL_BUILDER_INIT_FCT_WITH_RELATION()
       qx::dao::detail::QxSqlQueryHelper_FetchAll_WithRelation<type_sql>::sql(pRelationX, sql, (* this));
       if (! m_sHashRelation.isEmpty()) { sqlX.insert(m_sHashRelation, sql); }
+      if (! m_sHashRelation.isEmpty()) { sqlAliasX.insert(m_sHashRelation, m_lstSqlQueryAlias); }
       setSqlQuery(sql);
       return (* this);
    }
@@ -207,6 +209,7 @@ public:
       if (! getDataId()) { qDebug("[QxOrm] %s", QX_SQL_ERR_NO_ID_REGISTERED); qAssert(false); return (* this); }
       qx::dao::detail::QxSqlQueryHelper_FetchById_WithRelation<type_sql>::sql(pRelationX, sql, (* this));
       if (! m_sHashRelation.isEmpty()) { sqlX.insert(m_sHashRelation, sql); }
+      if (! m_sHashRelation.isEmpty()) { sqlAliasX.insert(m_sHashRelation, m_lstSqlQueryAlias); }
       setSqlQuery(sql);
       return (* this);
    }

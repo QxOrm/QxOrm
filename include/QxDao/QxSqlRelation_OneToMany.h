@@ -133,6 +133,7 @@ public:
       QString table = this->table(); QString tableAlias = this->tableAlias(params); QString tableRef = params.builder().table();
       if (! pId || ! pForeign) { return; }
       sql += this->getSqlJoin() + table + " " + tableAlias + " ON ";
+      params.builder().addSqlQueryAlias(table, tableAlias);
       for (int i = 0; i < pId->getNameCount(); i++)
       { sql += pForeign->getSqlAlias(tableAlias, true, i) + " = " + pId->getSqlAlias(tableRef, true, i) + " AND "; }
       sql = sql.left(sql.count() - 5); // Remove last " AND "

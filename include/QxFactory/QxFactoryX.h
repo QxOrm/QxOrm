@@ -85,9 +85,11 @@ private:
 
    boost::any createObject(const QString & sKey) const;
    void * createObjectNudePtr(const QString & sKey) const;
+   const std::type_info & typeInfo(const QString & sKey) const;
 
-   static inline boost::any createInstance(const QString & sKey)     { return QxFactoryX::getSingleton()->createObject(sKey); }
-   static inline void * createInstanceNudePtr(const QString & sKey)  { return QxFactoryX::getSingleton()->createObjectNudePtr(sKey); }
+   static inline boost::any createInstance(const QString & sKey)           { return QxFactoryX::getSingleton()->createObject(sKey); }
+   static inline void * createInstanceNudePtr(const QString & sKey)        { return QxFactoryX::getSingleton()->createObjectNudePtr(sKey); }
+   static inline const std::type_info & getTypeInfo(const QString & sKey)  { return QxFactoryX::getSingleton()->typeInfo(sKey); }
 
 };
 

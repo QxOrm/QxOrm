@@ -5,9 +5,9 @@ mingw32-make release
 IF NOT EXIST "./release/QxOrm.dll" GOTO END
 cd "./release/"
 copy "libQxOrm.a" "../lib/"
-copy "QxOrm.dll" "../lib/"
+if exist "QxOrm.dll" ( copy "QxOrm.dll" "../lib/" )
 copy "libQxOrm.a" "../test/_bin/"
-copy "QxOrm.dll" "../test/_bin/"
+if exist "QxOrm.dll" ( copy "QxOrm.dll" "../test/_bin/" )
 cd "../"
 REM -- BUILD TEST DLL1 --
 cd "./test/qxDllSample/dll1/"

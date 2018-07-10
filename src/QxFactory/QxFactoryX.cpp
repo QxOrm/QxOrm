@@ -66,4 +66,12 @@ void * QxFactoryX::createObjectNudePtr(const QString & sKey) const
    return (pFactory ? pFactory->createObjectNudePtr() : NULL);
 }
 
+const std::type_info & QxFactoryX::typeInfo(const QString & sKey) const
+{
+   IxFactory * pFactory = (m_mapFactoryX.contains(sKey) ? m_mapFactoryX.value(sKey) : NULL);
+   if (! pFactory) { qDebug("[QxOrm] cannot get informations about type '%s'", qPrintable(sKey)); }
+
+   return (pFactory ? pFactory->typeInfo() : typeid(void));
+}
+
 } // namespace qx

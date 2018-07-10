@@ -45,8 +45,10 @@ struct QxDao_FetchAll_WithRelation_Generic
       if (! query.isEmpty()) { dao.addQuery(query, true); sql = dao.builder().getSqlQuery(); }
       if (! dao.exec()) { return dao.errFailed(); }
 
+      qx::dao::on_before_fetch<T>((& t), (& dao));
       if (dao.getCartesianProduct()) { fetchAll_Complex(t, dao); }
       else { fetchAll_Simple(t, dao); }
+      qx::dao::on_after_fetch<T>((& t), (& dao));
 
       return dao.error();
    }
@@ -115,7 +117,9 @@ private:
       type_value_qx & item_val = item.value_qx();
       qx::IxDataMember * pId = dao.getDataId(); qAssert(pId);
       if (pId) { for (int i = 0; i < pId->getNameCount(); i++) { QVariant v = dao.query().value(i); qx::cvt::from_variant(v, item.key(), "", i); } }
+      qx::dao::on_before_fetch<type_value_qx>((& item_val), (& dao));
       type_query_helper::resolveOutput(dao.getSqlRelationX(), item_val, dao.query(), dao.builder());
+      qx::dao::on_after_fetch<type_value_qx>((& item_val), (& dao));
       type_generic_container::insertItem(t, item);
       qx::dao::detail::QxDao_Keep_Original<type_item>::backup(item);
    }

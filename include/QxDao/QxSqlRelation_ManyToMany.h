@@ -135,6 +135,7 @@ public:
       { sql += pIdOwner->getSqlAlias(tableOwner, true, i) + " = " + m_sExtraTable + "." + lstForeignKeyOwner.at(i) + " AND "; }
       sql = sql.left(sql.count() - 5); // Remove last " AND "
       sql += this->getSqlJoin() + table + " " + tableAlias + " ON ";
+      params.builder().addSqlQueryAlias(table, tableAlias);
       for (int i = 0; i < pIdData->getNameCount(); i++)
       { sql += m_sExtraTable + "." + lstForeignKeyDataType.at(i) + " = " + pIdData->getSqlAlias(tableAlias, true, i) + " AND "; }
       sql = sql.left(sql.count() - 5); // Remove last " AND "

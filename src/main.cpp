@@ -26,6 +26,7 @@
 #include <QxPrecompiled.h>
 
 #ifdef Q_OS_WIN
+#ifndef _QX_STATIC_BUILD
 
 #include <windows.h>
 
@@ -44,4 +45,5 @@ int WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /* lpReservedt */
    return 1;
 }
 
+#endif // _QX_STATIC_BUILD
 #endif // Q_OS_WIN

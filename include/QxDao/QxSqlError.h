@@ -58,7 +58,7 @@ private:
 
 public:
 
-   sql_error(const QSqlError & err) : std::exception(), m_error(err) { ; }
+   sql_error(const QSqlError & err) : std::exception(), m_error(err) { if (! m_error.text().isEmpty() && (m_error.type() == QSqlError::NoError)) { m_error.setType(QSqlError::UnknownError); } }
    virtual ~sql_error() throw() { ; }
 
    virtual const char * what() const throw()

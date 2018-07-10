@@ -120,6 +120,7 @@
 #include <QxDao/QxDateNeutral.h>
 #include <QxDao/QxTimeNeutral.h>
 #include <QxDao/QxDateTimeNeutral.h>
+#include <QxDao/IxPersistable.h>
 
 #include <QxDao/QxSqlElement/QxSqlElement.h>
 
@@ -134,6 +135,7 @@
 #include <QxCommon/QxStringCvt.h>
 #include <QxCommon/QxStringCvt_Impl.h>
 #include <QxCommon/QxStringCvt_Export.h>
+#include <QxCommon/QxAnyCastDynamic.h>
 
 #include <QxRegister/IxClass.h>
 #include <QxRegister/QxClass.h>
