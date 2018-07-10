@@ -93,7 +93,7 @@ daoError = qx::dao::destroy_all<Bar>();               qAssert(! daoError.isValid
  *
  * <i>Other note :</i> it is recommended to define into database an index on column <i>deleted_at</i> to optimize execution of SQL queries.
  */
-class QxSoftDelete
+class QX_DLL_EXPORT QxSoftDelete
 {
 
 public:
@@ -111,60 +111,31 @@ private:
 
 public:
 
-   QxSoftDelete() : m_eMode(mode_date_time) { ; }
-   QxSoftDelete(const QString & sColumn) : m_sColumn(sColumn), m_eMode(mode_date_time) { ; }
-   QxSoftDelete(const QString & sColumn, mode eMode) : m_sColumn(sColumn), m_eMode(eMode) { ; }
-   ~QxSoftDelete() { ; }
+   QxSoftDelete();
+   QxSoftDelete(const QString & sColumn);
+   QxSoftDelete(const QString & sColumn, mode eMode);
+   ~QxSoftDelete();
 
-   QString getTableName() const              { return m_sTable; }
-   QString getColumnName() const             { return m_sColumn; }
-   QString getSqlQueryToFetch() const        { return m_sSqlQueryToFetch; }
-   QString getSqlQueryToUpdate() const       { return m_sSqlQueryToUpdate; }
-   QString getSqlQueryToCreateTable() const  { return m_sSqlQueryToCreateTable; }
-   mode getMode() const                      { return m_eMode; }
+   QString getTableName() const;
+   QString getColumnName() const;
+   QString getSqlQueryToFetch() const;
+   QString getSqlQueryToUpdate() const;
+   QString getSqlQueryToCreateTable() const;
+   mode getMode() const;
 
-   void setTableName(const QString & sTable)          { m_sTable = sTable; }
-   void setColumnName(const QString & sColumn)        { m_sColumn = sColumn; }
-   void setSqlQueryToFetch(const QString & s)         { m_sSqlQueryToFetch = s; }
-   void setSqlQueryToUpdate(const QString & s)        { m_sSqlQueryToUpdate = s; }
-   void setSqlQueryToCreateTable(const QString & s)   { m_sSqlQueryToCreateTable = s; }
-   void setMode(mode eMode)                           { m_eMode = eMode; }
+   void setTableName(const QString & sTable);
+   void setColumnName(const QString & sColumn);
+   void setSqlQueryToFetch(const QString & s);
+   void setSqlQueryToUpdate(const QString & s);
+   void setSqlQueryToCreateTable(const QString & s);
+   void setMode(mode eMode);
 
-   bool isEmpty() const { return (m_sTable.isEmpty() || m_sColumn.isEmpty()); }
+   bool isEmpty() const;
 
-   QString buildSqlTablePointName(const QString & sTable = QString()) const
-   {
-      if (this->isEmpty()) { return ""; }
-      return ((sTable.isEmpty() ? m_sTable : sTable) + "." + m_sColumn);
-   }
-
-   QString buildSqlQueryToFetch(const QString & sTable = QString()) const
-   {
-      QString sCurrTable = (sTable.isEmpty() ? m_sTable : sTable);
-      if (this->isEmpty()) { return ""; }
-      else if (! m_sSqlQueryToFetch.isEmpty()) { return m_sSqlQueryToFetch; }
-      else if (m_eMode == mode_flag) { return ("(" + sCurrTable + "." + m_sColumn + " IS NULL" + " OR " + sCurrTable + "." + m_sColumn + " = ''" + " OR " + sCurrTable + "." + m_sColumn + " = '0'" + ")"); }
-      else if (m_eMode == mode_date_time) { return ("(" + sCurrTable + "." + m_sColumn + " IS NULL" + " OR " + sCurrTable + "." + m_sColumn + " = ''" + ")"); }
-      qAssert(false); return "";
-   }
-
-   QString buildSqlQueryToUpdate() const
-   {
-      if (this->isEmpty()) { return ""; }
-      else if (! m_sSqlQueryToUpdate.isEmpty()) { return m_sSqlQueryToUpdate; }
-      else if (m_eMode == mode_flag) { return (m_sColumn + " = '1'"); }
-      else if (m_eMode == mode_date_time) { return (m_sColumn + " = '" + QDateTime::currentDateTime().toString(QX_DAO_SOFT_DELETE_QDATETIME_FORMAT) + "'"); }
-      qAssert(false); return "";
-   }
-
-   QString buildSqlQueryToCreateTable() const
-   {
-      if (this->isEmpty()) { return ""; }
-      else if (! m_sSqlQueryToCreateTable.isEmpty()) { return m_sSqlQueryToCreateTable; }
-      else if (m_eMode == mode_flag) { return (m_sColumn + " " + "TEXT"); }
-      else if (m_eMode == mode_date_time) { return (m_sColumn + " " + "TEXT"); }
-      qAssert(false); return "";
-   }
+   QString buildSqlTablePointName(const QString & sTable = QString()) const;
+   QString buildSqlQueryToFetch(const QString & sTable = QString()) const;
+   QString buildSqlQueryToUpdate() const;
+   QString buildSqlQueryToCreateTable() const;
 
 };
 

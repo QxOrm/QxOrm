@@ -94,6 +94,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\QxDao\QxSoftDelete.cpp" />
+    <ClCompile Include="src\QxModelView\IxModel.cpp" />
     <ClCompile Include="src\QxSerialize\Qt\QxSerialize_QSqlError.cpp" />
     <ClCompile Include="src\QxSingleton\IxSingleton.cpp" />
     <ClCompile Include="src\QxSingleton\QxSingletonX.cpp" />
@@ -184,7 +186,10 @@
     <ClCompile Include="src\QxValidator\QxInvalidValueX.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\QxDao\QxSqlSaveMode.h" />
     <ClInclude Include="include\QxMemLeak.h" />
+    <ClInclude Include="include\QxModelView\IxModel.h" />
+    <ClInclude Include="include\QxModelView\QxModel.h" />
     <ClInclude Include="include\QxOrm.h" />
     <ClInclude Include="include\QxPrecompiled.h" />
     <ClInclude Include="include\QxCommon\QxAnyCastDynamic.h" />
@@ -440,6 +445,7 @@
     <ClInclude Include="include\QxValidator\QxValidatorX.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="inl\QxDao\QxDao_Save_WithRelation_Recursive.inl" />
     <None Include="inl\QxDataMember\QxDataMember.inl" />
     <None Include="inl\QxDataMember\QxDataMemberX.inl" />
     <None Include="inl\QxFactory\QxFactory.inl" />

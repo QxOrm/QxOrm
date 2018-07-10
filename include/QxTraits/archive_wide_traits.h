@@ -112,15 +112,25 @@ private:
    template <bool isWide /* = false */, int dummy>
    struct cvtQString
    {
+#ifndef QT_NO_STL
       static inline QString toQString(const std::string & str)                   { return QString::fromStdString(str); }
       static inline void fromQString(const QString & str, std::string & result)  { result = str.toStdString(); }
+#else // QT_NO_STL
+      static inline QString toQString(const std::string & str)                   { return QString::fromLatin1(str.data(), int(str.size())); }
+      static inline void fromQString(const QString & str, std::string & result)  { result = str.toLatin1().constData(); }
+#endif // QT_NO_STL
    };
 
    template <int dummy>
    struct cvtQString<true, dummy>
    {
+#if ((! defined(QT_NO_STL)) && (! defined(QT_NO_STL_WCHAR)))
       static inline QString toQString(const std::wstring & str)                     { return QString::fromStdWString(str); }
       static inline void fromQString(const QString & str, std::wstring & result)    { result = str.toStdWString(); }
+#else // ((! defined(QT_NO_STL)) && (! defined(QT_NO_STL_WCHAR)))
+      static inline QString toQString(const std::wstring & str)                     { Q_UNUSED(str); qAssert(false); /* Need STL compatibility ! */ return QString(); }
+      static inline void fromQString(const QString & str, std::wstring & result)    { Q_UNUSED(str); Q_UNUSED(result); qAssert(false); /* Need STL compatibility ! */ }
+#endif // ((! defined(QT_NO_STL)) && (! defined(QT_NO_STL_WCHAR)))
    };
 
    template <bool isWide /* = false */, int dummy>
@@ -136,9 +146,18 @@ private:
    struct cvtQByteArray<true, dummy>
    {
       static inline QByteArray toQByteArray(const std::wstring & str, std::wstring * owner)
+#if ((! defined(QT_NO_STL)) && (! defined(QT_NO_STL_WCHAR)))
       { Q_UNUSED(owner); return QString::fromStdWString(str).toUtf8(); }
+#else // ((! defined(QT_NO_STL)) && (! defined(QT_NO_STL_WCHAR)))
+      { Q_UNUSED(owner); Q_UNUSED(str); qAssert(false); /* Need STL compatibility ! */ return QByteArray(); }
+#endif // ((! defined(QT_NO_STL)) && (! defined(QT_NO_STL_WCHAR)))
+
       static inline void fromQByteArray(const QByteArray & data, std::wstring & result)
+#if ((! defined(QT_NO_STL)) && (! defined(QT_NO_STL_WCHAR)))
       { result = QString::fromUtf8(data.constData(), data.size()).toStdWString(); }
+#else // ((! defined(QT_NO_STL)) && (! defined(QT_NO_STL_WCHAR)))
+      { Q_UNUSED(data); Q_UNUSED(result); qAssert(false); /* Need STL compatibility ! */ }
+#endif // ((! defined(QT_NO_STL)) && (! defined(QT_NO_STL_WCHAR)))
    };
 
 };

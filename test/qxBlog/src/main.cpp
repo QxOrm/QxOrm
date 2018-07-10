@@ -159,6 +159,12 @@ int main(int argc, char * argv[])
    // Dump 'blog_tmp' result from database (xml serialization)
    qx::dump(blog_tmp);
 
+   // Check qx::dao::save_with_relation_recursive() function
+   daoError = qx::dao::save_with_relation_recursive(blog_tmp);
+   qAssert(! daoError.isValid());
+   daoError = qx::dao::save_with_relation_recursive(blog_tmp, qx::dao::save_mode::e_update_only);
+   qAssert(! daoError.isValid());
+
    // Call 'age()' method with class name and method name (reflexion)
    qx_bool bInvokeOk = qx::QxClassX::invoke("author", "age", author_1);
    qAssert(bInvokeOk);

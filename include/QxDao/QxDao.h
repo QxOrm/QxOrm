@@ -55,8 +55,10 @@
 #include <QxDao/QxSoftDelete.h>
 #include <QxDao/QxDaoPointer.h>
 #include <QxDao/QxSqlQuery.h>
+#include <QxDao/QxSqlSaveMode.h>
 
 namespace qx {
+class QxSqlRelationParams;
 namespace dao {
 
 namespace detail {
@@ -73,6 +75,7 @@ template <class T> struct QxDao_Update_Optimized;
 template <class T> struct QxDao_Update_WithRelation;
 template <class T> struct QxDao_Save;
 template <class T> struct QxDao_Save_WithRelation;
+template <class T> struct QxDao_Save_WithRelation_Recursive;
 template <class T> struct QxDao_DeleteById;
 template <class T> struct QxDao_DeleteAll;
 template <class T> struct QxDao_Exist;
@@ -575,6 +578,29 @@ inline QSqlError save_with_relation(const QStringList & relation, T & t, QSqlDat
 template <class T>
 inline QSqlError save_with_all_relation(T & t, QSqlDatabase * pDatabase = NULL)
 { return qx::dao::detail::QxDao_Save_WithRelation<T>::save("*", t, pDatabase); }
+
+/*!
+ * \ingroup QxDao
+ * \brief Insert (if no exist) or update (if already exist) recursively an element and all levels of relationships (or a list of elements + all levels of relationships) into database, useful to save a tree structure for example
+ * \param t Element (or list of elements) to be inserted (if no exist) or updated (if already exist) into database
+ * \param eSaveMode To improve performance, use this parameter to indicate if you just want to insert or update all elements in database
+ * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class (optional parameter)
+ * \param pRelationParams Keep this parameter as NULL, it is used internally by QxOrm library to iterate over each level of relationship
+ * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
+ *
+ * qx::dao::save_with_relation_recursive<T>() execute following SQL query :<br>
+ * <i>INSERT INTO my_table (my_column_1, my_column_2, etc.) VALUES (?, ?, etc.)</i>
+ * <br>or (if already exist into database) :<br>
+ * <i>UPDATE my_table SET my_column_1 = ?, my_column_2 = ?, etc.</i><br>
+ * <br>
+ * <b>Note :</b> to improve performance, and if you know that you are just inserting or updating items in database, you can use the parameter <i>eSaveMode</i> :<br>
+ * - <i>qx::dao::save_mode::e_check_insert_or_update</i> : check before saving if item already exists in database ;<br>
+ * - <i>qx::dao::save_mode::e_insert_only</i> : only insert items in database (use only 1 SQL query to insert collection of items) ;<br>
+ * - <i>qx::dao::save_mode::e_update_only</i> : only update items in database (use only 1 SQL query to update collection of items).
+ */
+template <class T>
+inline QSqlError save_with_relation_recursive(T & t, qx::dao::save_mode::e_save_mode eSaveMode = qx::dao::save_mode::e_check_insert_or_update, QSqlDatabase * pDatabase = NULL, qx::QxSqlRelationParams * pRelationParams = NULL)
+{ return qx::dao::detail::QxDao_Save_WithRelation_Recursive<T>::save(t, eSaveMode, pDatabase, pRelationParams); }
 
 /*!
  * \ingroup QxDao

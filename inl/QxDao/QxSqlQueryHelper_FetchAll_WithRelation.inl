@@ -53,7 +53,7 @@ struct QxSqlQueryHelper_FetchAll_WithRelation
       if (! oSoftDelete.isEmpty()) { l++; sql += (oSoftDelete.buildSqlTablePointName() + ", "); }
       pRelationX->hierarchySelect(params);
       sql = sql.left(sql.count() - 2); // Remove last ", "
-      sql += " FROM " + table + ", ";
+      sql += " FROM " + qx::IxDataMember::getSqlFromTable(table) + ", ";
       pRelationX->hierarchyFrom(params);
       sql = sql.left(sql.count() - 2); // Remove last ", "
       pRelationX->hierarchyJoin(params);

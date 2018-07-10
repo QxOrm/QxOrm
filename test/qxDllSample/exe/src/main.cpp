@@ -424,6 +424,12 @@ int main(int argc, char * argv[])
 
    //--------------------------------
 
+   // Just to check compilation of model/view template class
+   qx::IxModel * pModel = new qx::QxModel<Foo>();
+   Q_UNUSED(pModel);
+
+   //--------------------------------
+
    qAssert(qx::QxClassX::implementIxPersistable("qx::QxPersistable"));
    qAssert(! qx::QxClassX::implementIxPersistable("Bar"));
 

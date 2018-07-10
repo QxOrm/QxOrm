@@ -149,13 +149,16 @@ QString IxDataMember::getName(int iIndex, const QString & sOtherName /* = QStrin
 
 QString IxDataMember::getSqlAlias(const QString & sTable /* = QString() */, bool bClauseWhere /* = false */, int iIndexName /* = 0 */) const
 {
+   QString sTableAlias = sTable;
+   sTableAlias.replace(".", "_");
+
    // Standard SQL disallows references to column aliases in a WHERE clause
    // cf. <http://dev.mysql.com/doc/refman/5.0/en/problems-with-alias.html>
-   if (bClauseWhere && ! sTable.isEmpty()) { return (sTable + "." + getName(iIndexName)); }
+   if (bClauseWhere && ! sTableAlias.isEmpty()) { return (sTableAlias + "." + getName(iIndexName)); }
 
    QString sSqlAlias = m_sSqlAlias;
    if (! sSqlAlias.isEmpty()) { return sSqlAlias; }
-   if (! sTable.isEmpty()) { sSqlAlias = (sTable + "_" + getName(iIndexName) + "_0"); }
+   if (! sTableAlias.isEmpty()) { sSqlAlias = (sTableAlias + "_" + getName(iIndexName) + "_0"); }
    else { sSqlAlias = (m_sNameParent + "_" + getName(iIndexName) + "_0"); }
 
    // Special database keywords using '[', ']' or '"' characters
@@ -253,8 +256,10 @@ QString IxDataMember::getSqlNameEqualToPlaceHolder(const QString & sAppend /* = 
 QString IxDataMember::getSqlTablePointNameAsAlias(const QString & sTable, const QString & sSep /* = QString(", ") */, const QString & sSuffixAlias /* = QString() */) const
 {
    QString sResult;
+   QString sTableAlias = sTable;
+   sTableAlias.replace(".", "_");
    for (int i = 0; i < m_lstNames.count(); i++)
-   { sResult += sTable + "." + getName(i) + " AS " + getSqlAlias(sTable, false, i) + sSuffixAlias; sResult += sSep; }
+   { sResult += sTableAlias + "." + getName(i) + " AS " + getSqlAlias(sTable, false, i) + sSuffixAlias; sResult += sSep; }
    sResult = sResult.left(sResult.count() - sSep.count()); // Remove last separator
    return sResult;
 }
@@ -275,6 +280,14 @@ QString IxDataMember::getSqlNameAndTypeAndParams(const QString & sSep /* = QStri
    { sResult += getName(i, sOtherName) + " " + getSqlTypeAndParams(i); sResult += sSep; }
    sResult = sResult.left(sResult.count() - sSep.count()); // Remove last separator
    return sResult;
+}
+
+QString IxDataMember::getSqlFromTable(const QString & sTable)
+{
+   if (! sTable.contains(".")) { return sTable; }
+   QString sTableAlias = sTable;
+   sTableAlias.replace(".", "_");
+   return (sTable + " AS " + sTableAlias);
 }
 
 } // namespace qx

@@ -106,7 +106,7 @@ public:
    virtual IxSqlQueryBuilder & count()
    {
       QX_SQL_BUILDER_INIT_FCT()
-      sql = "SELECT COUNT(*) FROM " + m_sTableName;
+      sql = "SELECT COUNT(*) FROM " + qx::IxDataMember::getSqlFromTable(m_sTableName);
       if (! m_oSoftDelete.isEmpty()) { sql += " WHERE " + m_oSoftDelete.buildSqlQueryToFetch(); }
       setSqlQuery(sql);
       return (* this);

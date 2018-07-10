@@ -2,9 +2,10 @@
 <html>
 <head>
   <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
-  <title>QxOrm : Qt C++ Object Relational Mapping Library (ORM) - QxEntityEditor : Qt C++ Entities Graphic Editor (data model)</title>
+  <title>QxOrm : C++ Qt Object Relational Mapping Library (ORM) - QxEntityEditor : C++ Qt Entities Graphic Editor (data model)</title>
   <meta name="generator" content="Amaya, see http://www.w3.org/Amaya/">
   <link rel='stylesheet' type='text/css' href='./resource/qxorm_style.css'>
+  <script type="text/javascript" src="./resource/qxorm_script.js"></script>
 </head>
 <body>
 <table border="0" style="width: 80%" align="center">
@@ -29,8 +30,18 @@
       <td align="center"><a href="./home.html" class="btn_nav">Accueil</a></td>
       <td align="center"><a href="./download.html" class="btn_nav">Téléchargement</a></td>
       <td align="center"><a href="./quick_sample.html" class="btn_nav">Exemple rapide</a></td>
-      <td align="center"><a href="./tutorial.html" class="btn_nav">Tutoriel (3)</a></td>
-      <td align="center"><a href="./faq.html" class="btn_nav">Faq (35)</a></td>
+      <td align="center" onmouseover="showHideElementById('menu_tuto', true);" onmouseout="showHideElementById('menu_tuto', false);">
+         <a href="./tutorial.html" class="btn_nav">Tutoriel (4)</a>
+         <table class="table_menu_tuto"><tbody><tr><td>
+            <div id="menu_tuto" class="div_menu_tuto">
+               <a href="./tutorial_3.html" class="btn_sub_menu">install QxOrm</a><br/>
+               <a href="./tutorial.html" class="btn_sub_menu">qxBlog</a><br/>
+               <a href="./tutorial_2.html" class="btn_sub_menu">qxClientServer</a><br/>
+               <a href="./tutorial_4.html" class="btn_sub_menu">QxEntityEditor video</a>
+            </div>
+         </td></tr></tbody></table>
+      </td>
+      <td align="center"><a href="./faq.html" class="btn_nav">Faq (36)</a></td>
       <td align="center"><a href="./link.html" class="btn_nav">Forum</a></td>
     </tr>
   </tbody>
@@ -39,17 +50,17 @@
 <table border="0" style="width: 80%" align="center">
   <col><col><col><col><col><col>
   <tbody><tr>
-  <td align="left" valign="top"><font size="2">QxOrm  &gt;&gt;  Faq</font></td>
+  <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm  &gt;&gt;  Faq</font></td>
   <td align="right" valign="top">
     <table cellspacing="0" cellpadding="1"><col><col><tbody>
       <tr>
-         <td align="right" valign="top"><font size="2">Version courante :&nbsp;</font></td>
-         <td align="left" valign="top"><font size="2">QxOrm 1.2.6 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
+         <td align="right" valign="top"><font size="2" class="txt_with_shadow">Version courante :&nbsp;</font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.2.7 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
+      </tr>
       <tr>
-      <tr>
-         <td align="right" valign="top"><font size="2"></font></td>
-         <td align="left" valign="top"><font size="2">QxEntityEditor 1.1.3</font></td>
-      <tr>
+         <td align="right" valign="top"><font size="2" class="txt_with_shadow"></font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.1.4</font></td>
+      </tr>
     </tbody></table>
   </td>
   <td width="10px"></td>
@@ -102,6 +113,7 @@
                 </li><li><a href="#faq_270">Comment utiliser le moteur de relations pour récupérer des données associées à plusieurs tables ?</a><br>
                 </li><li><a href="#faq_280">Comment appeler une procédure stockée ou une requête SQL personnalisée ?</a><br>
                 </li><li><a href="#faq_290">Comment utiliser la classe <i>qx::QxDaoAsync</i> pour appeler des requêtes de manière asynchrone (multi-thread) ?</a><br>
+                </li><li><a href="#faq_300">Comment utiliser le module <i>QxModelView</i> pour travailler avec le moteur <i>model/view</i> de Qt (Qt widgets et vues QML) ?</a><br>
                 </li></ul>
               </td>
               <td width="200" align="center" valign="top"><a href="./resource/qt_ambassador_logo.png" target="_blank"><img alt="qt_ambassador" src="./resource/qt_ambassador_logo_150x150.png" width="150" height="150" border="0"></a><br>
@@ -147,14 +159,17 @@
            <td align="justify">
               <b>QxEntityEditor</b> est un éditeur graphique pour la bibliothèque <b>QxOrm</b> : <b>QxEntityEditor</b> permet de gérer graphiquement le modèle d'entités.<br>
               <b>QxEntityEditor</b> est multi-plateforme (disponible pour Windows, Linux et Mac OS X) et génère du code natif pour tous les environnements : bureau (Windows, Linux, Mac OS X), embarqué et mobile (Android, iOS, Raspberry Pi, etc.).<br>
+              <a href="./tutorial_4.html">Une vidéo de présentation de l'application <b>QxEntityEditor</b> est disponible</a>.<br>
+              <br>
               <b>QxEntityEditor</b> est basé sur un système de plugins et propose diverses fonctionnalités pour importer/exporter le modèle de données :
               <ul>
                 <li>génération automatique du code C++ (classes persistantes enregistrées dans le contexte QxOrm) ;</li>
                 <li>génération automatique des scripts SQL DDL (schéma de base de données) pour les bases SQLite, MySQL, PostgreSQL, Oracle et MS SQL Server ;</li>
                 <li>supporte l'évolution du schéma de base de données pour chaque version d'un projet (<i>ALTER TABLE</i>, <i>ADD COLUMN</i>, <i>DROP INDEX</i>, etc.) ;</li>
-                <li>génération automatique des classes C++ de services pour transférer le modèle de données sur le réseau, en utilisant le module <a href="../doxygen/html/group___qx_service.html" target="_blank">QxService</a>, pour créer rapidement des applications client/serveur.</li>
+                <li>génération automatique des classes C++ de services pour transférer le modèle de données sur le réseau, en utilisant le module <a href="../doxygen/html/group___qx_service.html" target="_blank">QxService</a>, pour créer rapidement des applications client/serveur ;</li>
+                <li>importation automatique des structures de bases de données existantes (par connexion ODBC) pour les bases SQLite, MySQL, PostgreSQL, Oracle et MS SQL Server.</li>
               </ul>
-              <a href="../qxentityeditor/resource/qxee_sample.png"><img alt="QxEntityEditor" src="../qxentityeditor/resource/qxee_sample_small.png" border="0"></a>
+              <a href="../qxentityeditor/resource/qxee_sample.png" target="_blank"><img alt="QxEntityEditor" src="../qxentityeditor/resource/qxee_sample_small.png" border="0" class="img_with_shadow"></a>
               <br><br>
               <b>QxEntityEditor</b> est développé par Lionel Marty, Ingénieur en développement logiciel depuis 2003.<br>
               <br><br>
@@ -1700,6 +1715,8 @@ bGetOk<span class="operator"> =</span> qx<span class="operator">::</span>cache<s
          <tr>
            <td valign="middle" width="30"></td>
            <td align="justify">
+           <a href="#faq_15">Il est recommandé d'utiliser l'application <b>QxEntityEditor</b> pour gérer cette problématique.</a><br>
+           <br>
            La bibliothèque QxOrm ne fournit pas de mécanisme pour gérer automatiquement la création et mise à jour des tables dans la base de données.<br>
            En effet, la fonction <i>qx::dao::create_table&lt;T&gt;</i> doit être utilisée uniquement pour créer des prototypes.<br>
            Il est fortement recommandé d'utiliser un outil spécifique à chaque SGBD pour créer et maintenir les tables de la base de données (par exemple <i>Navicat</i> pour <i>MySql</i>, <i>pgAdmin</i> pour <i>PostgreSQL</i>, <i>SQLite Manager</i> pour <i>SQLite</i>, etc.).<br>
@@ -2554,6 +2571,109 @@ void</span> MyWidget<span class="operator">::</span>onQueryFinished<span class="
 </span><span class="operator">}</span></pre>
            </td></tr></tbody></table>
            <br>
+           </td>
+         </tr>
+       </tbody>
+      </table>
+      <br><br>
+      <a name="faq_300"><u><b>Comment utiliser le module <i>QxModelView</i> pour travailler avec le moteur <i>model/view</i> de Qt (Qt widgets et vues QML) ?</b></u></a><br><br>
+      <table border="0" style="width: 100%" align="center">
+       <col>
+       <col>
+       <tbody>
+         <tr>
+           <td valign="middle" width="30"></td>
+           <td align="justify">
+           Le module <b><a href="../doxygen/html/group___qx_model_view.html" target="_blank">QxModelView</a></b> permet d'utiliser <a href="http://qt-project.org/doc/qt-5/modelview.html" target="_blank">le moteur model/view de Qt</a> avec toutes les classes enregistrées dans le contexte QxOrm :
+           <ul>
+           <li>Qt widgets : utilisation de <i>QTableView</i> ou <i>QListView</i> par exemple pour afficher/modifier le contenu d'une table de base de données ;</li>
+           <li>QML : toute propriété enregistrée dans le contexte QxOrm est accessible en QML : le module <b><a href="../doxygen/html/group___qx_model_view.html" target="_blank">QxModelView</a></b> permet ainsi de faciliter l'intéraction entre QML et les bases de données.</li>
+           </ul>
+           L'interface <b>qx::IxModel</b> propose une base commune pour tous les modèles liés aux classes persistantes déclarées dans le contexte QxOrm. Les méthodes de cette classe préfixées par '<i>qx</i>' appellent les fonctions du namespace '<i>qx::dao</i>' et communiquent donc directement avec la base de données.<br/>
+           <br/>
+           Le projet de test <i>qxBlogModelView</i> présent dans le dossier <i>./test/</i> du package QxOrm montre comment créer rapidement un modèle et l'associer au moteur <i>model/view</i> de Qt (d'abord dans un widget Qt, puis dans une vue QML).<br/>
+           <br/>
+           1- Exemple de création d'un modèle pour afficher/modifier les données de la table '<i>author</i>' (voir le <a href="./tutorial.html" target="_blank">tutoriel <i>qxBlog</i></a> pour la définition de la classe '<i>author</i>') dans un QTableView :<br/>
+           <br/>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="comment">// Create a model and fetch all data from database
+</span>qx<span class="operator">::</span>IxModel<span class="operator"> *</span> pModel<span class="operator"> =</span><span class="keyword"> new</span> qx<span class="operator">::</span>QxModel<span class="operator">&lt;</span>author<span class="operator">&gt;();</span>
+pModel<span class="operator">-&gt;</span>qxFetchAll<span class="operator">();</span><span class="comment">
+
+// Associate the model to a QTableView and display it
+</span>QTableView tableView<span class="operator">;</span>
+tableView<span class="operator">.</span>setModel<span class="operator">(</span>pModel<span class="operator">);</span>
+tableView<span class="operator">.</span>show<span class="operator">();</span></pre>
+           </td></tr></tbody></table>
+           <br>
+           Ce qui donne le résultat suivant à l'exécution :<br/>
+           <br/>
+           <img alt="qx_model_view_01" src="./resource/qx_model_view_01.png" border="0" /><br/>
+           <br/><br/>
+           2- Voici un autre exemple en QML (en Qt5, le module <b><a href="../doxygen/html/group___qx_model_view.html" target="_blank">QxModelView</a></b> étant également compatible avec Qt4) :<br/>
+           <br/>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="comment">// Create a model and fetch all data from database
+</span>qx<span class="operator">::</span>IxModel<span class="operator"> *</span> pModel<span class="operator"> =</span><span class="keyword"> new</span> qx<span class="operator">::</span>QxModel<span class="operator">&lt;</span>author<span class="operator">&gt;();</span>
+pModel<span class="operator">-&gt;</span>qxFetchAll<span class="operator">();</span><span class="comment">
+
+// Associate the model to a QML view and display it
+</span>QQuickView qmlView<span class="operator">;</span>
+qmlView<span class="operator">.</span>rootContext<span class="operator">()-&gt;</span>setContextProperty<span class="operator">(</span><span class="string">"myModel"</span><span class="operator">,</span> pModel<span class="operator">);</span>
+qmlView<span class="operator">.</span>setSource<span class="operator">(</span>QUrl<span class="operator">(</span><span class="string">"qrc:/documents/main.qml"</span><span class="operator">));</span>
+qmlView<span class="operator">.</span>show<span class="operator">();</span></pre>
+           </td></tr></tbody></table>
+           <br>
+           Et voici le contenu du fichier '<i>main.qml</i>' :<br/>
+           <br/>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre>import QtQuick<span class="float"> 2.1</span>
+import QtQuick<span class="operator">.</span>Controls<span class="float"> 1.0</span>
+
+Item<span class="operator"> {</span>
+   width<span class="operator">:</span><span class="int"> 400</span>
+   height<span class="operator">:</span><span class="int"> 300</span>
+   Row<span class="operator"> {</span>
+      height<span class="operator">:</span><span class="int"> 20</span>
+      spacing<span class="operator">:</span><span class="int"> 20</span>
+      Button<span class="operator"> {</span>
+         text<span class="operator">:</span><span class="string"> "Clear"</span>
+         onClicked<span class="operator">:</span> myModel<span class="operator">.</span>clear<span class="operator">()
+      }</span>
+      Button<span class="operator"> {</span>
+         text<span class="operator">:</span><span class="string"> "Fetch All"</span>
+         onClicked<span class="operator">:</span> myModel<span class="operator">.</span>qxFetchAll_<span class="operator">()
+      }</span>
+      Button<span class="operator"> {</span>
+         text<span class="operator">:</span><span class="string"> "Save"</span>
+         onClicked<span class="operator">:</span> myModel<span class="operator">.</span>qxSave_<span class="operator">()
+      }
+   }</span>
+   ListView<span class="operator"> {</span>
+      y<span class="operator">:</span><span class="int"> 30</span>
+      height<span class="operator">:</span><span class="int"> 270</span>
+      model<span class="operator">:</span> myModel
+      delegate<span class="operator">:</span> Row<span class="operator"> {</span>
+         height<span class="operator">:</span><span class="int"> 20</span>
+         spacing<span class="operator">:</span><span class="int"> 10</span>
+         Text<span class="operator"> {</span> text<span class="operator">:</span><span class="string"> "id: "</span><span class="operator"> +</span> author_id<span class="operator"> }</span>
+         TextField<span class="operator"> {</span>
+            text<span class="operator">:</span> name
+            onTextChanged<span class="operator">:</span> name<span class="operator"> =</span> text<span class="operator">
+         }
+      }
+   }
+}</span></pre>
+           </td></tr></tbody></table>
+           <br>
+           Ce qui donne le résultat suivant à l'exécution :<br/>
+           <br/>
+           <img alt="qx_model_view_02" src="./resource/qx_model_view_02.png" border="0" /><br/>
+           <br/>
+           Comme on peut le constater dans le fichier '<i>main.qml</i>', les propriétés '<i>author_id</i>' et '<i>name</i>' du modèle '<i>author</i>' (variable <i>myModel</i>) sont accessibles automatiquement en lecture/écriture (car elles ont été enregistrées dans le contexte QxOrm).<br/>
+           De plus, l'interface <b>qx::IxModel</b> propose une liste de méthodes accessibles en QML (utilisation de <i>Q_INVOKABLE</i>) pour communiquer directement avec la base de données : ainsi, le bouton '<i>Save</i>' de l'écran ci-dessus enregistre le modèle en base de données depuis QML.<br/>
+           <br/>
+           <b>Remarque :</b> un plugin de <b>QxEntityEditor</b> permet de générer automatiquement le code des modèles pour la gestion des relations. Il est ainsi possible de travailler avec des modèles imbriqués.<br/>
            </td>
          </tr>
        </tbody>

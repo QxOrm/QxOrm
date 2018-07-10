@@ -157,11 +157,7 @@ public:
    virtual QSqlError onBeforeSave(QxSqlRelationParams & params) const = 0;
    virtual QSqlError onAfterSave(QxSqlRelationParams & params) const = 0;
 
-#ifndef _QX_MODE_RELEASE
-   bool verifyOffset(QxSqlRelationParams & params, bool bId) const;
-#else // _QX_MODE_RELEASE
-   inline bool verifyOffset(QxSqlRelationParams & params, bool bId) const { Q_UNUSED(params); Q_UNUSED(bId); return true; }
-#endif // _QX_MODE_RELEASE
+   bool verifyOffset(QxSqlRelationParams & params, bool bId) const BOOST_USED;
 
 protected:
 

@@ -83,11 +83,19 @@ static inline QVariant toVariant(const qx::QxDateTimeNeutral & t, const QString 
 
 template <> struct QxStringCvt_ToVariant< std::string > {
 static inline QVariant toVariant(const std::string & t, const QString & format, int index)
+#ifndef QT_NO_STL
 { Q_UNUSED(format); Q_UNUSED(index); return QString::fromStdString(t); } };
+#else // QT_NO_STL
+{ Q_UNUSED(format); Q_UNUSED(index); return QString::fromLatin1(t.data(), int(t.size())); } };
+#endif // QT_NO_STL
 
 template <> struct QxStringCvt_ToVariant< std::wstring > {
 static inline QVariant toVariant(const std::wstring & t, const QString & format, int index)
+#if ((! defined(QT_NO_STL)) && (! defined(QT_NO_STL_WCHAR)))
 { Q_UNUSED(format); Q_UNUSED(index); return QString::fromStdWString(t); } };
+#else // ((! defined(QT_NO_STL)) && (! defined(QT_NO_STL_WCHAR)))
+{ Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(t); qAssert(false); /* Need STL compatibility ! */ return QVariant(); } };
+#endif // ((! defined(QT_NO_STL)) && (! defined(QT_NO_STL_WCHAR)))
 
 template <> struct QxStringCvt_ToVariant< QVariant > {
 static inline QVariant toVariant(const QVariant & t, const QString & format, int index)

@@ -81,7 +81,7 @@ public:
 
    virtual QSqlError onBeforeSave(QxSqlRelationParams & params) const
    {
-      if (this->isNullData(params)) { return QSqlError(); }
+      if (this->isNullData(params) || params.recursiveMode()) { return QSqlError(); }
       return qx::dao::save(this->getData(params), (& params.database()));
    }
 

@@ -131,11 +131,19 @@ static inline QString toString(const qx::QxDateTimeNeutral & t, const QString & 
 
 template <> struct QxStringCvt_ToString< std::string > {
 static inline QString toString(const std::string & t, const QString & format, int index)
+#ifndef QT_NO_STL
 { Q_UNUSED(format); Q_UNUSED(index); return QString::fromStdString(t); } };
+#else // QT_NO_STL
+{ Q_UNUSED(format); Q_UNUSED(index); return QString::fromLatin1(t.data(), int(t.size())); } };
+#endif // QT_NO_STL
 
 template <> struct QxStringCvt_ToString< std::wstring > {
 static inline QString toString(const std::wstring & t, const QString & format, int index)
+#if ((! defined(QT_NO_STL)) && (! defined(QT_NO_STL_WCHAR)))
 { Q_UNUSED(format); Q_UNUSED(index); return QString::fromStdWString(t); } };
+#else // ((! defined(QT_NO_STL)) && (! defined(QT_NO_STL_WCHAR)))
+{ Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(t); qAssert(false); /* Need STL compatibility ! */ return QString(); } };
+#endif // ((! defined(QT_NO_STL)) && (! defined(QT_NO_STL_WCHAR)))
 
 template <typename T> struct QxStringCvt_ToString< boost::optional<T> > {
 static inline QString toString(const boost::optional<T> & t, const QString & format, int index)

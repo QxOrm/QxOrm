@@ -74,6 +74,7 @@
 #include "../../inl/QxDao/QxDao_Update_WithRelation.inl"
 #include "../../inl/QxDao/QxDao_Save.inl"
 #include "../../inl/QxDao/QxDao_Save_WithRelation.inl"
+#include "../../inl/QxDao/QxDao_Save_WithRelation_Recursive.inl"
 #include "../../inl/QxDao/QxDao_DeleteById.inl"
 #include "../../inl/QxDao/QxDao_DeleteAll.inl"
 #include "../../inl/QxDao/QxDao_Exist.inl"

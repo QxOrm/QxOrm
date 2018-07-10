@@ -48,6 +48,7 @@
  * \defgroup QxTraits QxTraits : QxOrm library traits (template metaprogramming) not available in 'boost::type_traits' library
  * \defgroup QxDao QxDao : QxOrm library database communication used by persistence engine (ORM - Object Relational Mapping)
  * \defgroup QxValidator QxValidator : QxOrm library validation engine using validator pattern
+ * \defgroup QxModelView QxModelView : All classes registered into QxOrm context can be used with Qt model/view architecture (Qt widgets and/or QML views)
  * \defgroup QxService QxService : QxOrm library services engine to provide easy and powerful way to create C++ application server (to transfer data over network)
  * \defgroup QxCache QxCache : QxOrm library basic thread-safe cache feature to backup and restore any kind of objects (for example, object fetched from database)
  * \defgroup QxMemLeak QxMemLeak : QxOrm library memory leak detection (by Wu Yongwei)
@@ -132,6 +133,7 @@
 #include <QxDao/QxSqlJoin.h>
 #include <QxDao/QxSqlRelationLinked.h>
 #include <QxDao/QxDaoAsync.h>
+#include <QxDao/QxSqlSaveMode.h>
 
 #include <QxDao/QxSqlElement/QxSqlElement.h>
 
@@ -176,5 +178,8 @@
 #include <QxValidator/QxValidatorX.h>
 #include <QxValidator/QxValidatorError.h>
 #include <QxValidator/QxValidatorFct.h>
+
+#include <QxModelView/IxModel.h>
+#include <QxModelView/QxModel.h>
 
 #endif // _QX_ORM_H_

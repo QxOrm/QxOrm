@@ -119,11 +119,19 @@ static inline qx_bool fromVariant(const QVariant & v, qx::QxDateTimeNeutral & t,
 
 template <> struct QxStringCvt_FromVariant< std::string > {
 static inline qx_bool fromVariant(const QVariant & v, std::string & t, const QString & format, int index)
+#ifndef QT_NO_STL
 { Q_UNUSED(format); Q_UNUSED(index); t = v.toString().toStdString(); return qx_bool(true); } };
+#else // QT_NO_STL
+{ Q_UNUSED(format); Q_UNUSED(index); t = v.toString().toLatin1().constData(); return qx_bool(true); } };
+#endif // QT_NO_STL
 
 template <> struct QxStringCvt_FromVariant< std::wstring > {
 static inline qx_bool fromVariant(const QVariant & v, std::wstring & t, const QString & format, int index)
+#if ((! defined(QT_NO_STL)) && (! defined(QT_NO_STL_WCHAR)))
 { Q_UNUSED(format); Q_UNUSED(index); t = v.toString().toStdWString(); return qx_bool(true); } };
+#else // ((! defined(QT_NO_STL)) && (! defined(QT_NO_STL_WCHAR)))
+{ Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(t); Q_UNUSED(v); qAssert(false); /* Need STL compatibility ! */ return qx_bool(true); } };
+#endif // ((! defined(QT_NO_STL)) && (! defined(QT_NO_STL_WCHAR)))
 
 template <> struct QxStringCvt_FromVariant< qx_bool > {
 static inline qx_bool fromVariant(const QVariant & v, qx_bool & t, const QString & format, int index)

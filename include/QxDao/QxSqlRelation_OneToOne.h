@@ -90,7 +90,8 @@ public:
    virtual QSqlError onAfterSave(QxSqlRelationParams & params) const
    {
       if (this->isNullData(params)) { return QSqlError(); }
-      return qx::dao::save(this->getData(params), (& params.database()));
+      if (! params.recursiveMode()) { return qx::dao::save(this->getData(params), (& params.database())); }
+      else { return qx::dao::save_with_relation_recursive(this->getData(params), params.saveMode(), (& params.database()), (& params)); }
    }
 
    virtual QVariant getIdFromQuery(bool bEager, QxSqlRelationParams & params) const

@@ -61,7 +61,7 @@ m_iPort(-1), m_bTraceSqlQuery(true), m_bTraceSqlRecord(false), \
 m_ePlaceHolderStyle(ph_style_2_point_name), m_bSessionThrowable(false), \
 m_bSessionAutoTransaction(true), m_bValidatorThrowable(false), \
 m_bAutoReplaceSqlAliasIntoQuery(true), m_bVerifyOffsetRelation(false), \
-m_bAddAutoIncrementIdToUpdateQuery(true)
+m_bAddAutoIncrementIdToUpdateQuery(true), m_bForceParentIdToAllChildren(false)
 
 namespace qx {
 
@@ -99,6 +99,7 @@ private:
    bool m_bAutoReplaceSqlAliasIntoQuery;                    //!< Replace all sql alias into sql query automatically
    bool m_bVerifyOffsetRelation;                            //!< Only for debug purpose : assert if invalid offset detected fetching a relation
    bool m_bAddAutoIncrementIdToUpdateQuery;                 //!< For Microsoft SqlServer database compatibility : add or not auto-increment id to SQL update query
+   bool m_bForceParentIdToAllChildren;                      //!< Force parent id to all children (for 1-n relationship for example)
 
 private:
 
@@ -123,6 +124,7 @@ public:
    bool getAutoReplaceSqlAliasIntoQuery() const    { return m_bAutoReplaceSqlAliasIntoQuery; }
    bool getVerifyOffsetRelation() const            { return m_bVerifyOffsetRelation; }
    bool getAddAutoIncrementIdToUpdateQuery() const { return m_bAddAutoIncrementIdToUpdateQuery; }
+   bool getForceParentIdToAllChildren() const      { return m_bForceParentIdToAllChildren; }
 
    void setDriverName(const QString & s)                          { m_sDriverName = s; getSqlGenerator(); }
    void setConnectOptions(const QString & s)                      { m_sConnectOptions = s; }
@@ -141,6 +143,7 @@ public:
    void setAutoReplaceSqlAliasIntoQuery(bool b)                   { m_bAutoReplaceSqlAliasIntoQuery = b; }
    void setVerifyOffsetRelation(bool b)                           { m_bVerifyOffsetRelation = b; }
    void setAddAutoIncrementIdToUpdateQuery(bool b)                { m_bAddAutoIncrementIdToUpdateQuery = b; }
+   void setForceParentIdToAllChildren(bool b)                     { m_bForceParentIdToAllChildren = b; }
 
    static QSqlDatabase getDatabase();
    static QSqlDatabase getDatabase(QSqlError & dbError);

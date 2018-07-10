@@ -100,6 +100,7 @@ try { p = boost::any_cast<P>(params[PARAMCOUNT - 1]); } \
 catch (...) { bValid = qx_bool(false, 0, QString(QX_FUNCTION_ERR_INVALID_PARAM).replace("XXX", QString::number(PARAMCOUNT))); } \
 return bValid;
 
+#ifndef QT_NO_STL
 #define QX_FUNCTION_GET_PARAM_TYPE_STRING(PARAMCOUNT) \
 if (! qx_fct) { return qx_bool(false, 0, QX_FUNCTION_ERR_UNKNOWN_ERROR); } \
 QStringList lst = params.split(qx_fct->getSeparator()); \
@@ -108,6 +109,16 @@ qx_bool bValid = true; \
 try { p = boost::lexical_cast<P>(lst.at(PARAMCOUNT - 1).toStdString()); } \
 catch (...) { bValid = qx_bool(false, 0, QString(QX_FUNCTION_ERR_INVALID_PARAM).replace("XXX", QString::number(PARAMCOUNT))); } \
 return bValid;
+#else // QT_NO_STL
+#define QX_FUNCTION_GET_PARAM_TYPE_STRING(PARAMCOUNT) \
+if (! qx_fct) { return qx_bool(false, 0, QX_FUNCTION_ERR_UNKNOWN_ERROR); } \
+QStringList lst = params.split(qx_fct->getSeparator()); \
+if (lst.size() < PARAMCOUNT) { return qx_bool(false, 0, QX_FUNCTION_ERR_NUMBER_PARAMS); } \
+qx_bool bValid = true; \
+try { std::string tmp(lst.at(PARAMCOUNT - 1).toLatin1().constData()); p = boost::lexical_cast<P>(tmp); } \
+catch (...) { bValid = qx_bool(false, 0, QString(QX_FUNCTION_ERR_INVALID_PARAM).replace("XXX", QString::number(PARAMCOUNT))); } \
+return bValid;
+#endif // QT_NO_STL
 
 #define QX_FUNCTION_GET_PARAM_TYPE_STRING_TO_QSTRING(PARAMCOUNT) \
 if (! qx_fct) { return qx_bool(false, 0, QX_FUNCTION_ERR_UNKNOWN_ERROR); } \

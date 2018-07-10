@@ -2,9 +2,10 @@
 <html>
 <head>
   <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
-  <title>QxOrm : Qt C++ Object Relational Mapping Library (ORM) - QxEntityEditor : Qt C++ Entities Graphic Editor (data model)</title>
+  <title>QxOrm : C++ Qt Object Relational Mapping Library (ORM) - QxEntityEditor : C++ Qt Entities Graphic Editor (data model)</title>
   <meta name="generator" content="Amaya, see http://www.w3.org/Amaya/">
   <link rel='stylesheet' type='text/css' href='./resource/qxorm_style.css'>
+  <script type="text/javascript" src="./resource/qxorm_script.js"></script>
 </head>
 <body>
 <table border="0" style="width: 80%" align="center">
@@ -29,8 +30,18 @@
       <td align="center"><a href="./home.html" class="btn_nav">Home</a></td>
       <td align="center"><a href="./download.html" class="btn_nav">Download</a></td>
       <td align="center"><a href="./quick_sample.html" class="btn_nav">Quick sample</a></td>
-      <td align="center"><a href="./tutorial.html" class="btn_nav">Tutorial (3)</a></td>
-      <td align="center"><a href="./faq.html" class="btn_nav">Faq (35)</a></td>
+      <td align="center" onmouseover="showHideElementById('menu_tuto', true);" onmouseout="showHideElementById('menu_tuto', false);">
+         <a href="./tutorial.html" class="btn_nav">Tutorial (4)</a>
+         <table class="table_menu_tuto"><tbody><tr><td>
+            <div id="menu_tuto" class="div_menu_tuto">
+               <a href="./tutorial_3.html" class="btn_sub_menu">install QxOrm</a><br/>
+               <a href="./tutorial.html" class="btn_sub_menu">qxBlog</a><br/>
+               <a href="./tutorial_2.html" class="btn_sub_menu">qxClientServer</a><br/>
+               <a href="./tutorial_4.html" class="btn_sub_menu">QxEntityEditor video</a>
+            </div>
+         </td></tr></tbody></table>
+      </td>
+      <td align="center"><a href="./faq.html" class="btn_nav">Faq (36)</a></td>
       <td align="center"><a href="./link.html" class="btn_nav">Forum</a></td>
     </tr>
   </tbody>
@@ -39,17 +50,17 @@
 <table border="0" style="width: 80%" align="center">
   <col><col><col><col><col><col>
   <tbody><tr>
-  <td align="left" valign="top"><font size="2">QxOrm  &gt;&gt;  Download</font></td>
+  <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm  &gt;&gt;  Download</font></td>
   <td align="right" valign="top">
     <table cellspacing="0" cellpadding="1"><col><col><tbody>
       <tr>
-         <td align="right" valign="top"><font size="2">Current version :&nbsp;</font></td>
-         <td align="left" valign="top"><font size="2">QxOrm 1.2.6 - <a href="../doxygen/index.html" target="_blank">QxOrm library online documentation</a></font></td>
+         <td align="right" valign="top"><font size="2" class="txt_with_shadow">Current version :&nbsp;</font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.2.7 - <a href="../doxygen/index.html" target="_blank">QxOrm library online documentation</a></font></td>
+      </tr>
       <tr>
-      <tr>
-         <td align="right" valign="top"><font size="2"></font></td>
-         <td align="left" valign="top"><font size="2">QxEntityEditor 1.1.3</font></td>
-      <tr>
+         <td align="right" valign="top"><font size="2" class="txt_with_shadow"></font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.1.4</font></td>
+      </tr>
     </tbody></table>
   </td>
   <td width="10px"></td>
@@ -80,8 +91,8 @@
                        <td valign="middle" width="80" align="center"><a href="./download_details.php"><img alt="Download QxOrm" src="./resource/download.jpg" width="40" height="48" border="0"></a> </td>
                        <td align="justify">
                          <a href="./download_details.php">
-                         <b>Download QxOrm 1.2.6 (source + test + documentation)</b></a><br>
-                         This version has been tested with <b>Visual Studio 2008 and 2010</b> on Windows, <b>GCC 4.4.1</b> on Linux and Mac OS X, <b>MinGW</b> on Windows, and <b>Clang</b> on Mac OS X.
+                         <b>Download QxOrm 1.2.7 (source + test + documentation)</b></a><br>
+                         This version has been tested with <b>Visual Studio 2008, 2010 and 2012</b> on Windows, <b>GCC 4.4.1</b> on Linux and Mac OS X, <b>MinGW</b> on Windows, and <b>Clang</b> on Mac OS X.
                        </td>
                      </tr>
                    </tbody>
@@ -102,35 +113,35 @@
             <col><col><col><col><col><col><col><col>
             <tbody>
               <tr>
-                <td valign="middle" width="80" align="center"><a href="../version/QxEntityEditor/1.1.3/QxEntityEditor_1.1.3_setup_win32.exe"><img alt="QxEntityEditor" src="./resource/logo_windows.gif" width="32" height="32" border="0"></a></td>
-                <td align="justify"><a href="../version/QxEntityEditor/1.1.3/QxEntityEditor_1.1.3_setup_win32.exe"><b>QxEntityEditor 1.1.3 - Windows 32 bits</b></a></td>
+                <td valign="middle" width="80" align="center"><a href="../version/QxEntityEditor/1.1.4/QxEntityEditor_1.1.4_setup_win32.exe"><img alt="QxEntityEditor" src="./resource/logo_windows.gif" width="32" height="32" border="0"></a></td>
+                <td align="justify"><a href="../version/QxEntityEditor/1.1.4/QxEntityEditor_1.1.4_setup_win32.exe"><b>QxEntityEditor 1.1.4 - Windows 32 bits</b></a></td>
                 <td width="40"></td>
-                <td valign="middle" width="80" align="center"><a href="../version/QxEntityEditor/1.1.3/QxEntityEditor_1.1.3_setup_win64.exe"><img alt="QxEntityEditor" src="./resource/logo_windows.gif" width="32" height="32" border="0"></a></td>
-                <td align="justify"><a href="../version/QxEntityEditor/1.1.3/QxEntityEditor_1.1.3_setup_win64.exe"><b>QxEntityEditor 1.1.3 - Windows 64 bits</b></a></td>
+                <td valign="middle" width="80" align="center"><a href="../version/QxEntityEditor/1.1.4/QxEntityEditor_1.1.4_setup_win64.exe"><img alt="QxEntityEditor" src="./resource/logo_windows.gif" width="32" height="32" border="0"></a></td>
+                <td align="justify"><a href="../version/QxEntityEditor/1.1.4/QxEntityEditor_1.1.4_setup_win64.exe"><b>QxEntityEditor 1.1.4 - Windows 64 bits</b></a></td>
                 <td width="40"></td>
-                <td valign="middle" width="80" align="center"><a href="../version/QxEntityEditor/1.1.3/QxEntityEditor_1.1.3_setup_winxp.exe"><img alt="QxEntityEditor" src="./resource/logo_windows.gif" width="32" height="32" border="0"></a></td>
-                <td align="justify"><a href="../version/QxEntityEditor/1.1.3/QxEntityEditor_1.1.3_setup_winxp.exe"><b>QxEntityEditor 1.1.3 - Windows XP</b></a></td>
+                <td valign="middle" width="80" align="center"><a href="../version/QxEntityEditor/1.1.4/QxEntityEditor_1.1.4_setup_winxp.exe"><img alt="QxEntityEditor" src="./resource/logo_windows.gif" width="32" height="32" border="0"></a></td>
+                <td align="justify"><a href="../version/QxEntityEditor/1.1.4/QxEntityEditor_1.1.4_setup_winxp.exe"><b>QxEntityEditor 1.1.4 - Windows XP</b></a></td>
               </tr>
               <tr>
-                <td valign="middle" width="80" align="center"><a href="../version/QxEntityEditor/1.1.3/QxEntityEditor_1.1.3_win_32b.zip"><img alt="QxEntityEditor" src="./resource/logo_windows.gif" width="32" height="32" border="0"></a></td>
-                <td align="justify"><a href="../version/QxEntityEditor/1.1.3/QxEntityEditor_1.1.3_win_32b.zip"><b>QxEntityEditor 1.1.3 - Windows 32 bits (portable)</b></a></td>
+                <td valign="middle" width="80" align="center"><a href="../version/QxEntityEditor/1.1.4/QxEntityEditor_1.1.4_win_32b.zip"><img alt="QxEntityEditor" src="./resource/logo_windows.gif" width="32" height="32" border="0"></a></td>
+                <td align="justify"><a href="../version/QxEntityEditor/1.1.4/QxEntityEditor_1.1.4_win_32b.zip"><b>QxEntityEditor 1.1.4 - Windows 32 bits (portable)</b></a></td>
                 <td width="40"></td>
-                <td valign="middle" width="80" align="center"><a href="../version/QxEntityEditor/1.1.3/QxEntityEditor_1.1.3_win_64b.zip"><img alt="QxEntityEditor" src="./resource/logo_windows.gif" width="32" height="32" border="0"></a></td>
-                <td align="justify"><a href="../version/QxEntityEditor/1.1.3/QxEntityEditor_1.1.3_win_64b.zip"><b>QxEntityEditor 1.1.3 - Windows 64 bits (portable)</b></a></td>
+                <td valign="middle" width="80" align="center"><a href="../version/QxEntityEditor/1.1.4/QxEntityEditor_1.1.4_win_64b.zip"><img alt="QxEntityEditor" src="./resource/logo_windows.gif" width="32" height="32" border="0"></a></td>
+                <td align="justify"><a href="../version/QxEntityEditor/1.1.4/QxEntityEditor_1.1.4_win_64b.zip"><b>QxEntityEditor 1.1.4 - Windows 64 bits (portable)</b></a></td>
                 <td width="40"></td>
-                <td valign="middle" width="80" align="center"><a href="../version/QxEntityEditor/1.1.3/QxEntityEditor_1.1.3_win_xp.zip"><img alt="QxEntityEditor" src="./resource/logo_windows.gif" width="32" height="32" border="0"></a></td>
-                <td align="justify"><a href="../version/QxEntityEditor/1.1.3/QxEntityEditor_1.1.3_win_xp.zip"><b>QxEntityEditor 1.1.3 - Windows XP (portable)</b></a></td>
+                <td valign="middle" width="80" align="center"><a href="../version/QxEntityEditor/1.1.4/QxEntityEditor_1.1.4_win_xp.zip"><img alt="QxEntityEditor" src="./resource/logo_windows.gif" width="32" height="32" border="0"></a></td>
+                <td align="justify"><a href="../version/QxEntityEditor/1.1.4/QxEntityEditor_1.1.4_win_xp.zip"><b>QxEntityEditor 1.1.4 - Windows XP (portable)</b></a></td>
               </tr>
               <tr>
-                <td valign="middle" width="80" align="center"><a href="../version/QxEntityEditor/1.1.3/QxEntityEditor_1.1.3_linux_32b.tar.gz"><img alt="QxEntityEditor" src="./resource/logo_linux.gif" width="32" height="32" border="0"></a></td>
-                <td align="justify"><a href="../version/QxEntityEditor/1.1.3/QxEntityEditor_1.1.3_linux_32b.tar.gz"><b>QxEntityEditor 1.1.3 - Linux 32 bits</b></a></td>
+                <td valign="middle" width="80" align="center"><a href="../version/QxEntityEditor/1.1.4/QxEntityEditor_1.1.4_linux_32b.tar.gz"><img alt="QxEntityEditor" src="./resource/logo_linux.gif" width="32" height="32" border="0"></a></td>
+                <td align="justify"><a href="../version/QxEntityEditor/1.1.4/QxEntityEditor_1.1.4_linux_32b.tar.gz"><b>QxEntityEditor 1.1.4 - Linux 32 bits</b></a></td>
                 <td width="40"></td>
-                <td valign="middle" width="80" align="center"><a href="../version/QxEntityEditor/1.1.3/QxEntityEditor_1.1.3_linux_64b.tar.gz"><img alt="QxEntityEditor" src="./resource/logo_linux.gif" width="32" height="32" border="0"></a></td>
-                <td align="justify"><a href="../version/QxEntityEditor/1.1.3/QxEntityEditor_1.1.3_linux_64b.tar.gz"><b>QxEntityEditor 1.1.3 - Linux 64 bits</b></a></td>
+                <td valign="middle" width="80" align="center"><a href="../version/QxEntityEditor/1.1.4/QxEntityEditor_1.1.4_linux_64b.tar.gz"><img alt="QxEntityEditor" src="./resource/logo_linux.gif" width="32" height="32" border="0"></a></td>
+                <td align="justify"><a href="../version/QxEntityEditor/1.1.4/QxEntityEditor_1.1.4_linux_64b.tar.gz"><b>QxEntityEditor 1.1.4 - Linux 64 bits</b></a></td>
               </tr>
               <tr>
-                <td valign="middle" width="80" align="center"><a href="../version/QxEntityEditor/1.1.3/QxEntityEditor_1.1.3_macosx.zip"><img alt="QxEntityEditor" src="./resource/logo_mac.gif" width="32" height="32" border="0"></a></td>
-                <td align="justify"><a href="../version/QxEntityEditor/1.1.3/QxEntityEditor_1.1.3_macosx.zip"><b>QxEntityEditor 1.1.3 - Mac OS X</b></a></td>
+                <td valign="middle" width="80" align="center"><a href="../version/QxEntityEditor/1.1.4/QxEntityEditor_1.1.4_macosx.zip"><img alt="QxEntityEditor" src="./resource/logo_mac.gif" width="32" height="32" border="0"></a></td>
+                <td align="justify"><a href="../version/QxEntityEditor/1.1.4/QxEntityEditor_1.1.4_macosx.zip"><b>QxEntityEditor 1.1.4 - Mac OS X</b></a></td>
               </tr>
             </tbody>
           </table>
@@ -138,8 +149,9 @@
         <p align="justify"><b>Note : </b>by default, <b>QxEntityEditor</b> application is limited to 5 entities per project.
         To get a license key and create unlimited entities per project, please contact us using this e-mail : <a href="mailto:contact@qxorm.com">contact@qxorm.com</a>.<br>
         <br>
-        Price of a <b>QxEntityEditor</b> license : <i>300&euro;</i> (per developer, per year).</p>
-        <a href="../qxentityeditor/resource/qxee_sample.png"><img alt="QxEntityEditor" src="../qxentityeditor/resource/qxee_sample_small.png" border="0"></a>
+        <a href="./tutorial_4.html">A video presentation of <b>QxEntityEditor</b> application is available</a>.<br>
+        Price of a <b>QxEntityEditor</b> license : <i>300&euro;</i> (per developer, 12 months of free updates).</p>
+        <a href="../qxentityeditor/resource/qxee_sample.png" target="_blank"><img alt="QxEntityEditor" src="../qxentityeditor/resource/qxee_sample_small.png" border="0" class="img_with_shadow"></a>
         <br><br>
         <hr style="width: 90%" align="center" size="1" color="#100D5A">
         <p align="justify">
@@ -177,6 +189,14 @@
           <tbody>
             <tr>
               <td><i>
+Changes in version 1.2.7:<br>
+- New module QxModelView : now, all classes registered into QxOrm context can be used with Qt model/view architecture (Qt widgets and/or QML views)<br>
+- qx::IxModel interface provides an easy way to work on QML with QxOrm library and interact with databases<br>
+- For more details about the new module QxModelView, goto the FAQ : 'How to use QxModelView module to interact with Qt model/view architecture (Qt widgets and/or QML views) ?'<br>
+- New function qx::dao::save_with_relation_recursive(), useful to save a full tree structure for example<br>
+- Remove the dependency on the STL compatibility functions in Qt (QT_NO_STL), which may not be available (thanks to KDE Plasma Media Center team for the patch)<br>
+- Support database table defined into a schema (using qx::IxDataMember::setName() function)<br>
+<br>
 Changes in version 1.2.6:<br>
 - First version full compatible with QxEntityEditor application : the graphic editor for QxOrm library !<br>
 - For more details about QxEntityEditor, go to QxOrm website : http://www.qxorm.com/<br>
@@ -289,6 +309,41 @@ Changes in version 1.1.1:<br>
 <br>
 Changes in version 1.1.0:<br>
 - First release<br>
+              </i></td>
+            </tr>
+          </tbody>
+        </table>
+        <p></p>
+        <br><b>QxEntityEditor</b> application history :
+        <table border="1" style="width: 100%" bgcolor="#FFFFFF">
+          <col>
+          <tbody>
+            <tr>
+              <td><i>
+Changes in version QxEntityEditor 1.1.4:<br>
+- Improve import by ODBC plugin to manage relationship, schema and composite key for SQLite, MySQL, PostgreSQL, Oracle and MS SQL Server databases<br>
+- New import from SQLite plugin to import SQLite database structure into QxEntityEditor project without having to create an ODBC DSN connexion<br>
+- Improve C++ export plugin : add a set of useful methods in generated classes + option to manage relative path to QxOrm library<br>
+- New menu to rename a namespace (move all entities to another namespace) and delete a list of entities by namespace<br>
+- Fix a bug when executing QxEntityEditor in command line (no GUI)<br>
+- Add a viewer mode to open a QxEntityEditor project with unlimited entities count without having a license key (read-only mode)<br>
+<br>
+Changes in version QxEntityEditor 1.1.3 (first official release):<br>
+- New plugin to transfer your data model over network and create quickly client/server applications, using QxService module<br>
+- New options to define entity, enum and comment width in entities viewer<br>
+<br>
+Changes in version QxEntityEditor 1.1.2 (BETA):<br>
+- New plugin to generate DDL SQL script (database schema) for SQLite, MySQL, PostgreSQL, Oracle and MS SQL Server databases<br>
+- The new DDL SQL plugin manages automatically schema evolution for each project version (ALTER TABLE, ADD COLUMN, DROP INDEX, etc.)<br>
+- Add post-it or comments in the entities viewer<br>
+- Option to display or not property type in the entities viewer<br>
+<br>
+Changes in version QxEntityEditor 1.1.1 (BETA):<br>
+- First BETA version of QxEntityEditor application<br>
+- Provide a graphic way to manage the data model for QxOrm library<br>
+- Multi-platform (available for Windows, Linux and Mac OS X) and generate native code for all environments : desktop (Windows, Linux, Mac OS X), embedded and mobile (Android, iOS, Raspberry Pi, etc.)<br>
+- Based on plugins and provides many ways to import/export the data model<br>
+- Generate C++ persistent classes automatically (registered into QxOrm context)<br>
               </i></td>
             </tr>
           </tbody>

@@ -46,7 +46,7 @@ struct QxSqlQueryHelper_Exist
       sql = "SELECT ";
       if (pId) { sql += pId->getSqlTablePointNameAsAlias(table); }
       if (! oSoftDelete.isEmpty()) { sql += ", " + oSoftDelete.buildSqlTablePointName(); }
-      sql += " FROM " + table;
+      sql += " FROM " + qx::IxDataMember::getSqlFromTable(table);
       sql += " WHERE " + pId->getSqlAliasEqualToPlaceHolder(table, true);
       if (! oSoftDelete.isEmpty()) { sql += " AND " + oSoftDelete.buildSqlQueryToFetch(); }
    }

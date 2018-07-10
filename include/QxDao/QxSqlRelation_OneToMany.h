@@ -62,6 +62,7 @@ private:
    typedef typename QxSqlRelation<DataType, Owner>::type_container type_container;
    typedef typename QxSqlRelation<DataType, Owner>::type_generic_container type_generic_container;
    typedef typename QxSqlRelation<DataType, Owner>::type_item type_item;
+   typedef typename type_generic_container::type_iterator type_iterator;
 
    enum { is_data_container = QxSqlRelation<DataType, Owner>::is_data_container };
 
@@ -95,7 +96,9 @@ public:
    virtual QSqlError onAfterSave(QxSqlRelationParams & params) const
    {
       if (this->isNullData(params)) { return QSqlError(); }
-      return qx::dao::save(this->getContainer(params), (& params.database()));
+      this->forceParentIdToAllChildren(params);
+      if (! params.recursiveMode()) { return qx::dao::save(this->getContainer(params), (& params.database())); }
+      else { return qx::dao::save_with_relation_recursive(this->getContainer(params), params.saveMode(), (& params.database()), (& params)); }
    }
 
    virtual QVariant getIdFromQuery(bool bEager, QxSqlRelationParams & params) const
@@ -155,6 +158,34 @@ public:
       if (! this->callTriggerAfterFetch(item_val, params)) { return NULL; }
       type_generic_container::insertItem(this->getContainer(params), item);
       return (& item_val);
+   }
+
+private:
+
+   void forceParentIdToAllChildren(QxSqlRelationParams & params) const
+   {
+      bool bForce = qx::QxSqlDatabase::getSingleton()->getForceParentIdToAllChildren();
+      if (! bForce || ! params.owner()) { return; }
+      IxDataMember * pIdOwner = this->getDataIdOwner(); if (! pIdOwner) { return; }
+      IxDataMember * pForeign = this->getDataByKey(this->m_sForeignKey); if (! pForeign) { return; }
+      if (pIdOwner->getNameCount() != pForeign->getNameCount()) { return; }
+
+      QList<QVariant> vIdOwner;
+      for (int i = 0; i < pIdOwner->getNameCount(); i++)
+      { vIdOwner.append(pIdOwner->toVariant(params.owner(), i)); }
+
+      type_item item;
+      type_container & container = this->getContainer(params);
+      type_iterator itr = type_generic_container::begin(container, item);
+      type_iterator itr_end = type_generic_container::end(container);
+
+      while (itr != itr_end)
+      {
+         type_data & item_val = item.value_qx();
+         for (int i = 0; i < vIdOwner.count(); i++)
+         { pForeign->fromVariant((& item_val), vIdOwner.at(i), "", i); }
+         itr = type_generic_container::next(container, itr, item);
+      }
    }
 
 };

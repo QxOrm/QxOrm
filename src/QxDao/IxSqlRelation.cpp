@@ -126,9 +126,9 @@ QString IxSqlRelation::getSqlJoin(qx::dao::sql_join::join_type e /* = qx::dao::s
    return sJoin;
 }
 
-#ifndef _QX_MODE_RELEASE
 bool IxSqlRelation::verifyOffset(QxSqlRelationParams & params, bool bId) const
 {
+#ifndef _QX_MODE_RELEASE
    if (! qx::QxSqlDatabase::getSingleton()->getVerifyOffsetRelation()) { return true; }
    IxDataMember * p = (bId ? this->getDataId() : this->getDataMember());
    QString table = (bId ? this->tableAlias(params) : this->tableAliasOwner(params));
@@ -138,8 +138,10 @@ bool IxSqlRelation::verifyOffset(QxSqlRelationParams & params, bool bId) const
    int index = params.query().record().indexOf(sRecordToFind);
    qAssert(index == params.offset());
    return (index == params.offset());
-}
+#else // _QX_MODE_RELEASE
+   Q_UNUSED(params); Q_UNUSED(bId); return true;
 #endif // _QX_MODE_RELEASE
+}
 
 QVariant IxSqlRelation::getIdFromQuery_ManyToMany(bool bEager, QxSqlRelationParams & params) const
 {

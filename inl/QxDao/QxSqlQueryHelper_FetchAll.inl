@@ -53,7 +53,7 @@ struct QxSqlQueryHelper_FetchAll
       if (! oSoftDelete.isEmpty()) { l1++; sql += (oSoftDelete.buildSqlTablePointName() + ", "); }
       while ((pRelation = builder.nextRelation(l2))) { params.setIndex(l2); pRelation->lazySelect(params); }
       sql = sql.left(sql.count() - 2); // Remove last ", "
-      sql += " FROM " + table + ", ";
+      sql += " FROM " + qx::IxDataMember::getSqlFromTable(table) + ", ";
       while ((pRelation = builder.nextRelation(l3))) { params.setIndex(l3); pRelation->lazyFrom(params); }
       sql = sql.left(sql.count() - 2); // Remove last ", "
       while ((pRelation = builder.nextRelation(l4))) { params.setIndex(l4); pRelation->lazyJoin(params); }
@@ -95,7 +95,7 @@ struct QxSqlQueryHelper_FetchAll
       { p = pDataMemberX->get_WithDaoStrategy(columns.at(i)); if (p && (p != pId)) { sql += (p->getSqlTablePointNameAsAlias(table) + ", "); } }
       sql = sql.left(sql.count() - 2); // Remove last ", "
       if (! oSoftDelete.isEmpty()) { sql += ", " + oSoftDelete.buildSqlTablePointName(); }
-      sql += " FROM " + table;
+      sql += " FROM " + qx::IxDataMember::getSqlFromTable(table);
       if (! oSoftDelete.isEmpty()) { sql += " WHERE " + oSoftDelete.buildSqlQueryToFetch(); }
    }
 

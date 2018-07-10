@@ -40,7 +40,7 @@ CONFIG += dll
 DEFINES += _QX_BUILDING_QX_ORM
 PRECOMPILED_HEADER = ./include/QxPrecompiled.h
 
-unix { VERSION = 1.2.6 }
+unix { VERSION = 1.2.7 }
 
 contains(DEFINES, _QX_STATIC_BUILD) {
 CONFIG -= dll
@@ -67,6 +67,26 @@ headers_inl.path = $$PREFIX/inl/
 headers_inl.files = ./inl/*
 INSTALLS = target headers headers_inl
 } # unix
+
+####################################
+# Generate pkg-config files (*.pc) #
+####################################
+
+contains(DEFINES, _QX_CREATE_PKG_CONFIG) {
+CONFIG += create_pc create_prl
+QMAKE_PKGCONFIG_NAME = lib$$TARGET
+QMAKE_PKGCONFIG_DESCRIPTION = QxOrm Library
+QMAKE_PKGCONFIG_PREFIX = $$PREFIX
+QMAKE_PKGCONFIG_INCDIR = $$PREFIX/include/
+QMAKE_PKGCONFIG_DESTDIR = pkgconfig
+QMAKE_CLEAN += *.pc *.prl
+pkgconfig_clean.commands = -$(DEL_FILE) pkgconfig/*
+pkgconfig_distclean.commands = -$(DEL_DIR) pkgconfig
+pkgconfig_distclean.depends = pkgconfig_clean
+clean.depends += pkgconfig_clean
+distclean.depends += pkgconfig_distclean
+QMAKE_EXTRA_TARGETS += clean distclean pkgconfig_clean pkgconfig_distclean
+}
 
 #################
 # Headers Files #
@@ -159,6 +179,7 @@ HEADERS += ./include/QxDao/IxPersistable.h
 HEADERS += ./include/QxDao/QxSqlJoin.h
 HEADERS += ./include/QxDao/QxSqlRelationLinked.h
 HEADERS += ./include/QxDao/QxDaoAsync.h
+HEADERS += ./include/QxDao/QxSqlSaveMode.h
 
 HEADERS += ./include/QxDao/QxSqlElement/IxSqlElement.h
 HEADERS += ./include/QxDao/QxSqlElement/QxSqlCompare.h
@@ -346,6 +367,9 @@ HEADERS += ./include/QxValidator/QxValidatorError.h
 HEADERS += ./include/QxValidator/QxValidatorFct.h
 HEADERS += ./include/QxValidator/QxValidatorX.h
 
+HEADERS += ./include/QxModelView/IxModel.h
+HEADERS += ./include/QxModelView/QxModel.h
+
 HEADERS += ./include/QxOrm.h
 HEADERS += ./include/QxMemLeak.h
 
@@ -393,6 +417,7 @@ SOURCES += ./src/QxDao/IxPersistable.cpp
 SOURCES += ./src/QxDao/QxSqlRelationLinked.cpp
 SOURCES += ./src/QxDao/QxDaoAsync.cpp
 SOURCES += ./src/QxDao/QxSqlRelationParams.cpp
+SOURCES += ./src/QxDao/QxSoftDelete.cpp
 
 SOURCES += ./src/QxDao/QxSqlElement/IxSqlElement.cpp
 SOURCES += ./src/QxDao/QxSqlElement/QxSqlCompare.cpp
@@ -458,5 +483,7 @@ SOURCES += ./src/QxValidator/IxValidator.cpp
 SOURCES += ./src/QxValidator/IxValidatorX.cpp
 SOURCES += ./src/QxValidator/QxInvalidValue.cpp
 SOURCES += ./src/QxValidator/QxInvalidValueX.cpp
+
+SOURCES += ./src/QxModelView/IxModel.cpp
 
 SOURCES += ./src/main.cpp

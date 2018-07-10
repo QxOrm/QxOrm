@@ -1,3 +1,11 @@
+Changes in version 1.2.7:
+- New module QxModelView : now, all classes registered into QxOrm context can be used with Qt model/view architecture (Qt widgets and/or QML views)
+- qx::IxModel interface provides an easy way to work on QML with QxOrm library and interact with databases
+- For more details about the new module QxModelView, goto the FAQ : 'How to use QxModelView module to interact with Qt model/view architecture (Qt widgets and/or QML views) ?'
+- New function qx::dao::save_with_relation_recursive(), useful to save a full tree structure for example
+- Remove the dependency on the STL compatibility functions in Qt (QT_NO_STL), which may not be available (thanks to KDE Plasma Media Center team for the patch)
+- Support database table defined into a schema (using qx::IxDataMember::setName() function)
+
 Changes in version 1.2.6:
 - First version full compatible with QxEntityEditor application : the graphic editor for QxOrm library !
 - For more details about QxEntityEditor, go to QxOrm website : http://www.qxorm.com/

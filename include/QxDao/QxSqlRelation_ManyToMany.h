@@ -147,8 +147,10 @@ public:
 
    virtual QSqlError onAfterSave(QxSqlRelationParams & params) const
    {
+      QSqlError daoError;
       if (this->isNullData(params)) { return this->deleteFromExtraTable(params); }
-      QSqlError daoError = qx::dao::save(this->getContainer(params), (& params.database()));
+      if (! params.recursiveMode()) { daoError = qx::dao::save(this->getContainer(params), (& params.database())); }
+      else { daoError = qx::dao::save_with_relation_recursive(this->getContainer(params), params.saveMode(), (& params.database()), (& params)); }
       if (daoError.isValid()) { return daoError; }
       daoError = this->deleteFromExtraTable(params);
       if (daoError.isValid()) { return daoError; }

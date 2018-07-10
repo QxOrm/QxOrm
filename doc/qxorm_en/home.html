@@ -2,9 +2,10 @@
 <html>
 <head>
   <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
-  <title>QxOrm : Qt C++ Object Relational Mapping Library (ORM) - QxEntityEditor : Qt C++ Entities Graphic Editor (data model)</title>
+  <title>QxOrm : C++ Qt Object Relational Mapping Library (ORM) - QxEntityEditor : C++ Qt Entities Graphic Editor (data model)</title>
   <meta name="generator" content="Amaya, see http://www.w3.org/Amaya/">
   <link rel='stylesheet' type='text/css' href='./resource/qxorm_style.css'>
+  <script type="text/javascript" src="./resource/qxorm_script.js"></script>
 </head>
 <body>
 <table border="0" style="width: 80%" align="center">
@@ -29,8 +30,18 @@
       <td align="center"><a href="./home.html" class="btn_nav">Home</a></td>
       <td align="center"><a href="./download.html" class="btn_nav">Download</a></td>
       <td align="center"><a href="./quick_sample.html" class="btn_nav">Quick sample</a></td>
-      <td align="center"><a href="./tutorial.html" class="btn_nav">Tutorial (3)</a></td>
-      <td align="center"><a href="./faq.html" class="btn_nav">Faq (35)</a></td>
+      <td align="center" onmouseover="showHideElementById('menu_tuto', true);" onmouseout="showHideElementById('menu_tuto', false);">
+         <a href="./tutorial.html" class="btn_nav">Tutorial (4)</a>
+         <table class="table_menu_tuto"><tbody><tr><td>
+            <div id="menu_tuto" class="div_menu_tuto">
+               <a href="./tutorial_3.html" class="btn_sub_menu">install QxOrm</a><br/>
+               <a href="./tutorial.html" class="btn_sub_menu">qxBlog</a><br/>
+               <a href="./tutorial_2.html" class="btn_sub_menu">qxClientServer</a><br/>
+               <a href="./tutorial_4.html" class="btn_sub_menu">QxEntityEditor video</a>
+            </div>
+         </td></tr></tbody></table>
+      </td>
+      <td align="center"><a href="./faq.html" class="btn_nav">Faq (36)</a></td>
       <td align="center"><a href="./link.html" class="btn_nav">Forum</a></td>
     </tr>
   </tbody>
@@ -39,17 +50,17 @@
 <table border="0" style="width: 80%" align="center">
   <col><col><col><col><col><col>
   <tbody><tr>
-  <td align="left" valign="top"><font size="2">QxOrm  &gt;&gt;  Home</font></td>
+  <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm  &gt;&gt;  Home</font></td>
   <td align="right" valign="top">
     <table cellspacing="0" cellpadding="1"><col><col><tbody>
       <tr>
-         <td align="right" valign="top"><font size="2">Current version :&nbsp;</font></td>
-         <td align="left" valign="top"><font size="2">QxOrm 1.2.6 - <a href="../doxygen/index.html" target="_blank">QxOrm library online documentation</a></font></td>
+         <td align="right" valign="top"><font size="2" class="txt_with_shadow">Current version :&nbsp;</font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.2.7 - <a href="../doxygen/index.html" target="_blank">QxOrm library online documentation</a></font></td>
+      </tr>
       <tr>
-      <tr>
-         <td align="right" valign="top"><font size="2"></font></td>
-         <td align="left" valign="top"><font size="2">QxEntityEditor 1.1.3</font></td>
-      <tr>
+         <td align="right" valign="top"><font size="2" class="txt_with_shadow"></font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.1.4</font></td>
+      </tr>
     </tbody></table>
   </td>
   <td width="10px"></td>
@@ -67,7 +78,9 @@
           <col><col>
           <tbody>
             <tr>
-              <td><b>QxOrm library is an <i>Object Relational Mapping (ORM)</i> library for Qt/C++ developers.</b><br>
+              <td><font class="txt_with_shadow" color="#0B0B61" size="4"><b>QxOrm (the engine) + QxEntityEditor (the graphic editor) = the best solution to manage your data in C++/Qt !</b></font><br/>
+                 <br/><hr style="width: 90%" align="center" size="1" color="#100D5A">
+                 <b>QxOrm library is an <i>Object Relational Mapping (ORM)</i> library for C++/Qt developers.</b><br>
                  With a simple <b>C++ setting function by class</b> (like <i>Hibernate</i> XML mapping file), you will have access to the following features :<br>
                  <ul>
                    <li><b><font style="background-color:yellow">persistence</font></b> : communication with a lot of databases (with <i>1-1</i>, <i>1-n</i>, <i>n-1</i> and <i>n-n</i> relationships) ;
@@ -87,14 +100,17 @@
         </table>
         <b>QxEntityEditor</b> is a graphic editor for <b>QxOrm</b> library : <b>QxEntityEditor</b> provides a graphic way to manage the data model.<br>
         <b>QxEntityEditor</b> is multi-platform (available for Windows, Linux and Mac OS X) and generate native code for all environments : desktop (Windows, Linux, Mac OS X), embedded and mobile (Android, iOS, Raspberry Pi, etc.).<br>
+        <a href="./tutorial_4.html">A video presentation of <b>QxEntityEditor</b> application is available</a>.<br>
+        <br>
         <b>QxEntityEditor</b> is based on plugins and provides many ways to import/export your data model :
         <ul>
           <li>generate C++ persistent classes automatically (registered into QxOrm context) ;</li>
           <li>generate DDL SQL script automatically (database schema) for SQLite, MySQL, PostgreSQL, Oracle and MS SQL Server ;</li>
           <li>manage schema evolution for each project version (<i>ALTER TABLE</i>, <i>ADD COLUMN</i>, <i>DROP INDEX</i>, etc.) ;</li>
-          <li>transfer your data model over network and create quickly client/server applications, using <a href="../doxygen/html/group___qx_service.html" target="_blank">QxService</a> module.</li>
+          <li>transfer your data model over network and create quickly client/server applications, using <a href="../doxygen/html/group___qx_service.html" target="_blank">QxService</a> module ;</li>
+          <li>import existing database structure (using ODBC connection) for SQLite, MySQL, PostgreSQL, Oracle and MS SQL Server databases.</li>
         </ul>
-        <a href="../qxentityeditor/resource/qxee_sample.png"><img alt="QxEntityEditor" src="../qxentityeditor/resource/qxee_sample_small.png" border="0"></a>
+        <a href="../qxentityeditor/resource/qxee_sample.png" target="_blank"><img alt="QxEntityEditor" src="../qxentityeditor/resource/qxee_sample_small.png" border="0" class="img_with_shadow"></a>
         <br><br>
         <hr style="width: 90%" align="center" size="1" color="#100D5A">
         <br>
@@ -106,7 +122,7 @@
           <li><b>no XML mapping file</b> ;</li>
           <li><b>classes doesn't need to inherit from a 'super object'</b> ;</li>
           <li><b>template meta-programming</b> : no macro hack ;</li>
-          <li>works with <b>Visual C++ 2008 or 2010</b> on Windows, <b>GCC 4.4.1</b> on Linux and Mac OS X, and <b>MinGW</b> on Windows (other platforms will be tested soon : smartphones, etc...) ;</li>
+          <li>works with <b>Visual C++ 2008, 2010 and 2012</b> on Windows, <b>GCC 4.4.1</b> on Linux, <b>Clang</b> on Mac OS X, and <b>MinGW</b> on Windows (other platforms will be tested soon : smartphones, etc...) ;</li>
           <li>only one file <i>&lt;QxOrm.h&gt;</i> to include in precompiled-header (need <b>precompiled-header</b> file to reduce compilation times).</li>
         </ul>
         Before you install and compile <b>QxOrm</b>, you need the following libraries : <a href="http://www.boost.org/" target="_blank"><b>boost</b></a> (from version 1.38) and <a href="http://qt.digia.com/" target="_blank"><b>Qt</b></a> (from version 4.5.0) :
@@ -144,6 +160,8 @@
           </li>
           <li><p><b><a href="../doxygen/html/group___qx_register.html" target="_blank">QxRegister</a>, <a href="../doxygen/html/group___qx_data_member.html" target="_blank">QxDataMember</a>, <a href="../doxygen/html/group___qx_factory.html" target="_blank">QxFactory</a> and <a href="../doxygen/html/group___qx_function.html" target="_blank">QxFunction</a></b> : <b>QxOrm</b> emulates <i>reflection</i> (or <i>introspection</i>) mechanism (like other languages : Java, C#...).</p> 
           </li>
+          <li><p><b><a href="../doxygen/html/group___qx_model_view.html" target="_blank">QxModelView</a></b> : each class registered into QxOrm context can be used by the <a href="http://qt-project.org/doc/qt-5/modelview.html" target="_blank">Qt model/view engine</a> (Qt widgets and/or QML views). <i>qx::IxModel</i> interface exposes automatically to QML engine all properties defined into QxOrm context. This module makes easier interaction between QML and databases.</p>
+          </li>
           <li><p><b><a href="../doxygen/html/group___qx_service.html" target="_blank">QxService</a></b> : based on <a href="http://doc-snapshot.qt-project.org/4.8/qtnetwork.html" target="_blank"><i>QtNetwork</i></a> engine of Qt library, this module provides an easy and powerful way to create <b>C++ application server</b> (<i>services</i> concept with <i>request</i> from client and <i>reply</i> from server). <b>QxService</b> uses <i>serialization</i> and <i>introspection</i> from QxOrm library to transfer over network any class or structure. For more details on <b>QxService</b> module, <b>a tutorial</b> is available <a href="./tutorial_2.html">here</a>.</p>
           </li>
           <li><p><b><a href="../doxygen/html/group___qx_collection.html" target="_blank">QxCollection&lt;Key, Value&gt;</a></b> : based on <a href="http://www.boost.org/doc/libs/1_42_0/libs/multi_index/doc/index.html" target="_blank"><i>boost::multi_index_container</i></a>, this collection has advantages of <i>std::vector&lt;T&gt;</i> (insertion order + quick access by index) and <i>boost::unordered_map&lt;Key, Value&gt;</i> or <i>QHash&lt;Key, Value&gt;</i> (quick access by a key : <i>hash-map</i>). <b>QxCollection&lt;Key, Value&gt;</b> is adapted to contain the elements resulting from a database.</p> 
@@ -160,44 +178,9 @@
           </li>
         </ul>
         <p></p>
-        <p>You can download the last version of <b>QxOrm</b> and <b>QxEntityEditor</b> <a href="./download.html">by clicking here</a>.
-        <br>A quick sample showing the basic functionalities of <b>QxOrm</b> is available <a href="./quick_sample.html">by clicking here</a>.
-        <br>A forum is available <a href="http://www.qxorm.com/forum/phpbb/" target="_blank">by clicking here</a>.<br> 
-        <br>
-        For information and in order to be able to make a comparison, here a list of other C++ ORM libraries :</p> 
-        <ul>
-          <li><i>DTL</i> : <a href="http://dtemplatelib.sourceforge.net/"
-            target="_blank">http://dtemplatelib.sourceforge.net/</a>
-          </li>
-          <li><i>SOCI</i> : <a href="http://soci.sourceforge.net/"
-            target="_blank">http://soci.sourceforge.net/</a>
-          </li>
-          <li><i>Hiberlite</i> : <a href="http://code.google.com/p/hiberlite/"
-            target="_blank">http://code.google.com/p/hiberlite/</a>
-          </li>
-          <li><i>LiteSQL</i> : <a href="http://sourceforge.net/apps/trac/litesql/"
-            target="_blank">http://sourceforge.net/apps/trac/litesql/</a>
-          </li>
-          <li><i>Debea</i> : <a href="http://debea.net/"
-            target="_blank">http://debea.net/</a>
-          </li>
-          <li><i>Wt::Dbo</i> : <a
-            href="http://www.webtoolkit.eu/wt/doc/tutorial/dbo/tutorial.html"
-            target="_blank">http://www.webtoolkit.eu/wt/doc/tutorial/dbo/tutorial.html</a>
-          </li>
-          <li><i>QDjango</i> : <a
-            href="http://opensource.bolloretelecom.eu/projects/qdjango/"
-            target="_blank">http://opensource.bolloretelecom.eu/projects/qdjango/</a>
-          </li>
-          <li><i>QtPersistence</i> : <a
-            href="http://sourceforge.net/projects/qtpersistence/"
-            target="_blank">http://sourceforge.net/projects/qtpersistence/</a>
-          </li>
-          <li><i>QsT SQL Tools</i> : <a
-            href="http://sourceforge.net/projects/qstsqltools/"
-            target="_blank">http://sourceforge.net/projects/qstsqltools/</a>
-          </li>
-        </ul>
+        <p>You can download the last version of <b>QxOrm</b> and <b>QxEntityEditor</b> <a href="./download.html">here</a>.
+        <br>A quick sample showing the basic functionalities of <b>QxOrm</b> is available <a href="./quick_sample.html">here</a>.
+        <br>A forum is available <a href="http://www.qxorm.com/forum/phpbb/" target="_blank">here</a>.<br> 
       </td>
     </tr>
   </tbody>

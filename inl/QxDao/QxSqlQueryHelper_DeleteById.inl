@@ -44,7 +44,7 @@ struct QxSqlQueryHelper_DeleteById
       qx::QxSoftDelete oSoftDelete = builder.getSoftDelete();
       QString table = builder.table();
       if (bSoftDelete && ! oSoftDelete.isEmpty()) { sql = "UPDATE " + table + " SET " + oSoftDelete.buildSqlQueryToUpdate(); }
-      else { sql = "DELETE FROM " + table; }
+      else { sql = "DELETE FROM " + qx::IxDataMember::getSqlFromTable(table); }
       sql += qx::IxSqlQueryBuilder::addSqlCondition(sql);
       sql += pId->getSqlNameEqualToPlaceHolder("", " AND ");
    }

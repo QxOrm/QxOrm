@@ -186,6 +186,8 @@ public:
    QString getSqlName(const QString & sSep = QString(", "), const QString & sOtherName = QString()) const;
    QString getSqlNameAndTypeAndParams(const QString & sSep = QString(", "), const QString & sOtherName = QString()) const;
 
+   static QString getSqlFromTable(const QString & sTable);
+
    virtual bool isEqual(const void * pOwner1, const void * pOwner2) const = 0;
    virtual QString toString(const void * pOwner, const QString & sFormat, int iIndexName = -1) const = 0;
    virtual qx_bool fromString(void * pOwner, const QString & s, const QString & sFormat, int iIndexName = -1) = 0;

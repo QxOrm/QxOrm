@@ -104,13 +104,21 @@ struct QxStringCvtGeneric
       Q_UNUSED(format); Q_UNUSED(index); std::string s;
       try { s = boost::lexical_cast<std::string>(t); }
       catch (...) { qDebug("[QxOrm] %s", "'QxStringCvtGeneric::toString()' unknown error calling 'boost::lexical_cast<std::string>()'"); s = ""; }
+#ifndef QT_NO_STL
       return QString::fromStdString(s);
+#else // QT_NO_STL
+      return QString::fromLatin1(s.data(), int(s.size()));
+#endif // QT_NO_STL
    }
 
    static inline qx_bool fromString(const QString & s, T & t, const QString & format, int index)
    {
       Q_UNUSED(format); Q_UNUSED(index);
+#ifndef QT_NO_STL
       try { t = boost::lexical_cast<T>(s.toStdString()); }
+#else // QT_NO_STL
+      try { std::string tmp(s.toLatin1().constData()); t = boost::lexical_cast<T>(tmp); }
+#endif // QT_NO_STL
       catch (...) { qDebug("[QxOrm] %s", "'QxStringCvtGeneric::fromString()' unknown error calling 'boost::lexical_cast<T>()'"); return qx_bool(false); }
       return qx_bool(true);
    }

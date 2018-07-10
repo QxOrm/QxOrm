@@ -396,7 +396,11 @@ namespace detail {
 const char * get_sql_type_by_class_name(const char * sClassName, const char * sDefaultValue)
 {
    static std::string s;
+#ifndef QT_NO_STL
    s = qx::QxClassX::getSqlTypeByClassName(sClassName).toStdString();
+#else // QT_NO_STL
+   s = qx::QxClassX::getSqlTypeByClassName(sClassName).toLatin1().constData();
+#endif // QT_NO_STL
    return (s.empty() ? sDefaultValue : s.c_str());
 }
 
