@@ -230,6 +230,10 @@ struct get_sql_type< QString >
 { static inline const char * get() { return "TEXT"; } };
 
 template <>
+struct get_sql_type< QVariant >
+{ static inline const char * get() { return "TEXT"; } };
+
+template <>
 struct get_sql_type< QDate >
 { static inline const char * get() { return "DATE"; } };
 

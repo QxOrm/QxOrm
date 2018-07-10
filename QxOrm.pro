@@ -121,6 +121,7 @@ HEADERS += ./include/QxDao/QxDao_Impl.h
 HEADERS += ./include/QxDao/QxDaoStrategy.h
 HEADERS += ./include/QxDao/QxDaoPointer.h
 HEADERS += ./include/QxDao/QxDao_IsDirty.h
+HEADERS += ./include/QxDao/QxSoftDelete.h
 
 HEADERS += ./include/QxSerialize/QxArchive.h
 HEADERS += ./include/QxSerialize/QxClone.h

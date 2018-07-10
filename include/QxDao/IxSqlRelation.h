@@ -38,6 +38,7 @@
  */
 
 #include <QxDao/QxSqlRelationParams.h>
+#include <QxDao/QxSoftDelete.h>
 
 #include <QxCollection/QxCollection.h>
 
@@ -67,6 +68,7 @@ protected:
    IxDataMember *    m_pDataMemberId;     //!< 'IxDataMember' id of 'm_pDataMemberX'
    long              m_lOffsetRelation;   //!< Generic offset for sql relation
    join_type         m_eJoinType;         //!< Join type to build sql query
+   QxSoftDelete      m_oSoftDelete;       //!< Soft delete (or logical delete) behavior
 
    QxCollection<QString, IxDataMember *> * m_lstDataMemberPtr;    //!< Optimization : handle to collection of 'IxDataMember'
    IxSqlRelationX * m_lstSqlRelationPtr;                          //!< Optimization : handle to collection of 'IxSqlRelation'
@@ -108,6 +110,8 @@ public:
    virtual void eagerJoin(QxSqlRelationParams & params) const = 0;
    virtual void lazyWhere(QxSqlRelationParams & params) const = 0;
    virtual void eagerWhere(QxSqlRelationParams & params) const = 0;
+   virtual void lazyWhereSoftDelete(QxSqlRelationParams & params) const = 0;
+   virtual void eagerWhereSoftDelete(QxSqlRelationParams & params) const = 0;
    virtual void lazyFetch_ResolveInput(QxSqlRelationParams & params) const = 0;
    virtual void eagerFetch_ResolveInput(QxSqlRelationParams & params) const = 0;
    virtual void lazyFetch_ResolveOutput(QxSqlRelationParams & params) const = 0;

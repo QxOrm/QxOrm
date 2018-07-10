@@ -31,13 +31,15 @@ template <class T>
 struct QxDao_DeleteById_Generic
 {
 
-   static QSqlError deleteById(T & t, QSqlDatabase * pDatabase)
+   static QSqlError deleteById(T & t, QSqlDatabase * pDatabase, bool bVerifySoftDelete)
    {
       qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "delete by id");
       if (! dao.isValid()) { return dao.error(); }
       if (! dao.isValidPrimaryKey(t)) { return dao.errInvalidId(); }
 
-      QString sql = dao.builder().deleteById().getSqlQuery();
+      QString sql; qx::QxSoftDelete oSoftDelete = dao.builder().getSoftDelete();
+      if (bVerifySoftDelete && ! oSoftDelete.isEmpty()) { sql = dao.builder().softDeleteById().getSqlQuery(); }
+      else { sql = dao.builder().deleteById().getSqlQuery(); }
       if (! dao.getDataId() || sql.isEmpty()) { return dao.errEmpty(); }
       dao.query().prepare(sql);
 
@@ -55,13 +57,15 @@ template <class T>
 struct QxDao_DeleteById_Container
 {
 
-   static QSqlError deleteById(T & t, QSqlDatabase * pDatabase)
+   static QSqlError deleteById(T & t, QSqlDatabase * pDatabase, bool bVerifySoftDelete)
    {
       if (qx::trait::generic_container<T>::size(t) <= 0) { return QSqlError(); }
       qx::dao::detail::QxDao_Helper_Container<T> dao(t, pDatabase, "delete by id");
       if (! dao.isValid()) { return dao.error(); }
 
-      QString sql = dao.builder().deleteById().getSqlQuery();
+      QString sql; qx::QxSoftDelete oSoftDelete = dao.builder().getSoftDelete();
+      if (bVerifySoftDelete && ! oSoftDelete.isEmpty()) { sql = dao.builder().softDeleteById().getSqlQuery(); }
+      else { sql = dao.builder().deleteById().getSqlQuery(); }
       if (sql.isEmpty()) { return dao.errEmpty(); }
       dao.query().prepare(sql);
 
@@ -133,8 +137,12 @@ template <class T>
 struct QxDao_DeleteById_Ptr
 {
 
-   static inline QSqlError deleteById(T & t, QSqlDatabase * pDatabase)
-   { return (t ? qx::dao::delete_by_id((* t), pDatabase) : QSqlError()); }
+   static inline QSqlError deleteById(T & t, QSqlDatabase * pDatabase, bool bVerifySoftDelete)
+   {
+      if (! t) { return QSqlError(); }
+      if (bVerifySoftDelete) { return qx::dao::delete_by_id((* t), pDatabase); }
+      return qx::dao::destroy_by_id((* t), pDatabase);
+   }
 
 };
 
@@ -142,12 +150,12 @@ template <class T>
 struct QxDao_DeleteById
 {
 
-   static inline QSqlError deleteById(T & t, QSqlDatabase * pDatabase)
+   static inline QSqlError deleteById(T & t, QSqlDatabase * pDatabase, bool bVerifySoftDelete)
    {
       typedef typename boost::mpl::if_c< boost::is_pointer<T>::value, qx::dao::detail::QxDao_DeleteById_Ptr<T>, qx::dao::detail::QxDao_DeleteById_Generic<T> >::type type_dao_1;
       typedef typename boost::mpl::if_c< qx::trait::is_smart_ptr<T>::value, qx::dao::detail::QxDao_DeleteById_Ptr<T>, type_dao_1 >::type type_dao_2;
       typedef typename boost::mpl::if_c< qx::trait::is_container<T>::value, qx::dao::detail::QxDao_DeleteById_Container<T>, type_dao_2 >::type type_dao_3;
-      return type_dao_3::deleteById(t, pDatabase);
+      return type_dao_3::deleteById(t, pDatabase, bVerifySoftDelete);
    }
 
 };

@@ -301,6 +301,15 @@ int main(int argc, char * argv[])
    daoError = qx::dao::fetch_by_id_with_relation("foo_id", pBar);    qAssert(pBar->getFoo() && (pBar->getFoo()->getName() == "name3"));
    qx::dump(pBar);
 
+   // Test soft delete behavior
+   pBar.reset(new Bar());
+   pBar->setId(5);
+   daoError = qx::dao::delete_by_id(pBar);      qAssert(! daoError.isValid());
+   bDaoExist = qx::dao::exist(pBar);            qAssert(! bDaoExist);
+   daoError = qx::dao::delete_all<Bar>();       qAssert(! daoError.isValid());
+   long lBarCount = qx::dao::count<Bar>();      qAssert(lBarCount == 0);            Q_UNUSED(lBarCount);
+   daoError = qx::dao::destroy_all<Bar>();      qAssert(! daoError.isValid());
+
    //--------------------------------
 
    qx::cache::clear();

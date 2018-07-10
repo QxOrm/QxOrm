@@ -95,6 +95,10 @@ template <> struct QxStringCvt_FromVariant< QString > {
 static inline qx_bool fromVariant(const QVariant & v, QString & t, const QString & format, int index)
 { Q_UNUSED(format); Q_UNUSED(index); t = v.toString(); return qx_bool(true); } };
 
+template <> struct QxStringCvt_FromVariant< QVariant > {
+static inline qx_bool fromVariant(const QVariant & v, QVariant & t, const QString & format, int index)
+{ Q_UNUSED(format); Q_UNUSED(index); t = v; return qx_bool(true); } };
+
 template <> struct QxStringCvt_FromVariant< std::string > {
 static inline qx_bool fromVariant(const QVariant & v, std::string & t, const QString & format, int index)
 { Q_UNUSED(format); Q_UNUSED(index); t = v.toString().toStdString(); return qx_bool(true); } };

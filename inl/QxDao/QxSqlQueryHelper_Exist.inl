@@ -35,11 +35,14 @@ struct QxSqlQueryHelper_Exist
    {
       BOOST_STATIC_ASSERT(qx::trait::is_qx_registered<T>::value);
       qx::IxDataMember * pId = builder.getDataId(); qAssert(pId);
+      qx::QxSoftDelete oSoftDelete = builder.getSoftDelete();
       QString table = builder.table();
       sql = "SELECT ";
       if (pId) { sql += pId->getSqlTablePointNameAsAlias(table); }
+      if (! oSoftDelete.isEmpty()) { sql += ", " + oSoftDelete.buildSqlTablePointName(); }
       sql += " FROM " + table;
       sql += " WHERE " + pId->getSqlAliasEqualToPlaceHolder(table, true);
+      if (! oSoftDelete.isEmpty()) { sql += " AND " + oSoftDelete.buildSqlQueryToFetch(); }
    }
 
    static void resolveInput(T & t, QSqlQuery & query, qx::IxSqlQueryBuilder & builder)

@@ -12,7 +12,7 @@ class QX_DLL2_EXPORT Foo : public BaseClassTrigger
 protected:
 
    QString  m_sName;
-   QString  m_sDesc;
+   QVariant m_sDesc;
    BarX *   m_pBarX;
 
 public:
@@ -23,11 +23,11 @@ public:
    virtual void makeAbstractClass() { ; }
 
    QString getName() const    { return m_sName; }
-   QString getDesc() const    { return m_sDesc; }
+   QVariant getDesc() const   { return m_sDesc; }
    BarX * getBarX() const     { return m_pBarX; }
 
    void setName(const QString & s)  { m_sName = s; }
-   void setDesc(const QString & s)  { m_sDesc = s; }
+   void setDesc(const QVariant & s) { m_sDesc = s; }
    void setBarX(BarX * p)           { reset(); m_pBarX = p; }
 
 private:

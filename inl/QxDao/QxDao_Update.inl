@@ -31,7 +31,7 @@ template <class T>
 struct QxDao_Update_Generic
 {
 
-   static QSqlError update(T & t, QSqlDatabase * pDatabase, const QStringList & columns)
+   static QSqlError update(const qx::QxSqlQuery & query, T & t, QSqlDatabase * pDatabase, const QStringList & columns)
    {
       qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "update");
       if (! dao.isValid()) { return dao.error(); }
@@ -39,11 +39,13 @@ struct QxDao_Update_Generic
 
       QString sql = dao.builder().update(columns).getSqlQuery();
       if (! dao.getDataId() || sql.isEmpty()) { return dao.errEmpty(); }
+      if (! query.isEmpty()) { dao.addQuery(query, false); sql = dao.builder().getSqlQuery(); }
       if (! pDatabase) { dao.transaction(); }
       dao.query().prepare(sql);
 
       qx::dao::on_before_update<T>((& t), (& dao));
       qx::dao::detail::QxSqlQueryHelper_Update<T>::resolveInput(t, dao.query(), dao.builder(), columns);
+      if (! query.isEmpty()) { query.resolve(dao.query()); }
       if (! dao.query().exec()) { return dao.errFailed(); }
       qx::dao::on_after_update<T>((& t), (& dao));
 
@@ -56,7 +58,7 @@ template <class T>
 struct QxDao_Update_Container
 {
 
-   static QSqlError update(T & t, QSqlDatabase * pDatabase, const QStringList & columns)
+   static QSqlError update(const qx::QxSqlQuery & query, T & t, QSqlDatabase * pDatabase, const QStringList & columns)
    {
       if (qx::trait::generic_container<T>::size(t) <= 0) { return QSqlError(); }
       qx::dao::detail::QxDao_Helper_Container<T> dao(t, pDatabase, "update");
@@ -64,6 +66,7 @@ struct QxDao_Update_Container
 
       QString sql = dao.builder().update(columns).getSqlQuery();
       if (! dao.getDataId() || sql.isEmpty()) { return dao.errEmpty(); }
+      if (! query.isEmpty()) { dao.addQuery(query, false); sql = dao.builder().getSqlQuery(); }
       if (! pDatabase) { dao.transaction(); }
       dao.setSqlColumns(columns);
       dao.query().prepare(sql);
@@ -128,6 +131,7 @@ private:
          if (! dao.isValidPrimaryKey(item)) { dao.errInvalidId(); return false; }
          qx::dao::on_before_update<U>((& item), (& dao));
          qx::dao::detail::QxSqlQueryHelper_Update<U>::resolveInput(item, dao.query(), dao.builder(), columns);
+         if (! dao.qxQuery().isEmpty()) { dao.qxQuery().resolve(dao.query()); }
          if (! dao.query().exec()) { dao.errFailed(); return false; }
          qx::dao::on_after_update<U>((& item), (& dao));
 
@@ -141,8 +145,8 @@ template <class T>
 struct QxDao_Update_Ptr
 {
 
-   static inline QSqlError update(T & t, QSqlDatabase * pDatabase, const QStringList & columns)
-   { return (t ? qx::dao::update((* t), pDatabase, columns) : QSqlError()); }
+   static inline QSqlError update(const qx::QxSqlQuery & query, T & t, QSqlDatabase * pDatabase, const QStringList & columns)
+   { return (t ? qx::dao::update_by_query(query, (* t), pDatabase, columns) : QSqlError()); }
 
 };
 
@@ -150,13 +154,13 @@ template <class T>
 struct QxDao_Update
 {
 
-   static inline QSqlError update(T & t, QSqlDatabase * pDatabase, const QStringList & columns)
+   static inline QSqlError update(const qx::QxSqlQuery & query, T & t, QSqlDatabase * pDatabase, const QStringList & columns)
    {
       typedef typename boost::mpl::if_c< boost::is_pointer<T>::value, qx::dao::detail::QxDao_Update_Ptr<T>, qx::dao::detail::QxDao_Update_Generic<T> >::type type_dao_1;
       typedef typename boost::mpl::if_c< qx::trait::is_smart_ptr<T>::value, qx::dao::detail::QxDao_Update_Ptr<T>, type_dao_1 >::type type_dao_2;
       typedef typename boost::mpl::if_c< qx::trait::is_container<T>::value, qx::dao::detail::QxDao_Update_Container<T>, type_dao_2 >::type type_dao_3;
 
-      QSqlError error = type_dao_3::update(t, pDatabase, columns);
+      QSqlError error = type_dao_3::update(query, t, pDatabase, columns);
       if (! error.isValid()) { qx::dao::detail::QxDao_Keep_Original<T>::backup(t); }
       return error;
    }

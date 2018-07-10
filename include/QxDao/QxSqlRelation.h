@@ -102,6 +102,7 @@ public:
       m_pDataMemberId = (m_pDataMemberX ? m_pDataMemberX->getId_WithDaoStrategy() : NULL);
       m_lstDataMemberPtr = (& QxSqlRelation<DataType, Owner>::m_lstDataMember);
       m_lstSqlRelationPtr = (& QxSqlRelation<DataType, Owner>::m_lstSqlRelation);
+      m_oSoftDelete = QxClass<type_data>::getSingleton()->getSoftDelete();
       qAssert(m_pDataMember && m_pDataMemberX && m_pDataMemberId);
       if (getDataCount() > 0 || getRelationCount() > 0) { m_bInitInEvent = false; return; }
       IxDataMember * p = NULL; long lCount = m_pDataMemberX->count_WithDaoStrategy();

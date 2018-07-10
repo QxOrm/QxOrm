@@ -34,21 +34,25 @@ struct QxSqlQueryHelper_FetchAll
    static void sql(QString & sql, qx::IxSqlQueryBuilder & builder)
    {
       BOOST_STATIC_ASSERT(qx::trait::is_qx_registered<T>::value);
-      long l1(0), l2(0), l3(0), l4(0);
+      long l1(0), l2(0), l3(0), l4(0), l5(0);
       qx::IxDataMember * p = NULL;
       qx::IxDataMember * pId = builder.getDataId();
       qx::IxSqlRelation * pRelation = NULL;
       qx::QxSqlRelationParams params(0, 0, (& sql), (& builder), NULL, NULL);
+      qx::QxSoftDelete oSoftDelete = builder.getSoftDelete();
       QString table = builder.table();
       sql = "SELECT ";
       if (pId) { sql += (pId->getSqlTablePointNameAsAlias(table) + ", "); }
       while ((p = builder.nextData(l1))) { sql += (p->getSqlTablePointNameAsAlias(table) + ", "); }
+      if (! oSoftDelete.isEmpty()) { l1++; sql += (oSoftDelete.buildSqlTablePointName() + ", "); }
       while ((pRelation = builder.nextRelation(l2))) { params.setIndex(l2); pRelation->lazySelect(params); }
       sql = sql.left(sql.count() - 2); // Remove last ", "
       sql += " FROM " + table + ", ";
       while ((pRelation = builder.nextRelation(l3))) { params.setIndex(l3); pRelation->lazyFrom(params); }
       sql = sql.left(sql.count() - 2); // Remove last ", "
       while ((pRelation = builder.nextRelation(l4))) { params.setIndex(l4); pRelation->lazyJoin(params); }
+      if (! oSoftDelete.isEmpty()) { sql += " WHERE " + oSoftDelete.buildSqlQueryToFetch(); }
+      while ((pRelation = builder.nextRelation(l5))) { params.setIndex(l5); pRelation->lazyWhereSoftDelete(params); }
    }
 
    static void resolveInput(T & t, QSqlQuery & query, qx::IxSqlQueryBuilder & builder)
@@ -61,10 +65,12 @@ struct QxSqlQueryHelper_FetchAll
       qx::IxDataMember * p = NULL;
       qx::IxDataMember * pId = builder.getDataId();
       qx::IxSqlRelation * pRelation = NULL;
+      qx::QxSoftDelete oSoftDelete = builder.getSoftDelete();
       short iOffset = (pId ? pId->getNameCount() : 0);
       if (pId) { for (int i = 0; i < pId->getNameCount(); i++) { pId->fromVariant((& t), query.value(i), i); } }
       while ((p = builder.nextData(l1))) { p->fromVariant((& t), query.value(l1 + iOffset - 1)); }
-      qx::QxSqlRelationParams params(0, (builder.getDataCount() + iOffset), NULL, (& builder), (& query), (& t));
+      iOffset = (builder.getDataCount() + iOffset + (oSoftDelete.isEmpty() ? 0 : 1));
+      qx::QxSqlRelationParams params(0, iOffset, NULL, (& builder), (& query), (& t));
       while ((pRelation = builder.nextRelation(l2))) { params.setIndex(l2); pRelation->lazyFetch_ResolveOutput(params); }
    }
 
@@ -75,13 +81,16 @@ struct QxSqlQueryHelper_FetchAll
       qx::IxDataMember * p = NULL;
       qx::IxDataMember * pId = builder.getDataId();
       qx::IxDataMemberX * pDataMemberX = builder.getDataMemberX(); qAssert(pDataMemberX);
+      qx::QxSoftDelete oSoftDelete = builder.getSoftDelete();
       QString table = builder.table();
       sql = "SELECT ";
       if (pId) { sql += (pId->getSqlTablePointNameAsAlias(table) + ", "); }
       for (int i = 0; i < columns.count(); i++)
       { p = pDataMemberX->get_WithDaoStrategy(columns.at(i)); if (p && (p != pId)) { sql += (p->getSqlTablePointNameAsAlias(table) + ", "); } }
       sql = sql.left(sql.count() - 2); // Remove last ", "
+      if (! oSoftDelete.isEmpty()) { sql += ", " + oSoftDelete.buildSqlTablePointName(); }
       sql += " FROM " + table;
+      if (! oSoftDelete.isEmpty()) { sql += " WHERE " + oSoftDelete.buildSqlQueryToFetch(); }
    }
 
    static void resolveInput(T & t, QSqlQuery & query, qx::IxSqlQueryBuilder & builder, const QStringList & columns)

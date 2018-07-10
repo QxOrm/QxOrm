@@ -63,7 +63,7 @@
   <col><col><col><col><col>
   <tbody><tr>
   <td align="left" valign="top"><font size="2">QxOrm  &gt;&gt;  Tutorial  &gt;&gt;  qxBlog</font></td>
-  <td align="right" valign="top"><font size="2">Current version : QxOrm 1.1.6 (LGPL) - <a href="../doxygen/index.html" target="_blank">QxOrm library online documentation</a></font></td>
+  <td align="right" valign="top"><font size="2">Current version : QxOrm 1.1.7 (LGPL) - <a href="../doxygen/index.html" target="_blank">QxOrm library online documentation</a></font></td>
   <td width="10px"></td>
   <td width="40px" height="30px"><a href="../qxorm_fr/tutorial.html"><img alt="Version française du site" src="./resource/FR.png" width="40" height="30" border="0"></a></td>
   <td width="40px" height="30px"><a href="../qxorm_en/tutorial.html"><img alt="Web site english version" src="./resource/GB.png" width="40" height="30" border="0"></a></td>
@@ -668,15 +668,178 @@ int</span><span class="keyword"> main</span><span class="operator">(</span><span
 }</span>
 </pre>
         </td></tr></tbody></table>
-        <br>
+        <br><br>
         <a href="./resource/qxBlog.main.exec.result.txt"><i>Click here to see output debug trace after execution of <b>qxBlog</b> program...</i></a>
+        <br><br>
+        <div style="width:900px; height:500px; overflow:auto; background-color:white">
+<pre>
+[QxOrm] qx::QxSqlDatabase : create new database connection in thread '4456' with key '{e986c95d-1cb0-4368-ad9c-3dd4ccd20b84}'
+[QxOrm] sql query (93 ms) : DELETE FROM author
+[QxOrm] sql query (63 ms) : DELETE FROM comment
+[QxOrm] sql query (94 ms) : DELETE FROM category
+[QxOrm] sql query (78 ms) : DELETE FROM blog
+[QxOrm] sql query (62 ms) : INSERT INTO author (author_id, name, birthdate, sex) VALUES (:author_id, :name, :birthdate, :sex)
+[QxOrm] sql query (0 ms) : SELECT COUNT(*) FROM author
+[QxOrm] sql query (0 ms) : SELECT author.author_id AS author_author_id_0, author.name AS author_name_0, author.birthdate AS author_birthdate_0, author.sex AS author_sex_0 FROM author WHERE author.sex = :sex
+[QxOrm] start dump 'qx::QxCollection&lt;QString, boost::shared_ptr&lt;author&gt;&gt;'
+&lt;qx.QxCollection-QString_boost.shared_ptr-author-- class_id="0" tracking_level="0" version="0"&gt;
+	&lt;count&gt;2&lt;/count&gt;
+	&lt;item class_id="1" tracking_level="0" version="0"&gt;
+		&lt;first class_id="2" tracking_level="0" version="0"&gt;author_id_2&lt;/first&gt;
+		&lt;second class_id="3" tracking_level="0" version="1"&gt;
+			&lt;px class_id="4" tracking_level="1" version="0" object_id="_0"&gt;
+				&lt;author_id&gt;author_id_2&lt;/author_id&gt;
+				&lt;name&gt;author_2&lt;/name&gt;
+				&lt;birthdate class_id="5" tracking_level="0" version="0"&gt;20100409&lt;/birthdate&gt;
+				&lt;sex&gt;1&lt;/sex&gt;
+				&lt;list_blog class_id="6" tracking_level="0" version="0"&gt;
+					&lt;count&gt;0&lt;/count&gt;
+					&lt;item_version&gt;1&lt;/item_version&gt;
+				&lt;/list_blog&gt;
+			&lt;/px&gt;
+		&lt;/second&gt;
+	&lt;/item&gt;
+	&lt;item&gt;
+		&lt;first&gt;author_id_3&lt;/first&gt;
+		&lt;second&gt;
+			&lt;px class_id_reference="4" object_id="_1"&gt;
+				&lt;author_id&gt;author_id_3&lt;/author_id&gt;
+				&lt;name&gt;author_3&lt;/name&gt;
+				&lt;birthdate&gt;20100409&lt;/birthdate&gt;
+				&lt;sex&gt;1&lt;/sex&gt;
+				&lt;list_blog&gt;
+					&lt;count&gt;0&lt;/count&gt;
+					&lt;item_version&gt;1&lt;/item_version&gt;
+				&lt;/list_blog&gt;
+			&lt;/px&gt;
+		&lt;/second&gt;
+	&lt;/item&gt;
+&lt;/qx.QxCollection-QString_boost.shared_ptr-author--&gt;
+[QxOrm] end dump 'qx::QxCollection&lt;QString, boost::shared_ptr&lt;author&gt;&gt;'
+[QxOrm] sql query (0 ms) : INSERT INTO category (name, description) VALUES (:name, :description)
+[QxOrm] sql query (0 ms) : INSERT INTO category (name, description) VALUES (:name, :description)
+[QxOrm] sql query (0 ms) : INSERT INTO category (name, description) VALUES (:name, :description)
+[QxOrm] sql query (0 ms) : INSERT INTO blog (blog_text, date_creation, author_id) VALUES (:blog_text, :date_creation, :author_id)
+[QxOrm] sql query (0 ms) : SELECT blog.blog_id AS blog_blog_id_0 FROM blog WHERE blog_blog_id_0 = :blog_id
+[QxOrm] sql query (0 ms) : UPDATE blog SET blog_id = :blog_id, blog_text = :blog_text, date_creation = :date_creation, author_id = :author_id WHERE blog_id = :blog_id_bis
+[QxOrm] sql query (78 ms) : INSERT INTO comment (comment_text, date_creation, blog_id) VALUES (:comment_text, :date_creation, :blog_id)
+[QxOrm] sql query (78 ms) : INSERT INTO comment (comment_text, date_creation, blog_id) VALUES (:comment_text, :date_creation, :blog_id)
+[QxOrm] sql query (0 ms) : SELECT COUNT(*) FROM comment
+[QxOrm] sql query (0 ms) : SELECT blog.blog_id AS blog_blog_id_0 FROM blog WHERE blog_blog_id_0 = :blog_id
+[QxOrm] sql query (0 ms) : UPDATE blog SET blog_id = :blog_id, blog_text = :blog_text, date_creation = :date_creation, author_id = :author_id WHERE blog_id = :blog_id_bis
+[QxOrm] sql query (0 ms) : SELECT category.category_id AS category_category_id_0 FROM category WHERE category_category_id_0 = :category_id
+[QxOrm] sql query (0 ms) : UPDATE category SET category_id = :category_id, name = :name, description = :description WHERE category_id = :category_id_bis
+[QxOrm] sql query (0 ms) : SELECT category.category_id AS category_category_id_0 FROM category WHERE category_category_id_0 = :category_id
+[QxOrm] sql query (0 ms) : UPDATE category SET category_id = :category_id, name = :name, description = :description WHERE category_id = :category_id_bis
+[QxOrm] sql query (extra-table) : DELETE FROM category_blog WHERE category_blog.blog_id = :blog_id
+[QxOrm] sql query (extra-table) : INSERT INTO category_blog (blog_id, category_id) VALUES (:blog_id, :category_id)
+[QxOrm] sql query (0 ms) : SELECT blog.blog_id AS blog_blog_id_0, blog.blog_text AS blog_blog_text_0, blog.date_creation AS blog_date_creation_0, blog.author_id AS blog_author_id_0, author_1.author_id AS author_1_author_id_0, author_1.name AS author_1_name_0, author_1.birthdate AS author_1_birthdate_0, author_1.sex AS author_1_sex_0, comment_2.comment_id AS comment_2_comment_id_0, comment_2.blog_id AS comment_2_blog_id_0, comment_2.comment_text AS comment_2_comment_text_0, comment_2.date_creation AS comment_2_date_creation_0, category_3.category_id AS category_3_category_id_0, category_3.name AS category_3_name_0, category_3.description AS category_3_description_0 FROM blog LEFT OUTER JOIN author author_1 ON author_1_author_id_0 = blog_author_id_0 LEFT OUTER JOIN comment comment_2 ON comment_2_blog_id_0 = blog_blog_id_0 LEFT OUTER JOIN category_blog ON blog_blog_id_0 = category_blog.blog_id LEFT OUTER JOIN category category_3 ON category_blog.category_id = category_3_category_id_0 WHERE blog_blog_id_0 = :blog_id
+[QxOrm] start dump 'boost::shared_ptr&lt;blog&gt;'
+&lt;boost.shared_ptr-blog- class_id="0" tracking_level="0" version="1"&gt;
+	&lt;px class_id="1" tracking_level="1" version="0" object_id="_0"&gt;
+		&lt;blog_id&gt;113&lt;/blog_id&gt;
+		&lt;blog_text class_id="2" tracking_level="0" version="0"&gt;update blog_text_1&lt;/blog_text&gt;
+		&lt;date_creation class_id="3" tracking_level="0" version="0"&gt;20100409162612000&lt;/date_creation&gt;
+		&lt;author_id class_id="4" tracking_level="0" version="1"&gt;
+			&lt;px class_id="5" tracking_level="1" version="0" object_id="_1"&gt;
+				&lt;author_id&gt;author_id_2&lt;/author_id&gt;
+				&lt;name&gt;author_2&lt;/name&gt;
+				&lt;birthdate class_id="6" tracking_level="0" version="0"&gt;20100409&lt;/birthdate&gt;
+				&lt;sex&gt;1&lt;/sex&gt;
+				&lt;list_blog class_id="7" tracking_level="0" version="0"&gt;
+					&lt;count&gt;0&lt;/count&gt;
+					&lt;item_version&gt;1&lt;/item_version&gt;
+				&lt;/list_blog&gt;
+			&lt;/px&gt;
+		&lt;/author_id&gt;
+		&lt;list_comment class_id="8" tracking_level="0" version="0"&gt;
+			&lt;count&gt;2&lt;/count&gt;
+			&lt;item class_id="9" tracking_level="0" version="1"&gt;
+				&lt;px class_id="10" tracking_level="1" version="0" object_id="_2"&gt;
+					&lt;comment_id&gt;209&lt;/comment_id&gt;
+					&lt;comment_text&gt;comment_1 text&lt;/comment_text&gt;
+					&lt;date_creation&gt;20100409162612000&lt;/date_creation&gt;
+					&lt;blog_id&gt;
+						&lt;px class_id_reference="1" object_id="_3"&gt;
+							&lt;blog_id&gt;113&lt;/blog_id&gt;
+							&lt;blog_text&gt;&lt;/blog_text&gt;
+							&lt;date_creation&gt;&lt;/date_creation&gt;
+							&lt;author_id&gt;
+								&lt;px class_id="-1"&gt;&lt;/px&gt;
+							&lt;/author_id&gt;
+							&lt;list_comment&gt;
+								&lt;count&gt;0&lt;/count&gt;
+							&lt;/list_comment&gt;
+							&lt;list_category class_id="11" tracking_level="0" version="0"&gt;
+								&lt;count&gt;0&lt;/count&gt;
+							&lt;/list_category&gt;
+						&lt;/px&gt;
+					&lt;/blog_id&gt;
+				&lt;/px&gt;
+			&lt;/item&gt;
+			&lt;item&gt;
+				&lt;px class_id_reference="10" object_id="_4"&gt;
+					&lt;comment_id&gt;210&lt;/comment_id&gt;
+					&lt;comment_text&gt;comment_2 text&lt;/comment_text&gt;
+					&lt;date_creation&gt;20100409162612000&lt;/date_creation&gt;
+					&lt;blog_id&gt;
+						&lt;px class_id_reference="1" object_id="_5"&gt;
+							&lt;blog_id&gt;113&lt;/blog_id&gt;
+							&lt;blog_text&gt;&lt;/blog_text&gt;
+							&lt;date_creation&gt;&lt;/date_creation&gt;
+							&lt;author_id&gt;
+								&lt;px class_id="-1"&gt;&lt;/px&gt;
+							&lt;/author_id&gt;
+							&lt;list_comment&gt;
+								&lt;count&gt;0&lt;/count&gt;
+							&lt;/list_comment&gt;
+							&lt;list_category&gt;
+								&lt;count&gt;0&lt;/count&gt;
+							&lt;/list_category&gt;
+						&lt;/px&gt;
+					&lt;/blog_id&gt;
+				&lt;/px&gt;
+			&lt;/item&gt;
+		&lt;/list_comment&gt;
+		&lt;list_category&gt;
+			&lt;count&gt;2&lt;/count&gt;
+			&lt;item class_id="12" tracking_level="0" version="0"&gt;
+				&lt;first&gt;355&lt;/first&gt;
+				&lt;second class_id="13" tracking_level="0" version="0"&gt;
+					&lt;qt_shared_ptr class_id="14" tracking_level="1" version="0" object_id="_6"&gt;
+						&lt;category_id&gt;355&lt;/category_id&gt;
+						&lt;name&gt;category_1&lt;/name&gt;
+						&lt;description&gt;desc_1&lt;/description&gt;
+						&lt;list_blog class_id="15" tracking_level="0" version="0"&gt;
+							&lt;count&gt;0&lt;/count&gt;
+						&lt;/list_blog&gt;
+					&lt;/qt_shared_ptr&gt;
+				&lt;/second&gt;
+			&lt;/item&gt;
+			&lt;item&gt;
+				&lt;first&gt;357&lt;/first&gt;
+				&lt;second&gt;
+					&lt;qt_shared_ptr class_id_reference="14" object_id="_7"&gt;
+						&lt;category_id&gt;357&lt;/category_id&gt;
+						&lt;name&gt;category_3&lt;/name&gt;
+						&lt;description&gt;desc_3&lt;/description&gt;
+						&lt;list_blog&gt;
+							&lt;count&gt;0&lt;/count&gt;
+						&lt;/list_blog&gt;
+					&lt;/qt_shared_ptr&gt;
+				&lt;/second&gt;
+			&lt;/item&gt;
+		&lt;/list_category&gt;
+	&lt;/px&gt;
+&lt;/boost.shared_ptr-blog-&gt;
+[QxOrm] end dump 'boost::shared_ptr&lt;blog&gt;'
+</pre></div>
         <br><br>
         <i>Important note</i> : <b>QxOrm</b> doesn't want to hide sql query (by default, all sql queries are displayed).<br>
         <b>QxOrm</b> cannot resolve all problems with sql and databases, 
         so it is sometimes necessary to use <a href="http://doc.trolltech.com/4.6/sql-programming.html" target="_blank"><i>QtSql</i></a> engine of Qt library 
         to write your own sql query or stored procedure.<br>
-        <br>
-        <br>
+        <br><br>
         <a name="tuto_11"><u><font color="#100D5A">11- relationship <i>one-to-one</i> with <i>person</i> class :</font></u></a><br>
         <br>
         <b>QxOrm</b> can also be used with relationship <i>one-to-one</i>.<br>

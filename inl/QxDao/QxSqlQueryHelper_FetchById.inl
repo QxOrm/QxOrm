@@ -37,7 +37,8 @@ struct QxSqlQueryHelper_FetchById
       qx::IxDataMember * pId = builder.getDataId(); qAssert(pId);
       QString table = builder.table();
       sql = builder.fetchAll().getSqlQuery();
-      sql += " WHERE " + pId->getSqlAliasEqualToPlaceHolder(table, true);
+      sql += qx::IxSqlQueryBuilder::addSqlCondition(sql);
+      sql += pId->getSqlAliasEqualToPlaceHolder(table, true);
    }
 
    static void resolveInput(T & t, QSqlQuery & query, qx::IxSqlQueryBuilder & builder)
@@ -57,7 +58,8 @@ struct QxSqlQueryHelper_FetchById
       qx::IxDataMember * pId = builder.getDataId(); qAssert(pId);
       QString table = builder.table();
       sql = builder.fetchAll(columns).getSqlQuery();
-      sql += " WHERE " + pId->getSqlAliasEqualToPlaceHolder(table, true);
+      sql += qx::IxSqlQueryBuilder::addSqlCondition(sql);
+      sql += pId->getSqlAliasEqualToPlaceHolder(table, true);
    }
 
    static void resolveInput(T & t, QSqlQuery & query, qx::IxSqlQueryBuilder & builder, const QStringList & columns)

@@ -23,9 +23,9 @@
 **
 ****************************************************************************/
 
-#if _QX_ENABLE_QT_GUI_DEPENDENCY
-
 #include <QxPrecompiled.h>
+
+#if _QX_ENABLE_QT_GUI_DEPENDENCY
 
 #include <QxSerialize/Qt/QxSerialize_QFont.h>
 

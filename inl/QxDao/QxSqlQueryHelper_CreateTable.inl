@@ -39,10 +39,12 @@ struct QxSqlQueryHelper_CreateTable
       qx::IxDataMember * pId = builder.getDataId();
       qx::IxSqlRelation * pRelation = NULL;
       qx::QxSqlRelationParams params(0, 0, (& sql), (& builder), NULL, NULL);
+      qx::QxSoftDelete oSoftDelete = builder.getSoftDelete();
       QString table = builder.table();
       sql = "CREATE TABLE " + table + " (";
       if (pId) { sql += pId->getSqlNameAndTypeAndParams(", ") + ", "; qAssert(! pId->getSqlType().isEmpty()); }
       while ((p = builder.nextData(l1))) { sql += p->getSqlNameAndTypeAndParams(", ") + ", "; qAssert(! p->getSqlType().isEmpty()); }
+      if (! oSoftDelete.isEmpty()) { sql += oSoftDelete.buildSqlQueryToCreateTable() + ", "; }
       while ((pRelation = builder.nextRelation(l2))) { params.setIndex(l2); pRelation->createTable(params); }
       sql = sql.left(sql.count() - 2); // Remove last ", "
       sql += ")";

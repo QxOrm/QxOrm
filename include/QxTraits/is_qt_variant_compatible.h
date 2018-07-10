@@ -84,6 +84,7 @@ template <> struct is_qt_variant_compatible<QLineF>               { enum { value
 template <> struct is_qt_variant_compatible<QRect>                { enum { value = true }; };
 template <> struct is_qt_variant_compatible<QRectF>               { enum { value = true }; };
 template <> struct is_qt_variant_compatible<QUrl>                 { enum { value = true }; };
+template <> struct is_qt_variant_compatible<QVariant>             { enum { value = true }; };
 
 template <> struct is_qt_variant_compatible< QList<QVariant> >             { enum { value = true }; };
 template <> struct is_qt_variant_compatible< QMap<QString, QVariant> >     { enum { value = true }; };

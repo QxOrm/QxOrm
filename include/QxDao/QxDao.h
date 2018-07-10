@@ -46,6 +46,7 @@
 
 #include <QxCommon/QxBool.h>
 
+#include <QxDao/QxSoftDelete.h>
 #include <QxDao/QxDaoPointer.h>
 #include <QxDao/QxSqlQuery.h>
 
@@ -167,7 +168,22 @@ inline QSqlError insert(T & t, QSqlDatabase * pDatabase)
  */
 template <class T>
 inline QSqlError update(T & t, QSqlDatabase * pDatabase)
-{ return qx::dao::detail::QxDao_Update<T>::update(t, pDatabase, QStringList()); }
+{ return qx::dao::detail::QxDao_Update<T>::update("", t, pDatabase, QStringList()); }
+
+/*!
+ * \ingroup QxDao
+ * \brief Update an element or a list of elements into database (adding a user SQL query to the default SQL query builded by QxOrm library)
+ * \param query Define a user SQL query added to default SQL query builded by QxOrm library
+ * \param t Element (or list of elements) to be updated into database
+ * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class
+ * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
+ *
+ * qx::dao::update_by_query<T>() execute following SQL query :<br>
+ * <i>UPDATE my_table SET my_column_1 = ?, my_column_2 = ?, etc.</i> + <i>WHERE my_query...</i>
+ */
+template <class T>
+inline QSqlError update_by_query(const qx::QxSqlQuery & query, T & t, QSqlDatabase * pDatabase)
+{ return qx::dao::detail::QxDao_Update<T>::update(query, t, pDatabase, QStringList()); }
 
 /*!
  * \ingroup QxDao
@@ -193,11 +209,28 @@ inline QSqlError save(T & t, QSqlDatabase * pDatabase)
  * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
  *
  * qx::dao::delete_by_id<T>() execute following SQL query :<br>
- * <i>DELETE FROM my_table WHERE my_id = ?</i>
+ * <i>DELETE FROM my_table WHERE my_id = ?</i><br>
+ * <br>
+ * If a soft delete behavior is defined for class T, qx::dao::delete_by_id<T>() execute following SQL query :<br>
+ * <i>UPDATE my_table SET is_deleted='1' WHERE my_id = ?</i>
  */
 template <class T>
 inline QSqlError delete_by_id(T & t, QSqlDatabase * pDatabase)
-{ return qx::dao::detail::QxDao_DeleteById<T>::deleteById(t, pDatabase); }
+{ return qx::dao::detail::QxDao_DeleteById<T>::deleteById(t, pDatabase, true); }
+
+/*!
+ * \ingroup QxDao
+ * \brief Destroy a line (or list of lines) of a table (database) mapped to a C++ object of type T (registered into QxOrm context), even if a soft delete behavior is defined for class T
+ * \param t Element (or list of elements) to be destroyed into database
+ * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class
+ * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
+ *
+ * qx::dao::destroy_by_id<T>() execute following SQL query :<br>
+ * <i>DELETE FROM my_table WHERE my_id = ?</i>
+ */
+template <class T>
+inline QSqlError destroy_by_id(T & t, QSqlDatabase * pDatabase)
+{ return qx::dao::detail::QxDao_DeleteById<T>::deleteById(t, pDatabase, false); }
 
 /*!
  * \ingroup QxDao
@@ -206,11 +239,27 @@ inline QSqlError delete_by_id(T & t, QSqlDatabase * pDatabase)
  * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
  *
  * qx::dao::delete_all<T>() execute following SQL query :<br>
- * <i>DELETE FROM my_table</i>
+ * <i>DELETE FROM my_table</i><br>
+ * <br>
+ * If a soft delete behavior is defined for class T, qx::dao::delete_all<T>() execute following SQL query :<br>
+ * <i>UPDATE my_table SET is_deleted='1'</i>
  */
 template <class T>
 inline QSqlError delete_all(QSqlDatabase * pDatabase)
-{ return qx::dao::detail::QxDao_DeleteAll<T>::deleteAll("", pDatabase); }
+{ return qx::dao::detail::QxDao_DeleteAll<T>::deleteAll("", pDatabase, true); }
+
+/*!
+ * \ingroup QxDao
+ * \brief Destroy all lines of a table (database) mapped to a C++ class T (registered into QxOrm context), even if a soft delete behavior is defined for class T
+ * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class
+ * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
+ *
+ * qx::dao::destroy_all<T>() execute following SQL query :<br>
+ * <i>DELETE FROM my_table</i>
+ */
+template <class T>
+inline QSqlError destroy_all(QSqlDatabase * pDatabase)
+{ return qx::dao::detail::QxDao_DeleteAll<T>::deleteAll("", pDatabase, false); }
 
 /*!
  * \ingroup QxDao
@@ -220,11 +269,28 @@ inline QSqlError delete_all(QSqlDatabase * pDatabase)
  * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
  *
  * qx::dao::delete_by_query<T>() execute following SQL query :<br>
- * <i>DELETE FROM my_table</i> + <i>WHERE my_query...</i>
+ * <i>DELETE FROM my_table</i> + <i>WHERE my_query...</i><br>
+ * <br>
+ * If a soft delete behavior is defined for class T, qx::dao::delete_by_query<T>() execute following SQL query :<br>
+ * <i>UPDATE my_table SET is_deleted='1'</i> + <i>WHERE my_query...</i>
  */
 template <class T>
 inline QSqlError delete_by_query(const qx::QxSqlQuery & query, QSqlDatabase * pDatabase)
-{ return qx::dao::detail::QxDao_DeleteAll<T>::deleteAll(query, pDatabase); }
+{ return qx::dao::detail::QxDao_DeleteAll<T>::deleteAll(query, pDatabase, true); }
+
+/*!
+ * \ingroup QxDao
+ * \brief Destroy all lines of a table (database) mapped to a C++ class T (registered into QxOrm context) and filtered by a user SQL query, even if a soft delete behavior is defined for class T
+ * \param query Define a user SQL query added to default SQL query builded by QxOrm library
+ * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class
+ * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
+ *
+ * qx::dao::destroy_by_query<T>() execute following SQL query :<br>
+ * <i>DELETE FROM my_table</i> + <i>WHERE my_query...</i>
+ */
+template <class T>
+inline QSqlError destroy_by_query(const qx::QxSqlQuery & query, QSqlDatabase * pDatabase)
+{ return qx::dao::detail::QxDao_DeleteAll<T>::deleteAll(query, pDatabase, false); }
 
 /*!
  * \ingroup QxDao
@@ -445,7 +511,23 @@ inline QSqlError insert_with_all_relation(T & t, QSqlDatabase * pDatabase)
  */
 template <class T>
 inline QSqlError update_with_relation(const QString & relation, T & t, QSqlDatabase * pDatabase)
-{ return qx::dao::detail::QxDao_Update_WithRelation<T>::update(relation, t, pDatabase); }
+{ return qx::dao::detail::QxDao_Update_WithRelation<T>::update(relation, "", t, pDatabase); }
+
+/*!
+ * \ingroup QxDao
+ * \brief Update an element and its relationships (or a list of elements + relationships) into database (adding a user SQL query to the default SQL query builded by QxOrm library)
+ * \param relation List of relationships keys to be updated in others tables of database : use "|" separator to put many relationships keys into this parameter
+ * \param query Define a user SQL query added to default SQL query builded by QxOrm library
+ * \param t Element (or list of elements) to be updated into database
+ * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class
+ * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
+ *
+ * qx::dao::update_by_query_with_relation<T>() execute following SQL query :<br>
+ * <i>UPDATE my_table SET my_column_1 = ?, my_column_2 = ?, etc.</i> + <i>WHERE my_query...</i>
+ */
+template <class T>
+inline QSqlError update_by_query_with_relation(const QString & relation, const qx::QxSqlQuery & query, T & t, QSqlDatabase * pDatabase)
+{ return qx::dao::detail::QxDao_Update_WithRelation<T>::update(relation, query, t, pDatabase); }
 
 /*!
  * \ingroup QxDao
@@ -460,7 +542,23 @@ inline QSqlError update_with_relation(const QString & relation, T & t, QSqlDatab
  */
 template <class T>
 inline QSqlError update_with_relation(const QStringList & relation, T & t, QSqlDatabase * pDatabase)
-{ return qx::dao::detail::QxDao_Update_WithRelation<T>::update(relation, t, pDatabase); }
+{ return qx::dao::detail::QxDao_Update_WithRelation<T>::update(relation, "", t, pDatabase); }
+
+/*!
+ * \ingroup QxDao
+ * \brief Update an element and its relationships (or a list of elements + relationships) into database (adding a user SQL query to the default SQL query builded by QxOrm library)
+ * \param relation List of relationships keys to be updated in others tables of database
+ * \param query Define a user SQL query added to default SQL query builded by QxOrm library
+ * \param t Element (or list of elements) to be updated into database
+ * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class
+ * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
+ *
+ * qx::dao::update_by_query_with_relation<T>() execute following SQL query :<br>
+ * <i>UPDATE my_table SET my_column_1 = ?, my_column_2 = ?, etc.</i> + <i>WHERE my_query...</i>
+ */
+template <class T>
+inline QSqlError update_by_query_with_relation(const QStringList & relation, const qx::QxSqlQuery & query, T & t, QSqlDatabase * pDatabase)
+{ return qx::dao::detail::QxDao_Update_WithRelation<T>::update(relation, query, t, pDatabase); }
 
 /*!
  * \ingroup QxDao
@@ -474,7 +572,22 @@ inline QSqlError update_with_relation(const QStringList & relation, T & t, QSqlD
  */
 template <class T>
 inline QSqlError update_with_all_relation(T & t, QSqlDatabase * pDatabase)
-{ return qx::dao::detail::QxDao_Update_WithRelation<T>::update("*", t, pDatabase); }
+{ return qx::dao::detail::QxDao_Update_WithRelation<T>::update("*", "", t, pDatabase); }
+
+/*!
+ * \ingroup QxDao
+ * \brief Update an element and all its relationships (or a list of elements + all relationships) into database (adding a user SQL query to the default SQL query builded by QxOrm library)
+ * \param query Define a user SQL query added to default SQL query builded by QxOrm library
+ * \param t Element (or list of elements) to be updated into database
+ * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class
+ * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
+ *
+ * qx::dao::update_by_query_with_all_relation<T>() execute following SQL query :<br>
+ * <i>UPDATE my_table SET my_column_1 = ?, my_column_2 = ?, etc.</i> + <i>WHERE my_query...</i>
+ */
+template <class T>
+inline QSqlError update_by_query_with_all_relation(const qx::QxSqlQuery & query, T & t, QSqlDatabase * pDatabase)
+{ return qx::dao::detail::QxDao_Update_WithRelation<T>::update("*", query, t, pDatabase); }
 
 /*!
  * \ingroup QxDao
@@ -613,7 +726,21 @@ inline QSqlError insert(T & t)
  */
 template <class T>
 inline QSqlError update(T & t)
-{ return qx::dao::detail::QxDao_Update<T>::update(t, NULL, QStringList()); }
+{ return qx::dao::detail::QxDao_Update<T>::update("", t, NULL, QStringList()); }
+
+/*!
+ * \ingroup QxDao
+ * \brief Update an element or a list of elements into database (adding a user SQL query to the default SQL query builded by QxOrm library)
+ * \param query Define a user SQL query added to default SQL query builded by QxOrm library
+ * \param t Element (or list of elements) to be updated into database
+ * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
+ *
+ * qx::dao::update_by_query<T>() execute following SQL query :<br>
+ * <i>UPDATE my_table SET my_column_1 = ?, my_column_2 = ?, etc.</i> + <i>WHERE my_query...</i>
+ */
+template <class T>
+inline QSqlError update_by_query(const qx::QxSqlQuery & query, T & t)
+{ return qx::dao::detail::QxDao_Update<T>::update(query, t, NULL, QStringList()); }
 
 /*!
  * \ingroup QxDao
@@ -637,11 +764,27 @@ inline QSqlError save(T & t)
  * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
  *
  * qx::dao::delete_by_id<T>() execute following SQL query :<br>
- * <i>DELETE FROM my_table WHERE my_id = ?</i>
+ * <i>DELETE FROM my_table WHERE my_id = ?</i><br>
+ * <br>
+ * If a soft delete behavior is defined for class T, qx::dao::delete_by_id<T>() execute following SQL query :<br>
+ * <i>UPDATE my_table SET is_deleted='1' WHERE my_id = ?</i>
  */
 template <class T>
 inline QSqlError delete_by_id(T & t)
-{ return qx::dao::detail::QxDao_DeleteById<T>::deleteById(t, NULL); }
+{ return qx::dao::detail::QxDao_DeleteById<T>::deleteById(t, NULL, true); }
+
+/*!
+ * \ingroup QxDao
+ * \brief Destroy a line (or list of lines) of a table (database) mapped to a C++ object of type T (registered into QxOrm context), even if a soft delete behavior is defined for class T
+ * \param t Element (or list of elements) to be destroyed into database
+ * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
+ *
+ * qx::dao::destroy_by_id<T>() execute following SQL query :<br>
+ * <i>DELETE FROM my_table WHERE my_id = ?</i>
+ */
+template <class T>
+inline QSqlError destroy_by_id(T & t)
+{ return qx::dao::detail::QxDao_DeleteById<T>::deleteById(t, NULL, false); }
 
 /*!
  * \ingroup QxDao
@@ -649,11 +792,26 @@ inline QSqlError delete_by_id(T & t)
  * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
  *
  * qx::dao::delete_all<T>() execute following SQL query :<br>
- * <i>DELETE FROM my_table</i>
+ * <i>DELETE FROM my_table</i><br>
+ * <br>
+ * If a soft delete behavior is defined for class T, qx::dao::delete_all<T>() execute following SQL query :<br>
+ * <i>UPDATE my_table SET is_deleted='1'</i>
  */
 template <class T>
 inline QSqlError delete_all()
-{ return qx::dao::detail::QxDao_DeleteAll<T>::deleteAll("", NULL); }
+{ return qx::dao::detail::QxDao_DeleteAll<T>::deleteAll("", NULL, true); }
+
+/*!
+ * \ingroup QxDao
+ * \brief Destroy all lines of a table (database) mapped to a C++ class T (registered into QxOrm context), even if a soft delete behavior is defined for class T
+ * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
+ *
+ * qx::dao::destroy_all<T>() execute following SQL query :<br>
+ * <i>DELETE FROM my_table</i>
+ */
+template <class T>
+inline QSqlError destroy_all()
+{ return qx::dao::detail::QxDao_DeleteAll<T>::deleteAll("", NULL, false); }
 
 /*!
  * \ingroup QxDao
@@ -662,11 +820,27 @@ inline QSqlError delete_all()
  * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
  *
  * qx::dao::delete_by_query<T>() execute following SQL query :<br>
- * <i>DELETE FROM my_table</i> + <i>WHERE my_query...</i>
+ * <i>DELETE FROM my_table</i> + <i>WHERE my_query...</i><br>
+ * <br>
+ * If a soft delete behavior is defined for class T, qx::dao::delete_by_query<T>() execute following SQL query :<br>
+ * <i>UPDATE my_table SET is_deleted='1'</i> + <i>WHERE my_query...</i>
  */
 template <class T>
 inline QSqlError delete_by_query(const qx::QxSqlQuery & query)
-{ return qx::dao::detail::QxDao_DeleteAll<T>::deleteAll(query, NULL); }
+{ return qx::dao::detail::QxDao_DeleteAll<T>::deleteAll(query, NULL, true); }
+
+/*!
+ * \ingroup QxDao
+ * \brief Destroy all lines of a table (database) mapped to a C++ class T (registered into QxOrm context) and filtered by a user SQL query, even if a soft delete behavior is defined for class T
+ * \param query Define a user SQL query added to default SQL query builded by QxOrm library
+ * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
+ *
+ * qx::dao::destroy_by_query<T>() execute following SQL query :<br>
+ * <i>DELETE FROM my_table</i> + <i>WHERE my_query...</i>
+ */
+template <class T>
+inline QSqlError destroy_by_query(const qx::QxSqlQuery & query)
+{ return qx::dao::detail::QxDao_DeleteAll<T>::deleteAll(query, NULL, false); }
 
 /*!
  * \ingroup QxDao
@@ -752,7 +926,23 @@ inline QSqlError fetch_by_query(const qx::QxSqlQuery & query, T & t, QSqlDatabas
  */
 template <class T>
 inline QSqlError update(T & t, QSqlDatabase * pDatabase, const QStringList & columns)
-{ return qx::dao::detail::QxDao_Update<T>::update(t, pDatabase, columns); }
+{ return qx::dao::detail::QxDao_Update<T>::update("", t, pDatabase, columns); }
+
+/*!
+ * \ingroup QxDao
+ * \brief Update an element or a list of elements into database (adding a user SQL query to the default SQL query builded by QxOrm library)
+ * \param query Define a user SQL query added to default SQL query builded by QxOrm library
+ * \param t Element (or list of elements) to be updated into database
+ * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class
+ * \param columns List of database table columns (mapped to properties of C++ class T) to be updated
+ * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
+ *
+ * qx::dao::update_by_query<T>() execute following SQL query :<br>
+ * <i>UPDATE my_table SET my_column_1 = ?, my_column_2 = ?, etc.</i> + <i>WHERE my_query...</i>
+ */
+template <class T>
+inline QSqlError update_by_query(const qx::QxSqlQuery & query, T & t, QSqlDatabase * pDatabase, const QStringList & columns)
+{ return qx::dao::detail::QxDao_Update<T>::update(query, t, pDatabase, columns); }
 
 /*!
  * \ingroup QxDao
@@ -765,7 +955,21 @@ inline QSqlError update(T & t, QSqlDatabase * pDatabase, const QStringList & col
  */
 template <class T>
 inline QSqlError update_optimized(qx::dao::ptr<T> & ptr)
-{ return qx::dao::detail::QxDao_Update_Optimized<T>::update_optimized(ptr, NULL); }
+{ return qx::dao::detail::QxDao_Update_Optimized<T>::update_optimized("", ptr, NULL); }
+
+/*!
+ * \ingroup QxDao
+ * \brief Update only modified fields/properties of an element or a list of elements into database (using is dirty pattern and qx::dao::ptr<T> smart-pointer), adding a user SQL query to the default SQL query builded by QxOrm library
+ * \param query Define a user SQL query added to default SQL query builded by QxOrm library
+ * \param ptr Element (or list of elements) to be updated into database
+ * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
+ *
+ * qx::dao::update_optimized_by_query<T>() execute following SQL query :<br>
+ * <i>UPDATE my_table SET my_column_1 = ?, my_column_2 = ?, etc.</i> + <i>WHERE my_query...</i>
+ */
+template <class T>
+inline QSqlError update_optimized_by_query(const qx::QxSqlQuery & query, qx::dao::ptr<T> & ptr)
+{ return qx::dao::detail::QxDao_Update_Optimized<T>::update_optimized(query, ptr, NULL); }
 
 /*!
  * \ingroup QxDao
@@ -779,7 +983,22 @@ inline QSqlError update_optimized(qx::dao::ptr<T> & ptr)
  */
 template <class T>
 inline QSqlError update_optimized(qx::dao::ptr<T> & ptr, QSqlDatabase * pDatabase)
-{ return qx::dao::detail::QxDao_Update_Optimized<T>::update_optimized(ptr, pDatabase); }
+{ return qx::dao::detail::QxDao_Update_Optimized<T>::update_optimized("", ptr, pDatabase); }
+
+/*!
+ * \ingroup QxDao
+ * \brief Update only modified fields/properties of an element or a list of elements into database (using is dirty pattern and qx::dao::ptr<T> smart-pointer), adding a user SQL query to the default SQL query builded by QxOrm library
+ * \param query Define a user SQL query added to default SQL query builded by QxOrm library
+ * \param ptr Element (or list of elements) to be updated into database
+ * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class
+ * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
+ *
+ * qx::dao::update_optimized_by_query<T>() execute following SQL query :<br>
+ * <i>UPDATE my_table SET my_column_1 = ?, my_column_2 = ?, etc.</i> + <i>WHERE my_query...</i>
+ */
+template <class T>
+inline QSqlError update_optimized_by_query(const qx::QxSqlQuery & query, qx::dao::ptr<T> & ptr, QSqlDatabase * pDatabase)
+{ return qx::dao::detail::QxDao_Update_Optimized<T>::update_optimized(query, ptr, pDatabase); }
 
 /*!
  * \ingroup QxDao
@@ -960,7 +1179,22 @@ inline QSqlError insert_with_all_relation(T & t)
  */
 template <class T>
 inline QSqlError update_with_relation(const QString & relation, T & t)
-{ return qx::dao::detail::QxDao_Update_WithRelation<T>::update(relation, t, NULL); }
+{ return qx::dao::detail::QxDao_Update_WithRelation<T>::update(relation, "", t, NULL); }
+
+/*!
+ * \ingroup QxDao
+ * \brief Update an element and its relationships (or a list of elements + relationships) into database (adding a user SQL query to the default SQL query builded by QxOrm library)
+ * \param relation List of relationships keys to be updated in others tables of database : use "|" separator to put many relationships keys into this parameter
+ * \param query Define a user SQL query added to default SQL query builded by QxOrm library
+ * \param t Element (or list of elements) to be updated into database
+ * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
+ *
+ * qx::dao::update_by_query_with_relation<T>() execute following SQL query :<br>
+ * <i>UPDATE my_table SET my_column_1 = ?, my_column_2 = ?, etc.</i> + <i>WHERE my_query...</i>
+ */
+template <class T>
+inline QSqlError update_by_query_with_relation(const QString & relation, const qx::QxSqlQuery & query, T & t)
+{ return qx::dao::detail::QxDao_Update_WithRelation<T>::update(relation, query, t, NULL); }
 
 /*!
  * \ingroup QxDao
@@ -974,7 +1208,22 @@ inline QSqlError update_with_relation(const QString & relation, T & t)
  */
 template <class T>
 inline QSqlError update_with_relation(const QStringList & relation, T & t)
-{ return qx::dao::detail::QxDao_Update_WithRelation<T>::update(relation, t, NULL); }
+{ return qx::dao::detail::QxDao_Update_WithRelation<T>::update(relation, "", t, NULL); }
+
+/*!
+ * \ingroup QxDao
+ * \brief Update an element and its relationships (or a list of elements + relationships) into database (adding a user SQL query to the default SQL query builded by QxOrm library)
+ * \param relation List of relationships keys to be updated in others tables of database
+ * \param query Define a user SQL query added to default SQL query builded by QxOrm library
+ * \param t Element (or list of elements) to be updated into database
+ * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
+ *
+ * qx::dao::update_by_query_with_relation<T>() execute following SQL query :<br>
+ * <i>UPDATE my_table SET my_column_1 = ?, my_column_2 = ?, etc.</i> + <i>WHERE my_query...</i>
+ */
+template <class T>
+inline QSqlError update_by_query_with_relation(const QStringList & relation, const qx::QxSqlQuery & query, T & t)
+{ return qx::dao::detail::QxDao_Update_WithRelation<T>::update(relation, query, t, NULL); }
 
 /*!
  * \ingroup QxDao
@@ -987,7 +1236,21 @@ inline QSqlError update_with_relation(const QStringList & relation, T & t)
  */
 template <class T>
 inline QSqlError update_with_all_relation(T & t)
-{ return qx::dao::detail::QxDao_Update_WithRelation<T>::update("*", t, NULL); }
+{ return qx::dao::detail::QxDao_Update_WithRelation<T>::update("*", "", t, NULL); }
+
+/*!
+ * \ingroup QxDao
+ * \brief Update an element and all its relationships (or a list of elements + all relationships) into database (adding a user SQL query to the default SQL query builded by QxOrm library)
+ * \param query Define a user SQL query added to default SQL query builded by QxOrm library
+ * \param t Element (or list of elements) to be updated into database
+ * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
+ *
+ * qx::dao::update_by_query_with_all_relation<T>() execute following SQL query :<br>
+ * <i>UPDATE my_table SET my_column_1 = ?, my_column_2 = ?, etc.</i> + <i>WHERE my_query...</i>
+ */
+template <class T>
+inline QSqlError update_by_query_with_all_relation(const qx::QxSqlQuery & query, T & t)
+{ return qx::dao::detail::QxDao_Update_WithRelation<T>::update("*", query, t, NULL); }
 
 /*!
  * \ingroup QxDao

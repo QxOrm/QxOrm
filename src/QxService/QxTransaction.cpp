@@ -23,9 +23,9 @@
 **
 ****************************************************************************/
 
-#if _QX_ENABLE_QT_NETWORK_DEPENDENCY
-
 #include <QxPrecompiled.h>
+
+#if _QX_ENABLE_QT_NETWORK_DEPENDENCY
 
 #include <QtCore/quuid.h>
 

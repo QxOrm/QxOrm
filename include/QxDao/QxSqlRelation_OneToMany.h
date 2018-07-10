@@ -76,6 +76,7 @@ public:
    virtual void lazyJoin(QxSqlRelationParams & params) const                  { Q_UNUSED(params); }
    virtual void lazyWhere(QxSqlRelationParams & params) const                 { Q_UNUSED(params); }
    virtual void eagerWhere(QxSqlRelationParams & params) const                { Q_UNUSED(params); }
+   virtual void lazyWhereSoftDelete(QxSqlRelationParams & params) const       { Q_UNUSED(params); }
    virtual void lazyFetch_ResolveInput(QxSqlRelationParams & params) const    { Q_UNUSED(params); }
    virtual void eagerFetch_ResolveInput(QxSqlRelationParams & params) const   { Q_UNUSED(params); }
    virtual void lazyFetch_ResolveOutput(QxSqlRelationParams & params) const   { Q_UNUSED(params); }
@@ -105,6 +106,7 @@ public:
       long lOffsetId = (this->getDataId() ? this->getDataId()->getNameCount() : 0);
       long lNewOffset = (params.offset() + this->getDataCount() + lOffsetId);
       lNewOffset = (lNewOffset + (bAddOffsetForeign ? pForeign->getNameCount() : 0));
+      lNewOffset = (lNewOffset + (this->m_oSoftDelete.isEmpty() ? 0 : 1));
       params.setOffset(lNewOffset);
    }
 
@@ -118,6 +120,7 @@ public:
       if (pId) { sql += (pId->getSqlTablePointNameAsAlias(tableAlias) + ", "); }
       if (pForeign) { sql += (pForeign->getSqlTablePointNameAsAlias(tableAlias) + ", "); }
       while ((p = this->nextData(l1))) { if (p != pForeign) { sql += (p->getSqlTablePointNameAsAlias(tableAlias) + ", "); } }
+      if (! this->m_oSoftDelete.isEmpty()) { sql += (this->m_oSoftDelete.buildSqlTablePointName(tableAlias) + ", "); }
    }
 
    virtual void eagerJoin(QxSqlRelationParams & params) const
@@ -131,6 +134,15 @@ public:
       for (int i = 0; i < pId->getNameCount(); i++)
       { sql += pForeign->getSqlAlias(tableAlias, true, i) + " = " + pId->getSqlAlias(tableRef, true, i) + " AND "; }
       sql = sql.left(sql.count() - 5); // Remove last " AND "
+   }
+
+   virtual void eagerWhereSoftDelete(QxSqlRelationParams & params) const
+   {
+      if (this->m_oSoftDelete.isEmpty()) { return; }
+      QString & sql = params.sql();
+      QString tableAlias = this->tableAlias(params);
+      sql += qx::IxSqlQueryBuilder::addSqlCondition(sql);
+      sql += this->m_oSoftDelete.buildSqlQueryToFetch(tableAlias);
    }
 
    virtual void eagerFetch_ResolveOutput(QxSqlRelationParams & params) const

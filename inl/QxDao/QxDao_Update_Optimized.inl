@@ -31,11 +31,11 @@ template <class T>
 struct QxDao_Update_Optimized_Generic
 {
 
-   static inline QSqlError update_optimized(qx::dao::ptr<T> & ptr, QSqlDatabase * pDatabase)
+   static inline QSqlError update_optimized(const qx::QxSqlQuery & query, qx::dao::ptr<T> & ptr, QSqlDatabase * pDatabase)
    {
       QStringList lstDiff;
       if (ptr.isNull() || ! ptr.isDirty(lstDiff)) { return QSqlError(); }
-      return qx::dao::update((* ptr), pDatabase, lstDiff);
+      return qx::dao::update_by_query(query, (* ptr), pDatabase, lstDiff);
    }
 
 };
@@ -44,11 +44,11 @@ template <class T>
 struct QxDao_Update_Optimized_Container
 {
 
-   static inline QSqlError update_optimized(qx::dao::ptr<T> & ptr, QSqlDatabase * pDatabase)
+   static inline QSqlError update_optimized(const qx::QxSqlQuery & query, qx::dao::ptr<T> & ptr, QSqlDatabase * pDatabase)
    {
       if (ptr.isNull() || (qx::trait::generic_container<T>::size(* ptr) <= 0)) { return QSqlError(); }
       if (! ptr.getOriginal() || (qx::trait::generic_container<T>::size(* ptr) != qx::trait::generic_container<T>::size(* ptr.getOriginal())))
-      { return qx::dao::update((* ptr), pDatabase); }
+      { return qx::dao::update_by_query(query, (* ptr), pDatabase); }
 
       QStringList lstDiffItem; QSqlError errorItem;
       QSqlDatabase db = (pDatabase ? (* pDatabase) : qx::QxSqlDatabase::getDatabase());
@@ -59,7 +59,7 @@ struct QxDao_Update_Optimized_Container
       {
          lstDiffItem.clear();
          qx::dao::detail::is_dirty((* it1), (* it2), lstDiffItem);
-         if (lstDiffItem.count() > 0) { errorItem = qx::dao::update((* it1), (& db), lstDiffItem); }
+         if (lstDiffItem.count() > 0) { errorItem = qx::dao::update_by_query(query, (* it1), (& db), lstDiffItem); }
          if (errorItem.isValid()) { break; }
          else { ++it2; }
       }
@@ -75,11 +75,11 @@ template <class T>
 struct QxDao_Update_Optimized
 {
 
-   static inline QSqlError update_optimized(qx::dao::ptr<T> & ptr, QSqlDatabase * pDatabase)
+   static inline QSqlError update_optimized(const qx::QxSqlQuery & query, qx::dao::ptr<T> & ptr, QSqlDatabase * pDatabase)
    {
       typedef typename boost::mpl::if_c< qx::trait::is_container<T>::value, qx::dao::detail::QxDao_Update_Optimized_Container<T>, qx::dao::detail::QxDao_Update_Optimized_Generic<T> >::type type_dao_1;
 
-      QSqlError error = type_dao_1::update_optimized(ptr, pDatabase);
+      QSqlError error = type_dao_1::update_optimized(query, ptr, pDatabase);
       if (! error.isValid()) { qx::dao::detail::QxDao_Keep_Original< qx::dao::ptr<T> >::backup(ptr); }
       return error;
    }

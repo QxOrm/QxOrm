@@ -41,6 +41,8 @@
 
 #include <QxFunction/IxFunction.h>
 
+#include <QxDao/QxSoftDelete.h>
+
 namespace qx {
 
 /*!
@@ -62,6 +64,7 @@ protected:
    long m_lVersion;                                   //!< 'IxClass' version
    bool m_bFinalClass;                                //!< Class without base class (for example, qx::trait::no_base_class_defined and QObject)
    qx::dao::strategy::inheritance m_eDaoStrategy;     //!< Dao class strategy to access data member
+   qx::QxSoftDelete m_oSoftDelete;                    //!< Soft delete (or logical delete) behavior
 
    QByteArray m_byteName;                             //!< Optimization to retrieve name under "const char *" format
    const char * m_pName;                              //!< Optimization to retrieve name under "const char *" format
@@ -82,6 +85,7 @@ public:
    inline QString getDescription() const                          { return m_sDescription; }
    inline long getVersion() const                                 { return m_lVersion; }
    inline qx::dao::strategy::inheritance getDaoStrategy() const   { return m_eDaoStrategy; }
+   inline qx::QxSoftDelete getSoftDelete() const                  { return m_oSoftDelete; }
    inline bool getFinalClass() const                              { return m_bFinalClass; }
    inline IxDataMemberX * getDataMemberX() const                  { return m_pDataMemberX; }
    inline IxFunctionX * getFctMemberX() const                     { return m_pFctMemberX.get(); }
@@ -90,6 +94,7 @@ public:
    inline void setName(const QString & sName)                                 { m_sName = sName; updateNamePtr(); }
    inline void setDescription(const QString & sDesc)                          { m_sDescription = sDesc; }
    inline void setDaoStrategy(qx::dao::strategy::inheritance eDaoStrategy)    { m_eDaoStrategy = eDaoStrategy; }
+   inline void setSoftDelete(const qx::QxSoftDelete & oSoftDelete)            { m_oSoftDelete = oSoftDelete; if (m_oSoftDelete.getTableName().isEmpty()) { m_oSoftDelete.setTableName(m_sName); } }
 
 private:
 

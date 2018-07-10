@@ -40,6 +40,7 @@
 #include <QxDataMember/IxDataMemberX.h>
 
 #include <QxDao/IxSqlRelation.h>
+#include <QxDao/QxSoftDelete.h>
 
 namespace qx {
 
@@ -68,6 +69,7 @@ protected:
    QString m_sHashRelation;                                       //!< Optimization : hash to retrieve sql query with relation
    bool m_bCartesianProduct;                                      //!< Recordset can return cartesian product => same id in multiple records
    type_lst_ptr_by_id_ptr m_pIdX;                                 //!< Collection of id (and pointer associated) to avoid multiple fetch on same id (cartesian product)
+   QxSoftDelete m_oSoftDelete;                                    //!< Soft delete (or logical delete) behavior
 
 public:
 
@@ -84,6 +86,7 @@ public:
    inline QString getSqlQuery() const                    { return m_sSqlQuery; }
    inline QString getHashRelation() const                { return m_sHashRelation; }
    inline QString table() const                          { return m_sTableName; }
+   inline QxSoftDelete getSoftDelete() const             { return m_oSoftDelete; }
    inline bool getCartesianProduct() const               { return m_bCartesianProduct; }
    inline long getDataCount() const                      { return (m_lstDataMemberPtr ? m_lstDataMemberPtr->count() : 0); }
    inline long getRelationCount() const                  { return (m_lstSqlRelationPtr ? m_lstSqlRelationPtr->count() : 0); }
@@ -105,7 +108,9 @@ public:
    virtual IxSqlQueryBuilder & insert() = 0;
    virtual IxSqlQueryBuilder & update() = 0;
    virtual IxSqlQueryBuilder & deleteAll() = 0;
+   virtual IxSqlQueryBuilder & softDeleteAll() = 0;
    virtual IxSqlQueryBuilder & deleteById() = 0;
+   virtual IxSqlQueryBuilder & softDeleteById() = 0;
    virtual IxSqlQueryBuilder & createTable() = 0;
 
    virtual IxSqlQueryBuilder & fetchAll(const QStringList & columns) = 0;
@@ -114,6 +119,8 @@ public:
 
    virtual IxSqlQueryBuilder & fetchAll_WithRelation(IxSqlRelationX * pRelationX) = 0;
    virtual IxSqlQueryBuilder & fetchById_WithRelation(IxSqlRelationX * pRelationX) = 0;
+
+   static QString addSqlCondition(const QString & sql) { return (sql.contains(" WHERE ") ? " AND " : " WHERE "); }
 
 private:
 

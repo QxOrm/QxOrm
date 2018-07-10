@@ -65,6 +65,7 @@ public:
    virtual void lazyJoin(QxSqlRelationParams & params) const                  { Q_UNUSED(params); }
    virtual void lazyWhere(QxSqlRelationParams & params) const                 { Q_UNUSED(params); }
    virtual void eagerWhere(QxSqlRelationParams & params) const                { Q_UNUSED(params); }
+   virtual void lazyWhereSoftDelete(QxSqlRelationParams & params) const       { Q_UNUSED(params); }
    virtual void lazyFetch_ResolveInput(QxSqlRelationParams & params) const    { Q_UNUSED(params); }
    virtual void eagerFetch_ResolveInput(QxSqlRelationParams & params) const   { Q_UNUSED(params); }
    virtual QSqlError onBeforeSave(QxSqlRelationParams & params) const         { Q_UNUSED(params); return QSqlError(); }
@@ -86,8 +87,10 @@ public:
    virtual void updateOffset(bool bEager, QxSqlRelationParams & params) const
    {
       long lOffsetDataMember = (this->getDataMember() ? this->getDataMember()->getNameCount() : 0);
-      long lOffsetDataId = (bEager ? (this->getDataCount() + (this->getDataId() ? this->getDataId()->getNameCount() : 0)) : 0);
-      params.setOffset(params.offset() + lOffsetDataMember + lOffsetDataId);
+      long lOffsetDataId = (bEager ? (this->getDataId() ? this->getDataId()->getNameCount() : 0) : 0);
+      long lOffsetDataCount = (bEager ? this->getDataCount() : 0);
+      long lOffsetSoftDelete = (bEager ? (this->m_oSoftDelete.isEmpty() ? 0 : 1) : 0);
+      params.setOffset(params.offset() + lOffsetDataMember + lOffsetDataId + lOffsetDataCount + lOffsetSoftDelete);
    }
 
    virtual void createTable(QxSqlRelationParams & params) const
@@ -111,14 +114,11 @@ public:
       QString & sql = params.sql();
       IxDataMember * pData = this->getDataMember(); qAssert(pData);
       IxDataMember * p = NULL; IxDataMember * pId = this->getDataId(); qAssert(pId);
-      //IxSqlRelation * pRelation = NULL;
-      //QxSqlQueryBuilder<DataType> builderBis;
-      //QxSqlRelationParams paramsBis(0, 0, (& sql), (& builderBis), NULL, NULL);
       QString table = this->table(); QString tableAlias = this->tableAlias(params); QString tableRef = params.builder().table();
       if (pData) { sql += (pData->getSqlTablePointNameAsAlias(tableRef) + ", "); }
       if (pId) { sql += (pId->getSqlTablePointNameAsAlias(tableAlias) + ", "); }
       while ((p = this->nextData(l1))) { sql += (p->getSqlTablePointNameAsAlias(tableAlias) + ", "); }
-      //while ((pRelation = this->nextRelation(l2))) { params.setIndex(m_lOffsetRelation + l2); pRelation->lazySelect(paramsBis); }
+      if (! this->m_oSoftDelete.isEmpty()) { sql += (this->m_oSoftDelete.buildSqlTablePointName(tableAlias) + ", "); }
    }
 
    virtual void eagerJoin(QxSqlRelationParams & params) const
@@ -134,6 +134,15 @@ public:
       sql = sql.left(sql.count() - 5); // Remove last " AND "
    }
 
+   virtual void eagerWhereSoftDelete(QxSqlRelationParams & params) const
+   {
+      if (this->m_oSoftDelete.isEmpty()) { return; }
+      QString & sql = params.sql();
+      QString tableAlias = this->tableAlias(params);
+      sql += qx::IxSqlQueryBuilder::addSqlCondition(sql);
+      sql += this->m_oSoftDelete.buildSqlQueryToFetch(tableAlias);
+   }
+
    virtual void lazyFetch_ResolveOutput(QxSqlRelationParams & params) const
    {
       if (! this->verifyOffset(params, false)) { return; }
@@ -142,7 +151,7 @@ public:
       IxDataMember * pData = this->getDataMember(); qAssert(pData); if (! pData) { return; }
       for (int i = 0; i < pData->getNameCount(); i++)
       { QVariant vId = query.value(params.offset() + i); pData->fromVariant((& currOwner), vId, i); }
-      params.setOffset(params.offset() + (pData ? pData->getNameCount() : 0));
+      this->updateOffset(false, params);
    }
 
    virtual void eagerFetch_ResolveOutput(QxSqlRelationParams & params) const
@@ -153,7 +162,7 @@ public:
       IxDataMember * pData = this->getDataMember(); qAssert(pData); if (! pData) { return; }
       IxDataMember * p = NULL; IxDataMember * pId = this->getDataId(); qAssert(pId); if (! pId) { return; }
       long lIndex = 0; long lOffsetId = (pId ? pId->getNameCount() : 0); long lOffsetData = (pData ? pData->getNameCount() : 0);
-      long lOffsetOld = params.offset(); params.setOffset(lOffsetOld + this->getDataCount() + lOffsetId + lOffsetData);
+      long lOffsetOld = params.offset(); this->updateOffset(true, params);
       long lOffsetRelation = (lOffsetOld + lOffsetId + lOffsetData);
       bool bValidId(false), bValidIdBis(false);
       for (int i = 0; i < pData->getNameCount(); i++)

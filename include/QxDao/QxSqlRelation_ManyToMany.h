@@ -79,6 +79,7 @@ public:
    virtual void lazyJoin(QxSqlRelationParams & params) const                  { Q_UNUSED(params); }
    virtual void lazyWhere(QxSqlRelationParams & params) const                 { Q_UNUSED(params); }
    virtual void eagerWhere(QxSqlRelationParams & params) const                { Q_UNUSED(params); }
+   virtual void lazyWhereSoftDelete(QxSqlRelationParams & params) const       { Q_UNUSED(params); }
    virtual void lazyFetch_ResolveInput(QxSqlRelationParams & params) const    { Q_UNUSED(params); }
    virtual void eagerFetch_ResolveInput(QxSqlRelationParams & params) const   { Q_UNUSED(params); }
    virtual void lazyFetch_ResolveOutput(QxSqlRelationParams & params) const   { Q_UNUSED(params); }
@@ -97,7 +98,13 @@ public:
    }
 
    virtual void updateOffset(bool bEager, QxSqlRelationParams & params) const
-   { if (bEager) { params.setOffset(params.offset() + this->getDataCount() + (this->getDataId() ? this->getDataId()->getNameCount() : 0)); } }
+   {
+      if (! bEager) { return; }
+      long lOffsetNew = params.offset() + this->getDataCount();
+      lOffsetNew += (this->getDataId() ? this->getDataId()->getNameCount() : 0);
+      lOffsetNew += (this->m_oSoftDelete.isEmpty() ? 0 : 1);
+      params.setOffset(lOffsetNew);
+   }
 
    virtual void eagerSelect(QxSqlRelationParams & params) const
    {
@@ -107,6 +114,7 @@ public:
       QString tableAlias = this->tableAlias(params);
       if (pId) { sql += (pId->getSqlTablePointNameAsAlias(tableAlias) + ", "); }
       while ((p = this->nextData(l1))) { sql += (p->getSqlTablePointNameAsAlias(tableAlias) + ", "); }
+      if (! this->m_oSoftDelete.isEmpty()) { sql += (this->m_oSoftDelete.buildSqlTablePointName(tableAlias) + ", "); }
    }
 
    virtual void eagerJoin(QxSqlRelationParams & params) const
@@ -130,13 +138,22 @@ public:
       sql = sql.left(sql.count() - 5); // Remove last " AND "
    }
 
+   virtual void eagerWhereSoftDelete(QxSqlRelationParams & params) const
+   {
+      if (this->m_oSoftDelete.isEmpty()) { return; }
+      QString & sql = params.sql();
+      QString tableAlias = this->tableAlias(params);
+      sql += qx::IxSqlQueryBuilder::addSqlCondition(sql);
+      sql += this->m_oSoftDelete.buildSqlQueryToFetch(tableAlias);
+   }
+
    virtual void eagerFetch_ResolveOutput(QxSqlRelationParams & params) const
    {
       if (! this->verifyOffset(params, true)) { return; }
       QSqlQuery & query = params.query();
       IxDataMember * p = NULL; IxDataMember * pId = this->getDataId(); qAssert(pId);
       long lIndex = 0; long lOffsetId = (pId ? pId->getNameCount() : 0); bool bValidId(false);
-      long lOffsetOld = params.offset(); params.setOffset(lOffsetOld + this->getDataCount() + lOffsetId);
+      long lOffsetOld = params.offset(); this->updateOffset(true, params);
       for (int i = 0; i < pId->getNameCount(); i++)
       { QVariant v = query.value(lOffsetOld + i); bValidId = (bValidId || qx::trait::is_valid_primary_key(v)); }
       if (! bValidId) { return; }

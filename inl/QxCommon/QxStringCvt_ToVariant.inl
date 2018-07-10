@@ -71,6 +71,10 @@ template <> struct QxStringCvt_ToVariant< std::wstring > {
 static inline QVariant toVariant(const std::wstring & t, const QString & format, int index)
 { Q_UNUSED(format); Q_UNUSED(index); return QString::fromStdWString(t); } };
 
+template <> struct QxStringCvt_ToVariant< QVariant > {
+static inline QVariant toVariant(const QVariant & t, const QString & format, int index)
+{ Q_UNUSED(format); Q_UNUSED(index); return t; } };
+
 } // namespace detail
 } // namespace cvt
 } // namespace qx

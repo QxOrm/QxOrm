@@ -82,6 +82,8 @@ public:
    inline const QSqlQuery & query() const                      { return m_query; }
    inline QSqlError & error()                                  { return m_error; }
    inline const QSqlError & error() const                      { return m_error; }
+   inline qx::QxSqlQuery & qxQuery()                           { return m_qxQuery; }
+   inline const qx::QxSqlQuery & qxQuery() const               { return m_qxQuery; }
    inline qx::IxSqlQueryBuilder & builder()                    { qAssert(m_pQueryBuilder); return (* m_pQueryBuilder); }
    inline const qx::IxSqlQueryBuilder & builder() const        { qAssert(m_pQueryBuilder); return (* m_pQueryBuilder); }
    inline qx::IxDataMemberX * getDataMemberX() const           { return m_pDataMemberX; }
@@ -139,7 +141,11 @@ public:
       m_qxQuery = query;
       if (m_qxQuery.isEmpty()) { return; }
       QString sql = this->builder().getSqlQuery();
-      sql += " " + m_qxQuery.query();
+      QString sqlToAdd = m_qxQuery.query().trimmed();
+      bool bAddSqlCondition = false;
+      if (sqlToAdd.left(6).contains("WHERE ", Qt::CaseInsensitive)) { sqlToAdd = sqlToAdd.right(sqlToAdd.size() - 6); bAddSqlCondition = true; }
+      else if (sqlToAdd.left(4).contains("AND ", Qt::CaseInsensitive)) { sqlToAdd = sqlToAdd.right(sqlToAdd.size() - 4); bAddSqlCondition = true; }
+      sql += (bAddSqlCondition ? qx::IxSqlQueryBuilder::addSqlCondition(sql) : QString(" ")) + sqlToAdd;
       this->builder().setSqlQuery(sql);
       if (bResolve) { this->query().prepare(sql); m_qxQuery.resolve(this->query()); }
    }

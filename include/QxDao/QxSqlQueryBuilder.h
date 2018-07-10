@@ -100,6 +100,7 @@ public:
    {
       QX_SQL_BUILDER_INIT_FCT()
       sql = "SELECT COUNT(*) FROM " + m_sTableName;
+      if (! m_oSoftDelete.isEmpty()) { sql += " WHERE " + m_oSoftDelete.buildSqlQueryToFetch(); }
       setSqlQuery(sql);
       return (* this);
    }
@@ -155,11 +156,30 @@ public:
       return (* this);
    }
 
+   virtual IxSqlQueryBuilder & softDeleteAll()
+   {
+      QX_SQL_BUILDER_INIT_FCT()
+      if (! m_oSoftDelete.isEmpty()) { sql = "UPDATE " + m_sTableName + " SET " + m_oSoftDelete.buildSqlQueryToUpdate(); }
+      else { qAssert(false); }
+      setSqlQuery(sql);
+      return (* this);
+   }
+
    virtual IxSqlQueryBuilder & deleteById()
    {
       QX_SQL_BUILDER_INIT_FCT()
       if (! getDataId()) { qDebug("[QxOrm] %s", QX_SQL_ERR_NO_ID_REGISTERED); qAssert(false); return (* this); }
-      qx::dao::detail::QxSqlQueryHelper_DeleteById<type_sql>::sql(sql, (* this));
+      qx::dao::detail::QxSqlQueryHelper_DeleteById<type_sql>::sql(sql, (* this), false);
+      setSqlQuery(sql);
+      return (* this);
+   }
+
+   virtual IxSqlQueryBuilder & softDeleteById()
+   {
+      QX_SQL_BUILDER_INIT_FCT()
+      if (! getDataId()) { qDebug("[QxOrm] %s", QX_SQL_ERR_NO_ID_REGISTERED); qAssert(false); return (* this); }
+      if (m_oSoftDelete.isEmpty()) { qAssert(false); return (* this); }
+      qx::dao::detail::QxSqlQueryHelper_DeleteById<type_sql>::sql(sql, (* this), true);
       setSqlQuery(sql);
       return (* this);
    }
@@ -234,6 +254,7 @@ public:
       m_sTableName = m_pDataMemberX->getName();
       m_lstDataMemberPtr = (& QxSqlQueryBuilder<T>::m_lstDataMember);
       m_lstSqlRelationPtr = (& QxSqlQueryBuilder<T>::m_lstSqlRelation);
+      m_oSoftDelete = QxClass<type_sql>::getSingleton()->getSoftDelete();
       if (getDataCount() > 0 || getRelationCount() > 0) { return; }
       IxDataMember * p = NULL; long lCount = m_pDataMemberX->count_WithDaoStrategy();
       for (long l = 0; l < lCount; ++l) { if ((p = isValid_DataMember(l))) { m_lstDataMember.insert(p->getKey(), p); } }

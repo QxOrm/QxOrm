@@ -31,13 +31,15 @@ template <class T>
 struct QxDao_DeleteAll
 {
 
-   static QSqlError deleteAll(const qx::QxSqlQuery & query, QSqlDatabase * pDatabase)
+   static QSqlError deleteAll(const qx::QxSqlQuery & query, QSqlDatabase * pDatabase, bool bVerifySoftDelete)
    {
       T t; Q_UNUSED(t);
       qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "delete all");
       if (! dao.isValid()) { return dao.error(); }
 
-      QString sql = dao.builder().deleteAll().getSqlQuery();
+      QString sql; qx::QxSoftDelete oSoftDelete = dao.builder().getSoftDelete();
+      if (bVerifySoftDelete && ! oSoftDelete.isEmpty()) { sql = dao.builder().softDeleteAll().getSqlQuery(); }
+      else { sql = dao.builder().deleteAll().getSqlQuery(); }
       if (sql.isEmpty()) { return dao.errEmpty(); }
       if (! pDatabase) { dao.transaction(); }
       if (! query.isEmpty()) { dao.addQuery(query, true); sql = dao.builder().getSqlQuery(); }

@@ -35,15 +35,17 @@ struct QxSqlQueryHelper_FetchAll_WithRelation
    {
       BOOST_STATIC_ASSERT(qx::trait::is_qx_registered<T>::value);
       if (! pRelationX || (pRelationX->count() <= 0)) { qAssert(false); QxSqlQueryHelper_FetchAll<T>::sql(sql, builder); return; }
-      long l1(0), l2(0), l3(0), l4(0);
+      long l1(0), l2(0), l3(0), l4(0), l5(0);
       qx::IxDataMember * p = NULL;
       qx::IxDataMember * pId = builder.getDataId();
       qx::IxSqlRelation * pRelation = NULL;
       qx::QxSqlRelationParams params(0, 0, (& sql), (& builder), NULL, NULL);
+      qx::QxSoftDelete oSoftDelete = builder.getSoftDelete();
       QString table = builder.table();
       sql = "SELECT ";
       if (pId) { sql += (pId->getSqlTablePointNameAsAlias(table) + ", "); }
       while ((p = builder.nextData(l1))) { sql += (p->getSqlTablePointNameAsAlias(table) + ", "); }
+      if (! oSoftDelete.isEmpty()) { l1++; sql += (oSoftDelete.buildSqlTablePointName() + ", "); }
       while ((pRelation = builder.nextRelation(l2)))
       { params.setIndex(l2); if (pRelationX->exist(pRelation->getKey())) { pRelation->eagerSelect(params); } else { pRelation->lazySelect(params); } }
       sql = sql.left(sql.count() - 2); // Remove last ", "
@@ -53,6 +55,9 @@ struct QxSqlQueryHelper_FetchAll_WithRelation
       sql = sql.left(sql.count() - 2); // Remove last ", "
       while ((pRelation = builder.nextRelation(l4)))
       { params.setIndex(l4); if (pRelationX->exist(pRelation->getKey())) { pRelation->eagerJoin(params); } else { pRelation->lazyJoin(params); } }
+      if (! oSoftDelete.isEmpty()) { sql += " WHERE " + oSoftDelete.buildSqlQueryToFetch(); }
+      while ((pRelation = builder.nextRelation(l5)))
+      { params.setIndex(l5); if (pRelationX->exist(pRelation->getKey())) { pRelation->eagerWhereSoftDelete(params); } else { pRelation->lazyWhereSoftDelete(params); } }
    }
 
    static void resolveInput(qx::IxSqlRelationX * pRelationX, T & t, QSqlQuery & query, qx::IxSqlQueryBuilder & builder)
@@ -66,12 +71,14 @@ struct QxSqlQueryHelper_FetchAll_WithRelation
       qx::IxDataMember * p = NULL;
       qx::IxDataMember * pId = builder.getDataId();
       qx::IxSqlRelation * pRelation = NULL;
+      qx::QxSoftDelete oSoftDelete = builder.getSoftDelete();
       short iOffsetId = (pId ? pId->getNameCount() : 0);
       QVariant vId; QVariant vIdRelation;
       if (pId) { QString sId; for (int i = 0; i < pId->getNameCount(); i++) { sId += query.value(i).toString() + "|"; }; vId = sId; }
       bool bComplex = builder.getCartesianProduct();
       bool bByPass = (bComplex && builder.existIdX(0, vId, vId));
-      qx::QxSqlRelationParams params(0, (builder.getDataCount() + iOffsetId), NULL, (& builder), (& query), (& t));
+      short iOffset = (builder.getDataCount() + iOffsetId + (oSoftDelete.isEmpty() ? 0 : 1));
+      qx::QxSqlRelationParams params(0, iOffset, NULL, (& builder), (& query), (& t));
 
       if (! bByPass)
       {

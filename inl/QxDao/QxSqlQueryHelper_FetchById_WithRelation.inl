@@ -38,7 +38,8 @@ struct QxSqlQueryHelper_FetchById_WithRelation
       qx::IxDataMember * pId = builder.getDataId(); qAssert(pId);
       QString table = builder.table();
       sql = builder.fetchAll_WithRelation(pRelationX).getSqlQuery();
-      sql += " WHERE " + pId->getSqlAliasEqualToPlaceHolder(table, true);
+      sql += qx::IxSqlQueryBuilder::addSqlCondition(sql);
+      sql += pId->getSqlAliasEqualToPlaceHolder(table, true);
    }
 
    static void resolveInput(qx::IxSqlRelationX * pRelationX, T & t, QSqlQuery & query, qx::IxSqlQueryBuilder & builder)

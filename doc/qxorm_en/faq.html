@@ -63,7 +63,7 @@
   <col><col><col><col><col>
   <tbody><tr>
   <td align="left" valign="top"><font size="2">QxOrm  &gt;&gt;  Faq</font></td>
-  <td align="right" valign="top"><font size="2">Current version : QxOrm 1.1.6 (LGPL) - <a href="../doxygen/index.html" target="_blank">QxOrm library online documentation</a></font></td>
+  <td align="right" valign="top"><font size="2">Current version : QxOrm 1.1.7 (LGPL) - <a href="../doxygen/index.html" target="_blank">QxOrm library online documentation</a></font></td>
   <td width="10px"></td>
   <td width="40px" height="30px"><a href="../qxorm_fr/faq.html"><img alt="Version française du site" src="./resource/FR.png" width="40" height="30" border="0"></a></td>
   <td width="40px" height="30px"><a href="../qxorm_en/faq.html"><img alt="Web site english version" src="./resource/GB.png" width="40" height="30" border="0"></a></td>
@@ -97,6 +97,7 @@
                </li><li><a href="#faq_130">How to define a '<i>Trigger</i>' with QxOrm ?</a><br>
                </li><li><a href="#faq_140">How to register an abstract class into QxOrm context ?</a><br>
                </li><li><a href="#faq_150">How to register a class defined into a namespace into QxOrm context ?</a><br>
+               </li><li><a href="#faq_160">How to define a soft delete behavior ?</a><br>
                </li></ul>
               </td>
               <td width="200" align="center" valign="top"><a href="./resource/qt_ambassador_logo.png" target="_blank"><img alt="qt_ambassador" src="./resource/qt_ambassador_logo_150x150.png" width="150" height="150" border="0"></a><br>
@@ -852,6 +853,63 @@ void</span> BaseClassTrigger<span class="operator">::</span>onBeforeUpdate<span 
            You can find a sample in the directory <i>./test/qxDllSample/dll1/</i> of QxOrm package with the class <i>CPerson</i> defined into namespace <i>qx::test</i> :<br>
            <br>
            * <i><b>QX_REGISTER_COMPLEX_CLASS_NAME_HPP_QX_DLL1(qx::test::CPerson, QObject, 0, qx_test_CPerson)</b></i>
+           </td>
+         </tr>
+       </tbody>
+      </table>
+      <br><br>
+      <a name="faq_160"><u><b>How to define a soft delete behavior ?</b></u></a><br><br>
+      <table border="0" style="width: 100%" align="center">
+       <col>
+       <col>
+       <tbody>
+         <tr>
+           <td valign="middle" width="30"></td>
+           <td align="justify">
+           A soft delete doesn't remove rows from database (this is not a physical delete) : a new column is added to the table definition to flag a row as deleted or not.<br>
+           This column can contain a boolean (1 means row deleted, 0 or NULL means row not deleted), or can contain deletion date-time (if empty or NULL, row is not deleted).<br>
+           So you can reactivate a deleted row by setting NULL or empty value into database.<br>
+           <br>
+           To define a soft delete behavior with QxOrm library, you have to use the class <b>qx::QxSoftDelete</b> in function mapping by class <i>qx::register_class&lt;T&gt;</i>.<br>
+           Here is an example with the class <i>Bar</i> containing 2 properties <i>m_id</i> and <i>m_desc</i> :<br>
+           <br>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="keyword">namespace</span> qx<span class="operator"> {</span><span class="keyword">
+template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</span> register_class<span class="operator">(</span>QxClass<span class="operator">&lt;</span>Bar<span class="operator">&gt; &amp;</span> t<span class="operator">)
+{</span>
+   t<span class="operator">.</span>setSoftDelete<span class="operator">(</span>qx<span class="operator">::</span>QxSoftDelete<span class="operator">(</span><span class="string">"deleted_at"</span><span class="operator">));</span>
+
+   t<span class="operator">.</span>id<span class="operator">(&amp;</span> Bar<span class="operator">::</span>m_id<span class="operator">,</span><span class="string"> "id"</span><span class="operator">);</span>
+   t<span class="operator">.</span>data<span class="operator">(&amp;</span> Bar<span class="operator">::</span>m_desc<span class="operator">,</span><span class="string"> "desc"</span><span class="operator">);
+}}</span></pre>
+           </td></tr></tbody></table>
+           <br>
+           SQL queries builded by QxOrm library will take into account this soft delete parameter to add conditions (don't fetch deleted item, don't delete physically a row, etc.).<br>
+           For example, if you execute this code with the class <i>Bar</i> :<br>
+           <br>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre>Bar_ptr pBar<span class="operator">;</span> pBar<span class="operator">.</span>reset<span class="operator">(</span><span class="keyword">new</span> Bar<span class="operator">());</span>
+pBar<span class="operator">-&gt;</span>setId<span class="operator">(</span><span class="int">5</span><span class="operator">);</span>
+QSqlError daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<span class="operator">::</span>delete_by_id<span class="operator">(</span>pBar<span class="operator">);</span>     qAssert<span class="operator">(!</span> daoError<span class="operator">.</span>isValid<span class="operator">());</span>
+qx_bool bDaoExist<span class="operator"> =</span> qx<span class="operator">::</span>dao<span class="operator">::</span>exist<span class="operator">(</span>pBar<span class="operator">);</span>             qAssert<span class="operator">(!</span> bDaoExist<span class="operator">);</span>
+daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<span class="operator">::</span>delete_all<span class="operator">&lt;</span>Bar<span class="operator">&gt;();</span>                qAssert<span class="operator">(!</span> daoError<span class="operator">.</span>isValid<span class="operator">());</span><span class="type">
+long</span> lBarCount<span class="operator"> =</span> qx<span class="operator">::</span>dao<span class="operator">::</span>count<span class="operator">&lt;</span>Bar<span class="operator">&gt;();</span>               qAssert<span class="operator">(</span>lBarCount<span class="operator"> ==</span><span class="int"> 0</span><span class="operator">);</span>
+daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<span class="operator">::</span>destroy_all<span class="operator">&lt;</span>Bar<span class="operator">&gt;();</span>               qAssert<span class="operator">(!</span> daoError<span class="operator">.</span>isValid<span class="operator">());</span></pre>
+           </td></tr></tbody></table>
+           <br>
+           You will obtain following output trace :<br>
+           <br>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="operator">[</span>QxOrm<span class="operator">]</span> sql query<span class="operator"> (</span><span class="int">93</span> ms<span class="operator">) :</span> UPDATE Bar SET deleted_at<span class="operator"> =</span><span class="char"> '20110617115148615'</span> WHERE id<span class="operator"> = :</span>id<span class="operator">
+[</span>QxOrm<span class="operator">]</span> sql query<span class="operator"> (</span><span class="int">0</span> ms<span class="operator">) :</span> SELECT Bar<span class="operator">.</span>id AS Bar_id_0<span class="operator">,</span> Bar<span class="operator">.</span>deleted_at FROM Bar WHERE Bar<span class="operator">.</span>id<span class="operator"> = :</span>id AND<span class="operator"> (</span>Bar<span class="operator">.</span>deleted_at IS NULL OR Bar<span class="operator">.</span>deleted_at<span class="operator"> =</span><span class="char"> ''</span><span class="operator">)
+[</span>QxOrm<span class="operator">]</span> sql query<span class="operator"> (</span><span class="int">78</span> ms<span class="operator">) :</span> UPDATE Bar SET deleted_at<span class="operator"> =</span><span class="char"> '20110617115148724'</span><span class="operator">
+[</span>QxOrm<span class="operator">]</span> sql query<span class="operator"> (</span><span class="int">0</span> ms<span class="operator">) :</span> SELECT COUNT<span class="operator">(*)</span> FROM Bar WHERE<span class="operator"> (</span>Bar<span class="operator">.</span>deleted_at IS NULL OR Bar<span class="operator">.</span>deleted_at<span class="operator"> =</span><span class="char"> ''</span><span class="operator">)
+[</span>QxOrm<span class="operator">]</span> sql query<span class="operator"> (</span><span class="int">110</span> ms<span class="operator">) :</span> DELETE FROM Bar</pre>
+           </td></tr></tbody></table>
+           <br>
+           <b>Note :</b> To delete physically a row from database, you have to use followings functions : <i>qx::dao::destroy_by_id()</i> and <i>qx::dao::destroy_all()</i>.<br>
+           <br>
+           <b>Other note :</b> it is recommended to define into database an index on column <i>deleted_at</i> to optimize execution of SQL queries.<br>
            </td>
          </tr>
        </tbody>

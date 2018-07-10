@@ -31,12 +31,15 @@ template <class T>
 struct QxSqlQueryHelper_DeleteById
 {
 
-   static void sql(QString & sql, qx::IxSqlQueryBuilder & builder)
+   static void sql(QString & sql, qx::IxSqlQueryBuilder & builder, bool bSoftDelete)
    {
       BOOST_STATIC_ASSERT(qx::trait::is_qx_registered<T>::value);
       qx::IxDataMember * pId = builder.getDataId(); qAssert(pId);
+      qx::QxSoftDelete oSoftDelete = builder.getSoftDelete();
       QString table = builder.table();
-      sql = "DELETE FROM " + table + " WHERE ";
+      if (bSoftDelete && ! oSoftDelete.isEmpty()) { sql = "UPDATE " + table + " SET " + oSoftDelete.buildSqlQueryToUpdate(); }
+      else { sql = "DELETE FROM " + table; }
+      sql += qx::IxSqlQueryBuilder::addSqlCondition(sql);
       sql += pId->getSqlNameEqualToPlaceHolder("", " AND ");
    }
 

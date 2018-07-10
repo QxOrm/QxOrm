@@ -110,6 +110,7 @@
 #include <QxDao/QxDaoStrategy.h>
 #include <QxDao/QxDaoPointer.h>
 #include <QxDao/QxDao_IsDirty.h>
+#include <QxDao/QxSoftDelete.h>
 
 #include <QxSerialize/QxSerialize.h>
 
