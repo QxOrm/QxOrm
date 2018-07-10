@@ -58,8 +58,8 @@ namespace qx {
 class QxBool;
 } // namespace qx
 
-QX_DLL_EXPORT QDataStream & operator<< (QDataStream & stream, const qx::QxBool & t) BOOST_USED;
-QX_DLL_EXPORT QDataStream & operator>> (QDataStream & stream, qx::QxBool & t) BOOST_USED;
+QX_DLL_EXPORT QDataStream & operator<< (QDataStream & stream, const qx::QxBool & t) QX_USED;
+QX_DLL_EXPORT QDataStream & operator>> (QDataStream & stream, qx::QxBool & t) QX_USED;
 
 namespace qx {
 

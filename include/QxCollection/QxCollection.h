@@ -49,14 +49,6 @@
 #pragma warning(disable:4503)
 #endif // _MSC_VER
 
-#include <boost/multi_index_container.hpp>
-#include <boost/multi_index/member.hpp>
-#include <boost/multi_index/random_access_index.hpp>
-#include <boost/multi_index/hashed_index.hpp>
-#include <boost/type_traits/is_pointer.hpp>
-
-#include <QtCore/qpair.h>
-
 #include <QxCollection/IxCollection.h>
 #include <QxCollection/QxForeach.h>
 
@@ -90,7 +82,7 @@ namespace qx {
 class drug { public: QString code; QString name; QString desc; };
 
 // typedef a smart-pointer of drug class
-typedef boost::shared_ptr<drug> drug_ptr;
+typedef std::shared_ptr<drug> drug_ptr;
 
 // collection of drugs indexed by 'code' property (QString type)
 qx::QxCollection<QString, drug_ptr> lstDrugs;
@@ -159,28 +151,27 @@ public:
 
 protected:
 
-   typedef boost::multi_index::member<type_pair_key_value, Key, & type_pair_key_value::first> type_member;
-   typedef boost::multi_index::random_access<> type_first_index;
-   typedef boost::multi_index::hashed_unique<type_member> type_second_index;
-   typedef boost::multi_index::indexed_by<type_first_index, type_second_index> type_indexed_by;
-   typedef boost::multi_index::multi_index_container<type_pair_key_value, type_indexed_by> type_container;
-
-   typedef typename type_container::template nth_index<0>::type type_index_rand;
-   typedef typename type_container::template nth_index<1>::type type_index_hash;
+   typedef QList<type_pair_key_value> type_list_pair_key_value;
+   typedef QHash<Key, long> type_hash_position;
 
 public:
 
-   typedef typename type_index_rand::iterator iterator;
-   typedef typename type_index_rand::const_iterator const_iterator;
-   typedef typename type_index_rand::reverse_iterator reverse_iterator;
-   typedef typename type_index_rand::const_reverse_iterator const_reverse_iterator;
+   typedef typename type_list_pair_key_value::iterator iterator;
+   typedef typename type_list_pair_key_value::const_iterator const_iterator;
+
+#if (QT_VERSION >= 0x050600)
+   typedef typename type_list_pair_key_value::reverse_iterator reverse_iterator;
+   typedef typename type_list_pair_key_value::const_reverse_iterator const_reverse_iterator;
+#endif // (QT_VERSION >= 0x050600)
 
    typedef const Key & const_reference_key;
    typedef const Value & const_reference_value;
 
 protected:
 
-   type_container m_qxCollection;   //!< Collection with random access (like std::vector) and fast lookup by key (like boost::unordered_map)
+   type_list_pair_key_value m_list;
+   type_hash_position m_hash;
+   bool m_batch;
 
 public:
 
@@ -192,75 +183,77 @@ public:
    bool operator== (const QxCollection<Key, Value> & other) const;                  //!< Return 'true' if 'other' is equal to this list, otherwise return 'false' (same values in the same order)
    bool operator!= (const QxCollection<Key, Value> & other) const;                  //!< Return 'true' if 'other' is not equal to this list, otherwise return 'false'
 
-   inline iterator begin();                  //!< Return an STL-style iterator pointing to the first item in the list
-   inline iterator end();                    //!< Return an STL-style iterator pointing to the imaginary item after the last item in the list
-   inline const_iterator begin() const;      //!< Return a const STL-style iterator pointing to the first item in the list
-   inline const_iterator end() const;        //!< Return a const STL-style iterator pointing to the imaginary item after the last item in the list
+   iterator begin();                  //!< Return an STL-style iterator pointing to the first item in the list
+   iterator end();                    //!< Return an STL-style iterator pointing to the imaginary item after the last item in the list
+   const_iterator begin() const;      //!< Return a const STL-style iterator pointing to the first item in the list
+   const_iterator end() const;        //!< Return a const STL-style iterator pointing to the imaginary item after the last item in the list
 
-   inline reverse_iterator rbegin();               //!< Return a reverse STL-style iterator pointing to the first item in the list
-   inline reverse_iterator rend();                 //!< Return a reverse STL-style iterator pointing to the imaginary item after the last item in the list
-   inline const_reverse_iterator rbegin() const;   //!< Return a const reverse STL-style iterator pointing to the first item in the list
-   inline const_reverse_iterator rend() const;     //!< Return a const reverse STL-style iterator pointing to the imaginary item after the last item in the list
+#if (QT_VERSION >= 0x050600)
+   reverse_iterator rbegin();               //!< Return a reverse STL-style iterator pointing to the first item in the list
+   reverse_iterator rend();                 //!< Return a reverse STL-style iterator pointing to the imaginary item after the last item in the list
+   const_reverse_iterator rbegin() const;   //!< Return a const reverse STL-style iterator pointing to the first item in the list
+   const_reverse_iterator rend() const;     //!< Return a const reverse STL-style iterator pointing to the imaginary item after the last item in the list
+#endif // (QT_VERSION >= 0x050600)
 
-   inline long capacity() const;                   //!< Return size of allocated storage capacity
-   inline void reserve(long size);                 //!< Request that the capacity of the allocated storage space for the items of the container be at least enough to hold 'size' elements
-   inline void reverse();                          //!< Reverse all items in the list
-   inline void clear();                            //!< Remove all items from the list
-   inline long count() const;                      //!< Return the number of items in the list (same as 'size()')
-   inline long size() const;                       //!< Return the number of items in the list (same as 'count()')
-   inline bool contains(const Key & key) const;    //!< Return 'true' if the list contains an occurrence of 'key', otherwise return 'false' (same as 'exist()')
-   inline bool exist(const Key & key) const;       //!< Return 'true' if the list contains an occurrence of 'key', otherwise return 'false' (same as 'contains()')
-   inline bool empty() const;                      //!< Return 'true' if the list contains no items; otherwise return 'false'
+   void reserve(long size);                 //!< Request that the capacity of the allocated storage space for the items of the container be at least enough to hold 'size' elements
+   void reverse();                          //!< Reverse all items in the list
+   void clear();                            //!< Remove all items from the list
+   long count() const;                      //!< Return the number of items in the list (same as 'size()')
+   long size() const;                       //!< Return the number of items in the list (same as 'count()')
+   bool contains(const Key & key) const;    //!< Return 'true' if the list contains an occurrence of 'key', otherwise return 'false' (same as 'exist()')
+   bool exist(const Key & key) const;       //!< Return 'true' if the list contains an occurrence of 'key', otherwise return 'false' (same as 'contains()')
+   bool empty() const;                      //!< Return 'true' if the list contains no items; otherwise return 'false'
 
-   inline bool push_back(const Key & key, const Value & value);               //!< Add element 'value' at the end of the list indexed by 'key'
-   inline bool push_front(const Key & key, const Value & value);              //!< Insert 'value' at the beginning of the list indexed by 'key'
-   inline bool insert(const Key & key, const Value & value);                  //!< Add element 'value' at the end of the list indexed by 'key'
-   inline bool insert(long index, const Key & key, const Value & value);      //!< Insert element 'value' at position 'index' in the list indexed by 'key'
-   inline bool insert(const QxCollection<Key, Value> & other);                //!< Add all items of 'other' at the end of the list
-   inline bool insert(long index, const QxCollection<Key, Value> & other);    //!< Insert all items of 'other' at the end of the list
-   inline bool replace(long index, const Key & key, const Value & value);     //!< Replace the item at index position 'index' with element 'value' indexed by 'key'
-   inline bool swap(long index1, long index2);                                //!< Exchange the item at index position 'index1' with the item at index position 'index2'
-   inline bool move(long indexFrom, long indexTo);                            //!< Move the item at index position 'indexFrom' to index position 'indexTo'
+   bool push_back(const Key & key, const Value & value);               //!< Add element 'value' at the end of the list indexed by 'key'
+   bool push_front(const Key & key, const Value & value);              //!< Insert 'value' at the beginning of the list indexed by 'key'
+   bool insert(const Key & key, const Value & value);                  //!< Add element 'value' at the end of the list indexed by 'key'
+   bool insert(long index, const Key & key, const Value & value);      //!< Insert element 'value' at position 'index' in the list indexed by 'key'
+   bool insert(const QxCollection<Key, Value> & other);                //!< Add all items of 'other' at the end of the list
+   bool insert(long index, const QxCollection<Key, Value> & other);    //!< Insert all items of 'other' at the end of the list
+   bool replace(long index, const Key & key, const Value & value);     //!< Replace the item at index position 'index' with element 'value' indexed by 'key'
+   bool swap(long index1, long index2);                                //!< Exchange the item at index position 'index1' with the item at index position 'index2'
+   bool move(long indexFrom, long indexTo);                            //!< Move the item at index position 'indexFrom' to index position 'indexTo'
 
-   inline bool removeByKey(const Key & key);             //!< Remove the item indexed by 'key' in the list
-   inline bool removeByIndex(long index);                //!< Remove the item at index position 'index'
-   inline bool removeByIndex(long first, long last);     //!< Remove all items from index position 'first' to index position 'last'
-   inline bool removeFirst();                            //!< Remove the first item in the list
-   inline bool removeLast();                             //!< Remove the last item in the list
+   bool removeByKey(const Key & key);             //!< Remove the item indexed by 'key' in the list
+   bool removeByIndex(long index);                //!< Remove the item at index position 'index'
+   bool removeByIndex(long first, long last);     //!< Remove all items from index position 'first' to index position 'last'
+   bool removeFirst();                            //!< Remove the first item in the list
+   bool removeLast();                             //!< Remove the last item in the list
 
-   inline const_reference_value getByKey(const Key & key) const;     //!< Return the item associated with the 'key'
-   inline const_reference_value getByIndex(long index) const;        //!< Return the item at index position 'index'
-   inline const_reference_value getFirst() const;                    //!< Return the first element in the list
-   inline const_reference_value getLast() const;                     //!< Return the last element in the list
-   inline const_reference_key getKeyByIndex(long index) const;       //!< Return the key associated with the element at index position 'index'
+   const_reference_value getByKey(const Key & key) const;     //!< Return the item associated with the 'key'
+   const_reference_value getByIndex(long index) const;        //!< Return the item at index position 'index'
+   const_reference_value getFirst() const;                    //!< Return the first element in the list
+   const_reference_value getLast() const;                     //!< Return the last element in the list
+   const_reference_key getKeyByIndex(long index) const;       //!< Return the key associated with the element at index position 'index'
 
-   inline void sortByKey(bool bAscending = true);        //!< Sort all items in the list using associated keys to compare
-   inline void sortByValue(bool bAscending = true);      //!< Sort all items in the list
+   void sortByKey(bool bAscending = true);        //!< Sort all items in the list using associated keys to compare
+   void sortByValue(bool bAscending = true);      //!< Sort all items in the list
 
    template <typename Compare>
-   inline void sort(Compare comp) { m_qxCollection.template get<0>().sort(comp); }
+   void sort(Compare comp) { std::sort(m_list.begin(), m_list.end(), comp); updateHashPosition(); }
 
-private:
+protected:
 
    void cloneCollection(QxCollection<Key, Value> * pClone, const QxCollection<Key, Value> & pRef);
    bool isSameCollection(const QxCollection<Key, Value> * p1, const QxCollection<Key, Value> & p2) const;
+   void updateHashPosition(long from = 0, long to = -1);
 
    template <bool bIsPointer /* = false */, int dummy>
    struct compareKeyValue
    {
-      static inline bool compareByKeyAscending(const type_pair_key_value & v1, const type_pair_key_value & v2)    { return (v1.first < v2.first); }
-      static inline bool compareByKeyDescending(const type_pair_key_value & v1, const type_pair_key_value & v2)   { return (v1.first > v2.first); }
-      static inline bool compareByValueAscending(const type_pair_key_value & v1, const type_pair_key_value & v2)  { return (v1.second < v2.second); }
-      static inline bool compareByValueDescending(const type_pair_key_value & v1, const type_pair_key_value & v2) { return (v1.second > v2.second); }
+      static bool compareByKeyAscending(const type_pair_key_value & v1, const type_pair_key_value & v2)    { return (v1.first < v2.first); }
+      static bool compareByKeyDescending(const type_pair_key_value & v1, const type_pair_key_value & v2)   { return (v1.first > v2.first); }
+      static bool compareByValueAscending(const type_pair_key_value & v1, const type_pair_key_value & v2)  { return (v1.second < v2.second); }
+      static bool compareByValueDescending(const type_pair_key_value & v1, const type_pair_key_value & v2) { return (v1.second > v2.second); }
    };
 
    template <int dummy>
    struct compareKeyValue<true, dummy>
    {
-      static inline bool compareByKeyAscending(const type_pair_key_value & v1, const type_pair_key_value & v2)    { return ((v1.first && v2.first) ? ((* v1.first) < (* v2.first)) : false); }
-      static inline bool compareByKeyDescending(const type_pair_key_value & v1, const type_pair_key_value & v2)   { return ((v1.first && v2.first) ? ((* v1.first) > (* v2.first)) : true); }
-      static inline bool compareByValueAscending(const type_pair_key_value & v1, const type_pair_key_value & v2)  { return ((v1.second && v2.second) ? ((* v1.second) < (* v2.second)) : false); }
-      static inline bool compareByValueDescending(const type_pair_key_value & v1, const type_pair_key_value & v2) { return ((v1.second && v2.second) ? ((* v1.second) > (* v2.second)) : true); }
+      static bool compareByKeyAscending(const type_pair_key_value & v1, const type_pair_key_value & v2)    { return ((v1.first && v2.first) ? ((* v1.first) < (* v2.first)) : false); }
+      static bool compareByKeyDescending(const type_pair_key_value & v1, const type_pair_key_value & v2)   { return ((v1.first && v2.first) ? ((* v1.first) > (* v2.first)) : true); }
+      static bool compareByValueAscending(const type_pair_key_value & v1, const type_pair_key_value & v2)  { return ((v1.second && v2.second) ? ((* v1.second) < (* v2.second)) : false); }
+      static bool compareByValueDescending(const type_pair_key_value & v1, const type_pair_key_value & v2) { return ((v1.second && v2.second) ? ((* v1.second) > (* v2.second)) : true); }
    };
 
 public:
@@ -268,7 +261,7 @@ public:
    virtual long _count() const               { return this->count(); }
    virtual void _clear()                     { this->clear(); }
    virtual bool _remove(long index)          { return this->removeByIndex(index); }
-   virtual boost::any _at(long index) const  { Value val = this->getByIndex(index); return boost::any(val); }
+   virtual qx::any _at(long index) const     { Value val = this->getByIndex(index); return qx::any(val); }
 
 };
 

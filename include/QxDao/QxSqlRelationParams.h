@@ -66,7 +66,7 @@ class QX_DLL_EXPORT QxSqlRelationParams
 
 public:
 
-   typedef qx_shared_ptr<QxSqlRelationLinked> type_relation_linked_ptr;
+   typedef std::shared_ptr<QxSqlRelationLinked> type_relation_linked_ptr;
    typedef QHash<QString, type_relation_linked_ptr> type_lst_relation_linked;
 
 protected:

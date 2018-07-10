@@ -43,10 +43,6 @@
  * \brief qx::trait::is_container<T>::value : return true if T is a container from stl, boost, Qt or QxOrm library, otherwise return false
  */
 
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/or.hpp>
-#include <boost/mpl/logical.hpp>
-
 #include <QxTraits/is_boost_unordered_map.h>
 #include <QxTraits/is_boost_unordered_set.h>
 #include <QxTraits/is_qt_hash.h>
@@ -75,265 +71,263 @@ namespace trait {
  * \brief qx::trait::is_container<T>::value : return true if T is a container from stl, boost, Qt or QxOrm library, otherwise return false
  */
 template <typename T>
-struct is_container : public boost::mpl::false_ { ; };
+struct is_container : public std::false_type { ; };
+
+#ifdef _QX_ENABLE_BOOST
 
 template <typename Key, typename Value>
-struct is_container< boost::unordered_map<Key, Value> > : public boost::mpl::true_ { ; };
+struct is_container< boost::unordered_map<Key, Value> > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_container< boost::unordered_map<Key, Value> & > : public boost::mpl::true_ { ; };
+struct is_container< boost::unordered_map<Key, Value> & > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_container< const boost::unordered_map<Key, Value> > : public boost::mpl::true_ { ; };
+struct is_container< const boost::unordered_map<Key, Value> > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_container< const boost::unordered_map<Key, Value> & > : public boost::mpl::true_ { ; };
+struct is_container< const boost::unordered_map<Key, Value> & > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_container< boost::unordered_multimap<Key, Value> > : public boost::mpl::true_ { ; };
+struct is_container< boost::unordered_multimap<Key, Value> > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_container< boost::unordered_multimap<Key, Value> & > : public boost::mpl::true_ { ; };
+struct is_container< boost::unordered_multimap<Key, Value> & > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_container< const boost::unordered_multimap<Key, Value> > : public boost::mpl::true_ { ; };
+struct is_container< const boost::unordered_multimap<Key, Value> > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_container< const boost::unordered_multimap<Key, Value> & > : public boost::mpl::true_ { ; };
+struct is_container< const boost::unordered_multimap<Key, Value> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_container< boost::unordered_set<T> > : public boost::mpl::true_ { ; };
+struct is_container< boost::unordered_set<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_container< boost::unordered_set<T> & > : public boost::mpl::true_ { ; };
+struct is_container< boost::unordered_set<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_container< const boost::unordered_set<T> > : public boost::mpl::true_ { ; };
+struct is_container< const boost::unordered_set<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_container< const boost::unordered_set<T> & > : public boost::mpl::true_ { ; };
+struct is_container< const boost::unordered_set<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_container< boost::unordered_multiset<T> > : public boost::mpl::true_ { ; };
+struct is_container< boost::unordered_multiset<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_container< boost::unordered_multiset<T> & > : public boost::mpl::true_ { ; };
+struct is_container< boost::unordered_multiset<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_container< const boost::unordered_multiset<T> > : public boost::mpl::true_ { ; };
+struct is_container< const boost::unordered_multiset<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_container< const boost::unordered_multiset<T> & > : public boost::mpl::true_ { ; };
+struct is_container< const boost::unordered_multiset<T> & > : public std::true_type { ; };
+
+#endif // _QX_ENABLE_BOOST
 
 template <typename Key, typename Value>
-struct is_container< QHash<Key, Value> > : public boost::mpl::true_ { ; };
+struct is_container< QHash<Key, Value> > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_container< QHash<Key, Value> & > : public boost::mpl::true_ { ; };
+struct is_container< QHash<Key, Value> & > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_container< const QHash<Key, Value> > : public boost::mpl::true_ { ; };
+struct is_container< const QHash<Key, Value> > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_container< const QHash<Key, Value> & > : public boost::mpl::true_ { ; };
+struct is_container< const QHash<Key, Value> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_container< QLinkedList<T> > : public boost::mpl::true_ { ; };
+struct is_container< QLinkedList<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_container< QLinkedList<T> & > : public boost::mpl::true_ { ; };
+struct is_container< QLinkedList<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_container< const QLinkedList<T> > : public boost::mpl::true_ { ; };
+struct is_container< const QLinkedList<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_container< const QLinkedList<T> & > : public boost::mpl::true_ { ; };
+struct is_container< const QLinkedList<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_container< QList<T> > : public boost::mpl::true_ { ; };
+struct is_container< QList<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_container< QList<T> & > : public boost::mpl::true_ { ; };
+struct is_container< QList<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_container< const QList<T> > : public boost::mpl::true_ { ; };
+struct is_container< const QList<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_container< const QList<T> & > : public boost::mpl::true_ { ; };
+struct is_container< const QList<T> & > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_container< QMap<Key, Value> > : public boost::mpl::true_ { ; };
+struct is_container< QMap<Key, Value> > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_container< QMap<Key, Value> & > : public boost::mpl::true_ { ; };
+struct is_container< QMap<Key, Value> & > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_container< const QMap<Key, Value> > : public boost::mpl::true_ { ; };
+struct is_container< const QMap<Key, Value> > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_container< const QMap<Key, Value> & > : public boost::mpl::true_ { ; };
+struct is_container< const QMap<Key, Value> & > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_container< QMultiHash<Key, Value> > : public boost::mpl::true_ { ; };
+struct is_container< QMultiHash<Key, Value> > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_container< QMultiHash<Key, Value> & > : public boost::mpl::true_ { ; };
+struct is_container< QMultiHash<Key, Value> & > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_container< const QMultiHash<Key, Value> > : public boost::mpl::true_ { ; };
+struct is_container< const QMultiHash<Key, Value> > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_container< const QMultiHash<Key, Value> & > : public boost::mpl::true_ { ; };
+struct is_container< const QMultiHash<Key, Value> & > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_container< QMultiMap<Key, Value> > : public boost::mpl::true_ { ; };
+struct is_container< QMultiMap<Key, Value> > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_container< QMultiMap<Key, Value> & > : public boost::mpl::true_ { ; };
+struct is_container< QMultiMap<Key, Value> & > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_container< const QMultiMap<Key, Value> > : public boost::mpl::true_ { ; };
+struct is_container< const QMultiMap<Key, Value> > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_container< const QMultiMap<Key, Value> & > : public boost::mpl::true_ { ; };
+struct is_container< const QMultiMap<Key, Value> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_container< QSet<T> > : public boost::mpl::true_ { ; };
+struct is_container< QSet<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_container< QSet<T> & > : public boost::mpl::true_ { ; };
+struct is_container< QSet<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_container< const QSet<T> > : public boost::mpl::true_ { ; };
+struct is_container< const QSet<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_container< const QSet<T> & > : public boost::mpl::true_ { ; };
+struct is_container< const QSet<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_container< QVector<T> > : public boost::mpl::true_ { ; };
+struct is_container< QVector<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_container< QVector<T> & > : public boost::mpl::true_ { ; };
+struct is_container< QVector<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_container< const QVector<T> > : public boost::mpl::true_ { ; };
+struct is_container< const QVector<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_container< const QVector<T> & > : public boost::mpl::true_ { ; };
+struct is_container< const QVector<T> & > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_container< qx::QxCollection<Key, Value> > : public boost::mpl::true_ { ; };
+struct is_container< qx::QxCollection<Key, Value> > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_container< qx::QxCollection<Key, Value> & > : public boost::mpl::true_ { ; };
+struct is_container< qx::QxCollection<Key, Value> & > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_container< const qx::QxCollection<Key, Value> > : public boost::mpl::true_ { ; };
+struct is_container< const qx::QxCollection<Key, Value> > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_container< const qx::QxCollection<Key, Value> & > : public boost::mpl::true_ { ; };
+struct is_container< const qx::QxCollection<Key, Value> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_container< std::list<T> > : public boost::mpl::true_ { ; };
+struct is_container< std::list<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_container< std::list<T> & > : public boost::mpl::true_ { ; };
+struct is_container< std::list<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_container< const std::list<T> > : public boost::mpl::true_ { ; };
+struct is_container< const std::list<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_container< const std::list<T> & > : public boost::mpl::true_ { ; };
+struct is_container< const std::list<T> & > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_container< std::map<Key, Value> > : public boost::mpl::true_ { ; };
+struct is_container< std::map<Key, Value> > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_container< std::map<Key, Value> & > : public boost::mpl::true_ { ; };
+struct is_container< std::map<Key, Value> & > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_container< const std::map<Key, Value> > : public boost::mpl::true_ { ; };
+struct is_container< const std::map<Key, Value> > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_container< const std::map<Key, Value> & > : public boost::mpl::true_ { ; };
+struct is_container< const std::map<Key, Value> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_container< std::set<T> > : public boost::mpl::true_ { ; };
+struct is_container< std::set<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_container< std::set<T> & > : public boost::mpl::true_ { ; };
+struct is_container< std::set<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_container< const std::set<T> > : public boost::mpl::true_ { ; };
+struct is_container< const std::set<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_container< const std::set<T> & > : public boost::mpl::true_ { ; };
+struct is_container< const std::set<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_container< std::vector<T> > : public boost::mpl::true_ { ; };
+struct is_container< std::vector<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_container< std::vector<T> & > : public boost::mpl::true_ { ; };
+struct is_container< std::vector<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_container< const std::vector<T> > : public boost::mpl::true_ { ; };
+struct is_container< const std::vector<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_container< const std::vector<T> & > : public boost::mpl::true_ { ; };
-
-#ifdef _QX_CPP_11_CONTAINER
-#ifndef BOOST_NO_CXX11_STD_UNORDERED
+struct is_container< const std::vector<T> & > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_container< std::unordered_map<Key, Value> > : public boost::mpl::true_ { ; };
+struct is_container< std::unordered_map<Key, Value> > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_container< std::unordered_map<Key, Value> & > : public boost::mpl::true_ { ; };
+struct is_container< std::unordered_map<Key, Value> & > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_container< const std::unordered_map<Key, Value> > : public boost::mpl::true_ { ; };
+struct is_container< const std::unordered_map<Key, Value> > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_container< const std::unordered_map<Key, Value> & > : public boost::mpl::true_ { ; };
+struct is_container< const std::unordered_map<Key, Value> & > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_container< std::unordered_multimap<Key, Value> > : public boost::mpl::true_ { ; };
+struct is_container< std::unordered_multimap<Key, Value> > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_container< std::unordered_multimap<Key, Value> & > : public boost::mpl::true_ { ; };
+struct is_container< std::unordered_multimap<Key, Value> & > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_container< const std::unordered_multimap<Key, Value> > : public boost::mpl::true_ { ; };
+struct is_container< const std::unordered_multimap<Key, Value> > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_container< const std::unordered_multimap<Key, Value> & > : public boost::mpl::true_ { ; };
+struct is_container< const std::unordered_multimap<Key, Value> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_container< std::unordered_set<T> > : public boost::mpl::true_ { ; };
+struct is_container< std::unordered_set<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_container< std::unordered_set<T> & > : public boost::mpl::true_ { ; };
+struct is_container< std::unordered_set<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_container< const std::unordered_set<T> > : public boost::mpl::true_ { ; };
+struct is_container< const std::unordered_set<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_container< const std::unordered_set<T> & > : public boost::mpl::true_ { ; };
+struct is_container< const std::unordered_set<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_container< std::unordered_multiset<T> > : public boost::mpl::true_ { ; };
+struct is_container< std::unordered_multiset<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_container< std::unordered_multiset<T> & > : public boost::mpl::true_ { ; };
+struct is_container< std::unordered_multiset<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_container< const std::unordered_multiset<T> > : public boost::mpl::true_ { ; };
+struct is_container< const std::unordered_multiset<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_container< const std::unordered_multiset<T> & > : public boost::mpl::true_ { ; };
-
-#endif // BOOST_NO_CXX11_STD_UNORDERED
-#endif // _QX_CPP_11_CONTAINER
+struct is_container< const std::unordered_multiset<T> & > : public std::true_type { ; };
 
 } // namespace trait
 } // namespace qx

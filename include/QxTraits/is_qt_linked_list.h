@@ -45,9 +45,6 @@
 
 #include <QtCore/qlinkedlist.h>
 
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/logical.hpp>
-
 namespace qx {
 namespace trait {
 
@@ -56,19 +53,19 @@ namespace trait {
  * \brief qx::trait::is_qt_linked_list<T>::value : return true if T is a QLinkedList<> container of Qt library, otherwise return false
  */
 template <typename T>
-struct is_qt_linked_list : public boost::mpl::false_ { ; };
+struct is_qt_linked_list : public std::false_type { ; };
 
 template <typename T>
-struct is_qt_linked_list< QLinkedList<T> > : public boost::mpl::true_ { ; };
+struct is_qt_linked_list< QLinkedList<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_qt_linked_list< QLinkedList<T> & > : public boost::mpl::true_ { ; };
+struct is_qt_linked_list< QLinkedList<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_qt_linked_list< const QLinkedList<T> > : public boost::mpl::true_ { ; };
+struct is_qt_linked_list< const QLinkedList<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_qt_linked_list< const QLinkedList<T> & > : public boost::mpl::true_ { ; };
+struct is_qt_linked_list< const QLinkedList<T> & > : public std::true_type { ; };
 
 } // namespace trait
 } // namespace qx

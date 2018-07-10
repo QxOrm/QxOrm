@@ -29,8 +29,6 @@
 **
 ****************************************************************************/
 
-#ifdef _QX_CPP_11_CONTAINER
-#ifndef BOOST_NO_CXX11_STD_UNORDERED
 #ifndef _QX_SERIALIZE_QDATASTREAM_STD_UNORDERED_SET_H_
 #define _QX_SERIALIZE_QDATASTREAM_STD_UNORDERED_SET_H_
 
@@ -96,5 +94,3 @@ QDataStream & operator>> (QDataStream & stream, std::unordered_multiset<T> & t)
 }
 
 #endif // _QX_SERIALIZE_QDATASTREAM_STD_UNORDERED_SET_H_
-#endif // BOOST_NO_CXX11_STD_UNORDERED
-#endif // _QX_CPP_11_CONTAINER

@@ -72,7 +72,7 @@ private:
 
 };
 
-typedef qx_shared_ptr<QxSqlGenerator_MSSQLServer> QxSqlGenerator_MSSQLServer_ptr;
+typedef std::shared_ptr<QxSqlGenerator_MSSQLServer> QxSqlGenerator_MSSQLServer_ptr;
 
 } // namespace detail
 } // namespace dao

@@ -61,7 +61,7 @@ public:
    QxSqlGenerator_PostgreSQL();
    virtual ~QxSqlGenerator_PostgreSQL();
 
-   virtual void onBeforeInsert(IxDao_Helper * pDaoHelper, void * pOwner) const;
+   virtual void checkSqlInsert(IxDao_Helper * pDaoHelper, QString & sql) const;
    virtual void onAfterInsert(IxDao_Helper * pDaoHelper, void * pOwner) const;
 
 private:
@@ -70,7 +70,7 @@ private:
 
 };
 
-typedef qx_shared_ptr<QxSqlGenerator_PostgreSQL> QxSqlGenerator_PostgreSQL_ptr;
+typedef std::shared_ptr<QxSqlGenerator_PostgreSQL> QxSqlGenerator_PostgreSQL_ptr;
 
 } // namespace detail
 } // namespace dao

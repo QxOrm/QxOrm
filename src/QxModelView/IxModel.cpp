@@ -36,8 +36,8 @@
 #include <QxMemLeak/mem_leak.h>
 
 #define QX_CONSTRUCT_IX_MODEL() \
-m_pClass(NULL), m_pDataMemberX(NULL), m_pDataMemberId(NULL), m_pCollection(NULL), \
-m_pParent(NULL), m_eAutoUpdateDatabase(IxModel::e_no_auto_update)
+m_pClass(NULL), m_pModelClass(NULL), m_pDataMemberX(NULL), m_pDataMemberId(NULL), m_pCollection(NULL), \
+m_pParent(NULL), m_eAutoUpdateDatabase(IxModel::e_no_auto_update), m_pDataMemberRelationToParent(NULL), m_lManualInsertIndex(0)
 
 namespace qx {
 
@@ -46,6 +46,8 @@ IxModel::IxModel(QObject * parent /* = 0 */) : QAbstractItemModel(parent), QX_CO
 IxModel::~IxModel() { ; }
 
 IxClass * IxModel::getClass() const { return m_pClass; }
+
+IxClass * IxModel::getModelClass() const { return m_pModelClass; }
 
 IxCollection * IxModel::getCollection() const { return m_pCollection; }
 
@@ -57,7 +59,7 @@ QString IxModel::getLastErrorAsString() const { return (m_lastError.isValid() ? 
 
 QStringList IxModel::getListOfColumns() const { return m_lstColumns; }
 
-int IxModel::getRowCount() const { return this->rowCount(); }
+int IxModel::getRowCount() const { return rowCount(); }
 
 QHash<QString, QString> IxModel::getListOfHeaders() const
 {
@@ -76,7 +78,7 @@ QVariant IxModel::getModelValue(int row, const QString & column) const
 {
    if (! m_lstDataMemberByKey.contains(column)) { return QVariant(); }
    int iColumnIndex = m_lstDataMemberByKey.value(column);
-   QModelIndex idx = this->index(row, iColumnIndex, QModelIndex());
+   QModelIndex idx = index(row, iColumnIndex, QModelIndex());
    return data(idx, Qt::DisplayRole);
 }
 
@@ -90,9 +92,13 @@ int IxModel::getAutoUpdateDatabase_() const { return static_cast<int>(m_eAutoUpd
 
 IxModel::e_auto_update_database IxModel::getAutoUpdateDatabase() const { return m_eAutoUpdateDatabase; }
 
-void IxModel::dumpModel(bool bJsonFormat /* = true */) const { this->dumpModelImpl(bJsonFormat); }
+QVariant IxModel::getCustomProperty(const QString & key) const { return (m_hCustomProperties.contains(key) ? m_hCustomProperties.value(key) : QVariant()); }
 
-QObject * IxModel::cloneModel() { return this->cloneModelImpl(); }
+QObject * IxModel::getParentModel() const { return static_cast<QObject *>(m_pParent); }
+
+void IxModel::dumpModel(bool bJsonFormat /* = true */) const { dumpModelImpl(bJsonFormat); }
+
+QObject * IxModel::cloneModel() { return cloneModelImpl(); }
 
 void IxModel::setDatabase(const QSqlDatabase & db) { m_database = db; }
 
@@ -115,15 +121,31 @@ bool IxModel::setModelValue(int row, const QString & column, const QVariant & va
 {
    if (! m_lstDataMemberByKey.contains(column)) { return false; }
    int iColumnIndex = m_lstDataMemberByKey.value(column);
-   QModelIndex idx = this->index(row, iColumnIndex, QModelIndex());
+   QModelIndex idx = index(row, iColumnIndex, QModelIndex());
    return setData(idx, value, Qt::EditRole);
 }
 
-void IxModel::setParentModel(IxModel * pParent) { m_pParent = pParent; }
+void IxModel::setParentModel(IxModel * pParent)
+{
+   m_pParent = pParent;
+   m_pDataMemberRelationToParent = NULL;
+   if (! pParent || ! m_pDataMemberX) { return; }
+   long lCount = m_pDataMemberX->count_WithDaoStrategy();
+   for (long l = 0; l < lCount; l++)
+   {
+      IxDataMember * p = m_pDataMemberX->get_WithDaoStrategy(l); if (! p) { continue; }
+      IxSqlRelation * pRelation = p->getSqlRelation(); if (! pRelation) { continue; }
+      pRelation->init();
+      if (pRelation->getDataId() == pParent->m_pDataMemberId)
+      { m_pDataMemberRelationToParent = p; break; }
+   }
+}
 
 void IxModel::setAutoUpdateDatabase_(int i) { m_eAutoUpdateDatabase = static_cast<IxModel::e_auto_update_database>(i); }
 
 void IxModel::setAutoUpdateDatabase(IxModel::e_auto_update_database e) { m_eAutoUpdateDatabase = e; }
+
+void IxModel::setCustomProperty(const QString & key, const QVariant & val) { m_hCustomProperties.insert(key, val); }
 
 int IxModel::qxCount_(const QString & sQuery) { qx_query query(sQuery); return static_cast<int>(qxCount(query, database(NULL))); }
 
@@ -200,8 +222,15 @@ void IxModel::clear(bool bUpdateColumns /* = false */)
    for (long l = (m_lstChild.count() - 1); l >= 0; l--)
    { removeListOfChild(l); }
    m_lstChild.clear();
+   m_hChild.clear();
    if (bUpdateColumns) { generateRoleNames(); }
    endResetModel();
+
+   if (getShowEmptyLine())
+   {
+      setShowEmptyLine(false);
+      setShowEmptyLine(true);
+   }
 }
 
 IxModel * IxModel::getChild(long row, const QString & relation)
@@ -214,26 +243,111 @@ IxModel * IxModel::getChild(long row, const QString & relation)
 
 void IxModel::insertChild(long row, const QString & relation, IxModel * pChild)
 {
-   if (row < 0) { return; }
+   if ((row < 0) || (! pChild)) { return; }
    if (relation.isEmpty()) { return; }
    while (row > (m_lstChild.count() - 1))
    { IxModel::type_relation_by_name tmp; m_lstChild.append(tmp); }
-   IxModel::type_relation_by_name child = m_lstChild.at(row);
-   child.insert(relation, pChild);
+   m_lstChild[row].insert(relation, pChild);
+   QPair<int, QString> pairRowRelation(static_cast<int>(row), relation);
+   m_hChild.insert(pChild, pairRowRelation);
 }
 
 void IxModel::removeListOfChild(long row)
 {
    if ((row < 0) || (row >= m_lstChild.count())) { return; }
    IxModel::type_relation_by_name lst = m_lstChild.at(row);
-   Q_FOREACH(IxModel * p, lst) { if (p) { delete p; } }
+   Q_FOREACH(IxModel * p, lst) { if (p) { m_hChild.remove(p); delete p; } }
    m_lstChild.removeAt(row);
+}
+
+QSqlError IxModel::saveChildRelations(IxModel * pChild)
+{
+   if (! m_hChild.contains(pChild)) { return QSqlError(); }
+   QPair<int, QString> pairRowRelation = m_hChild.value(pChild);
+   return qxSaveRow(pairRowRelation.first, (QStringList() << pairRowRelation.second));
+}
+
+QVariant IxModel::getIdFromChild(IxModel * pChild) const
+{
+   if (! m_hChild.contains(pChild)) { return QVariant(); }
+   if (! m_pCollection || ! m_pDataMemberId) { qAssert(false); return QVariant(); }
+   int row = m_hChild.value(pChild).first;
+   if ((row < 0) || (row >= m_pCollection->_count())) { return QVariant(); }
+   void * pItem = getRowItemAsVoidPtr(row);
+   return (pItem ? m_pDataMemberId->toVariant(pItem) : QVariant());
+}
+
+QPair<int, QString> IxModel::getChildPosition(IxModel * pChild) const
+{
+   if (! m_hChild.contains(pChild)) { return QPair<int, QString>(-1, ""); }
+   return m_hChild.value(pChild);
+}
+
+QVariant IxModel::data(const QModelIndex & index, int role /* = Qt::DisplayRole */) const
+{
+   if (! index.isValid()) { return QVariant(); }
+   if ((role == Qt::DisplayRole) || (role == Qt::EditRole))
+   {
+      if ((index.column() < 0) || (index.column() >= m_lstDataMember.count())) { return QVariant(); }
+      else if ((index.row() < 0) || (index.row() >= rowCount())) { return QVariant(); }
+      IxDataMember * pDataMember = m_lstDataMember.at(index.column());
+      void * pItem = getRowItemAsVoidPtr(index.row());
+      if (! pDataMember || ! pItem) { return QVariant(); }
+      return pDataMember->toVariant(pItem);
+   }
+   else if (role >= (Qt::UserRole + 1))
+   {
+      QModelIndex idx = this->index(index.row(), (role - Qt::UserRole - 1), QModelIndex());
+      return data(idx, Qt::DisplayRole);
+   }
+   return QVariant();
+}
+
+bool IxModel::setData(const QModelIndex & index, const QVariant & value, int role /* = Qt::EditRole */)
+{
+   if (! index.isValid()) { return false; }
+   if (role == Qt::EditRole)
+   {
+      if ((index.column() < 0) || (index.column() >= m_lstDataMember.count())) { return false; }
+      else if ((index.row() < 0) || (index.row() >= rowCount())) { return false; }
+      IxDataMember * pDataMember = m_lstDataMember.at(index.column());
+      bool bDirtyRow = isDirtyRow(index.row());
+      void * pItem = getRowItemAsVoidPtr(index.row());
+      if (! pDataMember || ! pItem) { return false; }
+      QVariant vCurrentValue = pDataMember->toVariant(pItem);
+      if (vCurrentValue == value) { return true; }
+      qx_bool bSetData = pDataMember->fromVariant(pItem, value);
+      if (bSetData && (m_eAutoUpdateDatabase == qx::IxModel::e_auto_update_on_field_change))
+      {
+         qxSaveRowData(index.row(), (QStringList() << pDataMember->getKey()));
+         if (! m_lastError.isValid() && bDirtyRow) { insertDirtyRowToModel(); }
+         if (m_lastError.isValid())
+         {
+            if (! bDirtyRow)
+            {
+               qDebug("[QxOrm] qx::IxModel::setData() : %s", "an error occurred saving value in database (more details with 'getLastError()' method), so previous value has been restored");
+               pDataMember->fromVariant(pItem, vCurrentValue);
+               return false;
+            }
+         }
+         else if (pDataMember->hasSqlRelation())
+         { qxFetchRow(index.row(), (QStringList() << pDataMember->getSqlRelation()->getKey())); }
+      }
+      if (bSetData) { raiseEvent_dataChanged(index, index); }
+      return bSetData;
+   }
+   else if (role >= (Qt::UserRole + 1))
+   {
+      QModelIndex idx = this->index(index.row(), (role - Qt::UserRole - 1), QModelIndex());
+      return setData(idx, value, Qt::EditRole);
+   }
+   return false;
 }
 
 int IxModel::rowCount(const QModelIndex & parent /* = QModelIndex() */) const
 {
    if (parent.isValid() || ! m_pCollection) { return 0; }
-   return static_cast<int>(m_pCollection->_count());
+   return (static_cast<int>(m_pCollection->_count()) + (getShowEmptyLine() ? 1 : 0));
 }
 
 int IxModel::columnCount(const QModelIndex & parent /* = QModelIndex() */) const
@@ -266,6 +380,8 @@ bool IxModel::hasChildren(const QModelIndex & parent /* = QModelIndex() */) cons
 
 QVariant IxModel::headerData(int section, Qt::Orientation orientation, int role /* = Qt::DisplayRole */) const
 {
+   if (role == Qt::TextAlignmentRole) { return Qt::AlignCenter; }
+   if ((orientation == Qt::Vertical) && (role == Qt::DisplayRole) && (isDirtyRow(section))) { return QVariant(QString("*")); }
    if (orientation != Qt::Horizontal) { return QAbstractItemModel::headerData(section, orientation, role); }
    if ((section < 0) || (section >= m_lstDataMember.count()))
    { return QAbstractItemModel::headerData(section, orientation, role); }
@@ -273,7 +389,11 @@ QVariant IxModel::headerData(int section, Qt::Orientation orientation, int role 
    if (! pDataMember) { return QAbstractItemModel::headerData(section, orientation, role); }
    QString sHeaderDataKey = (QString::number(role) + "|" + pDataMember->getKey());
    if (m_lstHeadersData.contains(sHeaderDataKey)) { return m_lstHeadersData.value(sHeaderDataKey); }
-   if ((role == Qt::DisplayRole) || (role == Qt::EditRole)) { return pDataMember->getKey(); }
+   if ((role == Qt::DisplayRole) || (role == Qt::EditRole))
+   {
+      if (! pDataMember->getDescription().isEmpty()) { return pDataMember->getDescription(); }
+      return pDataMember->getKey();
+   }
    return QVariant();
 }
 
@@ -304,11 +424,35 @@ Qt::DropActions IxModel::supportedDropActions() const
 
 bool IxModel::removeRows(int row, int count, const QModelIndex & parent /* = QModelIndex() */)
 {
-   if (parent.isValid() || ! m_pCollection) { return false; }
+   if (parent.isValid()) { return false; }
+   if (m_eAutoUpdateDatabase == IxModel::e_auto_update_on_field_change) { return removeRowsAutoUpdateOnFieldChange(row, count); }
+   return removeRowsGeneric(row, count);
+}
+
+bool IxModel::removeRowsGeneric(int row, int count)
+{
+   if (! m_pCollection) { qAssert(false); return false; }
    beginRemoveRows(QModelIndex(), row, (row + count - 1));
    for (int i = 0; i < count; ++i)
    { m_pCollection->_remove(row); removeListOfChild(row); }
+   updateShowEmptyLine();
    endRemoveRows();
+   return true;
+}
+
+bool IxModel::removeRowsAutoUpdateOnFieldChange(int row, int count)
+{
+   if (! m_pCollection) { qAssert(false); return false; }
+   for (int i = 0; i < count; ++i)
+   {
+      if ((row >= 0) && (row < m_pCollection->_count()))
+      {
+         if (qxDeleteRow_(row)) { removeRowsGeneric(row, 1); }
+         else { qDebug("[QxOrm] qx::IxModel::removeRowsAutoUpdateOnFieldChange() : %s", "an error occurred deleting row from database (more details with 'getLastError()' method), so row is not removed from model"); return false; }
+      }
+      else if (isDirtyRow(row)) { setShowEmptyLine(false); setShowEmptyLine(true); }
+      else { return true; }
+   }
    return true;
 }
 
@@ -317,8 +461,20 @@ bool IxModel::setHeaderData(int section, Qt::Orientation orientation, const QVar
    if (orientation != Qt::Horizontal) { return QAbstractItemModel::setHeaderData(section, orientation, value, role); }
    if ((section < 0) || (section >= m_lstDataMember.count())) { return false; }
    IxDataMember * pDataMember = m_lstDataMember.at(section); if (! pDataMember) { return false; }
-   QString sHeaderDataKey = (QString::number(role) + "|" + pDataMember->getKey());
-   m_lstHeadersData.insert(sHeaderDataKey, value);
+
+   if ((role == Qt::EditRole) || (role == Qt::DisplayRole))
+   {
+      QString sHeaderDataKey = (QString::number(Qt::EditRole) + "|" + pDataMember->getKey());
+      m_lstHeadersData.insert(sHeaderDataKey, value);
+      sHeaderDataKey = (QString::number(Qt::DisplayRole) + "|" + pDataMember->getKey());
+      m_lstHeadersData.insert(sHeaderDataKey, value);
+   }
+   else
+   {
+      QString sHeaderDataKey = (QString::number(role) + "|" + pDataMember->getKey());
+      m_lstHeadersData.insert(sHeaderDataKey, value);
+   }
+
    Q_EMIT headerDataChanged(orientation, section, section);
    return true;
 }
@@ -367,13 +523,13 @@ QSqlDatabase * IxModel::database(QSqlDatabase * other)
 
 #ifndef _QX_NO_JSON
 
-QString IxModel::toJson(int row /* = -1 */) const { return this->toJson_Helper(row); }
+QString IxModel::toJson(int row /* = -1 */) const { return toJson_Helper(row); }
 
-bool IxModel::fromJson(const QString & json, int row /* = -1 */) { return this->fromJson_Helper(json, row); }
+bool IxModel::fromJson(const QString & json, int row /* = -1 */) { return fromJson_Helper(json, row); }
 
-QVariant IxModel::getRelationshipValues(int row, const QString & relation, bool bLoadFromDatabase /* = false */, const QString & sAppendRelations /* = QString() */) { return this->getRelationshipValues_Helper(row, relation, bLoadFromDatabase, sAppendRelations); }
+QVariant IxModel::getRelationshipValues(int row, const QString & relation, bool bLoadFromDatabase /* = false */, const QString & sAppendRelations /* = QString() */) { return getRelationshipValues_Helper(row, relation, bLoadFromDatabase, sAppendRelations); }
 
-bool IxModel::setRelationshipValues(int row, const QString & relation, const QVariant & values) { return this->setRelationshipValues_Helper(row, relation, values); }
+bool IxModel::setRelationshipValues(int row, const QString & relation, const QVariant & values) { return setRelationshipValues_Helper(row, relation, values); }
 
 #else // _QX_NO_JSON
 

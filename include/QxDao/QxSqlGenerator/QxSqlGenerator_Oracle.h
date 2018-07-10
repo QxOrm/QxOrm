@@ -71,7 +71,7 @@ private:
 
 };
 
-typedef qx_shared_ptr<QxSqlGenerator_Oracle> QxSqlGenerator_Oracle_ptr;
+typedef std::shared_ptr<QxSqlGenerator_Oracle> QxSqlGenerator_Oracle_ptr;
 
 } // namespace detail
 } // namespace dao

@@ -44,11 +44,14 @@
  * \brief Include all Qt QJson serialization method (save/load) provided by QxOrm library
  */
 
+#ifdef _QX_ENABLE_BOOST
 #include <QxSerialize/QJson/QxSerializeQJson_boost_scoped_ptr.h>
 #include <QxSerialize/QJson/QxSerializeQJson_boost_shared_ptr.h>
 #include <QxSerialize/QJson/QxSerializeQJson_boost_tuple.h>
 #include <QxSerialize/QJson/QxSerializeQJson_boost_unordered_map.h>
 #include <QxSerialize/QJson/QxSerializeQJson_boost_unordered_set.h>
+#endif // _QX_ENABLE_BOOST
+
 #include <QxSerialize/QJson/QxSerializeQJson_QBrush.h>
 #include <QxSerialize/QJson/QxSerializeQJson_QColor.h>
 #include <QxSerialize/QJson/QxSerializeQJson_QFlags.h>

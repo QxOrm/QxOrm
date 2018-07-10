@@ -40,7 +40,7 @@ struct QxDao_Trigger
 private:
 
    typedef typename qx::trait::get_base_class<T>::type type_base;
-   enum { is_valid_base_class = (! boost::is_same<type_base, qx::trait::no_base_class_defined>::value) };
+   enum { is_valid_base_class = (! std::is_same<type_base, qx::trait::no_base_class_defined>::value) };
 
 public:
 

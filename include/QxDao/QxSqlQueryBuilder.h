@@ -43,8 +43,6 @@
  * \brief Concrete SQL query builder by class with a cache mechanism to backup and restore queries already built by the program
  */
 
-#include <boost/static_assert.hpp>
-
 #include <QxDao/IxSqlQueryBuilder.h>
 #include <QxDao/QxSqlQueryHelper.h>
 
@@ -59,13 +57,13 @@
 
 #define QX_SQL_BUILDER_INIT_FCT(oper) \
 QString key = QxClass<type_sql>::getSingleton()->getKey() + oper; \
-QString sql = IxSqlQueryBuilder::m_lstSqlQuery.value(key); \
+QString sql = IxSqlQueryBuilder::listSqlQuery().value(key); \
 if (! sql.isEmpty()) { this->setSqlQuery(sql); return (* this); }
 
 #define QX_SQL_BUILDER_INIT_FCT_WITH_RELATION(oper) \
-QString key = QxClass<type_sql>::getSingleton()->getKey() + this->m_sHashRelation + oper; \
-QString sql = IxSqlQueryBuilder::m_lstSqlQuery.value(key); \
-if (! sql.isEmpty()) { this->setSqlQuery(sql); this->m_lstSqlQueryAlias = IxSqlQueryBuilder::m_lstSqlAlias.value(key); return (* this); }
+QString key = QxClass<type_sql>::getSingleton()->getKey() + this->getHashRelation() + oper; \
+QString sql = IxSqlQueryBuilder::listSqlQuery().value(key); \
+if (! sql.isEmpty()) { this->setSqlQuery(sql); this->listSqlQueryAlias() = IxSqlQueryBuilder::listSqlAlias().value(key); return (* this); }
 
 namespace qx {
 
@@ -89,13 +87,13 @@ public:
 public:
 
    QxSqlQueryBuilder() : IxSqlQueryBuilder() { ; }
-   virtual ~QxSqlQueryBuilder() { BOOST_STATIC_ASSERT(qx::trait::is_qx_registered<type_sql>::value); }
+   virtual ~QxSqlQueryBuilder() { static_assert(qx::trait::is_qx_registered<type_sql>::value, "qx::trait::is_qx_registered<type_sql>::value"); }
 
    virtual void init()
    {
-      if (m_bInitDone) { return; }
-      m_pDataMemberX = QxClass<type_sql>::getSingleton()->dataMemberX();
-      m_oSoftDelete = QxClass<type_sql>::getSingleton()->getSoftDelete();
+      if (isInitDone()) { return; }
+      setDataMemberX(QxClass<type_sql>::getSingleton()->dataMemberX());
+      setSoftDelete(QxClass<type_sql>::getSingleton()->getSoftDelete());
       IxSqlQueryBuilder::init();
    }
 
@@ -120,8 +118,8 @@ public:
    {
       Q_UNUSED(columns); Q_UNUSED(pRelationX);
       QX_SQL_BUILDER_INIT_FCT("Count")
-      sql = "SELECT COUNT(*) FROM " + qx::IxDataMember::getSqlFromTable(this->m_sTableName);
-      if (! this->m_oSoftDelete.isEmpty()) { sql += " WHERE " + this->m_oSoftDelete.buildSqlQueryToFetch(); }
+      sql = "SELECT COUNT(*) FROM " + qx::IxDataMember::getSqlFromTable(this->table());
+      if (! this->softDelete().isEmpty()) { sql += " WHERE " + this->softDelete().buildSqlQueryToFetch(); }
       this->setSqlQuery(sql, key);
       return (* this);
    }
@@ -317,7 +315,7 @@ public:
    {
       Q_UNUSED(columns); Q_UNUSED(pRelationX);
       QX_SQL_BUILDER_INIT_FCT("DeleteAll")
-      sql = "DELETE FROM " + this->m_sTableName;
+      sql = "DELETE FROM " + this->table();
       this->setSqlQuery(sql, key);
       return (* this);
    }
@@ -343,7 +341,7 @@ public:
    {
       Q_UNUSED(columns); Q_UNUSED(pRelationX);
       QX_SQL_BUILDER_INIT_FCT("SoftDeleteAll")
-      if (! this->m_oSoftDelete.isEmpty()) { sql = "UPDATE " + this->m_sTableName + " SET " + this->m_oSoftDelete.buildSqlQueryToUpdate(); }
+      if (! this->softDelete().isEmpty()) { sql = "UPDATE " + this->table() + " SET " + this->softDelete().buildSqlQueryToUpdate(); }
       else { qAssert(false); }
       this->setSqlQuery(sql, key);
       return (* this);
@@ -398,7 +396,7 @@ public:
       Q_UNUSED(columns); Q_UNUSED(pRelationX);
       QX_SQL_BUILDER_INIT_FCT("SoftDeleteById")
       if (! this->getDataId()) { qDebug("[QxOrm] %s", QX_SQL_ERR_NO_ID_REGISTERED); qAssert(false); return (* this); }
-      if (this->m_oSoftDelete.isEmpty()) { qAssert(false); return (* this); }
+      if (this->softDelete().isEmpty()) { qAssert(false); return (* this); }
       qx::dao::detail::QxSqlQueryHelper_DeleteById<type_sql>::sql(sql, (* this), true);
       this->setSqlQuery(sql, key);
       return (* this);
@@ -452,7 +450,7 @@ public:
       Q_UNUSED(columns);
       QX_SQL_BUILDER_INIT_FCT_WITH_RELATION("FetchAll_WithRelation")
       qx::dao::detail::QxSqlQueryHelper_FetchAll_WithRelation<type_sql>::sql(pRelationX, sql, (* this));
-      IxSqlQueryBuilder::m_lstSqlAlias.insert(key, this->m_lstSqlQueryAlias);
+      IxSqlQueryBuilder::listSqlAlias().insert(key, this->listSqlQueryAlias());
       this->setSqlQuery(sql, key);
       return (* this);
    }
@@ -481,7 +479,7 @@ public:
       if (! this->getDataId()) { qDebug("[QxOrm] %s", QX_SQL_ERR_NO_ID_REGISTERED); qAssert(false); return (* this); }
       QxSqlQueryBuilder_FetchAll_WithRelation<type_sql> builder; builder.clone(* this);
       qx::dao::detail::QxSqlQueryHelper_FetchById_WithRelation<type_sql>::sql(pRelationX, sql, builder);
-      IxSqlQueryBuilder::m_lstSqlAlias.insert(key, this->m_lstSqlQueryAlias);
+      IxSqlQueryBuilder::listSqlAlias().insert(key, this->listSqlQueryAlias());
       this->setSqlQuery(sql, key);
       return (* this);
    }

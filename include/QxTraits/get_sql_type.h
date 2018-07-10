@@ -43,32 +43,11 @@
  * \brief qx::trait::get_sql_type<T>::get() : return type name under const char * format used by database engine to map a C++ type T
  */
 
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/logical.hpp>
-#include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/intrusive_ptr.hpp>
-#include <boost/optional.hpp>
-#include <boost/type_traits/is_enum.hpp>
-#include <boost/type_traits/is_same.hpp>
-
 #include <QtCore/qsharedpointer.h>
 
 #if (QT_VERSION >= 0x040600)
 #include <QtCore/qscopedpointer.h>
 #endif // (QT_VERSION >= 0x040600)
-
-#ifdef _QX_CPP_11_SMART_PTR
-#ifndef BOOST_NO_CXX11_SMART_PTR
-#include <memory>
-#endif // BOOST_NO_CXX11_SMART_PTR
-#endif // _QX_CPP_11_SMART_PTR
-
-#ifdef _QX_CPP_11_TUPLE
-#ifndef BOOST_NO_CXX11_HDR_TUPLE
-#include <tuple>
-#endif // BOOST_NO_CXX11_HDR_TUPLE
-#endif // _QX_CPP_11_TUPLE
 
 #include <QxTraits/is_qx_registered.h>
 #include <QxTraits/get_primary_key.h>
@@ -93,8 +72,8 @@ struct get_sql_type_helper
 private:
 
    typedef typename qx::trait::remove_attr<T>::type type_1;
-   typedef typename boost::mpl::if_c< qx::trait::is_qx_registered<type_1>::value, typename qx::trait::get_primary_key<type_1>::type, type_1 >::type type_2;
-   typedef typename boost::mpl::if_c< boost::is_enum<type_2>::value, long, type_2 >::type type_3;
+   typedef typename std::conditional< qx::trait::is_qx_registered<type_1>::value, typename qx::trait::get_primary_key<type_1>::type, type_1 >::type type_2;
+   typedef typename std::conditional< std::is_enum<type_2>::value, long, type_2 >::type type_3;
 
 public:
 
@@ -119,8 +98,10 @@ template <typename T>
 struct get_sql_type
 {
    typedef typename qx::trait::detail::get_sql_type_helper<T>::type type_sql;
-   static inline const char * get() { return (boost::is_same<T, type_sql>::value ? qx::trait::detail::get_sql_type<type_sql>::get() : qx::trait::get_sql_type<type_sql>::get()); }
+   static inline const char * get() { return (std::is_same<T, type_sql>::value ? qx::trait::detail::get_sql_type<type_sql>::get() : qx::trait::get_sql_type<type_sql>::get()); }
 };
+
+#ifdef _QX_ENABLE_BOOST
 
 template <typename T>
 struct get_sql_type< boost::optional<T> >
@@ -138,6 +119,8 @@ template <typename T>
 struct get_sql_type< boost::intrusive_ptr<T> >
 { static inline const char * get() { return qx::trait::get_sql_type<T>::get(); } };
 
+#endif // _QX_ENABLE_BOOST
+
 template <typename T>
 struct get_sql_type< QSharedPointer<T> >
 { static inline const char * get() { return qx::trait::get_sql_type<T>::get(); } };
@@ -148,9 +131,6 @@ struct get_sql_type< QScopedPointer<T> >
 { static inline const char * get() { return qx::trait::get_sql_type<T>::get(); } };
 #endif // (QT_VERSION >= 0x040600)
 
-#ifdef _QX_CPP_11_SMART_PTR
-#ifndef BOOST_NO_CXX11_SMART_PTR
-
 template <typename T>
 struct get_sql_type< std::unique_ptr<T> >
 { static inline const char * get() { return qx::trait::get_sql_type<T>::get(); } };
@@ -158,9 +138,6 @@ struct get_sql_type< std::unique_ptr<T> >
 template <typename T>
 struct get_sql_type< std::shared_ptr<T> >
 { static inline const char * get() { return qx::trait::get_sql_type<T>::get(); } };
-
-#endif // BOOST_NO_CXX11_SMART_PTR
-#endif // _QX_CPP_11_SMART_PTR
 
 template <typename T>
 struct get_sql_type< qx::dao::ptr<T> >
@@ -173,6 +150,8 @@ struct get_sql_type< std::pair<T1, T2> >
 template <typename T1, typename T2>
 struct get_sql_type< QPair<T1, T2> >
 { static inline const char * get() { static std::string s; s = (std::string(qx::trait::get_sql_type<T1>::get()) + "|" + std::string(qx::trait::get_sql_type<T2>::get())); return s.c_str(); } };
+
+#ifdef _QX_ENABLE_BOOST
 
 template <typename T1, typename T2>
 struct get_sql_type< boost::tuple<T1, T2> >
@@ -206,8 +185,7 @@ template <typename T1, typename T2, typename T3, typename T4, typename T5, typen
 struct get_sql_type< boost::tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9> >
 { static inline const char * get() { static std::string s; s = (std::string(qx::trait::get_sql_type<T1>::get()) + "|" + std::string(qx::trait::get_sql_type<T2>::get()) + "|" + std::string(qx::trait::get_sql_type<T3>::get()) + "|" + std::string(qx::trait::get_sql_type<T4>::get()) + "|" + std::string(qx::trait::get_sql_type<T5>::get()) + "|" + std::string(qx::trait::get_sql_type<T6>::get()) + "|" + std::string(qx::trait::get_sql_type<T7>::get()) + "|" + std::string(qx::trait::get_sql_type<T8>::get()) + "|" + std::string(qx::trait::get_sql_type<T9>::get())); return s.c_str(); } };
 
-#ifdef _QX_CPP_11_TUPLE
-#ifndef BOOST_NO_CXX11_HDR_TUPLE
+#endif // _QX_ENABLE_BOOST
 
 template <typename T1, typename T2>
 struct get_sql_type< std::tuple<T1, T2> >
@@ -240,9 +218,6 @@ struct get_sql_type< std::tuple<T1, T2, T3, T4, T5, T6, T7, T8> >
 template <typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8, typename T9>
 struct get_sql_type< std::tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9> >
 { static inline const char * get() { static std::string s; s = (std::string(qx::trait::get_sql_type<T1>::get()) + "|" + std::string(qx::trait::get_sql_type<T2>::get()) + "|" + std::string(qx::trait::get_sql_type<T3>::get()) + "|" + std::string(qx::trait::get_sql_type<T4>::get()) + "|" + std::string(qx::trait::get_sql_type<T5>::get()) + "|" + std::string(qx::trait::get_sql_type<T6>::get()) + "|" + std::string(qx::trait::get_sql_type<T7>::get()) + "|" + std::string(qx::trait::get_sql_type<T8>::get()) + "|" + std::string(qx::trait::get_sql_type<T9>::get())); return s.c_str(); } };
-
-#endif // BOOST_NO_CXX11_HDR_TUPLE
-#endif // _QX_CPP_11_TUPLE
 
 } // namespace trait
 } // namespace qx

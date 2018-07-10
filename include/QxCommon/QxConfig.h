@@ -43,8 +43,8 @@
  * \brief List of parameters to compile and build QxOrm library
  */
 
-#define QX_VERSION         0x010403
-#define QX_VERSION_STR     "1.4.3"
+#define QX_VERSION         0x010404
+#define QX_VERSION_STR     "1.4.4"
 
 #ifndef _QX_MODE_DEBUG
 #ifndef _QX_MODE_RELEASE
@@ -174,39 +174,6 @@
 #else // _MSC_VER
 #define _QX_USE_SERIALIZE_POLYMORPHIC_PATCH  0
 #endif // _MSC_VER
-
-#if (BOOST_VERSION < 105100)
-#ifndef BOOST_NO_CXX11_TEMPLATE_ALIASES
-#define BOOST_NO_CXX11_TEMPLATE_ALIASES
-#endif // BOOST_NO_CXX11_TEMPLATE_ALIASES
-#endif // (BOOST_VERSION < 105100)
-
-#ifdef _QX_CPP_11_SMART_PTR
-#ifndef BOOST_NO_CXX11_SMART_PTR
-#include <memory>
-#ifndef BOOST_NO_CXX11_TEMPLATE_ALIASES
-template <typename T> using qx_shared_ptr = std::shared_ptr<T>;
-#define qx_static_pointer_cast std::static_pointer_cast
-#else // BOOST_NO_CXX11_TEMPLATE_ALIASES
-#define qx_shared_ptr std::shared_ptr
-#define qx_static_pointer_cast std::static_pointer_cast
-#endif // BOOST_NO_CXX11_TEMPLATE_ALIASES
-#define QX_SHARED_PTR_DEFINED
-#endif // BOOST_NO_CXX11_SMART_PTR
-#endif // _QX_CPP_11_SMART_PTR
-
-#ifndef QX_SHARED_PTR_DEFINED
-#include <boost/shared_ptr.hpp>
-#ifndef BOOST_NO_CXX11_TEMPLATE_ALIASES
-template <typename T> using qx_shared_ptr = boost::shared_ptr<T>;
-#define qx_static_pointer_cast boost::static_pointer_cast
-#else // BOOST_NO_CXX11_TEMPLATE_ALIASES
-#define qx_shared_ptr boost::shared_ptr
-#define qx_static_pointer_cast boost::static_pointer_cast
-#endif // BOOST_NO_CXX11_TEMPLATE_ALIASES
-#else // QX_SHARED_PTR_DEFINED
-#undef QX_SHARED_PTR_DEFINED
-#endif // QX_SHARED_PTR_DEFINED
 
 #if (QT_VERSION < 0x050000)
 #ifndef _QX_NO_JSON

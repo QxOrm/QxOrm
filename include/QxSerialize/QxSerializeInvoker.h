@@ -43,10 +43,6 @@
 #pragma warning(disable:4094)
 #endif // _MSC_VER
 
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/logical.hpp>
-#include <boost/static_assert.hpp>
-
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/nvp.hpp>
@@ -67,7 +63,7 @@ struct base_class
    static inline void save(Archive & ar, const T & t, const unsigned int file_version)
    {
       Q_UNUSED(file_version);
-      BOOST_STATIC_ASSERT(qx::trait::is_qx_registered<T>::value);
+      static_assert(qx::trait::is_qx_registered<T>::value, "qx::trait::is_qx_registered<T>::value");
       const char * sTag = QxClass<Base>::getSingleton()->getNamePtr();
       ar << boost::serialization::make_nvp(sTag, boost::serialization::base_object<const Base>(t));
    }
@@ -75,7 +71,7 @@ struct base_class
    static inline void load(Archive & ar, T & t, const unsigned int file_version)
    {
       Q_UNUSED(file_version);
-      BOOST_STATIC_ASSERT(qx::trait::is_qx_registered<T>::value);
+      static_assert(qx::trait::is_qx_registered<T>::value, "qx::trait::is_qx_registered<T>::value");
       const char * sTag = QxClass<Base>::getSingleton()->getNamePtr();
       ar >> boost::serialization::make_nvp(sTag, boost::serialization::base_object<Base>(t));
    }

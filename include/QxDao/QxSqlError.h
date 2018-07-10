@@ -46,6 +46,8 @@
 #include <iostream>
 #include <exception>
 
+#include <QtCore/qbytearray.h>
+
 #include <QtSql/qsqlerror.h>
 
 namespace qx {
@@ -61,15 +63,14 @@ class sql_error : public std::exception
 private:
 
    QSqlError m_error;
+   QByteArray m_errorMessage;
 
 public:
 
-   sql_error(const QSqlError & err) : std::exception(), m_error(err) { if (! m_error.text().isEmpty() && (m_error.type() == QSqlError::NoError)) { m_error.setType(QSqlError::UnknownError); } }
+   sql_error(const QSqlError & err) : std::exception(), m_error(err) { if (! m_error.text().isEmpty() && (m_error.type() == QSqlError::NoError)) { m_error.setType(QSqlError::UnknownError); }; m_errorMessage = m_error.text().toLocal8Bit(); }
    virtual ~sql_error() throw() { ; }
 
-   virtual const char * what() const throw()
-   { return (m_error.isValid() ? qPrintable(m_error.text()) : ""); }
-
+   virtual const char * what() const throw() { if (m_error.isValid()) { return m_errorMessage.constData(); } else { return ""; } }
    QSqlError get() const { return m_error; }
 
 };

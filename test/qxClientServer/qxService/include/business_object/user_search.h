@@ -18,6 +18,6 @@ public:
 
 QX_REGISTER_HPP_QX_SERVICE(user_search, qx::trait::no_base_class_defined, 0)
 
-typedef qx_shared_ptr<user_search> user_search_ptr;
+typedef std::shared_ptr<user_search> user_search_ptr;
 
 #endif // _QX_SERVICE_BO_USER_SEARCH_H_

@@ -101,9 +101,9 @@ int main(int argc, char * argv[])
    } // End of scope : 'db' is destroyed
 
    // Create a blog with the class name (factory)
-   boost::any blog_any = qx::create("blog");
+   qx::any blog_any = qx::create("blog");
    blog_ptr blog_1;
-   try { blog_1 = boost::any_cast<blog_ptr>(blog_any); }
+   try { blog_1 = qx::any_cast<blog_ptr>(blog_any); }
    catch (...) { blog_1.reset(new blog()); }
    blog_1->m_text = "blog_text_1";
    blog_1->m_dt_creation = QDateTime::currentDateTime();

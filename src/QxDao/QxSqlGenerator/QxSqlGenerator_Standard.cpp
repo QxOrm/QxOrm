@@ -85,6 +85,8 @@ void QxSqlGenerator_Standard::onBeforeDelete(IxDao_Helper * pDaoHelper, void * p
 
 void QxSqlGenerator_Standard::onAfterDelete(IxDao_Helper * pDaoHelper, void * pOwner) const { Q_UNUSED(pDaoHelper); Q_UNUSED(pOwner); }
 
+void QxSqlGenerator_Standard::checkSqlInsert(IxDao_Helper * pDaoHelper, QString & sql) const { Q_UNUSED(pDaoHelper); Q_UNUSED(sql); }
+
 } // namespace detail
 } // namespace dao
 } // namespace qx

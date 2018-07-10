@@ -2,6 +2,7 @@
 #define _QX_BLOG_PRECOMPILED_HEADER_H_
 
 #include <QxOrm.h>
+#include <QxModelView.h>
 
 #include "export.h"
 

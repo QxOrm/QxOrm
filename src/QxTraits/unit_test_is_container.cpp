@@ -33,10 +33,7 @@
 
 #include <QxPrecompiled.h>
 
-#include <boost/static_assert.hpp>
-
 #include <QxTraits/is_container.h>
-#include <QxTraits/is_container_base_of.h>
 #include <QxTraits/is_container_to_pod.h>
 #include <QxTraits/is_container_key_value.h>
 
@@ -49,29 +46,35 @@ namespace unit_test {
 
 void unit_test_is_container()
 {
-   BOOST_STATIC_ASSERT(! qx::trait::is_container<int>::value);
-   BOOST_STATIC_ASSERT(! qx::trait::is_container<QString>::value);
-   BOOST_STATIC_ASSERT(! qx::trait::is_container<QObject>::value);
-   BOOST_STATIC_ASSERT(! qx::trait::is_container<double>::value);
+   static_assert(! qx::trait::is_container<int>::value, "unit_test_is_container");
+   static_assert(! qx::trait::is_container<QString>::value, "unit_test_is_container");
+   static_assert(! qx::trait::is_container<QObject>::value, "unit_test_is_container");
+   static_assert(! qx::trait::is_container<double>::value, "unit_test_is_container");
 
    typedef qx::QxCollection<QString, double> qx_coll_string_to_double;
    typedef std::vector<QObject> std_vector_object;
    typedef QHash<double, QString> qt_hash_double_to_string;
    typedef std::set<int> std_set_int;
+
+   static_assert(qx::trait::is_container<qx_coll_string_to_double>::value, "unit_test_is_container");
+   static_assert(qx::trait::is_container<std_vector_object>::value, "unit_test_is_container");
+   static_assert(qx::trait::is_container<qt_hash_double_to_string>::value, "unit_test_is_container");
+   static_assert(qx::trait::is_container<std_set_int>::value, "unit_test_is_container");
+
+   static_assert(qx::trait::is_std_vector< std::vector<double> >::value, "unit_test_is_container");
+   static_assert(! qx::trait::is_qt_vector< std::vector<double> >::value, "unit_test_is_container");
+
+   static_assert(qx::trait::is_container_to_pod<std_set_int>::value, "unit_test_is_container");
+   static_assert(qx::trait::is_container_key_value<qx_coll_string_to_double>::value, "unit_test_is_container");
+
+#ifdef _QX_ENABLE_BOOST
+
    typedef boost::unordered_map<std::string, QObject *> boost_unordered_map_string_to_object_ptr;
 
-   BOOST_STATIC_ASSERT(qx::trait::is_container<qx_coll_string_to_double>::value);
-   BOOST_STATIC_ASSERT(qx::trait::is_container<std_vector_object>::value);
-   BOOST_STATIC_ASSERT(qx::trait::is_container<qt_hash_double_to_string>::value);
-   BOOST_STATIC_ASSERT(qx::trait::is_container<std_set_int>::value);
+   static_assert(! qx::trait::is_boost_unordered_map< std::vector<double> >::value, "unit_test_is_container");
+   static_assert(qx::trait::is_container_key_value<boost_unordered_map_string_to_object_ptr>::value, "unit_test_is_container");
 
-   BOOST_STATIC_ASSERT(qx::trait::is_std_vector< std::vector<double> >::value);
-   BOOST_STATIC_ASSERT(! qx::trait::is_qt_vector< std::vector<double> >::value);
-   BOOST_STATIC_ASSERT(! qx::trait::is_boost_unordered_map< std::vector<double> >::value);
-
-   BOOST_STATIC_ASSERT(qx::trait::is_container_to_pod<std_set_int>::value);
-   BOOST_STATIC_ASSERT(qx::trait::is_container_key_value<qx_coll_string_to_double>::value);
-   BOOST_STATIC_ASSERT(qx::trait::is_container_key_value<boost_unordered_map_string_to_object_ptr>::value);
+#endif // _QX_ENABLE_BOOST
 }
 
 } // namespace unit_test

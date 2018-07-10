@@ -7,7 +7,7 @@ class QX_BLOG_DLL_EXPORT category
 {
 public:
 // -- typedef
-   typedef qx_shared_ptr<blog> blog_ptr;
+   typedef std::shared_ptr<blog> blog_ptr;
    typedef qx::QxCollection<long, blog_ptr> list_blog;
 // -- properties
    long        m_id;

@@ -85,10 +85,11 @@ public:
    virtual void onAfterUpdate(IxDao_Helper * pDaoHelper, void * pOwner) const = 0;
    virtual void onBeforeDelete(IxDao_Helper * pDaoHelper, void * pOwner) const = 0;
    virtual void onAfterDelete(IxDao_Helper * pDaoHelper, void * pOwner) const = 0;
+   virtual void checkSqlInsert(IxDao_Helper * pDaoHelper, QString & sql) const = 0;
 
 };
 
-typedef qx_shared_ptr<IxSqlGenerator> IxSqlGenerator_ptr;
+typedef std::shared_ptr<IxSqlGenerator> IxSqlGenerator_ptr;
 
 } // namespace detail
 } // namespace dao

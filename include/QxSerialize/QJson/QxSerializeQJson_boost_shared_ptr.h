@@ -30,6 +30,7 @@
 ****************************************************************************/
 
 #ifndef _QX_NO_JSON
+#ifdef _QX_ENABLE_BOOST
 #ifndef _QX_SERIALIZE_QJSON_BOOST_SHARED_PTR_H_
 #define _QX_SERIALIZE_QJSON_BOOST_SHARED_PTR_H_
 
@@ -47,8 +48,6 @@
 #include <QtCore/qjsonvalue.h>
 #include <QtCore/qjsonobject.h>
 #include <QtCore/qjsonarray.h>
-
-#include <boost/shared_ptr.hpp>
 
 #include <QxConvert/QxConvert.h>
 #include <QxConvert/QxConvert_Impl.h>
@@ -82,4 +81,5 @@ struct QxConvert_FromJson< boost::shared_ptr<T> >
 } // namespace qx
 
 #endif // _QX_SERIALIZE_QJSON_BOOST_SHARED_PTR_H_
+#endif // _QX_ENABLE_BOOST
 #endif // _QX_NO_JSON

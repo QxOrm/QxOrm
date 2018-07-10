@@ -6,6 +6,7 @@ if "%1"=="release" set MINGW_CONFIG=%1
 if "%1"=="release" set LIB_SUFFIX=
 if "%2"=="minimal" set BATCH_TYPE=%2
 if "%BATCH_TYPE%"=="full" set QXORM_QMAKE_PARAMS="DEFINES += _QX_ENABLE_BOOST_SERIALIZATION" "DEFINES += _QX_ENABLE_QT_GUI" "DEFINES += _QX_ENABLE_QT_NETWORK"
+set QXORM_QMAKE_PARAMS=%QXORM_QMAKE_PARAMS% "QMAKE_CXXFLAGS += -std=c++0x"
 
 REM -- QT ENVIRONMENT VARIABLES --
 set QT_DIR=%QT4_MINGW%
@@ -26,13 +27,7 @@ REM -- BUILD QXORM LIBRARY --
 cd "../"
 qmake %QXORM_QMAKE_PARAMS%
 make %MINGW_CONFIG%
-IF NOT EXIST "./%MINGW_CONFIG%/QxOrm%LIB_SUFFIX%.dll" GOTO END
-cd "./%MINGW_CONFIG%/"
-copy "libQxOrm%LIB_SUFFIX%.a" "../lib/"
-if exist "QxOrm%LIB_SUFFIX%.dll" ( copy "QxOrm%LIB_SUFFIX%.dll" "../lib/" )
-copy "libQxOrm%LIB_SUFFIX%.a" "../test/_bin/"
-if exist "QxOrm%LIB_SUFFIX%.dll" ( copy "QxOrm%LIB_SUFFIX%.dll" "../test/_bin/" )
-cd "../"
+IF NOT EXIST "./lib/QxOrm%LIB_SUFFIX%.dll" GOTO END
 
 REM -- BUILD TEST DLL1 --
 cd "./test/qxDllSample/dll1/"

@@ -75,7 +75,7 @@ protected:
 
 };
 
-typedef qx_shared_ptr<QxSqlFreeText> QxSqlFreeText_ptr;
+typedef std::shared_ptr<QxSqlFreeText> QxSqlFreeText_ptr;
 
 } // namespace detail
 } // namespace dao

@@ -8,7 +8,6 @@ TEMPLATE = app
 DEFINES += _BUILDING_QX_CLIENT
 INCLUDEPATH += ../../../../QxOrm/include/
 DESTDIR = ../../../../QxOrm/test/_bin/
-LIBS += -L"../../../../QxOrm/test/_bin"
 
 QT += gui
 greaterThan(QT_MAJOR_VERSION, 4) { QT += widgets }
@@ -16,6 +15,9 @@ greaterThan(QT_MAJOR_VERSION, 4) { QT += widgets }
 !contains(DEFINES, _QX_NO_PRECOMPILED_HEADER) {
 PRECOMPILED_HEADER = ./include/precompiled.h
 } # !contains(DEFINES, _QX_NO_PRECOMPILED_HEADER)
+
+LIBS += -L"../../../../QxOrm/lib"
+LIBS += -L"../../../../QxOrm/test/_bin"
 
 CONFIG(debug, debug|release) {
 TARGET = qxClientd

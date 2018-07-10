@@ -27,7 +27,7 @@ int main(int argc, char * argv[])
 
    //--------------------------------
 
-   qx_shared_ptr<QObject> ptrTmp;
+   std::shared_ptr<QObject> ptrTmp;
    ptrTmp.reset(new CUser());
    qx::clone(ptrTmp);
 
@@ -49,8 +49,8 @@ int main(int argc, char * argv[])
    //--------------------------------
 
    qx::test::CPerson person;
-   qx_shared_ptr<qx::test::CPerson> personClone = qx::clone(person);
-   boost::any a = qx::create("qx::test::CPerson");
+   std::shared_ptr<qx::test::CPerson> personClone = qx::clone(person);
+   qx::any a = qx::create("qx::test::CPerson");
 
 #if _QX_SERIALIZE_POLYMORPHIC
    qx::serialization::polymorphic_binary::to_file(person, "person.bin");
@@ -97,7 +97,7 @@ int main(int argc, char * argv[])
    //--------------------------------
 
    CUser user;
-   qx_shared_ptr<CUser> userClone = qx::clone(user);
+   std::shared_ptr<CUser> userClone = qx::clone(user);
    qx::create("CUserXXX");
 
    qx::cache::max_cost(2);
@@ -105,11 +105,11 @@ int main(int argc, char * argv[])
    qx::cache::set("object", ptrTmp);
    qx::cache::set("person", personClone);
    qAssert(qx::cache::count() == 2);
-   ptrTmp = qx::cache::get< qx_shared_ptr<QObject> >("object");
+   ptrTmp = qx::cache::get< std::shared_ptr<QObject> >("object");
    qx_bool bCacheOk = qx::cache::get("user", userClone);
    qAssert(! bCacheOk && (ptrTmp.get() != NULL));
 
-   qx_shared_ptr<qx::test::CPerson> personValidate = qx::clone(person);
+   std::shared_ptr<qx::test::CPerson> personValidate = qx::clone(person);
    if (! personValidate) { personValidate.reset(new qx::test::CPerson()); }
    personValidate->setLastName("admin");
    personValidate->setDouble(305.86);
@@ -161,20 +161,20 @@ int main(int argc, char * argv[])
 
    //--------------------------------
 
-   boost::any resultInvoke;
+   qx::any resultInvoke;
    CUser * pUser = new CUser(); // You find a memory leak !!!
    pUser->test();
    qx_bool bInvokeOk = qx::QxClass<CUser>::invoke("fct_getPersonId", pUser);                          qAssert(bInvokeOk);
    bInvokeOk = qx::QxClassX::invoke("CUser", "fct_getPersonId", pUser);                               qAssert(bInvokeOk);
-   bInvokeOk = qx::QxClassX::invokeStatic("CUser", "fct_testStaticFct", "182", (& resultInvoke));     qAssert(bInvokeOk.getValue() && (boost::any_cast<int>(resultInvoke) == 182));
+   bInvokeOk = qx::QxClassX::invokeStatic("CUser", "fct_testStaticFct", "182", (& resultInvoke));     qAssert(bInvokeOk.getValue() && (qx::any_cast<int>(resultInvoke) == 182));
 
-   // Other way to invoke a function with parameters encapsulated in a list of boost::any : std::vector<boost::any>
-   resultInvoke = boost::any();
-   std::vector<boost::any> lstParams;
+   // Other way to invoke a function with parameters encapsulated in a list of qx::any : std::vector<qx::any>
+   resultInvoke = qx::any();
+   std::vector<qx::any> lstParams;
    QString invokeParam1 = "238";
    lstParams.push_back(invokeParam1);
    bInvokeOk = qx::QxClassX::invokeStatic("CUser", "fct_testStaticFct", lstParams, (& resultInvoke));
-   qAssert(bInvokeOk.getValue() && (boost::any_cast<int>(resultInvoke) == 238));
+   qAssert(bInvokeOk.getValue() && (qx::any_cast<int>(resultInvoke) == 238));
 
    //--------------------------------
 
@@ -205,14 +205,14 @@ int main(int argc, char * argv[])
 
    //--------------------------------
 
-   boost::any any_ret;
+   qx::any any_ret;
    qx::IxFunction_ptr pFct1 = qx::function::bind_fct_0<void, void>(& test_fct);
    qx_bool bInvoke = pFct1->invoke();
 
-   qx::IxFunction_ptr pFct2 = qx::function::bind_member_fct_0<test_class_fct, int>(& test_class_fct::class_fct);
+   qx::IxFunction_ptr pFct2 = qx::function::bind_member_fct_0<test_class_fct, int>(std::mem_fn(& test_class_fct::class_fct)); // using std::mem_fn() here is just a workaround for an issue with some versions of MSVC, it is not required with a full compliant C++11 compiler (http://stackoverflow.com/questions/23778883/vs2013-stdfunction-with-member-function)
    test_class_fct o_test_class_fct;
    bInvoke = pFct2->invoke(& o_test_class_fct, "", (& any_ret));
-   int iReturnByInvoke = boost::any_cast<int>(any_ret);
+   int iReturnByInvoke = qx::any_cast<int>(any_ret);
    Q_UNUSED(iReturnByInvoke);
 
    //--------------------------------
@@ -235,10 +235,10 @@ int main(int argc, char * argv[])
    QVariant sTestCvtVar = qx::cvt::to_variant(QTime::currentTime());
    QVariant dummy_03; bCvtOk = qx::cvt::from_variant(dummy_03, p1);
 
-   QVector< qx_shared_ptr<CUser> > lstCvtTest;
-   qx_shared_ptr<CUser> pp1; pp1.reset(new CUser()); lstCvtTest.push_back(pp1);
-   qx_shared_ptr<CUser> pp2; lstCvtTest.push_back(pp2);
-   qx_shared_ptr<CUser> pp3; pp3.reset(new CUser()); lstCvtTest.push_back(pp3);
+   QVector< std::shared_ptr<CUser> > lstCvtTest;
+   std::shared_ptr<CUser> pp1; pp1.reset(new CUser()); lstCvtTest.push_back(pp1);
+   std::shared_ptr<CUser> pp2; lstCvtTest.push_back(pp2);
+   std::shared_ptr<CUser> pp3; pp3.reset(new CUser()); lstCvtTest.push_back(pp3);
    sTestCvt = qx::cvt::to_string(lstCvtTest);
    lstCvtTest.remove(1);
    bCvtOk = qx::cvt::from_string(sTestCvt, lstCvtTest);
@@ -287,11 +287,11 @@ int main(int argc, char * argv[])
    bDaoExist = qx::dao::exist(pUser);                                   qAssert(! bDaoExist);
    pUser->setBrother(NULL);
 
-   typedef qx::QxCollection< long, qx_shared_ptr<CUser> > type_lstUser;
-   qx_shared_ptr<CUser> ppp1; ppp1.reset(new CUser(53));
+   typedef qx::QxCollection< long, std::shared_ptr<CUser> > type_lstUser;
+   std::shared_ptr<CUser> ppp1; ppp1.reset(new CUser(53));
    ppp1->setProfil("profil n°10");
    ppp1->setLastName("ppp1 lastname");
-   qx_shared_ptr<CUser> ppp2; ppp2.reset(new CUser(108));
+   std::shared_ptr<CUser> ppp2; ppp2.reset(new CUser(108));
    ppp2->setDateModif(QDateTime::currentDateTime());
    ppp2->setLastName("ppp1 lastname");
    type_lstUser lstUser;
@@ -388,13 +388,20 @@ int main(int argc, char * argv[])
       QList<Foo> pFooX1; daoError = qx::dao::fetch_all_with_all_relation(pFooX1); qAssert(pFooX1.size() == 7);
       QHash<long, Foo> pFooX2; daoError = qx::dao::fetch_all_with_all_relation(pFooX2); qAssert(pFooX2.size() == 7);
       qx::QxCollection<long, Foo> pFooX3; daoError = qx::dao::fetch_all_with_all_relation(pFooX3); qAssert(pFooX3.size() == 7);
+
+#ifdef _QX_ENABLE_BOOST
 #if (BOOST_VERSION >= 105000)
       boost::unordered_map<long, Foo> pFooX4; daoError = qx::dao::fetch_all_with_all_relation(pFooX4); qAssert(pFooX4.size() == 7);
 #endif // (BOOST_VERSION >= 105000)
+#endif // _QX_ENABLE_BOOST
+
       std::vector<Foo> pFooX5; daoError = qx::dao::fetch_all_with_all_relation(pFooX5); qAssert(pFooX5.size() == 7);
       QSet<Foo *> pFooX6; daoError = qx::dao::fetch_all_with_all_relation(pFooX6); qAssert(pFooX6.size() == 7); Q_FOREACH(Foo * pFooTemp, pFooX6) { delete pFooTemp; }
       std::set<Foo_ptr> pFooX7; daoError = qx::dao::fetch_all_with_all_relation(pFooX7); qAssert(pFooX7.size() == 7);
+
+#ifdef _QX_ENABLE_BOOST
       boost::unordered_set<Foo_ptr> pFooX8; daoError = qx::dao::fetch_all_with_all_relation(pFooX8); qAssert(pFooX8.size() == 7);
+#endif // _QX_ENABLE_BOOST
    }
 
    pBar.reset(new Bar()); pBar->setId(7);
@@ -415,7 +422,9 @@ int main(int argc, char * argv[])
    {
       pFoo.reset(new Foo()); pFoo->setName("name10"); pFoo->setDesc("desc10");
       pFoo->setDate(QDate::currentDate()); pFoo->setTime(QTime::currentTime()); pFoo->setDateTime(QDateTime::currentDateTime());
+#ifdef _QX_ENABLE_BOOST
       boost::optional<QString> optionalString("test boost optional"); pFoo->setOptString(optionalString);
+#endif // _QX_ENABLE_BOOST
 
       // Test session to manage automatically database transactions (using C++ RAII)
       qx::QxSession session;

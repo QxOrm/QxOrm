@@ -62,11 +62,10 @@ private:
 
 public:
 
-   QxSqlRelation_ManyToOne(IxDataMember * p) : QxSqlRelation<DataType, Owner>(p) { this->m_eRelationType = qx::IxSqlRelation::many_to_one; }
+   QxSqlRelation_ManyToOne(IxDataMember * p) : QxSqlRelation<DataType, Owner>(p) { this->setRelationType(qx::IxSqlRelation::many_to_one); }
    virtual ~QxSqlRelation_ManyToOne() { ; }
 
    virtual QString getDescription() const                                     { return "relation many-to-one"; }
-   virtual QString getExtraTable() const                                      { return ""; }
    virtual QString createExtraTable() const                                   { return ""; }
    virtual bool getCartesianProduct() const                                   { return false; }
    virtual void lazyFrom(QxSqlRelationParams & params) const                  { Q_UNUSED(params); }

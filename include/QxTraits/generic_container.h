@@ -43,11 +43,6 @@
  * \brief qx::trait::generic_container<T> : provide some tools to manage all containers without knowing its type
  */
 
-#include <boost/type_traits/is_pointer.hpp>
-
-#include <boost/unordered_set.hpp>
-#include <boost/unordered_map.hpp>
-
 #include <QxTraits/is_smart_ptr.h>
 #include <QxTraits/remove_attr.h>
 #include <QxTraits/remove_smart_ptr.h>
@@ -76,8 +71,8 @@ struct generic_container_item
    typedef typename qx::trait::remove_attr<Value>::type type_value_qx_tmp;
    typedef typename qx::trait::remove_smart_ptr<type_value_qx_tmp>::type type_value_qx;
 
-   enum { is_key_pointer = (boost::is_pointer<type_key>::value || qx::trait::is_smart_ptr<type_key>::value) };
-   enum { is_value_pointer = (boost::is_pointer<type_value>::value || qx::trait::is_smart_ptr<type_value>::value) };
+   enum { is_key_pointer = (std::is_pointer<type_key>::value || qx::trait::is_smart_ptr<type_key>::value) };
+   enum { is_value_pointer = (std::is_pointer<type_value>::value || qx::trait::is_smart_ptr<type_value>::value) };
 
 private:
 
@@ -301,6 +296,8 @@ template <typename Key, typename Value>
 struct generic_container< std::map<Key, Value> > : public qx::trait::detail::generic_container_base_key_value_std_style< std::map<Key, Value>, Key, Value >
 { QX_TRAIT_GENERIC_CONTAINER_TYPEDEF(QX_TEMPLATE_T_P1_P2(std::map, Key, Value), Key, Value) };
 
+#ifdef _QX_ENABLE_BOOST
+
 template <typename T>
 struct generic_container< boost::unordered_set<T> > : public qx::trait::detail::generic_container_base_set< boost::unordered_set<T>, T >
 { QX_TRAIT_GENERIC_CONTAINER_TYPEDEF(QX_TEMPLATE_T_P1(boost::unordered_set, T), qx::trait::no_type, T) };
@@ -317,8 +314,7 @@ template <typename Key, typename Value>
 struct generic_container< boost::unordered_multimap<Key, Value> > : public qx::trait::detail::generic_container_base_key_value_multi_std_style< boost::unordered_multimap<Key, Value>, Key, Value >
 { QX_TRAIT_GENERIC_CONTAINER_TYPEDEF(QX_TEMPLATE_T_P1_P2(boost::unordered_multimap, Key, Value), Key, Value) };
 
-#ifdef _QX_CPP_11_CONTAINER
-#ifndef BOOST_NO_CXX11_STD_UNORDERED
+#endif // _QX_ENABLE_BOOST
 
 template <typename T>
 struct generic_container< std::unordered_set<T> > : public qx::trait::detail::generic_container_base_set< std::unordered_set<T>, T >
@@ -335,9 +331,6 @@ struct generic_container< std::unordered_map<Key, Value> > : public qx::trait::d
 template <typename Key, typename Value>
 struct generic_container< std::unordered_multimap<Key, Value> > : public qx::trait::detail::generic_container_base_key_value_multi_std_style< std::unordered_multimap<Key, Value>, Key, Value >
 { QX_TRAIT_GENERIC_CONTAINER_TYPEDEF(QX_TEMPLATE_T_P1_P2(std::unordered_multimap, Key, Value), Key, Value) };
-
-#endif // BOOST_NO_CXX11_STD_UNORDERED
-#endif // _QX_CPP_11_CONTAINER
 
 template <typename T>
 struct generic_container< QVector<T> > : public qx::trait::detail::generic_container_base< QVector<T>, T >

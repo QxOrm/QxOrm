@@ -67,8 +67,8 @@ class QxTransaction;
 } // namespace service
 } // namespace qx
 
-QX_DLL_EXPORT QDataStream & operator<< (QDataStream & stream, const qx::service::QxTransaction & t) BOOST_USED;
-QX_DLL_EXPORT QDataStream & operator>> (QDataStream & stream, qx::service::QxTransaction & t) BOOST_USED;
+QX_DLL_EXPORT QDataStream & operator<< (QDataStream & stream, const qx::service::QxTransaction & t) QX_USED;
+QX_DLL_EXPORT QDataStream & operator>> (QDataStream & stream, qx::service::QxTransaction & t) QX_USED;
 
 #ifndef _QX_NO_JSON
 namespace qx {
@@ -76,8 +76,8 @@ namespace cvt {
 namespace detail {
 template <> struct QxConvert_ToJson< qx::service::QxTransaction >;
 template <> struct QxConvert_FromJson< qx::service::QxTransaction >;
-QX_DLL_EXPORT QJsonValue QxConvert_ToJson_Helper(const qx::service::QxTransaction & t, const QString & format) BOOST_USED;
-QX_DLL_EXPORT qx_bool QxConvert_FromJson_Helper(const QJsonValue & j, qx::service::QxTransaction & t, const QString & format) BOOST_USED;
+QX_DLL_EXPORT QJsonValue QxConvert_ToJson_Helper(const qx::service::QxTransaction & t, const QString & format) QX_USED;
+QX_DLL_EXPORT qx_bool QxConvert_FromJson_Helper(const QJsonValue & j, qx::service::QxTransaction & t, const QString & format) QX_USED;
 } // namespace detail
 } // namespace cvt
 } // namespace qx
@@ -186,7 +186,7 @@ protected:
 
 };
 
-typedef qx_shared_ptr<QxTransaction> QxTransaction_ptr;
+typedef std::shared_ptr<QxTransaction> QxTransaction_ptr;
 QX_DLL_EXPORT void execute_client(IxService * pService, const QString & sMethod);
 
 } // namespace service

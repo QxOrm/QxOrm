@@ -143,9 +143,13 @@ template <> struct QxConvert_ToJson< qx_bool > {
 static inline QJsonValue toJson(const qx_bool & t, const QString & format)
 { Q_UNUSED(format); QJsonObject obj; obj["value"] = t.getValue(); obj["code"] = static_cast<double>(t.getCode()); obj["desc"] = t.getDesc(); return QJsonValue(obj); } };
 
+#ifdef _QX_ENABLE_BOOST
+
 template <typename T> struct QxConvert_ToJson< boost::optional<T> > {
 static inline QJsonValue toJson(const boost::optional<T> & t, const QString & format)
 { if (t) { return qx::cvt::to_json((* t), format); }; return QJsonValue(); } };
+
+#endif // _QX_ENABLE_BOOST
 
 } // namespace detail
 } // namespace cvt

@@ -125,8 +125,8 @@ public:
 
 protected:
 
-   virtual boost::any getDataPtr(const void * pOwner) const;
-   virtual boost::any getDataPtr(void * pOwner);
+   virtual qx::any getDataPtr(const void * pOwner) const;
+   virtual qx::any getDataPtr(void * pOwner);
    virtual void * getDataVoidPtr(const void * pOwner) const;
    virtual void * getDataVoidPtr(void * pOwner);
 

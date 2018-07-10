@@ -30,8 +30,6 @@
 ****************************************************************************/
 
 #ifndef _QX_NO_JSON
-#ifdef _QX_CPP_11_TUPLE
-#ifndef BOOST_NO_CXX11_HDR_TUPLE
 #ifndef _QX_SERIALIZE_QJSON_STD_TUPLE_H_
 #define _QX_SERIALIZE_QJSON_STD_TUPLE_H_
 
@@ -49,8 +47,6 @@
 #include <QtCore/qjsonvalue.h>
 #include <QtCore/qjsonobject.h>
 #include <QtCore/qjsonarray.h>
-
-#include <tuple>
 
 #include <QxConvert/QxConvert.h>
 #include <QxConvert/QxConvert_Impl.h>
@@ -361,6 +357,4 @@ struct QxConvert_FromJson< std::tuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> >
 } // namespace qx
 
 #endif // _QX_SERIALIZE_QJSON_STD_TUPLE_H_
-#endif // BOOST_NO_CXX11_HDR_TUPLE
-#endif // _QX_CPP_11_TUPLE
 #endif // _QX_NO_JSON

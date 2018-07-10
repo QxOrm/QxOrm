@@ -43,10 +43,6 @@
  * \brief Concrete factory class to create object dynamically using the class name
  */
 
-#include <boost/shared_ptr.hpp>
-#include <boost/static_assert.hpp>
-#include <boost/type_traits/is_abstract.hpp>
-
 #include <QxFactory/IxFactory.h>
 
 #include <QxTraits/get_base_class.h>
@@ -84,11 +80,11 @@ public:
    QxFactory(const QString & sKey) : IxFactory(sKey) { QX_AUTO_REGISTER_REPOSITORY(T, sKey); }
    virtual ~QxFactory() { ; }
 
-   virtual boost::any createObject() const
-   { QxClass<T>::getSingleton(); return qxCreateInstance<boost::is_abstract<T>::value, 0>::create(); }
+   virtual qx::any createObject() const
+   { QxClass<T>::getSingleton(); return qxCreateInstance<std::is_abstract<T>::value, 0>::create(); }
 
    virtual void * createObjectNudePtr() const
-   { QxClass<T>::getSingleton(); return qxCreateInstance<boost::is_abstract<T>::value, 0>::createNudePtr(); }
+   { QxClass<T>::getSingleton(); return qxCreateInstance<std::is_abstract<T>::value, 0>::createNudePtr(); }
 
 #ifndef _QX_NO_RTTI
    virtual const std::type_info & typeInfo() const
@@ -100,14 +96,14 @@ private:
    template <bool bIsAbstract /* = false */, int dummy>
    struct qxCreateInstance
    {
-      static inline boost::any create()      { qx_shared_ptr<T> ptr; ptr.reset(new T()); return boost::any(ptr); }
+      static inline qx::any create()      { std::shared_ptr<T> ptr; ptr.reset(new T()); return qx::any(ptr); }
       static inline void * createNudePtr()   { return static_cast<void *>(new T()); }
    };
 
    template <int dummy>
    struct qxCreateInstance<true, dummy>
    {
-      static inline boost::any create()      { qDebug(QX_STR_CANNOT_INSTANTIATE_ABSTRACT_CLASS, qx::trait::get_class_name<T>::get()); return boost::any(); }
+      static inline qx::any create()      { qDebug(QX_STR_CANNOT_INSTANTIATE_ABSTRACT_CLASS, qx::trait::get_class_name<T>::get()); return qx::any(); }
       static inline void * createNudePtr()   { qDebug(QX_STR_CANNOT_INSTANTIATE_ABSTRACT_CLASS, qx::trait::get_class_name<T>::get()); return NULL; }
    };
 

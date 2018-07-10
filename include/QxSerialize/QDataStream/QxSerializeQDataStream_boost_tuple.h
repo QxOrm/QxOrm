@@ -29,6 +29,7 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST
 #ifndef _QX_SERIALIZE_QDATASTREAM_BOOST_TUPLE_H_
 #define _QX_SERIALIZE_QDATASTREAM_BOOST_TUPLE_H_
 
@@ -44,10 +45,6 @@
  */
 
 #include <QtCore/qdatastream.h>
-
-#include <boost/tuple/tuple.hpp>
-#include <boost/tuple/tuple_comparison.hpp>
-#include <boost/tuple/tuple_io.hpp>
 
 template <typename T0, typename T1>
 QDataStream & operator<< (QDataStream & stream, const boost::tuple<T0, T1> & t)
@@ -266,3 +263,4 @@ QDataStream & operator>> (QDataStream & stream, boost::tuple<T0, T1, T2, T3, T4,
 }
 
 #endif // _QX_SERIALIZE_QDATASTREAM_BOOST_TUPLE_H_
+#endif // _QX_ENABLE_BOOST

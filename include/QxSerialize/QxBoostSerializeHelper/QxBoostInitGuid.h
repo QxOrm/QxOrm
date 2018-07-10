@@ -58,10 +58,10 @@ public:
 
 private:
 
-   inline void guid(const char * key, boost::mpl::false_)
+   inline void guid(const char * key, std::false_type)
    { Q_UNUSED(key); /* boost::archive::detail::instantiate_ptr_serialization((T *)0, 0, boost::archive::detail::adl_tag()); */ }
 
-   inline void guid(const char * key, boost::mpl::true_)
+   inline void guid(const char * key, std::true_type)
    { Q_UNUSED(key); }
 
    inline void guid(const char * key)

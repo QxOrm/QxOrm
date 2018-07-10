@@ -43,12 +43,6 @@
  * \brief List of all classes registered into QxOrm context
  */
 
-#include <boost/function.hpp>
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/or.hpp>
-#include <boost/mpl/logical.hpp>
-#include <boost/type_traits/is_pointer.hpp>
-
 #include <QxCommon/QxBool.h>
 
 #include <QxRegister/IxClass.h>
@@ -75,8 +69,8 @@ class QX_DLL_EXPORT QxClassX : public QxSingleton<QxClassX>
 public:
 
    typedef IxFunction::type_any_params type_any_params;
-   typedef boost::function<QString (const QVariant &, int, const unsigned int)> type_fct_save_qvariant_usertype;
-   typedef boost::function<QVariant (const QString &, int, const unsigned int)> type_fct_load_qvariant_usertype;
+   typedef std::function<QString (const QVariant &, int, const unsigned int)> type_fct_save_qvariant_usertype;
+   typedef std::function<QVariant (const QString &, int, const unsigned int)> type_fct_load_qvariant_usertype;
 
 protected:
 
@@ -106,7 +100,7 @@ private:
 
 public:
 
-   static boost::any create(const QString & sKey);
+   static qx::any create(const QString & sKey);
    static IxClass * getClass(const QString & sKey);
    static IxDataMemberX * getDataMemberX(const QString & sKey);
    static IxFunctionX * getFctMemberX(const QString & sKey);
@@ -135,46 +129,46 @@ public:
    static void setFctLoadQVariantUserType(type_fct_load_qvariant_usertype fct)   { QxClassX::getSingleton()->m_fctLoadQVariantUserType = fct; }
 
    template <class U>
-   static inline qx_bool invoke(const QString & sClassKey, const QString & sFctKey, U & pOwner, const QString & params = QString(), boost::any * ret = NULL)
+   static inline qx_bool invoke(const QString & sClassKey, const QString & sFctKey, U & pOwner, const QString & params = QString(), qx::any * ret = NULL)
    {
-      typedef typename boost::mpl::if_c< boost::is_pointer<U>::value, QxClassX::invoke_ptr<U>, QxClassX::invoke_default<U> >::type type_invoke_1;
-      typedef typename boost::mpl::if_c< qx::trait::is_smart_ptr<U>::value, QxClassX::invoke_ptr<U>, type_invoke_1 >::type type_invoke_2;
+      typedef typename std::conditional< std::is_pointer<U>::value, QxClassX::invoke_ptr<U>, QxClassX::invoke_default<U> >::type type_invoke_1;
+      typedef typename std::conditional< qx::trait::is_smart_ptr<U>::value, QxClassX::invoke_ptr<U>, type_invoke_1 >::type type_invoke_2;
       return type_invoke_2::invoke(sClassKey, sFctKey, pOwner, params, ret);
    }
 
    template <class U>
-   static inline qx_bool invoke(const QString & sClassKey, const QString & sFctKey, U & pOwner, const type_any_params & params, boost::any * ret = NULL)
+   static inline qx_bool invoke(const QString & sClassKey, const QString & sFctKey, U & pOwner, const type_any_params & params, qx::any * ret = NULL)
    {
-      typedef typename boost::mpl::if_c< boost::is_pointer<U>::value, QxClassX::invoke_ptr<U>, QxClassX::invoke_default<U> >::type type_invoke_1;
-      typedef typename boost::mpl::if_c< qx::trait::is_smart_ptr<U>::value, QxClassX::invoke_ptr<U>, type_invoke_1 >::type type_invoke_2;
+      typedef typename std::conditional< std::is_pointer<U>::value, QxClassX::invoke_ptr<U>, QxClassX::invoke_default<U> >::type type_invoke_1;
+      typedef typename std::conditional< qx::trait::is_smart_ptr<U>::value, QxClassX::invoke_ptr<U>, type_invoke_1 >::type type_invoke_2;
       return type_invoke_2::invoke(sClassKey, sFctKey, pOwner, params, ret);
    }
 
-   static qx_bool invokeStatic(const QString & sClassKey, const QString & sFctKey, const QString & params = QString(), boost::any * ret = NULL);
-   static qx_bool invokeStatic(const QString & sClassKey, const QString & sFctKey, const type_any_params & params, boost::any * ret = NULL);
+   static qx_bool invokeStatic(const QString & sClassKey, const QString & sFctKey, const QString & params = QString(), qx::any * ret = NULL);
+   static qx_bool invokeStatic(const QString & sClassKey, const QString & sFctKey, const type_any_params & params, qx::any * ret = NULL);
 
 private:
 
    template <class U>
    struct invoke_ptr
    {
-      static inline qx_bool invoke(const QString & sClassKey, const QString & sFctKey, U & pOwner, const QString & params = QString(), boost::any * ret = NULL)
+      static inline qx_bool invoke(const QString & sClassKey, const QString & sFctKey, U & pOwner, const QString & params = QString(), qx::any * ret = NULL)
       { return QxClassX::invokeVoidPtr(sClassKey, sFctKey, static_cast<void *>(& (* pOwner)), params, ret); }
-      static inline qx_bool invoke(const QString & sClassKey, const QString & sFctKey, U & pOwner, const type_any_params & params, boost::any * ret = NULL)
+      static inline qx_bool invoke(const QString & sClassKey, const QString & sFctKey, U & pOwner, const type_any_params & params, qx::any * ret = NULL)
       { return QxClassX::invokeVoidPtr(sClassKey, sFctKey, static_cast<void *>(& (* pOwner)), params, ret); }
    };
 
    template <class U>
    struct invoke_default
    {
-      static inline qx_bool invoke(const QString & sClassKey, const QString & sFctKey, U & pOwner, const QString & params = QString(), boost::any * ret = NULL)
+      static inline qx_bool invoke(const QString & sClassKey, const QString & sFctKey, U & pOwner, const QString & params = QString(), qx::any * ret = NULL)
       { return QxClassX::invokeVoidPtr(sClassKey, sFctKey, static_cast<void *>(& pOwner), params, ret); }
-      static inline qx_bool invoke(const QString & sClassKey, const QString & sFctKey, U & pOwner, const type_any_params & params, boost::any * ret = NULL)
+      static inline qx_bool invoke(const QString & sClassKey, const QString & sFctKey, U & pOwner, const type_any_params & params, qx::any * ret = NULL)
       { return QxClassX::invokeVoidPtr(sClassKey, sFctKey, static_cast<void *>(& pOwner), params, ret); }
    };
 
-   static qx_bool invokeVoidPtr(const QString & sClassKey, const QString & sFctKey, void * pOwner, const QString & params = QString(), boost::any * ret = NULL);
-   static qx_bool invokeVoidPtr(const QString & sClassKey, const QString & sFctKey, void * pOwner, const type_any_params & params, boost::any * ret = NULL);
+   static qx_bool invokeVoidPtr(const QString & sClassKey, const QString & sFctKey, void * pOwner, const QString & params = QString(), qx::any * ret = NULL);
+   static qx_bool invokeVoidPtr(const QString & sClassKey, const QString & sFctKey, void * pOwner, const type_any_params & params, qx::any * ret = NULL);
 
    static bool isValid_DataMember(IxDataMember * p);
    static bool isValid_SqlRelation(IxDataMember * p);

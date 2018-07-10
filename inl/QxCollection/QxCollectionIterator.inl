@@ -32,7 +32,7 @@
 namespace qx {
 
 template <typename Key, typename Value>
-QxCollectionIterator<Key, Value>::QxCollectionIterator(const QxCollection<Key, Value> & col) : boost::noncopyable(), m_pCollection(& col), m_lCurrIndex(-1)
+QxCollectionIterator<Key, Value>::QxCollectionIterator(const QxCollection<Key, Value> & col) : m_pCollection(& col), m_lCurrIndex(-1)
 {
 }
 

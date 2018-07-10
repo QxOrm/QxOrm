@@ -69,11 +69,10 @@ private:
 
 public:
 
-   QxSqlRelation_OneToMany(IxDataMember * p, const QString & sForeignKey) : QxSqlRelation<DataType, Owner>(p) { this->m_eRelationType = qx::IxSqlRelation::one_to_many; this->m_sForeignKey = sForeignKey; qAssert(! this->m_sForeignKey.isEmpty()); }
-   virtual ~QxSqlRelation_OneToMany() { BOOST_STATIC_ASSERT(is_data_container); }
+   QxSqlRelation_OneToMany(IxDataMember * p, const QString & sForeignKey) : QxSqlRelation<DataType, Owner>(p) { this->setRelationType(qx::IxSqlRelation::one_to_many); this->setForeignKey(sForeignKey); qAssert(! this->getForeignKey().isEmpty()); }
+   virtual ~QxSqlRelation_OneToMany() { static_assert(is_data_container, "is_data_container"); }
 
    virtual QString getDescription() const                                     { return "relation one-to-many"; }
-   virtual QString getExtraTable() const                                      { return ""; }
    virtual QString createExtraTable() const                                   { return ""; }
    virtual bool getCartesianProduct() const                                   { return true; }
    virtual void createTable(QxSqlRelationParams & params) const               { Q_UNUSED(params); }
@@ -122,7 +121,7 @@ public:
       if (! this->verifyOffset(params, true)) { return NULL; }
       QSqlQuery & query = params.query();
       IxDataMember * p = NULL; IxDataMember * pId = this->getDataId(); qAssert(pId); if (! pId) { return NULL; }
-      IxDataMember * pForeign = this->getDataByKey(this->m_sForeignKey); qAssert(pForeign); if (! pForeign) { return NULL; }
+      IxDataMember * pForeign = this->getDataByKey(this->getForeignKey()); qAssert(pForeign); if (! pForeign) { return NULL; }
       long lIndex = 0; long lOffsetId = (pId ? pId->getNameCount() : 0); long lOffsetForeign = (pForeign ? pForeign->getNameCount() : 0);
       long lOffsetOld = params.offset(); this->updateOffset(true, params);
       long lOffsetRelation = (lOffsetOld + lOffsetId + lOffsetForeign);
@@ -170,7 +169,7 @@ private:
       bool bForce = qx::QxSqlDatabase::getSingleton()->getForceParentIdToAllChildren();
       if (! bForce || ! params.owner()) { return; }
       IxDataMember * pIdOwner = this->getDataIdOwner(); if (! pIdOwner) { return; }
-      IxDataMember * pForeign = this->getDataByKey(this->m_sForeignKey); if (! pForeign) { return; }
+      IxDataMember * pForeign = this->getDataByKey(this->getForeignKey()); if (! pForeign) { return; }
       if (pIdOwner->getNameCount() != pForeign->getNameCount()) { return; }
 
       QList<QVariant> vIdOwner;

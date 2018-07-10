@@ -39,13 +39,13 @@ struct QxSqlQueryHelper_Insert
 
    static void sql(QString & sql, qx::IxSqlQueryBuilder & builder)
    {
-      BOOST_STATIC_ASSERT(qx::trait::is_qx_registered<T>::value);
+      static_assert(qx::trait::is_qx_registered<T>::value, "qx::trait::is_qx_registered<T>::value");
       qx::IxSqlQueryBuilder::sql_Insert(sql, builder);
    }
 
    static void resolveInput(T & t, QSqlQuery & query, qx::IxSqlQueryBuilder & builder)
    {
-      BOOST_STATIC_ASSERT(qx::trait::is_qx_registered<T>::value);
+      static_assert(qx::trait::is_qx_registered<T>::value, "qx::trait::is_qx_registered<T>::value");
       qx::IxSqlQueryBuilder::resolveInput_Insert((& t), query, builder);
    }
 

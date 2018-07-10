@@ -68,7 +68,7 @@ class QX_DLL_EXPORT IxValidatorX
 protected:
 
    typedef QList<IxValidator_ptr> type_lst_validator;
-   typedef qx_shared_ptr<type_lst_validator> type_lst_validator_ptr;
+   typedef std::shared_ptr<type_lst_validator> type_lst_validator_ptr;
    typedef QxCollection<QString, type_lst_validator_ptr> type_lst_validator_ptr_by_group;
 
    type_lst_validator_ptr_by_group m_lstValidatorByGroup;   //!< List of validator by group
@@ -109,7 +109,7 @@ protected:
 
 };
 
-typedef qx_shared_ptr<IxValidatorX> IxValidatorX_ptr;
+typedef std::shared_ptr<IxValidatorX> IxValidatorX_ptr;
 
 } // namespace qx
 

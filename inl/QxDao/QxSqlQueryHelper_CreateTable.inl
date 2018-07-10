@@ -39,7 +39,7 @@ struct QxSqlQueryHelper_CreateTable
 
    static void sql(QString & sql, qx::IxSqlQueryBuilder & builder)
    {
-      BOOST_STATIC_ASSERT(qx::trait::is_qx_registered<T>::value);
+      static_assert(qx::trait::is_qx_registered<T>::value, "qx::trait::is_qx_registered<T>::value");
       qx::IxSqlQueryBuilder::sql_CreateTable(sql, builder);
    }
 

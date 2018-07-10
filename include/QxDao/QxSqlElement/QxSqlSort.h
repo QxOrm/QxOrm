@@ -83,7 +83,7 @@ protected:
 
 };
 
-typedef qx_shared_ptr<QxSqlSort> QxSqlSort_ptr;
+typedef std::shared_ptr<QxSqlSort> QxSqlSort_ptr;
 
 } // namespace detail
 } // namespace dao

@@ -49,14 +49,11 @@
 #pragma warning(disable:4094)
 #endif // _MSC_VER
 
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/logical.hpp>
-#include <boost/static_assert.hpp>
-
 #include <QxCommon/QxConfig.h>
 #include <QxCommon/QxMacro.h>
 
 #include <QxRegister/QxClass.h>
+#include <QxRegister/QxVersion.h>
 
 #include <QxFactory/QxFactory.h>
 
@@ -69,11 +66,11 @@
 #include <QxTraits/is_qx_registered.h>
 
 #define QX_REGISTER_CLASS_MAPPING_FCT_HPP(dllImportExport, className) \
-namespace qx { template <> dllImportExport void register_class(QxClass< className > & t) BOOST_USED; }
+namespace qx { template <> dllImportExport void register_class(QxClass< className > & t) QX_USED; }
 
 #define QX_REGISTER_SERIALIZE_QDATASTREAM_HPP(dllImportExport, className) \
-dllImportExport QDataStream & operator<< (QDataStream & stream, const className & t) BOOST_USED; \
-dllImportExport QDataStream & operator>> (QDataStream & stream, className & t) BOOST_USED;
+dllImportExport QDataStream & operator<< (QDataStream & stream, const className & t) QX_USED; \
+dllImportExport QDataStream & operator>> (QDataStream & stream, className & t) QX_USED;
 
 #define QX_REGISTER_SERIALIZE_QDATASTREAM_CPP(className) \
 QDataStream & operator<< (QDataStream & stream, const className & t) \
@@ -89,8 +86,8 @@ namespace qx { template <> void register_class(QxClass< className > & t) { Q_UNU
 namespace boost { namespace serialization { \
 inline void serialize(Archive & ar, className & t, const unsigned int file_version) \
 { \
-   BOOST_STATIC_ASSERT(qx::trait::is_qx_registered< className >::value); \
-   typedef boost::mpl::if_c< Archive::is_saving::value, qx::serialization::detail::saver< Archive, className >, qx::serialization::detail::loader< Archive, className > >::type type_invoker; \
+   static_assert(qx::trait::is_qx_registered< className >::value, "qx::trait::is_qx_registered< className >::value"); \
+   typedef std::conditional< Archive::is_saving::value, qx::serialization::detail::saver< Archive, className >, qx::serialization::detail::loader< Archive, className > >::type type_invoker; \
    type_invoker::invoke(ar, t, file_version); \
 } } } // namespace boost::serialization
 #endif // _QX_ENABLE_BOOST_SERIALIZATION
@@ -98,7 +95,7 @@ inline void serialize(Archive & ar, className & t, const unsigned int file_versi
 #ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #define QX_SERIALIZE_ARCHIVE_HPP(dllImportExport, Archive, className) \
 namespace boost { namespace serialization { \
-dllImportExport void serialize(Archive & ar, className & t, const unsigned int file_version) BOOST_USED; \
+dllImportExport void serialize(Archive & ar, className & t, const unsigned int file_version) QX_USED; \
 } } // namespace boost::serialization
 #endif // _QX_ENABLE_BOOST_SERIALIZATION
 
@@ -314,14 +311,14 @@ QX_REGISTER_BASE_CLASS(className, baseClass) \
 QX_REGISTER_FACTORY_COMPLEX_CLASS_NAME_HPP(className, classNameFormatted) \
 QX_REGISTER_BOOST_SERIALIZE_HELPER_COMPLEX_CLASS_NAME(className, classNameFormatted) \
 QX_BOOST_CLASS_EXPORT_HPP(className) \
-BOOST_CLASS_VERSION(className, version)
+QX_CLASS_VERSION(className, version)
 #else // _QX_ENABLE_BOOST_SERIALIZATION
 #define QX_REGISTER_COMPLEX_CLASS_NAME_HPP(className, baseClass, version, classNameFormatted) \
 QX_SET_REGISTERED(className) \
 QX_REGISTER_CLASS_NAME(className) \
 QX_REGISTER_BASE_CLASS(className, baseClass) \
 QX_REGISTER_FACTORY_COMPLEX_CLASS_NAME_HPP(className, classNameFormatted) \
-BOOST_CLASS_VERSION(className, version)
+QX_CLASS_VERSION(className, version)
 #endif // _QX_ENABLE_BOOST_SERIALIZATION
 
 #define QX_REGISTER_HPP(className, baseClass, version) \

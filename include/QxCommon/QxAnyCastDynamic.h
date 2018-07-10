@@ -40,62 +40,59 @@
  * \file QxAnyCastDynamic.h
  * \author Lionel Marty
  * \ingroup QxCommon
- * \brief qx::any_cast_dynamic<T>::get() : provides a tool to use boost::any_cast and polymorphism
+ * \brief qx::any_cast_dynamic<T>::get() : provides a tool to use qx::any_cast and polymorphism
  */
-
-#include <boost/any.hpp>
-#include <boost/shared_ptr.hpp>
 
 #include <QtCore/qsharedpointer.h>
 
-#include <QxDao/QxDaoPointer.h>
+#include <QxCommon/QxAny.h>
 
-#ifdef _QX_CPP_11_SMART_PTR
-#ifndef BOOST_NO_CXX11_SMART_PTR
-#include <memory>
-#endif // BOOST_NO_CXX11_SMART_PTR
-#endif // _QX_CPP_11_SMART_PTR
+#include <QxDao/QxDaoPointer.h>
 
 namespace qx {
 
 template <typename T>
 struct any_cast_dynamic
-{ static T get(const boost::any & a) { return boost::any_cast<T>(a); } };
+{ static T get(const qx::any & a) { return qx::any_cast<T>(a); } };
 
 template <typename T>
 struct any_cast_dynamic<T *>
 {
-   static T * get(const boost::any & a)
+   static T * get(const qx::any & a)
    {
       if (a.empty()) { return NULL; }
-      boost::any * b = const_cast<boost::any *>(& a);
-      T ** t = boost::unsafe_any_cast<T *>(b);
+      qx::any * b = const_cast<qx::any *>(& a);
+      T ** t = qx::unsafe_any_cast<T *>(b);
       if (! t) { return NULL; }
       return (* t);
    }
 };
 
+#ifdef _QX_ENABLE_BOOST
+
 template <typename T>
 struct any_cast_dynamic< boost::shared_ptr<T> >
 {
-   static boost::shared_ptr<T> get(const boost::any & a)
+   static boost::shared_ptr<T> get(const qx::any & a)
    {
       if (a.empty()) { return boost::shared_ptr<T>(); }
-      boost::any * b = const_cast<boost::any *>(& a);
-      boost::shared_ptr<T> * t = boost::unsafe_any_cast< boost::shared_ptr<T> >(b);
+      qx::any * b = const_cast<qx::any *>(& a);
+      boost::shared_ptr<T> * t = qx::unsafe_any_cast< boost::shared_ptr<T> >(b);
       if (! t) { return boost::shared_ptr<T>(); }
       return (* t);
    }
 };
 
+#endif // _QX_ENABLE_BOOST
+
 template <typename T>
 struct any_cast_dynamic< QSharedPointer<T> >
 {
-   static QSharedPointer<T> get(const boost::any & a)
+   static QSharedPointer<T> get(const qx::any & a)
    {
       if (a.empty()) { return QSharedPointer<T>(); }
-      boost::any * b = const_cast<boost::any *>(& a);
-      QSharedPointer<T> * t = boost::unsafe_any_cast< QSharedPointer<T> >(b);
+      qx::any * b = const_cast<qx::any *>(& a);
+      QSharedPointer<T> * t = qx::unsafe_any_cast< QSharedPointer<T> >(b);
       if (! t) { return QSharedPointer<T>(); }
       return (* t);
    }
@@ -104,34 +101,28 @@ struct any_cast_dynamic< QSharedPointer<T> >
 template <typename T>
 struct any_cast_dynamic< qx::dao::ptr<T> >
 {
-   static qx::dao::ptr<T> get(const boost::any & a)
+   static qx::dao::ptr<T> get(const qx::any & a)
    {
       if (a.empty()) { return qx::dao::ptr<T>(); }
-      boost::any * b = const_cast<boost::any *>(& a);
-      qx::dao::ptr<T> * t = boost::unsafe_any_cast< qx::dao::ptr<T> >(b);
+      qx::any * b = const_cast<qx::any *>(& a);
+      qx::dao::ptr<T> * t = qx::unsafe_any_cast< qx::dao::ptr<T> >(b);
       if (! t) { return qx::dao::ptr<T>(); }
       return (* t);
    }
 };
 
-#ifdef _QX_CPP_11_SMART_PTR
-#ifndef BOOST_NO_CXX11_SMART_PTR
-
 template <typename T>
 struct any_cast_dynamic< std::shared_ptr<T> >
 {
-   static std::shared_ptr<T> get(const boost::any & a)
+   static std::shared_ptr<T> get(const qx::any & a)
    {
       if (a.empty()) { return std::shared_ptr<T>(); }
-      boost::any * b = const_cast<boost::any *>(& a);
-      std::shared_ptr<T> * t = boost::unsafe_any_cast< std::shared_ptr<T> >(b);
+      qx::any * b = const_cast<qx::any *>(& a);
+      std::shared_ptr<T> * t = qx::unsafe_any_cast< std::shared_ptr<T> >(b);
       if (! t) { return std::shared_ptr<T>(); }
       return (* t);
    }
 };
-
-#endif // BOOST_NO_CXX11_SMART_PTR
-#endif // _QX_CPP_11_SMART_PTR
 
 } // namespace qx
 

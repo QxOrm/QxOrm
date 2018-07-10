@@ -66,11 +66,11 @@
     <table cellspacing="0" cellpadding="1"><col><col><tbody>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow">Version courante :&nbsp;</font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.3 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.4 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
       </tr>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow"></font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.2.1</font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.2.2</font></td>
       </tr>
     </tbody></table>
   </td>
@@ -386,7 +386,7 @@ class</span> QX_SERVICE_DLL_EXPORT server_infos_input<span class="operator"> :</
 { ; };</span>
 
 QX_REGISTER_HPP_QX_SERVICE<span class="operator">(</span>server_infos_input<span class="operator">,</span> qx<span class="operator">::</span>service<span class="operator">::</span>IxParameter<span class="operator">,</span><span class="int"> 0</span><span class="operator">)</span><span class="keyword">
-typedef</span> boost<span class="operator">::</span>shared_ptr<span class="operator">&lt;</span>server_infos_input<span class="operator">&gt;</span> server_infos_input_ptr<span class="operator">;</span><span class="comment">
+typedef</span> std<span class="operator">::</span>shared_ptr<span class="operator">&lt;</span>server_infos_input<span class="operator">&gt;</span> server_infos_input_ptr<span class="operator">;</span><span class="comment">
 
 /* -- Liste des paramètres de sortie du service -- */</span><span class="keyword">
 
@@ -394,7 +394,7 @@ class</span> QX_SERVICE_DLL_EXPORT server_infos_output<span class="operator"> :<
 {</span><span class="keyword"> public</span><span class="operator">:</span> QDateTime current_date_time<span class="operator">; };</span>
 
 QX_REGISTER_HPP_QX_SERVICE<span class="operator">(</span>server_infos_output<span class="operator">,</span> qx<span class="operator">::</span>service<span class="operator">::</span>IxParameter<span class="operator">,</span><span class="int"> 0</span><span class="operator">)</span><span class="keyword">
-typedef</span> boost<span class="operator">::</span>shared_ptr<span class="operator">&lt;</span>server_infos_output<span class="operator">&gt;</span> server_infos_output_ptr<span class="operator">;</span><span class="comment">
+typedef</span> std<span class="operator">::</span>shared_ptr<span class="operator">&lt;</span>server_infos_output<span class="operator">&gt;</span> server_infos_output_ptr<span class="operator">;</span><span class="comment">
 
 /* -- Définition du service -- */</span><span class="keyword">
 
@@ -408,7 +408,7 @@ public</span><span class="operator">:</span>
 };</span>
 
 QX_REGISTER_HPP_QX_SERVICE<span class="operator">(</span>server_infos<span class="operator">,</span> qx<span class="operator">::</span>service<span class="operator">::</span>IxService<span class="operator">,</span><span class="int"> 0</span><span class="operator">)</span><span class="keyword">
-typedef</span> boost<span class="operator">::</span>shared_ptr<span class="operator">&lt;</span>server_infos<span class="operator">&gt;</span> server_infos_ptr<span class="operator">;</span><span class="pre">
+typedef</span> std<span class="operator">::</span>shared_ptr<span class="operator">&lt;</span>server_infos<span class="operator">&gt;</span> server_infos_ptr<span class="operator">;</span><span class="pre">
 
 #endif // _QX_SERVICE_SERVER_INFOS_H_</span></pre>
         </td></tr></tbody></table>
@@ -421,12 +421,12 @@ typedef</span> boost<span class="operator">::</span>shared_ptr<span class="opera
         </ul>
         Ces trois classes doivent être enregistrées dans le contexte QxOrm, de la même façon qu'une classe persistante (voir <a href="./tutorial.html">le tutoriel <b>qxBlog</b></a>).<br>
         C'est pourquoi nous utilisons la macro <i>QX_REGISTER_HPP_QX_SERVICE</i> pour ces trois classes.<br>
-        De plus, pour simplifier l'écriture des pointeurs, la gestion de la mémoire et éviter les problèmes de fuites mémoires, nous utilisons les pointeurs intelligents de la bibliothèque boost : <i>boost::shared_ptr</i>.<br>
+        De plus, pour simplifier l'écriture des pointeurs, la gestion de la mémoire et éviter les problèmes de fuites mémoires, nous utilisons les pointeurs intelligents de la bibliothèque standard : <i>std::shared_ptr</i>.<br>
         Le module <b>QxService</b> travaille essentiellement avec des pointeurs intelligents, c'est pourquoi il est fortement conseillé de créer les <i>typedef</i> correspondants, par exemple :<br>
         <br>
-        <i>typedef boost::shared_ptr&lt;server_infos_input&gt; server_infos_input_ptr;</i>.<br>
-        <i>typedef boost::shared_ptr&lt;server_infos_output&gt; server_infos_output_ptr;</i>.<br>
-        <i>typedef boost::shared_ptr&lt;server_infos&gt; server_infos_ptr;</i>.<br>
+        <i>typedef std::shared_ptr&lt;server_infos_input&gt; server_infos_input_ptr;</i>.<br>
+        <i>typedef std::shared_ptr&lt;server_infos_output&gt; server_infos_output_ptr;</i>.<br>
+        <i>typedef std::shared_ptr&lt;server_infos&gt; server_infos_ptr;</i>.<br>
         <br>
         Enfin, le constructeur du service doit indiquer en paramètre le nom de la classe sous forme de chaîne de caractères : ceci est indispensable pour le moteur d'<i>introspection</i> de QxOrm pour pouvoir instancier dynamiquement les services correspondant aux requêtes des clients.<br>
         <br>

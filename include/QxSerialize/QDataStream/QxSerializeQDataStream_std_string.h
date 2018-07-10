@@ -47,10 +47,10 @@
 
 #include <string>
 
-QX_DLL_EXPORT QDataStream & operator<< (QDataStream & stream, const std::string & t) BOOST_USED;
-QX_DLL_EXPORT QDataStream & operator>> (QDataStream & stream, std::string & t) BOOST_USED;
+QX_DLL_EXPORT QDataStream & operator<< (QDataStream & stream, const std::string & t) QX_USED;
+QX_DLL_EXPORT QDataStream & operator>> (QDataStream & stream, std::string & t) QX_USED;
 
-QX_DLL_EXPORT QDataStream & operator<< (QDataStream & stream, const std::wstring & t) BOOST_USED;
-QX_DLL_EXPORT QDataStream & operator>> (QDataStream & stream, std::wstring & t) BOOST_USED;
+QX_DLL_EXPORT QDataStream & operator<< (QDataStream & stream, const std::wstring & t) QX_USED;
+QX_DLL_EXPORT QDataStream & operator>> (QDataStream & stream, std::wstring & t) QX_USED;
 
 #endif // _QX_SERIALIZE_QDATASTREAM_STD_STRING_H_

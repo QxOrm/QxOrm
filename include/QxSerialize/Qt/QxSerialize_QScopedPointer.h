@@ -40,7 +40,6 @@
 
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/split_free.hpp>
-#include <boost/serialization/version.hpp>
 #include <boost/serialization/nvp.hpp>
 
 #include <QtCore/qscopedpointer.h>

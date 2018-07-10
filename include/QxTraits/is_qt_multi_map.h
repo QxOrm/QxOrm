@@ -45,9 +45,6 @@
 
 #include <QtCore/QMultiMap>
 
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/logical.hpp>
-
 namespace qx {
 namespace trait {
 
@@ -56,19 +53,19 @@ namespace trait {
  * \brief qx::trait::is_qt_multi_map<T>::value : return true if T is a QMultiMap<> container of Qt library, otherwise return false
  */
 template <typename T>
-struct is_qt_multi_map : public boost::mpl::false_ { ; };
+struct is_qt_multi_map : public std::false_type { ; };
 
 template <typename Key, typename Value>
-struct is_qt_multi_map< QMultiMap<Key, Value> > : public boost::mpl::true_ { ; };
+struct is_qt_multi_map< QMultiMap<Key, Value> > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_qt_multi_map< QMultiMap<Key, Value> & > : public boost::mpl::true_ { ; };
+struct is_qt_multi_map< QMultiMap<Key, Value> & > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_qt_multi_map< const QMultiMap<Key, Value> > : public boost::mpl::true_ { ; };
+struct is_qt_multi_map< const QMultiMap<Key, Value> > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_qt_multi_map< const QMultiMap<Key, Value> & > : public boost::mpl::true_ { ; };
+struct is_qt_multi_map< const QMultiMap<Key, Value> & > : public std::true_type { ; };
 
 } // namespace trait
 } // namespace qx

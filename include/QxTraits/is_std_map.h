@@ -45,9 +45,6 @@
 
 #include <map>
 
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/logical.hpp>
-
 namespace qx {
 namespace trait {
 
@@ -56,19 +53,19 @@ namespace trait {
  * \brief qx::trait::is_std_map<T>::value : return true if T is a std::map<> container of stl library, otherwise return false
  */
 template <typename T>
-struct is_std_map : public boost::mpl::false_ { ; };
+struct is_std_map : public std::false_type { ; };
 
 template <typename Key, typename Value>
-struct is_std_map< std::map<Key, Value> > : public boost::mpl::true_ { ; };
+struct is_std_map< std::map<Key, Value> > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_std_map< std::map<Key, Value> & > : public boost::mpl::true_ { ; };
+struct is_std_map< std::map<Key, Value> & > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_std_map< const std::map<Key, Value> > : public boost::mpl::true_ { ; };
+struct is_std_map< const std::map<Key, Value> > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_std_map< const std::map<Key, Value> & > : public boost::mpl::true_ { ; };
+struct is_std_map< const std::map<Key, Value> & > : public std::true_type { ; };
 
 } // namespace trait
 } // namespace qx

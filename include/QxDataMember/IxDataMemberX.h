@@ -60,20 +60,20 @@ class IxClass;
 class QX_DLL_EXPORT IxDataMemberX
 {
 
+private:
+
+   struct IxDataMemberXImpl;
+   std::unique_ptr<IxDataMemberXImpl> m_pImpl; //!< Private implementation idiom
+
 protected:
 
-   QxCollection<QString, IxDataMember *> m_lstDataMember;   //!< Collection of IxDataMember
-   IxClass * m_pClass;                                      //!< Class definition
-
-protected:
-
-   IxDataMemberX() : m_pClass(NULL) { ; }
-   virtual ~IxDataMemberX() { deleteAllIxDataMember(); }
+   IxDataMemberX();
+   virtual ~IxDataMemberX();
 
 public:
 
-   inline IxClass * getClass() const   { return m_pClass; }
-   inline void setClass(IxClass * p)   { m_pClass = p; }
+   IxClass * getClass() const;
+   void setClass(IxClass * p);
 
    QString getName() const;
    const char * getNamePtr() const;
@@ -81,26 +81,28 @@ public:
    long getVersion() const;
    qx::dao::strategy::inheritance getDaoStrategy() const;
 
-   inline long count() const                             { return m_lstDataMember.count(); }
-   inline long size() const                              { return this->count(); }
-   inline bool exist(const QString & sKey) const         { return m_lstDataMember.exist(sKey); }
-   inline IxDataMember * get(long l) const               { return m_lstDataMember.getByIndex(l); }
-   inline IxDataMember * get(const QString & s) const    { return m_lstDataMember.getByKey(s); }
+   long count() const;
+   long size() const;
+   bool exist(const QString & sKey) const;
+   IxDataMember * get(long l) const;
+   IxDataMember * get(const QString & s) const;
+   IxDataMember * getId() const;
 
-   virtual IxDataMember * getId() const = 0;
    virtual long count_WithDaoStrategy() const = 0;
    virtual bool exist_WithDaoStrategy(const QString & sKey) const = 0;
    virtual IxDataMember * get_WithDaoStrategy(long lIndex) const = 0;
    virtual IxDataMember * get_WithDaoStrategy(const QString & sKey) const = 0;
    virtual IxDataMember * getId_WithDaoStrategy() const = 0;
 
-private:
+protected:
 
-   inline void deleteAllIxDataMember() { _foreach(IxDataMember * p, m_lstDataMember) { delete p; }; }
+   void setId(IxDataMember * p);
+   QxCollection<QString, IxDataMember *> & getListDataMemberRef();
+   const QxCollection<QString, IxDataMember *> & getListDataMemberRef() const;
 
 };
 
-typedef qx_shared_ptr<IxDataMemberX> IxDataMemberX_ptr;
+typedef std::shared_ptr<IxDataMemberX> IxDataMemberX_ptr;
 
 } // namespace qx
 

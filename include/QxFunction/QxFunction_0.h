@@ -58,7 +58,7 @@ class QxFunction_0 : public IxFunction
 
 public:
 
-   typedef boost::function<R (Owner *)> type_fct;
+   typedef std::function<R (Owner *)> type_fct;
    QX_FUNCTION_CLASS_MEMBER_FCT(QxFunction_0);
 
    virtual int getParamCount() const                                    { return 0; }
@@ -70,7 +70,7 @@ private:
    template <class T, bool bReturnValue /* = false */>
    struct QxInvokerFct
    {
-      static inline qx_bool invoke(void * pOwner, const T & params, boost::any * ret, const QxFunction_0 * pThis)
+      static inline qx_bool invoke(void * pOwner, const T & params, qx::any * ret, const QxFunction_0 * pThis)
       {
          QX_FUNCTION_INVOKE_START_WITH_OWNER();
          try { pThis->m_fct(static_cast<Owner *>(pOwner)); }
@@ -81,10 +81,10 @@ private:
    template <class T>
    struct QxInvokerFct<T, true>
    {
-      static inline qx_bool invoke(void * pOwner, const T & params, boost::any * ret, const QxFunction_0 * pThis)
+      static inline qx_bool invoke(void * pOwner, const T & params, qx::any * ret, const QxFunction_0 * pThis)
       {
          QX_FUNCTION_INVOKE_START_WITH_OWNER();
-         try { R retTmp = pThis->m_fct(static_cast<Owner *>(pOwner)); if (ret) { (* ret) = boost::any(retTmp); } }
+         try { R retTmp = pThis->m_fct(static_cast<Owner *>(pOwner)); if (ret) { (* ret) = qx::any(retTmp); } }
          QX_FUNCTION_CATCH_AND_RETURN_INVOKE();
       }
    };
@@ -97,7 +97,7 @@ class QxFunction_0<void, R> : public IxFunction
 
 public:
 
-   typedef boost::function<R ()> type_fct;
+   typedef std::function<R ()> type_fct;
    QX_FUNCTION_CLASS_FCT(QxFunction_0);
 
    virtual int getParamCount() const                                    { return 0; }
@@ -109,7 +109,7 @@ private:
    template <class T, bool bReturnValue /* = false */>
    struct QxInvokerFct
    {
-      static inline qx_bool invoke(const T & params, boost::any * ret, const QxFunction_0 * pThis)
+      static inline qx_bool invoke(const T & params, qx::any * ret, const QxFunction_0 * pThis)
       {
          QX_FUNCTION_INVOKE_START_WITHOUT_OWNER();
          try { pThis->m_fct(); }
@@ -120,10 +120,10 @@ private:
    template <class T>
    struct QxInvokerFct<T, true>
    {
-      static inline qx_bool invoke(const T & params, boost::any * ret, const QxFunction_0 * pThis)
+      static inline qx_bool invoke(const T & params, qx::any * ret, const QxFunction_0 * pThis)
       {
          QX_FUNCTION_INVOKE_START_WITHOUT_OWNER();
-         try { R retTmp = pThis->m_fct(); if (ret) { (* ret) = boost::any(retTmp); } }
+         try { R retTmp = pThis->m_fct(); if (ret) { (* ret) = qx::any(retTmp); } }
          QX_FUNCTION_CATCH_AND_RETURN_INVOKE();
       }
    };
@@ -135,8 +135,8 @@ namespace function {
 template <class Owner, typename R>
 IxFunction_ptr bind_fct_0(const typename QxFunction_0<Owner, R>::type_fct & fct)
 {
-   typedef boost::is_same<Owner, void> qx_verify_owner_tmp;
-   BOOST_STATIC_ASSERT(qx_verify_owner_tmp::value);
+   typedef std::is_same<Owner, void> qx_verify_owner_tmp;
+   static_assert(qx_verify_owner_tmp::value, "qx_verify_owner_tmp::value");
    IxFunction_ptr ptr; ptr.reset(new QxFunction_0<void, R>(fct));
    return ptr;
 }
@@ -144,8 +144,8 @@ IxFunction_ptr bind_fct_0(const typename QxFunction_0<Owner, R>::type_fct & fct)
 template <class Owner, typename R>
 IxFunction_ptr bind_member_fct_0(const typename QxFunction_0<Owner, R>::type_fct & fct)
 {
-   typedef boost::is_same<Owner, void> qx_verify_owner_tmp;
-   BOOST_STATIC_ASSERT(! qx_verify_owner_tmp::value);
+   typedef std::is_same<Owner, void> qx_verify_owner_tmp;
+   static_assert(! qx_verify_owner_tmp::value, "! qx_verify_owner_tmp::value");
    IxFunction_ptr ptr; ptr.reset(new QxFunction_0<Owner, R>(fct));
    return ptr;
 }

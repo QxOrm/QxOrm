@@ -43,9 +43,6 @@
  * \brief Define a session to manage automatically database transactions (using C++ RAII)
  */
 
-#include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
-
 #include <QtSql/qsqldatabase.h>
 #include <QtSql/qsqlquery.h>
 #include <QtSql/qsqlerror.h>
@@ -118,7 +115,7 @@ namespace qx {
 } // End of scope : session is destroyed (transaction => automatically commit or rollback if there is an error)
  * \endcode
  */
-class QX_DLL_EXPORT QxSession : private boost::noncopyable
+class QX_DLL_EXPORT QxSession
 {
 
 private:
@@ -249,7 +246,7 @@ public:
       IxDataMemberX * pDataMemberX = QxClass<T>::getSingleton()->getDataMemberX();
       IxDataMember * pDataMemberId = (pDataMemberX ? pDataMemberX->getId_WithDaoStrategy() : NULL);
       if (! pDataMemberId) { qAssert(false); return QSqlError(); }
-      qx_shared_ptr<T> t; t.reset(new T());
+      std::shared_ptr<T> t; t.reset(new T());
       pDataMemberId->fromVariant(t.get(), id, -1, qx::cvt::context::e_database);
       QSqlError err = qx::dao::delete_by_id((* t), this->database());
       if (err.isValid()) { (* this) += err; }
@@ -286,7 +283,7 @@ public:
       IxDataMemberX * pDataMemberX = QxClass<T>::getSingleton()->getDataMemberX();
       IxDataMember * pDataMemberId = (pDataMemberX ? pDataMemberX->getId_WithDaoStrategy() : NULL);
       if (! pDataMemberId) { qAssert(false); return QSqlError(); }
-      qx_shared_ptr<T> t; t.reset(new T());
+      std::shared_ptr<T> t; t.reset(new T());
       pDataMemberId->fromVariant(t.get(), id, -1, qx::cvt::context::e_database);
       QSqlError err = qx::dao::destroy_by_id((* t), this->database());
       if (err.isValid()) { (* this) += err; }
@@ -335,6 +332,11 @@ public:
    template <class T>
    qx_bool exist(T & t)
    { return qx::dao::exist(t, this->database()); }
+
+private:
+
+   QxSession(const QxSession & other) { Q_UNUSED(other); }
+   QxSession & operator=(const QxSession & other) { Q_UNUSED(other); return (* this); }
 
 };
 

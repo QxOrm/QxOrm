@@ -39,7 +39,6 @@
 #ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/split_free.hpp>
-#include <boost/serialization/version.hpp>
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/utility.hpp>
 #endif // _QX_ENABLE_BOOST_SERIALIZATION
@@ -50,6 +49,7 @@
 
 #include <QxRegister/QxClass.h>
 #include <QxRegister/QxRegister.h>
+#include <QxRegister/QxVersion.h>
 
 #include <QxSerialize/QxSerializeFastCompil.h>
 
@@ -60,7 +60,7 @@
 #ifdef _QX_ENABLE_BOOST_SERIALIZATION
 
 #define QX_REGISTER_INTERNAL_HELPER_HPP(dllImportExport, className, version) \
-BOOST_CLASS_VERSION(className, version) \
+QX_CLASS_VERSION(className, version) \
 QX_REGISTER_CLASS_NAME(className) \
 QX_REGISTER_CLASS_MAPPING_FCT_HPP(dllImportExport, className) \
 QX_SERIALIZE_FAST_COMPIL_SAVE_LOAD_HPP(dllImportExport, className) \
@@ -78,7 +78,7 @@ QX_REGISTER_BOOST_SERIALIZE_HELPER_CPP(className)
 #else // _QX_ENABLE_BOOST_SERIALIZATION
 
 #define QX_REGISTER_INTERNAL_HELPER_HPP(dllImportExport, className, version) \
-BOOST_CLASS_VERSION(className, version) \
+QX_CLASS_VERSION(className, version) \
 QX_REGISTER_CLASS_NAME(className) \
 QX_REGISTER_CLASS_MAPPING_FCT_HPP(dllImportExport, className)
 

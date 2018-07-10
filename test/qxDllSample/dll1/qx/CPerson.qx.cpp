@@ -25,9 +25,9 @@ template <> void register_class(QxClass<qx::test::CPerson> & t)
    pData = t.data(& qx::test::CPerson::m_dDouble, "double", 0);
    pData = t.data(& qx::test::CPerson::m_eSex, "sex", 0);
 
-   pFct = t.fct_0<long>(& qx::test::CPerson::getPersonId, "fct_getPersonId");
-   pFct = t.fct_0<QString>(& qx::test::CPerson::getFirstName, "fct_getFirstName");
-   pFct = t.fct_1<void, long>(& qx::test::CPerson::setPersonId, "fct_setPersonId");
+   pFct = t.fct_0<long>(std::mem_fn(& qx::test::CPerson::getPersonId), "fct_getPersonId"); // using std::mem_fn() here is just a workaround for an issue with some versions of MSVC, it is not required with a full compliant C++11 compiler (http://stackoverflow.com/questions/23778883/vs2013-stdfunction-with-member-function)
+   pFct = t.fct_0<QString>(std::mem_fn(& qx::test::CPerson::getFirstName), "fct_getFirstName");
+   pFct = t.fct_1<void, long>(std::mem_fn(& qx::test::CPerson::setPersonId), "fct_setPersonId");
 
    pFct = t.fctStatic_1<int, const QString &>(& qx::test::CPerson::testStaticFct, "fct_testStaticFct");
 
@@ -37,7 +37,7 @@ template <> void register_class(QxClass<qx::test::CPerson> & t)
    pValidator = pAllValidator->add_NotEmpty("lastName");
    pValidator = pAllValidator->add_MinDecimal("double", 0.5, "'double' field must be greater than or equal to '0.5'");
    pValidator = pAllValidator->add_MaxDecimal("double", 103.19);
-   pValidator = pAllValidator->add_CustomValidator(& qx::test::CPerson::isValid);
+   pValidator = pAllValidator->add_CustomValidator(std::mem_fn(& qx::test::CPerson::isValid)); // using std::mem_fn() here is just a workaround for an issue with some versions of MSVC, it is not required with a full compliant C++11 compiler (http://stackoverflow.com/questions/23778883/vs2013-stdfunction-with-member-function)
    pValidator = pAllValidator->add_CustomValidator_QVariant(& myGlobalValidator_1, "firstName");
    pValidator = pAllValidator->add_CustomValidator_DataType<QString>(& myGlobalValidator_2, "lastName");
 }}

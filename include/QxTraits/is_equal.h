@@ -43,11 +43,6 @@
  * \brief qx::trait::has_operator_equal_equal<T>::value : return true if T provides operator==() function, T must be registered with QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(T) macro
  */
 
-#include <string>
-
-#include <boost/shared_ptr.hpp>
-#include <boost/type_traits/is_pointer.hpp>
-
 #include <QtCore/qstring.h>
 #include <QtCore/qdatetime.h>
 #include <QtCore/qvariant.h>
@@ -59,12 +54,6 @@
 #include <QtCore/qurl.h>
 #include <QtCore/quuid.h>
 #include <QtCore/qsharedpointer.h>
-
-#ifdef _QX_CPP_11_SMART_PTR
-#ifndef BOOST_NO_CXX11_SMART_PTR
-#include <memory>
-#endif // BOOST_NO_CXX11_SMART_PTR
-#endif // _QX_CPP_11_SMART_PTR
 
 #ifdef _QX_ENABLE_QT_GUI
 #include <QtGui/qcolor.h>
@@ -86,7 +75,7 @@ namespace trait {
  */
 template <typename T>
 struct has_operator_equal_equal
-{ enum { value = boost::is_pointer<T>::value }; };
+{ enum { value = std::is_pointer<T>::value }; };
 
 } // namespace trait
 } // namespace qx
@@ -141,16 +130,15 @@ QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(QMatrix)
 QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(QRegion)
 #endif // _QX_ENABLE_QT_GUI
 
+#ifdef _QX_ENABLE_BOOST
 QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL_TEMPLATE_1(boost::shared_ptr)
+#endif // _QX_ENABLE_BOOST
+
 QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL_TEMPLATE_1(QSharedPointer)
 QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL_TEMPLATE_1(QWeakPointer)
 QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL_TEMPLATE_1(qx::dao::ptr)
 
-#ifdef _QX_CPP_11_SMART_PTR
-#ifndef BOOST_NO_CXX11_SMART_PTR
 QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL_TEMPLATE_1(std::shared_ptr)
 QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL_TEMPLATE_1(std::weak_ptr)
-#endif // BOOST_NO_CXX11_SMART_PTR
-#endif // _QX_CPP_11_SMART_PTR
 
 #endif // _QX_TRAIT_IS_EQUAL_H_

@@ -73,13 +73,13 @@ struct QxSerializeRegistered
 
    static QDataStream & save(QDataStream & stream, const T & t)
    {
-      BOOST_STATIC_ASSERT(is_valid);
+      static_assert(is_valid, "is_valid");
       return qx::QxSerializeRegistered_Helper::save(stream, qx::QxClass<T>::getSingleton(), (& t));
    }
 
    static QDataStream & load(QDataStream & stream, T & t)
    {
-      BOOST_STATIC_ASSERT(is_valid);
+      static_assert(is_valid, "is_valid");
       return qx::QxSerializeRegistered_Helper::load(stream, qx::QxClass<T>::getSingleton(), (& t));
    }
 

@@ -66,11 +66,11 @@
     <table cellspacing="0" cellpadding="1"><col><col><tbody>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow">Current version :&nbsp;</font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.3 - <a href="../doxygen/index.html" target="_blank">QxOrm library online class documentation</a></font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.4 - <a href="../doxygen/index.html" target="_blank">QxOrm library online class documentation</a></font></td>
       </tr>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow"></font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.2.1</font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.2.2</font></td>
       </tr>
     </tbody></table>
   </td>
@@ -91,7 +91,7 @@
             <tr>
               <td><h1 class="txt_slogan">QxOrm (the engine) + QxEntityEditor (the graphic editor) = the best solution to manage your persistent data layer in C++/Qt !</h1>
                  <br/><hr style="width: 90%" align="center" size="1" color="#100D5A">
-                 <b>QxOrm library is an <i>Object Relational Mapping (ORM)</i> database library for C++/Qt developers.</b><br>
+                 <br/><b>QxOrm library is an <i>Object Relational Mapping (ORM)</i> database library for C++/Qt developers.</b>
                  With a simple <b>C++ setting function per class</b> (like <a href="http://hibernate.org/" target="_blank"><i>Hibernate</i></a> XML mapping file in Java), you have access to the following features :<br>
                  <ul>
                    <li><b><font style="background-color:yellow"><a href="./manual.html#manual_30">persistence</a></font></b> : communication with databases (support <i>1-1</i>, <i>1-n</i>, <i>n-1</i> and <i>n-n</i> relationships) ;
@@ -109,6 +109,7 @@
             </tr>
           </tbody>
         </table>
+        <br/>
         <b>QxEntityEditor</b> is a graphic editor for <b>QxOrm</b> library : <b>QxEntityEditor</b> provides a graphic way to manage the data model.<br>
         <b>QxEntityEditor</b> is multi-platform (available for Windows, Linux and Mac OS X) and generates native code for all environments : desktop (Windows, Linux, Mac OS X), embedded and mobile (Android, iOS, Windows Phone, Raspberry Pi, etc.).<br>
         <a href="./manual_qxee.html">A user manual (documentation) for <b>QxEntityEditor</b> application is available</a>.<br>
@@ -137,7 +138,8 @@
           <li>only one file <i>&lt;QxOrm.h&gt;</i> to include in precompiled-header (<b>precompiled-header</b> file is recommended to reduce compilation times).</li>
         </ul>
         <br>
-        Before installing and building <b>QxOrm</b>, you need the following libraries : <a href="http://www.qt.io/" target="_blank"><b>Qt</b></a> (from version 4.5.0) and <a href="http://www.boost.org/" target="_blank"><b>boost</b></a> (from version 1.38, and by default just header files <i>*.hpp</i> are necessary) :
+        <b>QxOrm</b> is based on <a href="http://www.qt.io/" target="_blank"><b>Qt framework</b></a> (from version 4.5.0) :
+        <!-- and <a href="http://www.boost.org/" target="_blank"><b>boost</b></a> (from version 1.38, and by default just header files <i>*.hpp</i> are necessary) : -->
         <p></p>
         <table border="0" style="width: 100%" align="center">
           <col><col>
@@ -153,6 +155,7 @@
           </tbody>
         </table>
         <p></p>
+        <!--
         <table border="0" style="width: 100%" align="center">
           <col><col>
           <tbody>
@@ -166,10 +169,11 @@
           </tbody>
         </table>
         <p></p>
+        -->
         <br>
         <p><b>QxOrm</b> provides the following modules :</p> 
         <ul>
-          <li><p><b><a href="../doxygen/html/group___qx_dao.html" target="_blank">QxDao</a></b> : based on <b>Qt</b> <a href="http://doc.qt.io/qt-5/qtsql-index.html" target="_blank"><i>QtSql</i></a> engine, this module provides communication with databases (<i>select, update, delete, transaction</i>...) by mapping database table columns with C++ class properties. The relationships <i>1-1</i>, <i>1-n</i>, <i>n-1</i> and <i>n-n</i> are easy to setup in C++ code. This module supports object-oriented programming : inheritance, polymorphism, modularity. It supports also many containers (<b>stl</b>, <b>boost</b> and <b>Qt</b> : <i>std::vector, std::list, boost::unordered_map, QList, QHash...</i>).</p> 
+          <li><p><b><a href="../doxygen/html/group___qx_dao.html" target="_blank">QxDao</a></b> : based on <b>Qt</b> <a href="http://doc.qt.io/qt-5/qtsql-index.html" target="_blank"><i>QtSql</i></a> engine, this module provides communication with databases (<i>select, update, delete, transaction</i>...) by mapping database table columns with C++ class properties. The relationships <i>1-1</i>, <i>1-n</i>, <i>n-1</i> and <i>n-n</i> are easy to setup in C++ code. This module supports object-oriented programming : inheritance, polymorphism, modularity. It supports also many containers (<b>stl</b>, <b>boost</b> and <b>Qt</b> : <i>std::vector, std::list, std::unordered_map, QList, QHash...</i>).</p> 
           </li>
           <li><p><b><a href="../doxygen/html/group___qx_register.html" target="_blank">QxRegister</a>, <a href="../doxygen/html/group___qx_data_member.html" target="_blank">QxDataMember</a>, <a href="../doxygen/html/group___qx_factory.html" target="_blank">QxFactory</a></b> and <b><a href="../doxygen/html/group___qx_function.html" target="_blank">QxFunction</a></b> : <b>QxOrm</b> emulates <i>reflection</i> (or <i>introspection</i>) mechanism (like other languages : Java, C#...).</p> 
           </li>
@@ -177,11 +181,11 @@
           </li>
           <li><p><b><a href="../doxygen/html/group___qx_service.html" target="_blank">QxService</a></b> : based on <a href="http://doc.qt.io/qt-5/qtnetwork-index.html" target="_blank"><i>QtNetwork</i></a> engine of Qt library, this module provides an easy and powerful way to create <b>C++ application server</b> (<i>services</i> concept with <i>request</i> from client and <i>reply</i> from server). <b>QxService</b> uses <i>serialization</i> and <i>introspection</i> from QxOrm library to transfer over network any class or structure. For more details about <b>QxService</b> module, <b>a tutorial</b> is available <a href="./tutorial_2.html">here</a>.</p>
           </li>
-          <li><p><b><a href="../doxygen/html/group___qx_collection.html" target="_blank">QxCollection&lt;Key, Value&gt;</a></b> : based on <a href="http://www.boost.org/doc/libs/release/libs/multi_index/doc/index.html" target="_blank"><i>boost::multi_index_container</i></a>, this container has advantages of <i>std::vector&lt;T&gt;</i> (insertion order + quick access by index) and <i>boost::unordered_map&lt;Key, Value&gt;</i> or <i>QHash&lt;Key, Value&gt;</i> (quick access by a key : <i>hash-map</i>). <b>QxCollection&lt;Key, Value&gt;</b> is adapted to contain the items resulting from a database.</p> 
+          <li><p><b><a href="../doxygen/html/group___qx_collection.html" target="_blank">QxCollection&lt;Key, Value&gt;</a></b> : <!-- based on <a href="http://www.boost.org/doc/libs/release/libs/multi_index/doc/index.html" target="_blank"><i>boost::multi_index_container</i></a>, --> this container has advantages of <i>std::vector&lt;T&gt;</i> (insertion order + quick access by index) and <i>std::unordered_map&lt;Key, Value&gt;</i> or <i>QHash&lt;Key, Value&gt;</i> (quick access by a key : <i>hash-map</i>). <b>QxCollection&lt;Key, Value&gt;</b> is adapted to contain the items resulting from a database.</p> 
           </li>
-          <li><p><b><a href="../doxygen/html/group___qx_serialize.html" target="_blank">QxSerialize</a></b> : this module is based on Qt <a href="http://doc.qt.io/qt-5/qdatastream.html" target="_blank"><i>QDataStream</i></a> class and <a href="http://www.boost.org/doc/libs/release/libs/serialization/doc/index.html" target="_blank"><i>boost::serialization</i></a> library (<a href="http://www.boost.org/doc/libs/release/libs/serialization/doc/index.html" target="_blank"><i>boost::serialization</i></a> dependency is optional and not required by default). Any class defined by QxOrm can be serialized to binary, XML and JSON format. This module also allows to clone all instances of objects. Most of Qt objects (<i>QObject, QString, QDate, QTime, QDateTime, QList, QHash...</i>) are compatible with <i>QxSerialize</i> module.</p> 
+          <li><p><b><a href="../doxygen/html/group___qx_serialize.html" target="_blank">QxSerialize</a></b> : this module is based on Qt <a href="http://doc.qt.io/qt-5/qdatastream.html" target="_blank"><i>QDataStream</i></a> class. <!-- and <a href="http://www.boost.org/doc/libs/release/libs/serialization/doc/index.html" target="_blank"><i>boost::serialization</i></a> library (<a href="http://www.boost.org/doc/libs/release/libs/serialization/doc/index.html" target="_blank"><i>boost::serialization</i></a> dependency is optional and not required by default) --> Any class defined by QxOrm can be serialized to binary, XML and JSON format. This module also allows to clone all instances of objects. Most of Qt objects (<i>QObject, QString, QDate, QTime, QDateTime, QList, QHash...</i>) are compatible with <i>QxSerialize</i> module.</p> 
           </li>
-          <li><p><b><a href="../doxygen/html/group___qx_traits.html" target="_blank">QxTraits</a></b> : boost library provides several generic traits. QxOrm uses them but needs new functionalities that are not present in boost.</p> 
+          <li><p><b><a href="../doxygen/html/group___qx_traits.html" target="_blank">QxTraits</a></b> : C++ standard library provides several generic traits. QxOrm uses them but needs new functionalities that are not present in std standard library.</p> 
           </li>
           <li><p><b><a href="../doxygen/html/group___qx_cache.html" target="_blank">QxCache</a></b> : QxOrm's cache can contain all types of objects. It's possible for example to store data resulting from a database to avoid too frequent requests. This cache is generic and can be used in other contexts than QxOrm.</p> 
           </li>

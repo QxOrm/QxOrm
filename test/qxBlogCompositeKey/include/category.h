@@ -11,11 +11,11 @@ class QX_BLOG_DLL_EXPORT category
 public:
 
 // -- composite key (multi-column primary key in database)
-   typedef boost::tuple<QString, long, QString, long> type_composite_key;
+   typedef std::tuple<QString, long, QString, long> type_composite_key;
    static QString str_composite_key() { return "category_id_0|category_id_1|category_id_2|category_id_3"; }
 
 // -- typedef
-   typedef qx_shared_ptr<blog> blog_ptr;
+   typedef std::shared_ptr<blog> blog_ptr;
    typedef qx::QxCollection<long, blog_ptr> list_blog;
 
 // -- properties
@@ -30,16 +30,16 @@ public:
 
 // -- methods "get" to composite key
    type_composite_key getId() const    { return m_id; }
-   QString getId_0() const             { return boost::tuples::get<0>(m_id); }
-   long getId_1() const                { return boost::tuples::get<1>(m_id); }
-   QString getId_2() const             { return boost::tuples::get<2>(m_id); }
-   long getId_3() const                { return boost::tuples::get<3>(m_id); }
+   QString getId_0() const             { return std::get<0>(m_id); }
+   long getId_1() const                { return std::get<1>(m_id); }
+   QString getId_2() const             { return std::get<2>(m_id); }
+   long getId_3() const                { return std::get<3>(m_id); }
 
 // -- methods "set" to composite key
-   void setId_0(const QString & s)     { boost::tuples::get<0>(m_id) = s; }
-   void setId_1(long l)                { boost::tuples::get<1>(m_id) = l; }
-   void setId_2(const QString & s)     { boost::tuples::get<2>(m_id) = s; }
-   void setId_3(long l)                { boost::tuples::get<3>(m_id) = l; }
+   void setId_0(const QString & s)     { std::get<0>(m_id) = s; }
+   void setId_1(long l)                { std::get<1>(m_id) = l; }
+   void setId_2(const QString & s)     { std::get<2>(m_id) = s; }
+   void setId_3(long l)                { std::get<3>(m_id) = l; }
 
 };
 

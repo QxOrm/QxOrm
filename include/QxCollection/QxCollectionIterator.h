@@ -43,8 +43,6 @@
  * \brief Java-style iterator to iterate over a qx::QxCollection<Key, Value> container
  */
 
-#include <boost/noncopyable.hpp>
-
 #include <QxCollection/QxCollection.h>
 
 namespace qx {
@@ -65,7 +63,7 @@ while (itr.next())
  * \endcode
  */
 template <typename Key, typename Value>
-class QxCollectionIterator : private boost::noncopyable
+class QxCollectionIterator
 {
 
 private:
@@ -86,6 +84,11 @@ public:
 
    inline bool next();                    //!< Advance the iterator by one position. Return 'true' if there is at least one item ahead of the iterator, i.e. the iterator is not at the back of the container; otherwise return 'false'
    inline bool previous();                //!< Move the iterator back by one position. Return 'true' if there is at least one item behind the iterator, i.e. the iterator is not at the front of the container; otherwise return 'false'
+
+private:
+
+   QxCollectionIterator(const QxCollectionIterator & other) { Q_UNUSED(other); }
+   QxCollectionIterator & operator=(const QxCollectionIterator & other) { Q_UNUSED(other); return (* this); }
 
 };
 

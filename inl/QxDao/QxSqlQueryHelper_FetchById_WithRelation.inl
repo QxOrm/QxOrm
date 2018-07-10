@@ -39,14 +39,14 @@ struct QxSqlQueryHelper_FetchById_WithRelation
 
    static void sql(qx::QxSqlRelationLinked * pRelationX, QString & sql, qx::IxSqlQueryBuilder & builder)
    {
-      BOOST_STATIC_ASSERT(qx::trait::is_qx_registered<T>::value);
+      static_assert(qx::trait::is_qx_registered<T>::value, "qx::trait::is_qx_registered<T>::value");
       if (! pRelationX) { qAssert(false); QxSqlQueryHelper_FetchById<T>::sql(sql, builder); return; }
       qx::IxSqlQueryBuilder::sql_FetchById_WithRelation(pRelationX, sql, builder);
    }
 
    static void resolveInput(qx::QxSqlRelationLinked * pRelationX, T & t, QSqlQuery & query, qx::IxSqlQueryBuilder & builder)
    {
-      BOOST_STATIC_ASSERT(qx::trait::is_qx_registered<T>::value);
+      static_assert(qx::trait::is_qx_registered<T>::value, "qx::trait::is_qx_registered<T>::value");
       if (! pRelationX) { qAssert(false); QxSqlQueryHelper_FetchById<T>::resolveInput(t, query, builder); return; }
       qx::IxDataMember * pId = builder.getDataId(); qAssert(pId);
       pId->setSqlPlaceHolder(query, (& t));

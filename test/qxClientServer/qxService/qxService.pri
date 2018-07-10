@@ -9,7 +9,7 @@ CONFIG += dll
 DEFINES += _BUILDING_QX_SERVICE
 INCLUDEPATH += ../../../../QxOrm/include/
 DESTDIR = ../../../../QxOrm/test/_bin/
-LIBS += -L"../../../../QxOrm/test/_bin"
+LIBS += -L"../../../../QxOrm/lib"
 
 !contains(DEFINES, _QX_NO_PRECOMPILED_HEADER) {
 PRECOMPILED_HEADER = ./include/precompiled.h

@@ -51,12 +51,6 @@
 
 #include <QxCollection/QxCollection.h>
 
-#define QX_CONSTRUCT_IX_RELATION() \
-m_pClass(NULL), m_pClassOwner(NULL), m_pDataMember(p), m_pDataMemberX(NULL), \
-m_pDataMemberId(NULL), m_pDataMemberIdOwner(NULL), m_lOffsetRelation(100), \
-m_eJoinType(qx::dao::sql_join::left_outer_join), m_eRelationType(no_relation), \
-m_bInitInEvent(false), m_bInitDone(false), m_iIsSameDataOwner(0)
-
 namespace qx {
 
 class IxClass;
@@ -73,57 +67,36 @@ typedef QxCollection<QString, IxSqlRelation *> IxSqlRelationX;
 class QX_DLL_EXPORT IxSqlRelation : public qx::QxPropertyBag
 {
 
+private:
+
+   struct IxSqlRelationImpl;
+   std::unique_ptr<IxSqlRelationImpl> m_pImpl; //!< Private implementation idiom
+
 public:
 
    enum relation_type { no_relation, one_to_one, one_to_many, many_to_one, many_to_many };
 
-   typedef QxCollection<QString, IxDataMember *> type_lst_data_member;
-   typedef qx_shared_ptr<type_lst_data_member> type_lst_data_member_ptr;
-
-protected:
-
-   IxClass *                        m_pClass;               //!< 'IxClass' associated wth sql relation
-   IxClass *                        m_pClassOwner;          //!< 'IxClass' of the owner
-   IxDataMember *                   m_pDataMember;          //!< 'IxDataMember' associated wth sql relation
-   IxDataMemberX *                  m_pDataMemberX;         //!< Collection of 'IxDataMember' : parent of 'm_pDataMember'
-   IxDataMember *                   m_pDataMemberId;        //!< 'IxDataMember' id of 'm_pDataMemberX'
-   IxDataMember *                   m_pDataMemberIdOwner;   //!< 'IxDataMember' id of the owner
-   long                             m_lOffsetRelation;      //!< Generic offset for sql relation
-   qx::dao::sql_join::join_type     m_eJoinType;            //!< Join type to build sql query
-   relation_type                    m_eRelationType;        //!< Relation type : one-to-one, one-to-many, etc.
-   QxSoftDelete                     m_oSoftDelete;          //!< Soft delete (or logical delete) behavior
-   QString                          m_sForeignKey;          //!< SQL query foreign key (1-n)
-   QString                          m_sExtraTable;          //!< Extra-table that holds the relationship (n-n)
-   QString                          m_sForeignKeyOwner;     //!< SQL query foreign key for owner (n-n)
-   QString                          m_sForeignKeyDataType;  //!< SQL query foreign key for data type (n-n)
-   bool                             m_bInitInEvent;         //!< Class initialisation in progress
-   bool                             m_bInitDone;            //!< Class initialisation finished
-   int                              m_iIsSameDataOwner;     //!< Check if relationship source entity and target entity are equal
-
-   type_lst_data_member_ptr m_lstDataMemberPtr;             //!< Optimization : handle to collection of 'IxDataMember'
-   qx_shared_ptr<IxSqlRelationX> m_lstSqlRelationPtr;       //!< Optimization : handle to collection of 'IxSqlRelation'
-
-   static bool m_bTraceRelationInit;   //!< Can be useful to debug an issue with relationship initialization
-
-public:
-
-   IxSqlRelation(IxDataMember * p) : qx::QxPropertyBag(), QX_CONSTRUCT_IX_RELATION() { ; }
+   IxSqlRelation(IxDataMember * p);
    virtual ~IxSqlRelation() = 0;
 
-   inline QxCollection<QString, IxDataMember *> * getLstDataMember() const { return m_lstDataMemberPtr.get(); }
-   inline IxSqlRelationX * getLstRelation() const                          { return m_lstSqlRelationPtr.get(); }
+   QxCollection<QString, IxDataMember *> * getLstDataMember() const;
+   IxSqlRelationX * getLstRelation() const;
 
-   inline void setSqlJoinType(qx::dao::sql_join::join_type e)     { m_eJoinType = e; }
-   inline qx::dao::sql_join::join_type getSqlJoinType() const     { return m_eJoinType; }
-   inline relation_type getRelationType() const                   { return m_eRelationType; }
-   inline IxClass * getClass() const                              { return m_pClass; }
-   inline IxClass * getClassOwner() const                         { return m_pClassOwner; }
-   inline IxDataMember * getDataMember() const                    { return m_pDataMember; }
-   inline IxDataMemberX * getDataMemberX() const                  { return m_pDataMemberX; }
-   inline IxDataMember * getDataId() const                        { return m_pDataMemberId; }
-   inline IxDataMember * getDataIdOwner() const                   { return m_pDataMemberIdOwner; }
+   void setSqlJoinType(qx::dao::sql_join::join_type e);
+   qx::dao::sql_join::join_type getSqlJoinType() const;
+   relation_type getRelationType() const;
+   IxClass * getClass() const;
+   IxClass * getClassOwner() const;
+   IxDataMember * getDataMember() const;
+   IxDataMemberX * getDataMemberX() const;
+   IxDataMember * getDataId() const;
+   IxDataMember * getDataIdOwner() const;
 
    QString getKey() const;
+   QString getForeignKey() const;
+   QString getForeignKeyOwner() const;
+   QString getForeignKeyDataType() const;
+   QString getExtraTable() const;
    long getDataCount() const;
    long getRelationCount() const;
    IxDataMember * getDataByKey(const QString & sKey) const;
@@ -137,7 +110,6 @@ public:
 
    virtual void init();
    virtual QString getDescription() const = 0;
-   virtual QString getExtraTable() const = 0;
    virtual QString createExtraTable() const = 0;
    virtual bool getCartesianProduct() const = 0;
    virtual QVariant getIdFromQuery(bool bEager, QxSqlRelationParams & params) const = 0;
@@ -165,7 +137,7 @@ public:
    virtual QSqlError onBeforeSave(QxSqlRelationParams & params) const = 0;
    virtual QSqlError onAfterSave(QxSqlRelationParams & params) const = 0;
 
-   bool verifyOffset(QxSqlRelationParams & params, bool bId) const BOOST_USED;
+   bool verifyOffset(QxSqlRelationParams & params, bool bId) const QX_USED;
 
    static void setTraceRelationInit(bool bTrace);
 
@@ -207,10 +179,14 @@ protected:
 
    bool addLazyRelation(QxSqlRelationParams & params, IxSqlRelation * pRelation) const;
 
-private:
-
-   IxDataMember * isValid_DataMember(long lIndex) const;
-   IxDataMember * isValid_SqlRelation(long lIndex) const;
+   bool canInit() const;
+   void setIsSameDataOwner(int i);
+   void setClass(IxClass * pClass, IxClass * pClassOwner);
+   void setRelationType(relation_type e);
+   void setForeignKey(const QString & s) const;
+   void setForeignKeyOwner(const QString & s) const;
+   void setForeignKeyDataType(const QString & s) const;
+   void setExtraTable(const QString & s) const;
 
 };
 

@@ -55,7 +55,7 @@ class QX_DLL_EXPORT QxXmlReader : public QXmlStreamReader
 
 public:
 
-   typedef qx_shared_ptr<QByteArray> type_byte_arr_ptr;
+   typedef std::shared_ptr<QByteArray> type_byte_arr_ptr;
    typedef QHash<QString, type_byte_arr_ptr> type_hash_bin_data;
    typedef QHashIterator<QString, type_byte_arr_ptr> type_hash_bin_data_itr;
 

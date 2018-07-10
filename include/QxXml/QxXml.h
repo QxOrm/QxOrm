@@ -57,7 +57,7 @@ public:
    static QString toXml(T * pOwner);
    static bool fromXml(T * pOwner, const QString & sXml);
 
-   static qx_shared_ptr<QxXmlWriter> toXmlWriter(T * pOwner);
+   static std::shared_ptr<QxXmlWriter> toXmlWriter(T * pOwner);
    static bool fromXmlReader(T * pOwner, QxXmlReader * pXmlReader);
 
 };

@@ -63,6 +63,18 @@
 #endif // Q_MOC_RUN
 
 namespace qx {
+namespace model_view {
+namespace detail {
+
+template <class T, class M> struct QxNestedModel;
+template <class T, class M> struct QxNestedModel_Generic;
+template <class T, class M> struct QxNestedModel_Container;
+
+} // namespace detail
+} // namespace model_view
+} // namespace qx
+
+namespace qx {
 
 /*!
  * \ingroup QxModelView
@@ -152,16 +164,22 @@ class QX_DLL_EXPORT IxModel : public QAbstractItemModel
 
    Q_OBJECT
 
+   template <typename U, typename V> friend struct qx::model_view::detail::QxNestedModel;
+   template <typename U, typename V> friend struct qx::model_view::detail::QxNestedModel_Generic;
+   template <typename U, typename V> friend struct qx::model_view::detail::QxNestedModel_Container;
+
 public:
 
    enum e_auto_update_database { e_no_auto_update, e_auto_update_on_field_change };
 
    typedef QHash<QString, IxModel *> type_relation_by_name;
    typedef QList<type_relation_by_name> type_lst_relation_by_name;
+   typedef QHash<IxModel *, QPair<int, QString> > type_child_to_its_relation;
 
 protected:
 
    IxClass * m_pClass;                             //!< Class introspection registered into QxOrm context associated to the model
+   IxClass * m_pModelClass;                        //!< If model itself is registered into QxOrm context, then you can use this property to work with introspection engine
    IxDataMemberX * m_pDataMemberX;                 //!< List of properties defined into QxOrm context
    IxDataMember * m_pDataMemberId;                 //!< Primary key (property id) defined into QxOrm context
    IxCollection * m_pCollection;                   //!< Interface to store a list of items
@@ -174,7 +192,11 @@ protected:
    QSqlError m_lastError;                          //!< Last SQL error
    IxModel * m_pParent;                            //!< Parent model, NULL if current model is the root model
    type_lst_relation_by_name m_lstChild;           //!< List of child model : QxEntityEditor uses this property to manage relationships and create complex data structure
+   type_child_to_its_relation m_hChild;            //!< Reverse link to m_lstChild, used in setData() to save relations
    e_auto_update_database m_eAutoUpdateDatabase;   //!< Auto-update database on field change (detected by the setData() method)
+   IxDataMember * m_pDataMemberRelationToParent;   //!< The data member holding relationship to its parent model (if one exists), used only by nested models
+   long m_lManualInsertIndex;                      //!< Index to insert manually items to the collection
+   QHash<QString, QVariant> m_hCustomProperties;   //!< Use this generic hash-table to define extra-properties in your custom classes which inherit from qx::IxModel interface (instead of creating new properties) ==> this will ensure that sizeof(qx::IxModel) == sizeof(YourCustomClass), this is important with nested models feature
 
 public:
 
@@ -182,6 +204,7 @@ public:
    virtual ~IxModel();
 
    IxClass * getClass() const;
+   IxClass * getModelClass() const;
    IxCollection * getCollection() const;
    QSqlDatabase getDatabase() const;
    QSqlError getLastError() const;
@@ -195,6 +218,9 @@ public:
    Q_INVOKABLE int getColumnIndex(const QString & sColumnName) const;
    Q_INVOKABLE int getAutoUpdateDatabase_() const;
    e_auto_update_database getAutoUpdateDatabase() const;
+   Q_INVOKABLE virtual bool getShowEmptyLine() const = 0; //!< Can be useful when a model is displayed in a table (QTableView for example) to add automatically an empty row at the end of the table to insert quickly new items (for example, same style like QxEntityEditor list of properties/relationships)
+   Q_INVOKABLE QVariant getCustomProperty(const QString & key) const;
+   Q_INVOKABLE QObject * getParentModel() const; //!< Can be used to figure out whether this model has a parent model (used only by nested models)
    Q_INVOKABLE void dumpModel(bool bJsonFormat = true) const;
    Q_INVOKABLE QObject * cloneModel();
 
@@ -205,6 +231,8 @@ public:
    void setParentModel(IxModel * pParent);
    Q_INVOKABLE void setAutoUpdateDatabase_(int i);
    void setAutoUpdateDatabase(e_auto_update_database e);
+   Q_INVOKABLE virtual void setShowEmptyLine(bool b) = 0;
+   Q_INVOKABLE void setCustomProperty(const QString & key, const QVariant & val);
 
    Q_INVOKABLE QString toJson(int row = -1) const;                   //!< On QML side, use JSON.parse() to create a javascript object after calling this qx::IxModel::toJson() method
    Q_INVOKABLE bool fromJson(const QString & json, int row = -1);    //!< On QML side, use JSON.stringify() on a javascript object before calling this qx::IxModel::fromJson() method
@@ -224,6 +252,7 @@ public:
    virtual QSqlError qxUpdateRow(int row, const qx::QxSqlQuery & query = qx::QxSqlQuery(), const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL) = 0;
    virtual QSqlError qxSave(const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL) = 0;
    virtual QSqlError qxSaveRow(int row, const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL) = 0;
+   virtual QSqlError qxSaveRowData(int row, const QStringList & column = QStringList(), QSqlDatabase * pDatabase = NULL) = 0;
    virtual QSqlError qxDeleteById(const QVariant & id, QSqlDatabase * pDatabase = NULL) = 0;
    virtual QSqlError qxDeleteAll(QSqlDatabase * pDatabase = NULL) = 0;
    virtual QSqlError qxDeleteByQuery(const qx::QxSqlQuery & query, QSqlDatabase * pDatabase = NULL) = 0;
@@ -261,6 +290,10 @@ public:
    Q_INVOKABLE QString qxValidate_(const QStringList & groups = QStringList());
    Q_INVOKABLE QString qxValidateRow_(int row, const QStringList & groups = QStringList());
 
+   QSqlError saveChildRelations(IxModel * pChild);
+   QVariant getIdFromChild(IxModel * pChild) const; //!< Used to save foreign key in a nested model
+   QPair<int, QString> getChildPosition(IxModel * pChild) const;
+
 protected:
 
    void raiseEvent_headerDataChanged(Qt::Orientation orientation, int first, int last);
@@ -278,6 +311,8 @@ public:
 
    Q_INVOKABLE void clear(bool bUpdateColumns = false);
 
+   virtual QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
+   virtual bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole);
    virtual int rowCount(const QModelIndex & parent = QModelIndex()) const;
    virtual int columnCount(const QModelIndex & parent = QModelIndex()) const;
    virtual QModelIndex index(int row, int column, const QModelIndex & parent = QModelIndex()) const;
@@ -299,6 +334,10 @@ protected:
 
    virtual QObject * cloneModelImpl() = 0;
    virtual void dumpModelImpl(bool bJsonFormat) const = 0;
+   virtual void * getRowItemAsVoidPtr(int row) const = 0;
+   virtual bool isDirtyRow(int row) const = 0;
+   virtual void insertDirtyRowToModel() = 0;
+   virtual void updateShowEmptyLine() = 0;
    virtual void syncNestedModel(int row, const QStringList & relation);
    virtual void syncAllNestedModel(const QStringList & relation);
    void syncNestedModelRecursive(IxModel * pNestedModel, const QStringList & relation);
@@ -308,6 +347,8 @@ protected:
    IxModel * getChild(long row, const QString & relation);
    void insertChild(long row, const QString & relation, IxModel * pChild);
    void removeListOfChild(long row);
+   bool removeRowsGeneric(int row, int count);
+   bool removeRowsAutoUpdateOnFieldChange(int row, int count);
 
 #ifndef _QX_NO_JSON
 

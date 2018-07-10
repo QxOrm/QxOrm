@@ -36,11 +36,6 @@
 #pragma once
 #endif
 
-#include <boost/static_assert.hpp>
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/logical.hpp>
-#include <boost/type_traits/is_pointer.hpp>
-
 #include <QtCore/qstringlist.h>
 
 #include <QxDao/QxSqlQueryBuilder.h>
@@ -64,7 +59,7 @@ struct QxDao_IsDirty_Generic
 
    static void compare(const T & obj1, const T & obj2, QStringList & lstDiff)
    {
-      BOOST_STATIC_ASSERT(qx::trait::is_qx_registered<T>::value);
+      static_assert(qx::trait::is_qx_registered<T>::value, "qx::trait::is_qx_registered<T>::value");
 
       qx::QxSqlQueryBuilder_Count<T> builder; builder.init();
       qx::IxDataMember * pId = builder.getDataId();
@@ -116,9 +111,9 @@ struct QxDao_IsDirty
 
    static void compare(const T & obj1, const T & obj2, QStringList & lstDiff)
    {
-      typedef typename boost::mpl::if_c< boost::is_pointer<T>::value, qx::dao::detail::QxDao_IsDirty_Ptr<T>, qx::dao::detail::QxDao_IsDirty_Generic<T> >::type type_dao_1;
-      typedef typename boost::mpl::if_c< qx::trait::is_smart_ptr<T>::value, qx::dao::detail::QxDao_IsDirty_Ptr<T>, type_dao_1 >::type type_dao_2;
-      typedef typename boost::mpl::if_c< qx::trait::is_container<T>::value, qx::dao::detail::QxDao_IsDirty_Container<T>, type_dao_2 >::type type_dao_3;
+      typedef typename std::conditional< std::is_pointer<T>::value, qx::dao::detail::QxDao_IsDirty_Ptr<T>, qx::dao::detail::QxDao_IsDirty_Generic<T> >::type type_dao_1;
+      typedef typename std::conditional< qx::trait::is_smart_ptr<T>::value, qx::dao::detail::QxDao_IsDirty_Ptr<T>, type_dao_1 >::type type_dao_2;
+      typedef typename std::conditional< qx::trait::is_container<T>::value, qx::dao::detail::QxDao_IsDirty_Container<T>, type_dao_2 >::type type_dao_3;
       type_dao_3::compare(obj1, obj2, lstDiff);
    }
 

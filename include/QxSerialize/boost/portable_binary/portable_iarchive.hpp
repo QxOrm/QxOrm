@@ -77,7 +77,6 @@
 #include <istream>
 
 // basic headers
-#include <boost/version.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/archive/binary_iarchive.hpp>
 
@@ -199,7 +198,7 @@ namespace eos {
       * to the original value by using load_little_endian.
       */
       template <typename T>
-      typename boost::enable_if<boost::is_integral<T> >::type
+      typename boost::enable_if<std::is_integral<T> >::type
       load(T & t, dummy<2> = 0)
       {
          // get the number of bytes in the stream
@@ -262,8 +261,8 @@ namespace eos {
          // after reading the note above you still might decide to 
          // deactivate this static assert and try if it works out.
          typename traits::bits bits;
-         BOOST_STATIC_ASSERT(sizeof(bits) == sizeof(T));
-         BOOST_STATIC_ASSERT(std::numeric_limits<T>::is_iec559);
+         static_assert(sizeof(bits) == sizeof(T), "sizeof(bits) == sizeof(T)");
+         static_assert(std::numeric_limits<T>::is_iec559, "std::numeric_limits<T>::is_iec559");
 
          load(bits);
          traits::set_bits(t, bits);

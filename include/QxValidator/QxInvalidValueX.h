@@ -65,8 +65,8 @@ namespace qx {
 class QxInvalidValueX;
 } // namespace qx
 
-QX_DLL_EXPORT QDataStream & operator<< (QDataStream & stream, const qx::QxInvalidValueX & t) BOOST_USED;
-QX_DLL_EXPORT QDataStream & operator>> (QDataStream & stream, qx::QxInvalidValueX & t) BOOST_USED;
+QX_DLL_EXPORT QDataStream & operator<< (QDataStream & stream, const qx::QxInvalidValueX & t) QX_USED;
+QX_DLL_EXPORT QDataStream & operator>> (QDataStream & stream, qx::QxInvalidValueX & t) QX_USED;
 
 #ifndef _QX_NO_JSON
 namespace qx {
@@ -74,8 +74,8 @@ namespace cvt {
 namespace detail {
 template <> struct QxConvert_ToJson< qx::QxInvalidValueX >;
 template <> struct QxConvert_FromJson< qx::QxInvalidValueX >;
-QX_DLL_EXPORT QJsonValue QxConvert_ToJson_Helper(const qx::QxInvalidValueX & t, const QString & format) BOOST_USED;
-QX_DLL_EXPORT qx_bool QxConvert_FromJson_Helper(const QJsonValue & j, qx::QxInvalidValueX & t, const QString & format) BOOST_USED;
+QX_DLL_EXPORT QJsonValue QxConvert_ToJson_Helper(const qx::QxInvalidValueX & t, const QString & format) QX_USED;
+QX_DLL_EXPORT qx_bool QxConvert_FromJson_Helper(const QJsonValue & j, qx::QxInvalidValueX & t, const QString & format) QX_USED;
 } // namespace detail
 } // namespace cvt
 } // namespace qx

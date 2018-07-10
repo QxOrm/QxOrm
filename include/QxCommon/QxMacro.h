@@ -227,4 +227,19 @@
 #endif // NDEBUG
 #endif // _QX_MODE_RELEASE
 
+// From file <boost/serialization/force_include.hpp> (written by Robert Ramey)
+#if ! defined(_WIN32) && ! defined(_WIN64)
+#   if defined(__GNUC__) && (__GNUC__ >= 3)
+#       define QX_USED __attribute__ ((__used__))
+#   elif defined(__IBMCPP__) && (__IBMCPP__ >= 1110)
+#       define QX_USED __attribute__ ((__used__))
+#   elif defined(__INTEL_COMPILER)
+#       define QX_USED __attribute__ ((__used__))
+#   endif
+#endif // ! defined(_WIN32) && ! defined(_WIN64)
+
+#ifndef QX_USED
+#define QX_USED /* Nothing */
+#endif // QX_USED
+
 #endif // _QX_MACRO_H_

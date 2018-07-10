@@ -65,8 +65,8 @@ class IxService;
 } // namespace service
 } // namespace qx
 
-QX_DLL_EXPORT QDataStream & operator<< (QDataStream & stream, const qx::service::IxService & t) BOOST_USED;
-QX_DLL_EXPORT QDataStream & operator>> (QDataStream & stream, qx::service::IxService & t) BOOST_USED;
+QX_DLL_EXPORT QDataStream & operator<< (QDataStream & stream, const qx::service::IxService & t) QX_USED;
+QX_DLL_EXPORT QDataStream & operator>> (QDataStream & stream, qx::service::IxService & t) QX_USED;
 
 #ifndef _QX_NO_JSON
 namespace qx {
@@ -74,8 +74,8 @@ namespace cvt {
 namespace detail {
 template <> struct QxConvert_ToJson< qx::service::IxService >;
 template <> struct QxConvert_FromJson< qx::service::IxService >;
-QX_DLL_EXPORT QJsonValue QxConvert_ToJson_Helper(const qx::service::IxService & t, const QString & format) BOOST_USED;
-QX_DLL_EXPORT qx_bool QxConvert_FromJson_Helper(const QJsonValue & j, qx::service::IxService & t, const QString & format) BOOST_USED;
+QX_DLL_EXPORT QJsonValue QxConvert_ToJson_Helper(const qx::service::IxService & t, const QString & format) QX_USED;
+QX_DLL_EXPORT qx_bool QxConvert_FromJson_Helper(const QJsonValue & j, qx::service::IxService & t, const QString & format) QX_USED;
 } // namespace detail
 } // namespace cvt
 } // namespace qx
@@ -110,7 +110,7 @@ protected:
    IxParameter_ptr m_pInputParameter;                 //!< List of input parameters (request)
    IxParameter_ptr m_pOutputParameter;                //!< List of output parameters (reply)
    qx_bool m_bMessageReturn;                          //!< Message return to indicate if an error occured
-   qx_shared_ptr<QxTransaction> m_pTransaction;       //!< Current transaction after executing service method
+   std::shared_ptr<QxTransaction> m_pTransaction;     //!< Current transaction after executing service method
 
 public:
 
@@ -123,7 +123,7 @@ public:
    IxParameter_ptr getInputParameter_BaseClass() const         { return m_pInputParameter; }
    IxParameter_ptr getOutputParameter_BaseClass() const        { return m_pOutputParameter; }
    qx_bool getMessageReturn() const                            { return m_bMessageReturn; }
-   qx_shared_ptr<QxTransaction> getTransaction() const;
+   std::shared_ptr<QxTransaction> getTransaction() const;
 
    void setServiceName(const QString & s)                               { qAssert(! s.isEmpty()); m_sServiceName = s; }
    void setServiceMethodName(const QString & s)                         { qAssert(! s.isEmpty()); m_sServiceMethodName = s; }
@@ -131,7 +131,7 @@ public:
    void setOutputParameter(IxParameter_ptr p)                           { m_pOutputParameter = p; }
    void setMessageReturn(const qx_bool & b)                             { m_bMessageReturn = b; }
    void setMessageReturn(long l, const QString & s)                     { m_bMessageReturn = qx_bool(l, s); }
-   void setTransaction(const qx_shared_ptr<QxTransaction> & p);
+   void setTransaction(const std::shared_ptr<QxTransaction> & p);
 
    bool isValid() const             { return m_bMessageReturn.getValue(); }
    bool isValidWithOutput() const   { return (isValid() && (m_pOutputParameter.get() != NULL)); }
@@ -142,7 +142,7 @@ public:
 
 };
 
-typedef qx_shared_ptr<IxService> IxService_ptr;
+typedef std::shared_ptr<IxService> IxService_ptr;
 
 } // namespace service
 } // namespace qx

@@ -49,8 +49,8 @@ IxService::IxService() { ; }
 IxService::IxService(const QString & sServiceName) : m_sServiceName(sServiceName) { qAssert(! m_sServiceName.isEmpty()); }
 IxService::~IxService() { ; }
 
-qx_shared_ptr<QxTransaction> IxService::getTransaction() const          { return m_pTransaction; }
-void IxService::setTransaction(const qx_shared_ptr<QxTransaction> & p)  { m_pTransaction = p; }
+std::shared_ptr<QxTransaction> IxService::getTransaction() const          { return m_pTransaction; }
+void IxService::setTransaction(const std::shared_ptr<QxTransaction> & p)  { m_pTransaction = p; }
 
 } // namespace service
 } // namespace qx

@@ -43,8 +43,6 @@
  * \brief List of all classes registered with QxOrm library factory pattern to create object instance dynamically using the class name
  */
 
-#include <boost/shared_ptr.hpp>
-
 #include <QtCore/qhash.h>
 #include <QtCore/qmutex.h>
 
@@ -54,7 +52,7 @@
 
 namespace qx {
 
-inline boost::any create(const QString & sKey);
+inline qx::any create(const QString & sKey);
 template <typename T> inline T * create_nude_ptr(const QString & sKey);
 inline void * create_void_ptr(const QString & sKey);
 
@@ -70,7 +68,7 @@ class QX_DLL_EXPORT QxFactoryX : public QxSingleton<QxFactoryX>
    friend class QxClassX;
    friend class IxFactory;
    friend class QxSingleton<QxFactoryX>;
-   friend inline boost::any create(const QString & sKey);
+   friend inline qx::any create(const QString & sKey);
    template <typename T> friend inline T * create_nude_ptr(const QString & sKey);
    friend inline void * create_void_ptr(const QString & sKey);
 
@@ -89,14 +87,14 @@ private:
    void registerFactory(const QString & sKey, IxFactory * pFactory);
    void unregisterFactory(const QString & sKey);
 
-   boost::any createObject(const QString & sKey) const;
+   qx::any createObject(const QString & sKey) const;
    void * createObjectNudePtr(const QString & sKey) const;
 
 #ifndef _QX_NO_RTTI
    const std::type_info & typeInfo(const QString & sKey) const;
 #endif // _QX_NO_RTTI
 
-   static inline boost::any createInstance(const QString & sKey)           { return QxFactoryX::getSingleton()->createObject(sKey); }
+   static inline qx::any createInstance(const QString & sKey)           { return QxFactoryX::getSingleton()->createObject(sKey); }
    static inline void * createInstanceNudePtr(const QString & sKey)        { return QxFactoryX::getSingleton()->createObjectNudePtr(sKey); }
 
 #ifndef _QX_NO_RTTI
@@ -107,9 +105,9 @@ private:
 
 /*!
  * \ingroup QxFactory
- * \brief Return a smart-pointer new instance of object (qx_shared_ptr<T>) associated by key sKey using boost::any type (for example : qx::create("drug") return a new instance of smart-pointer drug class into boost::any type)
+ * \brief Return a smart-pointer new instance of object (std::shared_ptr<T>) associated by key sKey using qx::any type (for example : qx::create("drug") return a new instance of smart-pointer drug class into qx::any type)
  */
-inline boost::any create(const QString & sKey)
+inline qx::any create(const QString & sKey)
 { return qx::QxFactoryX::createInstance(sKey); }
 
 /*!

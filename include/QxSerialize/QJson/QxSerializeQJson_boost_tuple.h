@@ -30,6 +30,7 @@
 ****************************************************************************/
 
 #ifndef _QX_NO_JSON
+#ifdef _QX_ENABLE_BOOST
 #ifndef _QX_SERIALIZE_QJSON_BOOST_TUPLE_H_
 #define _QX_SERIALIZE_QJSON_BOOST_TUPLE_H_
 
@@ -47,10 +48,6 @@
 #include <QtCore/qjsonvalue.h>
 #include <QtCore/qjsonobject.h>
 #include <QtCore/qjsonarray.h>
-
-#include <boost/tuple/tuple.hpp>
-#include <boost/tuple/tuple_comparison.hpp>
-#include <boost/tuple/tuple_io.hpp>
 
 #include <QxConvert/QxConvert.h>
 #include <QxConvert/QxConvert_Impl.h>
@@ -361,4 +358,5 @@ struct QxConvert_FromJson< boost::tuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> 
 } // namespace qx
 
 #endif // _QX_SERIALIZE_QJSON_BOOST_TUPLE_H_
+#endif // _QX_ENABLE_BOOST
 #endif // _QX_NO_JSON

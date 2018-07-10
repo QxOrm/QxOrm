@@ -66,11 +66,11 @@
     <table cellspacing="0" cellpadding="1"><col><col><tbody>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow">Version courante :&nbsp;</font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.3 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.4 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
       </tr>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow"></font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.2.1</font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.2.2</font></td>
       </tr>
     </tbody></table>
   </td>
@@ -91,7 +91,7 @@
             <tr>
               <td><h1 class="txt_slogan">QxOrm (le moteur) + QxEntityEditor (l'éditeur graphique) = la meilleure solution pour gérer sa couche de données persistante en C++/Qt !</h1>
                  <br/><hr style="width: 90%" align="center" size="1" color="#100D5A">
-                 <b>QxOrm est une bibliothèque C++ de gestion de données.</b><br>
+                 <br/><b>QxOrm est une bibliothèque C++ de gestion de données.</b>
                  A partir d'une simple <b>fonction de paramétrage</b> (que l'on peut
                  comparer avec un fichier de mapping <a href="http://hibernate.org/" target="_blank"><i>Hibernate</i></a> en Java), vous
                  aurez accès aux fonctionnalités suivantes :<br>
@@ -114,6 +114,7 @@
             </tr>
           </tbody>
         </table>
+        <br/>
         <b>QxEntityEditor</b> est un éditeur graphique pour la bibliothèque <b>QxOrm</b> : <b>QxEntityEditor</b> permet de gérer graphiquement le modèle d'entités.<br>
         <b>QxEntityEditor</b> est multi-plateforme (disponible pour Windows, Linux et Mac OS X) et génère du code natif pour tous les environnements : bureau (Windows, Linux, Mac OS X), embarqué et mobile (Android, iOS, Windows Phone, Raspberry Pi, etc.).<br>
         <a href="./manual_qxee.html">Un manuel utilisateur (documentation) dédié à l'application <b>QxEntityEditor</b> est disponible</a>.<br>
@@ -165,9 +166,8 @@
           </li>
         </ul>
         <br>
-        <p align="justify"><b>QxOrm</b> est dépendant des excellentes bibliothèques
-        <a href="http://www.qt.io/" target="_blank"><b>Qt</b></a> (compatible à partir de la version 4.5.0) et
-        <a href="http://www.boost.org/" target="_blank"><b>boost</b></a> (compatible à partir de la version 1.38, par défaut seuls les fichiers d'en-tête <i>*.hpp</i> sont nécessaires) :</p>
+        <p align="justify"><b>QxOrm</b> est basé sur la bibliothèque <a href="http://www.qt.io/" target="_blank"><b>Qt</b></a> (compatible à partir de la version 4.5.0) :</p>
+        <!-- <a href="http://www.boost.org/" target="_blank"><b>boost</b></a> (compatible à partir de la version 1.38, par défaut seuls les fichiers d'en-tête <i>*.hpp</i> sont nécessaires) :</p> -->
         <p></p>
         <table border="0" style="width: 100%" align="center">
           <col>
@@ -194,6 +194,7 @@
           </tbody>
         </table>
         <p></p>
+        <!--
         <table border="0" style="width: 100%" align="center">
           <col>
           <col>
@@ -217,6 +218,7 @@
           </tbody>
         </table>
         <p></p>
+        -->
         <br>
         <p><b>QxOrm</b> est divisé en sous-modules, voici un descriptif rapide :</p>
         <ul>
@@ -229,7 +231,7 @@
             programmation objet : héritage, polymorphisme, composition,
             association ainsi que les collections (support des collections de
             <b>stl</b>, <b>boost</b> et <b>Qt</b> : <i>std::vector, std::list,
-            boost::unordered_map, QList, QHash, etc...</i>).</p>
+            std::unordered_map, QList, QHash, etc...</i>).</p>
           </li>
           <li><p><b><a href="../doxygen/html/group___qx_register.html" target="_blank">QxRegister</a>, <a href="../doxygen/html/group___qx_data_member.html" target="_blank">QxDataMember</a> et <a href="../doxygen/html/group___qx_function.html" target="_blank">QxFunction</a></b> : même si
             ce n'est pas le but 1er de QxOrm, il est nécessaire d'émuler le
@@ -246,17 +248,17 @@
             permet de créer de manière simple et performante <b>un serveur d'applications en C++</b> (notion de <i>services</i> avec <i>demande</i> du client et <i>réponse</i> du serveur). <b>QxService</b> utilise la <i>serialization</i> et l'<i>introspection</i> des données
             et fonctions pour pouvoir faire transiter sur le réseau n'importe quelle classe ou structure. Pour plus d'informations sur ce module, <b>un tutoriel</b> est disponible <a href="./tutorial_2.html">en cliquant ici</a>.
           </p></li>
-          <li><p><b><a href="../doxygen/html/group___qx_collection.html" target="_blank">QxCollection&lt;Key, Value&gt;</a></b> : basé sur
-            <a href="http://www.boost.org/doc/libs/release/libs/multi_index/doc/index.html" target="_blank"><i>boost::multi_index_container</i></a>, cette collection permet de cumuler
+          <li><p><b><a href="../doxygen/html/group___qx_collection.html" target="_blank">QxCollection&lt;Key, Value&gt;</a></b> : <!-- basé sur
+            <a href="http://www.boost.org/doc/libs/release/libs/multi_index/doc/index.html" target="_blank"><i>boost::multi_index_container</i></a>, --> cette collection permet de cumuler
             les avantages d'un <i>std::vector&lt;T&gt;</i> (conserve l'ordre
             d'insertion + accès rapide par index) et d'un
-            <i>boost::unordered_map&lt;Key, Value&gt;</i> ou encore <i>QHash&lt;Key,
+            <i>std::unordered_map&lt;Key, Value&gt;</i> ou encore <i>QHash&lt;Key,
             Value&gt;</i> (accès rapide par clé : <i>hash-map</i>). Ce type de collection
             est particulièrement adapté pour contenir les éléments issus d'une
             base de données.</p>
           </li>
-          <li><p><b><a href="../doxygen/html/group___qx_serialize.html" target="_blank">QxSerialize</a></b> : ce module s'appuie sur l'excellente
-            bibliothèque <a href="http://www.boost.org/doc/libs/release/libs/serialization/doc/index.html" target="_blank"><i>boost::serialization</i></a>. Toute classe définie par QxOrm
+          <li><p><b><a href="../doxygen/html/group___qx_serialize.html" target="_blank">QxSerialize</a></b> : <!-- ce module s'appuie sur l'excellente
+            bibliothèque <a href="http://www.boost.org/doc/libs/release/libs/serialization/doc/index.html" target="_blank"><i>boost::serialization</i></a>. --> Toute classe définie par QxOrm
             peut être sérializée dans un flux binaire, XML et JSON. Ce module permet
             également de cloner toutes les instances d'objet. Les principaux
             objets de la bibliothèque Qt (<i>QObject, QString, QDate, QTime,
@@ -268,7 +270,7 @@
             peut être créée en fonction du nom de la classe.</p>
           </li>
           <li><p><b><a href="../doxygen/html/group___qx_traits.html" target="_blank">QxTraits</a></b> : ce module contient une liste de classes de
-            traits non définies dans boost et qui sont utiles pour
+            traits non définies dans la bibliothèque standard et qui sont utiles pour
             l'utilisation de QxOrm. Ces classes de traits se veulent génériques
             et peuvent donc être utilisées dans d'autres contextes que celui de
             la bibliothèque QxOrm.</p>

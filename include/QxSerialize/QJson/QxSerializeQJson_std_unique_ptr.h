@@ -30,8 +30,6 @@
 ****************************************************************************/
 
 #ifndef _QX_NO_JSON
-#ifdef _QX_CPP_11_SMART_PTR
-#ifndef BOOST_NO_CXX11_SMART_PTR
 #ifndef _QX_SERIALIZE_QJSON_STD_UNIQUE_PTR_H_
 #define _QX_SERIALIZE_QJSON_STD_UNIQUE_PTR_H_
 
@@ -49,8 +47,6 @@
 #include <QtCore/qjsonvalue.h>
 #include <QtCore/qjsonobject.h>
 #include <QtCore/qjsonarray.h>
-
-#include <memory>
 
 #include <QxConvert/QxConvert.h>
 #include <QxConvert/QxConvert_Impl.h>
@@ -84,6 +80,4 @@ struct QxConvert_FromJson< std::unique_ptr<T> >
 } // namespace qx
 
 #endif // _QX_SERIALIZE_QJSON_STD_UNIQUE_PTR_H_
-#endif // BOOST_NO_CXX11_SMART_PTR
-#endif // _QX_CPP_11_SMART_PTR
 #endif // _QX_NO_JSON

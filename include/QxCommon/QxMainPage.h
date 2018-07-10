@@ -107,7 +107,7 @@ int main(int argc, char * argv[])
 
    // Create 3 new drugs
    // It is possible to use 'boost' and 'Qt' smart pointer : 'boost::shared_ptr', 'QSharedPointer', etc...
-   typedef boost::shared_ptr<drug> drug_ptr;
+   typedef std::shared_ptr<drug> drug_ptr;
    drug_ptr d1; d1.reset(new drug()); d1->name = "name1"; d1->description = "desc1";
    drug_ptr d2; d2.reset(new drug()); d2->name = "name2"; d2->description = "desc2";
    drug_ptr d3; d3.reset(new drug()); d3->name = "name3"; d3->description = "desc3";
@@ -161,7 +161,7 @@ int main(int argc, char * argv[])
    drug_ptr d_clone = qx::clone(* d1);
 
    // Create a new drug by class name (factory)
-   boost::any d_any = qx::create("drug");
+   qx::any d_any = qx::create("drug");
 
    // Insert drugs container into 'qx::cache'
    qx::cache::set("drugs", lst_drug);

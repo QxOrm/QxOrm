@@ -43,14 +43,6 @@
  * \brief qx::trait::remove_attr<T>::type : return a type without pointer, const, reference and/or volatile attributes
  */
 
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/logical.hpp>
-
-#include <boost/type_traits/remove_pointer.hpp>
-#include <boost/type_traits/remove_const.hpp>
-#include <boost/type_traits/remove_reference.hpp>
-#include <boost/type_traits/remove_volatile.hpp>
-
 namespace qx {
 namespace trait {
 
@@ -64,10 +56,10 @@ class remove_attr
 
 private:
 
-   typedef typename boost::mpl::if_c<bRemovePtr, typename boost::remove_pointer<T>::type, T>::type type_1;
-   typedef typename boost::mpl::if_c<bRemoveConst, typename boost::remove_const<type_1>::type, type_1>::type type_2;
-   typedef typename boost::mpl::if_c<bRemoveRef, typename boost::remove_reference<type_2>::type, type_2>::type type_3;
-   typedef typename boost::mpl::if_c<bRemoveVolatile, typename boost::remove_volatile<type_3>::type, type_3>::type type_4;
+   typedef typename std::conditional<bRemovePtr, typename std::remove_pointer<T>::type, T>::type type_1;
+   typedef typename std::conditional<bRemoveConst, typename std::remove_const<type_1>::type, type_1>::type type_2;
+   typedef typename std::conditional<bRemoveRef, typename std::remove_reference<type_2>::type, type_2>::type type_3;
+   typedef typename std::conditional<bRemoveVolatile, typename std::remove_volatile<type_3>::type, type_3>::type type_4;
 
 public:
 

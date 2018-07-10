@@ -56,12 +56,12 @@ void QxFactoryX::unregisterFactory(const QString & sKey)
    m_mapFactoryX.remove(sKey);
 }
 
-boost::any QxFactoryX::createObject(const QString & sKey) const
+qx::any QxFactoryX::createObject(const QString & sKey) const
 {
    IxFactory * pFactory = (m_mapFactoryX.contains(sKey) ? m_mapFactoryX.value(sKey) : NULL);
    if (! pFactory) { qDebug("[QxOrm] cannot create an instance of type '%s'", qPrintable(sKey)); }
 
-   return (pFactory ? pFactory->createObject() : boost::any());
+   return (pFactory ? pFactory->createObject() : qx::any());
 }
 
 void * QxFactoryX::createObjectNudePtr(const QString & sKey) const

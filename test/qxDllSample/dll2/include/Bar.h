@@ -12,7 +12,7 @@ class QX_DLL2_EXPORT Bar : public BaseClassTrigger
 
 public:
 
-   typedef qx_shared_ptr<Foo> Foo_ptr;
+   typedef std::shared_ptr<Foo> Foo_ptr;
 
 protected:
 
@@ -40,8 +40,8 @@ public:
 
 QX_REGISTER_HPP_QX_DLL2(Bar, BaseClassTrigger, 0)
 
-typedef qx_shared_ptr<Bar> Bar_ptr;
+typedef std::shared_ptr<Bar> Bar_ptr;
 typedef std::vector<Bar_ptr> BarX;
-typedef qx_shared_ptr<BarX> BarX_ptr;
+typedef std::shared_ptr<BarX> BarX_ptr;
 
 #endif // _QX_BAR_H_

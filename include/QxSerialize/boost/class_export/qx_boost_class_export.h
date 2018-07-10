@@ -45,9 +45,7 @@
 #include <cstddef> // NULL
 
 #include <boost/config.hpp>
-#include <boost/static_assert.hpp>
 #include <boost/preprocessor/stringize.hpp>
-#include <boost/type_traits/is_polymorphic.hpp>
 
 #ifndef BOOST_SERIALIZATION_DEFAULT_TYPE_INFO   
     #include <boost/serialization/extended_type_info_typeid.hpp>   
@@ -108,12 +106,12 @@ template <class Archive, class Serializable>
 struct ptr_serialization_support
 {
 # if defined(BOOST_MSVC)
-    virtual BOOST_DLLEXPORT void instantiate() BOOST_USED;
+    virtual BOOST_DLLEXPORT void instantiate() QX_USED;
 # elif defined(__BORLANDC__)   
-    static BOOST_DLLEXPORT void instantiate() BOOST_USED;
+    static BOOST_DLLEXPORT void instantiate() QX_USED;
     enum { x = sizeof(instantiate(),3) };
 # else
-    static BOOST_DLLEXPORT void instantiate() BOOST_USED;
+    static BOOST_DLLEXPORT void instantiate() QX_USED;
     typedef instantiate_function<
         &ptr_serialization_support::instantiate
     > x;

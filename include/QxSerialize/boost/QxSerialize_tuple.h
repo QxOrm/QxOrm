@@ -41,10 +41,6 @@
 #include <boost/serialization/split_free.hpp>
 #include <boost/serialization/nvp.hpp>
 
-#include <boost/tuple/tuple.hpp>
-#include <boost/tuple/tuple_comparison.hpp>
-#include <boost/tuple/tuple_io.hpp>
-
 namespace boost {
 namespace serialization {
 

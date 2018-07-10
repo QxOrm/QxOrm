@@ -39,7 +39,6 @@
 
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/split_free.hpp>
-#include <boost/serialization/version.hpp>
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/level.hpp>
 #include <boost/serialization/string.hpp>
@@ -48,7 +47,9 @@
 
 #include <QxSerialize/QxSerializeFastCompil.h>
 
-BOOST_CLASS_VERSION(QString, 0)
+#include <QxRegister/QxVersion.h>
+
+QX_CLASS_VERSION(QString, 0)
 BOOST_CLASS_TRACKING(QString, boost::serialization::track_never)
 
 QX_SERIALIZE_FAST_COMPIL_SAVE_LOAD_HPP(QX_DLL_EXPORT, QString)

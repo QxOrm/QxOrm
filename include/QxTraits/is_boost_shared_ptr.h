@@ -29,6 +29,7 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST
 #ifndef _QX_IS_BOOST_SHARED_PTR_H_
 #define _QX_IS_BOOST_SHARED_PTR_H_
 
@@ -43,10 +44,6 @@
  * \brief qx::trait::is_boost_shared_ptr<T>::value : return true if T is a boost::shared_ptr<> smart-pointer, otherwise return false
  */
 
-#include <boost/shared_ptr.hpp>
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/logical.hpp>
-
 namespace qx {
 namespace trait {
 
@@ -55,21 +52,22 @@ namespace trait {
  * \brief qx::trait::is_boost_shared_ptr<T>::value : return true if T is a boost::shared_ptr<> smart-pointer, otherwise return false
  */
 template <typename T>
-struct is_boost_shared_ptr : public boost::mpl::false_ { ; };
+struct is_boost_shared_ptr : public std::false_type { ; };
 
 template <typename T>
-struct is_boost_shared_ptr< boost::shared_ptr<T> > : public boost::mpl::true_ { ; };
+struct is_boost_shared_ptr< boost::shared_ptr<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_boost_shared_ptr< boost::shared_ptr<T> & > : public boost::mpl::true_ { ; };
+struct is_boost_shared_ptr< boost::shared_ptr<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_boost_shared_ptr< const boost::shared_ptr<T> > : public boost::mpl::true_ { ; };
+struct is_boost_shared_ptr< const boost::shared_ptr<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_boost_shared_ptr< const boost::shared_ptr<T> & > : public boost::mpl::true_ { ; };
+struct is_boost_shared_ptr< const boost::shared_ptr<T> & > : public std::true_type { ; };
 
 } // namespace trait
 } // namespace qx
 
 #endif // _QX_IS_BOOST_SHARED_PTR_H_
+#endif // _QX_ENABLE_BOOST

@@ -86,7 +86,7 @@ protected:
 
 };
 
-typedef qx_shared_ptr<QxSqlCompare> QxSqlCompare_ptr;
+typedef std::shared_ptr<QxSqlCompare> QxSqlCompare_ptr;
 
 } // namespace detail
 } // namespace dao

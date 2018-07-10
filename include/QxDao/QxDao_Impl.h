@@ -36,11 +36,6 @@
 #pragma once
 #endif
 
-#include <boost/static_assert.hpp>
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/logical.hpp>
-#include <boost/type_traits/is_pointer.hpp>
-
 #include <QxDao/QxDao.h>
 #include <QxDao/QxDaoPointer.h>
 #include <QxDao/QxDao_IsDirty.h>

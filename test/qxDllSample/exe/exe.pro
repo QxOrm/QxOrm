@@ -20,6 +20,7 @@ TARGET = exed
 TARGET = exe
 } # CONFIG(debug, debug|release)
 
+LIBS += -L"../../../../QxOrm/lib"
 LIBS += -L"../../../../QxOrm/test/_bin"
 
 CONFIG(debug, debug|release) {

@@ -46,6 +46,8 @@
 #include <QtCore/qdatastream.h>
 #include <QtCore/qglobal.h>
 
+#if (QT_VERSION < 0x050900)
+
 template <typename T>
 QDataStream & operator<< (QDataStream & stream, const QFlags<T> & t)
 {
@@ -63,4 +65,5 @@ QDataStream & operator>> (QDataStream & stream, QFlags<T> & t)
    return stream;
 }
 
+#endif // (QT_VERSION < 0x050900)
 #endif // _QX_SERIALIZE_QDATASTREAM_QFLAGS_H_

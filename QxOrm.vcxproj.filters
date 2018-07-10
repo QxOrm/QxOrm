@@ -192,6 +192,9 @@
     <Filter Include="src\QxSerialize\QJson">
       <UniqueIdentifier>{b81914b7-d239-4504-b4e3-752b58d50385}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\QxExtras">
+      <UniqueIdentifier>{7e6f220a-2896-41a3-8f89-c055c44ba6f2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -568,6 +571,9 @@
     </ClCompile>
     <ClCompile Include="src\QxSerialize\QJson\QxSerializeQJson_QxTransaction.cpp">
       <Filter>src\QxSerialize\QJson</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QxModelView\QxModelRowCompare.cpp">
+      <Filter>src\QxModelView</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1635,6 +1641,30 @@
     </ClInclude>
     <ClInclude Include="include\QxOrm_Impl.h">
       <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxModelView\QxModelRowCompare.h">
+      <Filter>include\QxModelView</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxCommon\QxAny.h">
+      <Filter>include\QxCommon</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxRegister\QxVersion.h">
+      <Filter>include\QxRegister</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxDaoRepository.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxModelView.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxServices.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxExtras\QxBoostOptionalOnly.h">
+      <Filter>include\QxExtras</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxExtras\QxStdOptional.h">
+      <Filter>include\QxExtras</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

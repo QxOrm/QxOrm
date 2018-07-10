@@ -69,11 +69,10 @@ private:
 
 public:
 
-   QxSqlRelation_ManyToMany(IxDataMember * p, const QString & sExtraTable, const QString & sForeignKeyOwner, const QString & sForeignKeyDataType) : QxSqlRelation<DataType, Owner>(p) { this->m_eRelationType = qx::IxSqlRelation::many_to_many; this->m_sExtraTable = sExtraTable; this->m_sForeignKeyOwner = sForeignKeyOwner; this->m_sForeignKeyDataType = sForeignKeyDataType; this->verifyParameters(); }
-   virtual ~QxSqlRelation_ManyToMany() { BOOST_STATIC_ASSERT(is_data_container); }
+   QxSqlRelation_ManyToMany(IxDataMember * p, const QString & sExtraTable, const QString & sForeignKeyOwner, const QString & sForeignKeyDataType) : QxSqlRelation<DataType, Owner>(p) { this->setRelationType(qx::IxSqlRelation::many_to_many); this->setExtraTable(sExtraTable); this->setForeignKeyOwner(sForeignKeyOwner); this->setForeignKeyDataType(sForeignKeyDataType); this->verifyParameters(); }
+   virtual ~QxSqlRelation_ManyToMany() { static_assert(is_data_container, "is_data_container"); }
 
    virtual QString getDescription() const                                     { return "relation many-to-many"; }
-   virtual QString getExtraTable() const                                      { return this->m_sExtraTable; }
    virtual bool getCartesianProduct() const                                   { return true; }
    virtual void createTable(QxSqlRelationParams & params) const               { Q_UNUSED(params); }
    virtual void lazySelect(QxSqlRelationParams & params) const                { Q_UNUSED(params); }
@@ -168,8 +167,8 @@ public:
 
 private:
 
-   inline void verifyParameters()
-   { qAssert(! this->m_sExtraTable.isEmpty() && ! this->m_sForeignKeyOwner.isEmpty() && ! this->m_sForeignKeyDataType.isEmpty() && (this->m_sForeignKeyOwner != this->m_sForeignKeyDataType)); }
+   void verifyParameters()
+   { qAssert(! this->getExtraTable().isEmpty() && ! this->getForeignKeyOwner().isEmpty() && ! this->getForeignKeyDataType().isEmpty() && (this->getForeignKeyOwner() != this->getForeignKeyDataType())); }
 
    QSqlError deleteFromExtraTable(QxSqlRelationParams & params) const
    { return this->deleteFromExtraTable_ManyToMany(params); }
@@ -179,15 +178,15 @@ private:
       IxDataMember * pIdOwner = this->getDataIdOwner(); qAssert(pIdOwner);
       IxDataMember * pIdData = this->getDataId(); qAssert(pIdData);
       if (! pIdOwner || ! pIdData) { return QSqlError(); }
-      QStringList lstForeignKeyOwner = this->m_sForeignKeyOwner.split("|");
-      QStringList lstForeignKeyDataType = this->m_sForeignKeyDataType.split("|");
+      QStringList lstForeignKeyOwner = this->getForeignKeyOwner().split("|");
+      QStringList lstForeignKeyDataType = this->getForeignKeyDataType().split("|");
       qAssert(pIdOwner->getNameCount() == lstForeignKeyOwner.count());
       qAssert(pIdData->getNameCount() == lstForeignKeyDataType.count());
 
-      QString sql = "INSERT INTO " + this->m_sExtraTable + " (";
-      sql += pIdOwner->getSqlName(", ", this->m_sForeignKeyOwner) + ", " + pIdData->getSqlName(", ", this->m_sForeignKeyDataType);
+      QString sql = "INSERT INTO " + this->getExtraTable() + " (";
+      sql += pIdOwner->getSqlName(", ", this->getForeignKeyOwner()) + ", " + pIdData->getSqlName(", ", this->getForeignKeyDataType());
       sql += ") VALUES (";
-      sql += pIdOwner->getSqlPlaceHolder("", -1, ", ", this->m_sForeignKeyOwner) + ", " + pIdData->getSqlPlaceHolder("", -1, ", ", this->m_sForeignKeyDataType) + ")";
+      sql += pIdOwner->getSqlPlaceHolder("", -1, ", ", this->getForeignKeyOwner()) + ", " + pIdData->getSqlPlaceHolder("", -1, ", ", this->getForeignKeyDataType()) + ")";
       if (this->traceSqlQuery()) { qDebug("[QxOrm] sql query (extra-table) : %s", qPrintable(sql)); }
 
       type_item item;
@@ -199,8 +198,8 @@ private:
 
       while (itr != itr_end)
       {
-         pIdOwner->setSqlPlaceHolder(queryInsert, params.owner(), "", this->m_sForeignKeyOwner);
-         pIdData->setSqlPlaceHolder(queryInsert, (& item.value_qx()), "", this->m_sForeignKeyDataType);
+         pIdOwner->setSqlPlaceHolder(queryInsert, params.owner(), "", this->getForeignKeyOwner());
+         pIdData->setSqlPlaceHolder(queryInsert, (& item.value_qx()), "", this->getForeignKeyDataType());
          if (! queryInsert.exec()) { return queryInsert.lastError(); }
          itr = type_generic_container::next(container, itr, item);
       }

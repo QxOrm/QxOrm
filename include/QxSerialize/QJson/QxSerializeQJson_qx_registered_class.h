@@ -78,13 +78,13 @@ struct QxSerializeJsonRegistered
 
    static QJsonValue save(const T & t, const QString & format)
    {
-      BOOST_STATIC_ASSERT(is_valid);
+      static_assert(is_valid, "is_valid");
       return qx::cvt::detail::QxSerializeJsonRegistered_Helper::save(qx::QxClass<T>::getSingleton(), (& t), format);
    }
 
    static qx_bool load(const QJsonValue & j, T & t, const QString & format)
    {
-      BOOST_STATIC_ASSERT(is_valid);
+      static_assert(is_valid, "is_valid");
       return qx::cvt::detail::QxSerializeJsonRegistered_Helper::load(j, qx::QxClass<T>::getSingleton(), (& t), format);
    }
 

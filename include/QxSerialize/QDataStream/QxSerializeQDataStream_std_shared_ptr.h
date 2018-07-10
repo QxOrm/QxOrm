@@ -29,8 +29,6 @@
 **
 ****************************************************************************/
 
-#ifdef _QX_CPP_11_SMART_PTR
-#ifndef BOOST_NO_CXX11_SMART_PTR
 #ifndef _QX_SERIALIZE_QDATASTREAM_STD_SHARED_PTR_H_
 #define _QX_SERIALIZE_QDATASTREAM_STD_SHARED_PTR_H_
 
@@ -46,8 +44,6 @@
  */
 
 #include <QtCore/qdatastream.h>
-
-#include <memory>
 
 template <typename T>
 QDataStream & operator<< (QDataStream & stream, const std::shared_ptr<T> & t)
@@ -69,5 +65,3 @@ QDataStream & operator>> (QDataStream & stream, std::shared_ptr<T> & t)
 }
 
 #endif // _QX_SERIALIZE_QDATASTREAM_STD_SHARED_PTR_H_
-#endif // BOOST_NO_CXX11_SMART_PTR
-#endif // _QX_CPP_11_SMART_PTR

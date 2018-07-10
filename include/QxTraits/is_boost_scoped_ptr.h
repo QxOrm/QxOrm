@@ -29,6 +29,7 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST
 #ifndef _QX_IS_BOOST_SCOPED_PTR_H_
 #define _QX_IS_BOOST_SCOPED_PTR_H_
 
@@ -43,10 +44,6 @@
  * \brief qx::trait::is_boost_scoped_ptr<T>::value : return true if T is a boost::scoped_ptr<> smart-pointer, otherwise return false
  */
 
-#include <boost/scoped_ptr.hpp>
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/logical.hpp>
-
 namespace qx {
 namespace trait {
 
@@ -55,21 +52,22 @@ namespace trait {
  * \brief qx::trait::is_boost_scoped_ptr<T>::value : return true if T is a boost::scoped_ptr<> smart-pointer, otherwise return false
  */
 template <typename T>
-struct is_boost_scoped_ptr : public boost::mpl::false_ { ; };
+struct is_boost_scoped_ptr : public std::false_type { ; };
 
 template <typename T>
-struct is_boost_scoped_ptr< boost::scoped_ptr<T> > : public boost::mpl::true_ { ; };
+struct is_boost_scoped_ptr< boost::scoped_ptr<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_boost_scoped_ptr< boost::scoped_ptr<T> & > : public boost::mpl::true_ { ; };
+struct is_boost_scoped_ptr< boost::scoped_ptr<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_boost_scoped_ptr< const boost::scoped_ptr<T> > : public boost::mpl::true_ { ; };
+struct is_boost_scoped_ptr< const boost::scoped_ptr<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_boost_scoped_ptr< const boost::scoped_ptr<T> & > : public boost::mpl::true_ { ; };
+struct is_boost_scoped_ptr< const boost::scoped_ptr<T> & > : public std::true_type { ; };
 
 } // namespace trait
 } // namespace qx
 
 #endif // _QX_IS_BOOST_SCOPED_PTR_H_
+#endif // _QX_ENABLE_BOOST

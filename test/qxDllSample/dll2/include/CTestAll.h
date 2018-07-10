@@ -32,12 +32,14 @@ protected:
    std::vector< QSharedPointer<qx::test::CPerson> > m_oStdVector;
    std::list<QDateTime> m_oStdList;
    std::map<std::string, QSharedPointer<CUser> > m_oStdMap;
+   std::shared_ptr<QObject> m_oBoostSharedPtr;
 
+#ifdef _QX_ENABLE_BOOST
    boost::tuple<QTime, QPoint, QUrl> m_oBoostTuple;
    boost::scoped_ptr<QSize> m_oBoostScopedPtr;
-   qx_shared_ptr<QObject> m_oBoostSharedPtr;
    boost::weak_ptr<CTestAll> m_oBoostWeakPtr;
    boost::unordered_map<long, std::string> m_oBoostUnorderedMap;
+#endif // _QX_ENABLE_BOOST
 
    QString m_oQString;
    QObject m_oQObject;
@@ -61,15 +63,15 @@ protected:
    QStringList m_oQStringList;
 
    QHash<long, QString> m_oQHash;
-   QMultiHash<QString, qx_shared_ptr<qx::test::CPerson> > m_oQMultiHash;
+   QMultiHash<QString, std::shared_ptr<qx::test::CPerson> > m_oQMultiHash;
    QMap<double, std::string> m_oQMap;
    QMultiMap<std::string, QSharedPointer<CUser> > m_oQMultiMap;
-   qx::QxCollection<QString, boost::tuple<long, qx::test::CPerson *> > m_oQxCollection;
+   qx::QxCollection<QString, std::tuple<long, qx::test::CPerson *> > m_oQxCollection;
 
    QList<float> m_oQList;
    QLinkedList<QString> m_oQLinkedList;
    QVector<CUser *> m_oQVector;
-   QSharedPointer<boost::tuple<int, std::string, qx_shared_ptr<qx::test::CPerson> > > m_oQSharedPointer;
+   QSharedPointer<std::tuple<int, std::string, std::shared_ptr<qx::test::CPerson> > > m_oQSharedPointer;
    QPair<QString, QPoint> m_oQPair;
 
 public:

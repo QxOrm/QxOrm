@@ -43,10 +43,6 @@
  * \brief qx::trait::is_smart_ptr_base_of<B, D>::value : return true if B and D are smart-pointers of boost, Qt or QxOrm libraries and if (*B) is a base class of (*D), otherwise return false
  */
 
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/logical.hpp>
-#include <boost/type_traits/is_base_of.hpp>
-
 #include <QxTraits/is_smart_ptr.h>
 
 #define qx_smart_ptr_base_of_test_0() (sizeof(qx::trait::is_smart_ptr_base_of<B, D>::removeSmartPtr(b, d)) == sizeof(char))
@@ -59,8 +55,6 @@
 #define qx_smart_ptr_base_of_test_7() (sizeof(qx::trait::is_smart_ptr_base_of<B, D>::removeSmartPtr((* b_qt_weak_ptr), d)) == sizeof(char))
 #define qx_smart_ptr_base_of_test_8() (sizeof(qx::trait::is_smart_ptr_base_of<B, D>::removeSmartPtr((* b_qx_dao_ptr), d)) == sizeof(char))
 
-#if (defined(_QX_CPP_11_SMART_PTR) && !defined(BOOST_NO_CXX11_SMART_PTR))
-
 #define qx_smart_ptr_base_of_test_9()  (sizeof(qx::trait::is_smart_ptr_base_of<B, D>::removeSmartPtr((* b_std_unique_ptr), d)) == sizeof(char))
 #define qx_smart_ptr_base_of_test_10() (sizeof(qx::trait::is_smart_ptr_base_of<B, D>::removeSmartPtr((* b_std_shared_ptr), d)) == sizeof(char))
 #define qx_smart_ptr_base_of_test_11() (sizeof(qx::trait::is_smart_ptr_base_of<B, D>::removeSmartPtr((* b_std_weak_ptr), d)) == sizeof(char))
@@ -70,15 +64,6 @@ qx_smart_ptr_base_of_test_1() || qx_smart_ptr_base_of_test_2() || qx_smart_ptr_b
 qx_smart_ptr_base_of_test_4() || qx_smart_ptr_base_of_test_5() || qx_smart_ptr_base_of_test_6() || \
 qx_smart_ptr_base_of_test_7() || qx_smart_ptr_base_of_test_8() || qx_smart_ptr_base_of_test_9() || \
 qx_smart_ptr_base_of_test_10() || qx_smart_ptr_base_of_test_11()
-
-#else // (defined(_QX_CPP_11_SMART_PTR) && !defined(BOOST_NO_CXX11_SMART_PTR))
-
-#define qx_smart_ptr_base_of_all_test() \
-qx_smart_ptr_base_of_test_1() || qx_smart_ptr_base_of_test_2() || qx_smart_ptr_base_of_test_3() || \
-qx_smart_ptr_base_of_test_4() || qx_smart_ptr_base_of_test_5() || qx_smart_ptr_base_of_test_6() || \
-qx_smart_ptr_base_of_test_7() || qx_smart_ptr_base_of_test_8()
-
-#endif // (defined(_QX_CPP_11_SMART_PTR) && !defined(BOOST_NO_CXX11_SMART_PTR))
 
 namespace qx {
 namespace trait {
@@ -93,63 +78,64 @@ class is_smart_ptr_base_of
 
 private:
 
-   template <typename V, typename W>
-   static typename boost::mpl::if_c<boost::is_base_of<V, W>::value, char, int>::type removeSmartPtr(const boost::scoped_ptr<V> &, const boost::scoped_ptr<W> &);
+#ifdef _QX_ENABLE_BOOST
 
    template <typename V, typename W>
-   static typename boost::mpl::if_c<boost::is_base_of<V, W>::value, char, int>::type removeSmartPtr(const boost::shared_ptr<V> &, const boost::shared_ptr<W> &);
+   static typename std::conditional<std::is_base_of<V, W>::value, char, int>::type removeSmartPtr(const boost::scoped_ptr<V> &, const boost::scoped_ptr<W> &);
 
    template <typename V, typename W>
-   static typename boost::mpl::if_c<boost::is_base_of<V, W>::value, char, int>::type removeSmartPtr(const boost::weak_ptr<V> &, const boost::weak_ptr<W> &);
+   static typename std::conditional<std::is_base_of<V, W>::value, char, int>::type removeSmartPtr(const boost::shared_ptr<V> &, const boost::shared_ptr<W> &);
 
    template <typename V, typename W>
-   static typename boost::mpl::if_c<boost::is_base_of<V, W>::value, char, int>::type removeSmartPtr(const boost::intrusive_ptr<V> &, const boost::intrusive_ptr<W> &);
+   static typename std::conditional<std::is_base_of<V, W>::value, char, int>::type removeSmartPtr(const boost::weak_ptr<V> &, const boost::weak_ptr<W> &);
 
    template <typename V, typename W>
-   static typename boost::mpl::if_c<boost::is_base_of<V, W>::value, char, int>::type removeSmartPtr(const QSharedDataPointer<V> &, const QSharedDataPointer<W> &);
+   static typename std::conditional<std::is_base_of<V, W>::value, char, int>::type removeSmartPtr(const boost::intrusive_ptr<V> &, const boost::intrusive_ptr<W> &);
+
+#endif // _QX_ENABLE_BOOST
 
    template <typename V, typename W>
-   static typename boost::mpl::if_c<boost::is_base_of<V, W>::value, char, int>::type removeSmartPtr(const QSharedPointer<V> &, const QSharedPointer<W> &);
+   static typename std::conditional<std::is_base_of<V, W>::value, char, int>::type removeSmartPtr(const QSharedDataPointer<V> &, const QSharedDataPointer<W> &);
 
    template <typename V, typename W>
-   static typename boost::mpl::if_c<boost::is_base_of<V, W>::value, char, int>::type removeSmartPtr(const QWeakPointer<V> &, const QWeakPointer<W> &);
+   static typename std::conditional<std::is_base_of<V, W>::value, char, int>::type removeSmartPtr(const QSharedPointer<V> &, const QSharedPointer<W> &);
 
    template <typename V, typename W>
-   static typename boost::mpl::if_c<boost::is_base_of<V, W>::value, char, int>::type removeSmartPtr(const qx::dao::ptr<V> &, const qx::dao::ptr<W> &);
-
-#if (defined(_QX_CPP_11_SMART_PTR) && !defined(BOOST_NO_CXX11_SMART_PTR))
+   static typename std::conditional<std::is_base_of<V, W>::value, char, int>::type removeSmartPtr(const QWeakPointer<V> &, const QWeakPointer<W> &);
 
    template <typename V, typename W>
-   static typename boost::mpl::if_c<boost::is_base_of<V, W>::value, char, int>::type removeSmartPtr(const std::unique_ptr<V> &, const std::unique_ptr<W> &);
+   static typename std::conditional<std::is_base_of<V, W>::value, char, int>::type removeSmartPtr(const qx::dao::ptr<V> &, const qx::dao::ptr<W> &);
 
    template <typename V, typename W>
-   static typename boost::mpl::if_c<boost::is_base_of<V, W>::value, char, int>::type removeSmartPtr(const std::shared_ptr<V> &, const std::shared_ptr<W> &);
+   static typename std::conditional<std::is_base_of<V, W>::value, char, int>::type removeSmartPtr(const std::unique_ptr<V> &, const std::unique_ptr<W> &);
 
    template <typename V, typename W>
-   static typename boost::mpl::if_c<boost::is_base_of<V, W>::value, char, int>::type removeSmartPtr(const std::weak_ptr<V> &, const std::weak_ptr<W> &);
+   static typename std::conditional<std::is_base_of<V, W>::value, char, int>::type removeSmartPtr(const std::shared_ptr<V> &, const std::shared_ptr<W> &);
 
-#endif // (defined(_QX_CPP_11_SMART_PTR) && !defined(BOOST_NO_CXX11_SMART_PTR))
+   template <typename V, typename W>
+   static typename std::conditional<std::is_base_of<V, W>::value, char, int>::type removeSmartPtr(const std::weak_ptr<V> &, const std::weak_ptr<W> &);
 
    static int removeSmartPtr(...);
    static B b;
    static D d;
 
+#ifdef _QX_ENABLE_BOOST
+
    static boost::scoped_ptr<B> * b_boost_scoped_ptr;
    static boost::shared_ptr<B> * b_boost_shared_ptr;
    static boost::weak_ptr<B> * b_boost_weak_ptr;
    static boost::intrusive_ptr<B> * b_boost_intrusive_ptr;
+
+#endif // _QX_ENABLE_BOOST
+
    static QSharedDataPointer<B> * b_qt_shared_data_ptr;
    static QSharedPointer<B> * b_qt_shared_ptr;
    static QWeakPointer<B> * b_qt_weak_ptr;
    static qx::dao::ptr<B> * b_qx_dao_ptr;
 
-#if (defined(_QX_CPP_11_SMART_PTR) && !defined(BOOST_NO_CXX11_SMART_PTR))
-
    static std::unique_ptr<B> * b_std_unique_ptr;
    static std::shared_ptr<B> * b_std_shared_ptr;
    static std::weak_ptr<B> * b_std_weak_ptr;
-
-#endif // (defined(_QX_CPP_11_SMART_PTR) && !defined(BOOST_NO_CXX11_SMART_PTR))
 
    enum { value_0 = (qx::trait::is_smart_ptr<D>::value) };
    enum { value_1 = (qx::trait::is_smart_ptr<B>::value) };
@@ -160,7 +146,7 @@ public:
 
    enum { value = (qx::trait::is_smart_ptr_base_of<B, D>::value_2 || qx::trait::is_smart_ptr_base_of<B, D>::value_3) };
 
-   typedef typename boost::mpl::if_c<qx::trait::is_smart_ptr_base_of<B, D>::value, boost::mpl::true_, boost::mpl::false_>::type type;
+   typedef typename std::conditional<qx::trait::is_smart_ptr_base_of<B, D>::value, std::true_type, std::false_type>::type type;
 
 };
 

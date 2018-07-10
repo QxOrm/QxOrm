@@ -47,8 +47,7 @@
 #include <typeinfo>
 #endif // _QX_NO_RTTI
 
-#include <boost/noncopyable.hpp>
-#include <boost/any.hpp>
+#include <QxCommon/QxAny.h>
 
 namespace qx {
 
@@ -56,7 +55,7 @@ namespace qx {
  * \ingroup QxFactory
  * \brief qx::IxFactory : common interface for all classes that can be created dynamically using the class name
  */
-class QX_DLL_EXPORT IxFactory : private boost::noncopyable
+class QX_DLL_EXPORT IxFactory
 {
 
 protected:
@@ -68,12 +67,17 @@ public:
    IxFactory(const QString & sKey);
    virtual ~IxFactory();
 
-   virtual boost::any createObject() const = 0;
+   virtual qx::any createObject() const = 0;
    virtual void * createObjectNudePtr() const = 0;
 
 #ifndef _QX_NO_RTTI
    virtual const std::type_info & typeInfo() const = 0;
 #endif // _QX_NO_RTTI
+
+private:
+
+   IxFactory(const IxFactory & other) { Q_UNUSED(other); }
+   IxFactory & operator=(const IxFactory & other) { Q_UNUSED(other); return (* this); }
 
 };
 

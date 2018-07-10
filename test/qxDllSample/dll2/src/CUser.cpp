@@ -6,7 +6,7 @@
 
 void CUser::test()
 {
-   qx_shared_ptr<QObject> ptrTmp;
+   std::shared_ptr<QObject> ptrTmp;
    ptrTmp.reset(new CUser());
    qx::clone(ptrTmp);
 

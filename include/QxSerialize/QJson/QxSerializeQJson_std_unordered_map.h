@@ -30,8 +30,6 @@
 ****************************************************************************/
 
 #ifndef _QX_NO_JSON
-#ifdef _QX_CPP_11_CONTAINER
-#ifndef BOOST_NO_CXX11_STD_UNORDERED
 #ifndef _QX_SERIALIZE_QJSON_STD_UNORDERED_MAP_H_
 #define _QX_SERIALIZE_QJSON_STD_UNORDERED_MAP_H_
 
@@ -284,6 +282,4 @@ struct QxConvert_FromJson< std::unordered_map<std::wstring, Value> >
 } // namespace qx
 
 #endif // _QX_SERIALIZE_QJSON_STD_UNORDERED_MAP_H_
-#endif // BOOST_NO_CXX11_STD_UNORDERED
-#endif // _QX_CPP_11_CONTAINER
 #endif // _QX_NO_JSON

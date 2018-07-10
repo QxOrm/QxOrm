@@ -39,14 +39,15 @@
 
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/split_free.hpp>
-#include <boost/serialization/version.hpp>
 #include <boost/serialization/nvp.hpp>
 
 #include <QtCore/qpoint.h>
 
 #include <QxSerialize/QxSerializeFastCompil.h>
 
-BOOST_CLASS_VERSION(QPoint, 0)
+#include <QxRegister/QxVersion.h>
+
+QX_CLASS_VERSION(QPoint, 0)
 
 QX_SERIALIZE_FAST_COMPIL_SERIALIZE_HPP(QX_DLL_EXPORT, QPoint)
 

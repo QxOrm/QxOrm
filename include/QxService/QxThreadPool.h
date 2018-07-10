@@ -110,7 +110,7 @@ Q_SIGNALS:
 
 };
 
-typedef qx_shared_ptr<QxThreadPool> QxThreadPool_ptr;
+typedef std::shared_ptr<QxThreadPool> QxThreadPool_ptr;
 
 } // namespace service
 } // namespace qx

@@ -36,40 +36,39 @@
 #pragma once
 #endif
 
-#include <boost/utility/value_init.hpp>
-#include <boost/type_traits/remove_const.hpp>
+#include <QxConvert/QxConvert.h>
 
 #define QX_FUNCTION_CLASS_FCT(className) \
 public: \
 type_fct m_fct; \
 className(type_fct fct) : IxFunction(), m_fct(fct) { ; }; \
 virtual ~className() { ; }; \
-virtual qx_bool invoke(const QString & params = QString(), boost::any * ret = NULL) const \
-{ return QxInvokerFct<QString, ! boost::is_same<R, void>::value>::invoke(params, ret, this); } \
-virtual qx_bool invoke(const type_any_params & params, boost::any * ret = NULL) const \
-{ return QxInvokerFct<type_any_params, ! boost::is_same<R, void>::value>::invoke(params, ret, this); } \
-virtual qx_bool invoke(void * pOwner, const QString & params = QString(), boost::any * ret = NULL) const \
+virtual qx_bool invoke(const QString & params = QString(), qx::any * ret = NULL) const \
+{ return QxInvokerFct<QString, ! std::is_same<R, void>::value>::invoke(params, ret, this); } \
+virtual qx_bool invoke(const type_any_params & params, qx::any * ret = NULL) const \
+{ return QxInvokerFct<type_any_params, ! std::is_same<R, void>::value>::invoke(params, ret, this); } \
+virtual qx_bool invoke(void * pOwner, const QString & params = QString(), qx::any * ret = NULL) const \
 { Q_UNUSED(pOwner); Q_UNUSED(params); Q_UNUSED(ret); qAssert(false); return qx_bool(false, 0, QX_FUNCTION_ERR_INVALID_INVOKE_CALL); } \
-virtual qx_bool invoke(void * pOwner, const type_any_params & params, boost::any * ret = NULL) const \
+virtual qx_bool invoke(void * pOwner, const type_any_params & params, qx::any * ret = NULL) const \
 { Q_UNUSED(pOwner); Q_UNUSED(params); Q_UNUSED(ret); qAssert(false); return qx_bool(false, 0, QX_FUNCTION_ERR_INVALID_INVOKE_CALL); } \
 virtual qx_bool isValidFct() const \
-{ return (m_fct.empty() ? qx_bool(false, 0, QX_FUNCTION_ERR_EMPTY_FCT) : qx_bool(true)); }
+{ return ((! m_fct) ? qx_bool(false, 0, QX_FUNCTION_ERR_EMPTY_FCT) : qx_bool(true)); }
 
 #define QX_FUNCTION_CLASS_MEMBER_FCT(className) \
 public: \
 type_fct m_fct; \
 className(type_fct fct) : IxFunction(), m_fct(fct) { ; }; \
 virtual ~className() { ; }; \
-virtual qx_bool invoke(void * pOwner, const QString & params = QString(), boost::any * ret = NULL) const \
-{ return QxInvokerFct<QString, ! boost::is_same<R, void>::value>::invoke(pOwner, params, ret, this); } \
-virtual qx_bool invoke(void * pOwner, const type_any_params & params, boost::any * ret = NULL) const \
-{ return QxInvokerFct<type_any_params, ! boost::is_same<R, void>::value>::invoke(pOwner, params, ret, this); } \
-virtual qx_bool invoke(const QString & params = QString(), boost::any * ret = NULL) const \
+virtual qx_bool invoke(void * pOwner, const QString & params = QString(), qx::any * ret = NULL) const \
+{ return QxInvokerFct<QString, ! std::is_same<R, void>::value>::invoke(pOwner, params, ret, this); } \
+virtual qx_bool invoke(void * pOwner, const type_any_params & params, qx::any * ret = NULL) const \
+{ return QxInvokerFct<type_any_params, ! std::is_same<R, void>::value>::invoke(pOwner, params, ret, this); } \
+virtual qx_bool invoke(const QString & params = QString(), qx::any * ret = NULL) const \
 { Q_UNUSED(params); Q_UNUSED(ret); qAssert(false); return qx_bool(false, 0, QX_FUNCTION_ERR_INVALID_INVOKE_CALL); } \
-virtual qx_bool invoke(const type_any_params & params, boost::any * ret = NULL) const \
+virtual qx_bool invoke(const type_any_params & params, qx::any * ret = NULL) const \
 { Q_UNUSED(params); Q_UNUSED(ret); qAssert(false); return qx_bool(false, 0, QX_FUNCTION_ERR_INVALID_INVOKE_CALL); } \
 virtual qx_bool isValidFct() const \
-{ return (m_fct.empty() ? qx_bool(false, 0, QX_FUNCTION_ERR_EMPTY_MEMBER_FCT) : qx_bool(true)); }
+{ return ((! m_fct) ? qx_bool(false, 0, QX_FUNCTION_ERR_EMPTY_MEMBER_FCT) : qx_bool(true)); }
 
 #define QX_FUNCTION_CATCH_AND_RETURN_INVOKE() \
 catch (const std::exception & e) { bValid = qx_bool(false, 0, e.what()); } \
@@ -78,47 +77,36 @@ if (! bValid) { QString sMsgDebug = bValid.getDesc(); qDebug("[QxOrm] %s", qPrin
 return bValid;
 
 #define QX_FUNCTION_INVOKE_START_WITH_OWNER() \
-if (ret) { (* ret) = boost::any(); } \
+if (ret) { (* ret) = qx::any(); } \
 qx_bool bValid = pThis->isValid<T, Owner>(pOwner, params, NULL); \
 if (! bValid) { QString sMsgDebug = bValid.getDesc(); qDebug("[QxOrm] %s", qPrintable(sMsgDebug)); qAssert(false); return bValid; }
 
 #define QX_FUNCTION_INVOKE_START_WITHOUT_OWNER() \
-if (ret) { (* ret) = boost::any(); } \
+if (ret) { (* ret) = qx::any(); } \
 qx_bool bValid = pThis->isValid(params); \
 if (! bValid) { QString sMsgDebug = bValid.getDesc(); qDebug("[QxOrm] %s", qPrintable(sMsgDebug)); qAssert(false); return bValid; }
 
 #define QX_FUNCTION_FETCH_PARAM(TYPE, VALUE, FCT) \
-boost::value_initialized< typename boost::remove_const< TYPE >::type > VALUE; \
-{ qx_bool bTmp = qx::function::detail::FCT(params, VALUE.data(), pThis); \
+typename std::remove_const< TYPE >::type VALUE; \
+{ qx_bool bTmp = qx::function::detail::FCT(params, VALUE, pThis); \
 if (! bTmp) { QString sMsgDebug = bTmp.getDesc(); qDebug("[QxOrm] %s", qPrintable(sMsgDebug)); qAssert(false); return bTmp; } }
 
 #define QX_FUNCTION_GET_PARAM_TYPE_ANY(PARAMCOUNT) \
 Q_UNUSED(qx_fct); \
 if (params.size() < PARAMCOUNT) { return qx_bool(false, 0, QX_FUNCTION_ERR_NUMBER_PARAMS); } \
 qx_bool bValid = true; \
-try { p = boost::any_cast<P>(params[PARAMCOUNT - 1]); } \
+try { p = qx::any_cast<P>(params[PARAMCOUNT - 1]); } \
 catch (...) { bValid = qx_bool(false, 0, QString(QX_FUNCTION_ERR_INVALID_PARAM).replace("XXX", QString::number(PARAMCOUNT))); } \
 return bValid;
 
-#ifndef QT_NO_STL
 #define QX_FUNCTION_GET_PARAM_TYPE_STRING(PARAMCOUNT) \
 if (! qx_fct) { return qx_bool(false, 0, QX_FUNCTION_ERR_UNKNOWN_ERROR); } \
 QStringList lst = params.split(qx_fct->getSeparator()); \
 if (lst.size() < PARAMCOUNT) { return qx_bool(false, 0, QX_FUNCTION_ERR_NUMBER_PARAMS); } \
 qx_bool bValid = true; \
-try { p = boost::lexical_cast<P>(lst.at(PARAMCOUNT - 1).toStdString()); } \
+try { bValid = qx::cvt::from_string(lst.at(PARAMCOUNT - 1), p); } \
 catch (...) { bValid = qx_bool(false, 0, QString(QX_FUNCTION_ERR_INVALID_PARAM).replace("XXX", QString::number(PARAMCOUNT))); } \
 return bValid;
-#else // QT_NO_STL
-#define QX_FUNCTION_GET_PARAM_TYPE_STRING(PARAMCOUNT) \
-if (! qx_fct) { return qx_bool(false, 0, QX_FUNCTION_ERR_UNKNOWN_ERROR); } \
-QStringList lst = params.split(qx_fct->getSeparator()); \
-if (lst.size() < PARAMCOUNT) { return qx_bool(false, 0, QX_FUNCTION_ERR_NUMBER_PARAMS); } \
-qx_bool bValid = true; \
-try { std::string tmp(lst.at(PARAMCOUNT - 1).toLatin1().constData()); p = boost::lexical_cast<P>(tmp); } \
-catch (...) { bValid = qx_bool(false, 0, QString(QX_FUNCTION_ERR_INVALID_PARAM).replace("XXX", QString::number(PARAMCOUNT))); } \
-return bValid;
-#endif // QT_NO_STL
 
 #define QX_FUNCTION_GET_PARAM_TYPE_STRING_TO_QSTRING(PARAMCOUNT) \
 if (! qx_fct) { return qx_bool(false, 0, QX_FUNCTION_ERR_UNKNOWN_ERROR); } \

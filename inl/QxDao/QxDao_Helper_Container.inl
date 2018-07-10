@@ -35,8 +35,8 @@ template <class T> \
 class QxDao_Helper_Container< className<T> > : public IxDao_Helper \
 { \
 public: \
-   QxDao_Helper_Container(className<T> & t, QSqlDatabase * pDatabase, const QString & sContext, qx::IxSqlQueryBuilder * pBuilder) : IxDao_Helper() { Q_UNUSED(t); m_pQueryBuilder.reset(pBuilder); init(pDatabase, sContext); } \
-   virtual ~QxDao_Helper_Container() { BOOST_STATIC_ASSERT(qx::trait::is_qx_registered<typename qx::QxSqlQueryBuilder<T>::type_sql>::value); } \
+   QxDao_Helper_Container(className<T> & t, QSqlDatabase * pDatabase, const QString & sContext, qx::IxSqlQueryBuilder * pBuilder) : IxDao_Helper(pBuilder) { Q_UNUSED(t); init(pDatabase, sContext); } \
+   virtual ~QxDao_Helper_Container() { static_assert(qx::trait::is_qx_registered<typename qx::QxSqlQueryBuilder<T>::type_sql>::value, "qx::trait::is_qx_registered<typename qx::QxSqlQueryBuilder<T>::type_sql>::value"); } \
 }; }}} // namespace qx::dao::detail
 
 #define QX_DAO_HELPER_CONTAINER_KEY_VALUE(className) \
@@ -45,8 +45,8 @@ template <class Key, class Value> \
 class QxDao_Helper_Container< className<Key, Value> > : public IxDao_Helper \
 { \
 public: \
-   QxDao_Helper_Container(className<Key, Value> & t, QSqlDatabase * pDatabase, const QString & sContext, qx::IxSqlQueryBuilder * pBuilder) : IxDao_Helper() { Q_UNUSED(t); m_pQueryBuilder.reset(pBuilder); init(pDatabase, sContext); } \
-   virtual ~QxDao_Helper_Container() { BOOST_STATIC_ASSERT(qx::trait::is_qx_registered<typename qx::QxSqlQueryBuilder<Value>::type_sql>::value); } \
+   QxDao_Helper_Container(className<Key, Value> & t, QSqlDatabase * pDatabase, const QString & sContext, qx::IxSqlQueryBuilder * pBuilder) : IxDao_Helper(pBuilder) { Q_UNUSED(t); init(pDatabase, sContext); } \
+   virtual ~QxDao_Helper_Container() { static_assert(qx::trait::is_qx_registered<typename qx::QxSqlQueryBuilder<Value>::type_sql>::value, "qx::trait::is_qx_registered<typename qx::QxSqlQueryBuilder<Value>::type_sql>::value"); } \
 }; }}} // namespace qx::dao::detail
 
 namespace qx {
@@ -65,21 +65,19 @@ QX_DAO_HELPER_CONTAINER(std::list)
 QX_DAO_HELPER_CONTAINER(std::set)
 QX_DAO_HELPER_CONTAINER_KEY_VALUE(std::map)
 
+#ifdef _QX_ENABLE_BOOST
+
 QX_DAO_HELPER_CONTAINER(boost::unordered_set)
 QX_DAO_HELPER_CONTAINER(boost::unordered_multiset)
 QX_DAO_HELPER_CONTAINER_KEY_VALUE(boost::unordered_map)
 QX_DAO_HELPER_CONTAINER_KEY_VALUE(boost::unordered_multimap)
 
-#ifdef _QX_CPP_11_CONTAINER
-#ifndef BOOST_NO_CXX11_STD_UNORDERED
+#endif // _QX_ENABLE_BOOST
 
 QX_DAO_HELPER_CONTAINER(std::unordered_set)
 QX_DAO_HELPER_CONTAINER(std::unordered_multiset)
 QX_DAO_HELPER_CONTAINER_KEY_VALUE(std::unordered_map)
 QX_DAO_HELPER_CONTAINER_KEY_VALUE(std::unordered_multimap)
-
-#endif // BOOST_NO_CXX11_STD_UNORDERED
-#endif // _QX_CPP_11_CONTAINER
 
 QX_DAO_HELPER_CONTAINER(QVector)
 QX_DAO_HELPER_CONTAINER(QList)

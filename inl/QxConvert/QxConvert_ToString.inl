@@ -163,9 +163,13 @@ static inline QString toString(const std::wstring & t, const QString & format, i
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); Q_UNUSED(t); qAssert(false); /* Need STL compatibility ! */ return QString(); } };
 #endif // ((! defined(QT_NO_STL)) && (! defined(QT_NO_STL_WCHAR)))
 
+#ifdef _QX_ENABLE_BOOST
+
 template <typename T> struct QxConvert_ToString< boost::optional<T> > {
 static inline QString toString(const boost::optional<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { if (t) { return qx::cvt::to_string((* t), format, index, ctx); }; return QString(); } };
+
+#endif // _QX_ENABLE_BOOST
 
 template <typename T1, typename T2> struct QxConvert_ToString< std::pair<T1, T2> > {
 static inline QString toString(const std::pair<T1, T2> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
@@ -187,6 +191,8 @@ template <typename T> struct QxConvert_ToString< std::set<T> > {
 static inline QString toString(const std::set<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return QX_CVT_DEFAULT_ARCHIVE::to_string(t); } };
 
+#ifdef _QX_ENABLE_BOOST
+
 template <typename T> struct QxConvert_ToString< boost::unordered_set<T> > {
 static inline QString toString(const boost::unordered_set<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return QX_CVT_DEFAULT_ARCHIVE::to_string(t); } };
@@ -195,8 +201,7 @@ template <typename T> struct QxConvert_ToString< boost::unordered_multiset<T> > 
 static inline QString toString(const boost::unordered_multiset<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return QX_CVT_DEFAULT_ARCHIVE::to_string(t); } };
 
-#ifdef _QX_CPP_11_CONTAINER
-#ifndef BOOST_NO_CXX11_STD_UNORDERED
+#endif // _QX_ENABLE_BOOST
 
 template <typename T> struct QxConvert_ToString< std::unordered_set<T> > {
 static inline QString toString(const std::unordered_set<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
@@ -205,9 +210,6 @@ static inline QString toString(const std::unordered_set<T> & t, const QString & 
 template <typename T> struct QxConvert_ToString< std::unordered_multiset<T> > {
 static inline QString toString(const std::unordered_multiset<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return QX_CVT_DEFAULT_ARCHIVE::to_string(t); } };
-
-#endif // BOOST_NO_CXX11_STD_UNORDERED
-#endif // _QX_CPP_11_CONTAINER
 
 template <typename T> struct QxConvert_ToString< QVector<T> > {
 static inline QString toString(const QVector<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
@@ -229,6 +231,8 @@ template <typename Key, typename Value> struct QxConvert_ToString< std::map<Key,
 static inline QString toString(const std::map<Key, Value> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return QX_CVT_DEFAULT_ARCHIVE::to_string(t); } };
 
+#ifdef _QX_ENABLE_BOOST
+
 template <typename Key, typename Value> struct QxConvert_ToString< boost::unordered_map<Key, Value> > {
 static inline QString toString(const boost::unordered_map<Key, Value> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return QX_CVT_DEFAULT_ARCHIVE::to_string(t); } };
@@ -237,8 +241,7 @@ template <typename Key, typename Value> struct QxConvert_ToString< boost::unorde
 static inline QString toString(const boost::unordered_multimap<Key, Value> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return QX_CVT_DEFAULT_ARCHIVE::to_string(t); } };
 
-#ifdef _QX_CPP_11_CONTAINER
-#ifndef BOOST_NO_CXX11_STD_UNORDERED
+#endif // _QX_ENABLE_BOOST
 
 template <typename Key, typename Value> struct QxConvert_ToString< std::unordered_map<Key, Value> > {
 static inline QString toString(const std::unordered_map<Key, Value> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
@@ -247,9 +250,6 @@ static inline QString toString(const std::unordered_map<Key, Value> & t, const Q
 template <typename Key, typename Value> struct QxConvert_ToString< std::unordered_multimap<Key, Value> > {
 static inline QString toString(const std::unordered_multimap<Key, Value> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return QX_CVT_DEFAULT_ARCHIVE::to_string(t); } };
-
-#endif // BOOST_NO_CXX11_STD_UNORDERED
-#endif // _QX_CPP_11_CONTAINER
 
 template <typename Key, typename Value> struct QxConvert_ToString< QHash<Key, Value> > {
 static inline QString toString(const QHash<Key, Value> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
@@ -270,6 +270,8 @@ static inline QString toString(const QMultiMap<Key, Value> & t, const QString & 
 template <typename Key, typename Value> struct QxConvert_ToString< qx::QxCollection<Key, Value> > {
 static inline QString toString(const qx::QxCollection<Key, Value> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return QX_CVT_DEFAULT_ARCHIVE::to_string(t); } };
+
+#ifdef _QX_ENABLE_BOOST
 
 template <typename T1> struct QxConvert_ToString< boost::tuple<T1> > {
 static inline QString toString(const boost::tuple<T1> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
@@ -307,8 +309,7 @@ template <typename T1, typename T2, typename T3, typename T4, typename T5, typen
 static inline QString toString(const boost::tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return QX_CVT_DEFAULT_ARCHIVE::to_string(t); } };
 
-#ifdef _QX_CPP_11_TUPLE
-#ifndef BOOST_NO_CXX11_HDR_TUPLE
+#endif // _QX_ENABLE_BOOST
 
 template <typename T1> struct QxConvert_ToString< std::tuple<T1> > {
 static inline QString toString(const std::tuple<T1> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
@@ -345,9 +346,6 @@ static inline QString toString(const std::tuple<T1, T2, T3, T4, T5, T6, T7, T8> 
 template <typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8, typename T9> struct QxConvert_ToString< std::tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9> > {
 static inline QString toString(const std::tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return QX_CVT_DEFAULT_ARCHIVE::to_string(t); } };
-
-#endif // BOOST_NO_CXX11_HDR_TUPLE
-#endif // _QX_CPP_11_TUPLE
 
 } // namespace detail
 } // namespace cvt

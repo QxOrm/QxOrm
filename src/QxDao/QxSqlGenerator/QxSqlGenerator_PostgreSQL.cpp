@@ -48,20 +48,17 @@ QxSqlGenerator_PostgreSQL::QxSqlGenerator_PostgreSQL() : QxSqlGenerator_Standard
 
 QxSqlGenerator_PostgreSQL::~QxSqlGenerator_PostgreSQL() { ; }
 
-void QxSqlGenerator_PostgreSQL::onBeforeInsert(IxDao_Helper * pDaoHelper, void * pOwner) const
+void QxSqlGenerator_PostgreSQL::checkSqlInsert(IxDao_Helper * pDaoHelper, QString & sql) const
 {
-   if (! pDaoHelper || ! pOwner) { qAssert(false); return; }
+   if (! pDaoHelper) { qAssert(false); return; }
    if (! pDaoHelper->getDataId()) { return; }
    qx::IxDataMember * pId = pDaoHelper->getDataId();
    if (! pId->getAutoIncrement()) { return; }
    if (pId->getNameCount() > 1) { qAssert(false); return; }
-   QString sql = pDaoHelper->sql();
    QString sqlToAdd = " RETURNING " + pId->getName();
    if (sql.right(sqlToAdd.size()) == sqlToAdd) { return; }
    sql += sqlToAdd;
    pDaoHelper->builder().setSqlQuery(sql);
-   if (! pDaoHelper->query().prepare(sql))
-   { pDaoHelper->errFailed(true); }
 }
 
 void QxSqlGenerator_PostgreSQL::onAfterInsert(IxDao_Helper * pDaoHelper, void * pOwner) const

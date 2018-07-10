@@ -43,8 +43,6 @@
  * \brief Common interface for all singleton of QxOrm library
  */
 
-#include <boost/noncopyable.hpp>
-
 namespace qx {
 
 class QxSingletonX;
@@ -53,7 +51,7 @@ class QxSingletonX;
  * \ingroup QxSingleton
  * \brief qx::IxSingleton : common interface for all singleton of QxOrm library
  */
-class QX_DLL_EXPORT IxSingleton : private boost::noncopyable
+class QX_DLL_EXPORT IxSingleton
 {
 
    friend class QxSingletonX;
@@ -70,6 +68,11 @@ protected:
    virtual void deleteInstance() = 0;
 
    static void initQxSingletonX();
+
+private:
+
+   IxSingleton(const IxSingleton & other) { Q_UNUSED(other); }
+   IxSingleton & operator=(const IxSingleton & other) { Q_UNUSED(other); return (* this); }
 
 };
 

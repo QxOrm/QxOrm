@@ -66,54 +66,39 @@ namespace qx {
 class QX_DLL_EXPORT IxClass : public qx::QxPropertyBag
 {
 
-protected:
+private:
 
-   IxDataMemberX * m_pDataMemberX;                    //!< List of data member
-   IxFunctionX_ptr m_pFctMemberX;                     //!< List of function member
-   IxFunctionX_ptr m_pFctStaticX;                     //!< List of function static
-
-   QString m_sKey;                                    //!< 'IxClass' key <=> class name
-   QString m_sName;                                   //!< 'IxClass' name <=> database table name (if empty => class name)
-   QString m_sDescription;                            //!< 'IxClass' description
-   long m_lVersion;                                   //!< 'IxClass' version
-   bool m_bFinalClass;                                //!< Class without base class (for example, qx::trait::no_base_class_defined and QObject)
-   bool m_bDaoReadOnly;                               //!< If 'true', cannot INSERT, UPDATE OR DELETE an instance of this class using qx::dao namespace
-   bool m_bRegistered;                                //!< Class registered into QxOrm context
-   qx::dao::strategy::inheritance m_eDaoStrategy;     //!< Dao class strategy to access data member
-   qx::QxSoftDelete m_oSoftDelete;                    //!< Soft delete (or logical delete) behavior
-   IxValidatorX_ptr m_pAllValidator;                  //!< List of validator associated to the class
-
-   QByteArray m_byteName;                             //!< Optimization to retrieve name under "const char *" format
-   const char * m_pName;                              //!< Optimization to retrieve name under "const char *" format
+   struct IxClassImpl;
+   std::unique_ptr<IxClassImpl> m_pImpl; //!< Private implementation idiom
 
 protected:
 
-   IxClass() : qx::QxPropertyBag(), m_pDataMemberX(NULL), m_lVersion(-1), m_bFinalClass(false), m_bDaoReadOnly(false), m_bRegistered(false), m_eDaoStrategy(qx::dao::strategy::concrete_table_inheritance), m_pName(NULL) { ; }
+   IxClass();
    virtual ~IxClass() = 0;
-
-   void updateClassX();
 
 public:
 
-   inline QString getKey() const                                  { return m_sKey; }
-   inline QString getName() const                                 { return m_sName; }
-   inline const char * getNamePtr() const                         { return m_pName; }
-   inline QString getDescription() const                          { return m_sDescription; }
-   inline long getVersion() const                                 { return m_lVersion; }
-   inline qx::dao::strategy::inheritance getDaoStrategy() const   { return m_eDaoStrategy; }
-   inline qx::QxSoftDelete getSoftDelete() const                  { return m_oSoftDelete; }
-   inline bool isFinalClass() const                               { return m_bFinalClass; }
-   inline bool isDaoReadOnly() const                              { return m_bDaoReadOnly; }
-   inline bool isRegistered() const                               { return m_bRegistered; }
-   inline IxDataMemberX * getDataMemberX() const                  { return m_pDataMemberX; }
-   inline IxFunctionX * getFctMemberX() const                     { return m_pFctMemberX.get(); }
-   inline IxFunctionX * getFctStaticX() const                     { return m_pFctStaticX.get(); }
+   QString getKey() const;
+   QString getName() const;
+   const char * getNamePtr() const;
+   QString getDescription() const;
+   long getVersion() const;
+   qx::dao::strategy::inheritance getDaoStrategy() const;
+   qx::QxSoftDelete getSoftDelete() const;
+   bool isFinalClass() const;
+   bool isDaoReadOnly() const;
+   bool isRegistered() const;
+   IxDataMemberX * getDataMemberX() const;
+   IxFunctionX * getFctMemberX() const;
+   IxFunctionX * getFctStaticX() const;
 
-   inline void setName(const QString & sName)                                 { m_sName = sName; updateNamePtr(); }
-   inline void setDescription(const QString & sDesc)                          { m_sDescription = sDesc; }
-   inline void setDaoStrategy(qx::dao::strategy::inheritance eDaoStrategy)    { m_eDaoStrategy = eDaoStrategy; }
-   inline void setSoftDelete(const qx::QxSoftDelete & oSoftDelete)            { m_oSoftDelete = oSoftDelete; if (m_oSoftDelete.getTableName().isEmpty()) { m_oSoftDelete.setTableName(m_sName); } }
-   inline void setDaoReadOnly(bool bDaoReadOnly)                              { m_bDaoReadOnly = bDaoReadOnly; }
+   void setKey(const QString & s);
+   void setName(const QString & s);
+   void setDescription(const QString & s);
+   void setDaoStrategy(qx::dao::strategy::inheritance e);
+   void setSoftDelete(const qx::QxSoftDelete & o);
+   void setDaoReadOnly(bool b);
+   void setVersion(long l);
 
    virtual bool isAbstract() const = 0;
    virtual bool implementIxPersistable() const = 0;
@@ -129,13 +114,19 @@ public:
    bool isKindOf(const std::type_info & typeInfo) const;
 #endif // _QX_NO_RTTI
 
-private:
+protected:
 
-   inline void updateNamePtr()   { m_byteName = m_sName.toLatin1(); m_pName = m_byteName.constData(); }
+   void updateClassX();
+   void setRegistered(bool b);
+   void setFinalClass(bool b);
+   void setDataMemberX(IxDataMemberX * p);
+   void setFctMemberX(IxFunctionX * p);
+   void setFctStaticX(IxFunctionX * p);
+   IxValidatorX_ptr & getAllValidatorRef();
 
 };
 
-typedef qx_shared_ptr<IxClass> IxClass_ptr;
+typedef std::shared_ptr<IxClass> IxClass_ptr;
 
 } // namespace qx
 

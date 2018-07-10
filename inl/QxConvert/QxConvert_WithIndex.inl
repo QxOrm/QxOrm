@@ -81,6 +81,8 @@ template <typename T1, typename T2>
 struct QxConvert_WithIndex_FromVariant< QPair<T1, T2> >
 { static inline qx_bool fromVariant(QPair<T1, T2> & data, const QVariant & v, const QString & format, int index, qx::cvt::context::ctx_type ctx) { qAssert((index >= -1) && (index < 2)); return ((index == 1) ? qx::cvt::from_variant(v, data.second, format, -1, ctx) : ((index == 0) ? qx::cvt::from_variant(v, data.first, format, -1, ctx) : qx::cvt::detail::QxConvert_FromVariant< QPair<T1, T2> >::fromVariant(v, data, format, -1, ctx))); } };
 
+#ifdef _QX_ENABLE_BOOST
+
 template <typename T1, typename T2>
 struct QxConvert_WithIndex_ToString< boost::tuple<T1, T2> >
 { static inline QString toString(const boost::tuple<T1, T2> & data, const QString & format, int index, qx::cvt::context::ctx_type ctx) { qAssert((index >= -1) && (index < 2)); return ((index == 1) ? qx::cvt::to_string(boost::tuples::get<1>(data), format, -1, ctx) : ((index == 0) ? qx::cvt::to_string(boost::tuples::get<0>(data), format, -1, ctx) : qx::cvt::detail::QxConvert_ToString< boost::tuple<T1, T2> >::toString(data, format, -1, ctx))); } };
@@ -209,8 +211,7 @@ template <typename T1, typename T2, typename T3, typename T4, typename T5, typen
 struct QxConvert_WithIndex_FromVariant< boost::tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9> >
 { static inline qx_bool fromVariant(boost::tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9> & data, const QVariant & v, const QString & format, int index, qx::cvt::context::ctx_type ctx) { qAssert((index >= -1) && (index < 9)); return ((index == 8) ? qx::cvt::from_variant(v, boost::tuples::get<8>(data), format, -1, ctx) : (index == 7) ? qx::cvt::from_variant(v, boost::tuples::get<7>(data), format, -1, ctx) : (index == 6) ? qx::cvt::from_variant(v, boost::tuples::get<6>(data), format, -1, ctx) : (index == 5) ? qx::cvt::from_variant(v, boost::tuples::get<5>(data), format, -1, ctx) : (index == 4) ? qx::cvt::from_variant(v, boost::tuples::get<4>(data), format, -1, ctx) : (index == 3) ? qx::cvt::from_variant(v, boost::tuples::get<3>(data), format, -1, ctx) : (index == 2) ? qx::cvt::from_variant(v, boost::tuples::get<2>(data), format, -1, ctx) : (index == 1) ? qx::cvt::from_variant(v, boost::tuples::get<1>(data), format, -1, ctx) : ((index == 0) ? qx::cvt::from_variant(v, boost::tuples::get<0>(data), format, -1, ctx) : qx::cvt::detail::QxConvert_FromVariant< boost::tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9> >::fromVariant(v, data, format, -1, ctx))); } };
 
-#ifdef _QX_CPP_11_TUPLE
-#ifndef BOOST_NO_CXX11_HDR_TUPLE
+#endif // _QX_ENABLE_BOOST
 
 template <typename T1, typename T2>
 struct QxConvert_WithIndex_ToString< std::tuple<T1, T2> >
@@ -339,9 +340,6 @@ struct QxConvert_WithIndex_ToVariant< std::tuple<T1, T2, T3, T4, T5, T6, T7, T8,
 template <typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8, typename T9>
 struct QxConvert_WithIndex_FromVariant< std::tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9> >
 { static inline qx_bool fromVariant(std::tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9> & data, const QVariant & v, const QString & format, int index, qx::cvt::context::ctx_type ctx) { qAssert((index >= -1) && (index < 9)); return ((index == 8) ? qx::cvt::from_variant(v, std::get<8>(data), format, -1, ctx) : (index == 7) ? qx::cvt::from_variant(v, std::get<7>(data), format, -1, ctx) : (index == 6) ? qx::cvt::from_variant(v, std::get<6>(data), format, -1, ctx) : (index == 5) ? qx::cvt::from_variant(v, std::get<5>(data), format, -1, ctx) : (index == 4) ? qx::cvt::from_variant(v, std::get<4>(data), format, -1, ctx) : (index == 3) ? qx::cvt::from_variant(v, std::get<3>(data), format, -1, ctx) : (index == 2) ? qx::cvt::from_variant(v, std::get<2>(data), format, -1, ctx) : (index == 1) ? qx::cvt::from_variant(v, std::get<1>(data), format, -1, ctx) : ((index == 0) ? qx::cvt::from_variant(v, std::get<0>(data), format, -1, ctx) : qx::cvt::detail::QxConvert_FromVariant< std::tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9> >::fromVariant(v, data, format, -1, ctx))); } };
-
-#endif // BOOST_NO_CXX11_HDR_TUPLE
-#endif // _QX_CPP_11_TUPLE
 
 } // namespace detail
 } // namespace cvt

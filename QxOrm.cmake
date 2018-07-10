@@ -38,6 +38,16 @@
 if(NOT QXORM_CMAKE_CONFIG_FILE_INCLUDED)
 set(QXORM_CMAKE_CONFIG_FILE_INCLUDED TRUE)
 
+###########################################
+# QxOrm library requires a C++11 compiler #
+###########################################
+
+# Qt framework requires a C++11 compiler since version Qt 5.7
+# So for all previous Qt versions, we need to define CONFIG += c++11
+# Please note that QxOrm library doesn't require a full compliant C++11 compiler : for example, QxOrm library can be built and used with MSVC 2012, GCC 4.5 or Clang 3.2
+
+set(CMAKE_CXX_STANDARD 11)
+
 ######################
 # QxOrm Library Path #
 ######################
@@ -46,23 +56,38 @@ set(QXORM_DIR ${CMAKE_CURRENT_LIST_DIR})
 set(QXORM_INCLUDE_DIR ${QXORM_DIR}/include)
 include_directories(${QXORM_INCLUDE_DIR})
 
+###########################################
+# Boost Header-Only Dependency (optional) #
+###########################################
+
+# Since QxOrm 1.4.4, QxOrm library doesn't depend on boost framework anymore (the boost dependency has been fully removed, replaced by some C++11 features)
+# So QxOrm library is now a pure Qt library which depends only on QtCore and QtSql by default
+# QxOrm library still supports some boost classes (boost smart-pointers, unordered containers, boost::optional, etc...) : you have to define _QX_ENABLE_BOOST compilation option to enable these features
+
+option(_QX_ENABLE_BOOST "If you enable _QX_ENABLE_BOOST option, then QxOrm library will support some boost header-only classes like boost::optional, boost::shared_ptr, boost::unordered_map, etc..." OFF)
+
 ######################################
 # Boost Library Configuration / Path #
 ######################################
 
-set(QX_BOOST_DIR "" CACHE STRING "Define where boost library is located, or leave QX_BOOST_DIR parameter empty and define a BOOST_ROOT environment variable")
+if(_QX_ENABLE_BOOST)
 
-if(NOT QX_BOOST_DIR STREQUAL "")
-   set(BOOST_ROOT ${QX_BOOST_DIR})
-endif()
+   add_definitions(-D_QX_ENABLE_BOOST)
+   set(QX_BOOST_DIR "" CACHE STRING "Define where boost library is located, or leave QX_BOOST_DIR parameter empty and define a BOOST_ROOT environment variable")
 
-find_package(Boost 1.38.0 REQUIRED)
+   if(NOT QX_BOOST_DIR STREQUAL "")
+      set(BOOST_ROOT ${QX_BOOST_DIR})
+   endif()
 
-if(NOT Boost_FOUND)
-   message(FATAL_ERROR "boost library not found : please define where boost library is located using QX_BOOST_DIR parameter, or leave QX_BOOST_DIR parameter empty and define a BOOST_ROOT environment variable")
-endif()
+   find_package(Boost 1.38.0 REQUIRED)
 
-include_directories(${Boost_INCLUDE_DIRS})
+   if(NOT Boost_FOUND)
+      message(FATAL_ERROR "boost library not found : please define where boost library is located using QX_BOOST_DIR parameter, or leave QX_BOOST_DIR parameter empty and define a BOOST_ROOT environment variable")
+   endif()
+
+   include_directories(${Boost_INCLUDE_DIRS})
+
+endif() # _QX_ENABLE_BOOST
 
 ###########################
 # Qt Library Dependencies #
@@ -134,6 +159,8 @@ endif()
 # Note : if you are not using serialization functions in projects based on QxOrm library, then you can define or not _QX_ENABLE_BOOST_SERIALIZATION compilation option without changing any line of your source code
 # Other note : to persist containers in database (not relationships, for example : std::vector<int>), without _QX_ENABLE_BOOST_SERIALIZATION it is stored as QByteArray (based on QDataStream engine), with _QX_ENABLE_BOOST_SERIALIZATION it is stored as XML (based on boost serialization XML engine) => so be careful, in this case it is not compatible
 
+if(_QX_ENABLE_BOOST)
+
 option(_QX_ENABLE_BOOST_SERIALIZATION "If you enable _QX_ENABLE_BOOST_SERIALIZATION option, then QxOrm library will provide a serialization engine based on boost::serialization (you have to build boost::serialization shared libray to use this feature)" OFF)
 
 if(_QX_ENABLE_BOOST_SERIALIZATION)
@@ -190,6 +217,7 @@ if(_QX_ENABLE_BOOST_SERIALIZATION)
    set(QX_LIBRARIES ${QX_LIBRARIES} ${Boost_SERIALIZATION_LIBRARY})
 
 endif() # _QX_ENABLE_BOOST_SERIALIZATION
+endif() # _QX_ENABLE_BOOST
 
 ############################
 # Qt Gui Module Dependency #
@@ -221,26 +249,6 @@ if(_QX_ENABLE_QT_NETWORK)
    find_package(Qt5Network REQUIRED)
    set(QX_LIBRARIES ${QX_LIBRARIES} Qt5::Network)
 endif() # _QX_ENABLE_QT_NETWORK
-
-#######################################
-# C++11 Smart Pointers And Containers #
-#######################################
-
-# By default, QxOrm library supports smart pointers and containers of Qt library and boost library : QHash, QList, QSharedPointer, boost::shared_ptr, boost::unordered_map, etc...
-# QxOrm library supports also by default containers of previous C++03 standard library : std::vector, std::list, std::map, std::set
-# If you want to enable smart pointers and containers of the new C++11 standard library, you can define the compilation options _QX_CPP_11_SMART_PTR, _QX_CPP_11_CONTAINER and _QX_CPP_11_TUPLE :
-# - With _QX_CPP_11_SMART_PTR : std::unique_ptr, std::shared_ptr, std::weak_ptr
-# - With _QX_CPP_11_CONTAINER : std::unordered_map, std::unordered_set, std::unordered_multimap, std::unordered_multiset
-# - With _QX_CPP_11_TUPLE : std::tuple
-
-option(_QX_ENABLE_CPP_11 "If you enable _QX_ENABLE_CPP_11 option, then QxOrm library will support C++11 types like smart-pointers (std::unique_ptr, std::shared_ptr, std::weak_ptr), containers (std::unordered_map, std::unordered_set, std::unordered_multimap, std::unordered_multiset) and tuple (std::tuple)" OFF)
-
-if(_QX_ENABLE_CPP_11)
-   set(CMAKE_CXX_STANDARD 11)
-   add_definitions(-D_QX_CPP_11_SMART_PTR)
-   add_definitions(-D_QX_CPP_11_CONTAINER)
-   add_definitions(-D_QX_CPP_11_TUPLE)
-endif() # _QX_ENABLE_CPP_11
 
 ################################
 # No JSON Serialization Engine #
@@ -277,6 +285,20 @@ if(_QX_UNITY_BUILD)
       # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wa,-mbig-obj")
    endif() # WIN32 AND MSVC
 endif() # _QX_UNITY_BUILD
+
+##########################################
+# More Efficient Qt QString Construction #
+##########################################
+
+# Qt provides some optimizations for QString class (construction, concatenation, etc...)
+# More details about these optimizations are available on Qt web site : http://doc.qt.io/qt-5/qstring.html#more-efficient-string-construction
+# To enable these optimizations, you can define QT_USE_QSTRINGBUILDER compilation option
+
+option(_QX_USE_QSTRINGBUILDER "If you enable _QX_USE_QSTRINGBUILDER option, then QxOrm library will define QT_USE_QSTRINGBUILDER compilation option of Qt library to provide some optimizations with QString class" OFF)
+
+if(_QX_USE_QSTRINGBUILDER)
+   add_definitions(-DQT_USE_QSTRINGBUILDER)
+endif()
 
 #############################
 # Compiler / Linker Options #

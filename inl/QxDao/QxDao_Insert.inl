@@ -44,12 +44,13 @@ struct QxDao_Insert_Generic
       if (dao.isReadOnly()) { return dao.errReadOnly(); }
       if (! dao.validateInstance(t)) { return dao.error(); }
 
+      IxSqlGenerator * pSqlGenerator = dao.getSqlGenerator();
       QString sql = dao.builder().buildSql().getSqlQuery();
       if (sql.isEmpty()) { return dao.errEmpty(); }
       if (! pDatabase) { dao.transaction(); }
+      if (pSqlGenerator) { pSqlGenerator->checkSqlInsert((& dao), sql); }
       if (! dao.query().prepare(sql)) { return dao.errFailed(true); }
 
-      IxSqlGenerator * pSqlGenerator = dao.getSqlGenerator();
       if (pSqlGenerator) { pSqlGenerator->onBeforeInsert((& dao), (& t)); }
       qx::dao::on_before_insert<T>((& t), (& dao)); if (! dao.isValid()) { return dao.error(); }
       qx::dao::detail::QxSqlQueryHelper_Insert<T>::resolveInput(t, dao.query(), dao.builder());
@@ -77,9 +78,11 @@ struct QxDao_Insert_Container
       if (dao.isReadOnly()) { return dao.errReadOnly(); }
       if (! dao.validateInstance(t)) { return dao.error(); }
 
+      IxSqlGenerator * pSqlGenerator = dao.getSqlGenerator();
       QString sql = dao.builder().buildSql().getSqlQuery();
       if (sql.isEmpty()) { return dao.errEmpty(); }
       if (! pDatabase) { dao.transaction(); }
+      if (pSqlGenerator) { pSqlGenerator->checkSqlInsert((& dao), sql); }
       if (! dao.query().prepare(sql)) { return dao.errFailed(true); }
 
       for (typename T::iterator it = t.begin(); it != t.end(); ++it)
@@ -93,7 +96,7 @@ private:
    template <typename U>
    static inline bool insertItem(U & item, qx::dao::detail::QxDao_Helper_Container<T> & dao)
    {
-      bool bInsertOk = insertItem_Helper<U, boost::is_pointer<U>::value || qx::trait::is_smart_ptr<U>::value>::insert(item, dao);
+      bool bInsertOk = insertItem_Helper<U, std::is_pointer<U>::value || qx::trait::is_smart_ptr<U>::value>::insert(item, dao);
       if (bInsertOk) { qx::dao::detail::QxDao_Keep_Original<U>::backup(item); }
       return bInsertOk;
    }
@@ -168,9 +171,9 @@ struct QxDao_Insert
 
    static inline QSqlError insert(T & t, QSqlDatabase * pDatabase)
    {
-      typedef typename boost::mpl::if_c< boost::is_pointer<T>::value, qx::dao::detail::QxDao_Insert_Ptr<T>, qx::dao::detail::QxDao_Insert_Generic<T> >::type type_dao_1;
-      typedef typename boost::mpl::if_c< qx::trait::is_smart_ptr<T>::value, qx::dao::detail::QxDao_Insert_Ptr<T>, type_dao_1 >::type type_dao_2;
-      typedef typename boost::mpl::if_c< qx::trait::is_container<T>::value, qx::dao::detail::QxDao_Insert_Container<T>, type_dao_2 >::type type_dao_3;
+      typedef typename std::conditional< std::is_pointer<T>::value, qx::dao::detail::QxDao_Insert_Ptr<T>, qx::dao::detail::QxDao_Insert_Generic<T> >::type type_dao_1;
+      typedef typename std::conditional< qx::trait::is_smart_ptr<T>::value, qx::dao::detail::QxDao_Insert_Ptr<T>, type_dao_1 >::type type_dao_2;
+      typedef typename std::conditional< qx::trait::is_container<T>::value, qx::dao::detail::QxDao_Insert_Container<T>, type_dao_2 >::type type_dao_3;
 
       QSqlError error = type_dao_3::insert(t, pDatabase);
       if (! error.isValid()) { qx::dao::detail::QxDao_Keep_Original<T>::backup(t); }

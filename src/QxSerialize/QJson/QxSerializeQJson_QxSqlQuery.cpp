@@ -34,7 +34,7 @@
 #ifndef _QX_NO_JSON
 
 #include <QxSerialize/QJson/QxSerializeQJson_QxSqlQuery.h>
-#include <QxSerialize/QJson/QxSerializeQJson_boost_tuple.h>
+#include <QxSerialize/QJson/QxSerializeQJson_std_tuple.h>
 #include <QxSerialize/QJson/QxSerializeQJson_QHash.h>
 #include <QxSerialize/QJson/QxSerializeQJson_QVector.h>
 #include <QxSerialize/QJson/QxSerializeQJson_QFlags.h>
@@ -112,7 +112,7 @@ qx_bool QxConvert_FromJson_Helper(const QJsonValue & j, qx::QxSqlQuery & t, cons
    t.m_pSqlResult.reset();
    if ((lstResultPosByKey.count() > 0) || (lstResultValues.count() > 0))
    {
-      t.m_pSqlResult = qx_shared_ptr<qx::QxSqlQuery::QxSqlResult>(new qx::QxSqlQuery::QxSqlResult());
+      t.m_pSqlResult = std::shared_ptr<qx::QxSqlQuery::QxSqlResult>(new qx::QxSqlQuery::QxSqlResult());
       t.m_pSqlResult->positionByKey = lstResultPosByKey;
       t.m_pSqlResult->values = lstResultValues;
    }

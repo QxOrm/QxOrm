@@ -39,13 +39,13 @@ struct QxSqlQueryHelper_DeleteById
 
    static void sql(QString & sql, qx::IxSqlQueryBuilder & builder, bool bSoftDelete)
    {
-      BOOST_STATIC_ASSERT(qx::trait::is_qx_registered<T>::value);
+      static_assert(qx::trait::is_qx_registered<T>::value, "qx::trait::is_qx_registered<T>::value");
       qx::IxSqlQueryBuilder::sql_DeleteById(sql, builder, bSoftDelete);
    }
 
    static void resolveInput(T & t, QSqlQuery & query, qx::IxSqlQueryBuilder & builder)
    {
-      BOOST_STATIC_ASSERT(qx::trait::is_qx_registered<T>::value);
+      static_assert(qx::trait::is_qx_registered<T>::value, "qx::trait::is_qx_registered<T>::value");
       qx::IxDataMember * pId = builder.getDataId(); qAssert(pId);
       pId->setSqlPlaceHolder(query, (& t));
    }

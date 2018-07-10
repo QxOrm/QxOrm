@@ -45,9 +45,6 @@
 
 #include <vector>
 
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/logical.hpp>
-
 namespace qx {
 namespace trait {
 
@@ -56,19 +53,19 @@ namespace trait {
  * \brief qx::trait::is_std_vector<T>::value : return true if T is a std::vector<> container of stl library, otherwise return false
  */
 template <typename T>
-struct is_std_vector : public boost::mpl::false_ { ; };
+struct is_std_vector : public std::false_type { ; };
 
 template <typename T>
-struct is_std_vector< std::vector<T> > : public boost::mpl::true_ { ; };
+struct is_std_vector< std::vector<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_std_vector< std::vector<T> & > : public boost::mpl::true_ { ; };
+struct is_std_vector< std::vector<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_std_vector< const std::vector<T> > : public boost::mpl::true_ { ; };
+struct is_std_vector< const std::vector<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_std_vector< const std::vector<T> & > : public boost::mpl::true_ { ; };
+struct is_std_vector< const std::vector<T> & > : public std::true_type { ; };
 
 } // namespace trait
 } // namespace qx

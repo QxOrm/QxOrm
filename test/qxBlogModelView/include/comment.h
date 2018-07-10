@@ -7,8 +7,8 @@ class QX_BLOG_DLL_EXPORT comment
 {
 public:
 // -- typedef
-   typedef qx_shared_ptr<blog> blog_ptr;
-   typedef qx_shared_ptr<blog> type_blog_id;
+   typedef std::shared_ptr<blog> blog_ptr;
+   typedef std::shared_ptr<blog> type_blog_id;
 // -- properties
    long        m_id;
    QString     m_title;
@@ -33,7 +33,7 @@ public:
 
 QX_REGISTER_HPP_QX_BLOG(comment, qx::trait::no_base_class_defined, 0)
 
-typedef qx_shared_ptr<comment> comment_ptr;
+typedef std::shared_ptr<comment> comment_ptr;
 typedef QList<comment_ptr> list_comment;
 
 #endif // _QX_BLOG_COMMENT_H_

@@ -36,7 +36,13 @@
 #pragma once
 #endif
 
-#define BOOST_ALL_NO_LIB /* -- Disable auto-link feature provided by boost -- */
+#ifdef _MSC_VER
+#if (_MSC_VER < 1800) // MSVC 2012 and below
+#ifndef _VARIADIC_MAX
+#define _VARIADIC_MAX 10 // to manage correctly std::tuple
+#endif // _VARIADIC_MAX
+#endif // (_MSC_VER < 1800)
+#endif // _MSC_VER
 
 #ifdef _MSC_VER
 #pragma warning(disable:4503) /* -- Disable 4503 warning because of boost template -- */
@@ -52,6 +58,12 @@
 #include <list>
 #include <map>
 #include <set>
+#include <functional>
+#include <type_traits>
+#include <memory>
+#include <unordered_map>
+#include <unordered_set>
+#include <tuple>
 
 #include <QtCore/qglobal.h>
 #include <QtCore/qobject.h>
@@ -76,44 +88,34 @@
 #pragma warning(disable:4396)
 #endif // _MSC_VER
 
+#ifndef _QX_ENABLE_BOOST
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
+#define _QX_ENABLE_BOOST
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
+#endif // _QX_ENABLE_BOOST
+
+#ifdef _QX_ENABLE_BOOST
+#define BOOST_ALL_NO_LIB /* -- Disable auto-link feature provided by boost -- */
 #include <boost/config.hpp>
-#include <boost/serialization/version.hpp>
+#include <boost/version.hpp>
+#include <boost/scoped_ptr.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
+#include <boost/intrusive_ptr.hpp>
+#include <boost/unordered_map.hpp>
+#include <boost/unordered_set.hpp>
+#include <boost/tuple/tuple.hpp>
+#include <boost/tuple/tuple_comparison.hpp>
+#include <boost/tuple/tuple_io.hpp>
+#include <boost/optional.hpp>
+#include <boost/none.hpp>
 #include <boost/serialization/force_include.hpp>
+#endif // _QX_ENABLE_BOOST
 
 #ifdef BOOST_DLLEXPORT
 #undef BOOST_DLLEXPORT
 #define BOOST_DLLEXPORT /* Nothing */
 #endif // BOOST_DLLEXPORT
-
-#ifdef _QX_CPP_11_SMART_PTR
-#ifndef BOOST_NO_CXX11_SMART_PTR
-#include <memory>
-#endif // BOOST_NO_CXX11_SMART_PTR
-#endif // _QX_CPP_11_SMART_PTR
-
-#ifdef _QX_CPP_11_CONTAINER
-#ifndef BOOST_NO_CXX11_STD_UNORDERED
-#include <unordered_map>
-#include <unordered_set>
-#endif // BOOST_NO_CXX11_STD_UNORDERED
-#endif // _QX_CPP_11_CONTAINER
-
-#ifdef _QX_CPP_11_TUPLE
-#ifndef BOOST_NO_CXX11_HDR_TUPLE
-#include <tuple>
-#endif // BOOST_NO_CXX11_HDR_TUPLE
-#endif // _QX_CPP_11_TUPLE
-
-#include <boost/version.hpp>
-#include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/unordered_map.hpp>
-#include <boost/algorithm/string.hpp>
-#include <boost/tuple/tuple.hpp>
-#include <boost/foreach.hpp>
-#include <boost/bind.hpp>
-#include <boost/none.hpp>
-#include <boost/optional.hpp>
 
 #ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #ifdef _MSC_VER

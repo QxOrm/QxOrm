@@ -58,8 +58,8 @@ class IxParameter;
 } // namespace service
 } // namespace qx
 
-QX_DLL_EXPORT QDataStream & operator<< (QDataStream & stream, const qx::service::IxParameter & t) BOOST_USED;
-QX_DLL_EXPORT QDataStream & operator>> (QDataStream & stream, qx::service::IxParameter & t) BOOST_USED;
+QX_DLL_EXPORT QDataStream & operator<< (QDataStream & stream, const qx::service::IxParameter & t) QX_USED;
+QX_DLL_EXPORT QDataStream & operator>> (QDataStream & stream, qx::service::IxParameter & t) QX_USED;
 
 namespace qx {
 namespace service {
@@ -95,7 +95,7 @@ public:
 
 };
 
-typedef qx_shared_ptr<IxParameter> IxParameter_ptr;
+typedef std::shared_ptr<IxParameter> IxParameter_ptr;
 
 } // namespace service
 } // namespace qx

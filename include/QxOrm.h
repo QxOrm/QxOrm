@@ -52,6 +52,7 @@
  * \defgroup QxService QxService : QxOrm library services engine to provide easy and powerful way to create C++ application server (to transfer data over network)
  * \defgroup QxCache QxCache : QxOrm library basic thread-safe cache feature to backup and restore any kind of objects (for example, object fetched from database)
  * \defgroup QxConvert QxConvert : QxOrm library conversion tools to-from QString type and to-from QVariant type
+ * \defgroup QxExtras QxExtras : QxOrm library extra-tools (for example : enable std::optional for C++17 compilers, enable boost::optional feature without enabling all boost features)
  * \defgroup QxMemLeak QxMemLeak : QxOrm library memory leak detection (by Wu Yongwei)
  */
 
@@ -67,18 +68,7 @@
 #include <QxCommon/QxException.h>
 #include <QxCommon/QxExceptionCode.h>
 #include <QxCommon/QxAnyCastDynamic.h>
-
-#include <QxMemLeak/bool_array.h>
-#include <QxMemLeak/class_level_lock.h>
-#include <QxMemLeak/cont_ptr_utils.h>
-#include <QxMemLeak/fast_mutex.h>
-#include <QxMemLeak/fixed_mem_pool.h>
-#include <QxMemLeak/mem_pool_base.h>
-#include <QxMemLeak/object_level_lock.h>
-#include <QxMemLeak/pctimer.h>
-#include <QxMemLeak/set_assign.h>
-#include <QxMemLeak/static_assert.h>
-#include <QxMemLeak/static_mem_pool.h>
+#include <QxCommon/QxAny.h>
 
 #include <QxCollection/IxCollection.h>
 #include <QxCollection/QxCollection.h>
@@ -88,6 +78,7 @@
 #include <QxSingleton/IxSingleton.h>
 #include <QxSingleton/QxSingleton.h>
 #include <QxSingleton/QxSingletonX.h>
+#include <QxSingleton/QxSingletonInit.h>
 
 #include <QxFactory/IxFactory.h>
 #include <QxFactory/QxFactory.h>
@@ -102,12 +93,6 @@
 #include <QxDataMember/QxDataMember_QObject.h>
 
 #include <QxFunction/QxFunctionInclude.h>
-
-/*
-#include <QxXml/QxXmlReader.h>
-#include <QxXml/QxXmlWriter.h>
-#include <QxXml/QxXml.h>
-*/
 
 #include <QxDao/IxSqlQueryBuilder.h>
 #include <QxDao/QxSqlQueryBuilder.h>
@@ -144,17 +129,19 @@
 
 #include <QxDao/QxSqlGenerator/QxSqlGenerator.h>
 
-#include <QxDao/QxRepository/IxRepository.h>
-#include <QxDao/QxRepository/QxRepository.h>
-#include <QxDao/QxRepository/QxRepositoryX.h>
-
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #include <QxSerialize/QxSerialize.h>
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
+
 #include <QxSerialize/QxSerializeQDataStream.h>
 #include <QxSerialize/QDataStream/QxSerializeQDataStream_all_include.h>
-#include <QxSerialize/QJson/QxSerializeQJson_all_include.h>
-#include <QxSerialize/QxSerializeQJson.h>
 #include <QxSerialize/QxClone.h>
 #include <QxSerialize/QxDump.h>
+
+#ifndef _QX_NO_JSON
+#include <QxSerialize/QJson/QxSerializeQJson_all_include.h>
+#include <QxSerialize/QxSerializeQJson.h>
+#endif // _QX_NO_JSON
 
 #include <QxConvert/QxConvert.h>
 #include <QxConvert/QxConvert_Impl.h>
@@ -168,17 +155,7 @@
 #include <QxRegister/QxRegisterInternalHelper.h>
 #include <QxRegister/IxTypeInfo.h>
 #include <QxRegister/QxRegisterQtProperty.h>
-
-#include <QxService/IxParameter.h>
-#include <QxService/IxService.h>
-#include <QxService/QxClientAsync.h>
-#include <QxService/QxConnect.h>
-#include <QxService/QxServer.h>
-#include <QxService/QxService.h>
-#include <QxService/QxThread.h>
-#include <QxService/QxThreadPool.h>
-#include <QxService/QxTools.h>
-#include <QxService/QxTransaction.h>
+#include <QxRegister/QxVersion.h>
 
 #include <QxValidator/IxValidator.h>
 #include <QxValidator/IxValidatorX.h>
@@ -188,12 +165,5 @@
 #include <QxValidator/QxValidatorX.h>
 #include <QxValidator/QxValidatorError.h>
 #include <QxValidator/QxValidatorFct.h>
-
-#include <QxModelView/IxModel.h>
-#include <QxModelView/QxModel.h>
-#include <QxModelView/QxNestedModel.h>
-#include <QxModelView/QxModelService.h>
-
-#include <QxSingleton/QxSingletonInit.h>
 
 #endif // _QX_ORM_H_

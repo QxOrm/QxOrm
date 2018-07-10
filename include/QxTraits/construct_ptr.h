@@ -43,23 +43,11 @@
  * \brief qx::trait::construct_ptr<T>::get(T & t) : instantiate a new pointer, support both nude-pointer and smart-pointer of boost, Qt and QxOrm libraries
  */
 
-#include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/intrusive_ptr.hpp>
-#include <boost/type_traits/is_abstract.hpp>
-#include <boost/type_traits/remove_pointer.hpp>
-
 #include <QtCore/qsharedpointer.h>
 
 #if (QT_VERSION >= 0x040600)
 #include <QtCore/qscopedpointer.h>
 #endif // (QT_VERSION >= 0x040600)
-
-#ifdef _QX_CPP_11_SMART_PTR
-#ifndef BOOST_NO_CXX11_SMART_PTR
-#include <memory>
-#endif // BOOST_NO_CXX11_SMART_PTR
-#endif // _QX_CPP_11_SMART_PTR
 
 #include <QxDao/QxDaoPointer.h>
 
@@ -76,12 +64,12 @@ struct construct_ptr
 
 private:
 
-   typedef typename boost::remove_pointer<T>::type type_ptr;
+   typedef typename std::remove_pointer<T>::type type_ptr;
 
 public:
 
    static inline void get(T & t)
-   { new_ptr<boost::is_abstract<type_ptr>::value, 0>::get(t); }
+   { new_ptr<std::is_abstract<type_ptr>::value, 0>::get(t); }
 
 private:
 
@@ -95,6 +83,8 @@ private:
 
 };
 
+#ifdef _QX_ENABLE_BOOST
+
 template <typename T>
 struct construct_ptr< boost::scoped_ptr<T> >
 { static inline void get(boost::scoped_ptr<T> & t) { t.reset(new T()); } };
@@ -106,6 +96,8 @@ struct construct_ptr< boost::shared_ptr<T> >
 template <typename T>
 struct construct_ptr< boost::intrusive_ptr<T> >
 { static inline void get(boost::intrusive_ptr<T> & t) { t.reset(new T()); } };
+
+#endif // _QX_ENABLE_BOOST
 
 template <typename T>
 struct construct_ptr< QSharedPointer<T> >
@@ -121,9 +113,6 @@ template <typename T>
 struct construct_ptr< qx::dao::ptr<T> >
 { static inline void get(qx::dao::ptr<T> & t) { t = qx::dao::ptr<T>(new T()); } };
 
-#ifdef _QX_CPP_11_SMART_PTR
-#ifndef BOOST_NO_CXX11_SMART_PTR
-
 template <typename T>
 struct construct_ptr< std::unique_ptr<T> >
 { static inline void get(std::unique_ptr<T> & t) { t.reset(new T()); } };
@@ -131,9 +120,6 @@ struct construct_ptr< std::unique_ptr<T> >
 template <typename T>
 struct construct_ptr< std::shared_ptr<T> >
 { static inline void get(std::shared_ptr<T> & t) { t.reset(new T()); } };
-
-#endif // BOOST_NO_CXX11_SMART_PTR
-#endif // _QX_CPP_11_SMART_PTR
 
 } // namespace trait
 } // namespace qx

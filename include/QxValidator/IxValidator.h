@@ -117,7 +117,7 @@ protected:
 
 };
 
-typedef qx_shared_ptr<IxValidator> IxValidator_ptr;
+typedef std::shared_ptr<IxValidator> IxValidator_ptr;
 
 } // namespace qx
 

@@ -29,6 +29,7 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST
 #ifndef _QX_SERIALIZE_QDATASTREAM_BOOST_SCOPED_PTR_H_
 #define _QX_SERIALIZE_QDATASTREAM_BOOST_SCOPED_PTR_H_
 
@@ -44,8 +45,6 @@
  */
 
 #include <QtCore/qdatastream.h>
-
-#include <boost/scoped_ptr.hpp>
 
 template <typename T>
 QDataStream & operator<< (QDataStream & stream, const boost::scoped_ptr<T> & t)
@@ -67,3 +66,4 @@ QDataStream & operator>> (QDataStream & stream, boost::scoped_ptr<T> & t)
 }
 
 #endif // _QX_SERIALIZE_QDATASTREAM_BOOST_SCOPED_PTR_H_
+#endif // _QX_ENABLE_BOOST

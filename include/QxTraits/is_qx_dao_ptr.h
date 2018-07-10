@@ -43,9 +43,6 @@
  * \brief qx::trait::is_qx_dao_ptr<T>::value : return true if T is a qx::dao::ptr<> smart-pointer of QxOrm library, otherwise return false
  */
 
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/logical.hpp>
-
 #include <QxDao/QxDaoPointer.h>
 
 namespace qx {
@@ -56,19 +53,19 @@ namespace trait {
  * \brief qx::trait::is_qx_dao_ptr<T>::value : return true if T is a qx::dao::ptr<> smart-pointer of QxOrm library, otherwise return false
  */
 template <typename T>
-struct is_qx_dao_ptr : public boost::mpl::false_ { ; };
+struct is_qx_dao_ptr : public std::false_type { ; };
 
 template <typename T>
-struct is_qx_dao_ptr< qx::dao::ptr<T> > : public boost::mpl::true_ { ; };
+struct is_qx_dao_ptr< qx::dao::ptr<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_qx_dao_ptr< qx::dao::ptr<T> & > : public boost::mpl::true_ { ; };
+struct is_qx_dao_ptr< qx::dao::ptr<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_qx_dao_ptr< const qx::dao::ptr<T> > : public boost::mpl::true_ { ; };
+struct is_qx_dao_ptr< const qx::dao::ptr<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_qx_dao_ptr< const qx::dao::ptr<T> & > : public boost::mpl::true_ { ; };
+struct is_qx_dao_ptr< const qx::dao::ptr<T> & > : public std::true_type { ; };
 
 } // namespace trait
 } // namespace qx

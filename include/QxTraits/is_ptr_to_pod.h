@@ -43,10 +43,6 @@
  * \brief qx::trait::is_ptr_to_pod<T>::value : return true if T is a pointer to a POD type (char, int, long, etc.), otherwise return false
  */
 
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/logical.hpp>
-#include <boost/type_traits/is_pointer.hpp>
-
 #include <QxTraits/is_qx_pod.h>
 
 namespace qx {
@@ -63,16 +59,16 @@ class is_ptr_to_pod
 private:
 
    template <typename U>
-   static typename boost::mpl::if_c<qx::trait::is_qx_pod<U>::value, char, int>::type removePtr(const volatile U * const volatile);
+   static typename std::conditional<qx::trait::is_qx_pod<U>::value, char, int>::type removePtr(const volatile U * const volatile);
 
    static int removePtr(...);
    static T t;
 
 public:
 
-   enum { value = (boost::is_pointer<T>::value && (sizeof(qx::trait::is_ptr_to_pod<T>::removePtr(t)) == sizeof(char))) };
+   enum { value = (std::is_pointer<T>::value && (sizeof(qx::trait::is_ptr_to_pod<T>::removePtr(t)) == sizeof(char))) };
 
-   typedef typename boost::mpl::if_c<qx::trait::is_ptr_to_pod<T>::value, boost::mpl::true_, boost::mpl::false_>::type type;
+   typedef typename std::conditional<qx::trait::is_ptr_to_pod<T>::value, std::true_type, std::false_type>::type type;
 
 };
 

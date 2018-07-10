@@ -29,6 +29,7 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST
 #ifndef _QX_SERIALIZE_QDATASTREAM_BOOST_UNORDERED_MAP_H_
 #define _QX_SERIALIZE_QDATASTREAM_BOOST_UNORDERED_MAP_H_
 
@@ -44,8 +45,6 @@
  */
 
 #include <QtCore/qdatastream.h>
-
-#include <boost/unordered_map.hpp>
 
 template <typename Key, typename Value>
 QDataStream & operator<< (QDataStream & stream, const boost::unordered_map<Key, Value> & t)
@@ -116,3 +115,4 @@ QDataStream & operator>> (QDataStream & stream, boost::unordered_multimap<Key, V
 }
 
 #endif // _QX_SERIALIZE_QDATASTREAM_BOOST_UNORDERED_MAP_H_
+#endif // _QX_ENABLE_BOOST

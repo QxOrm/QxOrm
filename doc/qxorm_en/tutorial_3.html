@@ -67,11 +67,11 @@
           <table cellspacing="0" cellpadding="1"><col><col><tbody>
             <tr>
                <td align="right" valign="top"><font size="2" class="txt_with_shadow">Current version :&nbsp;</font></td>
-               <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.3 - <a href="../doxygen/index.html" target="_blank">QxOrm library online class documentation</a></font></td>
+               <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.4 - <a href="../doxygen/index.html" target="_blank">QxOrm library online class documentation</a></font></td>
             </tr>
             <tr>
                <td align="right" valign="top"><font size="2" class="txt_with_shadow"></font></td>
-               <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.2.1</font></td>
+               <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.2.2</font></td>
             </tr>
           </tbody></table>
         </td>
@@ -107,12 +107,12 @@
           <col><col>
           <tbody>
             <tr>
-              <td>This tutorial provides a way to install a development environment to work with Qt, boost and QxOrm library on Windows, each library built on 32 bits mode (all steps are similar for 64 bits mode).<br/>
+              <td>This tutorial provides a way to install a development environment to work with Qt, boost (optional) and QxOrm library on Windows, each library built on 32 bits mode (all steps are similar for 64 bits mode).<br/>
                   At the end of this tutorial, you will be able to choose between <b>Microsoft Visual C++ 2012</b> and <b>QtCreator</b> EDI.<br/>
                   <br/>
                   <b>Prerequisites :</b> Microsoft Visual C++ 2012 is already installed on your computer (no matter the version : « <i>Express</i> », « <i>Professional</i> », etc.).<br/>
                   <br/>
-                  <b>Note :</b> each version of QxOrm library is tested on Windows with MSVC++ 2008, MSVC++ 2010, MSVC++ 2012 (32 bits and 64 bits) and MinGW GCC 4.5. This tutorial is written for MSVC++ 2012, but the installation process will be similar for other compilers.<br/>
+                  <b>Note :</b> each version of QxOrm library is tested on Windows with MSVC++ (32 bits and 64 bits) and MinGW GCC 4.5. This tutorial is written for MSVC++ 2012, but the installation process will be similar for other compilers.<br/>
                   <br/>
                   <b>Other note :</b> although this tutorial is for Windows developers, each version of QxOrm library is tested and validated on Linux (with <i>GCC</i>) and Mac OS X (with <i>Clang</i>).<br/>
                   <br/>
@@ -120,10 +120,10 @@
                   <ul>
                      <li><a href="#tuto_10">1- Download and install Qt (Qt4 or Qt5)</a></li>
                      <li><a href="#tuto_20">2- Add Qt « bin » directory to the Windows « PATH »</a></li>
-                     <li><a href="#tuto_30">3- Download and install boost library</a></li>
+                     <li><a href="#tuto_30">3- Download and install boost library (optional)</a></li>
                      <li><a href="#tuto_40">4- Add boost « lib_shared » directory to the Windows « PATH » (optional)</a></li>
                      <li><a href="#tuto_50">5- Download and install QxOrm library</a></li>
-                     <li><a href="#tuto_60">6- Configure « QxOrm.pri » file</a></li>
+                     <li><a href="#tuto_60">6- Configure « QxOrm.pri » file (optional)</a></li>
                      <li><a href="#tuto_70">7- Add QxOrm directory to the Windows « PATH »</a></li>
                      <li><a href="#tuto_80">8- Test your installation executing « qxBlog » sample project</a></li>
                      <li><a href="#tuto_90">9- Test all samples projects of QxOrm package with MSVC++ 2012</a></li>
@@ -180,10 +180,16 @@
         <b>Note :</b> Why did we add the Qt « bin » directory to the Windows « PATH » ? All executables for Qt process (<i>qmake</i>, <i>moc</i>, <i>ui</i>, <i>rcc</i>, etc.) are available everywhere on the system without having to configure other things. Moreover, it will be easier to switch to another Qt version : just modify the « QT_DIR » value to put another Qt directory.<br/>
         <br/>
         <br/>
-        <b><a name="tuto_30"><u><font color="#100D5A">3- Download and install boost library</font></u></a></b>
+        <b><a name="tuto_30"><u><font color="#100D5A">3- Download and install boost library (optional)</font></u></a></b>
         <br/><br/>
-        <b>Note :</b> by default, QxOrm library just needs boost header files <i>*.hpp</i> : <a href="http://www.boost.org/doc/libs/release/libs/serialization/doc/index.html" target="_blank">boost serialization</a> dependency is optional and not required with default configuration. So some steps about boost installation in this tutorial are optional.<br/>
+        <b>Note :</b> by default, QxOrm library depends only on Qt (<i>QtCore</i> and <i>QtSql</i>).
+        boost installation is optional and not required with default configuration : so if you don't need boost framework, then you can go directly to <a href="#tuto_50">next step</a>.<br/>
         <br/>
+        <b>Other note :</b> QxOrm provides 2 dependency levels on boost :
+        <ul>
+          <li>dependency only on boost headers files (<i>*.hpp</i>) : <i>_QX_ENABLE_BOOST</i> compilation option ;</li>
+          <li>dependency on <a href="http://www.boost.org/doc/libs/release/libs/serialization/doc/index.html" target="_blank">boost serialization</a> module : <i>_QX_ENABLE_BOOST_SERIALIZATION</i> compilation option.</li>
+        </ul>
         The fastest and easier way is to download the boost package provided by QxOrm website.<br/>
         The boost package can be downloaded here : <a href="http://www.qxorm.com/lib/boost_1_57.zip" target="_blank">http://www.qxorm.com/lib/boost_1_57.zip</a><br/>
         <br/>
@@ -229,9 +235,11 @@
         Once downloaded, you just have to unzip it where you want.<br/>
         <br/>
         <br/>
-        <b><a name="tuto_60"><u><font color="#100D5A">6- Configure « QxOrm.pri » file</font></u></a></b>
+        <b><a name="tuto_60"><u><font color="#100D5A">6- Configure « QxOrm.pri » file (optional)</font></u></a></b>
         <br/><br/>
-        It is necessary to indicate to QxOrm library how to access to boost configuring « QxOrm.pri » file (be careful, only « QxOrm.pri » file can be changed, all other files from QxOrm package should not be changed).<br/>
+        <b>Note :</b> if you don't need boost framework, then « QxOrm.pri » configuration file doesn't need to be changed (you can keep the default configuration).
+        <br/><br/>
+        Otherwise, if boost is required by your project, then it is necessary to indicate to QxOrm library how to access to boost configuring « QxOrm.pri » file (be careful, only « QxOrm.pri » file can be changed, all other files from QxOrm package should not be changed).<br/>
         <br/>
         Open « QxOrm.pri » file with a text editor (<i>notepad</i> or <i>notepad++</i> for instance), then modify the value of these parameters :
         <ul>

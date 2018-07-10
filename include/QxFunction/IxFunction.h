@@ -43,12 +43,7 @@
  * \brief Common interface for all functions registered into QxOrm context (used by introspection engine)
  */
 
-#include <boost/any.hpp>
-#include <boost/function.hpp>
-#include <boost/lexical_cast.hpp>
-#include <boost/static_assert.hpp>
-#include <boost/type_traits/is_same.hpp>
-
+#include <QxCommon/QxAny.h>
 #include <QxCommon/QxBool.h>
 #include <QxCommon/QxPropertyBag.h>
 
@@ -76,7 +71,7 @@ protected:
 
 public:
 
-   typedef std::vector<boost::any> type_any_params;
+   typedef std::vector<qx::any> type_any_params;
 
    IxFunction() : qx::QxPropertyBag(), m_sSeparator("|") { ; }
    virtual ~IxFunction() { ; }
@@ -91,10 +86,10 @@ public:
 
    virtual int getParamCount() const = 0;
 
-   virtual qx_bool invoke(const QString & params = QString(), boost::any * ret = NULL) const = 0;
-   virtual qx_bool invoke(const type_any_params & params, boost::any * ret = NULL) const = 0;
-   virtual qx_bool invoke(void * pOwner, const QString & params = QString(), boost::any * ret = NULL) const = 0;
-   virtual qx_bool invoke(void * pOwner, const type_any_params & params, boost::any * ret = NULL) const = 0;
+   virtual qx_bool invoke(const QString & params = QString(), qx::any * ret = NULL) const = 0;
+   virtual qx_bool invoke(const type_any_params & params, qx::any * ret = NULL) const = 0;
+   virtual qx_bool invoke(void * pOwner, const QString & params = QString(), qx::any * ret = NULL) const = 0;
+   virtual qx_bool invoke(void * pOwner, const type_any_params & params, qx::any * ret = NULL) const = 0;
 
    virtual qx_bool isValidFct() const = 0;
    virtual qx_bool isValidParams(const QString & params) const = 0;
@@ -104,8 +99,8 @@ public:
    qx_bool isValidOwner(void * pOwner, T * dummy) const
    {
       Q_UNUSED(dummy);
-      typedef boost::is_same<T, void> qx_verify_owner_tmp;
-      BOOST_STATIC_ASSERT(! qx_verify_owner_tmp::value);
+      typedef std::is_same<T, void> qx_verify_owner_tmp;
+      static_assert(! qx_verify_owner_tmp::value, "! qx_verify_owner_tmp::value");
       if (! pOwner) { return qx_bool(false, 0, QX_FUNCTION_ERR_NULL_OWNER); }
 #ifndef _QX_NO_RTTI
       if (! dynamic_cast<T *>(static_cast<T *>(pOwner))) { return qx_bool(false, 0, QX_FUNCTION_ERR_INVALID_OWNER); }
@@ -133,9 +128,9 @@ public:
 
 };
 
-typedef qx_shared_ptr<IxFunction> IxFunction_ptr;
+typedef std::shared_ptr<IxFunction> IxFunction_ptr;
 typedef QxCollection<QString, IxFunction_ptr> IxFunctionX;
-typedef qx_shared_ptr<IxFunctionX> IxFunctionX_ptr;
+typedef std::shared_ptr<IxFunctionX> IxFunctionX_ptr;
 
 } // namespace qx
 

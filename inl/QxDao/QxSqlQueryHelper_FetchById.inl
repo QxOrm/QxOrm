@@ -39,13 +39,13 @@ struct QxSqlQueryHelper_FetchById
 
    static void sql(QString & sql, qx::IxSqlQueryBuilder & builder)
    {
-      BOOST_STATIC_ASSERT(qx::trait::is_qx_registered<T>::value);
+      static_assert(qx::trait::is_qx_registered<T>::value, "qx::trait::is_qx_registered<T>::value");
       qx::IxSqlQueryBuilder::sql_FetchById(sql, builder);
    }
 
    static void resolveInput(T & t, QSqlQuery & query, qx::IxSqlQueryBuilder & builder)
    {
-      BOOST_STATIC_ASSERT(qx::trait::is_qx_registered<T>::value);
+      static_assert(qx::trait::is_qx_registered<T>::value, "qx::trait::is_qx_registered<T>::value");
       qx::IxDataMember * pId = builder.getDataId(); qAssert(pId);
       pId->setSqlPlaceHolder(query, (& t));
    }
@@ -56,14 +56,14 @@ struct QxSqlQueryHelper_FetchById
    static void sql(QString & sql, qx::IxSqlQueryBuilder & builder, const QStringList & columns)
    {
       if ((columns.count() <= 0) || (columns.at(0) == "*")) { QxSqlQueryHelper_FetchById<T>::sql(sql, builder); return; }
-      BOOST_STATIC_ASSERT(qx::trait::is_qx_registered<T>::value);
+      static_assert(qx::trait::is_qx_registered<T>::value, "qx::trait::is_qx_registered<T>::value");
       qx::IxSqlQueryBuilder::sql_FetchById(sql, builder, columns);
    }
 
    static void resolveInput(T & t, QSqlQuery & query, qx::IxSqlQueryBuilder & builder, const QStringList & columns)
    {
       if ((columns.count() <= 0) || (columns.at(0) == "*")) { QxSqlQueryHelper_FetchById<T>::resolveInput(t, query, builder); return; }
-      BOOST_STATIC_ASSERT(qx::trait::is_qx_registered<T>::value);
+      static_assert(qx::trait::is_qx_registered<T>::value, "qx::trait::is_qx_registered<T>::value");
       qx::IxDataMember * pId = builder.getDataId(); qAssert(pId);
       pId->setSqlPlaceHolder(query, (& t));
    }

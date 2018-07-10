@@ -84,7 +84,7 @@ protected:
 
 };
 
-typedef qx_shared_ptr<QxSqlExpression> QxSqlExpression_ptr;
+typedef std::shared_ptr<QxSqlExpression> QxSqlExpression_ptr;
 
 } // namespace detail
 } // namespace dao

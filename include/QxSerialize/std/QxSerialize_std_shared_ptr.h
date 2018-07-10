@@ -30,16 +30,12 @@
 ****************************************************************************/
 
 #ifdef _QX_ENABLE_BOOST_SERIALIZATION
-#ifdef _QX_CPP_11_SMART_PTR
-#ifndef BOOST_NO_CXX11_SMART_PTR
 #ifndef _QX_SERIALIZE_STD_SHARED_PTR_H_
 #define _QX_SERIALIZE_STD_SHARED_PTR_H_
 
 #ifdef _MSC_VER
 #pragma once
 #endif
-
-#include <boost/version.hpp>
 
 #if (BOOST_VERSION >= 105600)
 
@@ -49,10 +45,7 @@
 
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/split_free.hpp>
-#include <boost/serialization/version.hpp>
 #include <boost/serialization/nvp.hpp>
-
-#include <memory>
 
 namespace boost {
 namespace serialization {
@@ -85,6 +78,4 @@ inline void serialize(Archive & ar, std::shared_ptr<T> & t, const unsigned int f
 
 #endif // (BOOST_VERSION >= 105600)
 #endif // _QX_SERIALIZE_STD_SHARED_PTR_H_
-#endif // BOOST_NO_CXX11_SMART_PTR
-#endif // _QX_CPP_11_SMART_PTR
 #endif // _QX_ENABLE_BOOST_SERIALIZATION

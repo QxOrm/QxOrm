@@ -43,8 +43,6 @@
  * \brief Concrete class for a custom or recursive validator
  */
 
-#include <boost/function.hpp>
-
 #include <QxValidator/IxValidator.h>
 #include <QxValidator/QxInvalidValueX.h>
 
@@ -68,9 +66,9 @@ class QxValidator : public IxValidator
 
 public:
 
-   typedef boost::function<void (Owner *, QxInvalidValueX &)> type_fct_custom_validator_member;
-   typedef boost::function<void (const QVariant &, QxInvalidValueX &)> type_fct_custom_validator_variant;
-   typedef boost::function<void (const QVariant &, const IxValidator *, QxInvalidValueX &)> type_fct_custom_validator_variant_validator;
+   typedef std::function<void (Owner *, QxInvalidValueX &)> type_fct_custom_validator_member;
+   typedef std::function<void (const QVariant &, QxInvalidValueX &)> type_fct_custom_validator_variant;
+   typedef std::function<void (const QVariant &, const IxValidator *, QxInvalidValueX &)> type_fct_custom_validator_variant_validator;
 
 protected:
 
@@ -89,11 +87,11 @@ public:
 
    virtual void validate(void * pOwner, QxInvalidValueX & lstInvalidValues) const
    {
-      if (! m_fctCustomValidator_Member.empty())
+      if (m_fctCustomValidator_Member)
       { m_fctCustomValidator_Member(static_cast<Owner *>(pOwner), lstInvalidValues); }
-      else if (! m_fctCustomValidator_Variant.empty() && m_pDataMember)
+      else if (m_fctCustomValidator_Variant && m_pDataMember)
       { m_fctCustomValidator_Variant(m_pDataMember->toVariant(pOwner), lstInvalidValues); }
-      else if (! m_fctCustomValidator_VariantValidator.empty() && m_pDataMember)
+      else if (m_fctCustomValidator_VariantValidator && m_pDataMember)
       { m_fctCustomValidator_VariantValidator(m_pDataMember->toVariant(pOwner), this, lstInvalidValues); }
    }
 
@@ -112,8 +110,8 @@ class QxValidator_WithDataType : public IxValidator
 
 public:
 
-   typedef boost::function<void (const DataType &, QxInvalidValueX &)> type_fct_custom_validator_data_type;
-   typedef boost::function<void (const DataType &, const IxValidator *, QxInvalidValueX &)> type_fct_custom_validator_data_type_validator;
+   typedef std::function<void (const DataType &, QxInvalidValueX &)> type_fct_custom_validator_data_type;
+   typedef std::function<void (const DataType &, const IxValidator *, QxInvalidValueX &)> type_fct_custom_validator_data_type_validator;
 
 protected:
 
@@ -133,9 +131,9 @@ public:
       if (! m_pDataMember) { return; }
       IxDataMember * pDataMember = const_cast<IxDataMember *>(m_pDataMember);
       DataType * val = pDataMember->getValuePtr<DataType>(pOwner);
-      if (! m_fctCustomValidator_DataType.empty() && val)
+      if (m_fctCustomValidator_DataType && val)
       { m_fctCustomValidator_DataType((* val), lstInvalidValues); }
-      else if (! m_fctCustomValidator_DataTypeValidator.empty() && val)
+      else if (m_fctCustomValidator_DataTypeValidator && val)
       { m_fctCustomValidator_DataTypeValidator((* val), this, lstInvalidValues); }
    }
 

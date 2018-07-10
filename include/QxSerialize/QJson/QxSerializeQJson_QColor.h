@@ -58,8 +58,8 @@ namespace qx {
 namespace cvt {
 namespace detail {
 
-QX_DLL_EXPORT QJsonValue QxConvert_ToJson_Helper(const QColor & t, const QString & format) BOOST_USED;
-QX_DLL_EXPORT qx_bool QxConvert_FromJson_Helper(const QJsonValue & j, QColor & t, const QString & format) BOOST_USED;
+QX_DLL_EXPORT QJsonValue QxConvert_ToJson_Helper(const QColor & t, const QString & format) QX_USED;
+QX_DLL_EXPORT qx_bool QxConvert_FromJson_Helper(const QJsonValue & j, QColor & t, const QString & format) QX_USED;
 
 template <>
 struct QxConvert_ToJson< QColor >

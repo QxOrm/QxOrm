@@ -43,10 +43,6 @@
  * \brief qx::trait::is_qx_collection<T>::value : return true if T is a qx::QxCollection<> container of QxOrm library, otherwise return false
  */
 
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/logical.hpp>
-#include <boost/type_traits/is_base_of.hpp>
-
 #include <QxCollection/IxCollection.h>
 
 namespace qx {
@@ -62,11 +58,11 @@ class is_qx_collection
 
 public:
 
-   enum { value = boost::is_base_of<qx::IxCollection, T>::value };
+   enum { value = std::is_base_of<qx::IxCollection, T>::value };
 
-   typedef typename boost::mpl::if_c<qx::trait::is_qx_collection<T>::value, 
-                                     boost::mpl::true_, 
-                                     boost::mpl::false_>::type type;
+   typedef typename std::conditional<qx::trait::is_qx_collection<T>::value, 
+                                     std::true_type, 
+                                     std::false_type>::type type;
 
 };
 

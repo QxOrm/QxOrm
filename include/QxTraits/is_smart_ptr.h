@@ -43,10 +43,6 @@
  * \brief qx::trait::is_smart_ptr<T>::value : return true if T is a smart-pointer of boost, Qt or QxOrm libraries, otherwise return false
  */
 
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/or.hpp>
-#include <boost/mpl/logical.hpp>
-
 #include <QxTraits/is_boost_intrusive_ptr.h>
 #include <QxTraits/is_boost_scoped_ptr.h>
 #include <QxTraits/is_boost_shared_ptr.h>
@@ -68,161 +64,159 @@ namespace trait {
  * \brief qx::trait::is_smart_ptr<T>::value : return true if T is a smart-pointer of boost, Qt or QxOrm libraries, otherwise return false
  */
 template <typename T>
-struct is_smart_ptr : public boost::mpl::false_ { ; };
+struct is_smart_ptr : public std::false_type { ; };
+
+#ifdef _QX_ENABLE_BOOST
 
 template <typename T>
-struct is_smart_ptr< boost::shared_ptr<T> > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< boost::shared_ptr<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_smart_ptr< boost::shared_ptr<T> & > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< boost::shared_ptr<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_smart_ptr< const boost::shared_ptr<T> > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< const boost::shared_ptr<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_smart_ptr< const boost::shared_ptr<T> & > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< const boost::shared_ptr<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_smart_ptr< boost::intrusive_ptr<T> > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< boost::intrusive_ptr<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_smart_ptr< boost::intrusive_ptr<T> & > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< boost::intrusive_ptr<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_smart_ptr< const boost::intrusive_ptr<T> > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< const boost::intrusive_ptr<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_smart_ptr< const boost::intrusive_ptr<T> & > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< const boost::intrusive_ptr<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_smart_ptr< boost::scoped_ptr<T> > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< boost::scoped_ptr<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_smart_ptr< boost::scoped_ptr<T> & > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< boost::scoped_ptr<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_smart_ptr< const boost::scoped_ptr<T> > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< const boost::scoped_ptr<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_smart_ptr< const boost::scoped_ptr<T> & > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< const boost::scoped_ptr<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_smart_ptr< boost::weak_ptr<T> > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< boost::weak_ptr<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_smart_ptr< boost::weak_ptr<T> & > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< boost::weak_ptr<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_smart_ptr< const boost::weak_ptr<T> > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< const boost::weak_ptr<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_smart_ptr< const boost::weak_ptr<T> & > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< const boost::weak_ptr<T> & > : public std::true_type { ; };
+
+#endif // _QX_ENABLE_BOOST
 
 #if (QT_VERSION >= 0x040600)
 
 template <typename T>
-struct is_smart_ptr< QScopedPointer<T> > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< QScopedPointer<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_smart_ptr< QScopedPointer<T> & > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< QScopedPointer<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_smart_ptr< const QScopedPointer<T> > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< const QScopedPointer<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_smart_ptr< const QScopedPointer<T> & > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< const QScopedPointer<T> & > : public std::true_type { ; };
 
 #endif // (QT_VERSION >= 0x040600)
 
 template <typename T>
-struct is_smart_ptr< QSharedDataPointer<T> > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< QSharedDataPointer<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_smart_ptr< QSharedDataPointer<T> & > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< QSharedDataPointer<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_smart_ptr< const QSharedDataPointer<T> > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< const QSharedDataPointer<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_smart_ptr< const QSharedDataPointer<T> & > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< const QSharedDataPointer<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_smart_ptr< QSharedPointer<T> > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< QSharedPointer<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_smart_ptr< QSharedPointer<T> & > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< QSharedPointer<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_smart_ptr< const QSharedPointer<T> > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< const QSharedPointer<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_smart_ptr< const QSharedPointer<T> & > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< const QSharedPointer<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_smart_ptr< QWeakPointer<T> > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< QWeakPointer<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_smart_ptr< QWeakPointer<T> & > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< QWeakPointer<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_smart_ptr< const QWeakPointer<T> > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< const QWeakPointer<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_smart_ptr< const QWeakPointer<T> & > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< const QWeakPointer<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_smart_ptr< qx::dao::ptr<T> > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< qx::dao::ptr<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_smart_ptr< qx::dao::ptr<T> & > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< qx::dao::ptr<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_smart_ptr< const qx::dao::ptr<T> > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< const qx::dao::ptr<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_smart_ptr< const qx::dao::ptr<T> & > : public boost::mpl::true_ { ; };
-
-#ifdef _QX_CPP_11_SMART_PTR
-#ifndef BOOST_NO_CXX11_SMART_PTR
+struct is_smart_ptr< const qx::dao::ptr<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_smart_ptr< std::shared_ptr<T> > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< std::shared_ptr<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_smart_ptr< std::shared_ptr<T> & > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< std::shared_ptr<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_smart_ptr< const std::shared_ptr<T> > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< const std::shared_ptr<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_smart_ptr< const std::shared_ptr<T> & > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< const std::shared_ptr<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_smart_ptr< std::unique_ptr<T> > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< std::unique_ptr<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_smart_ptr< std::unique_ptr<T> & > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< std::unique_ptr<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_smart_ptr< const std::unique_ptr<T> > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< const std::unique_ptr<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_smart_ptr< const std::unique_ptr<T> & > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< const std::unique_ptr<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_smart_ptr< std::weak_ptr<T> > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< std::weak_ptr<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_smart_ptr< std::weak_ptr<T> & > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< std::weak_ptr<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_smart_ptr< const std::weak_ptr<T> > : public boost::mpl::true_ { ; };
+struct is_smart_ptr< const std::weak_ptr<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_smart_ptr< const std::weak_ptr<T> & > : public boost::mpl::true_ { ; };
-
-#endif // BOOST_NO_CXX11_SMART_PTR
-#endif // _QX_CPP_11_SMART_PTR
+struct is_smart_ptr< const std::weak_ptr<T> & > : public std::true_type { ; };
 
 } // namespace trait
 } // namespace qx

@@ -79,6 +79,8 @@ public:
 
    enum ph_style { ph_style_question_mark, ph_style_2_point_name, ph_style_at_name };
 
+   typedef std::function<void (QSqlDatabase &)> type_fct_db_open;
+
 private:
 
    QHash<Qt::HANDLE, QString> m_lstDbByThread;              //!< Collection of databases connexions by thread id
@@ -103,6 +105,7 @@ private:
    bool m_bVerifyOffsetRelation;                            //!< Only for debug purpose : assert if invalid offset detected fetching a relation
    bool m_bAddAutoIncrementIdToUpdateQuery;                 //!< For Microsoft SqlServer database compatibility : add or not auto-increment id to SQL update query
    bool m_bForceParentIdToAllChildren;                      //!< Force parent id to all children (for 1-n relationship for example)
+   type_fct_db_open m_fctDatabaseOpen;                      //!< Callback function called when a new database connection is opened (can be used for example with SQLite database to define some PRAGMAs before executing any SQL query)
 
 private:
 
@@ -130,6 +133,7 @@ public:
    bool getVerifyOffsetRelation() const            { return m_bVerifyOffsetRelation; }
    bool getAddAutoIncrementIdToUpdateQuery() const { return m_bAddAutoIncrementIdToUpdateQuery; }
    bool getForceParentIdToAllChildren() const      { return m_bForceParentIdToAllChildren; }
+   type_fct_db_open getFctDatabaseOpen() const     { return m_fctDatabaseOpen; }
 
    void setDriverName(const QString & s)                          { m_sDriverName = s; getSqlGenerator(); }
    void setConnectOptions(const QString & s)                      { m_sConnectOptions = s; }
@@ -151,6 +155,7 @@ public:
    void setVerifyOffsetRelation(bool b)                           { m_bVerifyOffsetRelation = b; }
    void setAddAutoIncrementIdToUpdateQuery(bool b)                { m_bAddAutoIncrementIdToUpdateQuery = b; }
    void setForceParentIdToAllChildren(bool b)                     { m_bForceParentIdToAllChildren = b; }
+   void setFctDatabaseOpen(type_fct_db_open fct)                  { m_fctDatabaseOpen = fct; }
 
    static QSqlDatabase getDatabase();
    static QSqlDatabase getDatabase(QSqlError & dbError);

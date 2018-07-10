@@ -139,8 +139,10 @@ void QxSingletonX::deleteAllSingleton()
    bOnClearSingletonX = true;
 
    QHash<QString, IxSingleton *> & mapSingletonX = getMapSingletonX();
-   _foreach(IxSingleton * pSingleton, mapSingletonX)
+   QHashIterator<QString, IxSingleton *> itr(mapSingletonX);
+   while (itr.hasNext())
    {
+      itr.next(); IxSingleton * pSingleton = itr.value();
       if (pSingleton && (pSingleton != QxSingletonX::getSingleton()))
          pSingleton->deleteInstance();
    }

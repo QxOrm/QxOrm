@@ -185,6 +185,7 @@
 
 #include "./QxModelView/IxModel.cpp"
 #include "./QxModelView/QxNestedModel.cpp"
+#include "./QxModelView/QxModelRowCompare.cpp"
 
 #include "./main.cpp"
 

@@ -45,9 +45,6 @@
 
 #include <QtCore/QSharedDataPointer>
 
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/logical.hpp>
-
 namespace qx {
 namespace trait {
 
@@ -56,19 +53,19 @@ namespace trait {
  * \brief qx::trait::is_qt_shared_data_ptr<T>::value : return true if T is a QSharedDataPointer<> smart-pointer of Qt library, otherwise return false
  */
 template <typename T>
-struct is_qt_shared_data_ptr : public boost::mpl::false_ { ; };
+struct is_qt_shared_data_ptr : public std::false_type { ; };
 
 template <typename T>
-struct is_qt_shared_data_ptr< QSharedDataPointer<T> > : public boost::mpl::true_ { ; };
+struct is_qt_shared_data_ptr< QSharedDataPointer<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_qt_shared_data_ptr< QSharedDataPointer<T> & > : public boost::mpl::true_ { ; };
+struct is_qt_shared_data_ptr< QSharedDataPointer<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_qt_shared_data_ptr< const QSharedDataPointer<T> > : public boost::mpl::true_ { ; };
+struct is_qt_shared_data_ptr< const QSharedDataPointer<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_qt_shared_data_ptr< const QSharedDataPointer<T> & > : public boost::mpl::true_ { ; };
+struct is_qt_shared_data_ptr< const QSharedDataPointer<T> & > : public std::true_type { ; };
 
 } // namespace trait
 } // namespace qx

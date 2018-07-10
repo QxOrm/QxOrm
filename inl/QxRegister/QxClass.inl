@@ -29,18 +29,26 @@
 **
 ****************************************************************************/
 
+#include <QxRegister/QxVersion.h>
+
 namespace qx {
 
 template <class T>
 void QxClass<T>::init()
 {
-   m_pDataMemberX = QxDataMemberX<T>::getSingleton();
-   m_pDataMemberX->setClass(this);
-   m_pFctMemberX.reset(new IxFunctionX());
-   m_pFctStaticX.reset(new IxFunctionX());
-   m_lVersion = boost::serialization::version<T>::value;
-   m_sKey = qx::trait::get_class_name<T>::get();
-   m_eDaoStrategy = QxClass<typename QxClass<T>::type_base_class>::getSingleton()->getDaoStrategy();
+   this->setDataMemberX(QxDataMemberX<T>::getSingleton());
+   this->getDataMemberX()->setClass(this);
+   this->setFctMemberX(new IxFunctionX());
+   this->setFctStaticX(new IxFunctionX());
+
+#ifdef _QX_ENABLE_BOOST_SERIALIZATION
+   this->setVersion(boost::serialization::version<T>::value);
+#else // _QX_ENABLE_BOOST_SERIALIZATION
+   this->setVersion(qx::version<T>::value);
+#endif // _QX_ENABLE_BOOST_SERIALIZATION
+
+   this->setKey(qx::trait::get_class_name<T>::get());
+   this->setDaoStrategy(QxClass<typename QxClass<T>::type_base_class>::getSingleton()->getDaoStrategy());
    this->setName(qx::trait::get_class_name<T>::get_xml_tag());
    this->updateClassX();
    beforeRegisterClass();
@@ -52,81 +60,42 @@ IxDataMember * QxClass<T>::data(const QString & sKey, long lVersion)
 
 template <class T>
 template <typename V, typename U>
-IxDataMember * QxClass<T>::data(V U::* pData, const QString & sKey, long lVersion, bool bSerialize, bool bDao)
+IxDataMember * QxClass<T>::data(V U::* pData, const QString & sKey, long lVersion /* = 0 */, bool bSerialize /* = true */, bool bDao /* = true */)
 { return this->dataMemberX()->add(pData, sKey, lVersion, bSerialize, bDao); }
-
-template <class T>
-template <typename V, typename U>
-IxDataMember * QxClass<T>::data(V U::* pData, const QString & sKey, long lVersion, bool bSerialize)
-{ return this->dataMemberX()->add(pData, sKey, lVersion, bSerialize); }
-
-template <class T>
-template <typename V, typename U>
-IxDataMember * QxClass<T>::data(V U::* pData, const QString & sKey, long lVersion)
-{ return this->dataMemberX()->add(pData, sKey, lVersion); }
-
-template <class T>
-template <typename V, typename U>
-IxDataMember * QxClass<T>::data(V U::* pData, const QString & sKey)
-{ return this->dataMemberX()->add(pData, sKey); }
 
 template <class T>
 IxDataMember * QxClass<T>::id(const QString & sKey, long lVersion)
 { return this->dataMemberX()->id(sKey, lVersion); }
 
 template <class T>
-IxDataMember * QxClass<T>::id(typename QxClass<T>::type_primary_key T::* pDataMemberId, const QString & sKey)
-{ return this->dataMemberX()->id(pDataMemberId, sKey); }
-
-template <class T>
-IxDataMember * QxClass<T>::id(typename QxClass<T>::type_primary_key T::* pDataMemberId, const QString & sKey, long lVersion)
+IxDataMember * QxClass<T>::id(typename QxClass<T>::type_primary_key T::* pDataMemberId, const QString & sKey, long lVersion /* = 0 */)
 { return this->dataMemberX()->id(pDataMemberId, sKey, lVersion); }
 
 template <class T>
 template <typename V, typename U>
-IxSqlRelation * QxClass<T>::relationOneToOne(V U::* pData, const QString & sKey)
-{ return this->dataMemberX()->relationOneToOne(pData, sKey); }
-
-template <class T>
-template <typename V, typename U>
-IxSqlRelation * QxClass<T>::relationOneToOne(V U::* pData, const QString & sKey, long lVersion)
+IxSqlRelation * QxClass<T>::relationOneToOne(V U::* pData, const QString & sKey, long lVersion /* = 0 */)
 { return this->dataMemberX()->relationOneToOne(pData, sKey, lVersion); }
 
 template <class T>
 template <typename V, typename U>
-IxSqlRelation * QxClass<T>::relationManyToOne(V U::* pData, const QString & sKey)
-{ return this->dataMemberX()->relationManyToOne(pData, sKey); }
-
-template <class T>
-template <typename V, typename U>
-IxSqlRelation * QxClass<T>::relationManyToOne(V U::* pData, const QString & sKey, long lVersion)
+IxSqlRelation * QxClass<T>::relationManyToOne(V U::* pData, const QString & sKey, long lVersion /* = 0 */)
 { return this->dataMemberX()->relationManyToOne(pData, sKey, lVersion); }
 
 template <class T>
 template <typename V, typename U>
-IxSqlRelation * QxClass<T>::relationOneToMany(V U::* pData, const QString & sKey, const QString & sForeignKey)
-{ return this->dataMemberX()->relationOneToMany(pData, sKey, sForeignKey); }
-
-template <class T>
-template <typename V, typename U>
-IxSqlRelation * QxClass<T>::relationOneToMany(V U::* pData, const QString & sKey, const QString & sForeignKey, long lVersion)
+IxSqlRelation * QxClass<T>::relationOneToMany(V U::* pData, const QString & sKey, const QString & sForeignKey, long lVersion /* = 0 */)
 { return this->dataMemberX()->relationOneToMany(pData, sKey, sForeignKey, lVersion); }
 
 template <class T>
 template <typename V, typename U>
-IxSqlRelation * QxClass<T>::relationManyToMany(V U::* pData, const QString & sKey, const QString & sExtraTable, const QString & sForeignKeyOwner, const QString & sForeignKeyDataType)
-{ return this->dataMemberX()->relationManyToMany(pData, sKey, sExtraTable, sForeignKeyOwner, sForeignKeyDataType); }
-
-template <class T>
-template <typename V, typename U>
-IxSqlRelation * QxClass<T>::relationManyToMany(V U::* pData, const QString & sKey, const QString & sExtraTable, const QString & sForeignKeyOwner, const QString & sForeignKeyDataType, long lVersion)
+IxSqlRelation * QxClass<T>::relationManyToMany(V U::* pData, const QString & sKey, const QString & sExtraTable, const QString & sForeignKeyOwner, const QString & sForeignKeyDataType, long lVersion /* = 0 */)
 { return this->dataMemberX()->relationManyToMany(pData, sKey, sExtraTable, sForeignKeyOwner, sForeignKeyDataType, lVersion); }
 
 template <class T>
 IxFunction * QxClass<T>::insertFct(IxFunction_ptr pFct, const QString & sKey)
 {
-   if (! m_pFctMemberX || sKey.isEmpty() || m_pFctMemberX->exist(sKey)) { qAssert(false); return NULL; }
-   bool bInsertOk = m_pFctMemberX->insert(sKey, pFct);
+   if (! this->getFctMemberX() || sKey.isEmpty() || this->getFctMemberX()->exist(sKey)) { qAssert(false); return NULL; }
+   bool bInsertOk = this->getFctMemberX()->insert(sKey, pFct);
    if (bInsertOk) { pFct->setKey(sKey); }
    return (bInsertOk ? pFct.get() : NULL);
 }
@@ -134,8 +103,8 @@ IxFunction * QxClass<T>::insertFct(IxFunction_ptr pFct, const QString & sKey)
 template <class T>
 IxFunction * QxClass<T>::insertFctStatic(IxFunction_ptr pFct, const QString & sKey)
 {
-   if (! m_pFctStaticX || sKey.isEmpty() || m_pFctStaticX->exist(sKey)) { qAssert(false); return NULL; }
-   bool bInsertOk = m_pFctStaticX->insert(sKey, pFct);
+   if (! this->getFctStaticX() || sKey.isEmpty() || this->getFctStaticX()->exist(sKey)) { qAssert(false); return NULL; }
+   bool bInsertOk = this->getFctStaticX()->insert(sKey, pFct);
    if (bInsertOk) { pFct->setKey(sKey); }
    return (bInsertOk ? pFct.get() : NULL);
 }
@@ -241,10 +210,10 @@ IxFunction * QxClass<T>::fctStatic_9(const typename QxFunction_9<void, R, P1, P2
 { return this->insertFctStatic(qx::function::bind_fct_9<void, R, P1, P2, P3, P4, P5, P6, P7, P8, P9>(fct), sKey); }
 
 template <> QX_GCC_WORKAROUND_TEMPLATE_SPEC_INLINE
-QxClass<qx::trait::no_base_class_defined>::QxClass() : IxClass(), QxSingleton< QxClass<qx::trait::no_base_class_defined> >("qx::QxClass_no_base_class_defined") { setName("qx::trait::no_base_class_defined"); m_bFinalClass = true; }
+QxClass<qx::trait::no_base_class_defined>::QxClass() : IxClass(), QxSingleton< QxClass<qx::trait::no_base_class_defined> >("qx::QxClass_no_base_class_defined") { setName("qx::trait::no_base_class_defined"); setFinalClass(true); }
 
 template <> QX_GCC_WORKAROUND_TEMPLATE_SPEC_INLINE
-QxClass<QObject>::QxClass() : IxClass(), QxSingleton< QxClass<QObject> >("qx::QxClass_QObject") { m_sKey = "QObject"; setName("QObject"); m_bFinalClass = true; }
+QxClass<QObject>::QxClass() : IxClass(), QxSingleton< QxClass<QObject> >("qx::QxClass_QObject") { setKey("QObject"); setName("QObject"); setFinalClass(true); }
 
 template <> QX_GCC_WORKAROUND_TEMPLATE_SPEC_INLINE
 void QxClass<qx::trait::no_base_class_defined>::registerClass() { ; }

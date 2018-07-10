@@ -17,6 +17,7 @@ TARGET = dll2d
 TARGET = dll2
 } # CONFIG(debug, debug|release)
 
+LIBS += -L"../../../../QxOrm/lib"
 LIBS += -L"../../../../QxOrm/test/_bin"
 
 CONFIG(debug, debug|release) {

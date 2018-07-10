@@ -36,8 +36,6 @@
 #pragma once
 #endif
 
-#include <boost/static_assert.hpp>
-
 #include <QtSql/qsqlquery.h>
 
 #include <QxDao/IxSqlQueryBuilder.h>

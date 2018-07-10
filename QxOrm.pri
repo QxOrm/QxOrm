@@ -29,6 +29,35 @@
 ##
 #############################################################################
 
+###########################################
+# QxOrm library requires a C++11 compiler #
+###########################################
+
+# Qt framework requires a C++11 compiler since version Qt 5.7
+# So for all previous Qt versions, we need to define CONFIG += c++11
+# Please note that QxOrm library doesn't require a full compliant C++11 compiler : for example, QxOrm library can be built and used with MSVC 2012, GCC 4.5 or Clang 3.2
+
+lessThan(QT_MAJOR_VERSION, 5) {
+CONFIG += c++11
+# QMAKE_CXXFLAGS += -std=c++11
+} else {
+equals(QT_MAJOR_VERSION, 5) {
+lessThan(QT_MINOR_VERSION, 7) {
+CONFIG += c++11
+} # lessThan(QT_MINOR_VERSION, 7)
+} # equals(QT_MAJOR_VERSION, 5)
+} # lessThan(QT_MAJOR_VERSION, 5)
+
+###########################################
+# Boost Header-Only Dependency (optional) #
+###########################################
+
+# Since QxOrm 1.4.4, QxOrm library doesn't depend on boost framework anymore (the boost dependency has been fully removed, replaced by some C++11 features)
+# So QxOrm library is now a pure Qt library which depends only on QtCore and QtSql by default
+# QxOrm library still supports some boost classes (boost smart-pointers, unordered containers, boost::optional, etc...) : you have to define _QX_ENABLE_BOOST compilation option to enable these features
+
+# DEFINES += _QX_ENABLE_BOOST
+
 ############################################################
 # Boost Serialization Shared Library Dependency (optional) #
 ############################################################
@@ -41,6 +70,12 @@
 # Other note : to persist containers in database (not relationships, for example : std::vector<int>), without _QX_ENABLE_BOOST_SERIALIZATION it is stored as QByteArray (based on QDataStream engine), with _QX_ENABLE_BOOST_SERIALIZATION it is stored as XML (based on boost serialization XML engine) => so be careful, in this case it is not compatible
 
 # DEFINES += _QX_ENABLE_BOOST_SERIALIZATION
+
+contains(DEFINES, _QX_ENABLE_BOOST_SERIALIZATION) {
+!contains(DEFINES, _QX_ENABLE_BOOST) {
+DEFINES += _QX_ENABLE_BOOST
+} # !contains(DEFINES, _QX_ENABLE_BOOST)
+} # contains(DEFINES, _QX_ENABLE_BOOST_SERIALIZATION)
 
 ######################################
 # Boost Library Configuration / Path #
@@ -55,8 +90,8 @@
 #  - QX_BOOST_LIB_WIDE_SERIALIZATION_RELEASE (optional) : your boost wide serialization module name in release mode (default is empty)
 # Note : if _QX_ENABLE_BOOST_SERIALIZATION is not defined, then the only option used is QX_BOOST_INCLUDE_PATH (other options are ignored, QxOrm just needs to know how to find boost header files)
 
+contains(DEFINES, _QX_ENABLE_BOOST) {
 isEmpty(QX_BOOST_INCLUDE_PATH) { QX_BOOST_INCLUDE_PATH = $$quote($$(BOOST_INCLUDE)) }
-
 contains(DEFINES, _QX_ENABLE_BOOST_SERIALIZATION) {
 
 isEmpty(QX_BOOST_LIB_PATH) { QX_BOOST_LIB_PATH = $$quote($$(BOOST_LIB)) }
@@ -66,11 +101,13 @@ isEmpty(QX_BOOST_LIB_SERIALIZATION_RELEASE) { QX_BOOST_LIB_SERIALIZATION_RELEASE
 # isEmpty(QX_BOOST_LIB_WIDE_SERIALIZATION_RELEASE) { QX_BOOST_LIB_WIDE_SERIALIZATION_RELEASE = "$$(BOOST_LIB_WIDE_SERIALIZATION_RELEASE)" }
 
 } # contains(DEFINES, _QX_ENABLE_BOOST_SERIALIZATION)
+} # contains(DEFINES, _QX_ENABLE_BOOST)
 
 ####################################
 # Check Boost Configuration / Path #
 ####################################
 
+contains(DEFINES, _QX_ENABLE_BOOST) {
 isEmpty(QX_BOOST_INCLUDE_PATH) {
 error("Error in QxOrm.pri configuration file : QX_BOOST_INCLUDE_PATH variable is empty, please define in QX_BOOST_INCLUDE_PATH variable where boost header files *.hpp are located, or define an environment variable named BOOST_INCLUDE (read QxOrm.pri configuration file for more details)")
 } # isEmpty(QX_BOOST_INCLUDE_PATH)
@@ -85,6 +122,7 @@ QX_CHECK_BOOST_INCLUDE_PATH = $$replace(QX_CHECK_BOOST_INCLUDE_PATH, \\, /)
 message("Check if boost header file exists : $${QX_CHECK_BOOST_INCLUDE_PATH}")
 error("Error in QxOrm.pri configuration file : QX_BOOST_INCLUDE_PATH variable is not valid ($${QX_BOOST_INCLUDE_PATH}), please define in QX_BOOST_INCLUDE_PATH variable where boost header files *.hpp are located, or define an environment variable named BOOST_INCLUDE (read QxOrm.pri configuration file for more details)")
 } # !exists($${QX_CHECK_BOOST_INCLUDE_PATH})
+} # contains(DEFINES, _QX_ENABLE_BOOST)
 
 ############################
 # Qt GUI Module Dependency #
@@ -112,22 +150,6 @@ QT += gui
 contains(DEFINES, _QX_ENABLE_QT_NETWORK) {
 QT += network
 } # contains(DEFINES, _QX_ENABLE_QT_NETWORK)
-
-#######################################
-# C++11 Smart Pointers And Containers #
-#######################################
-
-# By default, QxOrm library supports smart pointers and containers of Qt library and boost library : QHash, QList, QSharedPointer, boost::shared_ptr, boost::unordered_map, etc...
-# QxOrm library supports also by default containers of previous C++03 standard library : std::vector, std::list, std::map, std::set
-# If you want to enable smart pointers and containers of the new C++11 standard library, you can define the compilation options _QX_CPP_11_SMART_PTR, _QX_CPP_11_CONTAINER and _QX_CPP_11_TUPLE :
-# - With _QX_CPP_11_SMART_PTR : std::unique_ptr, std::shared_ptr, std::weak_ptr
-# - With _QX_CPP_11_CONTAINER : std::unordered_map, std::unordered_set, std::unordered_multimap, std::unordered_multiset
-# - With _QX_CPP_11_TUPLE : std::tuple
-
-# CONFIG += c++11
-# DEFINES += _QX_CPP_11_SMART_PTR
-# DEFINES += _QX_CPP_11_CONTAINER
-# DEFINES += _QX_CPP_11_TUPLE
 
 ############################################
 # QxOrm Library Boost Serialization Engine #
@@ -160,33 +182,21 @@ QT += sql
 CONFIG += debug_and_release
 DEPENDPATH += .
 INCLUDEPATH += ./include
-INCLUDEPATH += $${QX_BOOST_INCLUDE_PATH}
 MOC_DIR = ./qt/moc
 RCC_DIR = ./qt/rcc/src
 UI_DIR = ./qt/ui
 UI_HEADERS_DIR = ./qt/ui/include
 UI_SOURCES_DIR = ./qt/ui/src
 
+contains(DEFINES, _QX_ENABLE_BOOST) {
+INCLUDEPATH += $${QX_BOOST_INCLUDE_PATH}
+} # contains(DEFINES, _QX_ENABLE_BOOST)
+
 CONFIG(debug, debug|release) {
 DEFINES += _QX_MODE_DEBUG
 } else {
 DEFINES += _QX_MODE_RELEASE
 } # CONFIG(debug, debug|release)
-
-#############################
-# Compiler / Linker Options #
-#############################
-
-win32 {
-CONFIG(debug, debug|release) {
-} else {
-DEFINES += NDEBUG
-win32-msvc2005: QMAKE_LFLAGS += /OPT:NOREF
-win32-msvc2008: QMAKE_LFLAGS += /OPT:NOREF
-win32-msvc2010: QMAKE_LFLAGS += /OPT:NOREF
-} # CONFIG(debug, debug|release)
-win32-g++: QMAKE_LFLAGS += -Wl,-export-all-symbols -Wl,-enable-auto-import
-} # win32
 
 #######################
 # Externals Libraries #
@@ -247,7 +257,6 @@ CONFIG += precompile_header
 # You can build QxOrm library without C++ RTTI type information defining the compilation option : _QX_NO_RTTI
 # With _QX_NO_RTTI compilation option, dynamic_cast and typeid from QxOrm library are removed
 # Note : you cannot define this compilation option if you enable boost serialization feature (_QX_ENABLE_BOOST_SERIALIZATION)
-# Other note : _QX_NO_RTTI requires at least boost 1.57 (because boost::any has removed typeid dependency since boost 1.57)
 # Other note : it seems that on Unix system, CONFIG += rtti_off doesn't add the compilation flag -fno-rtti for GCC (there is a Qt bug report here : https://bugreports.qt.io/browse/QTBUG-26595), so in this case, just add the compilation flag to QMAKE_CXXFLAGS and QMAKE_CFLAGS variables
 
 # DEFINES += _QX_NO_RTTI
@@ -301,3 +310,13 @@ contains(DEFINES, _QX_UNITY_BUILD) {
 win32-msvc*: QMAKE_CXXFLAGS += -bigobj
 # win32-g++: QMAKE_CXXFLAGS += -Wa,-mbig-obj
 } # contains(DEFINES, _QX_UNITY_BUILD)
+
+##########################################
+# More Efficient Qt QString Construction #
+##########################################
+
+# Qt provides some optimizations for QString class (construction, concatenation, etc...)
+# More details about these optimizations are available on Qt web site : http://doc.qt.io/qt-5/qstring.html#more-efficient-string-construction
+# To enable these optimizations, you can define QT_USE_QSTRINGBUILDER compilation option
+
+# DEFINES *= QT_USE_QSTRINGBUILDER

@@ -36,12 +36,6 @@
 #pragma once
 #endif
 
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/logical.hpp>
-#include <boost/type_traits/is_pointer.hpp>
-#include <boost/type_traits/is_enum.hpp>
-#include <boost/static_assert.hpp>
-
 #include <QxConvert/QxConvert.h>
 #include <QxCommon/QxBool.h>
 
@@ -174,19 +168,8 @@ struct QxConvertHelper_ToString<T, qx::cvt::detail::helper::QxConvertHelper_Gene
    static inline QString toString(const T & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
    {
       Q_UNUSED(t); Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx);
-      BOOST_STATIC_ASSERT(qx_need_to_specialize_template_convert_to_string_from_string); // If a compilation error occurred here : you have to specialize template 'qx::cvt::detail::QxConvert_ToString< MyType >'
+      static_assert(qx_need_to_specialize_template_convert_to_string_from_string, "qx_need_to_specialize_template_convert_to_string_from_string"); // If a compilation error occurred here : you have to specialize template 'qx::cvt::detail::QxConvert_ToString< MyType >'
       return QString();
-
-      /*
-      std::string s;
-      try { s = boost::lexical_cast<std::string>(t); }
-      catch (...) { qDebug("[QxOrm] %s", "'QxConvertHelper_ToString::toString()' unknown error calling 'boost::lexical_cast<std::string>()'"); s = ""; }
-#ifndef QT_NO_STL
-      return QString::fromStdString(s);
-#else // QT_NO_STL
-      return QString::fromLatin1(s.data(), int(s.size()));
-#endif // QT_NO_STL
-      */
    }
 
 };
@@ -200,18 +183,8 @@ struct QxConvertHelper_FromString<T, qx::cvt::detail::helper::QxConvertHelper_Ge
    static inline qx_bool fromString(const QString & s, T & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
    {
       Q_UNUSED(s); Q_UNUSED(t); Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx);
-      BOOST_STATIC_ASSERT(qx_need_to_specialize_template_convert_to_string_from_string); // If a compilation error occurred here : you have to specialize template 'qx::cvt::detail::QxConvert_FromString< MyType >'
+      static_assert(qx_need_to_specialize_template_convert_to_string_from_string, "qx_need_to_specialize_template_convert_to_string_from_string"); // If a compilation error occurred here : you have to specialize template 'qx::cvt::detail::QxConvert_FromString< MyType >'
       return qx_bool(true);
-
-      /*
-#ifndef QT_NO_STL
-      try { t = boost::lexical_cast<T>(s.toStdString()); }
-#else // QT_NO_STL
-      try { std::string tmp(s.toLatin1().constData()); t = boost::lexical_cast<T>(tmp); }
-#endif // QT_NO_STL
-      catch (...) { qDebug("[QxOrm] %s", "'QxConvertHelper_FromString::fromString()' unknown error calling 'boost::lexical_cast<T>()'"); return qx_bool(false); }
-      return qx_bool(true);
-      */
    }
 
 };
@@ -478,11 +451,11 @@ struct QxConvertHelper
 
 private:
 
-   typedef typename boost::mpl::if_c< boost::is_pointer<T>::value, qx::cvt::detail::helper::QxConvertHelper_Ptr, qx::cvt::detail::helper::QxConvertHelper_Generic >::type type_str_cvt_helper_1;
-   typedef typename boost::mpl::if_c< qx::trait::is_smart_ptr<T>::value, qx::cvt::detail::helper::QxConvertHelper_Ptr, type_str_cvt_helper_1 >::type type_str_cvt_helper_2;
-   typedef typename boost::mpl::if_c< qx::trait::is_container<T>::value, qx::cvt::detail::helper::QxConvertHelper_Container, type_str_cvt_helper_2 >::type type_str_cvt_helper_3;
-   typedef typename boost::mpl::if_c< qx::trait::is_qx_registered<T>::value, qx::cvt::detail::helper::QxConvertHelper_Registered, type_str_cvt_helper_3 >::type type_str_cvt_helper_4;
-   typedef typename boost::mpl::if_c< boost::is_enum<T>::value, qx::cvt::detail::helper::QxConvertHelper_Enum, type_str_cvt_helper_4 >::type type_str_cvt_helper_5;
+   typedef typename std::conditional< std::is_pointer<T>::value, qx::cvt::detail::helper::QxConvertHelper_Ptr, qx::cvt::detail::helper::QxConvertHelper_Generic >::type type_str_cvt_helper_1;
+   typedef typename std::conditional< qx::trait::is_smart_ptr<T>::value, qx::cvt::detail::helper::QxConvertHelper_Ptr, type_str_cvt_helper_1 >::type type_str_cvt_helper_2;
+   typedef typename std::conditional< qx::trait::is_container<T>::value, qx::cvt::detail::helper::QxConvertHelper_Container, type_str_cvt_helper_2 >::type type_str_cvt_helper_3;
+   typedef typename std::conditional< qx::trait::is_qx_registered<T>::value, qx::cvt::detail::helper::QxConvertHelper_Registered, type_str_cvt_helper_3 >::type type_str_cvt_helper_4;
+   typedef typename std::conditional< std::is_enum<T>::value, qx::cvt::detail::helper::QxConvertHelper_Enum, type_str_cvt_helper_4 >::type type_str_cvt_helper_5;
 
 public:
 

@@ -37,8 +37,6 @@
 #pragma once
 #endif
 
-#include <boost/noncopyable.hpp>
-
 #include <QxCommon/QxConfig.h>
 
 #include <QxSerialize/boost/QxSerializeInclude.h>
@@ -49,7 +47,7 @@ virtual void helper(ArchiveOut & ar) const = 0;
 
 namespace qx {
 
-class QX_DLL_EXPORT IxBoostSerializeRegisterHelper : private boost::noncopyable
+class QX_DLL_EXPORT IxBoostSerializeRegisterHelper
 {
 
 private:
@@ -96,6 +94,11 @@ public:
 #if _QX_SERIALIZE_WIDE_XML
    QX_IX_BOOST_SERIALIZE_REGISTER_HELPER_PURE_VIRTUAL_ARCHIVE(boost::archive::xml_wiarchive, boost::archive::xml_woarchive)
 #endif // _QX_SERIALIZE_WIDE_XML
+
+private:
+
+   IxBoostSerializeRegisterHelper(const IxBoostSerializeRegisterHelper & other) { Q_UNUSED(other); }
+   IxBoostSerializeRegisterHelper & operator=(const IxBoostSerializeRegisterHelper & other) { Q_UNUSED(other); return (* this); }
 
 };
 

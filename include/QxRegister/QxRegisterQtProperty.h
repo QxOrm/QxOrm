@@ -43,8 +43,6 @@
  * \brief Register automatically Qt meta-property defined with Q_PROPERTY() macro into QxOrm context
  */
 
-#include <boost/static_assert.hpp>
-
 #include <QtCore/qmetaobject.h>
 #include <QtCore/qmetatype.h>
 
@@ -62,7 +60,7 @@ namespace qx {
 template <typename T>
 void register_all_qt_properties(QxClass<T> & t, const QString & sPropertyId)
 {
-   BOOST_STATIC_ASSERT(qx::trait::qt_meta_object<T>::is_valid);
+   static_assert(qx::trait::qt_meta_object<T>::is_valid, "qx::trait::qt_meta_object<T>::is_valid");
 
    const QMetaObject * pMetaObject = qx::trait::qt_meta_object<T>::get();
    int iIndexId = (sPropertyId.isEmpty() ? -2 : (pMetaObject ? pMetaObject->indexOfProperty(qPrintable(sPropertyId)) : -1));

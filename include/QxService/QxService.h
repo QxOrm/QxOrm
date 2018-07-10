@@ -63,27 +63,22 @@ class QxService : public IxService
 
 protected:
 
-   enum { is_input_parameter = boost::is_base_of<IxParameter, INPUT>::value };
-   enum { is_output_parameter = boost::is_base_of<IxParameter, OUTPUT>::value };
+   enum { is_input_parameter = std::is_base_of<IxParameter, INPUT>::value };
+   enum { is_output_parameter = std::is_base_of<IxParameter, OUTPUT>::value };
    enum { is_input_registered = qx::trait::is_qx_registered<INPUT>::value };
    enum { is_output_registered = qx::trait::is_qx_registered<OUTPUT>::value };
    enum { is_valid_parameter = (is_input_parameter && is_output_parameter && is_input_registered && is_output_registered) };
 
-   typedef qx_shared_ptr<INPUT> INPUT_ptr;
-   typedef qx_shared_ptr<OUTPUT> OUTPUT_ptr;
+   typedef std::shared_ptr<INPUT> INPUT_ptr;
+   typedef std::shared_ptr<OUTPUT> OUTPUT_ptr;
 
 public:
 
-   QxService(const QString & sServiceName) : IxService(sServiceName) { BOOST_STATIC_ASSERT(is_valid_parameter); }
+   QxService(const QString & sServiceName) : IxService(sServiceName) { static_assert(is_valid_parameter, "is_valid_parameter"); }
    virtual ~QxService() { ; }
 
-#if (defined(_QX_CPP_11_SMART_PTR) && !defined(BOOST_NO_CXX11_SMART_PTR))
    INPUT_ptr getInputParameter() const    { return std::static_pointer_cast<INPUT>(m_pInputParameter); }
    OUTPUT_ptr getOutputParameter() const  { return std::static_pointer_cast<OUTPUT>(m_pOutputParameter); }
-#else // (defined(_QX_CPP_11_SMART_PTR) && !defined(BOOST_NO_CXX11_SMART_PTR))
-   INPUT_ptr getInputParameter() const    { return boost::static_pointer_cast<INPUT>(m_pInputParameter); }
-   OUTPUT_ptr getOutputParameter() const  { return boost::static_pointer_cast<OUTPUT>(m_pOutputParameter); }
-#endif // (defined(_QX_CPP_11_SMART_PTR) && !defined(BOOST_NO_CXX11_SMART_PTR))
 
    virtual void registerClass() const { qx::QxClass<INPUT>::getSingleton(); qx::QxClass<OUTPUT>::getSingleton(); }
 

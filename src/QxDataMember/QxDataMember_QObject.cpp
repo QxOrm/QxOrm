@@ -51,12 +51,12 @@ namespace qx {
 
 QxDataMember_QObject::QxDataMember_QObject(const QMetaObject * pMetaObject, const QString & sKey) : IxDataMember(sKey), m_metaObject(pMetaObject)
 {
-   m_bAccessDataPointer = false;
+   setAccessDataPointer(false);
    if (! m_metaObject) { qAssert(false); return; }
    int index = m_metaObject->indexOfProperty(qPrintable(sKey));
    if (index == -1) { qAssert(false); return; }
    m_metaProperty = m_metaObject->property(index);
-   m_sSqlType = QxClassX::getSqlTypeByClassName(m_metaProperty.typeName());
+   setSqlType(QxClassX::getSqlTypeByClassName(m_metaProperty.typeName()));
 }
 
 bool QxDataMember_QObject::isEqual(const void * pOwner1, const void * pOwner2) const
@@ -108,20 +108,20 @@ qx_bool QxDataMember_QObject::fromJson(void * pOwner, const QJsonValue & j, cons
 
 #endif // _QX_NO_JSON
 
-boost::any QxDataMember_QObject::getDataPtr(const void * pOwner) const
+qx::any QxDataMember_QObject::getDataPtr(const void * pOwner) const
 {
    Q_UNUSED(pOwner);
    qDebug("[QxOrm] qx::QxDataMember_QObject::getDataPtr() : '%s'", "cannot access to the data-member pointer with Qt introspection engine");
    qAssert(false);
-   return boost::any();
+   return qx::any();
 }
 
-boost::any QxDataMember_QObject::getDataPtr(void * pOwner)
+qx::any QxDataMember_QObject::getDataPtr(void * pOwner)
 {
    Q_UNUSED(pOwner);
    qDebug("[QxOrm] qx::QxDataMember_QObject::getDataPtr() : '%s'", "cannot access to the data-member pointer with Qt introspection engine");
    qAssert(false);
-   return boost::any();
+   return qx::any();
 }
 
 void * QxDataMember_QObject::getDataVoidPtr(const void * pOwner) const

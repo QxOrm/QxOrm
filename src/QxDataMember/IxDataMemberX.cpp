@@ -39,19 +39,54 @@
 
 namespace qx {
 
-QString IxDataMemberX::getName() const
-{ return (m_pClass ? m_pClass->getName() : ""); }
+struct IxDataMemberX::IxDataMemberXImpl
+{
 
-const char * IxDataMemberX::getNamePtr() const
-{ return (m_pClass ? m_pClass->getNamePtr() : NULL); }
+   QxCollection<QString, IxDataMember *> m_lstDataMember;   //!< Collection of IxDataMember
+   IxClass * m_pClass;                                      //!< Class definition
+   IxDataMember * m_pDataMemberId;                          //!< Data member id with primary key type
 
-QString IxDataMemberX::getDescription() const
-{ return (m_pClass ? m_pClass->getDescription() : ""); }
+   IxDataMemberXImpl() : m_pClass(NULL), m_pDataMemberId(NULL) { ; }
+   ~IxDataMemberXImpl() { ; }
 
-long IxDataMemberX::getVersion() const
-{ return (m_pClass ? m_pClass->getVersion() : -1); }
+   void deleteAllIxDataMember() { for (auto itr = m_lstDataMember.begin(); itr != m_lstDataMember.end(); ++itr) { delete itr->second; } }
 
-qx::dao::strategy::inheritance IxDataMemberX::getDaoStrategy() const
-{ return (m_pClass ? m_pClass->getDaoStrategy() : qx::dao::strategy::concrete_table_inheritance); }
+};
+
+IxDataMemberX::IxDataMemberX() : m_pImpl(new IxDataMemberXImpl()) { ; }
+
+IxDataMemberX::~IxDataMemberX() { m_pImpl->deleteAllIxDataMember(); }
+
+IxClass * IxDataMemberX::getClass() const { return m_pImpl->m_pClass; }
+
+void IxDataMemberX::setClass(IxClass * p) { m_pImpl->m_pClass = p; }
+
+QString IxDataMemberX::getName() const { return (m_pImpl->m_pClass ? m_pImpl->m_pClass->getName() : ""); }
+
+const char * IxDataMemberX::getNamePtr() const { return (m_pImpl->m_pClass ? m_pImpl->m_pClass->getNamePtr() : NULL); }
+
+QString IxDataMemberX::getDescription() const { return (m_pImpl->m_pClass ? m_pImpl->m_pClass->getDescription() : ""); }
+
+long IxDataMemberX::getVersion() const { return (m_pImpl->m_pClass ? m_pImpl->m_pClass->getVersion() : -1); }
+
+qx::dao::strategy::inheritance IxDataMemberX::getDaoStrategy() const { return (m_pImpl->m_pClass ? m_pImpl->m_pClass->getDaoStrategy() : qx::dao::strategy::concrete_table_inheritance); }
+
+long IxDataMemberX::count() const { return m_pImpl->m_lstDataMember.count(); }
+
+long IxDataMemberX::size() const { return this->count(); }
+
+bool IxDataMemberX::exist(const QString & sKey) const { return m_pImpl->m_lstDataMember.exist(sKey); }
+
+IxDataMember * IxDataMemberX::get(long l) const { return m_pImpl->m_lstDataMember.getByIndex(l); }
+
+IxDataMember * IxDataMemberX::get(const QString & s) const { return m_pImpl->m_lstDataMember.getByKey(s); }
+
+IxDataMember * IxDataMemberX::getId() const { return m_pImpl->m_pDataMemberId; }
+
+void IxDataMemberX::setId(IxDataMember * p) { m_pImpl->m_pDataMemberId = p; }
+
+QxCollection<QString, IxDataMember *> & IxDataMemberX::getListDataMemberRef() { return m_pImpl->m_lstDataMember; }
+
+const QxCollection<QString, IxDataMember *> & IxDataMemberX::getListDataMemberRef() const { return m_pImpl->m_lstDataMember; }
 
 } // namespace qx

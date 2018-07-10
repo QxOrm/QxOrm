@@ -58,7 +58,7 @@ class QxFunction_8 : public IxFunction
 
 public:
 
-   typedef boost::function<R (Owner *, P1, P2, P3, P4, P5, P6, P7, P8)> type_fct;
+   typedef std::function<R (Owner *, P1, P2, P3, P4, P5, P6, P7, P8)> type_fct;
    typedef typename qx::trait::remove_attr<P1, false>::type type_P1;
    typedef typename qx::trait::remove_attr<P2, false>::type type_P2;
    typedef typename qx::trait::remove_attr<P3, false>::type type_P3;
@@ -78,7 +78,7 @@ private:
    template <class T, bool bReturnValue /* = false */>
    struct QxInvokerFct
    {
-      static inline qx_bool invoke(void * pOwner, const T & params, boost::any * ret, const QxFunction_8 * pThis)
+      static inline qx_bool invoke(void * pOwner, const T & params, qx::any * ret, const QxFunction_8 * pThis)
       {
          QX_FUNCTION_INVOKE_START_WITH_OWNER();
          QX_FUNCTION_FETCH_PARAM(type_P1, p1, get_param_1);
@@ -97,7 +97,7 @@ private:
    template <class T>
    struct QxInvokerFct<T, true>
    {
-      static inline qx_bool invoke(void * pOwner, const T & params, boost::any * ret, const QxFunction_8 * pThis)
+      static inline qx_bool invoke(void * pOwner, const T & params, qx::any * ret, const QxFunction_8 * pThis)
       {
          QX_FUNCTION_INVOKE_START_WITH_OWNER();
          QX_FUNCTION_FETCH_PARAM(type_P1, p1, get_param_1);
@@ -108,7 +108,7 @@ private:
          QX_FUNCTION_FETCH_PARAM(type_P6, p6, get_param_6);
          QX_FUNCTION_FETCH_PARAM(type_P7, p7, get_param_7);
          QX_FUNCTION_FETCH_PARAM(type_P8, p8, get_param_8);
-         try { R retTmp = pThis->m_fct(static_cast<Owner *>(pOwner), p1, p2, p3, p4, p5, p6, p7, p8); if (ret) { (* ret) = boost::any(retTmp); } }
+         try { R retTmp = pThis->m_fct(static_cast<Owner *>(pOwner), p1, p2, p3, p4, p5, p6, p7, p8); if (ret) { (* ret) = qx::any(retTmp); } }
          QX_FUNCTION_CATCH_AND_RETURN_INVOKE();
       }
    };
@@ -121,7 +121,7 @@ class QxFunction_8<void, R, P1, P2, P3, P4, P5, P6, P7, P8> : public IxFunction
 
 public:
 
-   typedef boost::function<R (P1, P2, P3, P4, P5, P6, P7, P8)> type_fct;
+   typedef std::function<R (P1, P2, P3, P4, P5, P6, P7, P8)> type_fct;
    typedef typename qx::trait::remove_attr<P1, false>::type type_P1;
    typedef typename qx::trait::remove_attr<P2, false>::type type_P2;
    typedef typename qx::trait::remove_attr<P3, false>::type type_P3;
@@ -141,7 +141,7 @@ private:
    template <class T, bool bReturnValue /* = false */>
    struct QxInvokerFct
    {
-      static inline qx_bool invoke(const T & params, boost::any * ret, const QxFunction_8 * pThis)
+      static inline qx_bool invoke(const T & params, qx::any * ret, const QxFunction_8 * pThis)
       {
          QX_FUNCTION_INVOKE_START_WITHOUT_OWNER();
          QX_FUNCTION_FETCH_PARAM(type_P1, p1, get_param_1);
@@ -160,7 +160,7 @@ private:
    template <class T>
    struct QxInvokerFct<T, true>
    {
-      static inline qx_bool invoke(const T & params, boost::any * ret, const QxFunction_8 * pThis)
+      static inline qx_bool invoke(const T & params, qx::any * ret, const QxFunction_8 * pThis)
       {
          QX_FUNCTION_INVOKE_START_WITHOUT_OWNER();
          QX_FUNCTION_FETCH_PARAM(type_P1, p1, get_param_1);
@@ -171,7 +171,7 @@ private:
          QX_FUNCTION_FETCH_PARAM(type_P6, p6, get_param_6);
          QX_FUNCTION_FETCH_PARAM(type_P7, p7, get_param_7);
          QX_FUNCTION_FETCH_PARAM(type_P8, p8, get_param_8);
-         try { R retTmp = pThis->m_fct(p1, p2, p3, p4, p5, p6, p7, p8); if (ret) { (* ret) = boost::any(retTmp); } }
+         try { R retTmp = pThis->m_fct(p1, p2, p3, p4, p5, p6, p7, p8); if (ret) { (* ret) = qx::any(retTmp); } }
          QX_FUNCTION_CATCH_AND_RETURN_INVOKE();
       }
    };
@@ -183,8 +183,8 @@ namespace function {
 template <class Owner, typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8>
 IxFunction_ptr bind_fct_8(const typename QxFunction_8<Owner, R, P1, P2, P3, P4, P5, P6, P7, P8>::type_fct & fct)
 {
-   typedef boost::is_same<Owner, void> qx_verify_owner_tmp;
-   BOOST_STATIC_ASSERT(qx_verify_owner_tmp::value);
+   typedef std::is_same<Owner, void> qx_verify_owner_tmp;
+   static_assert(qx_verify_owner_tmp::value, "qx_verify_owner_tmp::value");
    IxFunction_ptr ptr; ptr.reset(new QxFunction_8<void, R, P1, P2, P3, P4, P5, P6, P7, P8>(fct));
    return ptr;
 }
@@ -192,8 +192,8 @@ IxFunction_ptr bind_fct_8(const typename QxFunction_8<Owner, R, P1, P2, P3, P4, 
 template <class Owner, typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8>
 IxFunction_ptr bind_member_fct_8(const typename QxFunction_8<Owner, R, P1, P2, P3, P4, P5, P6, P7, P8>::type_fct & fct)
 {
-   typedef boost::is_same<Owner, void> qx_verify_owner_tmp;
-   BOOST_STATIC_ASSERT(! qx_verify_owner_tmp::value);
+   typedef std::is_same<Owner, void> qx_verify_owner_tmp;
+   static_assert(! qx_verify_owner_tmp::value, "! qx_verify_owner_tmp::value");
    IxFunction_ptr ptr; ptr.reset(new QxFunction_8<Owner, R, P1, P2, P3, P4, P5, P6, P7, P8>(fct));
    return ptr;
 }

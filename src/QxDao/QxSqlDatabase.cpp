@@ -35,8 +35,6 @@
 
 #include <QxDao/QxSqlGenerator/QxSqlGenerator.h>
 
-#include <boost/type_traits/is_pointer.hpp>
-
 #include <QxMemLeak/mem_leak.h>
 
 QX_DLL_EXPORT_QX_SINGLETON_CPP(qx::QxSqlDatabase)
@@ -110,7 +108,7 @@ struct CvtQtHandle<T, true>
 QSqlDatabase QxSqlDatabase::createDatabase(QSqlError & dbError)
 {
    Qt::HANDLE lCurrThreadId = QThread::currentThreadId();
-   QString sCurrThreadId = qx::helper::CvtQtHandle<Qt::HANDLE, boost::is_pointer<Qt::HANDLE>::value>::toString(lCurrThreadId);
+   QString sCurrThreadId = qx::helper::CvtQtHandle<Qt::HANDLE, std::is_pointer<Qt::HANDLE>::value>::toString(lCurrThreadId);
    QString sDbKeyNew = QUuid::createUuid().toString();
    dbError = QSqlError();
    bool bError = false;
@@ -132,7 +130,9 @@ QSqlDatabase QxSqlDatabase::createDatabase(QSqlError & dbError)
    if (bError) { QSqlDatabase::removeDatabase(sDbKeyNew); return QSqlDatabase(); }
    m_lstDbByThread.insert(lCurrThreadId, sDbKeyNew);
    qDebug("[QxOrm] qx::QxSqlDatabase : create new database connection in thread '%s' with key '%s'", qPrintable(sCurrThreadId), qPrintable(sDbKeyNew));
-   return QSqlDatabase::database(sDbKeyNew);
+   QSqlDatabase dbconn = QSqlDatabase::database(sDbKeyNew);
+   if (m_fctDatabaseOpen) { m_fctDatabaseOpen(dbconn); }
+   return dbconn;
 }
 
 void QxSqlDatabase::displayLastError(const QSqlDatabase & db, const QString & sDesc) const

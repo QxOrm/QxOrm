@@ -45,9 +45,6 @@
 
 #include <QtCore/qhash.h>
 
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/logical.hpp>
-
 namespace qx {
 namespace trait {
 
@@ -56,19 +53,19 @@ namespace trait {
  * \brief qx::trait::is_qt_hash<T>::value : return true if T is a QHash<> container of Qt library, otherwise return false
  */
 template <typename T>
-struct is_qt_hash : public boost::mpl::false_ { ; };
+struct is_qt_hash : public std::false_type { ; };
 
 template <typename Key, typename Value>
-struct is_qt_hash< QHash<Key, Value> > : public boost::mpl::true_ { ; };
+struct is_qt_hash< QHash<Key, Value> > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_qt_hash< QHash<Key, Value> & > : public boost::mpl::true_ { ; };
+struct is_qt_hash< QHash<Key, Value> & > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_qt_hash< const QHash<Key, Value> > : public boost::mpl::true_ { ; };
+struct is_qt_hash< const QHash<Key, Value> > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_qt_hash< const QHash<Key, Value> & > : public boost::mpl::true_ { ; };
+struct is_qt_hash< const QHash<Key, Value> & > : public std::true_type { ; };
 
 } // namespace trait
 } // namespace qx

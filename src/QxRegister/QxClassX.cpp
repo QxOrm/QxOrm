@@ -89,7 +89,7 @@ void QxClassX::clear()
    m_lstClass.clear();
 }
 
-boost::any QxClassX::create(const QString & sKey)
+qx::any QxClassX::create(const QString & sKey)
 {
    return qx::create(sKey);
 }
@@ -170,25 +170,25 @@ bool QxClassX::implementIxPersistable(const QString & sKey, bool bTraceIfFalse /
    return bImplement;
 }
 
-qx_bool QxClassX::invokeVoidPtr(const QString & sClassKey, const QString & sFctKey, void * pOwner, const QString & params /* = QString() */, boost::any * ret /* = NULL */)
+qx_bool QxClassX::invokeVoidPtr(const QString & sClassKey, const QString & sFctKey, void * pOwner, const QString & params /* = QString() */, qx::any * ret /* = NULL */)
 {
    IxFunction * pFct = QxClassX::getFctMember(sClassKey, sFctKey, true);
    return ((pOwner && pFct) ? pFct->invoke(pOwner, params, ret) : qx_bool(false));
 }
 
-qx_bool QxClassX::invokeVoidPtr(const QString & sClassKey, const QString & sFctKey, void * pOwner, const type_any_params & params, boost::any * ret /* = NULL */)
+qx_bool QxClassX::invokeVoidPtr(const QString & sClassKey, const QString & sFctKey, void * pOwner, const type_any_params & params, qx::any * ret /* = NULL */)
 {
    IxFunction * pFct = QxClassX::getFctMember(sClassKey, sFctKey, true);
    return ((pOwner && pFct) ? pFct->invoke(pOwner, params, ret) : qx_bool(false));
 }
 
-qx_bool QxClassX::invokeStatic(const QString & sClassKey, const QString & sFctKey, const QString & params /* = QString() */, boost::any * ret /* = NULL */)
+qx_bool QxClassX::invokeStatic(const QString & sClassKey, const QString & sFctKey, const QString & params /* = QString() */, qx::any * ret /* = NULL */)
 {
    IxFunction * pFct = QxClassX::getFctStatic(sClassKey, sFctKey, true);
    return (pFct ? pFct->invoke(params, ret) : qx_bool(false));
 }
 
-qx_bool QxClassX::invokeStatic(const QString & sClassKey, const QString & sFctKey, const type_any_params & params, boost::any * ret /* = NULL */)
+qx_bool QxClassX::invokeStatic(const QString & sClassKey, const QString & sFctKey, const type_any_params & params, qx::any * ret /* = NULL */)
 {
    IxFunction * pFct = QxClassX::getFctStatic(sClassKey, sFctKey, true);
    return (pFct ? pFct->invoke(params, ret) : qx_bool(false));
@@ -231,8 +231,8 @@ QString QxClassX::dumpAllClasses()
    QString sDump;
    long lCount = pAllClasses->count();
    qDebug("[QxOrm] start dump all registered classes (%ld)", lCount);
-   _foreach(IxClass * pClass, (* pAllClasses))
-   { if (pClass) { sDump += pClass->dumpClass(); } }
+   for (auto itr = pAllClasses->begin(); itr != pAllClasses->end(); ++itr)
+   { IxClass * pClass = itr->second; if (pClass) { sDump += pClass->dumpClass(); } }
    qDebug("[QxOrm] %s", "end dump all registered classes");
 
    return sDump;

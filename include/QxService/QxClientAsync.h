@@ -78,7 +78,7 @@ protected:
 
 };
 
-typedef qx_shared_ptr<QxClientAsync> QxClientAsync_ptr;
+typedef std::shared_ptr<QxClientAsync> QxClientAsync_ptr;
 
 } // namespace service
 } // namespace qx

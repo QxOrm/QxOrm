@@ -46,9 +46,6 @@
 
 #include <QtCore/qscopedpointer.h>
 
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/logical.hpp>
-
 namespace qx {
 namespace trait {
 
@@ -57,19 +54,19 @@ namespace trait {
  * \brief qx::trait::is_qt_scoped_ptr<T>::value : return true if T is a QScopedPointer<> smart-pointer of Qt library, otherwise return false
  */
 template <typename T>
-struct is_qt_scoped_ptr : public boost::mpl::false_ { ; };
+struct is_qt_scoped_ptr : public std::false_type { ; };
 
 template <typename T>
-struct is_qt_scoped_ptr< QScopedPointer<T> > : public boost::mpl::true_ { ; };
+struct is_qt_scoped_ptr< QScopedPointer<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_qt_scoped_ptr< QScopedPointer<T> & > : public boost::mpl::true_ { ; };
+struct is_qt_scoped_ptr< QScopedPointer<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_qt_scoped_ptr< const QScopedPointer<T> > : public boost::mpl::true_ { ; };
+struct is_qt_scoped_ptr< const QScopedPointer<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_qt_scoped_ptr< const QScopedPointer<T> & > : public boost::mpl::true_ { ; };
+struct is_qt_scoped_ptr< const QScopedPointer<T> & > : public std::true_type { ; };
 
 } // namespace trait
 } // namespace qx
@@ -83,7 +80,7 @@ struct is_qt_scoped_ptr< const QScopedPointer<T> & > : public boost::mpl::true_ 
 namespace qx { namespace trait {
 template <typename T>
 class is_qt_scoped_ptr
-{ public: enum { value = false }; typedef boost::mpl::false_ type; };
+{ public: enum { value = false }; typedef std::false_type type; };
 } } // namespace qx::trait
 #endif // _QX_IS_QT_SCOPED_PTR_H_
 #endif // (QT_VERSION < 0x040600)

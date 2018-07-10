@@ -74,7 +74,7 @@ protected:
 
 };
 
-typedef qx_shared_ptr<QxSqlElementTemp> QxSqlElementTemp_ptr;
+typedef std::shared_ptr<QxSqlElementTemp> QxSqlElementTemp_ptr;
 
 } // namespace detail
 } // namespace dao

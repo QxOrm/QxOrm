@@ -66,11 +66,11 @@
     <table cellspacing="0" cellpadding="1"><col><col><tbody>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow">Current version :&nbsp;</font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.3 - <a href="../doxygen/index.html" target="_blank">QxOrm library online class documentation</a></font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.4 - <a href="../doxygen/index.html" target="_blank">QxOrm library online class documentation</a></font></td>
       </tr>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow"></font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.2.1</font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.2.2</font></td>
       </tr>
     </tbody></table>
   </td>
@@ -195,8 +195,8 @@ int</span><span class="keyword"> main</span><span class="operator">(</span><span
    QApplication app<span class="operator">(</span>argc<span class="operator">,</span> argv<span class="operator">);</span><span class="comment"> // Qt application
 
    // Create 3 new drugs
-   // It is possible to use 'boost' and 'Qt' smart pointer : 'boost::shared_ptr', 'QSharedPointer', etc...
-</span><span class="keyword">   typedef</span> boost<span class="operator">::</span>shared_ptr<span class="operator">&lt;</span>drug<span class="operator">&gt;</span> drug_ptr<span class="operator">;</span>
+   // It is possible to use 'std' and 'Qt' smart pointer : 'std::shared_ptr', 'QSharedPointer', etc...
+</span><span class="keyword">   typedef</span> std<span class="operator">::</span>shared_ptr<span class="operator">&lt;</span>drug<span class="operator">&gt;</span> drug_ptr<span class="operator">;</span>
    drug_ptr d1<span class="operator">;</span> d1<span class="operator">.</span>reset<span class="operator">(</span><span class="keyword">new</span> drug<span class="operator">());</span> d1<span class="operator">-&gt;</span>name<span class="operator"> =</span><span class="string"> "name1"</span><span class="operator">;</span> d1<span class="operator">-&gt;</span>description<span class="operator"> =</span><span class="string"> "desc1"</span><span class="operator">;</span>
    drug_ptr d2<span class="operator">;</span> d2<span class="operator">.</span>reset<span class="operator">(</span><span class="keyword">new</span> drug<span class="operator">());</span> d2<span class="operator">-&gt;</span>name<span class="operator"> =</span><span class="string"> "name2"</span><span class="operator">;</span> d2<span class="operator">-&gt;</span>description<span class="operator"> =</span><span class="string"> "desc2"</span><span class="operator">;</span>
    drug_ptr d3<span class="operator">;</span> d3<span class="operator">.</span>reset<span class="operator">(</span><span class="keyword">new</span> drug<span class="operator">());</span> d3<span class="operator">-&gt;</span>name<span class="operator"> =</span><span class="string"> "name3"</span><span class="operator">;</span> d3<span class="operator">-&gt;</span>description<span class="operator"> =</span><span class="string"> "desc3"</span><span class="operator">;</span><span class="comment">
@@ -250,7 +250,7 @@ int</span><span class="keyword"> main</span><span class="operator">(</span><span
 </span>   drug_ptr d_clone<span class="operator"> =</span> qx<span class="operator">::</span>clone<span class="operator">(*</span> d1<span class="operator">);</span><span class="comment">
 
    // Create a new drug by class name (factory)
-</span>   boost<span class="operator">::</span>any d_any<span class="operator"> =</span> qx<span class="operator">::</span>create<span class="operator">(</span><span class="string">"drug"</span><span class="operator">);</span><span class="comment">
+</span>   qx<span class="operator">::</span>any d_any<span class="operator"> =</span> qx<span class="operator">::</span>create<span class="operator">(</span><span class="string">"drug"</span><span class="operator">);</span><span class="comment">
 
    // Insert drugs container into 'qx::cache'
 </span>   qx<span class="operator">::</span>cache<span class="operator">::</span>set<span class="operator">(</span><span class="string">"drugs"</span><span class="operator">,</span> lst_drug<span class="operator">);</span><span class="comment">

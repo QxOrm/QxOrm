@@ -31,7 +31,7 @@ PROJECT_NAME           = QxOrm
 # This could be handy for archiving the generated documentation or 
 # if some version control system is used.
 
-PROJECT_NUMBER         = 1.4.3
+PROJECT_NUMBER         = 1.4.4
 
 # Using the PROJECT_BRIEF tag one can provide an optional one line description 
 # for a project that appears at the top of each page and should give viewer 
@@ -1484,6 +1484,7 @@ INCLUDE_FILE_PATTERNS  =
 
 PREDEFINED             = _QX_ENABLE_QT_GUI:= \
                          _QX_ENABLE_QT_NETWORK:= \
+                         _QX_ENABLE_BOOST:= \
                          _QX_ENABLE_BOOST_SERIALIZATION:= \
                          _QX_SERIALIZE_POLYMORPHIC:=1 \
                          _QX_SERIALIZE_BINARY:=1 \

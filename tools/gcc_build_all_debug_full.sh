@@ -27,6 +27,13 @@ export BOOST_LIB_WIDE_SERIALIZATION_RELEASE=boost_wserialization-mt
 echo "-- MAKE OPTIONS : USE 8 CORE CPU TO REDUCE BUILD TIMES --"
 MAKEOPT=-j8
 
+GCCVERSION="$(gcc -dumpversion)"
+if [ "$GCCVERSION" = "4.4.1" ];
+then
+	echo "-- ADD GCC C++11 FEATURES --"
+	QMAKEPARAMS="$QMAKEPARAMS \"QMAKE_CXXFLAGS += -std=c++0x\""
+fi
+
 echo "-- BUILD QXORM LIBRARY --"
 cd "../"
 eval qmake $QMAKEPARAMS

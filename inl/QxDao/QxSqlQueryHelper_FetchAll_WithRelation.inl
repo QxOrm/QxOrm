@@ -39,7 +39,7 @@ struct QxSqlQueryHelper_FetchAll_WithRelation
 
    static void sql(qx::QxSqlRelationLinked * pRelationX, QString & sql, qx::IxSqlQueryBuilder & builder)
    {
-      BOOST_STATIC_ASSERT(qx::trait::is_qx_registered<T>::value);
+      static_assert(qx::trait::is_qx_registered<T>::value, "qx::trait::is_qx_registered<T>::value");
       if (! pRelationX) { qAssert(false); QxSqlQueryHelper_FetchAll<T>::sql(sql, builder); return; }
       qx::IxSqlQueryBuilder::sql_FetchAll_WithRelation(pRelationX, sql, builder);
    }
@@ -49,7 +49,7 @@ struct QxSqlQueryHelper_FetchAll_WithRelation
 
    static void resolveOutput(qx::QxSqlRelationLinked * pRelationX, T & t, QSqlQuery & query, qx::IxSqlQueryBuilder & builder)
    {
-      BOOST_STATIC_ASSERT(qx::trait::is_qx_registered<T>::value);
+      static_assert(qx::trait::is_qx_registered<T>::value, "qx::trait::is_qx_registered<T>::value");
       if (! pRelationX) { qAssert(false); QxSqlQueryHelper_FetchAll<T>::resolveOutput(t, query, builder); return; }
       qx::IxSqlQueryBuilder::resolveOutput_FetchAll_WithRelation(pRelationX, (& t), query, builder);
    }

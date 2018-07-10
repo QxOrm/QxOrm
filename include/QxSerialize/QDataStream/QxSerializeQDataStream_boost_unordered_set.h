@@ -29,6 +29,7 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST
 #ifndef _QX_SERIALIZE_QDATASTREAM_BOOST_UNORDERED_SET_H_
 #define _QX_SERIALIZE_QDATASTREAM_BOOST_UNORDERED_SET_H_
 
@@ -44,8 +45,6 @@
  */
 
 #include <QtCore/qdatastream.h>
-
-#include <boost/unordered_set.hpp>
 
 template <typename T>
 QDataStream & operator<< (QDataStream & stream, const boost::unordered_set<T> & t)
@@ -94,3 +93,4 @@ QDataStream & operator>> (QDataStream & stream, boost::unordered_multiset<T> & t
 }
 
 #endif // _QX_SERIALIZE_QDATASTREAM_BOOST_UNORDERED_SET_H_
+#endif // _QX_ENABLE_BOOST

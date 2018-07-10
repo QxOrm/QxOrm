@@ -43,9 +43,6 @@
  * \brief Concrete list of class properties registered into QxOrm context
  */
 
-#include <boost/type_traits/is_integral.hpp>
-#include <boost/type_traits/is_base_of.hpp>
-
 #include <QxDataMember/IxDataMemberX.h>
 #include <QxDataMember/QxDataMember.h>
 #include <QxDataMember/QxDataMember_QObject.h>
@@ -80,16 +77,10 @@ public:
 
 protected:
 
-   IxDataMember * m_pDataMemberId;  //!< Data member id with primary key type
-
-protected:
-
-   QxDataMemberX() : IxDataMemberX(), QxSingleton< QxDataMemberX<T> >(QString("qx::QxDataMemberX_") + qx::trait::get_class_name<T>::get_xml_tag()), m_pDataMemberId(NULL) { ; }
+   QxDataMemberX() : IxDataMemberX(), QxSingleton< QxDataMemberX<T> >(QString("qx::QxDataMemberX_") + qx::trait::get_class_name<T>::get_xml_tag()) { ; }
    virtual ~QxDataMemberX() { ; }
 
 public:
-
-   virtual IxDataMember * getId() const { return m_pDataMemberId; }
 
    virtual long count_WithDaoStrategy() const                              { return count_WithDaoStrategy_Helper(); }
    virtual bool exist_WithDaoStrategy(const QString & sKey) const          { return exist_WithDaoStrategy_Helper(sKey); }
@@ -97,24 +88,15 @@ public:
    virtual IxDataMember * get_WithDaoStrategy(const QString & sKey) const  { return get_WithDaoStrategy_Helper(sKey); }
    virtual IxDataMember * getId_WithDaoStrategy() const                    { return getId_WithDaoStrategy_Helper(); }
 
-   IxDataMember * id(type_primary_key T::* pDataMemberId, const QString & sKey);
-   IxDataMember * id(type_primary_key T::* pDataMemberId, const QString & sKey, long lVersion);
+   IxDataMember * id(type_primary_key T::* pDataMemberId, const QString & sKey, long lVersion = 0);
    IxDataMember * id(const QString & sKey, long lVersion);
    IxDataMember * add(const QString & sKey, long lVersion);
 
-   template <typename V, typename U> IxDataMember * add(V U::* pData, const QString & sKey);
-   template <typename V, typename U> IxDataMember * add(V U::* pData, const QString & sKey, long lVersion);
-   template <typename V, typename U> IxDataMember * add(V U::* pData, const QString & sKey, long lVersion, bool bSerialize);
-   template <typename V, typename U> IxDataMember * add(V U::* pData, const QString & sKey, long lVersion, bool bSerialize, bool bDao);
-
-   template <typename V, typename U> IxSqlRelation * relationOneToOne(V U::* pData, const QString & sKey);
-   template <typename V, typename U> IxSqlRelation * relationOneToOne(V U::* pData, const QString & sKey, long lVersion);
-   template <typename V, typename U> IxSqlRelation * relationManyToOne(V U::* pData, const QString & sKey);
-   template <typename V, typename U> IxSqlRelation * relationManyToOne(V U::* pData, const QString & sKey, long lVersion);
-   template <typename V, typename U> IxSqlRelation * relationOneToMany(V U::* pData, const QString & sKey, const QString & sForeignKey);
-   template <typename V, typename U> IxSqlRelation * relationOneToMany(V U::* pData, const QString & sKey, const QString & sForeignKey, long lVersion);
-   template <typename V, typename U> IxSqlRelation * relationManyToMany(V U::* pData, const QString & sKey, const QString & sExtraTable, const QString & sForeignKeyOwner, const QString & sForeignKeyDataType);
-   template <typename V, typename U> IxSqlRelation * relationManyToMany(V U::* pData, const QString & sKey, const QString & sExtraTable, const QString & sForeignKeyOwner, const QString & sForeignKeyDataType, long lVersion);
+   template <typename V, typename U> IxDataMember * add(V U::* pData, const QString & sKey, long lVersion = 0, bool bSerialize = true, bool bDao = true);
+   template <typename V, typename U> IxSqlRelation * relationOneToOne(V U::* pData, const QString & sKey, long lVersion = 0);
+   template <typename V, typename U> IxSqlRelation * relationManyToOne(V U::* pData, const QString & sKey, long lVersion = 0);
+   template <typename V, typename U> IxSqlRelation * relationOneToMany(V U::* pData, const QString & sKey, const QString & sForeignKey, long lVersion = 0);
+   template <typename V, typename U> IxSqlRelation * relationManyToMany(V U::* pData, const QString & sKey, const QString & sExtraTable, const QString & sForeignKeyOwner, const QString & sForeignKeyDataType, long lVersion = 0);
 
 #ifdef _QX_ENABLE_BOOST_SERIALIZATION
    template <class Archive> inline void toArchive(const T * pOwner, Archive & ar, const unsigned int file_version) const;
@@ -133,7 +115,7 @@ private:
       if (getDaoStrategy() == qx::dao::strategy::single_table_inheritance)
       { return ((getBaseClass_Helper()->getDaoStrategy() != getDaoStrategy()) ? count() : getBaseClass_Helper()->count_WithDaoStrategy()); }
       else if (getDaoStrategy() == qx::dao::strategy::class_table_inheritance)
-      { return (count() + ((! m_pDataMemberId && getId_WithDaoStrategy()) ? 1 : 0)); }
+      { return (count() + ((! getId() && getId_WithDaoStrategy()) ? 1 : 0)); }
       else if (getDaoStrategy() == qx::dao::strategy::concrete_table_inheritance)
       { return (count() + getBaseClass_Helper()->count_WithDaoStrategy()); }
       qAssert(false); return 0;
@@ -155,7 +137,7 @@ private:
       if (getDaoStrategy() == qx::dao::strategy::single_table_inheritance)
       { return ((getBaseClass_Helper()->getDaoStrategy() != getDaoStrategy()) ? get(lIndex) : getBaseClass_Helper()->get_WithDaoStrategy(lIndex)); }
       else if (getDaoStrategy() == qx::dao::strategy::class_table_inheritance)
-      { return ((! m_pDataMemberId && (lIndex == count())) ? getId_WithDaoStrategy() : get(lIndex)); }
+      { return ((! getId() && (lIndex == count())) ? getId_WithDaoStrategy() : get(lIndex)); }
       else if (getDaoStrategy() == qx::dao::strategy::concrete_table_inheritance)
       { return (((lIndex >= 0) && (lIndex < count())) ? get(lIndex) : getBaseClass_Helper()->get_WithDaoStrategy(lIndex - count())); }
       qAssert(false); return NULL;
@@ -175,11 +157,11 @@ private:
    IxDataMember * getId_WithDaoStrategy_Helper() const
    {
       if (getDaoStrategy() == qx::dao::strategy::single_table_inheritance)
-      { return ((getBaseClass_Helper()->getDaoStrategy() != getDaoStrategy()) ? m_pDataMemberId : getBaseClass_Helper()->getId_WithDaoStrategy()); }
+      { return ((getBaseClass_Helper()->getDaoStrategy() != getDaoStrategy()) ? getId() : getBaseClass_Helper()->getId_WithDaoStrategy()); }
       else if (getDaoStrategy() == qx::dao::strategy::class_table_inheritance)
-      { return (m_pDataMemberId ? m_pDataMemberId : getBaseClass_Helper()->getId_WithDaoStrategy()); }
+      { return (getId() ? getId() : getBaseClass_Helper()->getId_WithDaoStrategy()); }
       else if (getDaoStrategy() == qx::dao::strategy::concrete_table_inheritance)
-      { return (m_pDataMemberId ? m_pDataMemberId : getBaseClass_Helper()->getId_WithDaoStrategy()); }
+      { return (getId() ? getId() : getBaseClass_Helper()->getId_WithDaoStrategy()); }
       qAssert(false); return NULL;
    }
 

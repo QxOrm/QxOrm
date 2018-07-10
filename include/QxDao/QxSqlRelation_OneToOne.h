@@ -62,11 +62,10 @@ private:
 
 public:
 
-   QxSqlRelation_OneToOne(IxDataMember * p) : QxSqlRelation<DataType, Owner>(p) { this->m_eRelationType = qx::IxSqlRelation::one_to_one; }
+   QxSqlRelation_OneToOne(IxDataMember * p) : QxSqlRelation<DataType, Owner>(p) { this->setRelationType(qx::IxSqlRelation::one_to_one); }
    virtual ~QxSqlRelation_OneToOne() { ; }
 
    virtual QString getDescription() const                                     { return "relation one-to-one"; }
-   virtual QString getExtraTable() const                                      { return ""; }
    virtual QString createExtraTable() const                                   { return ""; }
    virtual bool getCartesianProduct() const                                   { return false; }
    virtual void createTable(QxSqlRelationParams & params) const               { Q_UNUSED(params); }

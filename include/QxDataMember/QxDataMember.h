@@ -48,10 +48,6 @@
 #include <boost/serialization/nvp.hpp>
 #endif // _QX_ENABLE_BOOST_SERIALIZATION
 
-#include <boost/tuple/tuple.hpp>
-#include <boost/tuple/tuple_comparison.hpp>
-#include <boost/tuple/tuple_io.hpp>
-
 #include <QxDataMember/IxDataMember.h>
 
 #include <QxTraits/is_equal.h>
@@ -78,8 +74,8 @@ protected:
 
 public:
 
-   QxDataMember(type_data_member_ptr pData, const QString & sKey) : IxDataMember(sKey), m_pData(pData) { m_bAccessDataPointer = true; }
-   QxDataMember(type_data_member_ptr pData, const QString & sKey, long lVersion, bool bSerialize, bool bDao) : IxDataMember(sKey, lVersion, bSerialize, bDao), m_pData(pData) { m_bAccessDataPointer = true; }
+   QxDataMember(type_data_member_ptr pData, const QString & sKey) : IxDataMember(sKey), m_pData(pData) { this->setAccessDataPointer(true); }
+   QxDataMember(type_data_member_ptr pData, const QString & sKey, long lVersion, bool bSerialize, bool bDao) : IxDataMember(sKey, lVersion, bSerialize, bDao), m_pData(pData) { this->setAccessDataPointer(true); }
    virtual ~QxDataMember() { ; }
 
    inline DataType * getData(void * pOwner) const              { return (pOwner ? (& ((static_cast<Owner *>(pOwner))->*m_pData)) : NULL); }
@@ -102,8 +98,8 @@ public:
 
 protected:
 
-   virtual boost::any getDataPtr(const void * pOwner) const    { return boost::any(getData(pOwner)); }
-   virtual boost::any getDataPtr(void * pOwner)                { return boost::any(getData(pOwner)); }
+   virtual qx::any getDataPtr(const void * pOwner) const       { return qx::any(getData(pOwner)); }
+   virtual qx::any getDataPtr(void * pOwner)                   { return qx::any(getData(pOwner)); }
    virtual void * getDataVoidPtr(const void * pOwner) const    { return static_cast<void *>(const_cast<DataType *>(getData(pOwner))); }
    virtual void * getDataVoidPtr(void * pOwner)                { return static_cast<void *>(getData(pOwner)); }
 

@@ -43,10 +43,6 @@
  * \brief Hierarchy of relationships to build SQL query
  */
 
-#include <boost/tuple/tuple.hpp>
-#include <boost/tuple/tuple_comparison.hpp>
-#include <boost/tuple/tuple_io.hpp>
-
 #include <QtSql/qsqlerror.h>
 
 #include <QxCommon/QxBool.h>
@@ -86,20 +82,10 @@ namespace qx {
 class QX_DLL_EXPORT QxSqlRelationLinked
 {
 
-protected:
+private:
 
-   typedef qx_shared_ptr<QxSqlRelationLinked> type_ptr;
-   typedef boost::tuple<qx::dao::sql_join::join_type, IxSqlRelation *, QPair<QSet<QString>, long> > type_relation;
-   typedef qx::QxCollection<QString, type_relation> type_lst_relation;
-   typedef QHash<QString, type_ptr> type_lst_relation_linked;
-
-   type_lst_relation m_relationX;               //!< List of relationships for current level
-   type_lst_relation_linked m_relationLinkedX;  //!< List of child to build the hierarchy
-   IxSqlRelationX * m_allRelationX;             //!< List of all relationships per level
-   bool m_bRoot;                                //!< Root of the hierarchy
-   QSet<QString> m_lstRootColumns;              //!< Root columns to fetch (using syntax { col_1, col_2, etc... } ), if empty then fetch all root columns
-   long m_lRootColumnsOffset;                   //!< Root columns offset to resolve SQL query output
-   bool m_bRootColumnsModeRemove;               //!< Special syntax to remove root columns instead of adding root columns : -{ column1, column2, etc... }
+   struct QxSqlRelationLinkedImpl;
+   std::unique_ptr<QxSqlRelationLinkedImpl> m_pImpl; //!< Private implementation idiom
 
 public:
 
@@ -123,10 +109,10 @@ public:
    long getRelationCount() const;
    bool existRelation(const QString & sKey) const;
 
-   bool checkRootColumns(const QString & s) const  { return (m_lstRootColumns.isEmpty() || (m_bRootColumnsModeRemove ? (! m_lstRootColumns.contains(s)) : m_lstRootColumns.contains(s))); }
-   long getRootColumnsCount() const                { return m_lstRootColumns.count(); }
-   long getRootColumnsOffset() const               { return m_lRootColumnsOffset; }
-   void setRootColumnsOffset(long l)               { m_lRootColumnsOffset = l; }
+   bool checkRootColumns(const QString & s) const;
+   long getRootColumnsCount() const;
+   long getRootColumnsOffset() const;
+   void setRootColumnsOffset(long l);
 
 protected:
 
@@ -136,7 +122,7 @@ protected:
 
 };
 
-typedef qx_shared_ptr<QxSqlRelationLinked> QxSqlRelationLinked_ptr;
+typedef std::shared_ptr<QxSqlRelationLinked> QxSqlRelationLinked_ptr;
 
 } // namespace qx
 

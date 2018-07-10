@@ -43,9 +43,6 @@
  * \brief qx::trait::is_qt_variant_compatible<T>::value : return true if T can be host into a QVariant object of Qt library, otherwise return false
  */
 
-#include <boost/type_traits/is_enum.hpp>
-#include <boost/type_traits/is_integral.hpp>
-
 #include <QtCore/qvariant.h>
 
 #include <QxCommon/QxConfig.h>
@@ -59,7 +56,7 @@ namespace trait {
  */
 template <typename T>
 struct is_qt_variant_compatible
-{ enum { value = (boost::is_enum<T>::value || boost::is_integral<T>::value) }; };
+{ enum { value = (std::is_enum<T>::value || std::is_integral<T>::value) }; };
 
 template <> struct is_qt_variant_compatible<bool>                 { enum { value = true }; };
 template <> struct is_qt_variant_compatible<short>                { enum { value = true }; };

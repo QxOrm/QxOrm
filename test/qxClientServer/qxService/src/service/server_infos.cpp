@@ -20,7 +20,7 @@ template <> void register_class(QxClass<server_infos_output> & t)
 { t.data(& server_infos_output::current_date_time, "current_date_time"); }
 
 template <> void register_class(QxClass<server_infos> & t)
-{ t.fct_0<void>(& server_infos::get_current_date_time, "get_current_date_time"); }
+{ t.fct_0<void>(std::mem_fn(& server_infos::get_current_date_time), "get_current_date_time"); } // using std::mem_fn() here is just a workaround for an issue with some versions of MSVC, it is not required with a full compliant C++11 compiler (http://stackoverflow.com/questions/23778883/vs2013-stdfunction-with-member-function)
 
 } // namespace qx
 

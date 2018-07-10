@@ -59,8 +59,8 @@ namespace qx {
 class QxDateNeutral;
 } // namespace qx
 
-QX_DLL_EXPORT QDataStream & operator<< (QDataStream & stream, const qx::QxDateNeutral & t) BOOST_USED;
-QX_DLL_EXPORT QDataStream & operator>> (QDataStream & stream, qx::QxDateNeutral & t) BOOST_USED;
+QX_DLL_EXPORT QDataStream & operator<< (QDataStream & stream, const qx::QxDateNeutral & t) QX_USED;
+QX_DLL_EXPORT QDataStream & operator>> (QDataStream & stream, qx::QxDateNeutral & t) QX_USED;
 
 namespace qx {
 

@@ -47,17 +47,15 @@
 #include <typeinfo>
 #endif // _QX_NO_RTTI
 
-#include <boost/algorithm/string.hpp>
-
 #include <QxTraits/remove_attr.h>
 
-#define QX_REGISTER_CLASS_NAME_SEP_INF std::string("<")
-#define QX_REGISTER_CLASS_NAME_SEP_SUP std::string(">")
-#define QX_REGISTER_CLASS_NAME_SEP_NXT std::string(", ")
+#define QX_REGISTER_CLASS_NAME_SEP_INF "<"
+#define QX_REGISTER_CLASS_NAME_SEP_SUP ">"
+#define QX_REGISTER_CLASS_NAME_SEP_NXT ", "
 
-#define QX_REGISTER_CLASS_NAME_SEP_INF_XML_TAG std::string("-")
-#define QX_REGISTER_CLASS_NAME_SEP_SUP_XML_TAG std::string("-")
-#define QX_REGISTER_CLASS_NAME_SEP_NXT_XML_TAG std::string("_")
+#define QX_REGISTER_CLASS_NAME_SEP_INF_XML_TAG "-"
+#define QX_REGISTER_CLASS_NAME_SEP_SUP_XML_TAG "-"
+#define QX_REGISTER_CLASS_NAME_SEP_NXT_XML_TAG "_"
 
 #define QX_GET_CLASS_NAME(TYPE) \
 qx::trait::get_class_name< qx::trait::remove_attr< TYPE >::type >::get()
@@ -88,12 +86,13 @@ static inline const char * get_xml_tag() \
 { \
    static std::string result_xml; \
    if (! result_xml.empty()) { return result_xml.c_str(); } \
-   result_xml = std::string(get_class_name::get()); \
-   boost::replace_all(result_xml, QX_REGISTER_CLASS_NAME_SEP_INF, QX_REGISTER_CLASS_NAME_SEP_INF_XML_TAG); \
-   boost::replace_all(result_xml, QX_REGISTER_CLASS_NAME_SEP_SUP, QX_REGISTER_CLASS_NAME_SEP_SUP_XML_TAG); \
-   boost::replace_all(result_xml, QX_REGISTER_CLASS_NAME_SEP_NXT, QX_REGISTER_CLASS_NAME_SEP_NXT_XML_TAG); \
-   boost::replace_all(result_xml, "::", "."); \
-   boost::replace_all(result_xml, " ", ""); \
+   QString tmp = get_class_name::get(); \
+   tmp.replace(QX_REGISTER_CLASS_NAME_SEP_INF, QX_REGISTER_CLASS_NAME_SEP_INF_XML_TAG); \
+   tmp.replace(QX_REGISTER_CLASS_NAME_SEP_SUP, QX_REGISTER_CLASS_NAME_SEP_SUP_XML_TAG); \
+   tmp.replace(QX_REGISTER_CLASS_NAME_SEP_NXT, QX_REGISTER_CLASS_NAME_SEP_NXT_XML_TAG); \
+   tmp.replace("::", "."); \
+   tmp.replace(" ", ""); \
+   result_xml = tmp.toLatin1().constData(); \
    return result_xml.c_str(); \
 }
 

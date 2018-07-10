@@ -33,10 +33,7 @@
 
 #include <QxPrecompiled.h>
 
-#include <boost/static_assert.hpp>
-
 #include <QxTraits/is_smart_ptr.h>
-#include <QxTraits/is_smart_ptr_base_of.h>
 #include <QxTraits/is_smart_ptr_to_pod.h>
 #include <QxTraits/is_ptr_base_of.h>
 #include <QxTraits/is_ptr_to_pod.h>
@@ -55,90 +52,89 @@ namespace unit_test {
 
 void unit_test_is_smart_ptr()
 {
-   BOOST_STATIC_ASSERT(! qx::trait::is_boost_intrusive_ptr<int>::value);
-   BOOST_STATIC_ASSERT(! qx::trait::is_boost_intrusive_ptr< boost::shared_ptr<int> >::value);
-   BOOST_STATIC_ASSERT(! qx::trait::is_boost_intrusive_ptr< boost::scoped_ptr<QObject> >::value);
-   BOOST_STATIC_ASSERT(qx::trait::is_boost_intrusive_ptr< boost::intrusive_ptr<QObject> >::value);
-   BOOST_STATIC_ASSERT(qx::trait::is_boost_intrusive_ptr< boost::intrusive_ptr<char *> >::value);
+#ifdef _QX_ENABLE_BOOST
 
-   BOOST_STATIC_ASSERT(! qx::trait::is_boost_scoped_ptr<double>::value);
-   BOOST_STATIC_ASSERT(! qx::trait::is_boost_scoped_ptr< boost::shared_ptr<int> >::value);
-   BOOST_STATIC_ASSERT(! qx::trait::is_boost_scoped_ptr< boost::weak_ptr<QString> >::value);
-   BOOST_STATIC_ASSERT(! qx::trait::is_boost_scoped_ptr< QWeakPointer<QObject> >::value);
-   BOOST_STATIC_ASSERT(qx::trait::is_boost_scoped_ptr< boost::scoped_ptr<QObject> >::value);
+   static_assert(! qx::trait::is_boost_intrusive_ptr<int>::value, "unit_test_is_smart_ptr");
+   static_assert(! qx::trait::is_boost_intrusive_ptr< boost::shared_ptr<int> >::value, "unit_test_is_smart_ptr");
+   static_assert(! qx::trait::is_boost_intrusive_ptr< boost::scoped_ptr<QObject> >::value, "unit_test_is_smart_ptr");
+   static_assert(qx::trait::is_boost_intrusive_ptr< boost::intrusive_ptr<QObject> >::value, "unit_test_is_smart_ptr");
+   static_assert(qx::trait::is_boost_intrusive_ptr< boost::intrusive_ptr<char *> >::value, "unit_test_is_smart_ptr");
 
-   BOOST_STATIC_ASSERT(! qx::trait::is_boost_shared_ptr<QObject>::value);
-   BOOST_STATIC_ASSERT(! qx::trait::is_boost_shared_ptr< boost::scoped_ptr<QString> >::value);
-   BOOST_STATIC_ASSERT(! qx::trait::is_boost_shared_ptr< boost::intrusive_ptr<QObject> >::value);
-   BOOST_STATIC_ASSERT(! qx::trait::is_boost_shared_ptr< QSharedPointer<double> >::value);
-   BOOST_STATIC_ASSERT(qx::trait::is_boost_shared_ptr< boost::shared_ptr<int> >::value);
+   static_assert(! qx::trait::is_boost_scoped_ptr<double>::value, "unit_test_is_smart_ptr");
+   static_assert(! qx::trait::is_boost_scoped_ptr< boost::shared_ptr<int> >::value, "unit_test_is_smart_ptr");
+   static_assert(! qx::trait::is_boost_scoped_ptr< boost::weak_ptr<QString> >::value, "unit_test_is_smart_ptr");
+   static_assert(! qx::trait::is_boost_scoped_ptr< QWeakPointer<QObject> >::value, "unit_test_is_smart_ptr");
+   static_assert(qx::trait::is_boost_scoped_ptr< boost::scoped_ptr<QObject> >::value, "unit_test_is_smart_ptr");
 
-   BOOST_STATIC_ASSERT(! qx::trait::is_boost_weak_ptr<int>::value);
-   BOOST_STATIC_ASSERT(! qx::trait::is_boost_weak_ptr< QWeakPointer<int> >::value);
-   BOOST_STATIC_ASSERT(! qx::trait::is_boost_weak_ptr< boost::scoped_ptr<QObject> >::value);
-   BOOST_STATIC_ASSERT(! qx::trait::is_boost_weak_ptr< boost::intrusive_ptr<QString> >::value);
-   BOOST_STATIC_ASSERT(qx::trait::is_boost_weak_ptr< boost::weak_ptr<QObject> >::value);
+   static_assert(! qx::trait::is_boost_shared_ptr<QObject>::value, "unit_test_is_smart_ptr");
+   static_assert(! qx::trait::is_boost_shared_ptr< boost::scoped_ptr<QString> >::value, "unit_test_is_smart_ptr");
+   static_assert(! qx::trait::is_boost_shared_ptr< boost::intrusive_ptr<QObject> >::value, "unit_test_is_smart_ptr");
+   static_assert(! qx::trait::is_boost_shared_ptr< QSharedPointer<double> >::value, "unit_test_is_smart_ptr");
+   static_assert(qx::trait::is_boost_shared_ptr< boost::shared_ptr<int> >::value, "unit_test_is_smart_ptr");
 
-   BOOST_STATIC_ASSERT(! qx::trait::is_qt_shared_data_ptr<QString>::value);
-   BOOST_STATIC_ASSERT(! qx::trait::is_qt_shared_data_ptr< QWeakPointer<int> >::value);
-   BOOST_STATIC_ASSERT(! qx::trait::is_qt_shared_data_ptr< boost::scoped_ptr<QObject> >::value);
-   BOOST_STATIC_ASSERT(! qx::trait::is_qt_shared_data_ptr< boost::weak_ptr<QObject> >::value);
-   BOOST_STATIC_ASSERT(qx::trait::is_qt_shared_data_ptr< QSharedDataPointer<QString> >::value);
+   static_assert(! qx::trait::is_boost_weak_ptr<int>::value, "unit_test_is_smart_ptr");
+   static_assert(! qx::trait::is_boost_weak_ptr< QWeakPointer<int> >::value, "unit_test_is_smart_ptr");
+   static_assert(! qx::trait::is_boost_weak_ptr< boost::scoped_ptr<QObject> >::value, "unit_test_is_smart_ptr");
+   static_assert(! qx::trait::is_boost_weak_ptr< boost::intrusive_ptr<QString> >::value, "unit_test_is_smart_ptr");
+   static_assert(qx::trait::is_boost_weak_ptr< boost::weak_ptr<QObject> >::value, "unit_test_is_smart_ptr");
 
-   BOOST_STATIC_ASSERT(! qx::trait::is_qt_shared_ptr<int>::value);
-   BOOST_STATIC_ASSERT(! qx::trait::is_qt_shared_ptr< boost::shared_ptr<int> >::value);
-   BOOST_STATIC_ASSERT(! qx::trait::is_qt_shared_ptr< QSharedDataPointer<QString> >::value);
-   BOOST_STATIC_ASSERT(! qx::trait::is_qt_shared_ptr< boost::scoped_ptr<QString> >::value);
-   BOOST_STATIC_ASSERT(qx::trait::is_qt_shared_ptr< QSharedPointer<QObject> >::value);
+   static_assert(! qx::trait::is_qt_shared_data_ptr< boost::scoped_ptr<QObject> >::value, "unit_test_is_smart_ptr");
+   static_assert(! qx::trait::is_qt_shared_data_ptr< boost::weak_ptr<QObject> >::value, "unit_test_is_smart_ptr");
+   static_assert(! qx::trait::is_qt_shared_ptr< boost::shared_ptr<int> >::value, "unit_test_is_smart_ptr");
+   static_assert(! qx::trait::is_qt_shared_ptr< boost::scoped_ptr<QString> >::value, "unit_test_is_smart_ptr");
 
-   BOOST_STATIC_ASSERT(! qx::trait::is_qt_weak_ptr<bool>::value);
-   BOOST_STATIC_ASSERT(! qx::trait::is_qt_weak_ptr< QSharedPointer<int> >::value);
-   BOOST_STATIC_ASSERT(! qx::trait::is_qt_weak_ptr< boost::scoped_ptr<QObject> >::value);
-   BOOST_STATIC_ASSERT(! qx::trait::is_qt_weak_ptr< boost::weak_ptr<QString> >::value);
-   BOOST_STATIC_ASSERT(qx::trait::is_qt_weak_ptr< QWeakPointer<QObject> >::value);
+   static_assert(! qx::trait::is_qt_weak_ptr< boost::scoped_ptr<QObject> >::value, "unit_test_is_smart_ptr");
+   static_assert(! qx::trait::is_qt_weak_ptr< boost::weak_ptr<QString> >::value, "unit_test_is_smart_ptr");
 
-   BOOST_STATIC_ASSERT(qx::trait::is_smart_ptr< boost::scoped_ptr<QObject> >::value);
-   BOOST_STATIC_ASSERT(! qx::trait::is_smart_ptr<QObject>::value);
-   BOOST_STATIC_ASSERT(qx::trait::is_smart_ptr< boost::weak_ptr<int> >::value);
-   BOOST_STATIC_ASSERT(qx::trait::is_smart_ptr< boost::shared_ptr<QString> >::value);
-   BOOST_STATIC_ASSERT(qx::trait::is_smart_ptr< boost::intrusive_ptr<QObject> >::value);
-   BOOST_STATIC_ASSERT(! qx::trait::is_smart_ptr<int>::value);
-   BOOST_STATIC_ASSERT(qx::trait::is_smart_ptr< QSharedDataPointer<double> >::value);
-   BOOST_STATIC_ASSERT(qx::trait::is_smart_ptr< QWeakPointer<QString> >::value);
-   BOOST_STATIC_ASSERT(qx::trait::is_smart_ptr< QSharedPointer<QObject> >::value);
-   BOOST_STATIC_ASSERT(qx::trait::is_smart_ptr< qx::dao::ptr<QString> >::value);
-   BOOST_STATIC_ASSERT(qx::trait::is_smart_ptr< qx::dao::ptr<int> >::value);
+   static_assert(qx::trait::is_smart_ptr< boost::scoped_ptr<QObject> >::value, "unit_test_is_smart_ptr");
+   static_assert(qx::trait::is_smart_ptr< boost::weak_ptr<int> >::value, "unit_test_is_smart_ptr");
+   static_assert(qx::trait::is_smart_ptr< boost::shared_ptr<QString> >::value, "unit_test_is_smart_ptr");
+   static_assert(qx::trait::is_smart_ptr< boost::intrusive_ptr<QObject> >::value, "unit_test_is_smart_ptr");
 
-   typedef qx::trait::is_smart_ptr_base_of< QObject, boost::scoped_ptr<QObject> > type_is_smart_ptr_base_of_object_boost_scoped_ptr;
+   static_assert(! qx::trait::is_boost_shared_ptr< std::shared_ptr<double> >::value, "unit_test_is_smart_ptr");
+   static_assert(! qx::trait::is_boost_scoped_ptr< std::weak_ptr<QObject> >::value, "unit_test_is_smart_ptr");
+   static_assert(! qx::trait::is_boost_weak_ptr< std::weak_ptr<int> >::value, "unit_test_is_smart_ptr");
+   static_assert(! qx::trait::is_boost_intrusive_ptr< std::unique_ptr<QObject> >::value, "unit_test_is_smart_ptr");
+   static_assert(! qx::trait::is_boost_shared_ptr< std::unique_ptr<QString> >::value, "unit_test_is_smart_ptr");
+   static_assert(! qx::trait::is_boost_weak_ptr< std::unique_ptr<QObject> >::value, "unit_test_is_smart_ptr");
 
-   BOOST_STATIC_ASSERT(type_is_smart_ptr_base_of_object_boost_scoped_ptr::value);
-   BOOST_STATIC_ASSERT(! qx::trait::is_smart_ptr_to_pod< QWeakPointer<QString> >::value);
-   BOOST_STATIC_ASSERT(qx::trait::is_smart_ptr_to_pod< QSharedDataPointer<double> >::value);
+#endif // _QX_ENABLE_BOOST
 
-#ifdef _QX_CPP_11_SMART_PTR
-#ifndef BOOST_NO_CXX11_SMART_PTR
+   static_assert(! qx::trait::is_qt_shared_data_ptr<QString>::value, "unit_test_is_smart_ptr");
+   static_assert(! qx::trait::is_qt_shared_data_ptr< QWeakPointer<int> >::value, "unit_test_is_smart_ptr");
+   static_assert(qx::trait::is_qt_shared_data_ptr< QSharedDataPointer<QString> >::value, "unit_test_is_smart_ptr");
 
-   BOOST_STATIC_ASSERT(! qx::trait::is_boost_shared_ptr< std::shared_ptr<double> >::value);
-   BOOST_STATIC_ASSERT(qx::trait::is_std_shared_ptr< std::shared_ptr<QObject> >::value);
-   BOOST_STATIC_ASSERT(! qx::trait::is_std_weak_ptr< std::shared_ptr<int> >::value);
-   BOOST_STATIC_ASSERT(qx::trait::is_smart_ptr< std::shared_ptr<QObject> >::value);
+   static_assert(! qx::trait::is_qt_shared_ptr<int>::value, "unit_test_is_smart_ptr");
+   static_assert(! qx::trait::is_qt_shared_ptr< QSharedDataPointer<QString> >::value, "unit_test_is_smart_ptr");
+   static_assert(qx::trait::is_qt_shared_ptr< QSharedPointer<QObject> >::value, "unit_test_is_smart_ptr");
 
-   BOOST_STATIC_ASSERT(! qx::trait::is_boost_scoped_ptr< std::weak_ptr<QObject> >::value);
-   BOOST_STATIC_ASSERT(! qx::trait::is_boost_weak_ptr< std::weak_ptr<int> >::value);
-   BOOST_STATIC_ASSERT(! qx::trait::is_qt_shared_data_ptr< std::weak_ptr<int> >::value);
-   BOOST_STATIC_ASSERT(qx::trait::is_std_weak_ptr< std::weak_ptr<QObject> >::value);
-   BOOST_STATIC_ASSERT(qx::trait::is_smart_ptr< std::weak_ptr<QString> >::value);
-   BOOST_STATIC_ASSERT(! qx::trait::is_smart_ptr_to_pod< std::weak_ptr<QString> >::value);
+   static_assert(! qx::trait::is_qt_weak_ptr<bool>::value, "unit_test_is_smart_ptr");
+   static_assert(! qx::trait::is_qt_weak_ptr< QSharedPointer<int> >::value, "unit_test_is_smart_ptr");
+   static_assert(qx::trait::is_qt_weak_ptr< QWeakPointer<QObject> >::value, "unit_test_is_smart_ptr");
 
-   BOOST_STATIC_ASSERT(! qx::trait::is_boost_intrusive_ptr< std::unique_ptr<QObject> >::value);
-   BOOST_STATIC_ASSERT(qx::trait::is_std_unique_ptr< std::unique_ptr<QObject> >::value);
-   BOOST_STATIC_ASSERT(! qx::trait::is_boost_shared_ptr< std::unique_ptr<QString> >::value);
-   BOOST_STATIC_ASSERT(! qx::trait::is_boost_weak_ptr< std::unique_ptr<QObject> >::value);
-   BOOST_STATIC_ASSERT(! qx::trait::is_qt_shared_data_ptr< std::unique_ptr<QObject> >::value);
-   BOOST_STATIC_ASSERT(! qx::trait::is_qt_shared_ptr< std::unique_ptr<QString> >::value);
+   static_assert(! qx::trait::is_smart_ptr<QObject>::value, "unit_test_is_smart_ptr");
+   static_assert(! qx::trait::is_smart_ptr<int>::value, "unit_test_is_smart_ptr");
+   static_assert(qx::trait::is_smart_ptr< QSharedDataPointer<double> >::value, "unit_test_is_smart_ptr");
+   static_assert(qx::trait::is_smart_ptr< QWeakPointer<QString> >::value, "unit_test_is_smart_ptr");
+   static_assert(qx::trait::is_smart_ptr< QSharedPointer<QObject> >::value, "unit_test_is_smart_ptr");
+   static_assert(qx::trait::is_smart_ptr< qx::dao::ptr<QString> >::value, "unit_test_is_smart_ptr");
+   static_assert(qx::trait::is_smart_ptr< qx::dao::ptr<int> >::value, "unit_test_is_smart_ptr");
 
-#endif // BOOST_NO_CXX11_SMART_PTR
-#endif // _QX_CPP_11_SMART_PTR
+   static_assert(! qx::trait::is_smart_ptr_to_pod< QWeakPointer<QString> >::value, "unit_test_is_smart_ptr");
+   static_assert(qx::trait::is_smart_ptr_to_pod< QSharedDataPointer<double> >::value, "unit_test_is_smart_ptr");
+
+   static_assert(qx::trait::is_std_shared_ptr< std::shared_ptr<QObject> >::value, "unit_test_is_smart_ptr");
+   static_assert(! qx::trait::is_std_weak_ptr< std::shared_ptr<int> >::value, "unit_test_is_smart_ptr");
+   static_assert(qx::trait::is_smart_ptr< std::shared_ptr<QObject> >::value, "unit_test_is_smart_ptr");
+
+   static_assert(! qx::trait::is_qt_shared_data_ptr< std::weak_ptr<int> >::value, "unit_test_is_smart_ptr");
+   static_assert(qx::trait::is_std_weak_ptr< std::weak_ptr<QObject> >::value, "unit_test_is_smart_ptr");
+   static_assert(qx::trait::is_smart_ptr< std::weak_ptr<QString> >::value, "unit_test_is_smart_ptr");
+   static_assert(! qx::trait::is_smart_ptr_to_pod< std::weak_ptr<QString> >::value, "unit_test_is_smart_ptr");
+
+   static_assert(qx::trait::is_std_unique_ptr< std::unique_ptr<QObject> >::value, "unit_test_is_smart_ptr");
+   static_assert(! qx::trait::is_qt_shared_data_ptr< std::unique_ptr<QObject> >::value, "unit_test_is_smart_ptr");
+   static_assert(! qx::trait::is_qt_shared_ptr< std::unique_ptr<QString> >::value, "unit_test_is_smart_ptr");
 }
 
 } // namespace unit_test

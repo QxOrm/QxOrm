@@ -98,7 +98,7 @@ private:
 
    template <typename U>
    static inline bool deleteItem(U & item, qx::dao::detail::QxDao_Helper_Container<T> & dao)
-   { return deleteItem_Helper<U, boost::is_pointer<U>::value || qx::trait::is_smart_ptr<U>::value>::deleteById(item, dao); }
+   { return deleteItem_Helper<U, std::is_pointer<U>::value || qx::trait::is_smart_ptr<U>::value>::deleteById(item, dao); }
 
    template <typename U, bool bIsPointer /* = true */>
    struct deleteItem_Helper
@@ -174,9 +174,9 @@ struct QxDao_DeleteById
 
    static inline QSqlError deleteById(T & t, QSqlDatabase * pDatabase, bool bVerifySoftDelete)
    {
-      typedef typename boost::mpl::if_c< boost::is_pointer<T>::value, qx::dao::detail::QxDao_DeleteById_Ptr<T>, qx::dao::detail::QxDao_DeleteById_Generic<T> >::type type_dao_1;
-      typedef typename boost::mpl::if_c< qx::trait::is_smart_ptr<T>::value, qx::dao::detail::QxDao_DeleteById_Ptr<T>, type_dao_1 >::type type_dao_2;
-      typedef typename boost::mpl::if_c< qx::trait::is_container<T>::value, qx::dao::detail::QxDao_DeleteById_Container<T>, type_dao_2 >::type type_dao_3;
+      typedef typename std::conditional< std::is_pointer<T>::value, qx::dao::detail::QxDao_DeleteById_Ptr<T>, qx::dao::detail::QxDao_DeleteById_Generic<T> >::type type_dao_1;
+      typedef typename std::conditional< qx::trait::is_smart_ptr<T>::value, qx::dao::detail::QxDao_DeleteById_Ptr<T>, type_dao_1 >::type type_dao_2;
+      typedef typename std::conditional< qx::trait::is_container<T>::value, qx::dao::detail::QxDao_DeleteById_Container<T>, type_dao_2 >::type type_dao_3;
       return type_dao_3::deleteById(t, pDatabase, bVerifySoftDelete);
    }
 

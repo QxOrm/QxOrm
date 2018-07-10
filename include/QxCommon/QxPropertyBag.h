@@ -43,8 +43,6 @@
  * \brief Used by introspection engine (IxClass, IxDataMember, IxFunction, etc.) to add meta-data (property bag)
  */
 
-#include <boost/shared_ptr.hpp>
-
 #include <QtCore/qhash.h>
 #include <QtCore/qstring.h>
 #include <QtCore/qvariant.h>
@@ -61,7 +59,7 @@ class QxPropertyBag
 protected:
 
    typedef QHash<QString, QVariant> type_hash_prop_bag;
-   typedef qx_shared_ptr<type_hash_prop_bag> type_hash_prop_bag_ptr;
+   typedef std::shared_ptr<type_hash_prop_bag> type_hash_prop_bag_ptr;
 
    type_hash_prop_bag_ptr m_lstPropertyBag;  //!< List of all properties in the bag (meta-data)
 

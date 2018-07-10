@@ -98,12 +98,26 @@ inline void qx_save(Archive & ar, const QVariant & t, const unsigned int file_ve
 #endif // _QX_ENABLE_QT_GUI
    else if (iType == QVariant::Invalid)
    { QString sInvalid; ar << boost::serialization::make_nvp(sTag, sInvalid); }
+   else if (iType == QMetaType::Long)
+   { long l(0); l = static_cast<long>(t.toLongLong()); ar << boost::serialization::make_nvp(sTag, l); }
+   else if (iType == QMetaType::Short)
+   { int i(0); i = t.toInt(); ar << boost::serialization::make_nvp(sTag, i); }
+   else if (iType == QMetaType::Char)
+   { int i(0); i = t.toInt(); ar << boost::serialization::make_nvp(sTag, i); }
+   else if (iType == QMetaType::ULong)
+   { unsigned long ul(0); ul = static_cast<unsigned long>(t.toULongLong()); ar << boost::serialization::make_nvp(sTag, ul); }
+   else if (iType == QMetaType::UShort)
+   { uint ui(0); ui = t.toUInt(); ar << boost::serialization::make_nvp(sTag, ui); }
+   else if (iType == QMetaType::UChar)
+   { uint ui(0); ui = t.toUInt(); ar << boost::serialization::make_nvp(sTag, ui); }
+   else if (iType == QMetaType::Float)
+   { double d(0.0); d = t.toDouble(); ar << boost::serialization::make_nvp(sTag, d); }
    else
    {
       QString sUserType("unknown variant serialize type");
       qx::QxClassX::type_fct_save_qvariant_usertype fct;
       fct = qx::QxClassX::getFctSaveQVariantUserType();
-      if (! fct.empty()) { sUserType = fct(t, iType, file_version); }
+      if (fct) { sUserType = fct(t, iType, file_version); }
       ar << boost::serialization::make_nvp(sTag, sUserType);
    }
 }
@@ -164,13 +178,27 @@ inline void qx_load(Archive & ar, QVariant & t, const unsigned int file_version)
 #endif // _QX_ENABLE_QT_GUI
    else if (iType == QVariant::Invalid)
    { QString sInvalid; ar >> boost::serialization::make_nvp(sTag, sInvalid); t = QVariant(); }
+   else if (iType == QMetaType::Long)
+   { long l(0); ar >> boost::serialization::make_nvp(sTag, l); t = QVariant(static_cast<qlonglong>(l)); }
+   else if (iType == QMetaType::Short)
+   { int i(0); ar >> boost::serialization::make_nvp(sTag, i); t = QVariant(i); }
+   else if (iType == QMetaType::Char)
+   { int i(0); ar >> boost::serialization::make_nvp(sTag, i); t = QVariant(i); }
+   else if (iType == QMetaType::ULong)
+   { unsigned long ul(0); ar >> boost::serialization::make_nvp(sTag, ul); t = QVariant(static_cast<qulonglong>(ul)); }
+   else if (iType == QMetaType::UShort)
+   { uint ui(0); ar >> boost::serialization::make_nvp(sTag, ui); t = QVariant(ui); }
+   else if (iType == QMetaType::UChar)
+   { uint ui(0); ar >> boost::serialization::make_nvp(sTag, ui); t = QVariant(ui); }
+   else if (iType == QMetaType::Float)
+   { double d(0.0); ar >> boost::serialization::make_nvp(sTag, d); t = QVariant(d); }
    else
    {
       QString sUserType;
       qx::QxClassX::type_fct_load_qvariant_usertype fct;
       ar >> boost::serialization::make_nvp(sTag, sUserType);
       fct = qx::QxClassX::getFctLoadQVariantUserType();
-      if (! fct.empty()) { t = fct(sUserType, iType, file_version); }
+      if (fct) { t = fct(sUserType, iType, file_version); }
       else { t = QVariant(); }
    }
 }

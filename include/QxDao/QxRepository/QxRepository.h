@@ -43,8 +43,6 @@
  * \brief Repository to provide a common interface to communicate with database
  */
 
-#include <boost/type_traits/is_base_of.hpp>
-
 #include <QxDao/QxRepository/IxRepository.h>
 #include <QxDao/QxRepository/QxRepositoryX.h>
 
@@ -182,7 +180,7 @@ public:
       IxDataMemberX * pDataMemberX = QxClass<T>::getSingleton()->getDataMemberX();
       IxDataMember * pDataMemberId = (pDataMemberX ? pDataMemberX->getId_WithDaoStrategy() : NULL);
       if (! pDataMemberId) { qAssert(false); return QSqlError(); }
-      qx_shared_ptr<T> t; t.reset(new T());
+      std::shared_ptr<T> t; t.reset(new T());
       pDataMemberId->fromVariant(t.get(), id, -1, qx::cvt::context::e_database);
       QSqlError err = qx::dao::delete_by_id((* t), this->database());
       if (err.isValid() && m_pSession) { (* m_pSession) += err; }
@@ -216,7 +214,7 @@ public:
       IxDataMemberX * pDataMemberX = QxClass<T>::getSingleton()->getDataMemberX();
       IxDataMember * pDataMemberId = (pDataMemberX ? pDataMemberX->getId_WithDaoStrategy() : NULL);
       if (! pDataMemberId) { qAssert(false); return QSqlError(); }
-      qx_shared_ptr<T> t; t.reset(new T());
+      std::shared_ptr<T> t; t.reset(new T());
       pDataMemberId->fromVariant(t.get(), id, -1, qx::cvt::context::e_database);
       QSqlError err = qx::dao::destroy_by_id((* t), this->database());
       if (err.isValid() && m_pSession) { (* m_pSession) += err; }
@@ -253,7 +251,7 @@ private:
 
    typedef typename qx::trait::get_primary_key<T>::type type_primary_key;
    typedef qx::QxCollection< type_primary_key, QSharedPointer<T> > type_collection_qt;
-   typedef qx::QxCollection< type_primary_key, qx_shared_ptr<T> > type_collection_boost;
+   typedef qx::QxCollection< type_primary_key, std::shared_ptr<T> > type_collection_boost;
 
    template <bool bIsQObject /* = false */, int dummy>
    struct qxVerifyPointer
@@ -277,7 +275,7 @@ public:
 
    virtual QSqlError _fetchById(QObject * p, const QStringList & columns = QStringList(), const QStringList & relation = QStringList())
    {
-      T * t = qxVerifyPointer<boost::is_base_of<QObject, T>::value, 0>::get(p);
+      T * t = qxVerifyPointer<std::is_base_of<QObject, T>::value, 0>::get(p);
       return this->fetchById((* t), columns, relation);
    }
 
@@ -289,7 +287,7 @@ public:
 
    virtual QSqlError _fetchAll(QObject * p, const QStringList & columns = QStringList(), const QStringList & relation = QStringList())
    {
-      T * t = qxVerifyPointer<boost::is_base_of<QObject, T>::value, 0>::get(p);
+      T * t = qxVerifyPointer<std::is_base_of<QObject, T>::value, 0>::get(p);
       return this->fetchAll((* t), columns, relation);
    }
 
@@ -301,7 +299,7 @@ public:
 
    virtual QSqlError _fetchByQuery(const qx::QxSqlQuery & query, QObject * p, const QStringList & columns = QStringList(), const QStringList & relation = QStringList())
    {
-      T * t = qxVerifyPointer<boost::is_base_of<QObject, T>::value, 0>::get(p);
+      T * t = qxVerifyPointer<std::is_base_of<QObject, T>::value, 0>::get(p);
       return this->fetchByQuery(query, (* t), columns, relation);
    }
 
@@ -313,7 +311,7 @@ public:
 
    virtual QSqlError _insert(QObject * p, const QStringList & relation = QStringList())
    {
-      T * t = qxVerifyPointer<boost::is_base_of<QObject, T>::value, 0>::get(p);
+      T * t = qxVerifyPointer<std::is_base_of<QObject, T>::value, 0>::get(p);
       return this->insert((* t), relation);
    }
 
@@ -325,7 +323,7 @@ public:
 
    virtual QSqlError _update(QObject * p, const qx::QxSqlQuery & query = qx::QxSqlQuery(), const QStringList & columns = QStringList(), const QStringList & relation = QStringList())
    {
-      T * t = qxVerifyPointer<boost::is_base_of<QObject, T>::value, 0>::get(p);
+      T * t = qxVerifyPointer<std::is_base_of<QObject, T>::value, 0>::get(p);
       return this->update((* t), query, columns, relation);
    }
 
@@ -337,7 +335,7 @@ public:
 
    virtual QSqlError _save(QObject * p, const QStringList & relation = QStringList())
    {
-      T * t = qxVerifyPointer<boost::is_base_of<QObject, T>::value, 0>::get(p);
+      T * t = qxVerifyPointer<std::is_base_of<QObject, T>::value, 0>::get(p);
       return this->save((* t), relation);
    }
 
@@ -352,7 +350,7 @@ public:
 
    virtual QSqlError _deleteById(QObject * p)
    {
-      T * t = qxVerifyPointer<boost::is_base_of<QObject, T>::value, 0>::get(p);
+      T * t = qxVerifyPointer<std::is_base_of<QObject, T>::value, 0>::get(p);
       return this->deleteById(* t);
    }
 
@@ -373,7 +371,7 @@ public:
 
    virtual QSqlError _destroyById(QObject * p)
    {
-      T * t = qxVerifyPointer<boost::is_base_of<QObject, T>::value, 0>::get(p);
+      T * t = qxVerifyPointer<std::is_base_of<QObject, T>::value, 0>::get(p);
       return this->destroyById(* t);
    }
 
@@ -391,7 +389,7 @@ public:
 
    virtual qx_bool _exist(QObject * p)
    {
-      T * t = qxVerifyPointer<boost::is_base_of<QObject, T>::value, 0>::get(p);
+      T * t = qxVerifyPointer<std::is_base_of<QObject, T>::value, 0>::get(p);
       return this->exist(* t);
    }
 

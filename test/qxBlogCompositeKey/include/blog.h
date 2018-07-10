@@ -42,7 +42,7 @@ public:
 QX_REGISTER_PRIMARY_KEY(blog, blog::type_composite_key)
 QX_REGISTER_HPP_QX_BLOG(blog, qx::trait::no_base_class_defined, 0)
 
-typedef qx_shared_ptr<blog> blog_ptr;
+typedef std::shared_ptr<blog> blog_ptr;
 typedef std::vector<blog_ptr> list_blog;
 
 #endif // _QX_BLOG_BLOG_H_

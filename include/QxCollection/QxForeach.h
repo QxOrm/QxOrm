@@ -29,6 +29,7 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST
 #ifndef _QX_FOREACH_H_
 #define _QX_FOREACH_H_
 
@@ -168,3 +169,4 @@ struct qx_deref
 #define _foreach_reverse_if(VAR, COL, COND) _foreach_reverse(VAR, COL) if (COND)
 
 #endif // _QX_FOREACH_H_
+#endif // _QX_ENABLE_BOOST

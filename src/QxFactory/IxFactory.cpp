@@ -38,7 +38,7 @@
 
 namespace qx {
 
-IxFactory::IxFactory(const QString & sKey) : boost::noncopyable(), m_sKeyFactory(sKey)
+IxFactory::IxFactory(const QString & sKey) : m_sKeyFactory(sKey)
 {
 #ifdef _QX_TRACE_CONSTRUCTOR_DESTRUCTOR
    qDebug("[QxOrm] qx::IxFactory constructor '%s'", qPrintable(m_sKeyFactory));

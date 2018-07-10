@@ -40,7 +40,7 @@
 
 namespace qx {
 
-IxBoostSerializeRegisterHelper::IxBoostSerializeRegisterHelper(const QString & sKey) : boost::noncopyable(), m_sKey(sKey)
+IxBoostSerializeRegisterHelper::IxBoostSerializeRegisterHelper(const QString & sKey) : m_sKey(sKey)
 {
    QxBoostSerializeRegisterHelperX::getSingleton()->add(m_sKey, this);
 }

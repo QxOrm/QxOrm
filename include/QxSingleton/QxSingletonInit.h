@@ -49,9 +49,11 @@
 
 #include <QxDataMember/QxDataMemberX.h>
 
+#ifdef _QX_ENABLE_QT_NETWORK
 #include <QxService/IxParameter.h>
 #include <QxService/IxService.h>
 #include <QxService/QxTransaction.h>
+#endif // _QX_ENABLE_QT_NETWORK
 
 #include <QxTraits/get_base_class.h>
 

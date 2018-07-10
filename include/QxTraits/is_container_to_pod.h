@@ -36,9 +36,6 @@
 #pragma once
 #endif
 
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/logical.hpp>
-
 #include <QxTraits/is_container.h>
 #include <QxTraits/is_qx_pod.h>
 
@@ -52,41 +49,41 @@ class is_container_to_pod
 private:
 
    template <typename U>
-   static typename boost::mpl::if_c<qx::trait::is_qx_pod<U>::value, char, int>::type removeContainer(const std::vector<U> &);
+   static typename std::conditional<qx::trait::is_qx_pod<U>::value, char, int>::type removeContainer(const std::vector<U> &);
 
    template <typename U>
-   static typename boost::mpl::if_c<qx::trait::is_qx_pod<U>::value, char, int>::type removeContainer(const std::list<U> &);
+   static typename std::conditional<qx::trait::is_qx_pod<U>::value, char, int>::type removeContainer(const std::list<U> &);
 
    template <typename U>
-   static typename boost::mpl::if_c<qx::trait::is_qx_pod<U>::value, char, int>::type removeContainer(const std::set<U> &);
+   static typename std::conditional<qx::trait::is_qx_pod<U>::value, char, int>::type removeContainer(const std::set<U> &);
 
    template <typename U>
-   static typename boost::mpl::if_c<qx::trait::is_qx_pod<U>::value, char, int>::type removeContainer(const QVector<U> &);
+   static typename std::conditional<qx::trait::is_qx_pod<U>::value, char, int>::type removeContainer(const QVector<U> &);
 
    template <typename U>
-   static typename boost::mpl::if_c<qx::trait::is_qx_pod<U>::value, char, int>::type removeContainer(const QList<U> &);
+   static typename std::conditional<qx::trait::is_qx_pod<U>::value, char, int>::type removeContainer(const QList<U> &);
 
    template <typename U>
-   static typename boost::mpl::if_c<qx::trait::is_qx_pod<U>::value, char, int>::type removeContainer(const QSet<U> &);
+   static typename std::conditional<qx::trait::is_qx_pod<U>::value, char, int>::type removeContainer(const QSet<U> &);
 
    template <typename U>
-   static typename boost::mpl::if_c<qx::trait::is_qx_pod<U>::value, char, int>::type removeContainer(const QLinkedList<U> &);
+   static typename std::conditional<qx::trait::is_qx_pod<U>::value, char, int>::type removeContainer(const QLinkedList<U> &);
+
+#ifdef _QX_ENABLE_BOOST
 
    template <typename U>
-   static typename boost::mpl::if_c<qx::trait::is_qx_pod<U>::value, char, int>::type removeContainer(const boost::unordered_set<U> &);
+   static typename std::conditional<qx::trait::is_qx_pod<U>::value, char, int>::type removeContainer(const boost::unordered_set<U> &);
 
    template <typename U>
-   static typename boost::mpl::if_c<qx::trait::is_qx_pod<U>::value, char, int>::type removeContainer(const boost::unordered_multiset<U> &);
+   static typename std::conditional<qx::trait::is_qx_pod<U>::value, char, int>::type removeContainer(const boost::unordered_multiset<U> &);
 
-#if (defined(_QX_CPP_11_CONTAINER) && !defined(BOOST_NO_CXX11_STD_UNORDERED))
-
-   template <typename U>
-   static typename boost::mpl::if_c<qx::trait::is_qx_pod<U>::value, char, int>::type removeContainer(const std::unordered_set<U> &);
+#endif // _QX_ENABLE_BOOST
 
    template <typename U>
-   static typename boost::mpl::if_c<qx::trait::is_qx_pod<U>::value, char, int>::type removeContainer(const std::unordered_multiset<U> &);
+   static typename std::conditional<qx::trait::is_qx_pod<U>::value, char, int>::type removeContainer(const std::unordered_set<U> &);
 
-#endif // (defined(_QX_CPP_11_CONTAINER) && !defined(BOOST_NO_CXX11_STD_UNORDERED))
+   template <typename U>
+   static typename std::conditional<qx::trait::is_qx_pod<U>::value, char, int>::type removeContainer(const std::unordered_multiset<U> &);
 
    static int removeContainer(...);
    static T t;
@@ -95,7 +92,7 @@ public:
 
    enum { value = (qx::trait::is_container<T>::value && (sizeof(qx::trait::is_container_to_pod<T>::removeContainer(t)) == sizeof(char))) };
 
-   typedef typename boost::mpl::if_c<qx::trait::is_container_to_pod<T>::value, boost::mpl::true_, boost::mpl::false_>::type type;
+   typedef typename std::conditional<qx::trait::is_container_to_pod<T>::value, std::true_type, std::false_type>::type type;
 
 };
 

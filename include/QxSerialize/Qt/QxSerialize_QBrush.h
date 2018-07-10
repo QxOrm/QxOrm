@@ -40,7 +40,6 @@
 
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/split_free.hpp>
-#include <boost/serialization/version.hpp>
 #include <boost/serialization/nvp.hpp>
 
 #include <QtGui/qbrush.h>
@@ -49,7 +48,9 @@
 #include <QxSerialize/Qt/QxSerialize_QPixmap.h>
 #include <QxSerialize/QxSerializeFastCompil.h>
 
-BOOST_CLASS_VERSION(QBrush, 0)
+#include <QxRegister/QxVersion.h>
+
+QX_CLASS_VERSION(QBrush, 0)
 
 QX_SERIALIZE_FAST_COMPIL_SAVE_LOAD_HPP(QX_DLL_EXPORT, QBrush)
 

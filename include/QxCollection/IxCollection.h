@@ -43,8 +43,6 @@
  * \brief Common interface for all QxOrm containers qx::QxCollection<Key, Value>
  */
 
-#include <boost/any.hpp>
-
 #include <QxTraits/get_class_name.h>
 
 #include <QxCommon/QxAnyCastDynamic.h>
@@ -66,7 +64,7 @@ public:
    virtual long _count() const = 0;
    virtual void _clear() = 0;
    virtual bool _remove(long index) = 0;
-   virtual boost::any _at(long index) const = 0;
+   virtual qx::any _at(long index) const = 0;
 
    template <typename T>
    T _get(long index) const
@@ -74,7 +72,7 @@ public:
 
 };
 
-typedef qx_shared_ptr<qx::IxCollection> IxCollection_ptr;
+typedef std::shared_ptr<qx::IxCollection> IxCollection_ptr;
 
 } // namespace qx
 

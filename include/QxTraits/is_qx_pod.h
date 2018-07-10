@@ -43,12 +43,6 @@
  * \brief qx::trait::is_qx_pod<T>::value : return true if T is a POD type and not a pointer
  */
 
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/logical.hpp>
-#include <boost/type_traits/is_pod.hpp>
-#include <boost/type_traits/is_pointer.hpp>
-#include <boost/type_traits/is_member_pointer.hpp>
-
 namespace qx {
 namespace trait {
 
@@ -60,9 +54,9 @@ template <typename T>
 struct is_qx_pod
 {
 
-   enum { value = (boost::is_pod<T>::value && ! boost::is_pointer<T>::value && ! boost::is_member_pointer<T>::value) };
+   enum { value = (std::is_pod<T>::value && ! std::is_pointer<T>::value && ! std::is_member_pointer<T>::value) };
 
-   typedef typename boost::mpl::if_c<qx::trait::is_qx_pod<T>::value, boost::mpl::true_, boost::mpl::false_>::type type;
+   typedef typename std::conditional<qx::trait::is_qx_pod<T>::value, std::true_type, std::false_type>::type type;
 
 };
 

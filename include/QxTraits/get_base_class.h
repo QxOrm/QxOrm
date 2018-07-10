@@ -43,10 +43,6 @@
  * \brief qx::trait::get_base_class<T>::type : retrieve base class of type T registered into QxOrm context and return qx::trait::no_base_class_defined if no base class defined
  */
 
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/logical.hpp>
-#include <boost/type_traits/is_same.hpp>
-
 #include <QxTraits/get_class_name.h>
 
 namespace qx {
@@ -65,14 +61,14 @@ class get_base_class
 
 template <class T>
 class is_base_class_defined
-{ public: enum { value = (boost::is_same<typename qx::trait::get_base_class<T>::type, qx::trait::no_base_class_defined>::value ? 0 : 1) }; };
+{ public: enum { value = (std::is_same<typename qx::trait::get_base_class<T>::type, qx::trait::no_base_class_defined>::value ? 0 : 1) }; };
 
 template <class T>
 class get_base_class_2
 {
 private: typedef typename qx::trait::get_base_class<T>::type type_base;
-private: enum { is_base_ok = (boost::is_same<type_base, qx::trait::no_base_class_defined>::value ? 0 : 1) };
-public: typedef typename boost::mpl::if_c<is_base_ok, type_base, T>::type type;
+private: enum { is_base_ok = (std::is_same<type_base, qx::trait::no_base_class_defined>::value ? 0 : 1) };
+public: typedef typename std::conditional<is_base_ok, type_base, T>::type type;
 };
 
 } // namespace trait

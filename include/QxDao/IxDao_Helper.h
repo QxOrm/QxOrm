@@ -83,33 +83,14 @@ namespace detail {
 class QX_DLL_EXPORT IxDao_Helper
 {
 
-protected:
+private:
 
-   QTime          m_time;                 //!< Time (in ms) to execute query
-   QSqlDatabase   m_database;             //!< Connection to database to execute query
-   QSqlQuery      m_query;                //!< Query to execute
-   QSqlError      m_error;                //!< Error executing query
-   QString        m_context;              //!< Description of context : fetch, insert, update, delete, etc...
-   long           m_lDataCount;           //!< Data member collection count
-   bool           m_bTransaction;         //!< Transaction in progress : commit if valid, rollback if error
-   bool           m_bQuiet;               //!< Display message and assert in debug mode
-   bool           m_bTraceQuery;          //!< Trace sql query
-   bool           m_bTraceRecord;         //!< Trace sql record
-   bool           m_bCartesianProduct;    //!< Recordset can return cartesian product => same id in multiple records
-   bool           m_bValidatorThrowable;  //!< An exception of type qx::validator_error is thrown when invalid values are detected inserting or updating an element into database
-   QStringList    m_lstColumns;           //!< List of columns to execute sql query (if empty => all columns)
-
-   qx::IxSqlQueryBuilder_ptr     m_pQueryBuilder;        //!< Sql query builder
-   qx::IxDataMemberX *           m_pDataMemberX;         //!< Collection of data member
-   qx::IxDataMember *            m_pDataId;              //!< Data member id
-   qx::QxSqlQuery                m_qxQuery;              //!< Query sql with place-holder
-   IxSqlGenerator *              m_pSqlGenerator;        //!< SQL generator to build SQL query specific for each database
-   qx::QxInvalidValueX           m_lstInvalidValues;     //!< List of invalid values using validator engine
-   qx::QxSqlRelationLinked_ptr   m_pSqlRelationLinked;   //!< List of relation linked to build a hierarchy of relationships
+   struct IxDao_HelperImpl;
+   std::unique_ptr<IxDao_HelperImpl> m_pImpl; //!< Private implementation idiom
 
 protected:
 
-   IxDao_Helper();
+   IxDao_Helper(qx::IxSqlQueryBuilder * pBuilder);
    virtual ~IxDao_Helper();
 
 public:
@@ -160,13 +141,13 @@ public:
 
    template <class U>
    inline bool isValidPrimaryKey(const U & u)
-   { return (m_pDataId && qx::trait::is_valid_primary_key(m_pDataId->toVariant((& u), -1, qx::cvt::context::e_database))); }
+   { return (getDataId() && qx::trait::is_valid_primary_key(getDataId()->toVariant((& u), -1, qx::cvt::context::e_database))); }
 
    template <class U>
    inline void updateLastInsertId(U & u)
    {
-      if (m_pDataId && m_pDataId->getAutoIncrement() && this->hasFeature(QSqlDriver::LastInsertId))
-      { m_pDataId->fromVariant((& u), m_query.lastInsertId(), -1, qx::cvt::context::e_database); }
+      if (getDataId() && getDataId()->getAutoIncrement() && this->hasFeature(QSqlDriver::LastInsertId))
+      { getDataId()->fromVariant((& u), query().lastInsertId(), -1, qx::cvt::context::e_database); }
    }
 
    template <class U>

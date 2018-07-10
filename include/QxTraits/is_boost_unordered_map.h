@@ -29,6 +29,7 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST
 #ifndef _QX_IS_BOOST_UNORDERED_MAP_H_
 #define _QX_IS_BOOST_UNORDERED_MAP_H_
 
@@ -43,10 +44,6 @@
  * \brief qx::trait::is_boost_unordered_map<T>::value : return true if T is a boost::unordered_map<> or boost::unordered_multimap<> container, otherwise return false
  */
 
-#include <boost/unordered_map.hpp>
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/logical.hpp>
-
 namespace qx {
 namespace trait {
 
@@ -55,33 +52,34 @@ namespace trait {
  * \brief qx::trait::is_boost_unordered_map<T>::value : return true if T is a boost::unordered_map<> or boost::unordered_multimap<> container, otherwise return false
  */
 template <typename T>
-struct is_boost_unordered_map : public boost::mpl::false_ { ; };
+struct is_boost_unordered_map : public std::false_type { ; };
 
 template <typename Key, typename Value>
-struct is_boost_unordered_map< boost::unordered_map<Key, Value> > : public boost::mpl::true_ { ; };
+struct is_boost_unordered_map< boost::unordered_map<Key, Value> > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_boost_unordered_map< boost::unordered_map<Key, Value> & > : public boost::mpl::true_ { ; };
+struct is_boost_unordered_map< boost::unordered_map<Key, Value> & > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_boost_unordered_map< const boost::unordered_map<Key, Value> > : public boost::mpl::true_ { ; };
+struct is_boost_unordered_map< const boost::unordered_map<Key, Value> > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_boost_unordered_map< const boost::unordered_map<Key, Value> & > : public boost::mpl::true_ { ; };
+struct is_boost_unordered_map< const boost::unordered_map<Key, Value> & > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_boost_unordered_map< boost::unordered_multimap<Key, Value> > : public boost::mpl::true_ { ; };
+struct is_boost_unordered_map< boost::unordered_multimap<Key, Value> > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_boost_unordered_map< boost::unordered_multimap<Key, Value> & > : public boost::mpl::true_ { ; };
+struct is_boost_unordered_map< boost::unordered_multimap<Key, Value> & > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_boost_unordered_map< const boost::unordered_multimap<Key, Value> > : public boost::mpl::true_ { ; };
+struct is_boost_unordered_map< const boost::unordered_multimap<Key, Value> > : public std::true_type { ; };
 
 template <typename Key, typename Value>
-struct is_boost_unordered_map< const boost::unordered_multimap<Key, Value> & > : public boost::mpl::true_ { ; };
+struct is_boost_unordered_map< const boost::unordered_multimap<Key, Value> & > : public std::true_type { ; };
 
 } // namespace trait
 } // namespace qx
 
 #endif // _QX_IS_BOOST_UNORDERED_MAP_H_
+#endif // _QX_ENABLE_BOOST

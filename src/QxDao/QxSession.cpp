@@ -38,26 +38,26 @@
 
 namespace qx {
 
-QxSession::QxSession() : boost::noncopyable(), m_bTransaction(false), m_bThrowInEvent(false), m_bAutoOpenClose(false)
+QxSession::QxSession() : m_bTransaction(false), m_bThrowInEvent(false), m_bAutoOpenClose(false)
 {
    m_database = qx::QxSqlDatabase::getDatabaseCloned();
    m_bThrowable = qx::QxSqlDatabase::getSingleton()->getSessionThrowable();
    if (qx::QxSqlDatabase::getSingleton()->getSessionAutoTransaction()) { open(); }
 }
 
-QxSession::QxSession(const QSqlDatabase & database) : boost::noncopyable(), m_database(database), m_bTransaction(false), m_bThrowInEvent(false), m_bAutoOpenClose(false)
+QxSession::QxSession(const QSqlDatabase & database) : m_database(database), m_bTransaction(false), m_bThrowInEvent(false), m_bAutoOpenClose(false)
 {
    m_bThrowable = qx::QxSqlDatabase::getSingleton()->getSessionThrowable();
    if (qx::QxSqlDatabase::getSingleton()->getSessionAutoTransaction()) { open(); }
 }
 
-QxSession::QxSession(const QSqlDatabase & database, bool bOpenTransaction) : boost::noncopyable(), m_database(database), m_bTransaction(false), m_bThrowInEvent(false), m_bAutoOpenClose(false)
+QxSession::QxSession(const QSqlDatabase & database, bool bOpenTransaction) : m_database(database), m_bTransaction(false), m_bThrowInEvent(false), m_bAutoOpenClose(false)
 {
    m_bThrowable = qx::QxSqlDatabase::getSingleton()->getSessionThrowable();
    if (bOpenTransaction) { open(); }
 }
 
-QxSession::QxSession(const QSqlDatabase & database, bool bOpenTransaction, bool bThrowable) : boost::noncopyable(), m_database(database), m_bTransaction(false), m_bThrowable(bThrowable), m_bThrowInEvent(false), m_bAutoOpenClose(false)
+QxSession::QxSession(const QSqlDatabase & database, bool bOpenTransaction, bool bThrowable) : m_database(database), m_bTransaction(false), m_bThrowable(bThrowable), m_bThrowInEvent(false), m_bAutoOpenClose(false)
 {
    if (bOpenTransaction) { open(); }
 }

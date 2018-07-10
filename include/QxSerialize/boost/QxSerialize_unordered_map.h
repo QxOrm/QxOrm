@@ -37,9 +37,6 @@
 #pragma once
 #endif
 
-#include <boost/version.hpp>
-#include <boost/unordered_map.hpp>
-
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/collections_save_imp.hpp>
 #include <boost/serialization/collections_load_imp.hpp>

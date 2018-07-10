@@ -129,7 +129,7 @@ private:
    template <typename U>
    static inline bool saveItem(qx::dao::save_mode::e_save_mode eSaveMode, qx::QxSqlRelationParams * pRelationParams, U & item, qx::dao::detail::QxDao_Helper_Container<T> & dao)
    {
-      bool bSaveOk = saveItem_Helper<U, boost::is_pointer<U>::value || qx::trait::is_smart_ptr<U>::value>::save(eSaveMode, pRelationParams, item, dao);
+      bool bSaveOk = saveItem_Helper<U, std::is_pointer<U>::value || qx::trait::is_smart_ptr<U>::value>::save(eSaveMode, pRelationParams, item, dao);
       if (bSaveOk) { qx::dao::detail::QxDao_Keep_Original<U>::backup(item); }
       return bSaveOk;
    }
@@ -137,7 +137,7 @@ private:
    template <typename U>
    static inline bool hierarchyOnBeforeSave(qx::dao::save_mode::e_save_mode eSaveMode, qx::QxSqlRelationParams * pRelationParams, U & item, qx::dao::detail::QxDao_Helper_Container<T> & dao)
    {
-      bool bBeforeSaveOk = saveItem_Helper<U, boost::is_pointer<U>::value || qx::trait::is_smart_ptr<U>::value>::hierarchyOnBeforeSave(eSaveMode, pRelationParams, item, dao);
+      bool bBeforeSaveOk = saveItem_Helper<U, std::is_pointer<U>::value || qx::trait::is_smart_ptr<U>::value>::hierarchyOnBeforeSave(eSaveMode, pRelationParams, item, dao);
       if (bBeforeSaveOk) { qx::dao::detail::QxDao_Keep_Original<U>::backup(item); }
       return bBeforeSaveOk;
    }
@@ -145,7 +145,7 @@ private:
    template <typename U>
    static inline bool hierarchyOnAfterSave(qx::dao::save_mode::e_save_mode eSaveMode, qx::QxSqlRelationParams * pRelationParams, U & item, qx::dao::detail::QxDao_Helper_Container<T> & dao)
    {
-      bool bAfterSaveOk = saveItem_Helper<U, boost::is_pointer<U>::value || qx::trait::is_smart_ptr<U>::value>::hierarchyOnAfterSave(eSaveMode, pRelationParams, item, dao);
+      bool bAfterSaveOk = saveItem_Helper<U, std::is_pointer<U>::value || qx::trait::is_smart_ptr<U>::value>::hierarchyOnAfterSave(eSaveMode, pRelationParams, item, dao);
       if (bAfterSaveOk) { qx::dao::detail::QxDao_Keep_Original<U>::backup(item); }
       return bAfterSaveOk;
    }
@@ -282,9 +282,9 @@ struct QxDao_Save_WithRelation_Recursive
 
    static inline QSqlError save(T & t, qx::dao::save_mode::e_save_mode eSaveMode, QSqlDatabase * pDatabase, qx::QxSqlRelationParams * pRelationParams)
    {
-      typedef typename boost::mpl::if_c< boost::is_pointer<T>::value, qx::dao::detail::QxDao_Save_WithRelation_Recursive_Ptr<T>, qx::dao::detail::QxDao_Save_WithRelation_Recursive_Generic<T> >::type type_dao_1;
-      typedef typename boost::mpl::if_c< qx::trait::is_smart_ptr<T>::value, qx::dao::detail::QxDao_Save_WithRelation_Recursive_Ptr<T>, type_dao_1 >::type type_dao_2;
-      typedef typename boost::mpl::if_c< qx::trait::is_container<T>::value, qx::dao::detail::QxDao_Save_WithRelation_Recursive_Container<T>, type_dao_2 >::type type_dao_3;
+      typedef typename std::conditional< std::is_pointer<T>::value, qx::dao::detail::QxDao_Save_WithRelation_Recursive_Ptr<T>, qx::dao::detail::QxDao_Save_WithRelation_Recursive_Generic<T> >::type type_dao_1;
+      typedef typename std::conditional< qx::trait::is_smart_ptr<T>::value, qx::dao::detail::QxDao_Save_WithRelation_Recursive_Ptr<T>, type_dao_1 >::type type_dao_2;
+      typedef typename std::conditional< qx::trait::is_container<T>::value, qx::dao::detail::QxDao_Save_WithRelation_Recursive_Container<T>, type_dao_2 >::type type_dao_3;
 
       QSqlError error = type_dao_3::save(t, eSaveMode, pDatabase, pRelationParams);
       if (! error.isValid()) { qx::dao::detail::QxDao_Keep_Original<T>::backup(t); }

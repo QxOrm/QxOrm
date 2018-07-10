@@ -39,7 +39,6 @@
 
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/split_free.hpp>
-#include <boost/serialization/version.hpp>
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/utility.hpp>
 
@@ -48,7 +47,9 @@
 #include <QxSerialize/Qt/QxSerialize_QVariant.h>
 #include <QxSerialize/QxSerializeFastCompil.h>
 
-BOOST_CLASS_VERSION(QObject, 0)
+#include <QxRegister/QxVersion.h>
+
+QX_CLASS_VERSION(QObject, 0)
 
 QX_SERIALIZE_FAST_COMPIL_SAVE_LOAD_HPP(QX_DLL_EXPORT, QObject)
 QX_BOOST_EXPORT_SERIALIZATION_FAST_COMPIL_HPP(QObject)

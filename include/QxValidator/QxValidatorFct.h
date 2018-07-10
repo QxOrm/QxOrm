@@ -43,11 +43,6 @@
  * \brief Implementation of qx::validate<T>() function (validator engine)
  */
 
-#include <boost/static_assert.hpp>
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/logical.hpp>
-#include <boost/type_traits/is_pointer.hpp>
-
 #include <QxValidator/IxValidatorX.h>
 #include <QxValidator/QxInvalidValueX.h>
 
@@ -72,7 +67,7 @@ struct QxValidator_Helper_Generic
 
    static inline qx::QxInvalidValueX validate(T & t, const QString & group)
    {
-      BOOST_STATIC_ASSERT(qx::trait::is_qx_registered<T>::value);
+      static_assert(qx::trait::is_qx_registered<T>::value, "qx::trait::is_qx_registered<T>::value");
 
       qx::QxInvalidValueX invalidValues;
       qx::IxClass * pClass = qx::QxClass<T>::getSingleton();
@@ -106,7 +101,7 @@ private:
 
    template <typename U>
    static inline qx::QxInvalidValueX validateItem(U & item, const QString & group)
-   { return validateItem_Helper<U, boost::is_pointer<U>::value || qx::trait::is_smart_ptr<U>::value>::validate(item, group); }
+   { return validateItem_Helper<U, std::is_pointer<U>::value || qx::trait::is_smart_ptr<U>::value>::validate(item, group); }
 
    template <typename U, bool bIsPointer /* = true */>
    struct validateItem_Helper
@@ -164,9 +159,9 @@ struct QxValidator_Helper
 
    static inline qx::QxInvalidValueX validate(T & t, const QString & group)
    {
-      typedef typename boost::mpl::if_c< boost::is_pointer<T>::value, qx::validator::detail::QxValidator_Helper_Ptr<T>, qx::validator::detail::QxValidator_Helper_Generic<T> >::type type_validator_1;
-      typedef typename boost::mpl::if_c< qx::trait::is_smart_ptr<T>::value, qx::validator::detail::QxValidator_Helper_Ptr<T>, type_validator_1 >::type type_validator_2;
-      typedef typename boost::mpl::if_c< qx::trait::is_container<T>::value, qx::validator::detail::QxValidator_Helper_Container<T>, type_validator_2 >::type type_validator_3;
+      typedef typename std::conditional< std::is_pointer<T>::value, qx::validator::detail::QxValidator_Helper_Ptr<T>, qx::validator::detail::QxValidator_Helper_Generic<T> >::type type_validator_1;
+      typedef typename std::conditional< qx::trait::is_smart_ptr<T>::value, qx::validator::detail::QxValidator_Helper_Ptr<T>, type_validator_1 >::type type_validator_2;
+      typedef typename std::conditional< qx::trait::is_container<T>::value, qx::validator::detail::QxValidator_Helper_Container<T>, type_validator_2 >::type type_validator_3;
 
       return type_validator_3::validate(t, group);
    }

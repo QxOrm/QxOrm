@@ -69,7 +69,7 @@ private:
 
 };
 
-typedef qx_shared_ptr<QxSqlGenerator_MySQL> QxSqlGenerator_MySQL_ptr;
+typedef std::shared_ptr<QxSqlGenerator_MySQL> QxSqlGenerator_MySQL_ptr;
 
 } // namespace detail
 } // namespace dao

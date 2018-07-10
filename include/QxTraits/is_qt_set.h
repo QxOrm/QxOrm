@@ -45,9 +45,6 @@
 
 #include <QtCore/qset.h>
 
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/logical.hpp>
-
 namespace qx {
 namespace trait {
 
@@ -56,19 +53,19 @@ namespace trait {
  * \brief qx::trait::is_qt_set<T>::value : return true if T is a QSet<> container of Qt library, otherwise return false
  */
 template <typename T>
-struct is_qt_set : public boost::mpl::false_ { ; };
+struct is_qt_set : public std::false_type { ; };
 
 template <typename T>
-struct is_qt_set< QSet<T> > : public boost::mpl::true_ { ; };
+struct is_qt_set< QSet<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_qt_set< QSet<T> & > : public boost::mpl::true_ { ; };
+struct is_qt_set< QSet<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_qt_set< const QSet<T> > : public boost::mpl::true_ { ; };
+struct is_qt_set< const QSet<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_qt_set< const QSet<T> & > : public boost::mpl::true_ { ; };
+struct is_qt_set< const QSet<T> & > : public std::true_type { ; };
 
 } // namespace trait
 } // namespace qx

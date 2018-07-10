@@ -38,7 +38,7 @@
 
 #include <QxCollection/QxCollectionIterator.h>
 
-#include <QxSerialize/boost/QxSerialize_tuple.h>
+#include <QxSerialize/std/QxSerialize_std_tuple.h>
 
 #include <QxSerialize/Qt/QxSerialize_QString.h>
 #include <QxSerialize/Qt/QxSerialize_QVariant.h>
@@ -131,13 +131,13 @@ QxSqlQuery & QxSqlQuery::bind(const QString & sKey, const QVariant & vValue, QSq
 QVariant QxSqlQuery::boundValue(const QString & sKey) const
 {
    if (sKey.isEmpty() || ! m_lstValue.exist(sKey)) { qAssert(false); return QVariant(); }
-   return m_lstValue.getByKey(sKey).get<0>();
+   return std::get<0>(m_lstValue.getByKey(sKey));
 }
 
 QVariant QxSqlQuery::boundValue(int iPosition) const
 {
    if ((iPosition < 0) || (iPosition >= m_lstValue.count())) { qAssert(false); return QVariant(); }
-   return m_lstValue.getByIndex(iPosition).get<0>();
+   return std::get<0>(m_lstValue.getByIndex(iPosition));
 }
 
 void QxSqlQuery::resolve(QSqlQuery & query) const
@@ -154,8 +154,8 @@ void QxSqlQuery::resolve(QSqlQuery & query) const
    QxCollectionIterator<QString, type_bind_value> itr(m_lstValue);
    while (itr.next())
    {
-      if (bKey) { query.bindValue(itr.key(), itr.value().get<0>(), itr.value().get<1>()); }
-      else { query.addBindValue(itr.value().get<0>(), itr.value().get<1>()); }
+      if (bKey) { query.bindValue(itr.key(), std::get<0>(itr.value()), std::get<1>(itr.value())); }
+      else { query.addBindValue(std::get<0>(itr.value()), std::get<1>(itr.value())); }
    }
 }
 
@@ -165,9 +165,9 @@ void QxSqlQuery::resolveOutput(QSqlQuery & query, bool bFetchSqlResult)
    for (long l = 0; l < m_lstValue.count(); l++)
    {
       type_bind_value val = m_lstValue.getByIndex(l);
-      if (val.get<1>() == QSql::In) { continue; }
-      if (bKey) { val.get<0>() = query.boundValue(m_lstValue.getKeyByIndex(l)); }
-      else { val.get<0>() = query.boundValue(l); }
+      if (std::get<1>(val) == QSql::In) { continue; }
+      if (bKey) { std::get<0>(val) = query.boundValue(m_lstValue.getKeyByIndex(l)); }
+      else { std::get<0>(val) = query.boundValue(l); }
    }
    if (bFetchSqlResult) { fetchSqlResult(query); }
 }
@@ -896,7 +896,7 @@ inline void qx_load(Archive & ar, qx::QxSqlQuery & t, const unsigned int file_ve
    t.m_pSqlResult.reset();
    if ((lstResultPosByKey.count() > 0) || (lstResultValues.count() > 0))
    {
-      t.m_pSqlResult = qx_shared_ptr<qx::QxSqlQuery::QxSqlResult>(new qx::QxSqlQuery::QxSqlResult());
+      t.m_pSqlResult = std::shared_ptr<qx::QxSqlQuery::QxSqlResult>(new qx::QxSqlQuery::QxSqlResult());
       t.m_pSqlResult->positionByKey = lstResultPosByKey;
       t.m_pSqlResult->values = lstResultValues;
    }
@@ -995,7 +995,7 @@ QDataStream & operator>> (QDataStream & stream, qx::QxSqlQuery & t)
    t.m_pSqlResult.reset();
    if ((lstResultPosByKey.count() > 0) || (lstResultValues.count() > 0))
    {
-      t.m_pSqlResult = qx_shared_ptr<qx::QxSqlQuery::QxSqlResult>(new qx::QxSqlQuery::QxSqlResult());
+      t.m_pSqlResult = std::shared_ptr<qx::QxSqlQuery::QxSqlResult>(new qx::QxSqlQuery::QxSqlResult());
       t.m_pSqlResult->positionByKey = lstResultPosByKey;
       t.m_pSqlResult->values = lstResultValues;
    }

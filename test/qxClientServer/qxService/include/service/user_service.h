@@ -18,7 +18,7 @@ public:
 };
 
 QX_REGISTER_HPP_QX_SERVICE(user_service_input, qx::service::IxParameter, 0)
-typedef qx_shared_ptr<user_service_input> user_service_input_ptr;
+typedef std::shared_ptr<user_service_input> user_service_input_ptr;
 
 /* -- Service Output Parameters -- */
 
@@ -31,7 +31,7 @@ public:
 };
 
 QX_REGISTER_HPP_QX_SERVICE(user_service_output, qx::service::IxParameter, 0)
-typedef qx_shared_ptr<user_service_output> user_service_output_ptr;
+typedef std::shared_ptr<user_service_output> user_service_output_ptr;
 
 /* -- Service Definition -- */
 
@@ -51,6 +51,6 @@ public:
 };
 
 QX_REGISTER_HPP_QX_SERVICE(user_service, qx::service::IxService, 0)
-typedef qx_shared_ptr<user_service> user_service_ptr;
+typedef std::shared_ptr<user_service> user_service_ptr;
 
 #endif // _QX_SERVICE_USER_SERVICE_H_

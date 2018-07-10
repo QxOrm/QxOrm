@@ -154,6 +154,8 @@ static inline qx_bool fromJson(const QJsonValue & j, qx_bool & t, const QString 
    return qx_bool(true);
 } };
 
+#ifdef _QX_ENABLE_BOOST
+
 template <typename T> struct QxConvert_FromJson< boost::optional<T> > {
 static inline qx_bool fromJson(const QJsonValue & j, boost::optional<T> & t, const QString & format)
 {
@@ -161,6 +163,8 @@ static inline qx_bool fromJson(const QJsonValue & j, boost::optional<T> & t, con
    else if (! t) { t = T(); }
    return qx::cvt::from_json(j, (* t), format);
 } };
+
+#endif // _QX_ENABLE_BOOST
 
 } // namespace detail
 } // namespace cvt

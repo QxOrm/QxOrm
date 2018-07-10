@@ -43,10 +43,6 @@
  * \brief qx::trait::is_container_key_value<T>::value : return true if T is a map or hash-map (with <Key, Value> template format) container from stl, boost, Qt or QxOrm library, otherwise return false
  */
 
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/or.hpp>
-#include <boost/mpl/logical.hpp>
-
 #include <QxTraits/is_container.h>
 
 namespace qx {
@@ -57,45 +53,131 @@ namespace trait {
  * \brief qx::trait::is_container_key_value<T>::value : return true if T is a map or hash-map (with <Key, Value> template format) container from stl, boost, Qt or QxOrm library, otherwise return false
  */
 template <typename T>
-class is_container_key_value
-{
+struct is_container_key_value : public std::false_type { ; };
 
-private:
+#ifdef _QX_ENABLE_BOOST
 
-   typedef typename boost::mpl::or_< qx::trait::is_boost_unordered_map<T>, 
-                                     qx::trait::is_std_map<T>, 
-                                     qx::trait::is_qt_map<T>, 
-                                     qx::trait::is_qt_hash<T> >::type cond_is_container_key_value_1;
+template <typename Key, typename Value>
+struct is_container_key_value< boost::unordered_map<Key, Value> > : public std::true_type { ; };
 
-   typedef typename boost::mpl::or_< typename qx::trait::is_container_key_value<T>::cond_is_container_key_value_1, 
-                                     qx::trait::is_qt_multi_map<T>, 
-                                     qx::trait::is_qt_multi_hash<T>, 
-                                     qx::trait::is_qx_collection<T> >::type cond_is_container_key_value_2;
+template <typename Key, typename Value>
+struct is_container_key_value< boost::unordered_map<Key, Value> & > : public std::true_type { ; };
 
-#if (defined(_QX_CPP_11_CONTAINER) && !defined(BOOST_NO_CXX11_STD_UNORDERED))
+template <typename Key, typename Value>
+struct is_container_key_value< const boost::unordered_map<Key, Value> > : public std::true_type { ; };
 
-   typedef typename boost::mpl::or_< typename qx::trait::is_container_key_value<T>::cond_is_container_key_value_2, 
-                                     qx::trait::is_std_unordered_map<T> >::type cond_is_container_key_value_3;
+template <typename Key, typename Value>
+struct is_container_key_value< const boost::unordered_map<Key, Value> & > : public std::true_type { ; };
 
-   typedef typename boost::mpl::if_< typename qx::trait::is_container_key_value<T>::cond_is_container_key_value_3, 
-                                     boost::mpl::true_, 
-                                     boost::mpl::false_ >::type type_is_container_key_value;
+template <typename Key, typename Value>
+struct is_container_key_value< boost::unordered_multimap<Key, Value> > : public std::true_type { ; };
 
-#else // (defined(_QX_CPP_11_CONTAINER) && !defined(BOOST_NO_CXX11_STD_UNORDERED))
+template <typename Key, typename Value>
+struct is_container_key_value< boost::unordered_multimap<Key, Value> & > : public std::true_type { ; };
 
-   typedef typename boost::mpl::if_< typename qx::trait::is_container_key_value<T>::cond_is_container_key_value_2, 
-                                     boost::mpl::true_, 
-                                     boost::mpl::false_ >::type type_is_container_key_value;
+template <typename Key, typename Value>
+struct is_container_key_value< const boost::unordered_multimap<Key, Value> > : public std::true_type { ; };
 
-#endif // (defined(_QX_CPP_11_CONTAINER) && !defined(BOOST_NO_CXX11_STD_UNORDERED))
+template <typename Key, typename Value>
+struct is_container_key_value< const boost::unordered_multimap<Key, Value> & > : public std::true_type { ; };
 
-public:
+#endif // _QX_ENABLE_BOOST
 
-   enum { value = (qx::trait::is_container<T>::value && qx::trait::is_container_key_value<T>::type_is_container_key_value::value) };
+template <typename Key, typename Value>
+struct is_container_key_value< QHash<Key, Value> > : public std::true_type { ; };
 
-   typedef typename boost::mpl::if_c<qx::trait::is_container_key_value<T>::value, boost::mpl::true_, boost::mpl::false_>::type type;
+template <typename Key, typename Value>
+struct is_container_key_value< QHash<Key, Value> & > : public std::true_type { ; };
 
-};
+template <typename Key, typename Value>
+struct is_container_key_value< const QHash<Key, Value> > : public std::true_type { ; };
+
+template <typename Key, typename Value>
+struct is_container_key_value< const QHash<Key, Value> & > : public std::true_type { ; };
+
+template <typename Key, typename Value>
+struct is_container_key_value< QMap<Key, Value> > : public std::true_type { ; };
+
+template <typename Key, typename Value>
+struct is_container_key_value< QMap<Key, Value> & > : public std::true_type { ; };
+
+template <typename Key, typename Value>
+struct is_container_key_value< const QMap<Key, Value> > : public std::true_type { ; };
+
+template <typename Key, typename Value>
+struct is_container_key_value< const QMap<Key, Value> & > : public std::true_type { ; };
+
+template <typename Key, typename Value>
+struct is_container_key_value< QMultiHash<Key, Value> > : public std::true_type { ; };
+
+template <typename Key, typename Value>
+struct is_container_key_value< QMultiHash<Key, Value> & > : public std::true_type { ; };
+
+template <typename Key, typename Value>
+struct is_container_key_value< const QMultiHash<Key, Value> > : public std::true_type { ; };
+
+template <typename Key, typename Value>
+struct is_container_key_value< const QMultiHash<Key, Value> & > : public std::true_type { ; };
+
+template <typename Key, typename Value>
+struct is_container_key_value< QMultiMap<Key, Value> > : public std::true_type { ; };
+
+template <typename Key, typename Value>
+struct is_container_key_value< QMultiMap<Key, Value> & > : public std::true_type { ; };
+
+template <typename Key, typename Value>
+struct is_container_key_value< const QMultiMap<Key, Value> > : public std::true_type { ; };
+
+template <typename Key, typename Value>
+struct is_container_key_value< const QMultiMap<Key, Value> & > : public std::true_type { ; };
+
+template <typename Key, typename Value>
+struct is_container_key_value< qx::QxCollection<Key, Value> > : public std::true_type { ; };
+
+template <typename Key, typename Value>
+struct is_container_key_value< qx::QxCollection<Key, Value> & > : public std::true_type { ; };
+
+template <typename Key, typename Value>
+struct is_container_key_value< const qx::QxCollection<Key, Value> > : public std::true_type { ; };
+
+template <typename Key, typename Value>
+struct is_container_key_value< const qx::QxCollection<Key, Value> & > : public std::true_type { ; };
+
+template <typename Key, typename Value>
+struct is_container_key_value< std::map<Key, Value> > : public std::true_type { ; };
+
+template <typename Key, typename Value>
+struct is_container_key_value< std::map<Key, Value> & > : public std::true_type { ; };
+
+template <typename Key, typename Value>
+struct is_container_key_value< const std::map<Key, Value> > : public std::true_type { ; };
+
+template <typename Key, typename Value>
+struct is_container_key_value< const std::map<Key, Value> & > : public std::true_type { ; };
+
+template <typename Key, typename Value>
+struct is_container_key_value< std::unordered_map<Key, Value> > : public std::true_type { ; };
+
+template <typename Key, typename Value>
+struct is_container_key_value< std::unordered_map<Key, Value> & > : public std::true_type { ; };
+
+template <typename Key, typename Value>
+struct is_container_key_value< const std::unordered_map<Key, Value> > : public std::true_type { ; };
+
+template <typename Key, typename Value>
+struct is_container_key_value< const std::unordered_map<Key, Value> & > : public std::true_type { ; };
+
+template <typename Key, typename Value>
+struct is_container_key_value< std::unordered_multimap<Key, Value> > : public std::true_type { ; };
+
+template <typename Key, typename Value>
+struct is_container_key_value< std::unordered_multimap<Key, Value> & > : public std::true_type { ; };
+
+template <typename Key, typename Value>
+struct is_container_key_value< const std::unordered_multimap<Key, Value> > : public std::true_type { ; };
+
+template <typename Key, typename Value>
+struct is_container_key_value< const std::unordered_multimap<Key, Value> & > : public std::true_type { ; };
 
 } // namespace trait
 } // namespace qx

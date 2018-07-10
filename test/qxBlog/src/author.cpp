@@ -18,7 +18,7 @@ template <> void register_class(QxClass<author> & t)
 
    t.relationOneToMany(& author::m_blogX, "list_blog", "author_id");
 
-   t.fct_0<int>(& author::age, "age");
+   t.fct_0<int>(std::mem_fn(& author::age), "age"); // using std::mem_fn() here is just a workaround for an issue with some versions of MSVC, it is not required with a full compliant C++11 compiler (http://stackoverflow.com/questions/23778883/vs2013-stdfunction-with-member-function)
 }}
 
 int author::age() const

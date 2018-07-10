@@ -31,7 +31,7 @@
 
 cmake_minimum_required(VERSION 3.1)
 
-project(QxOrm VERSION 1.4.3 LANGUAGES CXX)
+project(QxOrm VERSION 1.4.4 LANGUAGES CXX)
 
 # Include QxOrm library configuration file (should be included by all projects which depend on QxOrm)
 include(./QxOrm.cmake)
@@ -72,6 +72,7 @@ set(QX_HEADERS
     ./include/QxCommon/QxAnyCastDynamic.h
     ./include/QxCommon/QxException.h
     ./include/QxCommon/QxExceptionCode.h
+    ./include/QxCommon/QxAny.h
     ./include/QxConvert/QxConvert.h
     ./include/QxConvert/QxConvert_Impl.h
     ./include/QxConvert/QxConvert_Export.h
@@ -83,6 +84,7 @@ set(QX_HEADERS
     ./include/QxRegister/QxRegisterInternalHelper.h
     ./include/QxRegister/IxTypeInfo.h
     ./include/QxRegister/QxRegisterQtProperty.h
+    ./include/QxRegister/QxVersion.h
     ./include/QxCollection/IxCollection.h
     ./include/QxCollection/QxCollection.h
     ./include/QxCollection/QxCollectionIterator.h
@@ -388,9 +390,15 @@ set(QX_HEADERS
     ./include/QxModelView/QxModel.h
     ./include/QxModelView/QxNestedModel.h
     ./include/QxModelView/QxModelService.h
+    ./include/QxModelView/QxModelRowCompare.h
+    ./include/QxExtras/QxBoostOptionalOnly.h
+    ./include/QxExtras/QxStdOptional.h
     ./include/QxOrm.h
     ./include/QxOrm_Impl.h
     ./include/QxMemLeak.h
+    ./include/QxDaoRepository.h
+    ./include/QxModelView.h
+    ./include/QxServices.h
    )
 
 # To reduce compilation times, it is recommended to define _QX_UNITY_BUILD compilation option
@@ -526,6 +534,7 @@ else() # _QX_UNITY_BUILD
        ./src/QxValidator/QxInvalidValueX.cpp
        ./src/QxModelView/IxModel.cpp
        ./src/QxModelView/QxNestedModel.cpp
+       ./src/QxModelView/QxModelRowCompare.cpp
        ./src/main.cpp
       )
 

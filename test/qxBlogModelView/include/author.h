@@ -7,7 +7,7 @@ class QX_BLOG_DLL_EXPORT author
 {
 public:
 // -- typedef
-   typedef qx_shared_ptr<blog> blog_ptr;
+   typedef std::shared_ptr<blog> blog_ptr;
    typedef std::vector<blog_ptr> list_blog;
    typedef std::vector<blog_ptr> type_list_of_blog;
 // -- enum
@@ -43,7 +43,7 @@ public:
 QX_REGISTER_PRIMARY_KEY(author, QString)
 QX_REGISTER_HPP_QX_BLOG(author, qx::trait::no_base_class_defined, 0)
 
-typedef qx_shared_ptr<author> author_ptr;
+typedef std::shared_ptr<author> author_ptr;
 typedef qx::QxCollection<QString, author_ptr> list_author;
 
 #endif // _QX_BLOG_AUTHOR_H_

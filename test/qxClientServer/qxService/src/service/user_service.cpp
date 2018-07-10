@@ -30,13 +30,13 @@ template <> void register_class(QxClass<user_service_output> & t)
 
 template <> void register_class(QxClass<user_service> & t)
 {
-   t.fct_0<void>(& user_service::insert, "insert");
-   t.fct_0<void>(& user_service::update, "update");
-   t.fct_0<void>(& user_service::remove, "remove");
-   t.fct_0<void>(& user_service::remove_all, "remove_all");
-   t.fct_0<void>(& user_service::fetch_by_id, "fetch_by_id");
-   t.fct_0<void>(& user_service::fetch_all, "fetch_all");
-   t.fct_0<void>(& user_service::get_by_criteria, "get_by_criteria");
+   t.fct_0<void>(std::mem_fn(& user_service::insert), "insert"); // using std::mem_fn() here is just a workaround for an issue with some versions of MSVC, it is not required with a full compliant C++11 compiler (http://stackoverflow.com/questions/23778883/vs2013-stdfunction-with-member-function)
+   t.fct_0<void>(std::mem_fn(& user_service::update), "update");
+   t.fct_0<void>(std::mem_fn(& user_service::remove), "remove");
+   t.fct_0<void>(std::mem_fn(& user_service::remove_all), "remove_all");
+   t.fct_0<void>(std::mem_fn(& user_service::fetch_by_id), "fetch_by_id");
+   t.fct_0<void>(std::mem_fn(& user_service::fetch_all), "fetch_all");
+   t.fct_0<void>(std::mem_fn(& user_service::get_by_criteria), "get_by_criteria");
 }
 
 } // namespace qx

@@ -43,8 +43,6 @@
  * \brief qx::trait::qt_meta_object<T>::get() : if T is based on QObject class, then return QMetaObject instance of Qt introspection engine, else return NULL
  */
 
-#include <boost/type_traits/is_base_of.hpp>
-
 #include <QtCore/qmetaobject.h>
 #include <QtCore/qmetatype.h>
 
@@ -61,7 +59,7 @@ class qt_meta_object
 
 public:
 
-   enum { is_valid = (boost::is_base_of<QObject, T>::value) };
+   enum { is_valid = (std::is_base_of<QObject, T>::value) };
 
    static const QMetaObject * get()
    { return qtMetaObject<qt_meta_object<T>::is_valid, 0>::get(); }

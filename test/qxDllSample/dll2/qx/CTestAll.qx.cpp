@@ -19,13 +19,18 @@ template <> void register_class(QxClass<CTestAll> & t)
    pData = t.data(& CTestAll::m_oStdVector, "m_oStdVector");
    pData = t.data(& CTestAll::m_oStdList, "m_oStdList");
    pData = t.data(& CTestAll::m_oStdMap, "m_oStdMap");
-   pData = t.data(& CTestAll::m_oBoostTuple, "m_oBoostTuple");
    pData = t.data(& CTestAll::m_oQString, "m_oQString");
    pData = t.data(& CTestAll::m_oQObject, "m_oQObject");
    pData = t.data(& CTestAll::m_oQByteArray, "m_oQByteArray");
    pData = t.data(& CTestAll::m_oQDate, "m_oQDate");
    pData = t.data(& CTestAll::m_oQDateTime, "m_oQDateTime");
    pData = t.data(& CTestAll::m_oQTime, "m_oQTime");
+
+#ifdef _QX_ENABLE_BOOST
+   pData = t.data(& CTestAll::m_oBoostTuple, "m_oBoostTuple");
+   pData = t.data(& CTestAll::m_oBoostScopedPtr, "m_oBoostScopedPtr", 1);
+   pData = t.data(& CTestAll::m_oBoostUnorderedMap, "m_oBoostUnorderedMap", 1);
+#endif // _QX_ENABLE_BOOST
 
 #ifdef _QX_ENABLE_QT_GUI
    pData = t.data(& CTestAll::m_oQBrush, "m_oQBrush");
@@ -54,9 +59,7 @@ template <> void register_class(QxClass<CTestAll> & t)
    pData = t.data(& CTestAll::m_oQLinkedList, "m_oQLinkedList", 1);
    pData = t.data(& CTestAll::m_oQVector, "m_oQVector", 1);
    pData = t.data(& CTestAll::m_oQPair, "m_oQPair", 1);
-   pData = t.data(& CTestAll::m_oBoostScopedPtr, "m_oBoostScopedPtr", 1);
    pData = t.data(& CTestAll::m_oBoostSharedPtr, "m_oBoostSharedPtr", 1);
-   pData = t.data(& CTestAll::m_oBoostUnorderedMap, "m_oBoostUnorderedMap", 1);
    pData = t.data(& CTestAll::m_oQSharedPointer, "m_oQSharedPointer", 1);
    pData = t.data(& CTestAll::m_oQSize, "m_oQSize", 1);
 #endif // ((! defined(Q_OS_WIN)) || (! defined(__GNUC__)))

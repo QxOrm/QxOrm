@@ -83,7 +83,7 @@ protected:
 
 };
 
-typedef qx_shared_ptr<QxSqlIsNull> QxSqlIsNull_ptr;
+typedef std::shared_ptr<QxSqlIsNull> QxSqlIsNull_ptr;
 
 } // namespace detail
 } // namespace dao

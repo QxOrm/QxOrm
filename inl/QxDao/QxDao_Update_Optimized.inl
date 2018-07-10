@@ -84,7 +84,7 @@ struct QxDao_Update_Optimized
 
    static inline QSqlError update_optimized(const qx::QxSqlQuery & query, qx::dao::ptr<T> & ptr, QSqlDatabase * pDatabase)
    {
-      typedef typename boost::mpl::if_c< qx::trait::is_container<T>::value, qx::dao::detail::QxDao_Update_Optimized_Container<T>, qx::dao::detail::QxDao_Update_Optimized_Generic<T> >::type type_dao_1;
+      typedef typename std::conditional< qx::trait::is_container<T>::value, qx::dao::detail::QxDao_Update_Optimized_Container<T>, qx::dao::detail::QxDao_Update_Optimized_Generic<T> >::type type_dao_1;
 
       QSqlError error = type_dao_1::update_optimized(query, ptr, pDatabase);
       if (! error.isValid()) { qx::dao::detail::QxDao_Keep_Original< qx::dao::ptr<T> >::backup(ptr); }

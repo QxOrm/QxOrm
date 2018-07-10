@@ -43,9 +43,6 @@
  * \brief qx::trait::is_smart_ptr_to_pod<T>::value : return true if T is a smart-pointer of boost, Qt or QxOrm libraries and (*T) is a POD type (char, int, long, etc.), otherwise return false
  */
 
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/logical.hpp>
-
 #include <QxTraits/is_smart_ptr.h>
 #include <QxTraits/is_qx_pod.h>
 
@@ -62,42 +59,42 @@ class is_smart_ptr_to_pod
 
 private:
 
-   template <typename U>
-   static typename boost::mpl::if_c<qx::trait::is_qx_pod<U>::value, char, int>::type removeSmartPtr(const boost::scoped_ptr<U> &);
+#ifdef _QX_ENABLE_BOOST
 
    template <typename U>
-   static typename boost::mpl::if_c<qx::trait::is_qx_pod<U>::value, char, int>::type removeSmartPtr(const boost::shared_ptr<U> &);
+   static typename std::conditional<qx::trait::is_qx_pod<U>::value, char, int>::type removeSmartPtr(const boost::scoped_ptr<U> &);
 
    template <typename U>
-   static typename boost::mpl::if_c<qx::trait::is_qx_pod<U>::value, char, int>::type removeSmartPtr(const boost::weak_ptr<U> &);
+   static typename std::conditional<qx::trait::is_qx_pod<U>::value, char, int>::type removeSmartPtr(const boost::shared_ptr<U> &);
 
    template <typename U>
-   static typename boost::mpl::if_c<qx::trait::is_qx_pod<U>::value, char, int>::type removeSmartPtr(const boost::intrusive_ptr<U> &);
+   static typename std::conditional<qx::trait::is_qx_pod<U>::value, char, int>::type removeSmartPtr(const boost::weak_ptr<U> &);
 
    template <typename U>
-   static typename boost::mpl::if_c<qx::trait::is_qx_pod<U>::value, char, int>::type removeSmartPtr(const QSharedDataPointer<U> &);
+   static typename std::conditional<qx::trait::is_qx_pod<U>::value, char, int>::type removeSmartPtr(const boost::intrusive_ptr<U> &);
+
+#endif // _QX_ENABLE_BOOST
 
    template <typename U>
-   static typename boost::mpl::if_c<qx::trait::is_qx_pod<U>::value, char, int>::type removeSmartPtr(const QSharedPointer<U> &);
+   static typename std::conditional<qx::trait::is_qx_pod<U>::value, char, int>::type removeSmartPtr(const QSharedDataPointer<U> &);
 
    template <typename U>
-   static typename boost::mpl::if_c<qx::trait::is_qx_pod<U>::value, char, int>::type removeSmartPtr(const QWeakPointer<U> &);
+   static typename std::conditional<qx::trait::is_qx_pod<U>::value, char, int>::type removeSmartPtr(const QSharedPointer<U> &);
 
    template <typename U>
-   static typename boost::mpl::if_c<qx::trait::is_qx_pod<U>::value, char, int>::type removeSmartPtr(const qx::dao::ptr<U> &);
-
-#if (defined(_QX_CPP_11_SMART_PTR) && !defined(BOOST_NO_CXX11_SMART_PTR))
+   static typename std::conditional<qx::trait::is_qx_pod<U>::value, char, int>::type removeSmartPtr(const QWeakPointer<U> &);
 
    template <typename U>
-   static typename boost::mpl::if_c<qx::trait::is_qx_pod<U>::value, char, int>::type removeSmartPtr(const std::unique_ptr<U> &);
+   static typename std::conditional<qx::trait::is_qx_pod<U>::value, char, int>::type removeSmartPtr(const qx::dao::ptr<U> &);
 
    template <typename U>
-   static typename boost::mpl::if_c<qx::trait::is_qx_pod<U>::value, char, int>::type removeSmartPtr(const std::shared_ptr<U> &);
+   static typename std::conditional<qx::trait::is_qx_pod<U>::value, char, int>::type removeSmartPtr(const std::unique_ptr<U> &);
 
    template <typename U>
-   static typename boost::mpl::if_c<qx::trait::is_qx_pod<U>::value, char, int>::type removeSmartPtr(const std::weak_ptr<U> &);
+   static typename std::conditional<qx::trait::is_qx_pod<U>::value, char, int>::type removeSmartPtr(const std::shared_ptr<U> &);
 
-#endif // (defined(_QX_CPP_11_SMART_PTR) && !defined(BOOST_NO_CXX11_SMART_PTR))
+   template <typename U>
+   static typename std::conditional<qx::trait::is_qx_pod<U>::value, char, int>::type removeSmartPtr(const std::weak_ptr<U> &);
 
    static int removeSmartPtr(...);
    static T t;
@@ -106,7 +103,7 @@ public:
 
    enum { value = (qx::trait::is_smart_ptr<T>::value && (sizeof(qx::trait::is_smart_ptr_to_pod<T>::removeSmartPtr(t)) == sizeof(char))) };
 
-   typedef typename boost::mpl::if_c<qx::trait::is_smart_ptr_to_pod<T>::value, boost::mpl::true_, boost::mpl::false_>::type type;
+   typedef typename std::conditional<qx::trait::is_smart_ptr_to_pod<T>::value, std::true_type, std::false_type>::type type;
 
 };
 

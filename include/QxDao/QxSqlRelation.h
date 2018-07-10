@@ -43,11 +43,6 @@
  * \brief Base class for all relationships defined between 2 classes (or between 2 tables in database)
  */
 
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/logical.hpp>
-#include <boost/type_traits/is_same.hpp>
-#include <boost/type_traits/is_pointer.hpp>
-
 #include <QxDao/QxDao.h>
 #include <QxDao/IxSqlRelation.h>
 #include <QxDao/IxSqlQueryBuilder.h>
@@ -81,46 +76,45 @@ protected:
    typedef type_tmp_2 type_container;
    typedef qx::trait::generic_container<type_container> type_generic_container;
    typedef typename type_generic_container::type_item type_item;
-   typedef typename boost::mpl::if_c<qx::trait::is_container<type_container>::value, typename type_generic_container::type_value_qx, type_container>::type type_tmp_3;
+   typedef typename std::conditional<qx::trait::is_container<type_container>::value, typename type_generic_container::type_value_qx, type_container>::type type_tmp_3;
    typedef typename QxSqlRelation<DataType, Owner>::type_tmp_3 type_data;
    typedef Owner type_owner;
 
    enum { is_valid = (qx::trait::is_qx_registered<type_data>::value && qx::trait::is_qx_registered<type_owner>::value) };
-   enum { is_data_pointer = (boost::is_pointer<DataType>::value || qx::trait::is_smart_ptr<DataType>::value) };
+   enum { is_data_pointer = (std::is_pointer<DataType>::value || qx::trait::is_smart_ptr<DataType>::value) };
    enum { is_data_container = qx::trait::is_container<type_container>::value };
-   enum { is_same_data_owner = boost::is_same<type_data, type_owner>::value };
+   enum { is_same_data_owner = std::is_same<type_data, type_owner>::value };
 
 public:
 
-   QxSqlRelation(IxDataMember * p) : IxSqlRelation(p) { this->m_iIsSameDataOwner = static_cast<int>(is_same_data_owner); }
-   virtual ~QxSqlRelation() { BOOST_STATIC_ASSERT(is_valid); }
+   QxSqlRelation(IxDataMember * p) : IxSqlRelation(p) { this->setIsSameDataOwner(static_cast<int>(is_same_data_owner)); }
+   virtual ~QxSqlRelation() { static_assert(is_valid, "is_valid"); }
 
    virtual void init()
    {
-      if (m_bInitInEvent || m_bInitDone) { return; }
-      m_pClass = QxClass<type_data>::getSingleton();
-      m_pClassOwner = QxClass<type_owner>::getSingleton();
+      if (! this->canInit()) { return; }
+      this->setClass(QxClass<type_data>::getSingleton(), QxClass<type_owner>::getSingleton());
       IxSqlRelation::init();
    }
 
 protected:
 
-   inline DataType * getDataTypePtr(QxSqlRelationParams & params) const
-   { qAssert(params.owner() && m_pDataMember); return static_cast<DataType *>(m_pDataMember->getValueVoidPtr(params.owner())); }
+   DataType * getDataTypePtr(QxSqlRelationParams & params) const
+   { qAssert(params.owner() && this->getDataMember()); return static_cast<DataType *>(this->getDataMember()->getValueVoidPtr(params.owner())); }
 
-   inline type_owner & getOwner(QxSqlRelationParams & params) const
+   type_owner & getOwner(QxSqlRelationParams & params) const
    { qAssert(params.owner()); return (* static_cast<type_owner *>(params.owner())); }
 
-   inline type_data & getData(QxSqlRelationParams & params) const
+   type_data & getData(QxSqlRelationParams & params) const
    { return getData_Helper<is_data_pointer, is_data_container, 0>::get(getDataTypePtr(params)); }
 
-   inline type_container & getContainer(QxSqlRelationParams & params) const
+   type_container & getContainer(QxSqlRelationParams & params) const
    { return getContainer_Helper<is_data_pointer, is_data_container, 0>::get(getDataTypePtr(params)); }
 
-   inline type_item createItem() const
+   type_item createItem() const
    { return createItem_Helper<is_data_container, 0>::get(); }
 
-   inline bool isNullData(QxSqlRelationParams & params) const
+   bool isNullData(QxSqlRelationParams & params) const
    { return isNullData_Helper<is_data_pointer, 0>::get(getDataTypePtr(params)); }
 
    bool callTriggerBeforeFetch(type_data & t, QxSqlRelationParams & params) const
@@ -141,51 +135,51 @@ private:
 
    template <bool bIsPointer /* = false */, bool bIsContainer /* = false */, int dummy>
    struct getData_Helper
-   { static inline type_data & get(DataType * t) { return (* t); } };
+   { static type_data & get(DataType * t) { return (* t); } };
 
    template <int dummy>
    struct getData_Helper<true, false, dummy>
-   { static inline type_data & get(DataType * t) { if (! (* t)) { qx::trait::construct_ptr<DataType>::get(* t); }; return (** t); } };
+   { static type_data & get(DataType * t) { if (! (* t)) { qx::trait::construct_ptr<DataType>::get(* t); }; return (** t); } };
 
    template <int dummy>
    struct getData_Helper<false, true, dummy>
-   { static inline type_data & get(DataType * t) { qAssert(false); Q_UNUSED(t); type_data * pDummy(NULL); return (* pDummy); } };
+   { static type_data & get(DataType * t) { qAssert(false); Q_UNUSED(t); type_data * pDummy(NULL); return (* pDummy); } };
 
    template <int dummy>
    struct getData_Helper<true, true, dummy>
-   { static inline type_data & get(DataType * t) { qAssert(false); Q_UNUSED(t); type_data * pDummy(NULL); return (* pDummy); } };
+   { static type_data & get(DataType * t) { qAssert(false); Q_UNUSED(t); type_data * pDummy(NULL); return (* pDummy); } };
 
    template <bool bIsPointer /* = false */, bool bIsContainer /* = false */, int dummy>
    struct getContainer_Helper
-   { static inline type_container & get(DataType * t) { qAssert(false); Q_UNUSED(t); type_container * pDummy(NULL); return (* pDummy); } };
+   { static type_container & get(DataType * t) { qAssert(false); Q_UNUSED(t); type_container * pDummy(NULL); return (* pDummy); } };
 
    template <int dummy>
    struct getContainer_Helper<true, false, dummy>
-   { static inline type_container & get(DataType * t) { qAssert(false); Q_UNUSED(t); type_container * pDummy(NULL); return (* pDummy); } };
+   { static type_container & get(DataType * t) { qAssert(false); Q_UNUSED(t); type_container * pDummy(NULL); return (* pDummy); } };
 
    template <int dummy>
    struct getContainer_Helper<false, true, dummy>
-   { static inline type_container & get(DataType * t) { return (* t); } };
+   { static type_container & get(DataType * t) { return (* t); } };
 
    template <int dummy>
    struct getContainer_Helper<true, true, dummy>
-   { static inline type_container & get(DataType * t) { if (! (* t)) { qx::trait::construct_ptr<DataType>::get(* t); }; return (** t); } };
+   { static type_container & get(DataType * t) { if (! (* t)) { qx::trait::construct_ptr<DataType>::get(* t); }; return (** t); } };
 
    template <bool bIsContainer /* = false */, int dummy>
    struct createItem_Helper
-   { static inline type_item get() { qAssert(false); type_item * pDummy(NULL); return (* pDummy); } };
+   { static type_item get() { qAssert(false); type_item * pDummy(NULL); return (* pDummy); } };
 
    template <int dummy>
    struct createItem_Helper<true, dummy>
-   { static inline type_item get() { return type_generic_container::createItem(); } };
+   { static type_item get() { return type_generic_container::createItem(); } };
 
    template <bool bIsPointer /* = false */, int dummy>
    struct isNullData_Helper
-   { static inline bool get(DataType * t) { Q_UNUSED(t); return false; } };
+   { static bool get(DataType * t) { Q_UNUSED(t); return false; } };
 
    template <int dummy>
    struct isNullData_Helper<true, dummy>
-   { static inline bool get(DataType * t) { return ((! (* t)) ? true : false); } };
+   { static bool get(DataType * t) { return ((! (* t)) ? true : false); } };
 
 };
 

@@ -44,18 +44,15 @@ void CTestAll::init()
 
 void CTestAll::terminate()
 {
-   typedef boost::tuple<long, qx::test::CPerson *> qx_elt_tmp;
-
-   _foreach(CUser * p2, m_oQVector) { if (p2) { delete p2; } }
-   _foreach(qx_elt_tmp p3, m_oQxCollection) { if (p3.get<1>()) { delete p3.get<1>(); } }
+   Q_FOREACH(CUser * p2, m_oQVector) { if (p2) { delete p2; } }
 }
 
 void CTestAll::test()
 {
-   qx_shared_ptr<CTestAll> o1; o1.reset(new CTestAll());
-   qx_shared_ptr<CTestAll> o2; o2.reset(new CTestAll());
+   std::shared_ptr<CTestAll> o1; o1.reset(new CTestAll());
+   std::shared_ptr<CTestAll> o2; o2.reset(new CTestAll());
 
-   qx::QxCollection<long, qx_shared_ptr<CTestAll> > coll;
+   qx::QxCollection<long, std::shared_ptr<CTestAll> > coll;
    coll.insert(0, o1);
    coll.insert(1, o2);
 

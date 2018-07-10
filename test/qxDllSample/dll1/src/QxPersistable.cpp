@@ -52,7 +52,7 @@ void register_class(QxClass<qx::QxPersistable> & t)
    t.data(& qx::QxPersistable::m_qxDateModification, "qx_date_modification");
 
    QxValidatorX<qx::QxPersistable> * pAllValidator = t.getAllValidator();
-   pAllValidator->add_CustomValidator(& qx::QxPersistable::qxIsValidInternal);
+   pAllValidator->add_CustomValidator(std::mem_fn(& qx::QxPersistable::qxIsValidInternal)); // using std::mem_fn() here is just a workaround for an issue with some versions of MSVC, it is not required with a full compliant C++11 compiler (http://stackoverflow.com/questions/23778883/vs2013-stdfunction-with-member-function)
 }
 
 QX_PERSISTABLE_CPP(QxPersistable)

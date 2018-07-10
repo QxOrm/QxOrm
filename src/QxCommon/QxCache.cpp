@@ -66,25 +66,25 @@ void QxCache::setMaxCost(long l)
    updateCost();
 }
 
-boost::any QxCache::at(const QString & sKey)
+qx::any QxCache::at(const QString & sKey)
 {
    QMutexLocker locker(& m_oMutexCache);
-   if (! this->exist(sKey)) { return boost::any(); }
-   return m_cache.getByKey(sKey).get<2>();
+   if (! this->exist(sKey)) { return qx::any(); }
+   return std::get<2>(m_cache.getByKey(sKey));
 }
 
 long QxCache::insertionCost(const QString & sKey)
 {
    QMutexLocker locker(& m_oMutexCache);
    if (! this->exist(sKey)) { return -1; }
-   return m_cache.getByKey(sKey).get<0>();
+   return std::get<0>(m_cache.getByKey(sKey));
 }
 
 QDateTime QxCache::insertionDateTime(const QString & sKey)
 {
    QMutexLocker locker(& m_oMutexCache);
    if (! this->exist(sKey)) { return QDateTime(); }
-   return m_cache.getByKey(sKey).get<1>();
+   return std::get<1>(m_cache.getByKey(sKey));
 }
 
 void QxCache::clear()
@@ -94,7 +94,7 @@ void QxCache::clear()
    m_lCurrCost = 0;
 }
 
-bool QxCache::insert(const QString & sKey, const boost::any & anyObj, long lCost /* = 1 */, const QDateTime & dt /* = QDateTime() */)
+bool QxCache::insert(const QString & sKey, const qx::any & anyObj, long lCost /* = 1 */, const QDateTime & dt /* = QDateTime() */)
 {
    if (sKey.isEmpty()) { qAssert(false); return false; }
    this->remove(sKey);
@@ -102,7 +102,7 @@ bool QxCache::insert(const QString & sKey, const boost::any & anyObj, long lCost
    QMutexLocker locker(& m_oMutexCache);
    lCost = ((lCost < 0) ? 0 : lCost);
    QDateTime dtTemp(dt); if (! dtTemp.isValid()) { dtTemp = QDateTime::currentDateTime(); }
-   QxCache::type_qx_cache item = boost::make_tuple(lCost, dtTemp, anyObj);
+   QxCache::type_qx_cache item = std::make_tuple(lCost, dtTemp, anyObj);
    bool bInsertOk = m_cache.insert(sKey, item);
    if (bInsertOk) { m_lCurrCost += lCost; updateCost(); }
 
@@ -113,7 +113,7 @@ bool QxCache::remove(const QString & sKey)
 {
    QMutexLocker locker(& m_oMutexCache);
    if (! this->exist(sKey)) { return false; }
-   long lCost = m_cache.getByKey(sKey).get<0>();
+   long lCost = std::get<0>(m_cache.getByKey(sKey));
    bool bRemoveOk = m_cache.removeByKey(sKey);
    if (bRemoveOk) { m_lCurrCost -= lCost; }
 
@@ -125,7 +125,7 @@ void QxCache::updateCost()
    while ((m_lCurrCost > m_lMaxCost) && (m_cache.count() > 0))
    {
       QString sKey = m_cache.getKeyByIndex(0);
-      long lCost = m_cache.getByIndex(0).get<0>();
+      long lCost = std::get<0>(m_cache.getByIndex(0));
       m_cache.removeByIndex(0);
       m_lCurrCost -= lCost;
       QString sMsg = QString("qx::cache : auto remove object in cache '") + sKey + QString("'");

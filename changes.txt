@@ -1,3 +1,33 @@
+Changes in version 1.4.4:
+QxOrm library doesn't depend on boost framework anymore (the boost dependency has been fully removed, replaced by some C++11 features).
+So QxOrm library is now a pure Qt library which depends only on QtCore and QtSql by default.
+For backward compatibility, QxOrm library still supports some boost classes (boost smart-pointers, unordered containers, boost::optional, etc...) : you have to define _QX_ENABLE_BOOST compilation option to enable these features.
+
+Main advantages are :
+- QxOrm becomes a much lighter library
+- easier to install (because you don't have to deal with boost anymore)
+- reduce compilation times
+- reduce output binary size
+
+Thx also to Jimmy Taker for several improvments and new features in QxModelView module !
+
+- QxOrm library now requires a C++11 compiler (please note that QxOrm doesn't require a full compliant C++11 compiler : for example, QxOrm can be built and used with MSVC 2012, GCC 4.5 or Clang 3.2)
+- Implement PIMPL idiom for some QxOrm classes to reduce compilation times and output binary size
+- New class named qx::any to replace boost::any (basic implementation of boost::any written by Kevlin Henney)
+- qx_shared_ptr alias doesn't exist anymore : it is replaced everywhere by std::shared_ptr
+- QxModelView module : all models based on qx::IxModel class can now be sorted (on all columns), please note that you can also use QSortFilterProxyModel Qt class to sort your model
+- QxModelView module - qx::QxModel<T> : fix setData() with e_auto_update_on_field_change option when an error occurred saving data in database, now previous value is restored if an error occurred
+- QxModelView module - qx::IxModel : fix setHeaderData() using it with default role (Qt::EditRole) changes the header in a header view (role Qt::DisplayRole)
+- QxModelView module - qx::IxModel : if a description is registered in QxOrm context, then it is displayed in header for each property
+- QxModelView module : new feature available to add automatically an empty row at the end of the table to insert quickly new items (setShowEmptyLine() method)
+- QxModelView module : possibility to define an intermediate base class between qx::IxModel and qx::QxModel<T> to provide your own model features, for example imagine you develop a drag&drop feature in a class named IxModelDragDrop, you can now create a QxOrm model like this (see the second template parameter) : qx::IxModel * pModel = new qx::QxModel<MyPersistantClass, IxModelDragDrop>();
+- QxOrm.pro : fix DESTDIR parameter on Windows
+- QxOrm.pri and QxOrm.cmake : add a section to enable QT_USE_QSTRINGBUILDER to optimize QString operations
+- QxOrm library is now tested with MSVC 2015 compiler (support all MSVC versions from 2012)
+- Fix a bug in QxSqlError.h file with a qPrintable() call on a temporary object
+- Provide more details in logs after executing a SQL query : time to execute query in database + time to fetch C++ instances
+- Support std::optional<T> (if your compiler supports C++17 features) to manage NULL database value : new header available named <QxExtras/QxStdOptional.h> to include just after <QxOrm.h> header file (ideally in a precompiled header)
+
 Changes in version 1.4.3:
 - Support CMake : new CMakeLists.txt file added to build QxOrm library with CMake
 - Improve SQL error messages when qx::dao functions return a database error

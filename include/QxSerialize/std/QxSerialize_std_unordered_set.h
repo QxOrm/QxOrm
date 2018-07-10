@@ -30,16 +30,12 @@
 ****************************************************************************/
 
 #ifdef _QX_ENABLE_BOOST_SERIALIZATION
-#ifdef _QX_CPP_11_CONTAINER
-#ifndef BOOST_NO_CXX11_STD_UNORDERED
 #ifndef _QX_SERIALIZATION_STD_UNORDERED_SET_H_
 #define _QX_SERIALIZATION_STD_UNORDERED_SET_H_
 
 #ifdef _MSC_VER
 #pragma once
 #endif
-
-#include <boost/version.hpp>
 
 #if (BOOST_VERSION >= 105600)
 
@@ -110,6 +106,4 @@ inline void serialize(Archive & ar, std::unordered_multiset<Key> & t, const unsi
 
 #endif // (BOOST_VERSION >= 105600)
 #endif // _QX_SERIALIZATION_STD_UNORDERED_SET_H_
-#endif // BOOST_NO_CXX11_STD_UNORDERED
-#endif // _QX_CPP_11_CONTAINER
 #endif // _QX_ENABLE_BOOST_SERIALIZATION

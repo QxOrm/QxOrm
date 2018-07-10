@@ -40,7 +40,7 @@
 
 namespace qx {
 
-IxSingleton::IxSingleton(const QString & sKey) : boost::noncopyable(), m_sKeySingleton(sKey)
+IxSingleton::IxSingleton(const QString & sKey) : m_sKeySingleton(sKey)
 {
 #ifdef _QX_TRACE_CONSTRUCTOR_DESTRUCTOR
    qDebug("[QxOrm] qx::IxSingleton constructor '%s'", qPrintable(m_sKeySingleton));

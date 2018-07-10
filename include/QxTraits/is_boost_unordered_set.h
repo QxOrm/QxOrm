@@ -29,6 +29,7 @@
 **
 ****************************************************************************/
 
+#ifdef _QX_ENABLE_BOOST
 #ifndef _QX_IS_BOOST_UNORDERED_SET_H_
 #define _QX_IS_BOOST_UNORDERED_SET_H_
 
@@ -43,10 +44,6 @@
  * \brief qx::trait::is_boost_unordered_set<T>::value : return true if T is a boost::unordered_set<> or boost::unordered_multiset<> container, otherwise return false
  */
 
-#include <boost/unordered_set.hpp>
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/logical.hpp>
-
 namespace qx {
 namespace trait {
 
@@ -55,33 +52,34 @@ namespace trait {
  * \brief qx::trait::is_boost_unordered_set<T>::value : return true if T is a boost::unordered_set<> or boost::unordered_multiset<> container, otherwise return false
  */
 template <typename T>
-struct is_boost_unordered_set : public boost::mpl::false_ { ; };
+struct is_boost_unordered_set : public std::false_type { ; };
 
 template <typename T>
-struct is_boost_unordered_set< boost::unordered_set<T> > : public boost::mpl::true_ { ; };
+struct is_boost_unordered_set< boost::unordered_set<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_boost_unordered_set< boost::unordered_set<T> & > : public boost::mpl::true_ { ; };
+struct is_boost_unordered_set< boost::unordered_set<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_boost_unordered_set< const boost::unordered_set<T> > : public boost::mpl::true_ { ; };
+struct is_boost_unordered_set< const boost::unordered_set<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_boost_unordered_set< const boost::unordered_set<T> & > : public boost::mpl::true_ { ; };
+struct is_boost_unordered_set< const boost::unordered_set<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_boost_unordered_set< boost::unordered_multiset<T> > : public boost::mpl::true_ { ; };
+struct is_boost_unordered_set< boost::unordered_multiset<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_boost_unordered_set< boost::unordered_multiset<T> & > : public boost::mpl::true_ { ; };
+struct is_boost_unordered_set< boost::unordered_multiset<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_boost_unordered_set< const boost::unordered_multiset<T> > : public boost::mpl::true_ { ; };
+struct is_boost_unordered_set< const boost::unordered_multiset<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_boost_unordered_set< const boost::unordered_multiset<T> & > : public boost::mpl::true_ { ; };
+struct is_boost_unordered_set< const boost::unordered_multiset<T> & > : public std::true_type { ; };
 
 } // namespace trait
 } // namespace qx
 
 #endif // _QX_IS_BOOST_UNORDERED_SET_H_
+#endif // _QX_ENABLE_BOOST

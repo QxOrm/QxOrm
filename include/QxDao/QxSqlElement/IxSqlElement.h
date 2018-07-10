@@ -46,7 +46,6 @@
 #ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/split_free.hpp>
-#include <boost/serialization/version.hpp>
 #include <boost/serialization/nvp.hpp>
 #endif // _QX_ENABLE_BOOST_SERIALIZATION
 
@@ -74,8 +73,8 @@ class IxSqlElement;
 } // namespace dao
 } // namespace qx
 
-QX_DLL_EXPORT QDataStream & operator<< (QDataStream & stream, const qx::dao::detail::IxSqlElement & t) BOOST_USED;
-QX_DLL_EXPORT QDataStream & operator>> (QDataStream & stream, qx::dao::detail::IxSqlElement & t) BOOST_USED;
+QX_DLL_EXPORT QDataStream & operator<< (QDataStream & stream, const qx::dao::detail::IxSqlElement & t) QX_USED;
+QX_DLL_EXPORT QDataStream & operator>> (QDataStream & stream, qx::dao::detail::IxSqlElement & t) QX_USED;
 
 #ifndef _QX_NO_JSON
 namespace qx {
@@ -83,8 +82,8 @@ namespace cvt {
 namespace detail {
 template <> struct QxConvert_ToJson< qx::dao::detail::IxSqlElement >;
 template <> struct QxConvert_FromJson< qx::dao::detail::IxSqlElement >;
-QX_DLL_EXPORT QJsonValue QxConvert_ToJson_Helper(const qx::dao::detail::IxSqlElement & t, const QString & format) BOOST_USED;
-QX_DLL_EXPORT qx_bool QxConvert_FromJson_Helper(const QJsonValue & j, qx::dao::detail::IxSqlElement & t, const QString & format) BOOST_USED;
+QX_DLL_EXPORT QJsonValue QxConvert_ToJson_Helper(const qx::dao::detail::IxSqlElement & t, const QString & format) QX_USED;
+QX_DLL_EXPORT qx_bool QxConvert_FromJson_Helper(const QJsonValue & j, qx::dao::detail::IxSqlElement & t, const QString & format) QX_USED;
 } // namespace detail
 } // namespace cvt
 } // namespace qx
@@ -178,9 +177,9 @@ protected:
 
 };
 
-typedef qx_shared_ptr<IxSqlElement> IxSqlElement_ptr;
+typedef std::shared_ptr<IxSqlElement> IxSqlElement_ptr;
 
-QX_DLL_EXPORT IxSqlElement_ptr create_sql_element(IxSqlElement::type_class e) BOOST_USED;
+QX_DLL_EXPORT IxSqlElement_ptr create_sql_element(IxSqlElement::type_class e) QX_USED;
 
 } // namespace detail
 } // namespace dao

@@ -48,30 +48,41 @@
 #include <QtCore/qvariant.h>
 #include <QtCore/qpair.h>
 
-#include <boost/tuple/tuple.hpp>
-#include <boost/tuple/tuple_comparison.hpp>
-#include <boost/tuple/tuple_io.hpp>
-
-#ifdef _QX_CPP_11_TUPLE
-#ifndef BOOST_NO_CXX11_HDR_TUPLE
-#include <tuple>
-#endif // BOOST_NO_CXX11_HDR_TUPLE
-#endif // _QX_CPP_11_TUPLE
-
 inline std::size_t hash_value(const QString & s)      { return qHash(s); }
 inline std::size_t hash_value(const QDate & d)        { return qHash(d.toJulianDay()); }
 inline std::size_t hash_value(const QTime & t)        { return qHash(t.toString()); }
 inline std::size_t hash_value(const QDateTime & dt)   { return qHash(dt.toString()); }
 inline std::size_t hash_value(const QVariant & v)     { return qHash(v.toString()); }
 
+inline uint qHash(const QDate & d)                    { return static_cast<uint>(hash_value(d)); }
+inline uint qHash(const QTime & t)                    { return static_cast<uint>(hash_value(t)); }
+inline uint qHash(const QDateTime & dt)               { return static_cast<uint>(hash_value(dt)); }
+inline uint qHash(const QVariant & v)                 { return static_cast<uint>(hash_value(v)); }
+
+#ifndef QT_NO_STL
+inline uint qHash(const std::string & s)              { QString tmp = QString::fromStdString(s); return qHash(tmp); }
+inline uint qHash(const std::wstring & s)             { QString tmp = QString::fromStdWString(s); return qHash(tmp); }
+#else // QT_NO_STL
+inline uint qHash(const std::string & s)              { QString tmp = QString::fromLatin1(s.data(), int(s.size())); return qHash(tmp); }
+inline uint qHash(const std::wstring & s)             { qAssert(false); /* Need STL compatibility ! */ return 0; }
+#endif // QT_NO_STL
+
+namespace qx {
+template <class T>
+inline void hash_combine(std::size_t & seed, const T & t)
+{ seed ^= qHash(t) + 0x9e3779b9 + (seed << 6) + (seed >> 2); }
+} // namespace qx
+
 template <typename T0, typename T1>
 inline std::size_t hash_value(const QPair<T0, T1> & p)
 {
    std::size_t seed = 0;
-   boost::hash_combine(seed, p.first);
-   boost::hash_combine(seed, p.second);
+   qx::hash_combine(seed, p.first);
+   qx::hash_combine(seed, p.second);
    return seed;
 }
+
+#ifdef _QX_ENABLE_BOOST
 
 namespace boost {
 namespace tuples {
@@ -80,8 +91,8 @@ template <typename T0, typename T1>
 inline std::size_t hash_value(const boost::tuple<T0, T1> & tu)
 {
    std::size_t seed = 0;
-   boost::hash_combine(seed, boost::get<0>(tu));
-   boost::hash_combine(seed, boost::get<1>(tu));
+   qx::hash_combine(seed, boost::get<0>(tu));
+   qx::hash_combine(seed, boost::get<1>(tu));
    return seed;
 }
 
@@ -89,9 +100,9 @@ template <typename T0, class T1, typename T2>
 inline std::size_t hash_value(const boost::tuple<T0, T1, T2> & tu)
 {
    std::size_t seed = 0;
-   boost::hash_combine(seed, boost::get<0>(tu));
-   boost::hash_combine(seed, boost::get<1>(tu));
-   boost::hash_combine(seed, boost::get<2>(tu));
+   qx::hash_combine(seed, boost::get<0>(tu));
+   qx::hash_combine(seed, boost::get<1>(tu));
+   qx::hash_combine(seed, boost::get<2>(tu));
    return seed;
 }
 
@@ -99,10 +110,10 @@ template <typename T0, typename T1, typename T2, typename T3>
 inline std::size_t hash_value(const boost::tuple<T0, T1, T2, T3> & tu)
 {
    std::size_t seed = 0;
-   boost::hash_combine(seed, boost::get<0>(tu));
-   boost::hash_combine(seed, boost::get<1>(tu));
-   boost::hash_combine(seed, boost::get<2>(tu));
-   boost::hash_combine(seed, boost::get<3>(tu));
+   qx::hash_combine(seed, boost::get<0>(tu));
+   qx::hash_combine(seed, boost::get<1>(tu));
+   qx::hash_combine(seed, boost::get<2>(tu));
+   qx::hash_combine(seed, boost::get<3>(tu));
    return seed;
 }
 
@@ -110,11 +121,11 @@ template <typename T0, typename T1, typename T2, typename T3, typename T4>
 inline std::size_t hash_value(const boost::tuple<T0, T1, T2, T3, T4> & tu)
 {
    std::size_t seed = 0;
-   boost::hash_combine(seed, boost::get<0>(tu));
-   boost::hash_combine(seed, boost::get<1>(tu));
-   boost::hash_combine(seed, boost::get<2>(tu));
-   boost::hash_combine(seed, boost::get<3>(tu));
-   boost::hash_combine(seed, boost::get<4>(tu));
+   qx::hash_combine(seed, boost::get<0>(tu));
+   qx::hash_combine(seed, boost::get<1>(tu));
+   qx::hash_combine(seed, boost::get<2>(tu));
+   qx::hash_combine(seed, boost::get<3>(tu));
+   qx::hash_combine(seed, boost::get<4>(tu));
    return seed;
 }
 
@@ -122,12 +133,12 @@ template <typename T0, typename T1, typename T2, typename T3, typename T4, typen
 inline std::size_t hash_value(const boost::tuple<T0, T1, T2, T3, T4, T5> & tu)
 {
    std::size_t seed = 0;
-   boost::hash_combine(seed, boost::get<0>(tu));
-   boost::hash_combine(seed, boost::get<1>(tu));
-   boost::hash_combine(seed, boost::get<2>(tu));
-   boost::hash_combine(seed, boost::get<3>(tu));
-   boost::hash_combine(seed, boost::get<4>(tu));
-   boost::hash_combine(seed, boost::get<5>(tu));
+   qx::hash_combine(seed, boost::get<0>(tu));
+   qx::hash_combine(seed, boost::get<1>(tu));
+   qx::hash_combine(seed, boost::get<2>(tu));
+   qx::hash_combine(seed, boost::get<3>(tu));
+   qx::hash_combine(seed, boost::get<4>(tu));
+   qx::hash_combine(seed, boost::get<5>(tu));
    return seed;
 }
 
@@ -135,13 +146,13 @@ template <typename T0, typename T1, typename T2, typename T3, typename T4, typen
 inline std::size_t hash_value(const boost::tuple<T0, T1, T2, T3, T4, T5, T6> & tu)
 {
    std::size_t seed = 0;
-   boost::hash_combine(seed, boost::get<0>(tu));
-   boost::hash_combine(seed, boost::get<1>(tu));
-   boost::hash_combine(seed, boost::get<2>(tu));
-   boost::hash_combine(seed, boost::get<3>(tu));
-   boost::hash_combine(seed, boost::get<4>(tu));
-   boost::hash_combine(seed, boost::get<5>(tu));
-   boost::hash_combine(seed, boost::get<6>(tu));
+   qx::hash_combine(seed, boost::get<0>(tu));
+   qx::hash_combine(seed, boost::get<1>(tu));
+   qx::hash_combine(seed, boost::get<2>(tu));
+   qx::hash_combine(seed, boost::get<3>(tu));
+   qx::hash_combine(seed, boost::get<4>(tu));
+   qx::hash_combine(seed, boost::get<5>(tu));
+   qx::hash_combine(seed, boost::get<6>(tu));
    return seed;
 }
 
@@ -149,14 +160,14 @@ template <typename T0, typename T1, typename T2, typename T3, typename T4, typen
 inline std::size_t hash_value(const boost::tuple<T0, T1, T2, T3, T4, T5, T6, T7> & tu)
 {
    std::size_t seed = 0;
-   boost::hash_combine(seed, boost::get<0>(tu));
-   boost::hash_combine(seed, boost::get<1>(tu));
-   boost::hash_combine(seed, boost::get<2>(tu));
-   boost::hash_combine(seed, boost::get<3>(tu));
-   boost::hash_combine(seed, boost::get<4>(tu));
-   boost::hash_combine(seed, boost::get<5>(tu));
-   boost::hash_combine(seed, boost::get<6>(tu));
-   boost::hash_combine(seed, boost::get<7>(tu));
+   qx::hash_combine(seed, boost::get<0>(tu));
+   qx::hash_combine(seed, boost::get<1>(tu));
+   qx::hash_combine(seed, boost::get<2>(tu));
+   qx::hash_combine(seed, boost::get<3>(tu));
+   qx::hash_combine(seed, boost::get<4>(tu));
+   qx::hash_combine(seed, boost::get<5>(tu));
+   qx::hash_combine(seed, boost::get<6>(tu));
+   qx::hash_combine(seed, boost::get<7>(tu));
    return seed;
 }
 
@@ -164,15 +175,15 @@ template <typename T0, typename T1, typename T2, typename T3, typename T4, typen
 inline std::size_t hash_value(const boost::tuple<T0, T1, T2, T3, T4, T5, T6, T7, T8> & tu)
 {
    std::size_t seed = 0;
-   boost::hash_combine(seed, boost::get<0>(tu));
-   boost::hash_combine(seed, boost::get<1>(tu));
-   boost::hash_combine(seed, boost::get<2>(tu));
-   boost::hash_combine(seed, boost::get<3>(tu));
-   boost::hash_combine(seed, boost::get<4>(tu));
-   boost::hash_combine(seed, boost::get<5>(tu));
-   boost::hash_combine(seed, boost::get<6>(tu));
-   boost::hash_combine(seed, boost::get<7>(tu));
-   boost::hash_combine(seed, boost::get<8>(tu));
+   qx::hash_combine(seed, boost::get<0>(tu));
+   qx::hash_combine(seed, boost::get<1>(tu));
+   qx::hash_combine(seed, boost::get<2>(tu));
+   qx::hash_combine(seed, boost::get<3>(tu));
+   qx::hash_combine(seed, boost::get<4>(tu));
+   qx::hash_combine(seed, boost::get<5>(tu));
+   qx::hash_combine(seed, boost::get<6>(tu));
+   qx::hash_combine(seed, boost::get<7>(tu));
+   qx::hash_combine(seed, boost::get<8>(tu));
    return seed;
 }
 
@@ -180,31 +191,66 @@ template <typename T0, typename T1, typename T2, typename T3, typename T4, typen
 inline std::size_t hash_value(const boost::tuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> & tu)
 {
    std::size_t seed = 0;
-   boost::hash_combine(seed, boost::get<0>(tu));
-   boost::hash_combine(seed, boost::get<1>(tu));
-   boost::hash_combine(seed, boost::get<2>(tu));
-   boost::hash_combine(seed, boost::get<3>(tu));
-   boost::hash_combine(seed, boost::get<4>(tu));
-   boost::hash_combine(seed, boost::get<5>(tu));
-   boost::hash_combine(seed, boost::get<6>(tu));
-   boost::hash_combine(seed, boost::get<7>(tu));
-   boost::hash_combine(seed, boost::get<8>(tu));
-   boost::hash_combine(seed, boost::get<9>(tu));
+   qx::hash_combine(seed, boost::get<0>(tu));
+   qx::hash_combine(seed, boost::get<1>(tu));
+   qx::hash_combine(seed, boost::get<2>(tu));
+   qx::hash_combine(seed, boost::get<3>(tu));
+   qx::hash_combine(seed, boost::get<4>(tu));
+   qx::hash_combine(seed, boost::get<5>(tu));
+   qx::hash_combine(seed, boost::get<6>(tu));
+   qx::hash_combine(seed, boost::get<7>(tu));
+   qx::hash_combine(seed, boost::get<8>(tu));
+   qx::hash_combine(seed, boost::get<9>(tu));
    return seed;
 }
 
 } // namespace tuples
 } // namespace boost
 
-#ifdef _QX_CPP_11_TUPLE
-#ifndef BOOST_NO_CXX11_HDR_TUPLE
+template <typename T0, typename T1>
+inline uint qHash(const boost::tuple<T0, T1> & tu)
+{ return static_cast<uint>(hash_value(tu)); }
+
+template <typename T0, class T1, typename T2>
+inline uint qHash(const boost::tuple<T0, T1, T2> & tu)
+{ return static_cast<uint>(hash_value(tu)); }
+
+template <typename T0, typename T1, typename T2, typename T3>
+inline uint qHash(const boost::tuple<T0, T1, T2, T3> & tu)
+{ return static_cast<uint>(hash_value(tu)); }
+
+template <typename T0, typename T1, typename T2, typename T3, typename T4>
+inline uint qHash(const boost::tuple<T0, T1, T2, T3, T4> & tu)
+{ return static_cast<uint>(hash_value(tu)); }
+
+template <typename T0, typename T1, typename T2, typename T3, typename T4, typename T5>
+inline uint qHash(const boost::tuple<T0, T1, T2, T3, T4, T5> & tu)
+{ return static_cast<uint>(hash_value(tu)); }
+
+template <typename T0, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6>
+inline uint qHash(const boost::tuple<T0, T1, T2, T3, T4, T5, T6> & tu)
+{ return static_cast<uint>(hash_value(tu)); }
+
+template <typename T0, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7>
+inline uint qHash(const boost::tuple<T0, T1, T2, T3, T4, T5, T6, T7> & tu)
+{ return static_cast<uint>(hash_value(tu)); }
+
+template <typename T0, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8>
+inline uint qHash(const boost::tuple<T0, T1, T2, T3, T4, T5, T6, T7, T8> & tu)
+{ return static_cast<uint>(hash_value(tu)); }
+
+template <typename T0, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8, typename T9>
+inline uint qHash(const boost::tuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> & tu)
+{ return static_cast<uint>(hash_value(tu)); }
+
+#endif // _QX_ENABLE_BOOST
 
 template <typename T0, typename T1>
 inline std::size_t hash_value(const std::tuple<T0, T1> & tu)
 {
    std::size_t seed = 0;
-   boost::hash_combine(seed, std::get<0>(tu));
-   boost::hash_combine(seed, std::get<1>(tu));
+   qx::hash_combine(seed, std::get<0>(tu));
+   qx::hash_combine(seed, std::get<1>(tu));
    return seed;
 }
 
@@ -212,9 +258,9 @@ template <typename T0, class T1, typename T2>
 inline std::size_t hash_value(const std::tuple<T0, T1, T2> & tu)
 {
    std::size_t seed = 0;
-   boost::hash_combine(seed, std::get<0>(tu));
-   boost::hash_combine(seed, std::get<1>(tu));
-   boost::hash_combine(seed, std::get<2>(tu));
+   qx::hash_combine(seed, std::get<0>(tu));
+   qx::hash_combine(seed, std::get<1>(tu));
+   qx::hash_combine(seed, std::get<2>(tu));
    return seed;
 }
 
@@ -222,10 +268,10 @@ template <typename T0, typename T1, typename T2, typename T3>
 inline std::size_t hash_value(const std::tuple<T0, T1, T2, T3> & tu)
 {
    std::size_t seed = 0;
-   boost::hash_combine(seed, std::get<0>(tu));
-   boost::hash_combine(seed, std::get<1>(tu));
-   boost::hash_combine(seed, std::get<2>(tu));
-   boost::hash_combine(seed, std::get<3>(tu));
+   qx::hash_combine(seed, std::get<0>(tu));
+   qx::hash_combine(seed, std::get<1>(tu));
+   qx::hash_combine(seed, std::get<2>(tu));
+   qx::hash_combine(seed, std::get<3>(tu));
    return seed;
 }
 
@@ -233,11 +279,11 @@ template <typename T0, typename T1, typename T2, typename T3, typename T4>
 inline std::size_t hash_value(const std::tuple<T0, T1, T2, T3, T4> & tu)
 {
    std::size_t seed = 0;
-   boost::hash_combine(seed, std::get<0>(tu));
-   boost::hash_combine(seed, std::get<1>(tu));
-   boost::hash_combine(seed, std::get<2>(tu));
-   boost::hash_combine(seed, std::get<3>(tu));
-   boost::hash_combine(seed, std::get<4>(tu));
+   qx::hash_combine(seed, std::get<0>(tu));
+   qx::hash_combine(seed, std::get<1>(tu));
+   qx::hash_combine(seed, std::get<2>(tu));
+   qx::hash_combine(seed, std::get<3>(tu));
+   qx::hash_combine(seed, std::get<4>(tu));
    return seed;
 }
 
@@ -245,12 +291,12 @@ template <typename T0, typename T1, typename T2, typename T3, typename T4, typen
 inline std::size_t hash_value(const std::tuple<T0, T1, T2, T3, T4, T5> & tu)
 {
    std::size_t seed = 0;
-   boost::hash_combine(seed, std::get<0>(tu));
-   boost::hash_combine(seed, std::get<1>(tu));
-   boost::hash_combine(seed, std::get<2>(tu));
-   boost::hash_combine(seed, std::get<3>(tu));
-   boost::hash_combine(seed, std::get<4>(tu));
-   boost::hash_combine(seed, std::get<5>(tu));
+   qx::hash_combine(seed, std::get<0>(tu));
+   qx::hash_combine(seed, std::get<1>(tu));
+   qx::hash_combine(seed, std::get<2>(tu));
+   qx::hash_combine(seed, std::get<3>(tu));
+   qx::hash_combine(seed, std::get<4>(tu));
+   qx::hash_combine(seed, std::get<5>(tu));
    return seed;
 }
 
@@ -258,13 +304,13 @@ template <typename T0, typename T1, typename T2, typename T3, typename T4, typen
 inline std::size_t hash_value(const std::tuple<T0, T1, T2, T3, T4, T5, T6> & tu)
 {
    std::size_t seed = 0;
-   boost::hash_combine(seed, std::get<0>(tu));
-   boost::hash_combine(seed, std::get<1>(tu));
-   boost::hash_combine(seed, std::get<2>(tu));
-   boost::hash_combine(seed, std::get<3>(tu));
-   boost::hash_combine(seed, std::get<4>(tu));
-   boost::hash_combine(seed, std::get<5>(tu));
-   boost::hash_combine(seed, std::get<6>(tu));
+   qx::hash_combine(seed, std::get<0>(tu));
+   qx::hash_combine(seed, std::get<1>(tu));
+   qx::hash_combine(seed, std::get<2>(tu));
+   qx::hash_combine(seed, std::get<3>(tu));
+   qx::hash_combine(seed, std::get<4>(tu));
+   qx::hash_combine(seed, std::get<5>(tu));
+   qx::hash_combine(seed, std::get<6>(tu));
    return seed;
 }
 
@@ -272,14 +318,14 @@ template <typename T0, typename T1, typename T2, typename T3, typename T4, typen
 inline std::size_t hash_value(const std::tuple<T0, T1, T2, T3, T4, T5, T6, T7> & tu)
 {
    std::size_t seed = 0;
-   boost::hash_combine(seed, std::get<0>(tu));
-   boost::hash_combine(seed, std::get<1>(tu));
-   boost::hash_combine(seed, std::get<2>(tu));
-   boost::hash_combine(seed, std::get<3>(tu));
-   boost::hash_combine(seed, std::get<4>(tu));
-   boost::hash_combine(seed, std::get<5>(tu));
-   boost::hash_combine(seed, std::get<6>(tu));
-   boost::hash_combine(seed, std::get<7>(tu));
+   qx::hash_combine(seed, std::get<0>(tu));
+   qx::hash_combine(seed, std::get<1>(tu));
+   qx::hash_combine(seed, std::get<2>(tu));
+   qx::hash_combine(seed, std::get<3>(tu));
+   qx::hash_combine(seed, std::get<4>(tu));
+   qx::hash_combine(seed, std::get<5>(tu));
+   qx::hash_combine(seed, std::get<6>(tu));
+   qx::hash_combine(seed, std::get<7>(tu));
    return seed;
 }
 
@@ -287,15 +333,15 @@ template <typename T0, typename T1, typename T2, typename T3, typename T4, typen
 inline std::size_t hash_value(const std::tuple<T0, T1, T2, T3, T4, T5, T6, T7, T8> & tu)
 {
    std::size_t seed = 0;
-   boost::hash_combine(seed, std::get<0>(tu));
-   boost::hash_combine(seed, std::get<1>(tu));
-   boost::hash_combine(seed, std::get<2>(tu));
-   boost::hash_combine(seed, std::get<3>(tu));
-   boost::hash_combine(seed, std::get<4>(tu));
-   boost::hash_combine(seed, std::get<5>(tu));
-   boost::hash_combine(seed, std::get<6>(tu));
-   boost::hash_combine(seed, std::get<7>(tu));
-   boost::hash_combine(seed, std::get<8>(tu));
+   qx::hash_combine(seed, std::get<0>(tu));
+   qx::hash_combine(seed, std::get<1>(tu));
+   qx::hash_combine(seed, std::get<2>(tu));
+   qx::hash_combine(seed, std::get<3>(tu));
+   qx::hash_combine(seed, std::get<4>(tu));
+   qx::hash_combine(seed, std::get<5>(tu));
+   qx::hash_combine(seed, std::get<6>(tu));
+   qx::hash_combine(seed, std::get<7>(tu));
+   qx::hash_combine(seed, std::get<8>(tu));
    return seed;
 }
 
@@ -303,20 +349,53 @@ template <typename T0, typename T1, typename T2, typename T3, typename T4, typen
 inline std::size_t hash_value(const std::tuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> & tu)
 {
    std::size_t seed = 0;
-   boost::hash_combine(seed, std::get<0>(tu));
-   boost::hash_combine(seed, std::get<1>(tu));
-   boost::hash_combine(seed, std::get<2>(tu));
-   boost::hash_combine(seed, std::get<3>(tu));
-   boost::hash_combine(seed, std::get<4>(tu));
-   boost::hash_combine(seed, std::get<5>(tu));
-   boost::hash_combine(seed, std::get<6>(tu));
-   boost::hash_combine(seed, std::get<7>(tu));
-   boost::hash_combine(seed, std::get<8>(tu));
-   boost::hash_combine(seed, std::get<9>(tu));
+   qx::hash_combine(seed, std::get<0>(tu));
+   qx::hash_combine(seed, std::get<1>(tu));
+   qx::hash_combine(seed, std::get<2>(tu));
+   qx::hash_combine(seed, std::get<3>(tu));
+   qx::hash_combine(seed, std::get<4>(tu));
+   qx::hash_combine(seed, std::get<5>(tu));
+   qx::hash_combine(seed, std::get<6>(tu));
+   qx::hash_combine(seed, std::get<7>(tu));
+   qx::hash_combine(seed, std::get<8>(tu));
+   qx::hash_combine(seed, std::get<9>(tu));
    return seed;
 }
 
-#endif // BOOST_NO_CXX11_HDR_TUPLE
-#endif // _QX_CPP_11_TUPLE
+template <typename T0, typename T1>
+inline uint qHash(const std::tuple<T0, T1> & tu)
+{ return static_cast<uint>(hash_value(tu)); }
+
+template <typename T0, class T1, typename T2>
+inline uint qHash(const std::tuple<T0, T1, T2> & tu)
+{ return static_cast<uint>(hash_value(tu)); }
+
+template <typename T0, typename T1, typename T2, typename T3>
+inline uint qHash(const std::tuple<T0, T1, T2, T3> & tu)
+{ return static_cast<uint>(hash_value(tu)); }
+
+template <typename T0, typename T1, typename T2, typename T3, typename T4>
+inline uint qHash(const std::tuple<T0, T1, T2, T3, T4> & tu)
+{ return static_cast<uint>(hash_value(tu)); }
+
+template <typename T0, typename T1, typename T2, typename T3, typename T4, typename T5>
+inline uint qHash(const std::tuple<T0, T1, T2, T3, T4, T5> & tu)
+{ return static_cast<uint>(hash_value(tu)); }
+
+template <typename T0, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6>
+inline uint qHash(const std::tuple<T0, T1, T2, T3, T4, T5, T6> & tu)
+{ return static_cast<uint>(hash_value(tu)); }
+
+template <typename T0, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7>
+inline uint qHash(const std::tuple<T0, T1, T2, T3, T4, T5, T6, T7> & tu)
+{ return static_cast<uint>(hash_value(tu)); }
+
+template <typename T0, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8>
+inline uint qHash(const std::tuple<T0, T1, T2, T3, T4, T5, T6, T7, T8> & tu)
+{ return static_cast<uint>(hash_value(tu)); }
+
+template <typename T0, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8, typename T9>
+inline uint qHash(const std::tuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> & tu)
+{ return static_cast<uint>(hash_value(tu)); }
 
 #endif // _QX_HASH_VALUE_H_

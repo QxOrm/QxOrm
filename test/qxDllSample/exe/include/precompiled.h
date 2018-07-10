@@ -6,6 +6,8 @@
 #endif
 
 #include <QxOrm.h>
+#include <QxModelView.h>
+#include <QxDaoRepository.h>
 
 #include "../include/export.h"
 

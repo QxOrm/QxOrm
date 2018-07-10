@@ -37,7 +37,6 @@
 #pragma once
 #endif
 
-#include <boost/type_traits/is_same.hpp>
 #include <boost/serialization/void_cast.hpp>
 
 #include <QxTraits/get_base_class.h>
@@ -62,7 +61,7 @@ public:
    { Q_UNUSED(t); ar.template register_type<type_derived>(); }
 
    static inline void void_cast_register_helper(const T * t)
-   { Q_UNUSED(t); QxBoostVoidCastRegisterHelper<boost::is_same<type_base, qx::trait::no_base_class_defined>::value, 0>::helper(); }
+   { Q_UNUSED(t); QxBoostVoidCastRegisterHelper<std::is_same<type_base, qx::trait::no_base_class_defined>::value, 0>::helper(); }
 
    static inline void init_guid(const T * t)
    { Q_UNUSED(t); QxBoostInitGuid<T>::init(); }

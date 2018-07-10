@@ -43,10 +43,6 @@
  * \brief qx::trait::is_ptr_base_of<B, D>::value : return true if B and D are pointer type and (*B) is a base class of (*D) or if B and D are same type, otherwise return false
  */
 
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/logical.hpp>
-#include <boost/type_traits/is_pointer.hpp>
-
 namespace qx {
 namespace trait {
 
@@ -61,7 +57,7 @@ class is_ptr_base_of
 private:
 
    template <typename V, typename W>
-   static typename boost::mpl::if_c<boost::is_base_of<V, W>::value, char, int>::type removePtr(const volatile V * const volatile, const volatile W * const volatile);
+   static typename std::conditional<std::is_base_of<V, W>::value, char, int>::type removePtr(const volatile V * const volatile, const volatile W * const volatile);
 
    static int removePtr(...);
    static B b;
@@ -69,9 +65,9 @@ private:
 
 public:
 
-   enum { value = (boost::is_pointer<B>::value && boost::is_pointer<D>::value && (sizeof(qx::trait::is_ptr_base_of<B, D>::removePtr(b, d)) == sizeof(char))) };
+   enum { value = (std::is_pointer<B>::value && std::is_pointer<D>::value && (sizeof(qx::trait::is_ptr_base_of<B, D>::removePtr(b, d)) == sizeof(char))) };
 
-   typedef typename boost::mpl::if_c<qx::trait::is_ptr_base_of<B, D>::value, boost::mpl::true_, boost::mpl::false_>::type type;
+   typedef typename std::conditional<qx::trait::is_ptr_base_of<B, D>::value, std::true_type, std::false_type>::type type;
 
 };
 

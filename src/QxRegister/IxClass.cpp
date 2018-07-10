@@ -34,33 +34,117 @@
 #include <QxRegister/IxClass.h>
 #include <QxRegister/QxClassX.h>
 
+#include <QxDao/IxSqlRelation.h>
+
 #include <QxMemLeak/mem_leak.h>
 
 namespace qx {
 
+struct IxClass::IxClassImpl
+{
+
+   IxDataMemberX * m_pDataMemberX;                    //!< List of data member
+   IxFunctionX_ptr m_pFctMemberX;                     //!< List of function member
+   IxFunctionX_ptr m_pFctStaticX;                     //!< List of function static
+
+   QString m_sKey;                                    //!< 'IxClass' key <=> class name
+   QString m_sName;                                   //!< 'IxClass' name <=> database table name (if empty => class name)
+   QString m_sDescription;                            //!< 'IxClass' description
+   long m_lVersion;                                   //!< 'IxClass' version
+   bool m_bFinalClass;                                //!< Class without base class (for example, qx::trait::no_base_class_defined and QObject)
+   bool m_bDaoReadOnly;                               //!< If 'true', cannot INSERT, UPDATE OR DELETE an instance of this class using qx::dao namespace
+   bool m_bRegistered;                                //!< Class registered into QxOrm context
+   qx::dao::strategy::inheritance m_eDaoStrategy;     //!< Dao class strategy to access data member
+   qx::QxSoftDelete m_oSoftDelete;                    //!< Soft delete (or logical delete) behavior
+   IxValidatorX_ptr m_pAllValidator;                  //!< List of validator associated to the class
+
+   QByteArray m_byteName;                             //!< Optimization to retrieve name under "const char *" format
+   const char * m_pName;                              //!< Optimization to retrieve name under "const char *" format
+
+   IxClassImpl() : m_pDataMemberX(NULL), m_lVersion(-1), m_bFinalClass(false), m_bDaoReadOnly(false), m_bRegistered(false), m_eDaoStrategy(qx::dao::strategy::concrete_table_inheritance), m_pName(NULL) { ; }
+   ~IxClassImpl() { ; }
+
+   void updateNamePtr() { m_byteName = m_sName.toLatin1(); m_pName = m_byteName.constData(); }
+
+};
+
+IxClass::IxClass() : qx::QxPropertyBag(), m_pImpl(new IxClassImpl()) { ; }
+
 IxClass::~IxClass()
 {
-   if (QxClassX::isSingletonNull() || m_sKey.isEmpty()) { return; }
-   if (! QxClassX::getSingleton()->exist(m_sKey)) { return; }
-   QxClassX::getSingleton()->remove(m_sKey);
+   if (QxClassX::isSingletonNull() || m_pImpl->m_sKey.isEmpty()) { return; }
+   if (! QxClassX::getSingleton()->exist(m_pImpl->m_sKey)) { return; }
+   QxClassX::getSingleton()->remove(m_pImpl->m_sKey);
 }
+
+QString IxClass::getKey() const { return m_pImpl->m_sKey; }
+
+QString IxClass::getName() const { return m_pImpl->m_sName; }
+
+const char * IxClass::getNamePtr() const { return m_pImpl->m_pName; }
+
+QString IxClass::getDescription() const { return m_pImpl->m_sDescription; }
+
+long IxClass::getVersion() const { return m_pImpl->m_lVersion; }
+
+qx::dao::strategy::inheritance IxClass::getDaoStrategy() const { return m_pImpl->m_eDaoStrategy; }
+
+qx::QxSoftDelete IxClass::getSoftDelete() const { return m_pImpl->m_oSoftDelete; }
+
+bool IxClass::isFinalClass() const { return m_pImpl->m_bFinalClass; }
+
+bool IxClass::isDaoReadOnly() const { return m_pImpl->m_bDaoReadOnly; }
+
+bool IxClass::isRegistered() const { return m_pImpl->m_bRegistered; }
+
+IxDataMemberX * IxClass::getDataMemberX() const { return m_pImpl->m_pDataMemberX; }
+
+IxFunctionX * IxClass::getFctMemberX() const { return m_pImpl->m_pFctMemberX.get(); }
+
+IxFunctionX * IxClass::getFctStaticX() const { return m_pImpl->m_pFctStaticX.get(); }
+
+IxValidatorX_ptr & IxClass::getAllValidatorRef() { return m_pImpl->m_pAllValidator; }
+
+void IxClass::setKey(const QString & sKey) { m_pImpl->m_sKey = sKey; }
+
+void IxClass::setName(const QString & sName) { m_pImpl->m_sName = sName; m_pImpl->updateNamePtr(); }
+
+void IxClass::setDescription(const QString & sDesc) { m_pImpl->m_sDescription = sDesc; }
+
+void IxClass::setDaoStrategy(qx::dao::strategy::inheritance eDaoStrategy) { m_pImpl->m_eDaoStrategy = eDaoStrategy; }
+
+void IxClass::setSoftDelete(const qx::QxSoftDelete & oSoftDelete) { m_pImpl->m_oSoftDelete = oSoftDelete; if (m_pImpl->m_oSoftDelete.getTableName().isEmpty()) { m_pImpl->m_oSoftDelete.setTableName(m_pImpl->m_sName); } }
+
+void IxClass::setDaoReadOnly(bool bDaoReadOnly) { m_pImpl->m_bDaoReadOnly = bDaoReadOnly; }
+
+void IxClass::setVersion(long l) { m_pImpl->m_lVersion = l; }
+
+void IxClass::setRegistered(bool b) { m_pImpl->m_bRegistered = b; }
+
+void IxClass::setFinalClass(bool b) { m_pImpl->m_bFinalClass = b; }
+
+void IxClass::setDataMemberX(IxDataMemberX * p) { m_pImpl->m_pDataMemberX = p; }
+
+void IxClass::setFctMemberX(IxFunctionX * p) { m_pImpl->m_pFctMemberX.reset(p); }
+
+void IxClass::setFctStaticX(IxFunctionX * p) { m_pImpl->m_pFctStaticX.reset(p); }
 
 void IxClass::updateClassX()
 {
-   qAssert(! m_sKey.isEmpty() && ! QxClassX::getSingleton()->exist(m_sKey));
-   QxClassX::getSingleton()->insert(m_sKey, this);
+   qAssert(! m_pImpl->m_sKey.isEmpty() && ! QxClassX::getSingleton()->exist(m_pImpl->m_sKey));
+   QxClassX::getSingleton()->insert(m_pImpl->m_sKey, this);
 }
 
 IxValidatorX * IxClass::getAllValidator()
 {
-   if (! m_pAllValidator) { return NULL; }
-   m_pAllValidator->setClass(this);
-   return m_pAllValidator.get();
+   if (! m_pImpl->m_pAllValidator) { return NULL; }
+   m_pImpl->m_pAllValidator->setClass(this);
+   return m_pImpl->m_pAllValidator.get();
 }
 
 IxDataMember * IxClass::getId(bool bRecursive /* = false */) const
 {
-   IxDataMember * pId = (m_pDataMemberX ? m_pDataMemberX->getId() : NULL);
+   IxDataMember * pId = (m_pImpl->m_pDataMemberX ? m_pImpl->m_pDataMemberX->getId() : NULL);
    if (pId || ! bRecursive) { return pId; }
    IxClass * pBaseClass = getBaseClass();
    return (pBaseClass ? pBaseClass->getId(bRecursive) : NULL);
@@ -69,7 +153,7 @@ IxDataMember * IxClass::getId(bool bRecursive /* = false */) const
 bool IxClass::isKindOf(const QString & sClassName) const
 {
    if (sClassName.isEmpty()) { qAssert(false); return false; }
-   if (m_sKey == sClassName) { return true; }
+   if (m_pImpl->m_sKey == sClassName) { return true; }
 
    IxClass * p = getBaseClass();
    while (p != NULL)
@@ -101,18 +185,18 @@ bool IxClass::isKindOf(const std::type_info & typeInfo) const
 QString IxClass::dumpClass() const
 {
    QString sDump;
-   sDump += "-- class '" + m_sKey + "' (name '" + m_sName + "', ";
-   sDump += "description '" + m_sDescription + "', version '" + QString::number(m_lVersion) + "', ";
+   sDump += "-- class '" + m_pImpl->m_sKey + "' (name '" + m_pImpl->m_sName + "', ";
+   sDump += "description '" + m_pImpl->m_sDescription + "', version '" + QString::number(m_pImpl->m_lVersion) + "', ";
    sDump += "base class '" + (getBaseClass() ? getBaseClass()->getKey() : "") + "')\n";
 
-   long lCount = (m_pDataMemberX ? m_pDataMemberX->count() : 0);
+   long lCount = (m_pImpl->m_pDataMemberX ? m_pImpl->m_pDataMemberX->count() : 0);
    sDump += "\t* list of registered properties (" + QString::number(lCount) + ")\n";
-   if (m_pDataMemberX)
+   if (m_pImpl->m_pDataMemberX)
    {
       IxDataMember * pId = this->getId();
       for (long l = 0; l < lCount; l++)
       {
-         IxDataMember * p = m_pDataMemberX->get(l); if (! p) { continue; }
+         IxDataMember * p = m_pImpl->m_pDataMemberX->get(l); if (! p) { continue; }
          IxSqlRelation * pRelation = p->getSqlRelation();
          QString sInfos = p->getKey() + ((p == pId) ? QString(" (id)") : QString());
          sInfos += (pRelation ? (QString(" (") + pRelation->getDescription() + QString(")")) : QString());
@@ -120,20 +204,28 @@ QString IxClass::dumpClass() const
       }
    }
 
-   lCount = (m_pFctMemberX ? m_pFctMemberX->count() : 0);
+   lCount = (m_pImpl->m_pFctMemberX ? m_pImpl->m_pFctMemberX->count() : 0);
    sDump += "\t* list of registered member functions (" + QString::number(lCount) + ")\n";
-   if (m_pFctMemberX)
+   if (m_pImpl->m_pFctMemberX)
    {
-      _foreach_if(IxFunction_ptr p, (* m_pFctMemberX), (p))
-      { QString sKey = p->getKey(); sDump += "\t\t" + sKey + "\n"; }
+      for (auto itr = m_pImpl->m_pFctMemberX->begin(); itr != m_pImpl->m_pFctMemberX->end(); ++itr)
+      {
+         IxFunction_ptr p = itr->second; if (! p) { continue; }
+         QString sKey = p->getKey();
+         sDump += "\t\t" + sKey + "\n";
+      }
    }
 
-   lCount = (m_pFctStaticX ? m_pFctStaticX->count() : 0);
+   lCount = (m_pImpl->m_pFctStaticX ? m_pImpl->m_pFctStaticX->count() : 0);
    sDump += "\t* list of registered static functions (" + QString::number(lCount) + ")\n";
-   if (m_pFctStaticX)
+   if (m_pImpl->m_pFctStaticX)
    {
-      _foreach_if(IxFunction_ptr p, (* m_pFctStaticX), (p))
-      { QString sKey = p->getKey(); sDump += "\t\t" + sKey + "\n"; }
+      for (auto itr = m_pImpl->m_pFctStaticX->begin(); itr != m_pImpl->m_pFctStaticX->end(); ++itr)
+      {
+         IxFunction_ptr p = itr->second; if (! p) { continue; }
+         QString sKey = p->getKey();
+         sDump += "\t\t" + sKey + "\n";
+      }
    }
 
    qDebug("%s", qPrintable(sDump));

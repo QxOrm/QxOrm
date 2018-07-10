@@ -50,16 +50,16 @@ void qx_collection_unit_test()
    obj.sortByKey();
    obj.sortByValue();
 
-   typedef boost::tuple<QString, std::string, int> new_type;
-   qx::QxCollection< new_type, qx_shared_ptr<QWidget> > objColTuple;
+   typedef std::tuple<QString, std::string, int> new_type;
+   qx::QxCollection< new_type, std::shared_ptr<QWidget> > objColTuple;
    objColTuple.begin();
    objColTuple.reserve(10);
    objColTuple.clear();
    objColTuple.count();
    objColTuple.empty();
 
-   new_type t1 = boost::make_tuple("","",1);
-   new_type t2 = boost::make_tuple("","",1);
+   new_type t1 = std::make_tuple(QString(), std::string(), 1);
+   new_type t2 = std::make_tuple(QString(), std::string(), 2);
 }
 
 } // namespace unit_test

@@ -29,8 +29,6 @@
 **
 ****************************************************************************/
 
-#ifdef _QX_CPP_11_SMART_PTR
-#ifndef BOOST_NO_CXX11_SMART_PTR
 #ifndef _QX_IS_STD_WEAK_PTR_H_
 #define _QX_IS_STD_WEAK_PTR_H_
 
@@ -45,11 +43,6 @@
  * \brief qx::trait::is_std_weak_ptr<T>::value : return true if T is a std::weak_ptr<> smart-pointer, otherwise return false
  */
 
-#include <memory>
-
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/logical.hpp>
-
 namespace qx {
 namespace trait {
 
@@ -58,23 +51,21 @@ namespace trait {
  * \brief qx::trait::is_std_weak_ptr<T>::value : return true if T is a std::weak_ptr<> smart-pointer, otherwise return false
  */
 template <typename T>
-struct is_std_weak_ptr : public boost::mpl::false_ { ; };
+struct is_std_weak_ptr : public std::false_type { ; };
 
 template <typename T>
-struct is_std_weak_ptr< std::weak_ptr<T> > : public boost::mpl::true_ { ; };
+struct is_std_weak_ptr< std::weak_ptr<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_std_weak_ptr< std::weak_ptr<T> & > : public boost::mpl::true_ { ; };
+struct is_std_weak_ptr< std::weak_ptr<T> & > : public std::true_type { ; };
 
 template <typename T>
-struct is_std_weak_ptr< const std::weak_ptr<T> > : public boost::mpl::true_ { ; };
+struct is_std_weak_ptr< const std::weak_ptr<T> > : public std::true_type { ; };
 
 template <typename T>
-struct is_std_weak_ptr< const std::weak_ptr<T> & > : public boost::mpl::true_ { ; };
+struct is_std_weak_ptr< const std::weak_ptr<T> & > : public std::true_type { ; };
 
 } // namespace trait
 } // namespace qx
 
 #endif // _QX_IS_STD_WEAK_PTR_H_
-#endif // BOOST_NO_CXX11_SMART_PTR
-#endif // _QX_CPP_11_SMART_PTR

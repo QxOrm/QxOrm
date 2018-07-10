@@ -48,9 +48,6 @@
 #include <sstream>
 #include <fstream>
 
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/logical.hpp>
-
 #include <QtCore/qstring.h>
 
 #include <QxSerialize/boost/QxSerializeInclude.h>
@@ -87,19 +84,19 @@ public:
 
    enum { is_wide = qx::trait::is_archive_wide<T>::value };
 
-   typedef typename boost::mpl::if_c<is_wide, wchar_t, char>::type type_char;
-   typedef typename boost::mpl::if_c<is_wide, std::wstring, std::string>::type type_string;
+   typedef typename std::conditional<is_wide, wchar_t, char>::type type_char;
+   typedef typename std::conditional<is_wide, std::wstring, std::string>::type type_string;
 
-   typedef typename boost::mpl::if_c<is_wide, std::wistream, std::istream>::type type_istream;
-   typedef typename boost::mpl::if_c<is_wide, std::wostream, std::ostream>::type type_ostream;
+   typedef typename std::conditional<is_wide, std::wistream, std::istream>::type type_istream;
+   typedef typename std::conditional<is_wide, std::wostream, std::ostream>::type type_ostream;
 
-   typedef typename boost::mpl::if_c<is_wide, std::wstringstream, std::stringstream>::type type_stringstream;
-   typedef typename boost::mpl::if_c<is_wide, std::wistringstream, std::istringstream>::type type_istringstream;
-   typedef typename boost::mpl::if_c<is_wide, std::wostringstream, std::ostringstream>::type type_ostringstream;
+   typedef typename std::conditional<is_wide, std::wstringstream, std::stringstream>::type type_stringstream;
+   typedef typename std::conditional<is_wide, std::wistringstream, std::istringstream>::type type_istringstream;
+   typedef typename std::conditional<is_wide, std::wostringstream, std::ostringstream>::type type_ostringstream;
 
-   typedef typename boost::mpl::if_c<is_wide, std::wfstream, std::fstream>::type type_fstream;
-   typedef typename boost::mpl::if_c<is_wide, std::wifstream, std::ifstream>::type type_ifstream;
-   typedef typename boost::mpl::if_c<is_wide, std::wofstream, std::ofstream>::type type_ofstream;
+   typedef typename std::conditional<is_wide, std::wfstream, std::fstream>::type type_fstream;
+   typedef typename std::conditional<is_wide, std::wifstream, std::ifstream>::type type_ifstream;
+   typedef typename std::conditional<is_wide, std::wofstream, std::ofstream>::type type_ofstream;
 
    static inline QString toQString(const type_string & str)                   { return cvtQString<is_wide, 0>::toQString(str); }
    static inline void fromQString(const QString & str, type_string & result)  { cvtQString<is_wide, 0>::fromQString(str, result); }

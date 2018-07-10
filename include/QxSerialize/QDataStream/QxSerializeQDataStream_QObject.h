@@ -46,7 +46,7 @@
 #include <QtCore/qdatastream.h>
 #include <QtCore/qobject.h>
 
-QX_DLL_EXPORT QDataStream & operator<< (QDataStream & stream, const QObject & t) BOOST_USED;
-QX_DLL_EXPORT QDataStream & operator>> (QDataStream & stream, QObject & t) BOOST_USED;
+QX_DLL_EXPORT QDataStream & operator<< (QDataStream & stream, const QObject & t) QX_USED;
+QX_DLL_EXPORT QDataStream & operator>> (QDataStream & stream, QObject & t) QX_USED;
 
 #endif // _QX_SERIALIZE_QDATASTREAM_QOBJECT_H_

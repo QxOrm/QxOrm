@@ -43,14 +43,9 @@
  * \brief Define a user SQL query added to default SQL query builded by QxOrm library, and used by qx::dao::xxx functions to filter elements fetched from database
  */
 
-#include <boost/tuple/tuple.hpp>
-#include <boost/tuple/tuple_comparison.hpp>
-#include <boost/tuple/tuple_io.hpp>
-
 #ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/split_free.hpp>
-#include <boost/serialization/version.hpp>
 #include <boost/serialization/nvp.hpp>
 #endif // _QX_ENABLE_BOOST_SERIALIZATION
 
@@ -70,6 +65,8 @@
 
 #include <QxTraits/get_class_name.h>
 
+#include <QxRegister/QxVersion.h>
+
 #include <QxConvert/QxConvert.h>
 
 namespace qx {
@@ -87,8 +84,8 @@ template <class Archive> inline void qx_load(Archive & ar, qx::QxSqlQuery & t, c
 } // namespace boost
 #endif // _QX_ENABLE_BOOST_SERIALIZATION
 
-QX_DLL_EXPORT QDataStream & operator<< (QDataStream & stream, const qx::QxSqlQuery & t) BOOST_USED;
-QX_DLL_EXPORT QDataStream & operator>> (QDataStream & stream, qx::QxSqlQuery & t) BOOST_USED;
+QX_DLL_EXPORT QDataStream & operator<< (QDataStream & stream, const qx::QxSqlQuery & t) QX_USED;
+QX_DLL_EXPORT QDataStream & operator>> (QDataStream & stream, qx::QxSqlQuery & t) QX_USED;
 
 #ifndef _QX_NO_JSON
 namespace qx {
@@ -96,8 +93,8 @@ namespace cvt {
 namespace detail {
 template <> struct QxConvert_ToJson< qx::QxSqlQuery >;
 template <> struct QxConvert_FromJson< qx::QxSqlQuery >;
-QX_DLL_EXPORT QJsonValue QxConvert_ToJson_Helper(const qx::QxSqlQuery & t, const QString & format) BOOST_USED;
-QX_DLL_EXPORT qx_bool QxConvert_FromJson_Helper(const QJsonValue & j, qx::QxSqlQuery & t, const QString & format) BOOST_USED;
+QX_DLL_EXPORT QJsonValue QxConvert_ToJson_Helper(const qx::QxSqlQuery & t, const QString & format) QX_USED;
+QX_DLL_EXPORT qx_bool QxConvert_FromJson_Helper(const QJsonValue & j, qx::QxSqlQuery & t, const QString & format) QX_USED;
 } // namespace detail
 } // namespace cvt
 } // namespace qx
@@ -260,7 +257,7 @@ protected:
    struct QxSqlResult
    { QHash<QString, int> positionByKey; QVector< QVector<QVariant> > values; };
 
-   typedef boost::tuple<QVariant, QSql::ParamType> type_bind_value;
+   typedef std::tuple<QVariant, QSql::ParamType> type_bind_value;
 
    QString                                   m_sQuery;               //!< Query SQL with place-holder
    QxCollection<QString, type_bind_value>    m_lstValue;             //!< Bind value in this array
@@ -269,7 +266,7 @@ protected:
    int                                       m_iSqlElementIndex;     //!< Current index of SQL element
    int                                       m_iParenthesisCount;    //!< Current parenthesis count
    bool                                      m_bDistinct;            //!< Replace SELECT by SELECT DISTINCT in SQL query
-   qx_shared_ptr<QxSqlResult>                m_pSqlResult;           //!< All results returning by SQL query or stored procedure (after calling qx::dao::call_query function)
+   std::shared_ptr<QxSqlResult>              m_pSqlResult;           //!< All results returning by SQL query or stored procedure (after calling qx::dao::call_query function)
 
 public:
 
@@ -305,7 +302,7 @@ public:
 
 private:
 
-   void verifyQuery() const BOOST_USED;
+   void verifyQuery() const QX_USED;
    void fetchSqlResult(QSqlQuery & query);
 
 public:
@@ -465,7 +462,7 @@ QX_DLL_EXPORT QSqlError call_query_helper(qx::QxSqlQuery & query, QSqlDatabase *
 
 QX_REGISTER_CLASS_NAME(qx_query)
 
-BOOST_CLASS_VERSION(qx::QxSqlQuery, 0)
+QX_CLASS_VERSION(qx::QxSqlQuery, 0)
 
 #ifdef _QX_ENABLE_BOOST_SERIALIZATION
 QX_SERIALIZE_FAST_COMPIL_SAVE_LOAD_HPP(QX_DLL_EXPORT, qx::QxSqlQuery)

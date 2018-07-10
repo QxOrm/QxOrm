@@ -9,7 +9,7 @@ class QX_BLOG_DLL_EXPORT blog
 {
 public:
 
-   typedef qx_shared_ptr<author> type_author;
+   typedef std::shared_ptr<author> type_author;
    typedef QList<comment_ptr> type_list_of_comment;
    typedef qx::QxCollection<long, category_ptr> type_list_of_category;
 
@@ -47,7 +47,7 @@ public:
 
 QX_REGISTER_HPP_QX_BLOG(blog, qx::trait::no_base_class_defined, 0)
 
-typedef qx_shared_ptr<blog> blog_ptr;
+typedef std::shared_ptr<blog> blog_ptr;
 typedef std::vector<blog_ptr> list_blog;
 
 #endif // _QX_BLOG_BLOG_H_

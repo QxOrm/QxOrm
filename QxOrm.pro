@@ -39,6 +39,7 @@ include(./QxOrm.pri)
 TEMPLATE = lib
 CONFIG += dll
 DEFINES += _QX_BUILDING_QX_ORM
+DESTDIR = $$PWD/lib/
 
 !contains(DEFINES, _QX_NO_PRECOMPILED_HEADER) {
 PRECOMPILED_HEADER = ./include/QxPrecompiled.h
@@ -48,7 +49,7 @@ PRECOMPILED_HEADER = ./include/QxPrecompiled.h
 QT -= gui
 } # !contains(DEFINES, _QX_ENABLE_QT_GUI)
 
-unix { VERSION = 1.4.3 }
+unix { VERSION = 1.4.4 }
 
 contains(DEFINES, _QX_STATIC_BUILD) {
 CONFIG -= dll
@@ -66,7 +67,6 @@ TARGET = QxOrm
 } # CONFIG(debug, debug|release)
 
 unix {
-DESTDIR = ./lib/
 isEmpty(PREFIX) { PREFIX = /usr/local }
 target.path = $$PREFIX/lib/
 headers.path = $$PREFIX/include/
@@ -135,6 +135,7 @@ HEADERS += ./include/QxCommon/QxSimpleCrypt.h
 HEADERS += ./include/QxCommon/QxAnyCastDynamic.h
 HEADERS += ./include/QxCommon/QxException.h
 HEADERS += ./include/QxCommon/QxExceptionCode.h
+HEADERS += ./include/QxCommon/QxAny.h
 
 HEADERS += ./include/QxConvert/QxConvert.h
 HEADERS += ./include/QxConvert/QxConvert_Impl.h
@@ -148,6 +149,7 @@ HEADERS += ./include/QxRegister/QxRegister.h
 HEADERS += ./include/QxRegister/QxRegisterInternalHelper.h
 HEADERS += ./include/QxRegister/IxTypeInfo.h
 HEADERS += ./include/QxRegister/QxRegisterQtProperty.h
+HEADERS += ./include/QxRegister/QxVersion.h
 
 HEADERS += ./include/QxCollection/IxCollection.h
 HEADERS += ./include/QxCollection/QxCollection.h
@@ -478,10 +480,17 @@ HEADERS += ./include/QxModelView/IxModel.h
 HEADERS += ./include/QxModelView/QxModel.h
 HEADERS += ./include/QxModelView/QxNestedModel.h
 HEADERS += ./include/QxModelView/QxModelService.h
+HEADERS += ./include/QxModelView/QxModelRowCompare.h
+
+HEADERS += ./include/QxExtras/QxBoostOptionalOnly.h
+HEADERS += ./include/QxExtras/QxStdOptional.h
 
 HEADERS += ./include/QxOrm.h
 HEADERS += ./include/QxOrm_Impl.h
 HEADERS += ./include/QxMemLeak.h
+HEADERS += ./include/QxDaoRepository.h
+HEADERS += ./include/QxModelView.h
+HEADERS += ./include/QxServices.h
 
 #################
 # Sources Files #
@@ -635,6 +644,7 @@ SOURCES += ./src/QxValidator/QxInvalidValueX.cpp
 
 SOURCES += ./src/QxModelView/IxModel.cpp
 SOURCES += ./src/QxModelView/QxNestedModel.cpp
+SOURCES += ./src/QxModelView/QxModelRowCompare.cpp
 
 SOURCES += ./src/main.cpp
 

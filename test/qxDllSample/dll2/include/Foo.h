@@ -20,8 +20,10 @@ protected:
    qx::QxTimeNeutral       m_oTimeNeutral;
    qx::QxDateTimeNeutral   m_oDateTimeNeutral;
 
+#ifdef _QX_ENABLE_BOOST
    boost::optional<int> m_optInt;
    boost::optional<QString> m_optString;
+#endif // _QX_ENABLE_BOOST
 
 public:
 
@@ -36,8 +38,11 @@ public:
    QDate getDate() const                           { return m_oDateNeutral.toDate(); }
    QTime getTime() const                           { return m_oTimeNeutral.toTime(); }
    QDateTime getDateTime() const                   { return m_oDateTimeNeutral.toDateTime(); }
+
+#ifdef _QX_ENABLE_BOOST
    boost::optional<int> getOptInt() const          { return m_optInt; }
    boost::optional<QString> getOptString() const   { return m_optString; }
+#endif // _QX_ENABLE_BOOST
 
    void setName(const QString & s)                          { m_sName = s; }
    void setDesc(const QVariant & s)                         { m_sDesc = s; }
@@ -45,15 +50,18 @@ public:
    void setDate(const QDate & d)                            { m_oDateNeutral.setDate(d); }
    void setTime(const QTime & t)                            { m_oTimeNeutral.setTime(t); }
    void setDateTime(const QDateTime & dt)                   { m_oDateTimeNeutral.setDateTime(dt); }
+
+#ifdef _QX_ENABLE_BOOST
    void setOptInt(const boost::optional<int> & opt)         { m_optInt = opt; }
    void setOptString(const boost::optional<QString> & opt)  { m_optString = opt; }
+#endif // _QX_ENABLE_BOOST
 
 };
 
 QX_REGISTER_HPP_QX_DLL2(Foo, BaseClassTrigger, 0)
 
-typedef qx_shared_ptr<Foo> Foo_ptr;
+typedef std::shared_ptr<Foo> Foo_ptr;
 typedef qx::QxCollection<long, Foo_ptr> FooX;
-typedef qx_shared_ptr<FooX> FooX_ptr;
+typedef std::shared_ptr<FooX> FooX_ptr;
 
 #endif // _QX_FOO_H_

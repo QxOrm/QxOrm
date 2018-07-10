@@ -66,11 +66,11 @@
     <table cellspacing="0" cellpadding="1"><col><col><tbody>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow">Current version :&nbsp;</font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.3 - <a href="../doxygen/index.html" target="_blank">QxOrm library online class documentation</a></font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.4 - <a href="../doxygen/index.html" target="_blank">QxOrm library online class documentation</a></font></td>
       </tr>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow"></font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.2.1</font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.2.2</font></td>
       </tr>
     </tbody></table>
   </td>
@@ -129,7 +129,7 @@
                               <a href="#manual_200">Qt dependency</a>
                            </li>
                            <li class="manual_li_title_2">
-                              <a href="#manual_210">Boost dependency (only header files *.hpp are required)</a>
+                              <a href="#manual_210">Boost dependency (optional)</a>
                            </li>
                            <li class="manual_li_title_2">
                               <a href="#manual_220">QxOrm.pri (or QxOrm.cmake) configuration file</a>
@@ -488,7 +488,7 @@
          The goal of this chapter is to explain all steps required to install <b>QxOrm</b> library on all environments :
          <ul>
             <li><a href="#manual_200">Download and install Qt framework ;</a></li>
-            <li><a href="#manual_210">Download and unzip boost library (by default just header files <i>*.hpp</i> are necessary) ;</a></li>
+            <li><a href="#manual_210">Download and unzip boost library (optional) ;</a></li>
             <li><a href="#manual_220">Configure <i>QxOrm.pri</i> (or <i>QxOrm.cmake</i>) configuration file ;</a></li>
             <li><a href="#manual_230">Build QxOrm library (with qmake or CMake) ;</a></li>
             <li><a href="#manual_240">Check SQL drivers provided by Qt.</a></li>
@@ -514,8 +514,17 @@
            It is possible to enable extra features in the <a href="#manual_220"><i>QxOrm.pri</i> (or <i>QxOrm.cmake</i>) configuration file</a> : some features can add dependencies to QxOrm library.
            <br><br>
          </div>
-         <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_210">Boost dependency (only header files *.hpp are required)</a></p>
+         <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_210">Boost dependency (optional)</a></p>
          <div class="manual_div_content">
+           By default, QxOrm library depends only on Qt (<i>QtCore</i> and <i>QtSql</i>).
+           boost installation is optional and not required with default configuration.
+           <br/>
+           <b>Note :</b> QxOrm provides 2 dependency levels on boost :
+           <ul>
+             <li>dependency only on boost headers files (<i>*.hpp</i>) : <i>_QX_ENABLE_BOOST</i> compilation option ;</li>
+             <li>dependency on <a href="http://www.boost.org/doc/libs/release/libs/serialization/doc/index.html" target="_blank">boost serialization</a> module : <i>_QX_ENABLE_BOOST_SERIALIZATION</i> compilation option.</li>
+           </ul>
+           <br/>
            <table border="0" style="width: 100%" align="center">
              <col><col>
              <tbody>
@@ -529,15 +538,15 @@
              </tbody>
            </table>
            <br>
-           <b>Important note :</b> by default, <b>QxOrm</b> library depends only on <i>*.hpp</i> boost header files (<i>header only</i> libraries).
-           So boost installation is very easy because you just have to unzip boost package (to get <i>*.hpp</i> header files, there is nothing to build).
+           <b>Important note :</b> with <i>_QX_ENABLE_BOOST</i> compilation option, <b>QxOrm</b> library depends only on <i>*.hpp</i> boost header files (<i>header only</i> libraries).
+           So in this case, boost installation is very easy because you just have to unzip boost package (to get <i>*.hpp</i> header files, there is nothing to build).
            <br><br>
          </div>
          <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_220">QxOrm.pri (or QxOrm.cmake) configuration file</a></p>
          <div class="manual_div_content">
             <i>QxOrm.pri</i> (or <i>QxOrm.cmake</i>) configuration file is divided into several sections (each section is commented) and provides all settings and compilation options available to customize QxOrm library features.
             So it is strongly recommended to read carefully <i>QxOrm.pri</i> configuration file before compiling and building QxOrm library.
-            It is possible to keep default settings, only <b>QX_BOOST_INCLUDE_PATH</b> variable is required to build QxOrm library : this variable is used to define where <i>*.hpp</i> boost header files are located :<br>
+            It is possible to keep default settings, only <b>QX_BOOST_INCLUDE_PATH</b> variable is required if you work with boost : this variable is used to define where <i>*.hpp</i> boost header files are located :<br>
             <br>
             <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
 <pre>   <i>isEmpty(QX_BOOST_INCLUDE_PATH) { QX_BOOST_INCLUDE_PATH = $$quote(<font style="background-color:yellow">D:/Dvlp/_Libs/Boost/1_57/include</font>) }</i>   </pre>
@@ -547,11 +556,8 @@
             <br><br>
             Here is a list of compilation options available in <i>QxOrm.pri</i> configuration file, by default they are all disabled :
             <ul>
+               <li><b>_QX_ENABLE_BOOST :</b> add a dependency to boost headers files (<i>*.hpp</i>), support some classes like : <i>boost::shared_ptr</i>, <i>boost::optional</i>, <i>boost::container</i>, etc... ;</li>
                <li><b>_QX_ENABLE_BOOST_SERIALIZATION :</b> enable <a href="#manual_610">boost::serialization engine</a>. This option requires to build <a href="http://www.boost.org/doc/libs/release/libs/serialization/doc/index.html" target="_blank">boost::serialization</a> binary and adds a dependency to QxOrm library ;</li>
-               <br>
-               <li><b>_QX_CPP_11_SMART_PTR :</b> support C++11 smart-pointers : <i>std::unique_ptr, std::shared_ptr, std::weak_ptr</i> ;</li>
-               <li><b>_QX_CPP_11_CONTAINER :</b> support C++11 containers : <i>std::unordered_map, std::unordered_set, std::unordered_multimap, std::unordered_multiset</i> ;</li>
-               <li><b>_QX_CPP_11_TUPLE :</b> support C++11 <i>std::tuple</i> type ;</li>
                <br>
                <li><b>_QX_ENABLE_QT_GUI :</b> support serialization of <a href="http://doc.qt.io/qt-5/qtgui-index.html" target="_blank">QtGui</a> types : <i>QBrush, QColor, QFont, QImage, QMatrix, QPicture, QPixmap, QRegion</i>. This option adds a dependency to QxOrm library (<a href="http://doc.qt.io/qt-5/qtgui-index.html" target="_blank">QtGui</a>) ;</li>
                <li><b>_QX_ENABLE_QT_NETWORK :</b> enable <a href="#manual_80">QxService module</a> to transfer persistent data layer over network (client/server application). This option adds a dependency to QxOrm library (<a href="http://doc.qt.io/qt-5/qtnetwork-index.html" target="_blank">QtNetwork</a>) ;</li>
@@ -585,7 +591,7 @@
    <i>make release</i>   </pre>
            </td></tr></tbody></table>
            <br>
-           On <b>Windows</b>, <i>*.vcproj</i> and <i>*.sln</i> files are available for <b>Visual C++ 2008</b>, <b>Visual C++ 2010</b> and <b>Visual C++ 2012</b>.<br>
+           On <b>Windows</b>, <i>*.vcproj</i> and <i>*.sln</i> files are available for <b>Microsoft Visual C++</b>.<br>
            <i>*.pro</i> files are readable by <b>Qt Creator</b>, and some plugins are available to interface to other C++ source code editors.<br>
            <i>mingw_build_all_debug.bat</i> and <i>mingw_build_all_release.bat</i> scripts in the directory <i>./tools/</i> can be used to quickly build QxOrm library and all tests with <b>MinGW</b> compiler on Windows.<br>
            <i>gcc_build_all_debug.sh</i> and <i>gcc_build_all_release.sh</i> scripts in the directory <i>./tools/</i> can be used to quickly build QxOrm library and all tests with <b>GCC</b> compiler on <b>Linux</b>.<br>
@@ -1862,7 +1868,6 @@ WHERE blog.blog_id = :blog_id</span></pre>
   std::set&lt;T&gt;  
   std::map&lt;Key, Value&gt;  
 
-  <span class="comment">// With _QX_CPP_11_CONTAINER compilation option defined</span>  
   std::unordered_map&lt;Key, Value&gt;  
   std::unordered_set&lt;T&gt;  
   std::unordered_multimap&lt;Key, Value&gt;  
@@ -1992,7 +1997,6 @@ lstDrugs<span class="operator">.</span>clear<span class="operator">();</span></p
             <div class="manual_div_content">
                <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="std smart pointers">
 <pre>
-  <span class="comment">// With _QX_CPP_11_SMART_PTR compilation option defined</span>  
   std::shared_ptr&lt;T&gt;  
   std::unique_ptr&lt;T&gt;  
   std::weak_ptr&lt;T&gt;  
@@ -2380,6 +2384,7 @@ qDebug<span class="operator">(</span><span class="string">"[QxOrm] test 'QxValid
             <p class="manual_p_title_3"><a class="manual_a_title_3" name="manual_4300">boost::optional</a></p>
             <div class="manual_div_content">
                <a href="http://www.boost.org/doc/libs/release/libs/optional/doc/html/index.html" target="_blank">boost::optional&lt;T&gt;</a> class provided by boost is the best solution to manage NULL value in C++.<br>
+               To use <a href="http://www.boost.org/doc/libs/release/libs/optional/doc/html/index.html" target="_blank">boost::optional&lt;T&gt;</a> with QxOrm library, you must define <b><i>_QX_ENABLE_BOOST</i></b> compilation option, or include <b><i>&lt;QxExtras/QxBoostOptionalOnly.h&gt;</i></b> header file.<br>
                Here is an example where all properties (except primary key) can be NULL using <a href="http://www.boost.org/doc/libs/release/libs/optional/doc/html/index.html" target="_blank">boost::optional</a> class :<br>
                <br>
                <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="person.h">
@@ -3440,7 +3445,7 @@ template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</
          <div class="manual_div_content">
             Each C++ class registered in QxOrm context can be cloned using :
             <ul>
-               <li><a href="../doxygen/html/_qx_clone_8h.html" target="_blank">qx::clone&lt;T&gt;(const T & t) :</a> create a new instance similar to <i>t</i> of <i>qx_shared_ptr&lt;T&gt;</i> type (by default equals to <i>boost::shared_ptr&lt;T&gt;</i> type, if C++11 enabled then equals to <i>std::shared_ptr&lt;T&gt;</i> type) ;</li>
+               <li><a href="../doxygen/html/_qx_clone_8h.html" target="_blank">qx::clone&lt;T&gt;(const T & t) :</a> create a new instance similar to <i>t</i> of <i>std::shared_ptr&lt;T&gt;</i> type (by default equals to <i>boost::shared_ptr&lt;T&gt;</i> type, if C++11 enabled then equals to <i>std::shared_ptr&lt;T&gt;</i> type) ;</li>
                <li><a href="../doxygen/html/_qx_clone_8h.html" target="_blank">qx::clone_to_boost_shared_ptr&lt;T&gt;(const T & t) :</a> create a new instance similar to <i>t</i> of <i>boost::shared_ptr&lt;T&gt;</i> type ;</li>
                <li><a href="../doxygen/html/_qx_clone_8h.html" target="_blank">qx::clone_to_qt_shared_ptr&lt;T&gt;(const T & t) :</a> create a new instance similar to <i>t</i> of <i>QSharedPointer&lt;T&gt;</i> type ;</li>
                <li><a href="../doxygen/html/_qx_clone_8h.html" target="_blank">qx::clone_to_std_shared_ptr&lt;T&gt;(const T & t) :</a> create a new instance similar to <i>t</i> of <i>std::shared_ptr&lt;T&gt;</i> type ;</li>
@@ -3638,7 +3643,7 @@ if</span><span class="operator"> (</span>pCloneTemp<span class="operator">) {</s
             <ul>
                <li><a href="../doxygen/html/classqx_1_1_ix_data_member.html" target="_blank">toVariant()</a> : returns data member value converted to <a href="http://doc.qt.io/qt-5/qvariant.html" target="_blank">QVariant</a> type ;</li>
                <li><a href="../doxygen/html/classqx_1_1_ix_data_member.html" target="_blank">getValue&lt;T&gt;()</a> : returns data member value in its real type (template T) ;</li>
-               <li><a href="../doxygen/html/classqx_1_1_ix_data_member.html" target="_blank">getValueAnyPtr()</a> : returns data member value encapsulated in <a href="http://www.boost.org/doc/libs/release/doc/html/any.html" target="_blank">boost::any</a> type (possibility to cast using <a href="http://www.boost.org/doc/libs/release/doc/html/any.html" target="_blank">boost::any_cast</a> function).</li>
+               <li><a href="../doxygen/html/classqx_1_1_ix_data_member.html" target="_blank">getValueAnyPtr()</a> : returns data member value encapsulated in <a href="http://www.boost.org/doc/libs/release/doc/html/any.html" target="_blank">qx::any</a> type (possibility to cast using <a href="http://www.boost.org/doc/libs/release/doc/html/any.html" target="_blank">qx::any_cast</a> function).</li>
             </ul>
             <b>For example :</b> we have a generic pointer <i>void *</i> to a <i>person</i> class.
             We can get the <i>QString</i> value of <i>firstName</i> property writing :
@@ -3656,7 +3661,7 @@ if</span><span class="operator"> (</span>pCloneTemp<span class="operator">) {</s
 // Second method to get the data member value converted in QVariant
 </span>QVariant vFirstName<span class="operator"> =</span> pDataMember<span class="operator">-&gt;</span>toVariant<span class="operator">(</span>p<span class="operator">);</span><span class="comment">
 
-// Third method to get the value encapsulated in boost::any type
+// Third method to get the value encapsulated in qx::any type
 </span>boost<span class="operator">::</span>any aFirstName<span class="operator"> =</span> pDataMember<span class="operator">-&gt;</span>getValueAnyPtr<span class="operator">(</span>p<span class="operator">);</span><span class="comment">
 
 // Check if all values are equals
@@ -3769,10 +3774,10 @@ template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</
 
    // Call method 'myMethodWith2Params' with 2 parameters encapsulated in a string (default separator for parameters is character '|')
    // This way to pass parameters to the function works only if parameters are numeric or string
-   // If parameters are more complex, then you have to encapsulate parameters in a list of boost::any, as shown below
+   // If parameters are more complex, then you have to encapsulate parameters in a list of qx::any, as shown below
 </span>   qx<span class="operator">::</span>QxClassX<span class="operator">::</span>invoke<span class="operator">(</span><span class="string">"person"</span><span class="operator">,</span><span class="string"> "myMethodWith2Params"</span><span class="operator">,</span> p<span class="operator">,</span><span class="string"> "36|my string param 2"</span><span class="operator">);</span><span class="comment">
 
-   // Call method 'myMethodWith2Params' with 2 parameters encapsulated in a list of boost::any : std::vector&lt;boost::any&gt;
+   // Call method 'myMethodWith2Params' with 2 parameters encapsulated in a list of qx::any : std::vector&lt;qx::any&gt;
 </span>   std<span class="operator">::</span>vector<span class="operator">&lt;</span>boost<span class="operator">::</span>any<span class="operator">&gt;</span> lstParams<span class="operator">;</span><span class="type">
    int</span> iParam1<span class="operator"> =</span><span class="int"> 36</span><span class="operator">;</span> lstParams<span class="operator">.</span>push_back<span class="operator">(</span>iParam1<span class="operator">);</span><span class="comment"> // Parameter at position 1
 </span>   QString sParam2<span class="operator"> =</span><span class="string"> "my string param 2"</span><span class="operator">;</span> lstParams<span class="operator">.</span>push_back<span class="operator">(</span>sParam2<span class="operator">);</span><span class="comment"> // Parameter at position 2
@@ -3788,7 +3793,7 @@ template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</
          <div class="manual_div_content">
             Introspection engine of QxOrm library is able to create class instances dynamically based on class name (<a href="../doxygen/html/group___qx_factory.html" target="_blank">QxFactory module</a>, design pattern factory) using following functions :
             <ul>
-               <li><a href="../doxygen/html/group___qx_factory.html" target="_blank">qx::create(const QString & sKey)</a> : create a C++ instance of <i>sKey</i> type encapsulated in <a href="http://www.boost.org/doc/libs/release/doc/html/any.html" target="_blank">boost::any</a> type (which contains a <i>qx_shared_ptr</i> smart-pointer, equals to <i>boost::shared_ptr</i> by default) ;</li>
+               <li><a href="../doxygen/html/group___qx_factory.html" target="_blank">qx::create(const QString & sKey)</a> : create a C++ instance of <i>sKey</i> type encapsulated in <a href="http://www.boost.org/doc/libs/release/doc/html/any.html" target="_blank">qx::any</a> type (which contains a <i>std::shared_ptr</i> smart-pointer, equals to <i>boost::shared_ptr</i> by default) ;</li>
                <li><a href="../doxygen/html/group___qx_factory.html" target="_blank">qx::create_nude_ptr&lt;T&gt;(const QString & sKey)</a> : create a C++ instance of <i>sKey</i> type in a nude pointer of <i>T *</i> type (you have to delete yourself this nude pointer to avoid memory leak) ;</li>
                <li><a href="../doxygen/html/group___qx_factory.html" target="_blank">qx::create_void_ptr(const QString & sKey)</a> : create a C++ instance of <i>sKey</i> type in a nude pointer of <i>void *</i> type (you have to delete yourself this nude pointer to avoid memory leak).</li>
             </ul>

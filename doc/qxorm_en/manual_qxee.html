@@ -66,11 +66,11 @@
     <table cellspacing="0" cellpadding="1"><col><col><tbody>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow">Current version :&nbsp;</font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.3 - <a href="../doxygen/index.html" target="_blank">QxOrm library online class documentation</a></font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.4 - <a href="../doxygen/index.html" target="_blank">QxOrm library online class documentation</a></font></td>
       </tr>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow"></font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.2.1</font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.2.2</font></td>
       </tr>
     </tbody></table>
   </td>
@@ -364,6 +364,9 @@
                                  </li>
                                  <li class="manual_li_title_3">
                                     <a href="#js_engine_functions_list">Get list of entities/enumerations of a project</a>
+                                 </li>
+                                 <li class="manual_li_title_3">
+                                    <a href="#js_engine_qxee_params">Fetch all application settings (at global level, project level and plugin level)</a>
                                  </li>
                               </ol>
                            </li>
@@ -4087,6 +4090,30 @@ f2<span class="operator">.</span>close<span class="operator">();</span></pre>
                <div style="width:900px; height:100px; overflow:auto; background-color:white">
 <pre>var listOfAllEntities<span class="operator"> =</span> helper<span class="operator">.</span>getListOfAllEntities<span class="operator">();</span><span class="comment"> // 'listOfAllEntities' variable is an array, each item of this array contains : &lt;entity_id&gt;|&lt;entity_name&gt;
 </span>var listOfAllEnums<span class="operator"> =</span> helper<span class="operator">.</span>getListOfAllEnums<span class="operator">();</span><span class="comment"> // 'listOfAllEnums' variable is an array, each item of this array contains : &lt;enum_id&gt;|&lt;enum_name&gt;</span></pre>
+               </div>
+               <br/><br/>
+            </div>
+            <p class="manual_p_title_3"><a class="manual_a_title_3" name="js_engine_qxee_params">Fetch all application settings (at global level, project level and plugin level)</a></p>
+            <div class="manual_div_content">
+               Here is how to fetch all application settings (JSON format) :
+               <ul>
+                  <li><a href="#global_settings">at global level</a> calling function : <i>helper.getQxEEGlobalSettingsJson()</i> ;</li>
+                  <li><a href="#project_settings">at project level</a> calling function : <i>helper.getQxEEProjectSettingsJson()</i> ;</li>
+                  <li><a href="#cpp_export_settings_parameters">at plugin level</a> calling function : <i>helper.getQxEEPluginSetingsJson()</i>.</li>
+               </ul>
+               <br/>
+               <div style="width:900px; height:300px; overflow:auto; background-color:white">
+<pre>var globalSettings<span class="operator"> =</span> helper<span class="operator">.</span>getQxEEGlobalSettingsJson<span class="operator">();</span><span class="comment">    // the result is a string in JSON format ==&gt; so just use JSON.parse() function to get a javascript object instance
+</span>var projectSettings<span class="operator"> =</span> helper<span class="operator">.</span>getQxEEProjectSettingsJson<span class="operator">();</span><span class="comment">  // the result is a string in JSON format ==&gt; so just use JSON.parse() function to get a javascript object instance
+</span>var pluginSettings<span class="operator"> =</span> helper<span class="operator">.</span>getQxEEPluginSetingsJson<span class="operator">();</span><span class="comment">     // the result is a string in JSON format ==&gt; so just use JSON.parse() function to get a javascript object instance
+</span>
+print<span class="operator">(</span>globalSettings<span class="operator">);</span> helper<span class="operator">.</span>print<span class="operator">(</span>globalSettings<span class="operator">);</span>
+print<span class="operator">(</span>projectSettings<span class="operator">);</span> helper<span class="operator">.</span>print<span class="operator">(</span>projectSettings<span class="operator">);</span>
+print<span class="operator">(</span>pluginSettings<span class="operator">);</span> helper<span class="operator">.</span>print<span class="operator">(</span>pluginSettings<span class="operator">);</span>
+
+globalSettings<span class="operator"> =</span> JSON<span class="operator">.</span>parse<span class="operator">(</span>globalSettings<span class="operator">);</span><span class="comment">    // Now 'globalSettings' is a javascript object instance
+</span>projectSettings<span class="operator"> =</span> JSON<span class="operator">.</span>parse<span class="operator">(</span>projectSettings<span class="operator">);</span><span class="comment">  // Now 'projectSettings' is a javascript object instance
+</span>pluginSettings<span class="operator"> =</span> JSON<span class="operator">.</span>parse<span class="operator">(</span>pluginSettings<span class="operator">);</span><span class="comment">    // Now 'pluginSettings' is a javascript object instance</span></pre>
                </div>
                <br/><br/>
             </div>

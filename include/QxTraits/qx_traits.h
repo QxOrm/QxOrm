@@ -40,16 +40,7 @@
 #include <QxTraits/get_primary_key.h>
 #include <QxTraits/get_class_name.h>
 #include <QxTraits/get_class_name_primitive.h>
-#include <QxTraits/is_boost_intrusive_ptr.h>
-#include <QxTraits/is_boost_scoped_ptr.h>
-#include <QxTraits/is_boost_shared_ptr.h>
-#include <QxTraits/is_boost_unordered_map.h>
-#include <QxTraits/is_boost_unordered_set.h>
-#include <QxTraits/is_boost_weak_ptr.h>
 #include <QxTraits/is_container.h>
-#include <QxTraits/is_container_base_of.h>
-#include <QxTraits/is_container_key_value.h>
-#include <QxTraits/is_container_to_pod.h>
 #include <QxTraits/is_ptr_base_of.h>
 #include <QxTraits/is_ptr_to_pod.h>
 #include <QxTraits/is_qt_hash.h>
@@ -69,8 +60,6 @@
 #include <QxTraits/is_qx_pod.h>
 #include <QxTraits/is_qx_registered.h>
 #include <QxTraits/is_smart_ptr.h>
-#include <QxTraits/is_smart_ptr_base_of.h>
-#include <QxTraits/is_smart_ptr_to_pod.h>
 #include <QxTraits/is_std_list.h>
 #include <QxTraits/is_std_map.h>
 #include <QxTraits/is_std_set.h>
@@ -91,5 +80,14 @@
 #include <QxTraits/is_std_unordered_map.h>
 #include <QxTraits/is_std_unordered_set.h>
 #include <QxTraits/is_std_weak_ptr.h>
+
+#ifdef _QX_ENABLE_BOOST
+#include <QxTraits/is_boost_intrusive_ptr.h>
+#include <QxTraits/is_boost_scoped_ptr.h>
+#include <QxTraits/is_boost_shared_ptr.h>
+#include <QxTraits/is_boost_unordered_map.h>
+#include <QxTraits/is_boost_unordered_set.h>
+#include <QxTraits/is_boost_weak_ptr.h>
+#endif // _QX_ENABLE_BOOST
 
 #endif // _QX_TRAITS_H_

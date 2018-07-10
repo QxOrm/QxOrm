@@ -4,8 +4,6 @@ project(qxBlogCpp11 LANGUAGES CXX)
 
 include(../../QxOrm.cmake)
 
-if(_QX_ENABLE_CPP_11)
-
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_DEBUG_POSTFIX "d")
@@ -52,9 +50,3 @@ set_target_properties(qxBlogCpp11 PROPERTIES
                      )
 
 set_target_properties(qxBlogCpp11 PROPERTIES DEBUG_POSTFIX ${CMAKE_DEBUG_POSTFIX})
-
-else() # _QX_ENABLE_CPP_11
-
-message(STATUS "qxBlogCpp11 project not loaded because _QX_ENABLE_CPP_11 option not enabled (QxOrm C++11 features are disabled)")
-
-endif() # _QX_ENABLE_CPP_11

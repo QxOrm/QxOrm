@@ -47,7 +47,7 @@
 
 #include <QtSql/qsqlerror.h>
 
-QX_DLL_EXPORT QDataStream & operator<< (QDataStream & stream, const QSqlError & t) BOOST_USED;
-QX_DLL_EXPORT QDataStream & operator>> (QDataStream & stream, QSqlError & t) BOOST_USED;
+QX_DLL_EXPORT QDataStream & operator<< (QDataStream & stream, const QSqlError & t) QX_USED;
+QX_DLL_EXPORT QDataStream & operator>> (QDataStream & stream, QSqlError & t) QX_USED;
 
 #endif // _QX_SERIALIZE_QDATASTREAM_QSQLERROR_H_

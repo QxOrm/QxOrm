@@ -49,32 +49,6 @@
 #include <map>
 #include <set>
 
-#include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/unordered_map.hpp>
-#include <boost/unordered_set.hpp>
-#include <boost/optional.hpp>
-#include <boost/tuple/tuple.hpp>
-
-#ifdef _QX_CPP_11_SMART_PTR
-#ifndef BOOST_NO_CXX11_SMART_PTR
-#include <memory>
-#endif // BOOST_NO_CXX11_SMART_PTR
-#endif // _QX_CPP_11_SMART_PTR
-
-#ifdef _QX_CPP_11_CONTAINER
-#ifndef BOOST_NO_CXX11_STD_UNORDERED
-#include <unordered_map>
-#include <unordered_set>
-#endif // BOOST_NO_CXX11_STD_UNORDERED
-#endif // _QX_CPP_11_CONTAINER
-
-#ifdef _QX_CPP_11_TUPLE
-#ifndef BOOST_NO_CXX11_HDR_TUPLE
-#include <tuple>
-#endif // BOOST_NO_CXX11_HDR_TUPLE
-#endif // _QX_CPP_11_TUPLE
-
 #include <QtCore/qglobal.h>
 #include <QtCore/qobject.h>
 #include <QtCore/qstring.h>
@@ -119,6 +93,7 @@
 
 #include <QxTraits/get_class_name.h>
 
+QX_REGISTER_CLASS_NAME(void)
 QX_REGISTER_CLASS_NAME(bool)
 QX_REGISTER_CLASS_NAME(int)
 QX_REGISTER_CLASS_NAME(short)
@@ -167,10 +142,14 @@ QX_REGISTER_CLASS_NAME_TEMPLATE_1(std::vector)
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(std::list)
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(std::set)
 
+#ifdef _QX_ENABLE_BOOST
+
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(boost::shared_ptr)
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(boost::scoped_ptr)
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(boost::weak_ptr)
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(boost::optional)
+
+#endif // _QX_ENABLE_BOOST
 
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(QVector)
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(QList)
@@ -182,30 +161,24 @@ QX_REGISTER_CLASS_NAME_TEMPLATE_1(QSet)
 
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(qx::dao::ptr)
 
-#ifdef _QX_CPP_11_SMART_PTR
-#ifndef BOOST_NO_CXX11_SMART_PTR
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(std::unique_ptr)
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(std::shared_ptr)
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(std::weak_ptr)
-#endif // BOOST_NO_CXX11_SMART_PTR
-#endif // _QX_CPP_11_SMART_PTR
 
 QX_REGISTER_CLASS_NAME_TEMPLATE_2(std::pair)
 QX_REGISTER_CLASS_NAME_TEMPLATE_2(std::map)
 
+#ifdef _QX_ENABLE_BOOST
 QX_REGISTER_CLASS_NAME_TEMPLATE_2(boost::unordered_map)
 QX_REGISTER_CLASS_NAME_TEMPLATE_2(boost::unordered_multimap)
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(boost::unordered_set)
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(boost::unordered_multiset)
+#endif // _QX_ENABLE_BOOST
 
-#ifdef _QX_CPP_11_CONTAINER
-#ifndef BOOST_NO_CXX11_STD_UNORDERED
 QX_REGISTER_CLASS_NAME_TEMPLATE_2(std::unordered_map)
 QX_REGISTER_CLASS_NAME_TEMPLATE_2(std::unordered_multimap)
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(std::unordered_set)
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(std::unordered_multiset)
-#endif // BOOST_NO_CXX11_STD_UNORDERED
-#endif // _QX_CPP_11_CONTAINER
 
 QX_REGISTER_CLASS_NAME_TEMPLATE_2(QPair)
 QX_REGISTER_CLASS_NAME_TEMPLATE_2(QHash)
@@ -213,6 +186,7 @@ QX_REGISTER_CLASS_NAME_TEMPLATE_2(QMultiHash)
 QX_REGISTER_CLASS_NAME_TEMPLATE_2(QMap)
 QX_REGISTER_CLASS_NAME_TEMPLATE_2(QMultiMap)
 
+#ifdef _QX_ENABLE_BOOST
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(boost::tuple)
 QX_REGISTER_CLASS_NAME_TEMPLATE_2(boost::tuple)
 QX_REGISTER_CLASS_NAME_TEMPLATE_3(boost::tuple)
@@ -222,9 +196,8 @@ QX_REGISTER_CLASS_NAME_TEMPLATE_6(boost::tuple)
 QX_REGISTER_CLASS_NAME_TEMPLATE_7(boost::tuple)
 QX_REGISTER_CLASS_NAME_TEMPLATE_8(boost::tuple)
 QX_REGISTER_CLASS_NAME_TEMPLATE_9(boost::tuple)
+#endif // _QX_ENABLE_BOOST
 
-#ifdef _QX_CPP_11_TUPLE
-#ifndef BOOST_NO_CXX11_HDR_TUPLE
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(std::tuple)
 QX_REGISTER_CLASS_NAME_TEMPLATE_2(std::tuple)
 QX_REGISTER_CLASS_NAME_TEMPLATE_3(std::tuple)
@@ -234,8 +207,6 @@ QX_REGISTER_CLASS_NAME_TEMPLATE_6(std::tuple)
 QX_REGISTER_CLASS_NAME_TEMPLATE_7(std::tuple)
 QX_REGISTER_CLASS_NAME_TEMPLATE_8(std::tuple)
 QX_REGISTER_CLASS_NAME_TEMPLATE_9(std::tuple)
-#endif // BOOST_NO_CXX11_HDR_TUPLE
-#endif // _QX_CPP_11_TUPLE
 
 #if (QT_VERSION >= 0x040600)
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(QScopedPointer)

@@ -122,11 +122,13 @@ T * clone_to_nude_ptr(const T & obj)
 
 /*!
  * \ingroup QxSerialize
- * \brief qx::clone(const T & obj) : return a boost smart-pointer (qx_shared_ptr<T>) of a new instance of type T cloned from obj
+ * \brief qx::clone(const T & obj) : return a boost smart-pointer (std::shared_ptr<T>) of a new instance of type T cloned from obj
  */
 template <class T>
-qx_shared_ptr<T> clone(const T & obj)
-{ T * ptr = qx::clone_to_nude_ptr<T>(obj); return qx_shared_ptr<T>(ptr); }
+std::shared_ptr<T> clone(const T & obj)
+{ T * ptr = qx::clone_to_nude_ptr<T>(obj); return std::shared_ptr<T>(ptr); }
+
+#ifdef _QX_ENABLE_BOOST
 
 /*!
  * \ingroup QxSerialize
@@ -136,6 +138,8 @@ template <class T>
 boost::shared_ptr<T> clone_to_boost_shared_ptr(const T & obj)
 { T * ptr = qx::clone_to_nude_ptr<T>(obj); return boost::shared_ptr<T>(ptr); }
 
+#endif // _QX_ENABLE_BOOST
+
 /*!
  * \ingroup QxSerialize
  * \brief qx::clone_to_qt_shared_ptr(const T & obj) : return a Qt smart-pointer (QSharedPointer<T>) of a new instance of type T cloned from obj
@@ -144,9 +148,6 @@ template <class T>
 QSharedPointer<T> clone_to_qt_shared_ptr(const T & obj)
 { T * ptr = qx::clone_to_nude_ptr<T>(obj); return QSharedPointer<T>(ptr); }
 
-#ifdef _QX_CPP_11_SMART_PTR
-#ifndef BOOST_NO_CXX11_SMART_PTR
-
 /*!
  * \ingroup QxSerialize
  * \brief qx::clone_to_std_shared_ptr(const T & obj) : return a C++11 std smart-pointer (std::shared_ptr<T>) of a new instance of type T cloned from obj
@@ -154,9 +155,6 @@ QSharedPointer<T> clone_to_qt_shared_ptr(const T & obj)
 template <class T>
 std::shared_ptr<T> clone_to_std_shared_ptr(const T & obj)
 { T * ptr = qx::clone_to_nude_ptr<T>(obj); return std::shared_ptr<T>(ptr); }
-
-#endif // BOOST_NO_CXX11_SMART_PTR
-#endif // _QX_CPP_11_SMART_PTR
 
 } // namespace qx
 

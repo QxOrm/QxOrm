@@ -43,12 +43,8 @@
  * \brief qx::cache : based on singleton pattern, provide basic thread-safe cache feature to backup and restore any kind of objects (for example, object fetched from database)
  */
 
-#include <boost/any.hpp>
-#include <boost/tuple/tuple.hpp>
-#include <boost/tuple/tuple_comparison.hpp>
-#include <boost/tuple/tuple_io.hpp>
-
 #include <QxCommon/QxBool.h>
+#include <QxCommon/QxAny.h>
 
 #include <QxCollection/QxCollection.h>
 
@@ -65,10 +61,10 @@ class QX_DLL_EXPORT QxCache : public qx::QxSingleton<QxCache>
 
 protected:
 
-   typedef boost::tuple<long, QDateTime, boost::any> type_qx_cache;
+   typedef std::tuple<long, QDateTime, qx::any> type_qx_cache;
    typedef qx::QxCollection<QString, type_qx_cache> type_qx_lst_cache;
 
-   type_qx_lst_cache m_cache;    //!< List of objects in cache under boost::any format
+   type_qx_lst_cache m_cache;    //!< List of objects in cache under qx::any format
    QMutex m_oMutexCache;         //!< Mutex => 'QxCache' is thread-safe
    long m_lMaxCost;              //!< Max cost before deleting object in cache
    long m_lCurrCost;             //!< Current cost in cache
@@ -87,12 +83,12 @@ public:
    bool isEmpty() const;
    bool exist(const QString & sKey) const;
    bool contains(const QString & sKey) const;
-   boost::any at(const QString & sKey);
+   qx::any at(const QString & sKey);
    long insertionCost(const QString & sKey);
    QDateTime insertionDateTime(const QString & sKey);
    void clear();
 
-   bool insert(const QString & sKey, const boost::any & anyObj, long lCost = 1, const QDateTime & dt = QDateTime());
+   bool insert(const QString & sKey, const qx::any & anyObj, long lCost = 1, const QDateTime & dt = QDateTime());
    bool remove(const QString & sKey);
 
 private:
@@ -173,7 +169,7 @@ inline bool remove(const QString & sKey)
 template <typename T>
 inline bool set(const QString & sKey, T & t, long lCost = 1, const QDateTime & dt = QDateTime())
 {
-   boost::any obj(t);
+   qx::any obj(t);
    return qx::cache::detail::QxCache::getSingleton()->insert(sKey, obj, lCost, dt);
 }
 
@@ -184,10 +180,10 @@ inline bool set(const QString & sKey, T & t, long lCost = 1, const QDateTime & d
 template <typename T>
 inline T get(const QString & sKey)
 {
-   boost::any obj = qx::cache::detail::QxCache::getSingleton()->at(sKey);
+   qx::any obj = qx::cache::detail::QxCache::getSingleton()->at(sKey);
    if (obj.empty()) { return T(); }
-   try { return boost::any_cast<T>(obj); }
-   catch (const boost::bad_any_cast & err) { Q_UNUSED(err); return T(); }
+   try { return qx::any_cast<T>(obj); }
+   catch (const qx::bad_any_cast & err) { Q_UNUSED(err); return T(); }
    catch (...) { return T(); }
 }
 
@@ -200,10 +196,10 @@ inline qx_bool get(const QString & sKey, T & t, QDateTime & dt)
 {
    dt = QDateTime();
    if (! qx::cache::exist(sKey)) { return qx_bool(false, 0, "[QxOrm] qx::cache : key doesn't exist in cache"); }
-   boost::any obj = qx::cache::detail::QxCache::getSingleton()->at(sKey);
+   qx::any obj = qx::cache::detail::QxCache::getSingleton()->at(sKey);
    dt = qx::cache::detail::QxCache::getSingleton()->insertionDateTime(sKey);
-   try { t = boost::any_cast<T>(obj); return qx_bool(true); }
-   catch (const boost::bad_any_cast & err) { Q_UNUSED(err); return qx_bool(false, 0, "[QxOrm] qx::cache : bad any cast exception"); }
+   try { t = qx::any_cast<T>(obj); return qx_bool(true); }
+   catch (const qx::bad_any_cast & err) { Q_UNUSED(err); return qx_bool(false, 0, "[QxOrm] qx::cache : bad any cast exception"); }
    catch (...) { return qx_bool(false, 0, "[QxOrm] qx::cache : unknown cast exception"); }
 }
 

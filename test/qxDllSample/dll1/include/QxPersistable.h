@@ -146,7 +146,7 @@ public:
 
 };
 
-typedef qx_shared_ptr<qx::QxPersistable> QxPersistable_ptr;
+typedef std::shared_ptr<qx::QxPersistable> QxPersistable_ptr;
 
 } // namespace qx
 
