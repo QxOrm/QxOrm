@@ -58,9 +58,15 @@
     </tr>
   </tbody>
 </table>
-<hr style="width: 80%" align="center" size="1" color="#100D5A"><br>
-<table border="1" frame="vsides" rules="cols" style="width: 80%" align="center"
-cellpadding="6" bgcolor="#F2F2F4">
+<hr style="width: 80%" align="center" size="1" color="#100D5A">
+<table border="0" style="width: 80%" align="center">
+  <col><col>
+  <tbody><tr>
+  <td align="left" valign="middle"><font size="2">QxOrm  &gt;&gt;  Tutoriel</font></td>
+  <td align="right" valign="middle"><font size="2">Version courante : QxOrm 1.1.1</font></td>
+  </tr></tbody>
+</table><br>
+<table border="1" frame="vsides" rules="cols" style="width: 80%" align="center" cellpadding="6" bgcolor="#F2F2F4">
   <col>
   <tbody>
     <tr>
@@ -244,7 +250,7 @@ cellpadding="6" bgcolor="#F2F2F4">
         à une ligne de la table <i>author</i> dans la base de données. <br>
         Ce principe permet d'écrire du code C++ simple de compréhension et
         facile à maintenir.<br><br>
-        Nous ajoutons 1 méthode à notre classe <i>author</i> : <i>int age()</i> qui calculera l'age en fonction de la
+        Nous ajoutons 1 méthode à notre classe <i>author</i> : <i>int age()</i> qui calculera l'âge en fonction de la
         date de naissance envoyée par la base de données.<br>
         Nous définissons également 2 <i>typedef</i> pour représenter un pointeur (<i>smart-pointer</i>) vers un objet <i>author</i> ainsi qu'une collection de <i>author</i>.<br>
         La classe <i>author</i> a un identifiant de type <i>QString</i> (par défaut, un identifiant dans le contexte <b>QxOrm</b> est de type <i>long</i>) : nous utilisons la macro <b><i>QX_REGISTER_PRIMARY_KEY(author, QString)</i></b> pour spécialiser le template.<br>
@@ -718,7 +724,7 @@ int</span><span class="keyword"> main</span><span class="operator">(</span><span
         données, il sera alors nécessaire d'utiliser directement le module
         <a href="http://doc.trolltech.com/4.6/sql-programming.html" target="_blank"><i>QtSql</i></a> de Qt en écrivant soi-même les requêtes sql ou les procédures
         stockées.<br>
-        Enfin, il faut être extrêmement vigileant au nombre de requêtes
+        Enfin, il faut être extrêmement vigilant au nombre de requêtes
         effectuées entre le programme C++ et la base de données : un trop grand
         nombre d'appels à la base de données peut écrouler les performances
         d'une application. Il est important de maîtriser la notion de

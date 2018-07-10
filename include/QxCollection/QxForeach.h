@@ -48,7 +48,7 @@ struct qx_deref_boost_or_qx
 template<typename T, typename C>
 struct qx_deref_boost_or_qx<T, C, true>
 {
-   typedef typename T::qx_coll_pair_key_value::second_type type;
+   typedef typename T::type_pair_key_value::second_type type;
 };
 
 template<typename T, typename C, bool is_qx_collection = false>

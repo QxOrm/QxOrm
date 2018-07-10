@@ -122,6 +122,20 @@ private:
       { return type_this::fetchItem(item.second, dao); }
    };
 
+   template <typename U1, typename U2>
+   struct fetchItem_Helper<QPair<U1, U2>, false>
+   {
+      static inline bool fetch(QPair<U1, U2> & item, type_dao_helper & dao)
+      { return type_this::fetchItem(item.second, dao); }
+   };
+
+   template <typename U1, typename U2>
+   struct fetchItem_Helper<const QPair<U1, U2>, false>
+   {
+      static inline bool fetch(const QPair<U1, U2> & item, type_dao_helper & dao)
+      { return type_this::fetchItem(item.second, dao); }
+   };
+
    template <typename U>
    struct fetchItem_Helper<U, false>
    {

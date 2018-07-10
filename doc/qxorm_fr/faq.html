@@ -58,7 +58,14 @@
     </tr>
   </tbody>
 </table>
-<hr style="width: 80%" align="center" size="1" color="#100D5A"><br>
+<hr style="width: 80%" align="center" size="1" color="#100D5A">
+<table border="0" style="width: 80%" align="center">
+  <col><col>
+  <tbody><tr>
+  <td align="left" valign="middle"><font size="2">QxOrm  &gt;&gt;  Faq</font></td>
+  <td align="right" valign="middle"><font size="2">Version courante : QxOrm 1.1.1</font></td>
+  </tr></tbody>
+</table><br>
 <table border="1" frame="vsides" rules="cols" style="width: 80%" align="center" cellpadding="6" bgcolor="#F2F2F4">
   <col>
   <tbody>
@@ -70,11 +77,11 @@
       </li><li><a href="#faq_40">Quelles sont les bases de données prises en compte par QxOrm ?</a><br>
       </li><li><a href="#faq_50">Pourquoi QxOrm est dépendant de 2 librairies : boost et Qt ?</a><br>
       </li><li><a href="#faq_60">Pourquoi QxOrm nécessite un en-tête précompilé (precompiled header) pour pouvoir être utilisé ?</a><br>
-      </li><li><a href="#faq_70">Est-ce qu'il est possible d'accélérer les temps de compilation de mon projet ?</a><br>
+      </li><li><a href="#faq_70">Est-il possible d'accélérer les temps de compilation de mon projet ?</a><br>
       </li><li><a href="#faq_80">Pourquoi QxOrm fournit un nouveau type de container <i>qx::QxCollection&lt;Key, Value&gt;</i> ?</a><br>
-      </li><li><a href="#faq_90">Est-ce qu'il faut utiliser <i>QString</i> ou <i>std::string</i> ?</a><br>
-      </li><li><a href="#faq_95">Est-ce qu'il faut utiliser les pointeurs intelligents <i>smart-pointer</i> ?</a><br>
-      </li><li><a href="#faq_100">La clé primaire est de type <i>long</i> par défaut. Est-ce qu'il est possible d'utiliser une clé de type <i>QString</i> ou autre ?</a><br>
+      </li><li><a href="#faq_90">Faut-il utiliser <i>QString</i> ou <i>std::string</i> ?</a><br>
+      </li><li><a href="#faq_95">Faut-il utiliser les pointeurs intelligents <i>smart-pointer</i> ?</a><br>
+      </li><li><a href="#faq_100">La clé primaire est de type <i>long</i> par défaut. Est-il possible d'utiliser une clé de type <i>QString</i> ou autre ?</a><br>
       </li><li><a href="#faq_110">Comment activer/désactiver le module <i>QxMemLeak</i> pour la détection automatique des fuites mémoires ?</a><br>
       </li></ul>
       <br>
@@ -182,7 +189,7 @@
                    src="./resource/logo_boost.jpg" width="161"
                  height="50" border="0"></a></td>
                  <td align="justify"><b>boost</b> : de nombreux modules de la
-                   librairie boost font partis de la nouvelle norme C++.<br>
+                   librairie boost font partie de la nouvelle norme C++.<br>
                    C'est une librairie reconnue pour sa qualité, son code 'C++
                    moderne', sa documentation, sa portabilité, etc...<br>
                    QxOrm utilise les fonctionnalités suivantes de boost :
@@ -255,7 +262,7 @@
        </tbody>
       </table>
       <br><br>
-      <a name="faq_70"><u><b>Est-ce qu'il est possible d'accélérer les temps de compilation de mon projet ?</b></u></a><br><br>
+      <a name="faq_70"><u><b>Est-il possible d'accélérer les temps de compilation de mon projet ?</b></u></a><br><br>
       <table border="0" style="width: 100%" align="center">
        <col>
        <col>
@@ -373,7 +380,7 @@ lstDrugs<span class="operator">.</span>clear<span class="operator">();</span></p
        </tbody>
       </table>
       <br><br>
-      <a name="faq_90"><u><b>Est-ce qu'il faut utiliser <i>QString</i> ou <i>std::string</i> ?</b></u></a><br><br>
+      <a name="faq_90"><u><b>Faut-il utiliser <i>QString</i> ou <i>std::string</i> ?</b></u></a><br><br>
       <table border="0" style="width: 100%" align="center">
        <col>
        <col>
@@ -390,7 +397,7 @@ lstDrugs<span class="operator">.</span>clear<span class="operator">();</span></p
        </tbody>
       </table>
       <br><br>
-      <a name="faq_95"><u><b>Est-ce qu'il faut utiliser les pointeurs intelligents <i>smart-pointer</i> ?</b></u></a><br><br>
+      <a name="faq_95"><u><b>Faut-il utiliser les pointeurs intelligents <i>smart-pointer</i> ?</b></u></a><br><br>
       <table border="0" style="width: 100%" align="center">
        <col>
        <col>
@@ -402,7 +409,7 @@ lstDrugs<span class="operator">.</span>clear<span class="operator">();</span></p
            Le langage C++ ne possède pas de <i>Garbage Collector</i> comme <i>Java</i> ou <i>C#</i> par exemple.<br>
            L'utilisation des <i>smart-pointer</i> simplifie énormément la gestion de la mémoire en C++.<br>
            L'idéal dans un programme C++ est de n'avoir aucun appel à <i>delete</i> ou <i>delete[]</i>.<br>
-           De plus, les <i>smart-pointer</i> font partis de la nouvelle norme C++ : <b>C++0x</b>.<br>
+           De plus, les <i>smart-pointer</i> font partie de la nouvelle norme C++ : <b>C++0x</b>.<br>
            Il est donc essentiel aujourd'hui de connaître les classes suivantes :
            <ul><li><a href="http://www.boost.org/doc/libs/1_42_0/libs/smart_ptr/smart_ptr.htm" target="_blank"><i>shared_ptr</i>, <i>scoped_ptr</i> et <i>weak_ptr</i></a> pour les pointeurs intelligents de la librairie <b>boost</b>
            </li><li><a href="http://qt.nokia.com/doc/4.6/qsharedpointer.html" target="_blank"><i>QSharedPointer</i>, <i>QScopedPointer</i> et <i>QWeakPointer</i></a> pour les pointeurs intelligents de la librairie <b>Qt</b>
@@ -412,7 +419,7 @@ lstDrugs<span class="operator">.</span>clear<span class="operator">();</span></p
        </tbody>
       </table>
       <br><br>
-      <a name="faq_100"><u><b>La clé primaire est de type <i>long</i> par défaut. Est-ce qu'il est possible d'utiliser une clé de type <i>QString</i> ou autre ?</b></u></a><br><br>
+      <a name="faq_100"><u><b>La clé primaire est de type <i>long</i> par défaut. Est-il possible d'utiliser une clé de type <i>QString</i> ou autre ?</b></u></a><br><br>
       <table border="0" style="width: 100%" align="center">
        <col>
        <col>

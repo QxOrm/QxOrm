@@ -31,7 +31,7 @@
 #pragma once
 #endif
 
-#define QX_VERSION   0x010100 // QxOrm version 1.1.0
+#define QX_VERSION   0x010101 // QxOrm version 1.1.1
 
 #define _QX_SERIALIZE_POLYMORPHIC            0
 

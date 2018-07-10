@@ -101,6 +101,20 @@ private:
       { return qx::dao::detail::QxDao_Update_Container<T>::updateItem(item.second, dao); }
    };
 
+   template <typename U1, typename U2>
+   struct updateItem_Helper<QPair<U1, U2>, false>
+   {
+      static inline bool update(QPair<U1, U2> & item, qx::dao::detail::QxDao_Helper_Container<T> & dao)
+      { return qx::dao::detail::QxDao_Update_Container<T>::updateItem(item.second, dao); }
+   };
+
+   template <typename U1, typename U2>
+   struct updateItem_Helper<const QPair<U1, U2>, false>
+   {
+      static inline bool update(const QPair<U1, U2> & item, qx::dao::detail::QxDao_Helper_Container<T> & dao)
+      { return qx::dao::detail::QxDao_Update_Container<T>::updateItem(item.second, dao); }
+   };
+
    template <typename U>
    struct updateItem_Helper<U, false>
    {

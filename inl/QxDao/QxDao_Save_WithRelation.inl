@@ -96,6 +96,20 @@ private:
       { return qx::dao::detail::QxDao_Save_WithRelation_Container<T>::saveItem(relation, item.second, dao); }
    };
 
+   template <typename U1, typename U2>
+   struct saveItem_Helper<QPair<U1, U2>, false>
+   {
+      static inline bool save(const QStringList & relation, QPair<U1, U2> & item, qx::dao::detail::QxDao_Helper_Container<T> & dao)
+      { return qx::dao::detail::QxDao_Save_WithRelation_Container<T>::saveItem(relation, item.second, dao); }
+   };
+
+   template <typename U1, typename U2>
+   struct saveItem_Helper<const QPair<U1, U2>, false>
+   {
+      static inline bool save(const QStringList & relation, const QPair<U1, U2> & item, qx::dao::detail::QxDao_Helper_Container<T> & dao)
+      { return qx::dao::detail::QxDao_Save_WithRelation_Container<T>::saveItem(relation, item.second, dao); }
+   };
+
    template <typename U>
    struct saveItem_Helper<U, false>
    {

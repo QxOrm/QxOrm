@@ -103,6 +103,20 @@ private:
       { return qx::dao::detail::QxDao_Insert_WithRelation_Container<T>::insertItem(item.second, dao); }
    };
 
+   template <typename U1, typename U2>
+   struct insertItem_Helper<QPair<U1, U2>, false>
+   {
+      static inline bool insert(QPair<U1, U2> & item, qx::dao::detail::QxDao_Helper_Container<T> & dao)
+      { return qx::dao::detail::QxDao_Insert_WithRelation_Container<T>::insertItem(item.second, dao); }
+   };
+
+   template <typename U1, typename U2>
+   struct insertItem_Helper<const QPair<U1, U2>, false>
+   {
+      static inline bool insert(const QPair<U1, U2> & item, qx::dao::detail::QxDao_Helper_Container<T> & dao)
+      { return qx::dao::detail::QxDao_Insert_WithRelation_Container<T>::insertItem(item.second, dao); }
+   };
+
    template <typename U>
    struct insertItem_Helper<U, false>
    {

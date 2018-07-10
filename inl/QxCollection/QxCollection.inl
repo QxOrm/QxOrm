@@ -69,7 +69,7 @@ void QxCollection<Key, Value>::cloneCollection(QxCollection<Key, Value> * pClone
 
    for (long l = 0; l < pRef.size(); l++)
    {
-      std::pair<Key, Value> pair = pRef.m_qxCollection.template get<0>().at(l);
+      type_pair_key_value pair = pRef.m_qxCollection.template get<0>().at(l);
       pClone->m_qxCollection.template get<0>().push_back(pair);
    }
 }
@@ -82,7 +82,7 @@ bool QxCollection<Key, Value>::isSameCollection(const QxCollection<Key, Value> *
 
    for (long l = 0; l < p2.size(); l++)
    {
-      std::pair<Key, Value> pair = p2.m_qxCollection.template get<0>().at(l);
+      type_pair_key_value pair = p2.m_qxCollection.template get<0>().at(l);
       if (p1->m_qxCollection.template get<0>().at(l) != pair) { return false; }
    }
 
@@ -208,7 +208,7 @@ template <typename Key, typename Value>
 inline bool QxCollection<Key, Value>::insert(const Key & key, const Value & value)
 {
    qAssert(! exist(key));
-   return m_qxCollection.template get<0>().push_back(std::make_pair(key, value)).second;
+   return m_qxCollection.template get<0>().push_back(type_pair_key_value(key, value)).second;
 }
 
 template <typename Key, typename Value>
@@ -217,7 +217,7 @@ inline bool QxCollection<Key, Value>::insert(long index, const Key & key, const 
    qAssert(! exist(key));
    if (index < 0) { index = 0; }
    if (index >= size()) { index = (size() - 1); }
-   return m_qxCollection.template get<0>().insert((begin() + index), std::make_pair(key, value)).second;
+   return m_qxCollection.template get<0>().insert((begin() + index), type_pair_key_value(key, value)).second;
 }
 
 template <typename Key, typename Value>
@@ -234,7 +234,7 @@ inline bool QxCollection<Key, Value>::insert(long index, const QxCollection<Key,
 
    for (long l = 0; l < other.size(); l++)
    {
-      std::pair<Key, Value> pair = other.m_qxCollection.template get<0>().at(l);
+      type_pair_key_value pair = other.m_qxCollection.template get<0>().at(l);
       this->insert(pair.first, pair.second);
    }
 
@@ -245,7 +245,7 @@ template <typename Key, typename Value>
 inline bool QxCollection<Key, Value>::replace(long index, const Key & key, const Value & value)
 {
    qAssert(! exist(key));
-   return m_qxCollection.template get<0>().replace((begin() + index), std::make_pair(key, value));
+   return m_qxCollection.template get<0>().replace((begin() + index), type_pair_key_value(key, value));
 }
 
 template <typename Key, typename Value>

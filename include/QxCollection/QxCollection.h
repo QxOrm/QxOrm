@@ -43,6 +43,8 @@
 #include <boost/multi_index/hashed_index.hpp>
 #include <boost/type_traits/is_pointer.hpp>
 
+#include <QtCore/qpair.h>
+
 #include "../../include/QxCollection/IxCollection.h"
 #include "../../include/QxCollection/QxForeach.h"
 
@@ -59,32 +61,32 @@ class QxCollection : public IxCollection
 
 public:
 
-   typedef typename std::pair<Key, Value> qx_coll_pair_key_value;
+   typedef QPair<Key, Value> type_pair_key_value;
 
 protected:
 
-   typedef boost::multi_index::member<qx_coll_pair_key_value, Key, & qx_coll_pair_key_value::first> qx_coll_hash_key;
-   typedef boost::multi_index::random_access<> qx_coll_first_index;
-   typedef boost::multi_index::hashed_unique<qx_coll_hash_key> qx_coll_second_index;
-   typedef boost::multi_index::indexed_by<qx_coll_first_index, qx_coll_second_index> qx_coll_indexed_by;
-   typedef boost::multi_index::multi_index_container<qx_coll_pair_key_value, qx_coll_indexed_by> qx_coll_type_container;
+   typedef boost::multi_index::member<type_pair_key_value, Key, & type_pair_key_value::first> type_member;
+   typedef boost::multi_index::random_access<> type_first_index;
+   typedef boost::multi_index::hashed_unique<type_member> type_second_index;
+   typedef boost::multi_index::indexed_by<type_first_index, type_second_index> type_indexed_by;
+   typedef boost::multi_index::multi_index_container<type_pair_key_value, type_indexed_by> type_container;
 
-   typedef typename qx_coll_type_container::template nth_index<0>::type qx_coll_type_rand;
-   typedef typename qx_coll_type_container::template nth_index<1>::type qx_coll_type_hash;
+   typedef typename type_container::template nth_index<0>::type type_index_rand;
+   typedef typename type_container::template nth_index<1>::type type_index_hash;
 
 public:
 
-   typedef typename qx_coll_type_rand::iterator iterator;
-   typedef typename qx_coll_type_rand::const_iterator const_iterator;
-   typedef typename qx_coll_type_rand::reverse_iterator reverse_iterator;
-   typedef typename qx_coll_type_rand::const_reverse_iterator const_reverse_iterator;
+   typedef typename type_index_rand::iterator iterator;
+   typedef typename type_index_rand::const_iterator const_iterator;
+   typedef typename type_index_rand::reverse_iterator reverse_iterator;
+   typedef typename type_index_rand::const_reverse_iterator const_reverse_iterator;
 
    typedef const Key & const_reference_key;
    typedef const Value & const_reference_value;
 
 protected:
 
-   qx_coll_type_container m_qxCollection; // Collection with random access (like std::vector) and fast lookup by key (like boost::unordered_map)
+   type_container m_qxCollection;   // Collection with random access (like std::vector) and fast lookup by key (like boost::unordered_map)
 
 public:
 
@@ -152,19 +154,19 @@ private:
    template <bool bIsPointer /* = false */, int dummy>
    struct compareKeyValue
    {
-      static inline bool compareByKeyAscending(const qx_coll_pair_key_value & v1, const qx_coll_pair_key_value & v2)     { return (v1.first < v2.first); }
-      static inline bool compareByKeyDescending(const qx_coll_pair_key_value & v1, const qx_coll_pair_key_value & v2)    { return (v1.first > v2.first); }
-      static inline bool compareByValueAscending(const qx_coll_pair_key_value & v1, const qx_coll_pair_key_value & v2)   { return (v1.second < v2.second); }
-      static inline bool compareByValueDescending(const qx_coll_pair_key_value & v1, const qx_coll_pair_key_value & v2)  { return (v1.second > v2.second); }
+      static inline bool compareByKeyAscending(const type_pair_key_value & v1, const type_pair_key_value & v2)    { return (v1.first < v2.first); }
+      static inline bool compareByKeyDescending(const type_pair_key_value & v1, const type_pair_key_value & v2)   { return (v1.first > v2.first); }
+      static inline bool compareByValueAscending(const type_pair_key_value & v1, const type_pair_key_value & v2)  { return (v1.second < v2.second); }
+      static inline bool compareByValueDescending(const type_pair_key_value & v1, const type_pair_key_value & v2) { return (v1.second > v2.second); }
    };
 
    template <int dummy>
    struct compareKeyValue<true, dummy>
    {
-      static inline bool compareByKeyAscending(const qx_coll_pair_key_value & v1, const qx_coll_pair_key_value & v2)     { return ((v1.first && v2.first) ? ((* v1.first) < (* v2.first)) : false); }
-      static inline bool compareByKeyDescending(const qx_coll_pair_key_value & v1, const qx_coll_pair_key_value & v2)    { return ((v1.first && v2.first) ? ((* v1.first) > (* v2.first)) : true); }
-      static inline bool compareByValueAscending(const qx_coll_pair_key_value & v1, const qx_coll_pair_key_value & v2)   { return ((v1.second && v2.second) ? ((* v1.second) < (* v2.second)) : false); }
-      static inline bool compareByValueDescending(const qx_coll_pair_key_value & v1, const qx_coll_pair_key_value & v2)  { return ((v1.second && v2.second) ? ((* v1.second) > (* v2.second)) : true); }
+      static inline bool compareByKeyAscending(const type_pair_key_value & v1, const type_pair_key_value & v2)    { return ((v1.first && v2.first) ? ((* v1.first) < (* v2.first)) : false); }
+      static inline bool compareByKeyDescending(const type_pair_key_value & v1, const type_pair_key_value & v2)   { return ((v1.first && v2.first) ? ((* v1.first) > (* v2.first)) : true); }
+      static inline bool compareByValueAscending(const type_pair_key_value & v1, const type_pair_key_value & v2)  { return ((v1.second && v2.second) ? ((* v1.second) < (* v2.second)) : false); }
+      static inline bool compareByValueDescending(const type_pair_key_value & v1, const type_pair_key_value & v2) { return ((v1.second && v2.second) ? ((* v1.second) > (* v2.second)) : true); }
    };
 
 };
