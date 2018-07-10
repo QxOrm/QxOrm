@@ -63,6 +63,8 @@
 #include <QxTraits/generic_container.h>
 #include <QxTraits/is_valid_primary_key.h>
 
+#include <QxSerialize/QxClone.h>
+
 #include <QxModelView/IxModel.h>
 #include <QxModelView/QxModel.h>
 
@@ -71,6 +73,9 @@ namespace model_view {
 
 template <class T>
 qx::IxModel * create_nested_model(qx::IxModel * pParent, const QModelIndex & idxParent, T & t);
+
+template <class T>
+void sync_nested_model(qx::IxModel * pModel, T & t);
 
 } // namespace model_view
 } // namespace qx
@@ -82,29 +87,60 @@ namespace detail {
 template <class T>
 struct QxNestedModel;
 
+template <class T, bool bIsQObject /* = false */>
+struct QxNestedModel_Helper
+{
+
+   static boost::shared_ptr<T> clone(T & t)
+   { boost::shared_ptr<T> p; p.reset(new T()); (* p) = t; return p; }
+
+   static void synchronize(T & t1, T & t2)
+   { t1 = t2; }
+
+};
+
+template <class T>
+struct QxNestedModel_Helper<T, true>
+{
+
+   static boost::shared_ptr<T> clone(T & t)
+   { boost::shared_ptr<T> p; p.reset(qx::clone_to_nude_ptr(t)); qAssert(p); return p; }
+
+   static void synchronize(T & t1, T & t2)
+   {
+      qx::IxClass * pClass = qx::QxClass<T>::getSingleton();
+      qx::IxDataMemberX * pDataMemberX = (pClass ? pClass->getDataMemberX() : NULL);
+      for (long l = 0; (pDataMemberX && (l < pDataMemberX->count_WithDaoStrategy())); l++)
+      {
+         qx::IxDataMember * pDataMember = pDataMemberX->get_WithDaoStrategy(l); if (! pDataMember) { continue; }
+         QVariant value = pDataMember->toVariant(& t2);
+         pDataMember->fromVariant((& t1), value);
+      }
+   }
+
+};
+
 template <class T>
 struct QxNestedModel_Generic
 {
+
+   typedef typename qx::QxModel<T>::type_collection type_collection;
+   typedef typename qx::QxModel<T>::type_primary_key type_primary_key;
+   typedef typename qx::QxModel<T>::type_ptr type_ptr;
 
    enum { is_valid = qx::trait::is_qx_registered<T>::value };
 
    static inline qx::IxModel * create(qx::IxModel * pParent, const QModelIndex & idxParent, T & t)
    {
-      typedef typename qx::QxModel<T>::type_collection type_collection;
-      typedef typename qx::QxModel<T>::type_primary_key type_primary_key;
-      typedef typename qx::QxModel<T>::type_ptr type_ptr;
-
       BOOST_STATIC_ASSERT(is_valid);
       qx::QxModel<T> * pModel = new qx::QxModel<T>(pParent);
       pModel->setParentModel(pParent);
       type_collection & model = pModel->m_model;
       long & idx = pModel->m_lManualInsertIndex;
       type_primary_key key;
-      type_ptr ptr;
 
       pModel->beginInsertRows(idxParent, 0, 0);
-      ptr = type_ptr(new T());
-      (* ptr) = t;
+      type_ptr ptr = qx::model_view::detail::QxNestedModel_Helper<T, boost::is_base_of<QObject, T>::value>::clone(t);
       qx::IxDataMember * pDataMemberId = pModel->m_pDataMemberId;
       if (! pDataMemberId) { qAssert(false); pModel->endInsertRows(); return pModel; }
       QVariant value = pDataMemberId->toVariant(& t);
@@ -116,6 +152,17 @@ struct QxNestedModel_Generic
       return pModel;
    }
 
+   static inline void synchronize(qx::IxModel * pModel, T & t)
+   {
+      if (! pModel) { qAssert(false); return; }
+      qx::QxModel<T> * pModelTyped = static_cast<qx::QxModel<T> *>(pModel);
+      type_collection & model = pModelTyped->m_model;
+      if (model.count() <= 0) { return; }
+      type_ptr ptr = model.getByIndex(0);
+      if (! ptr) { return; }
+      qx::model_view::detail::QxNestedModel_Helper<T, boost::is_base_of<QObject, T>::value>::synchronize(t, (* ptr));
+   }
+
 };
 
 template <class T>
@@ -124,6 +171,10 @@ struct QxNestedModel_Container
 
    typedef qx::trait::generic_container<T> type_generic_container;
    typedef typename type_generic_container::type_value_qx type_data;
+   typedef typename type_generic_container::type_item type_item;
+   typedef typename qx::QxModel<type_data>::type_collection type_collection;
+   typedef typename qx::QxModel<type_data>::type_primary_key type_primary_key;
+   typedef typename qx::QxModel<type_data>::type_ptr type_ptr;
 
    enum { is_valid = qx::trait::is_qx_registered<type_data>::value };
 
@@ -133,7 +184,7 @@ struct QxNestedModel_Container
       BOOST_STATIC_ASSERT(is_valid);
       qx::QxModel<type_data> * pModel = new qx::QxModel<type_data>(pParent);
       pModel->setParentModel(pParent);
-      long lCount = static_cast<long>(qx::trait::generic_container<T>::size(t));
+      long lCount = static_cast<long>(type_generic_container::size(t));
       if (lCount <= 0) { return pModel; }
 
       pModel->beginInsertRows(idxParent, 0, (lCount - 1));
@@ -146,19 +197,13 @@ struct QxNestedModel_Container
    template <typename U>
    static inline bool insert(qx::IxModel * pModel, U & item, int iRow)
    {
-      typedef typename qx::QxModel<U>::type_collection type_collection;
-      typedef typename qx::QxModel<U>::type_primary_key type_primary_key;
-      typedef typename qx::QxModel<U>::type_ptr type_ptr;
-
       if (! pModel) { qAssert(false); return false; }
       qx::QxModel<U> * pModelWrk = static_cast<qx::QxModel<U> *>(pModel);
       type_collection & model = pModelWrk->m_model;
       long & idx = pModelWrk->m_lManualInsertIndex;
       type_primary_key key;
-      type_ptr ptr;
 
-      ptr = type_ptr(new U());
-      (* ptr) = item;
+      type_ptr ptr = qx::model_view::detail::QxNestedModel_Helper<U, boost::is_base_of<QObject, U>::value>::clone(item);
       qx::IxDataMember * pDataMemberId = pModelWrk->m_pDataMemberId;
       if (! pDataMemberId) { qAssert(false); return false; }
       QVariant value = pDataMemberId->toVariant(& item);
@@ -167,6 +212,25 @@ struct QxNestedModel_Container
       qx::cvt::from_variant(value, key);
       model.insert(iRow, key, ptr);
       return true;
+   }
+
+   static inline void synchronize(qx::IxModel * pModel, T & t)
+   {
+      if (! pModel) { qAssert(false); return; }
+      type_generic_container::clear(t);
+      qx::QxModel<type_data> * pModelTyped = static_cast<qx::QxModel<type_data> *>(pModel);
+      type_collection & model = pModelTyped->m_model;
+
+      for (long l = 0; l < model.count(); l++)
+      {
+         type_ptr ptr = model.getByIndex(l); if (! ptr) { continue; }
+         type_item item = type_generic_container::createItem();
+         type_data & item_val = item.value_qx();
+         qx::model_view::detail::QxNestedModel_Helper<type_data, boost::is_base_of<QObject, type_data>::value>::synchronize(item_val, (* ptr));
+         QVariant vKey = QVariant(static_cast<qlonglong>(l));
+         qx::cvt::from_variant(vKey, item.key());
+         type_generic_container::insertItem(t, item);
+      }
    }
 
 private:
@@ -227,6 +291,9 @@ struct QxNestedModel_Ptr
    static inline qx::IxModel * create(qx::IxModel * pParent, const QModelIndex & idxParent, T & t)
    { return (t ? create_Helper(pParent, idxParent, (* t)) : create_NullHelper(pParent, idxParent)); }
 
+   static inline void synchronize(qx::IxModel * pModel, T & t)
+   { if (! t) { qx::trait::construct_ptr<T>::get(t); }; if (t) { qx::model_view::sync_nested_model(pModel, (* t)); } }
+
 private:
 
    template <class U>
@@ -248,14 +315,15 @@ template <class T>
 struct QxNestedModel
 {
 
-   static inline qx::IxModel * create(qx::IxModel * pParent, const QModelIndex & idxParent, T & t)
-   {
-      typedef typename boost::mpl::if_c< boost::is_pointer<T>::value, qx::model_view::detail::QxNestedModel_Ptr<T>, qx::model_view::detail::QxNestedModel_Generic<T> >::type type_model_view_1;
-      typedef typename boost::mpl::if_c< qx::trait::is_smart_ptr<T>::value, qx::model_view::detail::QxNestedModel_Ptr<T>, type_model_view_1 >::type type_model_view_2;
-      typedef typename boost::mpl::if_c< qx::trait::is_container<T>::value, qx::model_view::detail::QxNestedModel_Container<T>, type_model_view_2 >::type type_model_view_3;
+   typedef typename boost::mpl::if_c< boost::is_pointer<T>::value, qx::model_view::detail::QxNestedModel_Ptr<T>, qx::model_view::detail::QxNestedModel_Generic<T> >::type type_model_view_1;
+   typedef typename boost::mpl::if_c< qx::trait::is_smart_ptr<T>::value, qx::model_view::detail::QxNestedModel_Ptr<T>, type_model_view_1 >::type type_model_view_2;
+   typedef typename boost::mpl::if_c< qx::trait::is_container<T>::value, qx::model_view::detail::QxNestedModel_Container<T>, type_model_view_2 >::type type_model_view_3;
 
-      return type_model_view_3::create(pParent, idxParent, t);
-   }
+   static inline qx::IxModel * create(qx::IxModel * pParent, const QModelIndex & idxParent, T & t)
+   { return type_model_view_3::create(pParent, idxParent, t); }
+
+   static inline void synchronize(qx::IxModel * pModel, T & t)
+   { type_model_view_3::synchronize(pModel, t); }
 
 };
 
@@ -288,6 +356,10 @@ qx::IxModel * create_nested_model_with_type(qx::IxModel * pParent, const QModelI
    delete pModel;
    return pOther;
 }
+
+template <class T>
+void sync_nested_model(qx::IxModel * pModel, T & t)
+{ qx::model_view::detail::QxNestedModel<T>::synchronize(pModel, t); }
 
 } // namespace model_view
 } // namespace qx

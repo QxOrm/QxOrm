@@ -39,9 +39,13 @@ namespace qx {
 namespace dao {
 namespace detail {
 
+QxSqlExpression::QxSqlExpression() : IxSqlElement(0), m_type(QxSqlExpression::_where) { ; }
+
 QxSqlExpression::QxSqlExpression(int index, QxSqlExpression::type t) : IxSqlElement(index), m_type(t) { ; }
 
 QxSqlExpression::~QxSqlExpression() { ; }
+
+IxSqlElement::type_class QxSqlExpression::getTypeClass() const { return IxSqlElement::_sql_expression; }
 
 QString QxSqlExpression::toString() const
 {
@@ -63,6 +67,10 @@ QString QxSqlExpression::toString() const
 void QxSqlExpression::resolve(QSqlQuery & query) const { Q_UNUSED(query); }
 
 void QxSqlExpression::postProcess(QString & sql) const { Q_UNUSED(sql); }
+
+QString QxSqlExpression::getExtraSettings() const { return QString::number(static_cast<int>(m_type)); }
+
+void QxSqlExpression::setExtraSettings(const QString & s) { m_type = static_cast<QxSqlExpression::type>(s.toInt()); }
 
 } // namespace detail
 } // namespace dao

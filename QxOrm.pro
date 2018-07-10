@@ -38,14 +38,17 @@ include(./QxOrm.pri)
 TEMPLATE = lib
 CONFIG += dll
 DEFINES += _QX_BUILDING_QX_ORM
-PRECOMPILED_HEADER = ./include/QxPrecompiled.h
 
-unix { VERSION = 1.2.9 }
+!contains(DEFINES, _QX_NO_PRECOMPILED_HEADER) {
+PRECOMPILED_HEADER = ./include/QxPrecompiled.h
+} # !contains(DEFINES, _QX_NO_PRECOMPILED_HEADER)
+
+unix { VERSION = 1.3.1 }
 
 contains(DEFINES, _QX_STATIC_BUILD) {
 CONFIG -= dll
 CONFIG += staticlib
-}
+} # contains(DEFINES, _QX_STATIC_BUILD)
 
 #############################
 # Compiler / Linker Options #
@@ -86,7 +89,7 @@ pkgconfig_distclean.depends = pkgconfig_clean
 clean.depends += pkgconfig_clean
 distclean.depends += pkgconfig_distclean
 QMAKE_EXTRA_TARGETS += clean distclean pkgconfig_clean pkgconfig_distclean
-}
+} # contains(DEFINES, _QX_CREATE_PKG_CONFIG)
 
 #################
 # Headers Files #
@@ -111,6 +114,7 @@ HEADERS += ./include/QxMemLeak/static_mem_pool.h
 HEADERS += ./include/QxSingleton/IxSingleton.h
 HEADERS += ./include/QxSingleton/QxSingleton.h
 HEADERS += ./include/QxSingleton/QxSingletonX.h
+HEADERS += ./include/QxSingleton/QxSingletonInit.h
 
 HEADERS += ./include/QxFactory/IxFactory.h
 HEADERS += ./include/QxFactory/QxFactory.h
@@ -370,6 +374,7 @@ HEADERS += ./include/QxValidator/QxValidatorX.h
 HEADERS += ./include/QxModelView/IxModel.h
 HEADERS += ./include/QxModelView/QxModel.h
 HEADERS += ./include/QxModelView/QxNestedModel.h
+HEADERS += ./include/QxModelView/QxModelService.h
 
 HEADERS += ./include/QxOrm.h
 HEADERS += ./include/QxMemLeak.h
@@ -385,6 +390,7 @@ SOURCES += ./src/QxMemLeak/static_mem_pool.cpp
 
 SOURCES += ./src/QxSingleton/IxSingleton.cpp
 SOURCES += ./src/QxSingleton/QxSingletonX.cpp
+SOURCES += ./src/QxSingleton/QxSingletonInit.cpp
 
 SOURCES += ./src/QxFactory/IxFactory.cpp
 SOURCES += ./src/QxFactory/QxFactoryX.cpp

@@ -35,9 +35,13 @@
 
 #include <QxMemLeak/mem_leak.h>
 
+#define QX_CONSTRUCT_IX_MODEL() \
+m_pClass(NULL), m_pDataMemberX(NULL), m_pDataMemberId(NULL), m_pCollection(NULL), \
+m_pParent(NULL), m_eAutoUpdateDatabase(IxModel::e_no_auto_update)
+
 namespace qx {
 
-IxModel::IxModel(QObject * parent /* = 0 */) : QAbstractItemModel(parent), m_pClass(NULL), m_pDataMemberX(NULL), m_pDataMemberId(NULL), m_pCollection(NULL), m_pParent(NULL) { ; }
+IxModel::IxModel(QObject * parent /* = 0 */) : QAbstractItemModel(parent), QX_CONSTRUCT_IX_MODEL() { ; }
 
 IxModel::~IxModel() { ; }
 
@@ -67,6 +71,16 @@ QVariant IxModel::getModelValue(int row, const QString & column) const
    return data(idx, Qt::DisplayRole);
 }
 
+int IxModel::getColumnIndex(const QString & sColumnName) const
+{
+   if (! m_lstDataMemberByKey.contains(sColumnName)) { qAssert(false); return -1; }
+   return m_lstDataMemberByKey.value(sColumnName);
+}
+
+int IxModel::getAutoUpdateDatabase_() const { return static_cast<int>(m_eAutoUpdateDatabase); }
+
+IxModel::e_auto_update_database IxModel::getAutoUpdateDatabase() const { return m_eAutoUpdateDatabase; }
+
 void IxModel::setDatabase(const QSqlDatabase & db) { m_database = db; }
 
 void IxModel::setListOfColumns(const QStringList & lst) { m_lstColumns = lst; clear(true); }
@@ -83,6 +97,10 @@ bool IxModel::setModelValue(int row, const QString & column, const QVariant & va
 
 void IxModel::setParentModel(IxModel * pParent) { m_pParent = pParent; }
 
+void IxModel::setAutoUpdateDatabase_(int i) { m_eAutoUpdateDatabase = static_cast<IxModel::e_auto_update_database>(i); }
+
+void IxModel::setAutoUpdateDatabase(IxModel::e_auto_update_database e) { m_eAutoUpdateDatabase = e; }
+
 int IxModel::qxCount_(const QString & sQuery) { qx_query query(sQuery); return static_cast<int>(qxCount(query, database(NULL))); }
 
 bool IxModel::qxFetchById_(const QVariant & id, const QStringList & relation /* = QStringList() */) { return (! qxFetchById(id, relation, database(NULL)).isValid()); }
@@ -91,9 +109,15 @@ bool IxModel::qxFetchAll_(const QStringList & relation /* = QStringList() */) { 
 
 bool IxModel::qxFetchByQuery_(const QString & sQuery, const QStringList & relation /* = QStringList() */) { qx_query query(sQuery); return (! qxFetchByQuery(query, relation, database(NULL)).isValid()); }
 
+bool IxModel::qxFetchRow_(int row, const QStringList & relation /* = QStringList() */) { return (! qxFetchRow(row, relation, database(NULL)).isValid()); }
+
 bool IxModel::qxInsert_(const QStringList & relation /* = QStringList() */) { return (! qxInsert(relation, database(NULL)).isValid()); }
 
+bool IxModel::qxInsertRow_(int row, const QStringList & relation /* = QStringList() */) { return (! qxInsertRow(row, relation, database(NULL)).isValid()); }
+
 bool IxModel::qxUpdate_(const QString & sQuery, const QStringList & relation /* = QStringList() */) { qx_query query(sQuery); return (! qxUpdate(query, relation, database(NULL)).isValid()); }
+
+bool IxModel::qxUpdateRow_(int row, const QString & sQuery, const QStringList & relation /* = QStringList() */) { qx_query query(sQuery); return (! qxUpdateRow(row, query, relation, database(NULL)).isValid()); }
 
 bool IxModel::qxSave_(const QStringList & relation /* = QStringList() */) { return (! qxSave(relation, database(NULL)).isValid()); }
 
@@ -105,17 +129,23 @@ bool IxModel::qxDeleteAll_() { return (! qxDeleteAll(database(NULL)).isValid());
 
 bool IxModel::qxDeleteByQuery_(const QString & sQuery) { qx_query query(sQuery); return (! qxDeleteByQuery(query, database(NULL)).isValid()); }
 
+bool IxModel::qxDeleteRow_(int row) { return (! qxDeleteRow(row, database(NULL)).isValid()); }
+
 bool IxModel::qxDestroyById_(const QVariant & id) { return (! qxDestroyById(id, database(NULL)).isValid()); }
 
 bool IxModel::qxDestroyAll_() { return (! qxDestroyAll(database(NULL)).isValid()); }
 
 bool IxModel::qxDestroyByQuery_(const QString & sQuery) { qx_query query(sQuery); return (! qxDestroyByQuery(query, database(NULL)).isValid()); }
 
+bool IxModel::qxDestroyRow_(int row) { return (! qxDestroyRow(row, database(NULL)).isValid()); }
+
 bool IxModel::qxExecuteQuery_(const QString & sQuery) { qx_query query(sQuery); return (! qxExecuteQuery(query, database(NULL)).isValid()); }
 
 bool IxModel::qxExist_(const QVariant & id) { return qxExist(id, database(NULL)).getValue(); }
 
 QString IxModel::qxValidate_(const QStringList & groups /* = QStringList() */) { qx::QxInvalidValueX invalidValueX = qxValidate(groups); return (invalidValueX ? QString() : invalidValueX.text()); }
+
+QString IxModel::qxValidateRow_(int row, const QStringList & groups /* = QStringList() */) { qx::QxInvalidValueX invalidValueX = qxValidateRow(row, groups); return (invalidValueX ? QString() : invalidValueX.text()); }
 
 void IxModel::raiseEvent_headerDataChanged(Qt::Orientation orientation, int first, int last) { Q_EMIT headerDataChanged(orientation, first, last); }
 
@@ -267,6 +297,12 @@ bool IxModel::setHeaderData(int section, Qt::Orientation orientation, const QVar
    Q_EMIT headerDataChanged(orientation, section, section);
    return true;
 }
+
+void IxModel::syncNestedModel(int row, const QStringList & relation) { Q_UNUSED(row); Q_UNUSED(relation); }
+
+void IxModel::syncAllNestedModel(const QStringList & relation) { Q_UNUSED(relation); }
+
+void IxModel::syncNestedModelRecursive(IxModel * pNestedModel, const QStringList & relation) { if (pNestedModel) { pNestedModel->syncAllNestedModel(relation); } }
 
 void IxModel::generateRoleNames()
 {

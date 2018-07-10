@@ -54,21 +54,12 @@ greaterThan(QT_MAJOR_VERSION, 4) { QT += widgets }
 #  - QX_BOOST_LIB_WIDE_SERIALIZATION_DEBUG : your boost wide serialization module name in debug mode (default is empty)
 #  - QX_BOOST_LIB_WIDE_SERIALIZATION_RELEASE : your boost wide serialization module name in release mode (default is empty)
 
-unix {
-isEmpty(QX_BOOST_INCLUDE_PATH) { QX_BOOST_INCLUDE_PATH = $$quote(/usr/include) }
-isEmpty(QX_BOOST_LIB_PATH) { QX_BOOST_LIB_PATH = $$quote(/usr/lib) }
-isEmpty(QX_BOOST_LIB_SERIALIZATION_DEBUG) { QX_BOOST_LIB_SERIALIZATION_DEBUG = "boost_serialization-mt-d" }
-isEmpty(QX_BOOST_LIB_SERIALIZATION_RELEASE) { QX_BOOST_LIB_SERIALIZATION_RELEASE = "boost_serialization-mt" }
-# isEmpty(QX_BOOST_LIB_WIDE_SERIALIZATION_DEBUG) { QX_BOOST_LIB_WIDE_SERIALIZATION_DEBUG = "boost_wserialization-mt-d" }
-# isEmpty(QX_BOOST_LIB_WIDE_SERIALIZATION_RELEASE) { QX_BOOST_LIB_WIDE_SERIALIZATION_RELEASE = "boost_wserialization-mt" }
-} else {
-isEmpty(QX_BOOST_INCLUDE_PATH) { QX_BOOST_INCLUDE_PATH = $$quote(D:/Dvlp/_Libs/Boost/1_54/include) }
-isEmpty(QX_BOOST_LIB_PATH) { QX_BOOST_LIB_PATH = $$quote(D:/Dvlp/_Libs/Boost/1_54/lib_shared) }
-isEmpty(QX_BOOST_LIB_SERIALIZATION_DEBUG) { QX_BOOST_LIB_SERIALIZATION_DEBUG = "boost_serialization-vc110-mt-gd-1_54" }
-isEmpty(QX_BOOST_LIB_SERIALIZATION_RELEASE) { QX_BOOST_LIB_SERIALIZATION_RELEASE = "boost_serialization-vc110-mt-1_54" }
-# isEmpty(QX_BOOST_LIB_WIDE_SERIALIZATION_DEBUG) { QX_BOOST_LIB_WIDE_SERIALIZATION_DEBUG = "boost_wserialization-vc110-mt-gd-1_54" }
-# isEmpty(QX_BOOST_LIB_WIDE_SERIALIZATION_RELEASE) { QX_BOOST_LIB_WIDE_SERIALIZATION_RELEASE = "boost_wserialization-vc110-mt-1_54" }
-} # unix
+isEmpty(QX_BOOST_INCLUDE_PATH) { QX_BOOST_INCLUDE_PATH = $$quote($$(BOOST_INCLUDE)) }
+isEmpty(QX_BOOST_LIB_PATH) { QX_BOOST_LIB_PATH = $$quote($$(BOOST_LIB)) }
+isEmpty(QX_BOOST_LIB_SERIALIZATION_DEBUG) { QX_BOOST_LIB_SERIALIZATION_DEBUG = "$$(BOOST_LIB_SERIALIZATION_DEBUG)" }
+isEmpty(QX_BOOST_LIB_SERIALIZATION_RELEASE) { QX_BOOST_LIB_SERIALIZATION_RELEASE = "$$(BOOST_LIB_SERIALIZATION_RELEASE)" }
+# isEmpty(QX_BOOST_LIB_WIDE_SERIALIZATION_DEBUG) { QX_BOOST_LIB_WIDE_SERIALIZATION_DEBUG = "$$(BOOST_LIB_WIDE_SERIALIZATION_DEBUG)" }
+# isEmpty(QX_BOOST_LIB_WIDE_SERIALIZATION_RELEASE) { QX_BOOST_LIB_WIDE_SERIALIZATION_RELEASE = "$$(BOOST_LIB_WIDE_SERIALIZATION_RELEASE)" }
 
 ##############################
 # QxOrm Library Static Build #
@@ -136,7 +127,7 @@ win32-msvc2005: QMAKE_LFLAGS += /OPT:NOREF
 win32-msvc2008: QMAKE_LFLAGS += /OPT:NOREF
 win32-msvc2010: QMAKE_LFLAGS += /OPT:NOREF
 } # CONFIG(debug, debug|release)
-win32-g++: QMAKE_LFLAGS += -export-all-symbols -Wl,-enable-auto-import
+win32-g++: QMAKE_LFLAGS += -Wl,-export-all-symbols -Wl,-enable-auto-import
 } # win32
 
 #######################
@@ -166,3 +157,15 @@ LIBS += -l$${QX_BOOST_LIB_SERIALIZATION_RELEASE}
 #QMAKE_CXXFLAGS_RELEASE += -ffunction-sections -fdata-sections -Os -pipe
 #QMAKE_CFLAGS_RELEASE += -ffunction-sections -fdata-sections -Os -pipe
 #QMAKE_LFLAGS_RELEASE += -Wl,--gc-sections -s
+
+#########################
+# No precompiled header #
+#########################
+
+# Some versions of MinGW on Windows have a bug with large precompiled headers (for example, MinGW GCC 4.8)
+# More detais about this problem here : https://gcc.gnu.org/bugzilla/show_bug.cgi?id=56926
+# And here : http://stackoverflow.com/questions/10841306/cc1plus-exe-crash-when-using-large-precompiled-header-file
+# To fix the crash during compilation, you have to disable precompiled headers : just enable the following compilation option _QX_NO_PRECOMPILED_HEADER
+# Note : there is a side effect disabling precompiled headers => compilation times are considerably increased !
+
+# DEFINES += _QX_NO_PRECOMPILED_HEADER

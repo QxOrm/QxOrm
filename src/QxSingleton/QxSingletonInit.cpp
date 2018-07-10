@@ -29,65 +29,27 @@
 **
 ****************************************************************************/
 
-#ifndef _QX_SQL_IN_H_
-#define _QX_SQL_IN_H_
+#include <QxPrecompiled.h>
 
-#ifdef _MSC_VER
-#pragma once
-#endif
+#include <QxSingleton/QxSingletonInit.h>
 
-/*!
- * \file QxSqlIn.h
- * \author Lionel Marty
- * \ingroup QxDao
- * \brief SQL element to verify a list of values (IN, NOT IN, etc.)
- */
+#include <QxMemLeak/mem_leak.h>
 
-#include <QxDao/QxSqlElement/IxSqlElement.h>
+QX_DLL_EXPORT_QX_SINGLETON_CPP( qx::QxClass< qx::trait::no_base_class_defined > )
+QX_DLL_EXPORT_QX_SINGLETON_CPP( qx::QxDataMemberX< qx::trait::no_base_class_defined > )
 
-namespace qx {
-namespace dao {
-namespace detail {
+QX_DLL_EXPORT_QX_SINGLETON_CPP( qx::QxClass< QObject > )
+QX_DLL_EXPORT_QX_SINGLETON_CPP( qx::QxDataMemberX< QObject > )
 
-/*!
- * \ingroup QxDao
- * \brief qx::dao::detail::QxSqlIn : SQL element to verify a list of values (IN, NOT IN, etc.)
- */
-class QX_DLL_EXPORT QxSqlIn : public IxSqlElement
-{
+#if _QX_ENABLE_QT_NETWORK_DEPENDENCY
 
-public:
+QX_DLL_EXPORT_QX_SINGLETON_CPP( qx::QxClass< qx::service::IxParameter > )
+QX_DLL_EXPORT_QX_SINGLETON_CPP( qx::QxDataMemberX< qx::service::IxParameter > )
 
-   enum type { _in, _not_in, 
-               _in_select, _not_in_select };
+QX_DLL_EXPORT_QX_SINGLETON_CPP( qx::QxClass< qx::service::IxService > )
+QX_DLL_EXPORT_QX_SINGLETON_CPP( qx::QxDataMemberX< qx::service::IxService > )
 
-protected:
+QX_DLL_EXPORT_QX_SINGLETON_CPP( qx::QxClass< qx::service::QxTransaction > )
+QX_DLL_EXPORT_QX_SINGLETON_CPP( qx::QxDataMemberX< qx::service::QxTransaction > )
 
-   QxSqlIn::type m_type;
-
-public:
-
-   QxSqlIn();
-   QxSqlIn(int index, QxSqlIn::type t);
-   virtual ~QxSqlIn();
-
-   virtual QString toString() const;
-   virtual void resolve(QSqlQuery & query) const;
-   virtual void postProcess(QString & sql) const;
-
-   virtual IxSqlElement::type_class getTypeClass() const;
-
-protected:
-
-   virtual QString getExtraSettings() const;
-   virtual void setExtraSettings(const QString & s);
-
-};
-
-typedef boost::shared_ptr<QxSqlIn> QxSqlIn_ptr;
-
-} // namespace detail
-} // namespace dao
-} // namespace qx
-
-#endif // _QX_SQL_IN_H_
+#endif // _QX_ENABLE_QT_NETWORK_DEPENDENCY

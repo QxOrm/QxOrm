@@ -39,15 +39,23 @@ namespace qx {
 namespace dao {
 namespace detail {
 
+QxSqlFreeText::QxSqlFreeText() : IxSqlElement(0) { ; }
+
 QxSqlFreeText::QxSqlFreeText(int index) : IxSqlElement(index) { ; }
 
 QxSqlFreeText::~QxSqlFreeText() { ; }
+
+IxSqlElement::type_class QxSqlFreeText::getTypeClass() const { return IxSqlElement::_sql_free_text; }
 
 QString QxSqlFreeText::toString() const { return ((m_lstValues.count() > 0) ? m_lstValues.at(0).toString() : QString("")); }
 
 void QxSqlFreeText::resolve(QSqlQuery & query) const { Q_UNUSED(query); }
 
 void QxSqlFreeText::postProcess(QString & sql) const { Q_UNUSED(sql); }
+
+QString QxSqlFreeText::getExtraSettings() const { return ""; }
+
+void QxSqlFreeText::setExtraSettings(const QString & s) { Q_UNUSED(s); }
 
 } // namespace detail
 } // namespace dao

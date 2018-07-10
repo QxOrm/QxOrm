@@ -41,9 +41,13 @@ namespace qx {
 namespace dao {
 namespace detail {
 
+QxSqlIsBetween::QxSqlIsBetween() : IxSqlElement(0), m_type(QxSqlIsBetween::_is_between) { ; }
+
 QxSqlIsBetween::QxSqlIsBetween(int index, QxSqlIsBetween::type t) : IxSqlElement(index), m_type(t) { ; }
 
 QxSqlIsBetween::~QxSqlIsBetween() { ; }
+
+IxSqlElement::type_class QxSqlIsBetween::getTypeClass() const { return IxSqlElement::_sql_is_between; }
 
 QString QxSqlIsBetween::toString() const
 {
@@ -75,6 +79,10 @@ void QxSqlIsBetween::resolve(QSqlQuery & query) const
 }
 
 void QxSqlIsBetween::postProcess(QString & sql) const { Q_UNUSED(sql); }
+
+QString QxSqlIsBetween::getExtraSettings() const { return QString::number(static_cast<int>(m_type)); }
+
+void QxSqlIsBetween::setExtraSettings(const QString & s) { m_type = static_cast<QxSqlIsBetween::type>(s.toInt()); }
 
 } // namespace detail
 } // namespace dao

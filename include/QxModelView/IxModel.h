@@ -43,6 +43,12 @@
  * \brief Interface to manage Qt model/view architecture with classes registered into QxOrm context (Qt widgets and/or QML views)
  */
 
+#ifdef _QX_NO_PRECOMPILED_HEADER
+#ifndef Q_MOC_RUN
+#include <QxPrecompiled.h> // Need to include precompiled header for the generated moc file
+#endif // Q_MOC_RUN
+#endif // _QX_NO_PRECOMPILED_HEADER
+
 #include <QtCore/qabstractitemmodel.h>
 
 #ifndef Q_MOC_RUN
@@ -148,24 +154,27 @@ class QX_DLL_EXPORT IxModel : public QAbstractItemModel
 
 public:
 
+   enum e_auto_update_database { e_no_auto_update, e_auto_update_on_field_change };
+
    typedef QHash<QString, IxModel *> type_relation_by_name;
    typedef QList<type_relation_by_name> type_lst_relation_by_name;
 
 protected:
 
-   IxClass * m_pClass;                          //!< Class introspection registered into QxOrm context associated to the model
-   IxDataMemberX * m_pDataMemberX;              //!< List of properties defined into QxOrm context
-   IxDataMember * m_pDataMemberId;              //!< Primary key (property id) defined into QxOrm context
-   IxCollection * m_pCollection;                //!< Interface to store a list of items
-   QHash<int, QByteArray> m_lstRoleNames;       //!< List of model's role names to expose data to QML
-   QList<IxDataMember *> m_lstDataMember;       //!< List of data member exposed by the model
-   QHash<QString, int> m_lstDataMemberByKey;    //!< List of data member key to get column index in model
-   QHash<QString, QString> m_lstHeaders;        //!< List of headers titles to override default data member key value
-   QStringList m_lstColumns;                    //!< List of columns exposed by the model (if empty, all columns)
-   QSqlDatabase m_database;                     //!< Database connexion to execute SQL queries (if empty, default database connexion)
-   QSqlError m_lastError;                       //!< Last SQL error
-   IxModel * m_pParent;                         //!< Parent model, NULL if current model is the root model
-   type_lst_relation_by_name m_lstChild;        //!< List of child model : QxEntityEditor uses this property to manage relationships and create complex data structure
+   IxClass * m_pClass;                             //!< Class introspection registered into QxOrm context associated to the model
+   IxDataMemberX * m_pDataMemberX;                 //!< List of properties defined into QxOrm context
+   IxDataMember * m_pDataMemberId;                 //!< Primary key (property id) defined into QxOrm context
+   IxCollection * m_pCollection;                   //!< Interface to store a list of items
+   QHash<int, QByteArray> m_lstRoleNames;          //!< List of model's role names to expose data to QML
+   QList<IxDataMember *> m_lstDataMember;          //!< List of data member exposed by the model
+   QHash<QString, int> m_lstDataMemberByKey;       //!< List of data member key to get column index in model
+   QHash<QString, QString> m_lstHeaders;           //!< List of headers titles to override default data member key value
+   QStringList m_lstColumns;                       //!< List of columns exposed by the model (if empty, all columns)
+   QSqlDatabase m_database;                        //!< Database connexion to execute SQL queries (if empty, default database connexion)
+   QSqlError m_lastError;                          //!< Last SQL error
+   IxModel * m_pParent;                            //!< Parent model, NULL if current model is the root model
+   type_lst_relation_by_name m_lstChild;           //!< List of child model : QxEntityEditor uses this property to manage relationships and create complex data structure
+   e_auto_update_database m_eAutoUpdateDatabase;   //!< Auto-update database on field change (detected by the setData() method)
 
 public:
 
@@ -182,49 +191,66 @@ public:
    IxDataMember * getDataMember(int column) const;
    Q_INVOKABLE QString getDataMemberKey(int column) const;
    Q_INVOKABLE QVariant getModelValue(int row, const QString & column) const;
+   Q_INVOKABLE int getColumnIndex(const QString & sColumnName) const;
+   Q_INVOKABLE int getAutoUpdateDatabase_() const;
+   e_auto_update_database getAutoUpdateDatabase() const;
 
    void setDatabase(const QSqlDatabase & db);
    Q_INVOKABLE void setListOfColumns(const QStringList & lst);
    void setListOfHeaders(const QHash<QString, QString> & lst);
    Q_INVOKABLE bool setModelValue(int row, const QString & column, const QVariant & value);
    void setParentModel(IxModel * pParent);
+   Q_INVOKABLE void setAutoUpdateDatabase_(int i);
+   void setAutoUpdateDatabase(e_auto_update_database e);
 
    virtual long qxCount(const qx::QxSqlQuery & query = qx::QxSqlQuery(), QSqlDatabase * pDatabase = NULL) = 0;
    virtual QSqlError qxCount(long & lCount, const qx::QxSqlQuery & query = qx::QxSqlQuery(), QSqlDatabase * pDatabase = NULL) = 0;
    virtual QSqlError qxFetchById(const QVariant & id, const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL) = 0;
    virtual QSqlError qxFetchAll(const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL) = 0;
    virtual QSqlError qxFetchByQuery(const qx::QxSqlQuery & query, const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL) = 0;
+   virtual QSqlError qxFetchRow(int row, const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL) = 0;
    virtual QSqlError qxInsert(const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL) = 0;
+   virtual QSqlError qxInsertRow(int row, const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL) = 0;
    virtual QSqlError qxUpdate(const qx::QxSqlQuery & query = qx::QxSqlQuery(), const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL) = 0;
+   virtual QSqlError qxUpdateRow(int row, const qx::QxSqlQuery & query = qx::QxSqlQuery(), const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL) = 0;
    virtual QSqlError qxSave(const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL) = 0;
    virtual QSqlError qxSaveRow(int row, const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL) = 0;
    virtual QSqlError qxDeleteById(const QVariant & id, QSqlDatabase * pDatabase = NULL) = 0;
    virtual QSqlError qxDeleteAll(QSqlDatabase * pDatabase = NULL) = 0;
    virtual QSqlError qxDeleteByQuery(const qx::QxSqlQuery & query, QSqlDatabase * pDatabase = NULL) = 0;
+   virtual QSqlError qxDeleteRow(int row, QSqlDatabase * pDatabase = NULL) = 0;
    virtual QSqlError qxDestroyById(const QVariant & id, QSqlDatabase * pDatabase = NULL) = 0;
    virtual QSqlError qxDestroyAll(QSqlDatabase * pDatabase = NULL) = 0;
    virtual QSqlError qxDestroyByQuery(const qx::QxSqlQuery & query, QSqlDatabase * pDatabase = NULL) = 0;
+   virtual QSqlError qxDestroyRow(int row, QSqlDatabase * pDatabase = NULL) = 0;
    virtual QSqlError qxExecuteQuery(qx::QxSqlQuery & query, QSqlDatabase * pDatabase = NULL) = 0;
    virtual qx_bool qxExist(const QVariant & id, QSqlDatabase * pDatabase = NULL) = 0;
    virtual qx::QxInvalidValueX qxValidate(const QStringList & groups = QStringList()) = 0;
+   virtual qx::QxInvalidValueX qxValidateRow(int row, const QStringList & groups = QStringList()) = 0;
 
    Q_INVOKABLE int qxCount_(const QString & sQuery);
    Q_INVOKABLE bool qxFetchById_(const QVariant & id, const QStringList & relation = QStringList());
    Q_INVOKABLE bool qxFetchAll_(const QStringList & relation = QStringList());
    Q_INVOKABLE bool qxFetchByQuery_(const QString & sQuery, const QStringList & relation = QStringList());
+   Q_INVOKABLE bool qxFetchRow_(int row, const QStringList & relation = QStringList());
    Q_INVOKABLE bool qxInsert_(const QStringList & relation = QStringList());
+   Q_INVOKABLE bool qxInsertRow_(int row, const QStringList & relation = QStringList());
    Q_INVOKABLE bool qxUpdate_(const QString & sQuery, const QStringList & relation = QStringList());
+   Q_INVOKABLE bool qxUpdateRow_(int row, const QString & sQuery, const QStringList & relation = QStringList());
    Q_INVOKABLE bool qxSave_(const QStringList & relation = QStringList());
    Q_INVOKABLE bool qxSaveRow_(int row, const QStringList & relation = QStringList());
    Q_INVOKABLE bool qxDeleteById_(const QVariant & id);
    Q_INVOKABLE bool qxDeleteAll_();
    Q_INVOKABLE bool qxDeleteByQuery_(const QString & sQuery);
+   Q_INVOKABLE bool qxDeleteRow_(int row);
    Q_INVOKABLE bool qxDestroyById_(const QVariant & id);
    Q_INVOKABLE bool qxDestroyAll_();
    Q_INVOKABLE bool qxDestroyByQuery_(const QString & sQuery);
+   Q_INVOKABLE bool qxDestroyRow_(int row);
    Q_INVOKABLE bool qxExecuteQuery_(const QString & sQuery);
    Q_INVOKABLE bool qxExist_(const QVariant & id);
    Q_INVOKABLE QString qxValidate_(const QStringList & groups = QStringList());
+   Q_INVOKABLE QString qxValidateRow_(int row, const QStringList & groups = QStringList());
 
 protected:
 
@@ -260,6 +286,10 @@ public:
 #endif // (QT_VERSION >= 0x050000)
 
 protected:
+
+   virtual void syncNestedModel(int row, const QStringList & relation);
+   virtual void syncAllNestedModel(const QStringList & relation);
+   void syncNestedModelRecursive(IxModel * pNestedModel, const QStringList & relation);
 
    void generateRoleNames();
    QSqlDatabase * database(QSqlDatabase * other);

@@ -25,14 +25,25 @@ then
     echo "$2 OK."
 fi
 }
-           
+
 clear
 pwd
 cd ..
 
+echo "-- BOOST ENVIRONMENT VARIABLES --"
+export BOOST_INCLUDE=/usr/include
+export BOOST_LIB=/usr/lib
+export BOOST_LIB_SERIALIZATION_DEBUG=boost_serialization-mt-d
+export BOOST_LIB_SERIALIZATION_RELEASE=boost_serialization-mt
+export BOOST_LIB_WIDE_SERIALIZATION_DEBUG=boost_wserialization-mt-d
+export BOOST_LIB_WIDE_SERIALIZATION_RELEASE=boost_wserialization-mt
+
+echo "-- MAKE OPTIONS : USE 8 CORE CPU TO REDUCE BUILD TIMES --"
+MAKEOPT=-j8
+
 echo "-- BUILD QXORM LIBRARY --"
 qmake QxOrm.pro -r -spec macx-g++
-make -w $CONFIG
+make -w $CONFIG $MAKEOPT
 testFile -f ./lib/libQxOrm$SUFFIX.*
 cp -R -v ./lib/libQxOrm$SUFFIX.* ./test/_bin/
 cp -R -v ./lib/$LIBBOOSTSERIALIZATION ./test/_bin/
@@ -45,14 +56,14 @@ cd ./test/
 echo "-- BUILD DLLSAMPLE --"
 cd ./qxDllSample/dll1/
 qmake dll1.pro -r -spec macx-g++
-make -w $CONFIG
+make -w $CONFIG $MAKEOPT
 testFile -f ../../_bin/libdll1$SUFFIX.*
 cd ../../
 install_name_tool -id @executable_path/libdll1$SUFFIX.dylib ./_bin/libdll1$SUFFIX.dylib
 install_name_tool -change $LIBBOOSTSERIALIZATION @executable_path/$LIBBOOSTSERIALIZATION ./_bin/libdll1$SUFFIX.dylib
 cd ./qxDllSample/dll2/
 qmake dll2.pro -r -spec macx-g++
-make -w $CONFIG
+make -w $CONFIG $MAKEOPT
 testFile -f ../../_bin/libdll2$SUFFIX.*
 cd ../../
 install_name_tool -id @executable_path/libdll2$SUFFIX.dylib ./_bin/libdll2$SUFFIX.dylib
@@ -60,7 +71,7 @@ install_name_tool -change $LIBBOOSTSERIALIZATION @executable_path/$LIBBOOSTSERIA
 #install_name_tool -change libdll1$SUFFIX.1.dylib @executable_path/libdll1$SUFFIX.dylib ./_bin/libdll2$SUFFIX.dylib
 cd ./qxDllSample/exe/
 qmake exe.pro -r -spec macx-g++
-make -w $CONFIG
+make -w $CONFIG $MAKEOPT
 testFile -f ../../_bin/exe$SUFFIX
 cd ../../
 install_name_tool -change $LIBBOOSTSERIALIZATION @executable_path/$LIBBOOSTSERIALIZATION ./_bin/exe$SUFFIX
@@ -69,7 +80,7 @@ install_name_tool -change $LIBBOOSTSERIALIZATION @executable_path/$LIBBOOSTSERIA
 echo "-- BUILD TEST QXBLOG --"
 cd ./qxBlog/
 qmake qxBlog.pro -r -spec macx-g++
-make -w $CONFIG
+make -w $CONFIG $MAKEOPT
 testFile -f ../_bin/qxBlog$SUFFIX
 cd ../
 install_name_tool -change $LIBBOOSTSERIALIZATION @executable_path/$LIBBOOSTSERIALIZATION ./_bin/qxBlog$SUFFIX
@@ -77,7 +88,7 @@ install_name_tool -change $LIBBOOSTSERIALIZATION @executable_path/$LIBBOOSTSERIA
 echo "-- BUILD TEST QXBLOG COMPOSITE KEY --"
 cd ./qxBlogCompositeKey/
 qmake qxBlog.pro -r -spec macx-g++
-make -w $CONFIG
+make -w $CONFIG $MAKEOPT
 testFile -f ../_bin/qxBlogCompositeKey$SUFFIX
 cd ../
 install_name_tool -change $LIBBOOSTSERIALIZATION @executable_path/$LIBBOOSTSERIALIZATION ./_bin/qxBlogCompositeKey$SUFFIX
@@ -85,13 +96,13 @@ install_name_tool -change $LIBBOOSTSERIALIZATION @executable_path/$LIBBOOSTSERIA
 echo "-- BUILD TEST QXCLIENTSERVER QXSERVICE --"
 cd ./qxClientServer/qxService
 qmake qxServiceServer.pro -r -spec macx-g++
-make -w $CONFIG
+make -w $CONFIG $MAKEOPT
 testFile -f ../../_bin/libqxServiceServer$SUFFIX.*
 install_name_tool -id @executable_path/../Frameworks/libqxServiceServer$SUFFIX.dylib ../../_bin/libqxServiceServer$SUFFIX.dylib
 install_name_tool -change $LIBBOOSTSERIALIZATION @executable_path/../Frameworks/$LIBBOOSTSERIALIZATION ../../_bin/libqxServiceServer$SUFFIX.dylib
 install_name_tool -change @executable_path/libQxOrm$SUFFIX.dylib @executable_path/../Frameworks/libQxOrm$SUFFIX.dylib ../../_bin/libqxServiceServer$SUFFIX.dylib
 qmake qxServiceClient.pro -r -spec macx-g++
-make -w $CONFIG
+make -w $CONFIG $MAKEOPT
 testFile -f ../../_bin/libqxServiceClient$SUFFIX.*
 install_name_tool -id @executable_path/../Frameworks/libqxServiceClient$SUFFIX.dylib ../../_bin/libqxServiceClient$SUFFIX.dylib
 install_name_tool -change $LIBBOOSTSERIALIZATION @executable_path/../Frameworks/$LIBBOOSTSERIALIZATION ../../_bin/libqxServiceClient$SUFFIX.dylib
@@ -101,7 +112,7 @@ cd ../../
 echo "-- BUILD TEST QXCLIENTSERVER QXSERVER --"
 cd ./qxClientServer/qxServer/
 qmake qxServer.pro -r -spec macx-g++
-make -w $CONFIG
+make -w $CONFIG $MAKEOPT
 testFile -d ../../_bin/qxServer$SUFFIX.app
 cd ../../
 mkdir -p ./_bin/qxServer$SUFFIX.app/Contents/Frameworks/
@@ -117,7 +128,7 @@ install_name_tool -change @executable_path/libQxOrm$SUFFIX.dylib @executable_pat
 echo "-- BUILD TEST QXCLIENTSERVER QXCLIENT --"
 cd ./qxClientServer/qxClient/
 qmake qxClient.pro -r -spec macx-g++
-make -w $CONFIG
+make -w $CONFIG $MAKEOPT
 testFile -d ../../_bin/qxClient$SUFFIX.app
 cd ../../
 mkdir -p ./_bin/qxClient$SUFFIX.app/Contents/Frameworks/

@@ -41,9 +41,13 @@ namespace qx {
 namespace dao {
 namespace detail {
 
+QxSqlLimit::QxSqlLimit() : IxSqlElement(0) { ; }
+
 QxSqlLimit::QxSqlLimit(int index) : IxSqlElement(index) { ; }
 
 QxSqlLimit::~QxSqlLimit() { ; }
+
+IxSqlElement::type_class QxSqlLimit::getTypeClass() const { return IxSqlElement::_sql_limit; }
 
 QString QxSqlLimit::toString() const
 {
@@ -110,6 +114,10 @@ QString QxSqlLimit::getMaxRow_ParamKey() const
    else { sMaxRow = ":" + sMaxRow; }
    return sMaxRow;
 }
+
+QString QxSqlLimit::getExtraSettings() const { return ""; }
+
+void QxSqlLimit::setExtraSettings(const QString & s) { Q_UNUSED(s); }
 
 } // namespace detail
 } // namespace dao

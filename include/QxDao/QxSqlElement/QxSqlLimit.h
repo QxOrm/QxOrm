@@ -58,6 +58,7 @@ class QX_DLL_EXPORT QxSqlLimit : public IxSqlElement
 
 public:
 
+   QxSqlLimit();
    QxSqlLimit(int index);
    virtual ~QxSqlLimit();
 
@@ -72,6 +73,13 @@ public:
    QString getStartRow_ParamKey() const;
    QString getRowsCount_ParamKey() const;
    QString getMaxRow_ParamKey() const;
+
+   virtual IxSqlElement::type_class getTypeClass() const;
+
+protected:
+
+   virtual QString getExtraSettings() const;
+   virtual void setExtraSettings(const QString & s);
 
 };
 

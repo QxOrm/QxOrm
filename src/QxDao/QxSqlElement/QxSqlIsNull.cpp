@@ -39,9 +39,13 @@ namespace qx {
 namespace dao {
 namespace detail {
 
+QxSqlIsNull::QxSqlIsNull() : IxSqlElement(0), m_type(QxSqlIsNull::_is_null) { ; }
+
 QxSqlIsNull::QxSqlIsNull(int index, QxSqlIsNull::type t) : IxSqlElement(index), m_type(t) { ; }
 
 QxSqlIsNull::~QxSqlIsNull() { ; }
+
+IxSqlElement::type_class QxSqlIsNull::getTypeClass() const { return IxSqlElement::_sql_is_null; }
 
 QString QxSqlIsNull::toString() const
 {
@@ -62,6 +66,10 @@ QString QxSqlIsNull::toString() const
 void QxSqlIsNull::resolve(QSqlQuery & query) const { Q_UNUSED(query); }
 
 void QxSqlIsNull::postProcess(QString & sql) const { Q_UNUSED(sql); }
+
+QString QxSqlIsNull::getExtraSettings() const { return QString::number(static_cast<int>(m_type)); }
+
+void QxSqlIsNull::setExtraSettings(const QString & s) { m_type = static_cast<QxSqlIsNull::type>(s.toInt()); }
 
 } // namespace detail
 } // namespace dao

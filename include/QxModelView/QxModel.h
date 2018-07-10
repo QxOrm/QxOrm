@@ -51,6 +51,7 @@
 
 #include <QxTraits/get_primary_key.h>
 #include <QxTraits/is_qx_registered.h>
+#include <QxTraits/is_valid_primary_key.h>
 
 namespace qx {
 namespace model_view {
@@ -195,6 +196,7 @@ protected:
       this->m_model = pOtherWrk->m_model;
       this->m_lManualInsertIndex = pOtherWrk->m_lManualInsertIndex;
       this->m_pParent = pOtherWrk->m_pParent;
+      if (this->m_pParent) { this->m_eAutoUpdateDatabase = this->m_pParent->getAutoUpdateDatabase(); }
    }
 
 public:
@@ -233,6 +235,14 @@ public:
          if (vCurrentValue == value) { return true; }
          qx_bool bSetData = pDataMember->fromVariant(pItem.get(), value);
          if (bSetData) { raiseEvent_dataChanged(index, index); }
+         if (bSetData && (m_eAutoUpdateDatabase == qx::IxModel::e_auto_update_on_field_change) && m_pDataMemberId)
+         {
+            QVariant vId = m_pDataMemberId->toVariant(pItem.get());
+            bool bExist = qx::trait::is_valid_primary_key(vId);
+            if (bExist) { bExist = qx::dao::exist((* pItem), database(NULL)); }
+            if (bExist) { m_lastError = qx::dao::update((* pItem), database(NULL), (QStringList() << pDataMember->getKey())); }
+            else { m_lastError = qx::dao::insert((* pItem), database(NULL)); }
+         }
          return bSetData;
       }
       else if (role >= (Qt::UserRole + 1))
@@ -246,11 +256,12 @@ public:
    virtual bool insertRows(int row, int count, const QModelIndex & parent = QModelIndex())
    {
       if (parent.isValid()) { return false; }
+      if ((row < 0) || (count <= 0)) { return false; }
       beginInsertRows(QModelIndex(), row, (row + count - 1));
       for (int i = 0; i < count; ++i)
       {
-         m_lManualInsertIndex--;
          type_primary_key primaryKey;
+         m_lManualInsertIndex = (m_lManualInsertIndex - 1);
          QVariant vNewId(static_cast<qlonglong>(m_lManualInsertIndex));
          qx::cvt::from_variant(vNewId, primaryKey);
          type_ptr pItem = type_ptr(new T());
@@ -262,17 +273,35 @@ public:
 
 public:
 
+   /*!
+    * \brief Return the number of lines in the table (database) mapped to the C++ class T (registered into QxOrm context) and filtered by a user SQL query
+    * \param query Define a user SQL query added to default SQL query builded by QxOrm library (optional parameter)
+    * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class (optional parameter)
+    */
    virtual long qxCount(const qx::QxSqlQuery & query = qx::QxSqlQuery(), QSqlDatabase * pDatabase = NULL)
    {
       return qx::dao::count<T>(query, database(pDatabase));
    }
 
+   /*!
+    * \brief Return the number of lines in the table (database) mapped to the C++ class T (registered into QxOrm context) and filtered by a user SQL query
+    * \param lCount Output parameter with the number of lines in the table associated to the SQL query
+    * \param query Define a user SQL query added to default SQL query builded by QxOrm library (optional parameter)
+    * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class (optional parameter)
+    */
    virtual QSqlError qxCount(long & lCount, const qx::QxSqlQuery & query = qx::QxSqlQuery(), QSqlDatabase * pDatabase = NULL)
    {
       m_lastError = qx::dao::count<T>(lCount, query, database(pDatabase));
       return m_lastError;
    }
 
+   /*!
+    * \brief Clear the model and fetch an object (retrieve all its properties) of type T (registered into QxOrm context) mapped to a table in the database
+    * \param id Row id to be fetched (retrieve all properties from database)
+    * \param relation List of relationships keys to be fetched (eager fetch instead of default lazy fetch for a relation) : use "|" separator to put many relationships keys into this parameter
+    * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class (optional parameter)
+    * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
+    */
    virtual QSqlError qxFetchById(const QVariant & id, const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL)
    {
       clear();
@@ -292,6 +321,12 @@ public:
       return m_lastError;
    }
 
+   /*!
+    * \brief Clear the model and fetch a list of objects (retrieve all elements and properties associated) of type T (container registered into QxOrm context) mapped to a table in the database
+    * \param relation List of relationships keys to be fetched (eager fetch instead of default lazy fetch for a relation) : use "|" separator to put many relationships keys into this parameter
+    * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class (optional parameter)
+    * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
+    */
    virtual QSqlError qxFetchAll(const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL)
    {
       clear();
@@ -299,12 +334,20 @@ public:
       if (relation.count() == 0) { m_lastError = qx::dao::fetch_all(tmp, database(pDatabase), m_lstColumns); }
       else { m_lastError = qx::dao::fetch_all_with_relation(relation, tmp, database(pDatabase)); }
 
+      if (tmp.count() <= 0) { return m_lastError; }
       beginInsertRows(QModelIndex(), 0, (tmp.count() - 1));
       m_model = tmp;
       endInsertRows();
       return m_lastError;
    }
 
+   /*!
+    * \brief Clear the model and fetch a list of objects (retrieve all elements and properties associated) of type T (container registered into QxOrm context) mapped to a table in the database and filtered by a user SQL query
+    * \param query Define a user SQL query added to default SQL query builded by QxOrm library
+    * \param relation List of relationships keys to be fetched (eager fetch instead of default lazy fetch for a relation) : use "|" separator to put many relationships keys into this parameter
+    * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class (optional parameter)
+    * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
+    */
    virtual QSqlError qxFetchByQuery(const qx::QxSqlQuery & query, const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL)
    {
       clear();
@@ -312,42 +355,142 @@ public:
       if (relation.count() == 0) { m_lastError = qx::dao::fetch_by_query(query, tmp, database(pDatabase), m_lstColumns); }
       else { m_lastError = qx::dao::fetch_by_query_with_relation(relation, query, tmp, database(pDatabase)); }
 
+      if (tmp.count() <= 0) { return m_lastError; }
       beginInsertRows(QModelIndex(), 0, (tmp.count() - 1));
       m_model = tmp;
       endInsertRows();
       return m_lastError;
    }
 
-   virtual QSqlError qxInsert(const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL)
-   {
-      if (relation.count() == 0) { m_lastError = qx::dao::insert(m_model, database(pDatabase)); }
-      else { m_lastError = qx::dao::insert_with_relation(relation, m_model, database(pDatabase)); }
-      return m_lastError;
-   }
-
-   virtual QSqlError qxUpdate(const qx::QxSqlQuery & query = qx::QxSqlQuery(), const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL)
-   {
-      if (relation.count() == 0) { m_lastError = qx::dao::update_by_query(query, m_model, database(pDatabase), m_lstColumns); }
-      else { m_lastError = qx::dao::update_by_query_with_relation(relation, query, m_model, database(pDatabase)); }
-      return m_lastError;
-   }
-
-   virtual QSqlError qxSave(const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL)
-   {
-      if (relation.count() == 0) { m_lastError = qx::dao::save(m_model, database(pDatabase)); }
-      else { m_lastError = qx::dao::save_with_relation(relation, m_model, database(pDatabase)); }
-      return m_lastError;
-   }
-
-   virtual QSqlError qxSaveRow(int row, const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL)
+   /*!
+    * \brief Get an item in the model at line row and fetch all its properties mapped to a table in the database, then all views attached to this model are automatically updated
+    * \param row Get an item in the model at line row
+    * \param relation List of relationships keys to be fetched (eager fetch instead of default lazy fetch for a relation) : use "|" separator to put many relationships keys into this parameter
+    * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class (optional parameter)
+    * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
+    */
+   virtual QSqlError qxFetchRow(int row, const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL)
    {
       if ((row < 0) || (row >= m_model.count())) { return QSqlError(); }
       type_ptr pItem = m_model.getByIndex(row); if (! pItem) { return QSqlError(); }
-      if (relation.count() == 0) { m_lastError = qx::dao::save((* pItem), database(pDatabase)); }
-      else { m_lastError = qx::dao::save_with_relation(relation, (* pItem), database(pDatabase)); }
+      if (relation.count() == 0) { m_lastError = qx::dao::fetch_by_id((* pItem), database(pDatabase), m_lstColumns); }
+      else { m_lastError = qx::dao::fetch_by_id_with_relation(relation, (* pItem), database(pDatabase)); }
+      if (m_lastError.isValid()) { return m_lastError; }
+
+      QModelIndex idxTopLeft = this->index(row, 0);
+      QModelIndex idxBottomRight = this->index(row, (m_lstDataMember.count() - 1));
+      this->raiseEvent_dataChanged(idxTopLeft, idxBottomRight);
+      this->updateKey(row);
       return m_lastError;
    }
 
+   /*!
+    * \brief Insert all items in the model into database
+    * \param relation List of relationships keys to be inserted in others tables of database : use "|" separator to put many relationships keys into this parameter
+    * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class (optional parameter)
+    * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
+    */
+   virtual QSqlError qxInsert(const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL)
+   {
+      if (relation.count() > 0) { this->syncAllNestedModel(relation); }
+      if (relation.count() == 0) { m_lastError = qx::dao::insert(m_model, database(pDatabase)); }
+      else { m_lastError = qx::dao::insert_with_relation(relation, m_model, database(pDatabase)); }
+      if (! m_lastError.isValid()) { this->updateAllKeys(); }
+      return m_lastError;
+   }
+
+   /*!
+    * \brief Insert an item of the model at line row into database
+    * \param row Insert an item in the model at line row
+    * \param relation List of relationships keys to be inserted in others tables of database : use "|" separator to put many relationships keys into this parameter
+    * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class (optional parameter)
+    * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
+    */
+   virtual QSqlError qxInsertRow(int row, const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL)
+   {
+      if ((row < 0) || (row >= m_model.count())) { return QSqlError(); }
+      if (relation.count() > 0) { this->syncNestedModel(row, relation); }
+      type_ptr pItem = m_model.getByIndex(row); if (! pItem) { return QSqlError(); }
+      if (relation.count() == 0) { m_lastError = qx::dao::insert((* pItem), database(pDatabase)); }
+      else { m_lastError = qx::dao::insert_with_relation(relation, (* pItem), database(pDatabase)); }
+      if (! m_lastError.isValid()) { this->updateKey(row); }
+      return m_lastError;
+   }
+
+   /*!
+    * \brief Update all items in the model into database
+    * \param query Define a user SQL query added to default SQL query builded by QxOrm library
+    * \param relation List of relationships keys to be inserted in others tables of database : use "|" separator to put many relationships keys into this parameter
+    * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class (optional parameter)
+    * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
+    */
+   virtual QSqlError qxUpdate(const qx::QxSqlQuery & query = qx::QxSqlQuery(), const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL)
+   {
+      if (relation.count() > 0) { this->syncAllNestedModel(relation); }
+      if (relation.count() == 0) { m_lastError = qx::dao::update_by_query(query, m_model, database(pDatabase), m_lstColumns); }
+      else { m_lastError = qx::dao::update_by_query_with_relation(relation, query, m_model, database(pDatabase)); }
+      if (! m_lastError.isValid()) { this->updateAllKeys(); }
+      return m_lastError;
+   }
+
+   /*!
+    * \brief Update an item of the model at line row into database
+    * \param row Update an item in the model at line row
+    * \param query Define a user SQL query added to default SQL query builded by QxOrm library
+    * \param relation List of relationships keys to be inserted in others tables of database : use "|" separator to put many relationships keys into this parameter
+    * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class (optional parameter)
+    * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
+    */
+   virtual QSqlError qxUpdateRow(int row, const qx::QxSqlQuery & query = qx::QxSqlQuery(), const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL)
+   {
+      if ((row < 0) || (row >= m_model.count())) { return QSqlError(); }
+      if (relation.count() > 0) { this->syncNestedModel(row, relation); }
+      type_ptr pItem = m_model.getByIndex(row); if (! pItem) { return QSqlError(); }
+      if (relation.count() == 0) { m_lastError = qx::dao::update_by_query(query, (* pItem), database(pDatabase), m_lstColumns); }
+      else { m_lastError = qx::dao::update_by_query_with_relation(relation, query, (* pItem), database(pDatabase)); }
+      if (! m_lastError.isValid()) { this->updateKey(row); }
+      return m_lastError;
+   }
+
+   /*!
+    * \brief Save all items (insert or update) in the model into database
+    * \param relation List of relationships keys to be inserted in others tables of database : use "|" separator to put many relationships keys into this parameter
+    * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class (optional parameter)
+    * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
+    */
+   virtual QSqlError qxSave(const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL)
+   {
+      if (relation.count() > 0) { this->syncAllNestedModel(relation); }
+      if (relation.count() == 0) { m_lastError = qx::dao::save(m_model, database(pDatabase)); }
+      else { m_lastError = qx::dao::save_with_relation(relation, m_model, database(pDatabase)); }
+      if (! m_lastError.isValid()) { this->updateAllKeys(); }
+      return m_lastError;
+   }
+
+   /*!
+    * \brief Save an item of the model at line row into database
+    * \param row Save an item (insert or update) in the model at line row
+    * \param relation List of relationships keys to be inserted in others tables of database : use "|" separator to put many relationships keys into this parameter
+    * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class (optional parameter)
+    * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
+    */
+   virtual QSqlError qxSaveRow(int row, const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL)
+   {
+      if ((row < 0) || (row >= m_model.count())) { return QSqlError(); }
+      if (relation.count() > 0) { this->syncNestedModel(row, relation); }
+      type_ptr pItem = m_model.getByIndex(row); if (! pItem) { return QSqlError(); }
+      if (relation.count() == 0) { m_lastError = qx::dao::save((* pItem), database(pDatabase)); }
+      else { m_lastError = qx::dao::save_with_relation(relation, (* pItem), database(pDatabase)); }
+      if (! m_lastError.isValid()) { this->updateKey(row); }
+      return m_lastError;
+   }
+
+   /*!
+    * \brief Delete a line of a table (database) mapped to a C++ object of type T (registered into QxOrm context), if no error occurred then you should remove row from the model
+    * \param id Row id to be deleted from database
+    * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class (optional parameter)
+    * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
+    */
    virtual QSqlError qxDeleteById(const QVariant & id, QSqlDatabase * pDatabase = NULL)
    {
       type_ptr pItem = type_ptr(new T());
@@ -358,18 +501,49 @@ public:
       return m_lastError;
    }
 
+   /*!
+    * \brief Delete all lines of a table (database) mapped to a C++ class T (registered into QxOrm context), if no error occurred then you should clear the model
+    * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class (optional parameter)
+    * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
+    */
    virtual QSqlError qxDeleteAll(QSqlDatabase * pDatabase = NULL)
    {
       m_lastError = qx::dao::delete_all<T>(database(pDatabase));
       return m_lastError;
    }
 
+   /*!
+    * \brief Delete all lines of a table (database) mapped to a C++ class T (registered into QxOrm context) and filtered by a user SQL query, if no error occurred then you should refresh the model
+    * \param query Define a user SQL query added to default SQL query builded by QxOrm library
+    * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class (optional parameter)
+    * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
+    */
    virtual QSqlError qxDeleteByQuery(const qx::QxSqlQuery & query, QSqlDatabase * pDatabase = NULL)
    {
       m_lastError = qx::dao::delete_by_query<T>(query, database(pDatabase));
       return m_lastError;
    }
 
+   /*!
+    * \brief Delete in database the item at line row in the model, if no error occurred then you should remove row from the model
+    * \param row Delete in database the item in the model at line row
+    * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class (optional parameter)
+    * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
+    */
+   virtual QSqlError qxDeleteRow(int row, QSqlDatabase * pDatabase = NULL)
+   {
+      if ((row < 0) || (row >= m_model.count())) { return QSqlError(); }
+      type_ptr pItem = m_model.getByIndex(row); if (! pItem) { return QSqlError(); }
+      m_lastError = qx::dao::delete_by_id((* pItem), database(pDatabase));
+      return m_lastError;
+   }
+
+   /*!
+    * \brief Delete a line of a table (even if a logical delete is defined) mapped to a C++ object of type T (registered into QxOrm context), if no error occurred then you should remove row from the model
+    * \param id Row id to be deleted from database
+    * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class (optional parameter)
+    * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
+    */
    virtual QSqlError qxDestroyById(const QVariant & id, QSqlDatabase * pDatabase = NULL)
    {
       type_ptr pItem = type_ptr(new T());
@@ -380,15 +554,40 @@ public:
       return m_lastError;
    }
 
+   /*!
+    * \brief Delete all lines of a table (even if a logical delete is defined) mapped to a C++ class T (registered into QxOrm context), if no error occurred then you should clear the model
+    * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class (optional parameter)
+    * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
+    */
    virtual QSqlError qxDestroyAll(QSqlDatabase * pDatabase = NULL)
    {
       m_lastError = qx::dao::destroy_all<T>(database(pDatabase));
       return m_lastError;
    }
 
+   /*!
+    * \brief Delete all lines of a table (even if a logical delete is defined) mapped to a C++ class T (registered into QxOrm context) and filtered by a user SQL query, if no error occurred then you should refresh the model
+    * \param query Define a user SQL query added to default SQL query builded by QxOrm library
+    * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class (optional parameter)
+    * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
+    */
    virtual QSqlError qxDestroyByQuery(const qx::QxSqlQuery & query, QSqlDatabase * pDatabase = NULL)
    {
       m_lastError = qx::dao::destroy_by_query<T>(query, database(pDatabase));
+      return m_lastError;
+   }
+
+   /*!
+    * \brief Delete in database (even if a logical delete is defined) the item at line row in the model, if no error occurred then you should remove row from the model
+    * \param row Delete in database the item in the model at line row
+    * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class (optional parameter)
+    * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
+    */
+   virtual QSqlError qxDestroyRow(int row, QSqlDatabase * pDatabase = NULL)
+   {
+      if ((row < 0) || (row >= m_model.count())) { return QSqlError(); }
+      type_ptr pItem = m_model.getByIndex(row); if (! pItem) { return QSqlError(); }
+      m_lastError = qx::dao::destroy_by_id((* pItem), database(pDatabase));
       return m_lastError;
    }
 
@@ -398,6 +597,7 @@ public:
       type_collection tmp;
       m_lastError = qx::dao::execute_query(query, tmp, database(pDatabase));
 
+      if (tmp.count() <= 0) { return m_lastError; }
       beginInsertRows(QModelIndex(), 0, (tmp.count() - 1));
       m_model = tmp;
       endInsertRows();
@@ -416,6 +616,37 @@ public:
    virtual qx::QxInvalidValueX qxValidate(const QStringList & groups = QStringList())
    {
       return qx::validate(m_model, groups);
+   }
+
+   virtual qx::QxInvalidValueX qxValidateRow(int row, const QStringList & groups = QStringList())
+   {
+      if ((row < 0) || (row >= m_model.count())) { return qx::QxInvalidValueX(); }
+      type_ptr pItem = m_model.getByIndex(row); if (! pItem) { return qx::QxInvalidValueX(); }
+      return qx::validate((* pItem), groups);
+   }
+
+protected:
+
+   void updateKey(int row)
+   {
+      if ((row < 0) || (row >= m_model.count())) { return; }
+      type_ptr pItem = m_model.getByIndex(row); if (! pItem || ! m_pDataMemberId) { return; }
+      type_primary_key currPrimaryKey = m_model.getKeyByIndex(row);
+      QVariant vCurrPrimaryKey = qx::cvt::to_variant(currPrimaryKey);
+      QVariant vNextPrimaryKey = m_pDataMemberId->toVariant(pItem.get());
+      if ((vCurrPrimaryKey == vNextPrimaryKey) || (! vNextPrimaryKey.isValid())) { return; }
+      if (! qx::trait::is_valid_primary_key(vNextPrimaryKey)) { return; }
+      type_primary_key updatedPrimaryKey;
+      qx::cvt::from_variant(vNextPrimaryKey, updatedPrimaryKey);
+      if (m_model.exist(updatedPrimaryKey)) { return; }
+      m_model.removeByIndex(row);
+      m_model.insert(row, updatedPrimaryKey, pItem);
+   }
+
+   void updateAllKeys()
+   {
+      for (long l = 0; l < m_model.count(); l++)
+      { this->updateKey(l); }
    }
 
 };

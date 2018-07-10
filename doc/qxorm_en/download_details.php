@@ -43,6 +43,7 @@
       </td>
       <td align="center"><a href="./faq.html" class="btn_nav">Faq (36)</a></td>
       <td align="center"><a href="./link.html" class="btn_nav">Forum</a></td>
+      <td align="center"><a href="./customer.html" class="btn_nav">Our customers</a></td>
     </tr>
   </tbody>
 </table>
@@ -55,11 +56,11 @@
     <table cellspacing="0" cellpadding="1"><col><col><tbody>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow">Current version :&nbsp;</font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.2.9 - <a href="../doxygen/index.html" target="_blank">QxOrm library online documentation</a></font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.3.1 - <a href="../doxygen/index.html" target="_blank">QxOrm library online documentation</a></font></td>
       </tr>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow"></font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.1.6</font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.1.7</font></td>
       </tr>
     </tbody></table>
   </td>
@@ -110,7 +111,7 @@
          <br/>
          If you have any questions, or if you want to purchase the <b>QXPL</b> license, please contact us using this e-mail : <a href="mailto:contact@qxorm.com">contact@qxorm.com</a>.<br/>
          <br/>
-         <a href="../php/add_download.php5?file_path=QxOrm_1.2.9.zip&file_desc=QxOrm_1.2.9" class="btn_tuto" target="_blank">Download QxOrm 1.2.9</a>
+         <a href="../php/add_download.php5?file_path=QxOrm_1.3.1.zip&file_desc=QxOrm_1.3.1" class="btn_tuto" target="_blank">Download QxOrm 1.3.1</a>
          <br/>
          <!--
          <script type="text/javascript">
@@ -121,7 +122,7 @@ function checkForm(f) { f.submit(); return true; }
             <input type="text" id="created_by" name="created_by" size="50" maxlength="200" /><br/>
             Help us to improve QxOrm library adding a comment (optional) :<br/>
             <textarea id="message_text" name="message_text" rows="3" cols="50"></textarea><br/>
-            <input type="submit" value="            Download QxOrm 1.2.9            " />
+            <input type="submit" value="            Download QxOrm 1.3.1            " />
          </form>
          -->
          <br>
@@ -138,7 +139,7 @@ function checkForm(f) { f.submit(); return true; }
         <img alt="QxOrm" src="./resource/logo_qxorm_small.png" width="168" height="40">
       </td>
       <td align="center" valign="middle">
-        <font size="2">© 2014 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
+        <font size="2">© 2015 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
       </td>
       <td align="right" valign="middle">
         <form action="https://www.paypal.com/cgi-bin/webscr" method="post">

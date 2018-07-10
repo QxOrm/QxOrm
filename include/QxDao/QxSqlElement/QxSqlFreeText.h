@@ -58,12 +58,20 @@ class QX_DLL_EXPORT QxSqlFreeText : public IxSqlElement
 
 public:
 
+   QxSqlFreeText();
    QxSqlFreeText(int index);
    virtual ~QxSqlFreeText();
 
    virtual QString toString() const;
    virtual void resolve(QSqlQuery & query) const;
    virtual void postProcess(QString & sql) const;
+
+   virtual IxSqlElement::type_class getTypeClass() const;
+
+protected:
+
+   virtual QString getExtraSettings() const;
+   virtual void setExtraSettings(const QString & s);
 
 };
 

@@ -221,7 +221,7 @@ inline bool QxCollection<Key, Value>::insert(long index, const Key & key, const 
 {
    qAssert(! exist(key));
    if (index < 0) { index = 0; }
-   if ((index >= size()) && (index != 0)) { index = (size() - 1); }
+   if (index >= size()) { return this->insert(key, value); }
    return m_qxCollection.template get<0>().insert((begin() + index), type_pair_key_value(key, value)).second;
 }
 

@@ -5,6 +5,12 @@
 #pragma once
 #endif
 
+#ifdef _QX_NO_PRECOMPILED_HEADER
+#ifndef Q_MOC_RUN
+#include "../include/precompiled.h" // Need to include precompiled header for the generated moc file
+#endif // Q_MOC_RUN
+#endif // _QX_NO_PRECOMPILED_HEADER
+
 #include "../../dll1/include/CPerson.h"
 
 class QX_DLL2_EXPORT CUser : public qx::test::CPerson

@@ -5,7 +5,10 @@ CONFIG += dll
 DEFINES += _QX_BUILDING_DLL1
 INCLUDEPATH += ../../../../QxOrm/include/
 DESTDIR = ../../../../QxOrm/test/_bin/
+
+!contains(DEFINES, _QX_NO_PRECOMPILED_HEADER) {
 PRECOMPILED_HEADER = ./include/precompiled.h
+} # !contains(DEFINES, _QX_NO_PRECOMPILED_HEADER)
 
 CONFIG(debug, debug|release) {
 TARGET = dll1d

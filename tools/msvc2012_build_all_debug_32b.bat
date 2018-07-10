@@ -1,4 +1,16 @@
+REM -- QT ENVIRONMENT VARIABLES --
+set QT_DIR=%QT5_MSVC2012_32B%
+set PATH=%QT_DIR%\bin;%PATH%
+REM -- BOOST ENVIRONMENT VARIABLES --
+set BOOST_INCLUDE=D:\Dvlp\_Libs\Boost\1_54\include
+set BOOST_LIB=D:\Dvlp\_Libs\Boost\1_54\lib_shared
+set BOOST_LIB_SERIALIZATION_DEBUG=boost_serialization-vc110-mt-gd-1_54
+set BOOST_LIB_SERIALIZATION_RELEASE=boost_serialization-vc110-mt-1_54
+set BOOST_LIB_WIDE_SERIALIZATION_DEBUG=boost_wserialization-vc110-mt-gd-1_54
+set BOOST_LIB_WIDE_SERIALIZATION_RELEASE=boost_wserialization-vc110-mt-1_54
+REM -- LOAD MSVC ENVIRONMENT VARIABLES --
 CALL "C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\vcvarsall.bat" x86
+SET CL=/MP
 CD "..\"
 REM -- BUILD QXORM LIBRARY --
 msbuild ".\QxOrm.sln" /p:Configuration="Debug" /p:Platform="Win32" /t:build /nologo /v:detailed

@@ -29,66 +29,49 @@
 **
 ****************************************************************************/
 
-#ifndef _QX_SQL_COMPARE_H_
-#define _QX_SQL_COMPARE_H_
+#ifndef _QX_SINGLETON_INIT_H_
+#define _QX_SINGLETON_INIT_H_
 
 #ifdef _MSC_VER
 #pragma once
 #endif
 
 /*!
- * \file QxSqlCompare.h
+ * \file QxSingletonInit.h
  * \author Lionel Marty
- * \ingroup QxDao
- * \brief SQL element to compare value (==, <, >, <=, >=, LIKE, NOT LIKE, etc.)
+ * \ingroup QxSingleton
+ * \brief Initialize some singletons hosted by QxOrm shared library
  */
 
-#include <QxDao/QxSqlElement/IxSqlElement.h>
+#include <QxSingleton/QxSingleton.h>
 
-namespace qx {
-namespace dao {
-namespace detail {
+#include <QxRegister/QxClass.h>
 
-/*!
- * \ingroup QxDao
- * \brief qx::dao::detail::QxSqlCompare : SQL element to compare value (==, <, >, <=, >=, LIKE, NOT LIKE, etc.)
- */
-class QX_DLL_EXPORT QxSqlCompare : public IxSqlElement
-{
+#include <QxDataMember/QxDataMemberX.h>
 
-public:
+#include <QxService/IxParameter.h>
+#include <QxService/IxService.h>
+#include <QxService/QxTransaction.h>
 
-   enum type { _is_equal_to, _is_not_equal_to, _is_greater_than, 
-               _is_greater_than_or_equal_to, _is_less_than, _is_less_than_or_equal_to, 
-               _like, _not_like, _starts_with, _ends_with, _contains_string };
+#include <QxTraits/get_base_class.h>
 
-protected:
+QX_DLL_EXPORT_QX_SINGLETON_HPP( qx::QxClass< qx::trait::no_base_class_defined > )
+QX_DLL_EXPORT_QX_SINGLETON_HPP( qx::QxDataMemberX< qx::trait::no_base_class_defined > )
 
-   QxSqlCompare::type m_type;
+QX_DLL_EXPORT_QX_SINGLETON_HPP( qx::QxClass< QObject > )
+QX_DLL_EXPORT_QX_SINGLETON_HPP( qx::QxDataMemberX< QObject > )
 
-public:
+#if _QX_ENABLE_QT_NETWORK_DEPENDENCY
 
-   QxSqlCompare();
-   QxSqlCompare(int index, QxSqlCompare::type t);
-   virtual ~QxSqlCompare();
+QX_DLL_EXPORT_QX_SINGLETON_HPP( qx::QxClass< qx::service::IxParameter > )
+QX_DLL_EXPORT_QX_SINGLETON_HPP( qx::QxDataMemberX< qx::service::IxParameter > )
 
-   virtual QString toString() const;
-   virtual void resolve(QSqlQuery & query) const;
-   virtual void postProcess(QString & sql) const;
+QX_DLL_EXPORT_QX_SINGLETON_HPP( qx::QxClass< qx::service::IxService > )
+QX_DLL_EXPORT_QX_SINGLETON_HPP( qx::QxDataMemberX< qx::service::IxService > )
 
-   virtual IxSqlElement::type_class getTypeClass() const;
+QX_DLL_EXPORT_QX_SINGLETON_HPP( qx::QxClass< qx::service::QxTransaction > )
+QX_DLL_EXPORT_QX_SINGLETON_HPP( qx::QxDataMemberX< qx::service::QxTransaction > )
 
-protected:
+#endif // _QX_ENABLE_QT_NETWORK_DEPENDENCY
 
-   virtual QString getExtraSettings() const;
-   virtual void setExtraSettings(const QString & s);
-
-};
-
-typedef boost::shared_ptr<QxSqlCompare> QxSqlCompare_ptr;
-
-} // namespace detail
-} // namespace dao
-} // namespace qx
-
-#endif // _QX_SQL_COMPARE_H_
+#endif // _QX_SINGLETON_INIT_H_

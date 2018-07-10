@@ -1,6 +1,16 @@
 #ifndef _QX_TEST_QT_META_PROPERTY_H_
 #define _QX_TEST_QT_META_PROPERTY_H_
 
+#ifdef _MSC_VER
+#pragma once
+#endif
+
+#ifdef _QX_NO_PRECOMPILED_HEADER
+#ifndef Q_MOC_RUN
+#include "../include/precompiled.h" // Need to include precompiled header for the generated moc file
+#endif // Q_MOC_RUN
+#endif // _QX_NO_PRECOMPILED_HEADER
+
 class QX_DLL1_EXPORT TestQtProperty : public QObject
 {
 

@@ -91,7 +91,7 @@ private:
       typedef typename type_item::type_value_qx type_value_qx;
       type_item item = qx::trait::generic_container<T>::createItem();
       type_value_qx & item_val = item.value_qx();
-      qx::IxDataMember * pId = dao.getDataId(); qAssert(pId);
+      qx::IxDataMember * pId = dao.getDataId();
       QStringList columns = dao.getSqlColumns();
       if (pId) { for (int i = 0; i < pId->getNameCount(); i++) { QVariant v = dao.query().value(i); qx::cvt::from_variant(v, item.key(), "", i); } }
       qx::dao::on_before_fetch<type_value_qx>((& item_val), (& dao)); if (! dao.isValid()) { return; }

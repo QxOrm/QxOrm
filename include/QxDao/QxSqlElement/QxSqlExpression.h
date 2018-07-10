@@ -67,12 +67,20 @@ protected:
 
 public:
 
+   QxSqlExpression();
    QxSqlExpression(int index, QxSqlExpression::type t);
    virtual ~QxSqlExpression();
 
    virtual QString toString() const;
    virtual void resolve(QSqlQuery & query) const;
    virtual void postProcess(QString & sql) const;
+
+   virtual IxSqlElement::type_class getTypeClass() const;
+
+protected:
+
+   virtual QString getExtraSettings() const;
+   virtual void setExtraSettings(const QString & s);
 
 };
 

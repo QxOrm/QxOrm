@@ -2,12 +2,10 @@
 
 #include <windows.h>
 
-#include "../include/precompiled.h"
-
 extern "C"
 int WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /* lpReservedt */)
 {
-   Q_UNUSED(hInstance);
+   (void)hInstance;
    switch (dwReason)
    {
       case DLL_PROCESS_ATTACH:   ::OutputDebugStringA("dll2.DllMain() ---> DLL_PROCESS_ATTACH\n");  break;

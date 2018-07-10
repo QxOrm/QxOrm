@@ -48,6 +48,8 @@
 #include <boost/tuple/tuple_io.hpp>
 
 #include <boost/serialization/serialization.hpp>
+#include <boost/serialization/split_free.hpp>
+#include <boost/serialization/version.hpp>
 #include <boost/serialization/nvp.hpp>
 
 #include <QtSql/qsqlquery.h>
@@ -56,17 +58,24 @@
 
 #include <QxDao/QxSqlElement/QxSqlElement.h>
 
-#include <QxSerialize/boost/QxSerialize_tuple.h>
-
-#include <QxSerialize/Qt/QxSerialize_QString.h>
-#include <QxSerialize/Qt/QxSerialize_QVariant.h>
-#include <QxSerialize/Qt/QxSerialize_QHash.h>
-#include <QxSerialize/Qt/QxSerialize_QVector.h>
-#include <QxSerialize/Qt/QxSerialize_QFlags.h>
-
-#include <QxSerialize/Qx/QxSerialize_QxCollection.h>
+#include <QxSerialize/QxSerializeFastCompil.h>
 
 #include <QxTraits/get_class_name.h>
+
+namespace qx {
+
+class QxSqlQuery;
+
+} // namespace qx
+
+namespace boost {
+namespace serialization {
+
+template <class Archive> inline void qx_save(Archive & ar, const qx::QxSqlQuery & t, const unsigned int file_version);
+template <class Archive> inline void qx_load(Archive & ar, qx::QxSqlQuery & t, const unsigned int file_version);
+
+} // namespace serialization
+} // namespace boost
 
 namespace qx {
 
@@ -205,7 +214,8 @@ query.dumpSqlResult();
 class QX_DLL_EXPORT QxSqlQuery
 {
 
-   friend class boost::serialization::access;
+   template <class Archive> friend inline void boost::serialization::qx_save(Archive & ar, const qx::QxSqlQuery & t, const unsigned int file_version);
+   template <class Archive> friend inline void boost::serialization::qx_load(Archive & ar, qx::QxSqlQuery & t, const unsigned int file_version);
 
 protected:
 
@@ -369,40 +379,6 @@ private:
    QxSqlQuery & addSqlIsNull(qx::dao::detail::QxSqlIsNull::type type);
    QxSqlQuery & addSqlIsBetween(const QVariant & val1, const QVariant & val2, qx::dao::detail::QxSqlIsBetween::type type);
 
-   template <class Archive>
-   void serialize(Archive & ar, const unsigned int file_version)
-   {
-      Q_UNUSED(file_version);
-      QString sQuery; QHash<QString, int> lstResultPosByKey;
-      QVector< QVector<QVariant> > lstResultValues;
-
-      if (Archive::is_saving::value)
-      {
-         sQuery = this->query();
-         if (m_pSqlResult) { lstResultPosByKey = m_pSqlResult->positionByKey; }
-         if (m_pSqlResult) { lstResultValues = m_pSqlResult->values; }
-      }
-
-      ar & boost::serialization::make_nvp("query", sQuery);
-      ar & boost::serialization::make_nvp("distinct", m_bDistinct);
-      ar & boost::serialization::make_nvp("list_values", m_lstValue);
-      ar & boost::serialization::make_nvp("result_position_by_key", lstResultPosByKey);
-      ar & boost::serialization::make_nvp("result_values", lstResultValues);
-
-      if (Archive::is_loading::value)
-      {
-         m_lstSqlElement.clear();
-         m_sQuery = sQuery;
-         m_pSqlResult.reset();
-         if ((lstResultPosByKey.count() > 0) || (lstResultValues.count() > 0))
-         {
-            m_pSqlResult = boost::shared_ptr<QxSqlResult>(new QxSqlResult());
-            m_pSqlResult->positionByKey = lstResultPosByKey;
-            m_pSqlResult->values = lstResultValues;
-         }
-      }
-   }
-
 };
 
 } // namespace qx
@@ -441,6 +417,10 @@ QX_DLL_EXPORT QSqlError call_query(qx::QxSqlQuery & query, QSqlDatabase * pDatab
 } // namespace qx
 
 QX_REGISTER_CLASS_NAME(qx_query)
+
+BOOST_CLASS_VERSION(qx::QxSqlQuery, 0)
+
+QX_SERIALIZE_FAST_COMPIL_SAVE_LOAD_HPP(QX_DLL_EXPORT, qx::QxSqlQuery)
 
 #define QX_SQL_QUERY_DERIVED_IMPL_COVARIANT_RETURN_TYPE_HPP(className) \
 public: \

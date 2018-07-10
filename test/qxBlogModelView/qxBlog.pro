@@ -5,7 +5,10 @@ DEFINES += _BUILDING_QX_BLOG
 INCLUDEPATH += ../../../QxOrm/include/
 DESTDIR = ../../../QxOrm/test/_bin/
 LIBS += -L"../../../QxOrm/test/_bin"
+
+!contains(DEFINES, _QX_NO_PRECOMPILED_HEADER) {
 PRECOMPILED_HEADER = ./include/precompiled.h
+} # !contains(DEFINES, _QX_NO_PRECOMPILED_HEADER)
 
 greaterThan(QT_MAJOR_VERSION, 4) {
 QT += quick

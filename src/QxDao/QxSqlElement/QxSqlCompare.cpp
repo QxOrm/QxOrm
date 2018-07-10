@@ -41,9 +41,13 @@ namespace qx {
 namespace dao {
 namespace detail {
 
+QxSqlCompare::QxSqlCompare() : IxSqlElement(0), m_type(QxSqlCompare::_is_equal_to) { ; }
+
 QxSqlCompare::QxSqlCompare(int index, QxSqlCompare::type t) : IxSqlElement(index), m_type(t) { ; }
 
 QxSqlCompare::~QxSqlCompare() { ; }
+
+IxSqlElement::type_class QxSqlCompare::getTypeClass() const { return IxSqlElement::_sql_compare; }
 
 QString QxSqlCompare::toString() const
 {
@@ -87,6 +91,10 @@ void QxSqlCompare::resolve(QSqlQuery & query) const
 }
 
 void QxSqlCompare::postProcess(QString & sql) const { Q_UNUSED(sql); }
+
+QString QxSqlCompare::getExtraSettings() const { return QString::number(static_cast<int>(m_type)); }
+
+void QxSqlCompare::setExtraSettings(const QString & s) { m_type = static_cast<QxSqlCompare::type>(s.toInt()); }
 
 } // namespace detail
 } // namespace dao

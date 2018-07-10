@@ -66,12 +66,20 @@ protected:
 
 public:
 
+   QxSqlSort();
    QxSqlSort(int index, QxSqlSort::type t);
    virtual ~QxSqlSort();
 
    virtual QString toString() const;
    virtual void resolve(QSqlQuery & query) const;
    virtual void postProcess(QString & sql) const;
+
+   virtual IxSqlElement::type_class getTypeClass() const;
+
+protected:
+
+   virtual QString getExtraSettings() const;
+   virtual void setExtraSettings(const QString & s);
 
 };
 

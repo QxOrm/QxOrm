@@ -39,9 +39,13 @@ namespace qx {
 namespace dao {
 namespace detail {
 
+QxSqlSort::QxSqlSort() : IxSqlElement(0), m_type(QxSqlSort::_order_asc) { ; }
+
 QxSqlSort::QxSqlSort(int index, QxSqlSort::type t) : IxSqlElement(index), m_type(t) { ; }
 
 QxSqlSort::~QxSqlSort() { ; }
+
+IxSqlElement::type_class QxSqlSort::getTypeClass() const { return IxSqlElement::_sql_sort; }
 
 QString QxSqlSort::toString() const
 {
@@ -76,6 +80,10 @@ QString QxSqlSort::toString() const
 void QxSqlSort::resolve(QSqlQuery & query) const { Q_UNUSED(query); }
 
 void QxSqlSort::postProcess(QString & sql) const { Q_UNUSED(sql); }
+
+QString QxSqlSort::getExtraSettings() const { return QString::number(static_cast<int>(m_type)); }
+
+void QxSqlSort::setExtraSettings(const QString & s) { m_type = static_cast<QxSqlSort::type>(s.toInt()); }
 
 } // namespace detail
 } // namespace dao

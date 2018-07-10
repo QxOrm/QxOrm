@@ -38,6 +38,16 @@
 
 #include <QxCollection/QxCollectionIterator.h>
 
+#include <QxSerialize/boost/QxSerialize_tuple.h>
+
+#include <QxSerialize/Qt/QxSerialize_QString.h>
+#include <QxSerialize/Qt/QxSerialize_QVariant.h>
+#include <QxSerialize/Qt/QxSerialize_QHash.h>
+#include <QxSerialize/Qt/QxSerialize_QVector.h>
+#include <QxSerialize/Qt/QxSerialize_QFlags.h>
+
+#include <QxSerialize/Qx/QxSerialize_QxCollection.h>
+
 #include <QxMemLeak/mem_leak.h>
 
 namespace qx {
@@ -772,3 +782,123 @@ QSqlError call_query(qx::QxSqlQuery & query, QSqlDatabase * pDatabase /* = NULL 
 
 } // namespace dao
 } // namespace qx
+
+qx::dao::detail::IxSqlElement_ptr qx_create_sql_element(qx::dao::detail::IxSqlElement::type_class e)
+{
+   qx::dao::detail::IxSqlElement_ptr p;
+   switch (e)
+   {
+      case qx::dao::detail::IxSqlElement::_sql_compare:           p.reset(new qx::dao::detail::QxSqlCompare()); break;
+      case qx::dao::detail::IxSqlElement::_sql_element_temp:      p.reset(new qx::dao::detail::QxSqlElementTemp()); break;
+      case qx::dao::detail::IxSqlElement::_sql_expression:        p.reset(new qx::dao::detail::QxSqlExpression()); break;
+      case qx::dao::detail::IxSqlElement::_sql_free_text:         p.reset(new qx::dao::detail::QxSqlFreeText()); break;
+      case qx::dao::detail::IxSqlElement::_sql_in:                p.reset(new qx::dao::detail::QxSqlIn()); break;
+      case qx::dao::detail::IxSqlElement::_sql_is_between:        p.reset(new qx::dao::detail::QxSqlIsBetween()); break;
+      case qx::dao::detail::IxSqlElement::_sql_is_null:           p.reset(new qx::dao::detail::QxSqlIsNull()); break;
+      case qx::dao::detail::IxSqlElement::_sql_limit:             p.reset(new qx::dao::detail::QxSqlLimit()); break;
+      case qx::dao::detail::IxSqlElement::_sql_sort:              p.reset(new qx::dao::detail::QxSqlSort()); break;
+      default:                                                    qAssert(false);
+   }
+   return p;
+}
+
+namespace boost {
+namespace serialization {
+
+template <class Archive>
+inline void qx_save(Archive & ar, const qx::QxSqlQuery & t, const unsigned int file_version)
+{
+   Q_UNUSED(file_version);
+   QHash<QString, int> lstResultPosByKey;
+   QVector< QVector<QVariant> > lstResultValues;
+   qx::dao::detail::IxSqlElement::type_class eNoSqlType = qx::dao::detail::IxSqlElement::_no_type;
+
+   if (t.m_pSqlResult)
+   {
+      lstResultPosByKey = t.m_pSqlResult->positionByKey;
+      lstResultValues = t.m_pSqlResult->values;
+   }
+
+   ar << boost::serialization::make_nvp("query", t.m_sQuery);
+   ar << boost::serialization::make_nvp("list_values", t.m_lstValue);
+   ar << boost::serialization::make_nvp("sql_element_index", t.m_iSqlElementIndex);
+   ar << boost::serialization::make_nvp("parenthesis_count", t.m_iParenthesisCount);
+   ar << boost::serialization::make_nvp("distinct", t.m_bDistinct);
+   ar << boost::serialization::make_nvp("result_position_by_key", lstResultPosByKey);
+   ar << boost::serialization::make_nvp("result_values", lstResultValues);
+
+   if (! t.m_pSqlElementTemp)
+   {
+      ar << boost::serialization::make_nvp("sql_element_temp_type", eNoSqlType);
+   }
+   else
+   {
+      qx::dao::detail::IxSqlElement::type_class eTypeSqlElement = t.m_pSqlElementTemp->getTypeClass();
+      ar << boost::serialization::make_nvp("sql_element_temp_type", eTypeSqlElement);
+      t.m_pSqlElementTemp->qxSave(ar);
+   }
+
+   long lSqlElementCount = t.m_lstSqlElement.count();
+   ar << boost::serialization::make_nvp("sql_element_count", lSqlElementCount);
+   Q_FOREACH(qx::dao::detail::IxSqlElement_ptr pSqlElement, t.m_lstSqlElement)
+   {
+      if (! pSqlElement) { ar << boost::serialization::make_nvp("sql_element_type", eNoSqlType); continue; }
+      qx::dao::detail::IxSqlElement::type_class eTypeSqlElement = pSqlElement->getTypeClass();
+      ar << boost::serialization::make_nvp("sql_element_type", eTypeSqlElement);
+      pSqlElement->qxSave(ar);
+   }
+}
+
+template <class Archive>
+inline void qx_load(Archive & ar, qx::QxSqlQuery & t, const unsigned int file_version)
+{
+   Q_UNUSED(file_version);
+   QHash<QString, int> lstResultPosByKey;
+   QVector< QVector<QVariant> > lstResultValues;
+
+   ar >> boost::serialization::make_nvp("query", t.m_sQuery);
+   ar >> boost::serialization::make_nvp("list_values", t.m_lstValue);
+   ar >> boost::serialization::make_nvp("sql_element_index", t.m_iSqlElementIndex);
+   ar >> boost::serialization::make_nvp("parenthesis_count", t.m_iParenthesisCount);
+   ar >> boost::serialization::make_nvp("distinct", t.m_bDistinct);
+   ar >> boost::serialization::make_nvp("result_position_by_key", lstResultPosByKey);
+   ar >> boost::serialization::make_nvp("result_values", lstResultValues);
+
+   t.m_pSqlResult.reset();
+   if ((lstResultPosByKey.count() > 0) || (lstResultValues.count() > 0))
+   {
+      t.m_pSqlResult = boost::shared_ptr<qx::QxSqlQuery::QxSqlResult>(new qx::QxSqlQuery::QxSqlResult());
+      t.m_pSqlResult->positionByKey = lstResultPosByKey;
+      t.m_pSqlResult->values = lstResultValues;
+   }
+
+   t.m_pSqlElementTemp.reset();
+   qx::dao::detail::IxSqlElement::type_class eTypeSqlElement = qx::dao::detail::IxSqlElement::_no_type;
+   ar >> boost::serialization::make_nvp("sql_element_temp_type", eTypeSqlElement);
+   if (eTypeSqlElement != qx::dao::detail::IxSqlElement::_no_type)
+   {
+      t.m_pSqlElementTemp = qx_create_sql_element(eTypeSqlElement); qAssert(t.m_pSqlElementTemp);
+      if (t.m_pSqlElementTemp) { t.m_pSqlElementTemp->qxLoad(ar); }
+   }
+
+   t.m_lstSqlElement.clear(); long lSqlElementCount = 0;
+   ar >> boost::serialization::make_nvp("sql_element_count", lSqlElementCount);
+   t.m_lstSqlElement.reserve(lSqlElementCount);
+   for (long l = 0; l < lSqlElementCount; l++)
+   {
+      qx::dao::detail::IxSqlElement_ptr pSqlElement;
+      eTypeSqlElement = qx::dao::detail::IxSqlElement::_no_type;
+      ar >> boost::serialization::make_nvp("sql_element_type", eTypeSqlElement);
+      if (eTypeSqlElement != qx::dao::detail::IxSqlElement::_no_type)
+      {
+         pSqlElement = qx_create_sql_element(eTypeSqlElement); qAssert(pSqlElement);
+         if (pSqlElement) { pSqlElement->qxLoad(ar); }
+      }
+      t.m_lstSqlElement.append(pSqlElement);
+   }
+}
+
+} // namespace serialization
+} // namespace boost
+
+QX_SERIALIZE_FAST_COMPIL_SAVE_LOAD_CPP(qx::QxSqlQuery)

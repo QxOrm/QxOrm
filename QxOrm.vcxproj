@@ -99,6 +99,7 @@
     <ClCompile Include="src\QxModelView\QxNestedModel.cpp" />
     <ClCompile Include="src\QxSerialize\Qt\QxSerialize_QSqlError.cpp" />
     <ClCompile Include="src\QxSingleton\IxSingleton.cpp" />
+    <ClCompile Include="src\QxSingleton\QxSingletonInit.cpp" />
     <ClCompile Include="src\QxSingleton\QxSingletonX.cpp" />
     <ClCompile Include="src\QxMemLeak\bool_array.cpp" />
     <ClCompile Include="src\QxMemLeak\debug_new.cpp" />
@@ -191,6 +192,7 @@
     <ClInclude Include="include\QxMemLeak.h" />
     <ClInclude Include="include\QxModelView\IxModel.h" />
     <ClInclude Include="include\QxModelView\QxModel.h" />
+    <ClInclude Include="include\QxModelView\QxModelService.h" />
     <ClInclude Include="include\QxModelView\QxNestedModel.h" />
     <ClInclude Include="include\QxOrm.h" />
     <ClInclude Include="include\QxPrecompiled.h" />
@@ -232,6 +234,7 @@
     <ClInclude Include="include\QxSerialize\Qt\QxSerialize_QSqlError.h" />
     <ClInclude Include="include\QxSingleton\IxSingleton.h" />
     <ClInclude Include="include\QxSingleton\QxSingleton.h" />
+    <ClInclude Include="include\QxSingleton\QxSingletonInit.h" />
     <ClInclude Include="include\QxSingleton\QxSingletonX.h" />
     <ClInclude Include="include\QxTraits\archive_printable.h" />
     <ClInclude Include="include\QxTraits\archive_wide_traits.h" />

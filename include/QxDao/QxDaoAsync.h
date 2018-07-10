@@ -43,6 +43,12 @@
  * \brief Helper class to execute SQL queries in another thread (asynchronous way) using qx::IxPersistable interface
  */
 
+#ifdef _QX_NO_PRECOMPILED_HEADER
+#ifndef Q_MOC_RUN
+#include <QxPrecompiled.h> // Need to include precompiled header for the generated moc file
+#endif // Q_MOC_RUN
+#endif // _QX_NO_PRECOMPILED_HEADER
+
 #include <QtCore/qqueue.h>
 
 #include <QtSql/qsqlerror.h>

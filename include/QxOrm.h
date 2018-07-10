@@ -182,5 +182,8 @@
 #include <QxModelView/IxModel.h>
 #include <QxModelView/QxModel.h>
 #include <QxModelView/QxNestedModel.h>
+#include <QxModelView/QxModelService.h>
+
+#include <QxSingleton/QxSingletonInit.h>
 
 #endif // _QX_ORM_H_

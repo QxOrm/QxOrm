@@ -43,9 +43,18 @@
  * \brief Common interface for all SQL elements to build SQL query
  */
 
+#include <boost/serialization/serialization.hpp>
+#include <boost/serialization/split_free.hpp>
+#include <boost/serialization/version.hpp>
+#include <boost/serialization/nvp.hpp>
+
 #include <QtSql/qsqlquery.h>
 
 #include <QxDao/QxSqlGenerator/IxSqlGenerator.h>
+
+#include <QxSerialize/Qt/QxSerialize_QList.h>
+#include <QxSerialize/Qt/QxSerialize_QStringList.h>
+#include <QxSerialize/Qt/QxSerialize_QVariant.h>
 
 namespace qx {
 namespace dao {
@@ -58,12 +67,17 @@ namespace detail {
 class QX_DLL_EXPORT IxSqlElement
 {
 
+public:
+
+   enum type_class { _no_type, _sql_compare, _sql_element_temp, _sql_expression, _sql_free_text, 
+                     _sql_in, _sql_is_between, _sql_is_null, _sql_limit, _sql_sort };
+
 protected:
 
    int               m_iIndex;            //!< Index of SQL element to build unique string
    QStringList       m_lstColumns;        //!< List of columns associated to SQL element
    QStringList       m_lstKeys;           //!< List of keys associated to SQL element
-   QVariantList      m_lstValues;         //!< List of values associated to SQL element
+   QList<QVariant>   m_lstValues;         //!< List of values associated to SQL element
    IxSqlGenerator *  m_pSqlGenerator;     //!< SQL generator to build SQL query specific for each database
 
 public:
@@ -76,15 +90,43 @@ public:
    void setValue(const QVariant & val);
    void setValues(const QVariantList & values);
 
+   virtual IxSqlElement::type_class getTypeClass() const = 0;
+
    virtual QString toString() const = 0;
    virtual void resolve(QSqlQuery & query) const = 0;
    virtual void postProcess(QString & sql) const = 0;
 
    virtual void clone(IxSqlElement * other);
 
+   template <class Archive>
+   void qxSave(Archive & ar) const
+   {
+      QString sExtraSettings = getExtraSettings();
+      ar << boost::serialization::make_nvp("index", m_iIndex);
+      ar << boost::serialization::make_nvp("list_columns", m_lstColumns);
+      ar << boost::serialization::make_nvp("list_keys", m_lstKeys);
+      ar << boost::serialization::make_nvp("list_values", m_lstValues);
+      ar << boost::serialization::make_nvp("extra_settings", sExtraSettings);
+   }
+
+   template <class Archive>
+   void qxLoad(Archive & ar)
+   {
+      QString sExtraSettings;
+      ar >> boost::serialization::make_nvp("index", m_iIndex);
+      ar >> boost::serialization::make_nvp("list_columns", m_lstColumns);
+      ar >> boost::serialization::make_nvp("list_keys", m_lstKeys);
+      ar >> boost::serialization::make_nvp("list_values", m_lstValues);
+      ar >> boost::serialization::make_nvp("extra_settings", sExtraSettings);
+      setExtraSettings(sExtraSettings);
+   }
+
 protected:
 
    void updateKeys();
+
+   virtual QString getExtraSettings() const = 0;
+   virtual void setExtraSettings(const QString & s) = 0;
 
 };
 

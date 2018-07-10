@@ -41,9 +41,13 @@ namespace qx {
 namespace dao {
 namespace detail {
 
+QxSqlIn::QxSqlIn() : IxSqlElement(0), m_type(QxSqlIn::_in) { ; }
+
 QxSqlIn::QxSqlIn(int index, QxSqlIn::type t) : IxSqlElement(index), m_type(t) { ; }
 
 QxSqlIn::~QxSqlIn() { ; }
+
+IxSqlElement::type_class QxSqlIn::getTypeClass() const { return IxSqlElement::_sql_in; }
 
 QString QxSqlIn::toString() const
 {
@@ -90,6 +94,10 @@ void QxSqlIn::resolve(QSqlQuery & query) const
 }
 
 void QxSqlIn::postProcess(QString & sql) const { Q_UNUSED(sql); }
+
+QString QxSqlIn::getExtraSettings() const { return QString::number(static_cast<int>(m_type)); }
+
+void QxSqlIn::setExtraSettings(const QString & s) { m_type = static_cast<QxSqlIn::type>(s.toInt()); }
 
 } // namespace detail
 } // namespace dao

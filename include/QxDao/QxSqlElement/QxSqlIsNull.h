@@ -66,12 +66,20 @@ protected:
 
 public:
 
+   QxSqlIsNull();
    QxSqlIsNull(int index, QxSqlIsNull::type t);
    virtual ~QxSqlIsNull();
 
    virtual QString toString() const;
    virtual void resolve(QSqlQuery & query) const;
    virtual void postProcess(QString & sql) const;
+
+   virtual IxSqlElement::type_class getTypeClass() const;
+
+protected:
+
+   virtual QString getExtraSettings() const;
+   virtual void setExtraSettings(const QString & s);
 
 };
 
