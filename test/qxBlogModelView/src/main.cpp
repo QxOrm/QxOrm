@@ -260,6 +260,10 @@ void init_data()
    daoError = qx::dao::execute_query(testStoredProcThird, category_tmp);
    qAssert(! daoError.isValid()); qAssert(category_tmp->m_id != 0);
    qx::dump(category_tmp);
+
+   // Just to test compilation of nested models
+   qx::IxModel * pNestedModel1 = qx::model_view::create_nested_model(NULL, QModelIndex(), category_tmp);    Q_UNUSED(pNestedModel1);
+   qx::IxModel * pNestedModel2 = qx::model_view::create_nested_model(NULL, QModelIndex(), authorX);         Q_UNUSED(pNestedModel2);
 }
 
 void test_qt_widget()

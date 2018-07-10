@@ -96,6 +96,7 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\QxDao\QxSoftDelete.cpp" />
     <ClCompile Include="src\QxModelView\IxModel.cpp" />
+    <ClCompile Include="src\QxModelView\QxNestedModel.cpp" />
     <ClCompile Include="src\QxSerialize\Qt\QxSerialize_QSqlError.cpp" />
     <ClCompile Include="src\QxSingleton\IxSingleton.cpp" />
     <ClCompile Include="src\QxSingleton\QxSingletonX.cpp" />
@@ -190,6 +191,7 @@
     <ClInclude Include="include\QxMemLeak.h" />
     <ClInclude Include="include\QxModelView\IxModel.h" />
     <ClInclude Include="include\QxModelView\QxModel.h" />
+    <ClInclude Include="include\QxModelView\QxNestedModel.h" />
     <ClInclude Include="include\QxOrm.h" />
     <ClInclude Include="include\QxPrecompiled.h" />
     <ClInclude Include="include\QxCommon\QxAnyCastDynamic.h" />

@@ -37,7 +37,7 @@
                <a href="./tutorial_3.html" class="btn_sub_menu">install QxOrm</a><br/>
                <a href="./tutorial.html" class="btn_sub_menu">qxBlog</a><br/>
                <a href="./tutorial_2.html" class="btn_sub_menu">qxClientServer</a><br/>
-               <a href="./tutorial_4.html" class="btn_sub_menu">QxEntityEditor video</a>
+               <a href="./tutorial_4.html" class="btn_sub_menu">QxEntityEditor videos</a>
             </div>
          </td></tr></tbody></table>
       </td>
@@ -55,11 +55,11 @@
     <table cellspacing="0" cellpadding="1"><col><col><tbody>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow">Version courante :&nbsp;</font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.2.7 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.2.8 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
       </tr>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow"></font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.1.4</font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.1.5</font></td>
       </tr>
     </tbody></table>
   </td>
@@ -2589,7 +2589,7 @@ void</span> MyWidget<span class="operator">::</span>onQueryFinished<span class="
            <li>Qt widgets : utilisation de <i>QTableView</i> ou <i>QListView</i> par exemple pour afficher/modifier le contenu d'une table de base de données ;</li>
            <li>QML : toute propriété enregistrée dans le contexte QxOrm est accessible en QML : le module <b><a href="../doxygen/html/group___qx_model_view.html" target="_blank">QxModelView</a></b> permet ainsi de faciliter l'intéraction entre QML et les bases de données.</li>
            </ul>
-           L'interface <b>qx::IxModel</b> propose une base commune pour tous les modèles liés aux classes persistantes déclarées dans le contexte QxOrm. Les méthodes de cette classe préfixées par '<i>qx</i>' appellent les fonctions du namespace '<i>qx::dao</i>' et communiquent donc directement avec la base de données.<br/>
+           L'interface <a href="../doxygen/html/classqx_1_1_ix_model.html" target="_blank">qx::IxModel</a> propose une base commune pour tous les modèles liés aux classes persistantes déclarées dans le contexte QxOrm. Les méthodes de cette classe préfixées par '<i>qx</i>' appellent les fonctions du namespace '<i>qx::dao</i>' et communiquent donc directement avec la base de données.<br/>
            <br/>
            Le projet de test <i>qxBlogModelView</i> présent dans le dossier <i>./test/</i> du package QxOrm montre comment créer rapidement un modèle et l'associer au moteur <i>model/view</i> de Qt (d'abord dans un widget Qt, puis dans une vue QML).<br/>
            <br/>
@@ -2671,7 +2671,7 @@ Item<span class="operator"> {</span>
            <img alt="qx_model_view_02" src="./resource/qx_model_view_02.png" border="0" /><br/>
            <br/>
            Comme on peut le constater dans le fichier '<i>main.qml</i>', les propriétés '<i>author_id</i>' et '<i>name</i>' du modèle '<i>author</i>' (variable <i>myModel</i>) sont accessibles automatiquement en lecture/écriture (car elles ont été enregistrées dans le contexte QxOrm).<br/>
-           De plus, l'interface <b>qx::IxModel</b> propose une liste de méthodes accessibles en QML (utilisation de <i>Q_INVOKABLE</i>) pour communiquer directement avec la base de données : ainsi, le bouton '<i>Save</i>' de l'écran ci-dessus enregistre le modèle en base de données depuis QML.<br/>
+           De plus, l'interface <a href="../doxygen/html/classqx_1_1_ix_model.html" target="_blank">qx::IxModel</a> propose une liste de méthodes accessibles en QML (utilisation de <i>Q_INVOKABLE</i>) pour communiquer directement avec la base de données : ainsi, le bouton '<i>Save</i>' de l'écran ci-dessus enregistre le modèle en base de données depuis QML.<br/>
            <br/>
            <b>Remarque :</b> un plugin de <b>QxEntityEditor</b> permet de générer automatiquement le code des modèles pour la gestion des relations. Il est ainsi possible de travailler avec des modèles imbriqués.<br/>
            </td>

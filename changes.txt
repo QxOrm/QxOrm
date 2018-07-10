@@ -1,3 +1,8 @@
+Changes in version 1.2.8:
+- New function qx::model_view::create_nested_model (QxModelView module) used by QxEntityEditor to manage complex data structure to work with relationships in QML views and Qt model/view architecture
+- New section in the QxOrm.pri file with some tips to reduce output binaries size
+- Fix the call of triggers to have the inserted ID inside the trigger function with PostgreSQL
+
 Changes in version 1.2.7:
 - New module QxModelView : now, all classes registered into QxOrm context can be used with Qt model/view architecture (Qt widgets and/or QML views)
 - qx::IxModel interface provides an easy way to work on QML with QxOrm library and interact with databases

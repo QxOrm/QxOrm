@@ -152,3 +152,17 @@ LIBS += -l$${QX_BOOST_LIB_SERIALIZATION_DEBUG}
 LIBS += -l$${QX_BOOST_LIB_SERIALIZATION_RELEASE}
 !isEmpty(QX_BOOST_LIB_WIDE_SERIALIZATION_RELEASE) { LIBS += -l$${QX_BOOST_LIB_WIDE_SERIALIZATION_RELEASE} }
 } # CONFIG(debug, debug|release)
+
+#####################################
+# Output binaries size optimization #
+#####################################
+
+# To compile faster classes registered into QxOrm context and to produce smaller binaries size, you should :
+# - define only the _QX_SERIALIZE_BINARY_ENABLED compilation option (and disable the default _QX_SERIALIZE_XML_ENABLED compilation option) ;
+# - if you need the XML engine, you could consider enable only the _QX_SERIALIZE_POLYMORPHIC_ENABLED compilation option ;
+# - under Windows, use MSVC++ instead of MinGW GCC ;
+# - with GCC compiler, use the following optimizations options (uncomment it) :
+
+#QMAKE_CXXFLAGS_RELEASE += -ffunction-sections -fdata-sections -Os -pipe
+#QMAKE_CFLAGS_RELEASE += -ffunction-sections -fdata-sections -Os -pipe
+#QMAKE_LFLAGS_RELEASE += -Wl,--gc-sections -s

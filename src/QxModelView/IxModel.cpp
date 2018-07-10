@@ -37,7 +37,7 @@
 
 namespace qx {
 
-IxModel::IxModel(QObject * parent /* = 0 */) : QAbstractItemModel(parent), m_pClass(NULL), m_pDataMemberX(NULL), m_pDataMemberId(NULL), m_pCollection(NULL) { ; }
+IxModel::IxModel(QObject * parent /* = 0 */) : QAbstractItemModel(parent), m_pClass(NULL), m_pDataMemberX(NULL), m_pDataMemberId(NULL), m_pCollection(NULL), m_pParent(NULL) { ; }
 
 IxModel::~IxModel() { ; }
 
@@ -80,6 +80,8 @@ bool IxModel::setModelValue(int row, const QString & column, const QVariant & va
    QModelIndex idx = this->index(row, iColumnIndex, QModelIndex());
    return setData(idx, value, Qt::EditRole);
 }
+
+void IxModel::setParentModel(IxModel * pParent) { m_pParent = pParent; }
 
 int IxModel::qxCount_(const QString & sQuery) { qx_query query(sQuery); return static_cast<int>(qxCount(query, database(NULL))); }
 
@@ -141,8 +143,37 @@ void IxModel::clear(bool bUpdateColumns /* = false */)
    if (! bUpdateColumns && (m_pCollection->_count() <= 0)) { return; }
    beginResetModel();
    m_pCollection->_clear();
+   for (long l = (m_lstChild.count() - 1); l >= 0; l--)
+   { removeListOfChild(l); }
+   m_lstChild.clear();
    if (bUpdateColumns) { generateRoleNames(); }
    endResetModel();
+}
+
+IxModel * IxModel::getChild(long row, const QString & relation)
+{
+   if ((row < 0) || (row >= m_lstChild.count())) { return NULL; }
+   IxModel::type_relation_by_name child = m_lstChild.at(row);
+   if (! child.contains(relation)) { return NULL; }
+   return child.value(relation);
+}
+
+void IxModel::insertChild(long row, const QString & relation, IxModel * pChild)
+{
+   if (row < 0) { return; }
+   if (relation.isEmpty()) { return; }
+   while (row > (m_lstChild.count() - 1))
+   { IxModel::type_relation_by_name tmp; m_lstChild.append(tmp); }
+   IxModel::type_relation_by_name child = m_lstChild.at(row);
+   child.insert(relation, pChild);
+}
+
+void IxModel::removeListOfChild(long row)
+{
+   if ((row < 0) || (row >= m_lstChild.count())) { return; }
+   IxModel::type_relation_by_name lst = m_lstChild.at(row);
+   Q_FOREACH(IxModel * p, lst) { if (p) { delete p; } }
+   m_lstChild.removeAt(row);
 }
 
 int IxModel::rowCount(const QModelIndex & parent /* = QModelIndex() */) const
@@ -221,7 +252,7 @@ bool IxModel::removeRows(int row, int count, const QModelIndex & parent /* = QMo
    if (parent.isValid() || ! m_pCollection) { return false; }
    beginRemoveRows(QModelIndex(), row, (row + count - 1));
    for (int i = 0; i < count; ++i)
-   { m_pCollection->_remove(row); }
+   { m_pCollection->_remove(row); removeListOfChild(row); }
    endRemoveRows();
    return true;
 }

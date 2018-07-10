@@ -57,8 +57,8 @@ struct QxDao_Update_Generic
       qx::dao::detail::QxSqlQueryHelper_Update<T>::resolveInput(t, dao.query(), dao.builder(), columns);
       if (! query.isEmpty()) { query.resolve(dao.query()); }
       if (! dao.query().exec()) { return dao.errFailed(); }
-      qx::dao::on_after_update<T>((& t), (& dao)); if (! dao.isValid()) { return dao.error(); }
       if (pSqlGenerator) { pSqlGenerator->onAfterUpdate((& dao), (& t)); }
+      qx::dao::on_after_update<T>((& t), (& dao)); if (! dao.isValid()) { return dao.error(); }
 
       return dao.error();
    }
@@ -148,8 +148,8 @@ private:
          qx::dao::detail::QxSqlQueryHelper_Update<U>::resolveInput(item, dao.query(), dao.builder(), columns);
          if (! dao.qxQuery().isEmpty()) { dao.qxQuery().resolve(dao.query()); }
          if (! dao.query().exec()) { dao.errFailed(); return false; }
-         qx::dao::on_after_update<U>((& item), (& dao)); if (! dao.isValid()) { return false; }
          if (pSqlGenerator) { pSqlGenerator->onAfterUpdate((& dao), (& item)); }
+         qx::dao::on_after_update<U>((& item), (& dao)); if (! dao.isValid()) { return false; }
 
          return dao.isValid();
       }

@@ -55,8 +55,8 @@ struct QxDao_DeleteById_Generic
       qx::dao::on_before_delete<T>((& t), (& dao)); if (! dao.isValid()) { return dao.error(); }
       qx::dao::detail::QxSqlQueryHelper_DeleteById<T>::resolveInput(t, dao.query(), dao.builder());
       if (! dao.query().exec()) { return dao.errFailed(); }
-      qx::dao::on_after_delete<T>((& t), (& dao)); if (! dao.isValid()) { return dao.error(); }
       if (pSqlGenerator) { pSqlGenerator->onAfterDelete((& dao), (& t)); }
+      qx::dao::on_after_delete<T>((& t), (& dao)); if (! dao.isValid()) { return dao.error(); }
 
       return dao.error();
    }
@@ -138,8 +138,8 @@ private:
          qx::dao::on_before_delete<U>((& item), (& dao)); if (! dao.isValid()) { return false; }
          qx::dao::detail::QxSqlQueryHelper_DeleteById<U>::resolveInput(item, dao.query(), dao.builder());
          if (! dao.query().exec()) { dao.errFailed(); return false; }
-         qx::dao::on_after_delete<U>((& item), (& dao)); if (! dao.isValid()) { return false; }
          if (pSqlGenerator) { pSqlGenerator->onAfterDelete((& dao), (& item)); }
+         qx::dao::on_after_delete<U>((& item), (& dao)); if (! dao.isValid()) { return false; }
 
          return dao.isValid();
       }

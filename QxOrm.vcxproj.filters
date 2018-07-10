@@ -446,6 +446,9 @@
     <ClCompile Include="src\QxModelView\IxModel.cpp">
       <Filter>src\QxModelView</Filter>
     </ClCompile>
+    <ClCompile Include="src\QxModelView\QxNestedModel.cpp">
+      <Filter>src\QxModelView</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\QxMemLeak.h">
@@ -1217,6 +1220,9 @@
       <Filter>include\QxModelView</Filter>
     </ClInclude>
     <ClInclude Include="include\QxModelView\QxModel.h">
+      <Filter>include\QxModelView</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxModelView\QxNestedModel.h">
       <Filter>include\QxModelView</Filter>
     </ClInclude>
   </ItemGroup>

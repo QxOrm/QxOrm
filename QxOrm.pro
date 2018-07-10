@@ -40,7 +40,7 @@ CONFIG += dll
 DEFINES += _QX_BUILDING_QX_ORM
 PRECOMPILED_HEADER = ./include/QxPrecompiled.h
 
-unix { VERSION = 1.2.7 }
+unix { VERSION = 1.2.8 }
 
 contains(DEFINES, _QX_STATIC_BUILD) {
 CONFIG -= dll
@@ -369,6 +369,7 @@ HEADERS += ./include/QxValidator/QxValidatorX.h
 
 HEADERS += ./include/QxModelView/IxModel.h
 HEADERS += ./include/QxModelView/QxModel.h
+HEADERS += ./include/QxModelView/QxNestedModel.h
 
 HEADERS += ./include/QxOrm.h
 HEADERS += ./include/QxMemLeak.h
@@ -485,5 +486,6 @@ SOURCES += ./src/QxValidator/QxInvalidValue.cpp
 SOURCES += ./src/QxValidator/QxInvalidValueX.cpp
 
 SOURCES += ./src/QxModelView/IxModel.cpp
+SOURCES += ./src/QxModelView/QxNestedModel.cpp
 
 SOURCES += ./src/main.cpp

@@ -48,7 +48,7 @@
 #ifndef Q_MOC_RUN
 #include <QxRegister/IxClass.h>
 #include <QxDataMember/IxDataMemberX.h>
-#include <QxCollection/IxCollection.h>
+#include <QxCollection/QxCollection.h>
 #include <QxDao/IxSqlRelation.h>
 #include <QxDao/QxSqlQuery.h>
 #include <QxDao/QxDao.h>
@@ -146,6 +146,11 @@ class QX_DLL_EXPORT IxModel : public QAbstractItemModel
 
    Q_OBJECT
 
+public:
+
+   typedef QHash<QString, IxModel *> type_relation_by_name;
+   typedef QList<type_relation_by_name> type_lst_relation_by_name;
+
 protected:
 
    IxClass * m_pClass;                          //!< Class introspection registered into QxOrm context associated to the model
@@ -159,6 +164,8 @@ protected:
    QStringList m_lstColumns;                    //!< List of columns exposed by the model (if empty, all columns)
    QSqlDatabase m_database;                     //!< Database connexion to execute SQL queries (if empty, default database connexion)
    QSqlError m_lastError;                       //!< Last SQL error
+   IxModel * m_pParent;                         //!< Parent model, NULL if current model is the root model
+   type_lst_relation_by_name m_lstChild;        //!< List of child model : QxEntityEditor uses this property to manage relationships and create complex data structure
 
 public:
 
@@ -180,6 +187,7 @@ public:
    Q_INVOKABLE void setListOfColumns(const QStringList & lst);
    void setListOfHeaders(const QHash<QString, QString> & lst);
    Q_INVOKABLE bool setModelValue(int row, const QString & column, const QVariant & value);
+   void setParentModel(IxModel * pParent);
 
    virtual long qxCount(const qx::QxSqlQuery & query = qx::QxSqlQuery(), QSqlDatabase * pDatabase = NULL) = 0;
    virtual QSqlError qxCount(long & lCount, const qx::QxSqlQuery & query = qx::QxSqlQuery(), QSqlDatabase * pDatabase = NULL) = 0;
@@ -255,6 +263,9 @@ protected:
 
    void generateRoleNames();
    QSqlDatabase * database(QSqlDatabase * other);
+   IxModel * getChild(long row, const QString & relation);
+   void insertChild(long row, const QString & relation, IxModel * pChild);
+   void removeListOfChild(long row);
 
 };
 

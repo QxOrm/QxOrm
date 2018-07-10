@@ -37,7 +37,7 @@
                <a href="./tutorial_3.html" class="btn_sub_menu">install QxOrm</a><br/>
                <a href="./tutorial.html" class="btn_sub_menu">qxBlog</a><br/>
                <a href="./tutorial_2.html" class="btn_sub_menu">qxClientServer</a><br/>
-               <a href="./tutorial_4.html" class="btn_sub_menu">QxEntityEditor video</a>
+               <a href="./tutorial_4.html" class="btn_sub_menu">QxEntityEditor videos</a>
             </div>
          </td></tr></tbody></table>
       </td>
@@ -55,11 +55,11 @@
     <table cellspacing="0" cellpadding="1"><col><col><tbody>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow">Version courante :&nbsp;</font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.2.7 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.2.8 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
       </tr>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow"></font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.1.4</font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.1.5</font></td>
       </tr>
     </tbody></table>
   </td>
@@ -109,8 +109,14 @@
             <li>De 21 à 30 classes C++ enregistrées dans le contexte QxOrm par application : <i>250&euro;</i> ;</li>
             <li>De 31 à un nombre illimité de classes C++ enregistrées dans le contexte QxOrm par application : <i>300&euro;</i>.</li>
          </ul>
+         La licence QXPL de la bibliothèque QxOrm est une licence par projet (ou par application), peu importe le nombre de développeurs travaillant sur le projet, et peu importe le nombre d'instances déployées de votre logiciel (royalty-free).
+         Par exemple, si vous développez 3 applications différentes basées sur la bibliothèque QxOrm, alors vous devez acquérir 3 licences QXPL (une par projet).<br/>
+         <br/>
          Pour toutes questions ou précisions sur les licences, ou bien pour acquérir la licence <b>QXPL</b>, vous pouvez nous contacter à l'adresse suivante : <a href="mailto:contact@qxorm.com">contact@qxorm.com</a>.<br/>
-         <br/><br/>
+         <br/>
+         <a href="../php/add_download.php5?file_path=QxOrm_1.2.8.zip&file_desc=QxOrm_1.2.8" class="btn_tuto" target="_blank">Télécharger QxOrm 1.2.8</a>
+         <br/>
+         <!--
          <script type="text/javascript">
 function checkForm(f) { f.submit(); return true; }
          </script>
@@ -119,8 +125,9 @@ function checkForm(f) { f.submit(); return true; }
             <input type="text" id="created_by" name="created_by" size="50" maxlength="200" /><br/>
             Aidez nous à améliorer la bibliothèque QxOrm en ajoutant vos remarques et suggestions (optionnel) :<br/>
             <textarea id="message_text" name="message_text" rows="3" cols="50"></textarea><br/>
-            <input type="submit" value="            Télécharger QxOrm 1.2.7            " />
+            <input type="submit" value="            Télécharger QxOrm 1.2.8            " />
          </form>
+         -->
          <br>
       </td>
     </tr>

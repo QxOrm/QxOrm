@@ -53,6 +53,18 @@
 #include <QxTraits/is_qx_registered.h>
 
 namespace qx {
+namespace model_view {
+namespace detail {
+
+template <class T> struct QxNestedModel;
+template <class T> struct QxNestedModel_Generic;
+template <class T> struct QxNestedModel_Container;
+
+} // namespace detail
+} // namespace model_view
+} // namespace qx
+
+namespace qx {
 
 /*!
  * \ingroup QxModelView
@@ -140,6 +152,10 @@ Item {
 template <class T>
 class QxModel : public qx::IxModel
 {
+
+   friend struct qx::model_view::detail::QxNestedModel<T>;
+   friend struct qx::model_view::detail::QxNestedModel_Generic<T>;
+   template <typename U> friend struct qx::model_view::detail::QxNestedModel_Container;
 
 public:
 
