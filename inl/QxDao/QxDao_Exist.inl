@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -42,9 +42,18 @@ struct QxDao_Exist_Generic
       qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "exist", new qx::QxSqlQueryBuilder_Exist<T>());
       if (! dao.isValid()) { return qx_bool(false); }
 
+#ifdef _QX_ENABLE_MONGODB
+      if (dao.isMongoDB())
+      {
+         long cnt = 0; QString json = qx::serialization::json::to_string(t, 1, "mongodb:only_id"); qx_query query(json);
+         qx::dao::mongodb::QxMongoDB_Helper::count((& dao), dao.getDataMemberX()->getClass(), cnt, (& query)); if (! dao.isValid()) { return qx_bool(false); }
+         return qx_bool(cnt >= 1);
+      }
+#endif // _QX_ENABLE_MONGODB
+
       QString sql = dao.builder().buildSql().getSqlQuery();
       if (! dao.getDataId() || sql.isEmpty()) { dao.errEmpty(); return qx_bool(false); }
-      if (! dao.query().prepare(sql)) { dao.errFailed(true); return qx_bool(false); }
+      if (! dao.prepare(sql)) { dao.errFailed(true); return qx_bool(false); }
       qx::dao::detail::QxSqlQueryHelper_Exist<T>::resolveInput(t, dao.query(), dao.builder());
       if (! dao.query().exec()) { dao.errFailed(); return qx_bool(false); }
 
@@ -65,9 +74,18 @@ struct QxDao_Exist_Container
       qx::dao::detail::QxDao_Helper_Container<T> dao(t, pDatabase, "exist", new qx::QxSqlQueryBuilder_Exist<type_item>());
       if (! dao.isValid()) { return qx_bool(false); }
 
+#ifdef _QX_ENABLE_MONGODB
+      if (dao.isMongoDB())
+      {
+         for (typename T::iterator it = t.begin(); it != t.end(); ++it)
+         { if (! existItem((* it), dao)) { return qx_bool(false); } }
+         return qx_bool(true);
+      }
+#endif // _QX_ENABLE_MONGODB
+
       QString sql = dao.builder().buildSql().getSqlQuery();
       if (sql.isEmpty()) { dao.errEmpty(); return qx_bool(false); }
-      if (! dao.query().prepare(sql)) { dao.errFailed(true); return qx_bool(false); }
+      if (! dao.prepare(sql)) { dao.errFailed(true); return qx_bool(false); }
 
       for (typename T::iterator it = t.begin(); it != t.end(); ++it)
       { if (! existItem((* it), dao)) { return qx_bool(false); } }
@@ -121,9 +139,17 @@ private:
    {
       static bool exist(U & item, qx::dao::detail::QxDao_Helper_Container<T> & dao)
       {
+#ifdef _QX_ENABLE_MONGODB
+         if (dao.isMongoDB())
+         {
+            long cnt = 0; QString json = qx::serialization::json::to_string(item, 1, "mongodb:only_id"); qx_query query(json);
+            qx::dao::mongodb::QxMongoDB_Helper::count((& dao), dao.getDataMemberX()->getClass(), cnt, (& query)); if (! dao.isValid()) { return false; }
+            return (cnt >= 1);
+         }
+#endif // _QX_ENABLE_MONGODB
+
          qx::dao::detail::QxSqlQueryHelper_Exist<U>::resolveInput(item, dao.query(), dao.builder());
          if (! dao.query().exec()) { dao.errFailed(); return false; }
-
          return dao.nextRecord();
       }
    };

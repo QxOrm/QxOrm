@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -208,7 +208,7 @@ QxCollection<QString, IxClass *> * QxClassX::getAllClasses()
    return QxClassX::getSingleton()->getAll();
 }
 
-void QxClassX::registerAllClasses()
+void QxClassX::registerAllClasses(bool bInitAllRelations /* = false */)
 {
    QHash<QString, IxFactory *> * pAllFactory = QxFactoryX::getSingleton()->getAllFactory();
    if (! pAllFactory) { qAssert(false); return; }
@@ -220,11 +220,26 @@ void QxClassX::registerAllClasses()
       IxClass * pClass = QxClassX::getClass(itr.key());
       qAssert(pClass != NULL); Q_UNUSED(pClass);
    }
+
+   if (! bInitAllRelations) { return; }
+   QxCollection<QString, IxClass *> * pAllClasses = QxClassX::getSingleton()->getAll();
+   if (! pAllClasses) { qAssert(false); return; }
+
+   for (long k = 0; k < pAllClasses->count(); k++)
+   {
+      IxClass * pClass = pAllClasses->getByIndex(k); if (! pClass) { continue; }
+      IxDataMemberX * pDataMemberX = pClass->getDataMemberX(); if (! pDataMemberX) { continue; }
+      for (long l = 0; l < pDataMemberX->count_WithDaoStrategy(); l++)
+      {
+         IxDataMember * pDataMember = pDataMemberX->get_WithDaoStrategy(l); if (! pDataMember) { continue; }
+         if (isValid_SqlRelation(pDataMember)) { pDataMember->getSqlRelation()->init(); }
+      }
+   }
 }
 
 QString QxClassX::dumpAllClasses()
 {
-   QxClassX::registerAllClasses();
+   QxClassX::registerAllClasses(true);
    QxCollection<QString, IxClass *> * pAllClasses = QxClassX::getAllClasses();
    if (! pAllClasses) { qAssert(false); return ""; }
 

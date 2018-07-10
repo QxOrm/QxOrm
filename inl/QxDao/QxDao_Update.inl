@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -45,11 +45,22 @@ struct QxDao_Update_Generic
       if (! dao.isValidPrimaryKey(t)) { return dao.errInvalidId(); }
       if (! dao.validateInstance(t)) { return dao.error(); }
 
+#ifdef _QX_ENABLE_MONGODB
+      if (dao.isMongoDB())
+      {
+         qx::dao::on_before_update<T>((& t), (& dao)); if (! dao.isValid()) { return dao.error(); }
+         QString ctx = QString("mongodb") + ((columns.count() > 0) ? (QString(":columns{,") + columns.join(",") + QString(",}")) : QString());
+         qx::dao::mongodb::QxMongoDB_Helper::updateOne((& dao), dao.getDataMemberX()->getClass(), qx::serialization::json::to_string(t, 1, ctx), (& query)); if (! dao.isValid()) { return dao.error(); }
+         qx::dao::on_after_update<T>((& t), (& dao)); if (! dao.isValid()) { return dao.error(); }
+         return dao.error();
+      }
+#endif // _QX_ENABLE_MONGODB
+
       QString sql = dao.builder().buildSql(columns).getSqlQuery();
       if (! dao.getDataId() || sql.isEmpty()) { return dao.errEmpty(); }
       if (! query.isEmpty()) { dao.addQuery(query, false); sql = dao.builder().getSqlQuery(); }
       if (! pDatabase) { dao.transaction(); }
-      if (! dao.query().prepare(sql)) { return dao.errFailed(true); }
+      if (! dao.prepare(sql)) { return dao.errFailed(true); }
 
       IxSqlGenerator * pSqlGenerator = dao.getSqlGenerator();
       if (pSqlGenerator) { pSqlGenerator->onBeforeUpdate((& dao), (& t)); }
@@ -79,11 +90,24 @@ struct QxDao_Update_Container
       if (dao.isReadOnly()) { return dao.errReadOnly(); }
       if (! dao.validateInstance(t)) { return dao.error(); }
 
+#ifdef _QX_ENABLE_MONGODB
+      if (dao.isMongoDB())
+      {
+         dao.setSqlColumns(columns);
+         for (typename T::iterator it = t.begin(); it != t.end(); ++it) { if (! updateItem((* it), dao)) { return dao.error(); } }
+         QStringList & itemsAsJson = dao.itemsAsJson();
+         qx::dao::mongodb::QxMongoDB_Helper::updateMany((& dao), dao.getDataMemberX()->getClass(), itemsAsJson, (& query)); if (! dao.isValid()) { return dao.error(); }
+         dao.qxQuery().queryAt(2, "<done>"); dao.itemsAsJson().clear();
+         for (typename T::iterator it = t.begin(); it != t.end(); ++it) { if (! updateItem((* it), dao)) { return dao.error(); } }
+         return dao.error();
+      }
+#endif // _QX_ENABLE_MONGODB
+
       QString sql = dao.builder().buildSql(columns).getSqlQuery();
       if (! dao.getDataId() || sql.isEmpty()) { return dao.errEmpty(); }
       if (! query.isEmpty()) { dao.addQuery(query, false); sql = dao.builder().getSqlQuery(); }
       if (! pDatabase) { dao.transaction(); }
-      if (! dao.query().prepare(sql)) { return dao.errFailed(true); }
+      if (! dao.prepare(sql)) { return dao.errFailed(true); }
       dao.setSqlColumns(columns);
 
       for (typename T::iterator it = t.begin(); it != t.end(); ++it)
@@ -143,6 +167,18 @@ private:
       static bool update(U & item, qx::dao::detail::QxDao_Helper_Container<T> & dao)
       {
          QStringList columns = dao.getSqlColumns();
+
+#ifdef _QX_ENABLE_MONGODB
+         if (dao.isMongoDB())
+         {
+            if (dao.qxQuery().queryAt(2) == "<done>") { qx::dao::on_after_update<U>((& item), (& dao)); return dao.isValid(); }
+            QString ctx = QString("mongodb") + ((columns.count() > 0) ? (QString(":columns{,") + columns.join(",") + QString(",}")) : QString());
+            qx::dao::on_before_update<U>((& item), (& dao)); if (! dao.isValid()) { return false; }
+            dao.itemsAsJson().append(qx::serialization::json::to_string(item, 1, ctx));
+            return dao.isValid();
+         }
+#endif // _QX_ENABLE_MONGODB
+
          if (! dao.isValidPrimaryKey(item)) { dao.errInvalidId(); return false; }
          IxSqlGenerator * pSqlGenerator = dao.getSqlGenerator();
          if (pSqlGenerator) { pSqlGenerator->onBeforeUpdate((& dao), (& item)); }

@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -79,6 +79,7 @@
 #include "./QxDao/QxSession.cpp"
 #include "./QxDao/IxDao_Helper.cpp"
 #include "./QxDao/IxPersistable.cpp"
+#include "./QxDao/IxPersistableCollection.cpp"
 #include "./QxDao/QxSqlRelationLinked.cpp"
 #include "./QxDao/QxDaoAsync.cpp"
 #include "./QxDao/QxSqlRelationParams.cpp"
@@ -108,6 +109,10 @@
 
 #include "./QxDao/QxRepository/IxRepository.cpp"
 #include "./QxDao/QxRepository/QxRepositoryX.cpp"
+
+#ifdef _QX_ENABLE_MONGODB
+#include "./QxDao/QxMongoDB/QxMongoDB_Helper.cpp"
+#endif // _QX_ENABLE_MONGODB
 
 #include "./QxSerialize/QxSerializeCheckInstance.cpp"
 

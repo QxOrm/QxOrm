@@ -1,4 +1,4 @@
-QxOrm library - Copyright (C) 2017 Lionel Marty (contact@qxorm.com)
+QxOrm library - Copyright (C) 2018 Lionel Marty (contact@qxorm.com)
 
 You may use, distribute and copy QxOrm library under the terms of the
 GNU General Public License version 3, which is displayed below

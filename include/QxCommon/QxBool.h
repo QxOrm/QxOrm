@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -74,8 +74,8 @@ class QxBool
    friend class boost::serialization::access;
 #endif // _QX_ENABLE_BOOST_SERIALIZATION
 
-   friend QDataStream & ::operator<< (QDataStream & stream, const qx::QxBool & t);
-   friend QDataStream & ::operator>> (QDataStream & stream, qx::QxBool & t);
+   friend QX_DLL_EXPORT QDataStream & ::operator<< (QDataStream & stream, const qx::QxBool & t);
+   friend QX_DLL_EXPORT QDataStream & ::operator>> (QDataStream & stream, qx::QxBool & t);
 
 private:
 

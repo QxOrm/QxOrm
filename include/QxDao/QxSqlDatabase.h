@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -56,13 +56,15 @@
 
 #include <QxDao/QxSqlGenerator/IxSqlGenerator.h>
 
-#define QX_CONSTRUCT_QX_SQL_DATABASE() \
-m_iPort(-1), m_bTraceSqlQuery(true), m_bTraceSqlRecord(false), \
-m_bTraceSqlBoundValues(false), m_bTraceSqlBoundValuesOnError(true), \
-m_ePlaceHolderStyle(ph_style_2_point_name), m_bSessionThrowable(false), \
-m_bSessionAutoTransaction(true), m_bValidatorThrowable(false), \
-m_bAutoReplaceSqlAliasIntoQuery(true), m_bVerifyOffsetRelation(false), \
-m_bAddAutoIncrementIdToUpdateQuery(true), m_bForceParentIdToAllChildren(false)
+namespace qx {
+namespace dao {
+namespace detail {
+
+class IxDao_Helper;
+
+} // namespace detail
+} // namespace dao
+} // namespace qx
 
 namespace qx {
 
@@ -74,6 +76,7 @@ class QX_DLL_EXPORT QxSqlDatabase : public QxSingleton<QxSqlDatabase>
 {
 
    friend class QxSingleton<QxSqlDatabase>;
+   friend class qx::dao::detail::IxDao_Helper;
 
 public:
 
@@ -83,97 +86,87 @@ public:
 
 private:
 
-   QHash<Qt::HANDLE, QString> m_lstDbByThread;              //!< Collection of databases connexions by thread id
-   QMutex m_oDbMutex;                                       //!< Mutex => 'QxSqlDatabase' is thread-safe
-   QString m_sDriverName;                                   //!< Driver name to connect to database
-   QString m_sConnectOptions;                               //!< Connect options to database
-   QString m_sDatabaseName;                                 //!< Database name
-   QString m_sUserName;                                     //!< Connection's user name
-   QString m_sPassword;                                     //!< Connection's password
-   QString m_sHostName;                                     //!< Connection's host name
-   int m_iPort;                                             //!< Connection's port number
-   bool m_bTraceSqlQuery;                                   //!< Trace each sql query executed
-   bool m_bTraceSqlRecord;                                  //!< Trace each sql record
-   bool m_bTraceSqlBoundValues;                             //!< Trace sql bound values
-   bool m_bTraceSqlBoundValuesOnError;                      //!< Trace sql bound values (only when an error occurred)
-   ph_style m_ePlaceHolderStyle;                            //!< Place holder style to build sql query
-   bool m_bSessionThrowable;                                //!< An exception of type qx::dao::sql_error is thrown when a SQL error is appended to qx::QxSession object
-   bool m_bSessionAutoTransaction;                          //!< A transaction is automatically beginned when a qx::QxSession object is instantiated
-   bool m_bValidatorThrowable;                              //!< An exception of type qx::validator_error is thrown when invalid values are detected inserting or updating an element into database
-   qx::dao::detail::IxSqlGenerator_ptr m_pSqlGenerator;     //!< SQL generator to build SQL query specific for each database
-   bool m_bAutoReplaceSqlAliasIntoQuery;                    //!< Replace all sql alias into sql query automatically
-   bool m_bVerifyOffsetRelation;                            //!< Only for debug purpose : assert if invalid offset detected fetching a relation
-   bool m_bAddAutoIncrementIdToUpdateQuery;                 //!< For Microsoft SqlServer database compatibility : add or not auto-increment id to SQL update query
-   bool m_bForceParentIdToAllChildren;                      //!< Force parent id to all children (for 1-n relationship for example)
-   type_fct_db_open m_fctDatabaseOpen;                      //!< Callback function called when a new database connection is opened (can be used for example with SQLite database to define some PRAGMAs before executing any SQL query)
+   struct QxSqlDatabaseImpl;
+   std::unique_ptr<QxSqlDatabaseImpl> m_pImpl; //!< Private implementation idiom
 
-private:
-
-   QxSqlDatabase() : QxSingleton<QxSqlDatabase>("qx::QxSqlDatabase"), QX_CONSTRUCT_QX_SQL_DATABASE() { ; }
-   virtual ~QxSqlDatabase() { ; }
+   QxSqlDatabase();
+   virtual ~QxSqlDatabase();
 
 public:
 
-   QString getDriverName() const                   { return m_sDriverName; }
-   QString getConnectOptions() const               { return m_sConnectOptions; }
-   QString getDatabaseName() const                 { return m_sDatabaseName; }
-   QString getUserName() const                     { return m_sUserName; }
-   QString getPassword() const                     { return m_sPassword; }
-   QString getHostName() const                     { return m_sHostName; }
-   int getPort() const                             { return m_iPort; }
-   bool getTraceSqlQuery() const                   { return m_bTraceSqlQuery; }
-   bool getTraceSqlRecord() const                  { return m_bTraceSqlRecord; }
-   bool getTraceSqlBoundValues() const             { return m_bTraceSqlBoundValues; }
-   bool getTraceSqlBoundValuesOnError() const      { return m_bTraceSqlBoundValuesOnError; }
-   ph_style getSqlPlaceHolderStyle() const         { return m_ePlaceHolderStyle; }
-   bool getSessionThrowable() const                { return m_bSessionThrowable; }
-   bool getSessionAutoTransaction() const          { return m_bSessionAutoTransaction; }
-   bool getValidatorThrowable() const              { return m_bValidatorThrowable; }
-   bool getAutoReplaceSqlAliasIntoQuery() const    { return m_bAutoReplaceSqlAliasIntoQuery; }
-   bool getVerifyOffsetRelation() const            { return m_bVerifyOffsetRelation; }
-   bool getAddAutoIncrementIdToUpdateQuery() const { return m_bAddAutoIncrementIdToUpdateQuery; }
-   bool getForceParentIdToAllChildren() const      { return m_bForceParentIdToAllChildren; }
-   type_fct_db_open getFctDatabaseOpen() const     { return m_fctDatabaseOpen; }
+   QString getDriverName() const;
+   QString getConnectOptions() const;
+   QString getDatabaseName() const;
+   QString getUserName() const;
+   QString getPassword() const;
+   QString getHostName() const;
+   int getPort() const;
+   bool getTraceSqlQuery() const;
+   bool getTraceSqlRecord() const;
+   bool getTraceSqlBoundValues() const;
+   bool getTraceSqlBoundValuesOnError() const;
+   ph_style getSqlPlaceHolderStyle() const;
+   bool getSessionThrowable() const;
+   bool getSessionAutoTransaction() const;
+   bool getValidatorThrowable() const;
+   bool getAutoReplaceSqlAliasIntoQuery() const;
+   bool getVerifyOffsetRelation() const;
+   bool getAddAutoIncrementIdToUpdateQuery() const;
+   bool getForceParentIdToAllChildren() const;
+   type_fct_db_open getFctDatabaseOpen() const;
+   bool getAddSqlSquareBracketsForTableName() const;
+   bool getAddSqlSquareBracketsForColumnName() const;
+   bool getFormatSqlQueryBeforeLogging() const;
+   QStringList getSqlDelimiterForTableName() const;
+   QStringList getSqlDelimiterForColumnName() const;
+   int getTraceSqlOnlySlowQueriesDatabase() const;
+   int getTraceSqlOnlySlowQueriesTotal() const;
 
-   void setDriverName(const QString & s)                          { m_sDriverName = s; getSqlGenerator(); }
-   void setConnectOptions(const QString & s)                      { m_sConnectOptions = s; }
-   void setDatabaseName(const QString & s)                        { m_sDatabaseName = s; }
-   void setUserName(const QString & s)                            { m_sUserName = s; }
-   void setPassword(const QString & s)                            { m_sPassword = s; }
-   void setHostName(const QString & s)                            { m_sHostName = s; }
-   void setPort(int i)                                            { m_iPort = i; }
-   void setTraceSqlQuery(bool b)                                  { m_bTraceSqlQuery = b; }
-   void setTraceSqlRecord(bool b)                                 { m_bTraceSqlRecord = b; }
-   void setTraceSqlBoundValues(bool b)                            { m_bTraceSqlBoundValues = b; }
-   void setTraceSqlBoundValuesOnError(bool b)                     { m_bTraceSqlBoundValuesOnError = b; }
-   void setSqlPlaceHolderStyle(ph_style e)                        { m_ePlaceHolderStyle = e; }
-   void setSessionThrowable(bool b)                               { m_bSessionThrowable = b; }
-   void setSessionAutoTransaction(bool b)                         { m_bSessionAutoTransaction = b; }
-   void setValidatorThrowable(bool b)                             { m_bValidatorThrowable = b; }
-   void setSqlGenerator(qx::dao::detail::IxSqlGenerator_ptr p)    { m_pSqlGenerator = p; if (p) { p->init(); } }
-   void setAutoReplaceSqlAliasIntoQuery(bool b)                   { m_bAutoReplaceSqlAliasIntoQuery = b; }
-   void setVerifyOffsetRelation(bool b)                           { m_bVerifyOffsetRelation = b; }
-   void setAddAutoIncrementIdToUpdateQuery(bool b)                { m_bAddAutoIncrementIdToUpdateQuery = b; }
-   void setForceParentIdToAllChildren(bool b)                     { m_bForceParentIdToAllChildren = b; }
-   void setFctDatabaseOpen(type_fct_db_open fct)                  { m_fctDatabaseOpen = fct; }
+   void setDriverName(const QString & s, bool bJustForCurrentThread = false, QSqlDatabase * pJustForThisDatabase = NULL);
+   void setConnectOptions(const QString & s, bool bJustForCurrentThread = false, QSqlDatabase * pJustForThisDatabase = NULL);
+   void setDatabaseName(const QString & s, bool bJustForCurrentThread = false, QSqlDatabase * pJustForThisDatabase = NULL);
+   void setUserName(const QString & s, bool bJustForCurrentThread = false, QSqlDatabase * pJustForThisDatabase = NULL);
+   void setPassword(const QString & s, bool bJustForCurrentThread = false, QSqlDatabase * pJustForThisDatabase = NULL);
+   void setHostName(const QString & s, bool bJustForCurrentThread = false, QSqlDatabase * pJustForThisDatabase = NULL);
+   void setPort(int i, bool bJustForCurrentThread = false, QSqlDatabase * pJustForThisDatabase = NULL);
+   void setTraceSqlQuery(bool b, bool bJustForCurrentThread = false, QSqlDatabase * pJustForThisDatabase = NULL);
+   void setTraceSqlRecord(bool b, bool bJustForCurrentThread = false, QSqlDatabase * pJustForThisDatabase = NULL);
+   void setTraceSqlBoundValues(bool b, bool bJustForCurrentThread = false, QSqlDatabase * pJustForThisDatabase = NULL);
+   void setTraceSqlBoundValuesOnError(bool b, bool bJustForCurrentThread = false, QSqlDatabase * pJustForThisDatabase = NULL);
+   void setSqlPlaceHolderStyle(ph_style e, bool bJustForCurrentThread = false, QSqlDatabase * pJustForThisDatabase = NULL);
+   void setSessionThrowable(bool b, bool bJustForCurrentThread = false, QSqlDatabase * pJustForThisDatabase = NULL);
+   void setSessionAutoTransaction(bool b, bool bJustForCurrentThread = false, QSqlDatabase * pJustForThisDatabase = NULL);
+   void setValidatorThrowable(bool b, bool bJustForCurrentThread = false, QSqlDatabase * pJustForThisDatabase = NULL);
+   void setSqlGenerator(qx::dao::detail::IxSqlGenerator_ptr p, bool bJustForCurrentThread = false, QSqlDatabase * pJustForThisDatabase = NULL);
+   void setAutoReplaceSqlAliasIntoQuery(bool b, bool bJustForCurrentThread = false, QSqlDatabase * pJustForThisDatabase = NULL);
+   void setVerifyOffsetRelation(bool b, bool bJustForCurrentThread = false, QSqlDatabase * pJustForThisDatabase = NULL);
+   void setAddAutoIncrementIdToUpdateQuery(bool b, bool bJustForCurrentThread = false, QSqlDatabase * pJustForThisDatabase = NULL);
+   void setForceParentIdToAllChildren(bool b, bool bJustForCurrentThread = false, QSqlDatabase * pJustForThisDatabase = NULL);
+   void setFctDatabaseOpen(type_fct_db_open fct, bool bJustForCurrentThread = false, QSqlDatabase * pJustForThisDatabase = NULL);
+   void setAddSqlSquareBracketsForTableName(bool b, bool bJustForCurrentThread = false, QSqlDatabase * pJustForThisDatabase = NULL);
+   void setAddSqlSquareBracketsForColumnName(bool b, bool bJustForCurrentThread = false, QSqlDatabase * pJustForThisDatabase = NULL);
+   void setFormatSqlQueryBeforeLogging(bool b, bool bJustForCurrentThread = false, QSqlDatabase * pJustForThisDatabase = NULL);
+   void setSqlDelimiterForTableName(const QStringList & lst, bool bJustForCurrentThread = false, QSqlDatabase * pJustForThisDatabase = NULL);
+   void setSqlDelimiterForColumnName(const QStringList & lst, bool bJustForCurrentThread = false, QSqlDatabase * pJustForThisDatabase = NULL);
+   void setTraceSqlOnlySlowQueriesDatabase(int i, bool bJustForCurrentThread = false, QSqlDatabase * pJustForThisDatabase = NULL);
+   void setTraceSqlOnlySlowQueriesTotal(int i, bool bJustForCurrentThread = false, QSqlDatabase * pJustForThisDatabase = NULL);
 
    static QSqlDatabase getDatabase();
    static QSqlDatabase getDatabase(QSqlError & dbError);
    static QSqlDatabase getDatabaseCloned();
    static void closeAllDatabases();
    static void clearAllDatabases();
+   static bool isEmpty();
 
    qx::dao::detail::IxSqlGenerator * getSqlGenerator();
 
-private:
+   void clearAllSettingsForCurrentThread();
+   void clearAllSettingsForDatabase(QSqlDatabase * p);
 
-   QSqlDatabase getDatabaseByCurrThreadId(QSqlError & dbError);
-   QSqlDatabase createDatabase(QSqlError & dbError);
+protected:
 
-   void displayLastError(const QSqlDatabase & db, const QString & sDesc) const;
-   QString formatLastError(const QSqlDatabase & db) const;
-
-   bool isValid() const { return (! m_sDriverName.isEmpty() && ! m_sDatabaseName.isEmpty()); }
+   bool setCurrentDatabaseByThread(QSqlDatabase * p);
+   void clearCurrentDatabaseByThread();
 
 };
 

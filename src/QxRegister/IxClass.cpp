@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -198,7 +198,7 @@ QString IxClass::dumpClass() const
       {
          IxDataMember * p = m_pImpl->m_pDataMemberX->get(l); if (! p) { continue; }
          IxSqlRelation * pRelation = p->getSqlRelation();
-         QString sInfos = p->getKey() + ((p == pId) ? QString(" (id)") : QString());
+         QString sInfos = p->getKey() + ((p == pId) ? QString(" (id)") : QString()) + " - " + p->getType();
          sInfos += (pRelation ? (QString(" (") + pRelation->getDescription() + QString(")")) : QString());
          sDump += "\t\t" + sInfos + "\n";
       }

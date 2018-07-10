@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -69,20 +69,26 @@ void QxSqlLimit::postProcess(QString & sql) const
 
 int QxSqlLimit::getStartRow() const
 {
-   qAssert(m_lstValues.count() == 2);
+   qAssert(m_lstValues.count() >= 2);
    return ((m_lstValues.count() > 0) ? m_lstValues.at(0).toInt() : 0);
 }
 
 int QxSqlLimit::getRowsCount() const
 {
-   qAssert(m_lstValues.count() == 2);
+   qAssert(m_lstValues.count() >= 2);
    return ((m_lstValues.count() > 1) ? m_lstValues.at(1).toInt() : 0);
 }
 
 int QxSqlLimit::getMaxRow() const
 {
-   qAssert(m_lstValues.count() == 2);
+   qAssert(m_lstValues.count() >= 2);
    return ((m_lstValues.count() > 1) ? (m_lstValues.at(0).toInt() + m_lstValues.at(1).toInt()) : 0);
+}
+
+bool QxSqlLimit::getWithTies() const
+{
+   qAssert(m_lstValues.count() >= 3);
+   return ((m_lstValues.count() > 2) ? m_lstValues.at(2).toBool() : false);
 }
 
 QString QxSqlLimit::getStartRow_ParamKey() const

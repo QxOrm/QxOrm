@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -48,6 +48,14 @@ struct QxDao_DeleteAll
       qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "delete all", pBuilder);
       if (! dao.isValid()) { return dao.error(); }
       if (dao.isReadOnly()) { return dao.errReadOnly(); }
+
+#ifdef _QX_ENABLE_MONGODB
+      if (dao.isMongoDB())
+      {
+         qx::dao::mongodb::QxMongoDB_Helper::deleteMany((& dao), dao.getDataMemberX()->getClass(), QStringList(), (& query)); if (! dao.isValid()) { return dao.error(); }
+         return dao.error();
+      }
+#endif // _QX_ENABLE_MONGODB
 
       QString sql = dao.builder().buildSql().getSqlQuery();
       if (sql.isEmpty()) { return dao.errEmpty(); }

@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -52,6 +52,8 @@ QString QxSqlGenerator_Standard::getAutoIncrement() const { return "AUTOINCREMEN
 
 QString QxSqlGenerator_Standard::getWildCard() const { return "%"; }
 
+QString QxSqlGenerator_Standard::getTableAliasSep() const { return " AS "; }
+
 QString QxSqlGenerator_Standard::getLimit(const QxSqlLimit * pLimit) const
 {
    if (! pLimit) { qAssert(false); return ""; }
@@ -86,6 +88,29 @@ void QxSqlGenerator_Standard::onBeforeDelete(IxDao_Helper * pDaoHelper, void * p
 void QxSqlGenerator_Standard::onAfterDelete(IxDao_Helper * pDaoHelper, void * pOwner) const { Q_UNUSED(pDaoHelper); Q_UNUSED(pOwner); }
 
 void QxSqlGenerator_Standard::checkSqlInsert(IxDao_Helper * pDaoHelper, QString & sql) const { Q_UNUSED(pDaoHelper); Q_UNUSED(sql); }
+
+void QxSqlGenerator_Standard::onBeforeSqlPrepare(IxDao_Helper * pDaoHelper, QString & sql) const { Q_UNUSED(pDaoHelper); Q_UNUSED(sql); }
+
+void QxSqlGenerator_Standard::formatSqlQuery(IxDao_Helper * pDaoHelper, QString & sql) const
+{
+   Q_UNUSED(pDaoHelper);
+
+   if (sql.startsWith("SELECT ")) { sql = "\nSELECT " + sql.right(sql.size() - 7); }
+   else if (sql.startsWith("INSERT ")) { sql = "\nINSERT " + sql.right(sql.size() - 7); }
+   else if (sql.startsWith("UPDATE ")) { sql = "\nUPDATE " + sql.right(sql.size() - 7); }
+   else if (sql.startsWith("DELETE ")) { sql = "\nDELETE " + sql.right(sql.size() - 7); }
+   else if (sql.startsWith("CREATE ")) { sql = "\nCREATE " + sql.right(sql.size() - 7); }
+
+   sql.replace(" FROM ", "\n  FROM ");
+   sql.replace(" WHERE ", "\n  WHERE ");
+   sql.replace(" LEFT OUTER JOIN ", "\n  LEFT OUTER JOIN ");
+   sql.replace(" INNER JOIN ", "\n  INNER JOIN ");
+   sql.replace(" ORDER BY ", "\n  ORDER BY ");
+   sql.replace(" GROUP BY ", "\n  GROUP BY ");
+   sql.replace(" AND ", "\n  AND ");
+   sql.replace(" OR ", "\n  OR ");
+   sql += "\n";
+}
 
 } // namespace detail
 } // namespace dao

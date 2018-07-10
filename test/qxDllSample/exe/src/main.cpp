@@ -352,6 +352,18 @@ int main(int argc, char * argv[])
    lDaoCount = pFoo->qxCount();           qAssert(lDaoCount == 7);
    invalidValues = pFoo->qxValidate();    qAssert(invalidValues.count() == 0);
 
+#ifndef _QX_NO_JSON
+   QString fooAsJson = pFoo->toJson(); qDebug("[QxOrm] qx::IxPersistable::toJson() test 1 :\n%s", qPrintable(fooAsJson));
+   qx::IxPersistable * pFooPersistable = static_cast<qx::IxPersistable *>(pFoo.get());
+   fooAsJson = qx::serialization::json::to_string(* pFooPersistable);
+   qDebug("[QxOrm] qx::IxPersistable::toJson() test 2 :\n%s", qPrintable(fooAsJson));
+   qx::IxPersistableCollection_ptr pFooPersistableCollection = qx::IxPersistable::qxFetchAll("Foo");
+   qAssert(pFooPersistableCollection && (pFooPersistableCollection->__count() != 0));
+   fooAsJson = pFooPersistableCollection->toJson();
+   qDebug("[QxOrm] qx::IxPersistableCollection::toJson() test 3 :\n%s", qPrintable(fooAsJson));
+   daoError = pFooPersistableCollection->qxSave(); qAssert(! daoError.isValid());
+#endif // _QX_NO_JSON
+
    Bar_ptr pBar;
    pBar.reset(new Bar()); pBar->setCode("code1"); pBar->setValue("value1"); pBar->setFoo(3); daoError = qx::dao::save(pBar); qAssert(pBar->getId() == 1);
    pBar.reset(new Bar()); pBar->setCode("code2"); pBar->setValue("value2"); pBar->setFoo(3); daoError = qx::dao::save(pBar); qAssert(pBar->getId() == 2);
@@ -504,7 +516,7 @@ int main(int argc, char * argv[])
    //--------------------------------
 
    qAssert(qx::QxClassX::implementIxPersistable("qx::QxPersistable"));
-   qAssert(! qx::QxClassX::implementIxPersistable("Bar"));
+   qAssert(qx::QxClassX::implementIxPersistable("Bar"));
 
    qx::cache::clear();
 

@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -67,7 +67,7 @@ public:
    IxFactory(const QString & sKey);
    virtual ~IxFactory();
 
-   virtual qx::any createObject() const = 0;
+   virtual qx::any createObject(bool bRawPointer = false) const = 0;
    virtual void * createObjectNudePtr() const = 0;
 
 #ifndef _QX_NO_RTTI

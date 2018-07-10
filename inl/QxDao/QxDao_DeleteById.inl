@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -49,9 +49,19 @@ struct QxDao_DeleteById_Generic
       if (dao.isReadOnly()) { return dao.errReadOnly(); }
       if (! dao.isValidPrimaryKey(t)) { return dao.errInvalidId(); }
 
+#ifdef _QX_ENABLE_MONGODB
+      if (dao.isMongoDB())
+      {
+         qx::dao::on_before_delete<T>((& t), (& dao)); if (! dao.isValid()) { return dao.error(); }
+         qx::dao::mongodb::QxMongoDB_Helper::deleteOne((& dao), dao.getDataMemberX()->getClass(), qx::serialization::json::to_string(t, 1, "mongodb:only_id"), NULL); if (! dao.isValid()) { return dao.error(); }
+         qx::dao::on_after_delete<T>((& t), (& dao)); if (! dao.isValid()) { return dao.error(); }
+         return dao.error();
+      }
+#endif // _QX_ENABLE_MONGODB
+
       QString sql = dao.builder().buildSql().getSqlQuery();
       if (! dao.getDataId() || sql.isEmpty()) { return dao.errEmpty(); }
-      if (! dao.query().prepare(sql)) { return dao.errFailed(true); }
+      if (! dao.prepare(sql)) { return dao.errFailed(true); }
 
       IxSqlGenerator * pSqlGenerator = dao.getSqlGenerator();
       if (pSqlGenerator) { pSqlGenerator->onBeforeDelete((& dao), (& t)); }
@@ -84,9 +94,21 @@ struct QxDao_DeleteById_Container
       if (! dao.isValid()) { return dao.error(); }
       if (dao.isReadOnly()) { return dao.errReadOnly(); }
 
+#ifdef _QX_ENABLE_MONGODB
+      if (dao.isMongoDB())
+      {
+         for (typename T::iterator it = t.begin(); it != t.end(); ++it) { if (! deleteItem((* it), dao)) { return dao.error(); } }
+         QStringList & itemsAsJson = dao.itemsAsJson();
+         qx::dao::mongodb::QxMongoDB_Helper::deleteMany((& dao), dao.getDataMemberX()->getClass(), itemsAsJson, NULL); if (! dao.isValid()) { return dao.error(); }
+         dao.qxQuery().queryAt(2, "<done>"); dao.itemsAsJson().clear();
+         for (typename T::iterator it = t.begin(); it != t.end(); ++it) { if (! deleteItem((* it), dao)) { return dao.error(); } }
+         return dao.error();
+      }
+#endif // _QX_ENABLE_MONGODB
+
       QString sql = dao.builder().buildSql().getSqlQuery();
       if (sql.isEmpty()) { return dao.errEmpty(); }
-      if (! dao.query().prepare(sql)) { return dao.errFailed(true); }
+      if (! dao.prepare(sql)) { return dao.errFailed(true); }
 
       for (typename T::iterator it = t.begin(); it != t.end(); ++it)
       { if (! deleteItem((* it), dao)) { return dao.error(); } }
@@ -141,6 +163,18 @@ private:
       static bool deleteById(U & item, qx::dao::detail::QxDao_Helper_Container<T> & dao)
       {
          if (! dao.isValidPrimaryKey(item)) { dao.errInvalidId(); return false; }
+
+#ifdef _QX_ENABLE_MONGODB
+         if (dao.isMongoDB())
+         {
+            if (dao.qxQuery().queryAt(2) == "<done>") { qx::dao::on_after_delete<U>((& item), (& dao)); return dao.isValid(); }
+            qx::dao::on_before_delete<U>((& item), (& dao)); if (! dao.isValid()) { return false; }
+            QVariant id = (dao.getDataId() ? dao.getDataId()->toVariant(& item) : QVariant());
+            if (! id.isNull() && ! id.toString().isEmpty()) { dao.itemsAsJson().append(id.toString()); }
+            return dao.isValid();
+         }
+#endif // _QX_ENABLE_MONGODB
+
          IxSqlGenerator * pSqlGenerator = dao.getSqlGenerator();
          if (pSqlGenerator) { pSqlGenerator->onBeforeDelete((& dao), (& item)); }
          qx::dao::on_before_delete<U>((& item), (& dao)); if (! dao.isValid()) { return false; }

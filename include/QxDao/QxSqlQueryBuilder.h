@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -56,11 +56,13 @@
 #define QX_SQL_ERR_NO_ID_REGISTERED             "'QxSqlQueryBuilder<T>' error : no id registered"
 
 #define QX_SQL_BUILDER_INIT_FCT(oper) \
+QMutexLocker locker(& IxSqlQueryBuilder::getMutex()); \
 QString key = QxClass<type_sql>::getSingleton()->getKey() + oper; \
 QString sql = IxSqlQueryBuilder::listSqlQuery().value(key); \
 if (! sql.isEmpty()) { this->setSqlQuery(sql); return (* this); }
 
 #define QX_SQL_BUILDER_INIT_FCT_WITH_RELATION(oper) \
+QMutexLocker locker(& IxSqlQueryBuilder::getMutex()); \
 QString key = QxClass<type_sql>::getSingleton()->getKey() + this->getHashRelation() + oper; \
 QString sql = IxSqlQueryBuilder::listSqlQuery().value(key); \
 if (! sql.isEmpty()) { this->setSqlQuery(sql); this->listSqlQueryAlias() = IxSqlQueryBuilder::listSqlAlias().value(key); return (* this); }

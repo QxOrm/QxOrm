@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -56,14 +56,22 @@ namespace detail {
 class QX_DLL_EXPORT QxSqlGenerator_Oracle : public QxSqlGenerator_Standard
 {
 
+protected:
+
+   bool m_bOldLimitSyntax;    //!< Use old limit syntax (for Oracle version < 12.1), more details here : https://stackoverflow.com/questions/470542/how-do-i-limit-the-number-of-rows-returned-by-an-oracle-query-after-ordering
+
 public:
 
    QxSqlGenerator_Oracle();
    virtual ~QxSqlGenerator_Oracle();
 
+   virtual QString getTableAliasSep() const;
    virtual QString getLimit(const QxSqlLimit * pLimit) const;
    virtual void resolveLimit(QSqlQuery & query, const QxSqlLimit * pLimit) const;
    virtual void postProcess(QString & sql, const QxSqlLimit * pLimit) const;
+
+   bool getOldLimitSyntax() const;
+   void setOldLimitSyntax(bool b);
 
 private:
 

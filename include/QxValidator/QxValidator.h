@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -57,8 +57,8 @@ QxInvalidValueX validate(T & t, const QString & group);
  * \ingroup QxValidator
  * \brief qx::QxValidator<Owner> : concrete class for a custom validator
  *
- * For more informations about <b>QxValidator module</b>, <a href="http://www.qxorm.com/qxorm_en/faq.html#faq_250" target="_blank">goto the FAQ of QxOrm website</a> :
- * <a href="http://www.qxorm.com/qxorm_en/faq.html#faq_250" target="_blank">http://www.qxorm.com/qxorm_en/faq.html#faq_250</a>
+ * For more informations about <b>QxValidator module</b>, <a href="https://www.qxorm.com/qxorm_en/faq.html#faq_250" target="_blank">goto the FAQ of QxOrm website</a> :
+ * <a href="https://www.qxorm.com/qxorm_en/faq.html#faq_250" target="_blank">https://www.qxorm.com/qxorm_en/faq.html#faq_250</a>
  */
 template <class Owner>
 class QxValidator : public IxValidator
@@ -101,8 +101,8 @@ public:
  * \ingroup QxValidator
  * \brief qx::QxValidator_WithDataType<DataType, Owner> : concrete class for a custom validator with data type
  *
- * For more informations about <b>QxValidator module</b>, <a href="http://www.qxorm.com/qxorm_en/faq.html#faq_250" target="_blank">goto the FAQ of QxOrm website</a> :
- * <a href="http://www.qxorm.com/qxorm_en/faq.html#faq_250" target="_blank">http://www.qxorm.com/qxorm_en/faq.html#faq_250</a>
+ * For more informations about <b>QxValidator module</b>, <a href="https://www.qxorm.com/qxorm_en/faq.html#faq_250" target="_blank">goto the FAQ of QxOrm website</a> :
+ * <a href="https://www.qxorm.com/qxorm_en/faq.html#faq_250" target="_blank">https://www.qxorm.com/qxorm_en/faq.html#faq_250</a>
  */
 template <typename DataType, class Owner>
 class QxValidator_WithDataType : public IxValidator
@@ -143,8 +143,8 @@ public:
  * \ingroup QxValidator
  * \brief qx::QxValidator_Recursive<DataType, Owner> : concrete class for a recursive validator
  *
- * For more informations about <b>QxValidator module</b>, <a href="http://www.qxorm.com/qxorm_en/faq.html#faq_250" target="_blank">goto the FAQ of QxOrm website</a> :
- * <a href="http://www.qxorm.com/qxorm_en/faq.html#faq_250" target="_blank">http://www.qxorm.com/qxorm_en/faq.html#faq_250</a>
+ * For more informations about <b>QxValidator module</b>, <a href="https://www.qxorm.com/qxorm_en/faq.html#faq_250" target="_blank">goto the FAQ of QxOrm website</a> :
+ * <a href="https://www.qxorm.com/qxorm_en/faq.html#faq_250" target="_blank">https://www.qxorm.com/qxorm_en/faq.html#faq_250</a>
  */
 template <typename DataType, class Owner>
 class QxValidator_Recursive : public IxValidator

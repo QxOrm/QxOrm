@@ -1,14 +1,14 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v3
-# $Header: /var/cvsroot/gentoo-x86/dev-cpp/qxorm/qxorm-1.4.4-r1.ebuild,v 1.4.4-r1 2011/04/04 $
+# $Header: /var/cvsroot/gentoo-x86/dev-cpp/qxorm/qxorm-1.4.5-r1.ebuild,v 1.4.5-r1 2011/04/04 $
 
 EAPI="2"
 
 inherit qt4-r2
 
 DESCRIPTION="C++ Object Relational Mapping library"
-HOMEPAGE="http://www.qxorm.com/"
-SRC_URI="http://www.qxorm.com/version/QxOrm_${PV}.zip"
+HOMEPAGE="https://www.qxorm.com/"
+SRC_URI="https://www.qxorm.com/version/QxOrm_${PV}.zip"
 S=${WORKDIR}/QxOrm
 
 LICENSE="GPL-3"

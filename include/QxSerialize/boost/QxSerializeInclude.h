@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -71,11 +71,6 @@
 #include <boost/archive/xml_oarchive.hpp>
 #endif // _QX_SERIALIZE_XML
 
-#if _QX_SERIALIZE_PORTABLE_BINARY
-#include <QxSerialize/boost/portable_binary/portable_iarchive.hpp>
-#include <QxSerialize/boost/portable_binary/portable_oarchive.hpp>
-#endif // _QX_SERIALIZE_PORTABLE_BINARY
-
 #if _QX_SERIALIZE_WIDE_BINARY
 #include <boost/archive/binary_wiarchive.hpp>
 #include <boost/archive/binary_woarchive.hpp>
@@ -90,6 +85,11 @@
 #include <boost/archive/xml_wiarchive.hpp>
 #include <boost/archive/xml_woarchive.hpp>
 #endif // _QX_SERIALIZE_WIDE_XML
+
+#if _QX_SERIALIZE_PORTABLE_BINARY
+#include <QxSerialize/boost/portable_binary/portable_iarchive.hpp>
+#include <QxSerialize/boost/portable_binary/portable_oarchive.hpp>
+#endif // _QX_SERIALIZE_PORTABLE_BINARY
 
 #ifndef _QX_BOOST_ARCHIVE_SERIALIZER_IMPL_DEFINED_
 #define _QX_BOOST_ARCHIVE_SERIALIZER_IMPL_DEFINED_

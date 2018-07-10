@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -57,9 +57,18 @@ struct QxDao_Update_Optimized_Container
       { return qx::dao::update_by_query(query, (* ptr), pDatabase); }
 
       QStringList lstDiffItem; QSqlError errorItem;
-      QSqlDatabase db = (pDatabase ? (* pDatabase) : qx::QxSqlDatabase::getDatabase(errorItem));
-      if (errorItem.isValid()) { return errorItem; }
-      if (! pDatabase) { db.transaction(); }
+      QSqlDatabase db; bool bCheckDatabaseTransaction = true;
+
+#ifdef _QX_ENABLE_MONGODB
+      if (qx::QxSqlDatabase::getSingleton()->getDriverName() == "QXMONGODB") { bCheckDatabaseTransaction = false; }
+#endif // _QX_ENABLE_MONGODB
+
+      if (bCheckDatabaseTransaction)
+      {
+         db = (pDatabase ? (* pDatabase) : qx::QxSqlDatabase::getDatabase(errorItem));
+         if (errorItem.isValid()) { return errorItem; }
+         if (! pDatabase) { db.transaction(); }
+      }
 
       typename T::const_iterator it2 = ptr.getOriginal()->begin();
       for (typename T::const_iterator it1 = ptr->begin(); it1 != ptr->end(); ++it1)
@@ -71,8 +80,12 @@ struct QxDao_Update_Optimized_Container
          else { ++it2; }
       }
 
-      if (! pDatabase && ! errorItem.isValid()) { db.commit(); }
-      else if (! pDatabase) { db.rollback(); }
+      if (bCheckDatabaseTransaction)
+      {
+         if (! pDatabase && ! errorItem.isValid()) { db.commit(); }
+         else if (! pDatabase) { db.rollback(); }
+      }
+
       return errorItem;
    }
 

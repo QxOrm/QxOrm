@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -722,7 +722,7 @@ inline QSqlError execute_query(qx::QxSqlQuery & query, T & t, QSqlDatabase * pDa
 
 /*!
  * \ingroup QxDao
- * \brief Callback before inserting an object into database (<a href="http://www.qxorm.com/qxorm_en/faq.html#faq_130" target="_blank">here is an example using QxOrm Trigger</a>)
+ * \brief Callback before inserting an object into database (<a href="https://www.qxorm.com/qxorm_en/faq.html#faq_130" target="_blank">here is an example using QxOrm Trigger</a>)
  */
 template <class T>
 inline void on_before_insert(T * t, qx::dao::detail::IxDao_Helper * dao)
@@ -730,7 +730,7 @@ inline void on_before_insert(T * t, qx::dao::detail::IxDao_Helper * dao)
 
 /*!
  * \ingroup QxDao
- * \brief Callback before updating an object into database (<a href="http://www.qxorm.com/qxorm_en/faq.html#faq_130" target="_blank">here is an example using QxOrm Trigger</a>)
+ * \brief Callback before updating an object into database (<a href="https://www.qxorm.com/qxorm_en/faq.html#faq_130" target="_blank">here is an example using QxOrm Trigger</a>)
  */
 template <class T>
 inline void on_before_update(T * t, qx::dao::detail::IxDao_Helper * dao)
@@ -738,7 +738,7 @@ inline void on_before_update(T * t, qx::dao::detail::IxDao_Helper * dao)
 
 /*!
  * \ingroup QxDao
- * \brief Callback before deleting an object into database (<a href="http://www.qxorm.com/qxorm_en/faq.html#faq_130" target="_blank">here is an example using QxOrm Trigger</a>)
+ * \brief Callback before deleting an object into database (<a href="https://www.qxorm.com/qxorm_en/faq.html#faq_130" target="_blank">here is an example using QxOrm Trigger</a>)
  */
 template <class T>
 inline void on_before_delete(T * t, qx::dao::detail::IxDao_Helper * dao)
@@ -746,7 +746,7 @@ inline void on_before_delete(T * t, qx::dao::detail::IxDao_Helper * dao)
 
 /*!
  * \ingroup QxDao
- * \brief Callback before fetching an object from database (<a href="http://www.qxorm.com/qxorm_en/faq.html#faq_130" target="_blank">here is an example using QxOrm Trigger</a>)
+ * \brief Callback before fetching an object from database (<a href="https://www.qxorm.com/qxorm_en/faq.html#faq_130" target="_blank">here is an example using QxOrm Trigger</a>)
  */
 template <class T>
 inline void on_before_fetch(T * t, qx::dao::detail::IxDao_Helper * dao)
@@ -754,7 +754,7 @@ inline void on_before_fetch(T * t, qx::dao::detail::IxDao_Helper * dao)
 
 /*!
  * \ingroup QxDao
- * \brief Callback after inserting an object into database (<a href="http://www.qxorm.com/qxorm_en/faq.html#faq_130" target="_blank">here is an example using QxOrm Trigger</a>)
+ * \brief Callback after inserting an object into database (<a href="https://www.qxorm.com/qxorm_en/faq.html#faq_130" target="_blank">here is an example using QxOrm Trigger</a>)
  */
 template <class T>
 inline void on_after_insert(T * t, qx::dao::detail::IxDao_Helper * dao)
@@ -762,7 +762,7 @@ inline void on_after_insert(T * t, qx::dao::detail::IxDao_Helper * dao)
 
 /*!
  * \ingroup QxDao
- * \brief Callback after updating an object into database (<a href="http://www.qxorm.com/qxorm_en/faq.html#faq_130" target="_blank">here is an example using QxOrm Trigger</a>)
+ * \brief Callback after updating an object into database (<a href="https://www.qxorm.com/qxorm_en/faq.html#faq_130" target="_blank">here is an example using QxOrm Trigger</a>)
  */
 template <class T>
 inline void on_after_update(T * t, qx::dao::detail::IxDao_Helper * dao)
@@ -770,7 +770,7 @@ inline void on_after_update(T * t, qx::dao::detail::IxDao_Helper * dao)
 
 /*!
  * \ingroup QxDao
- * \brief Callback after deleting an object into database (<a href="http://www.qxorm.com/qxorm_en/faq.html#faq_130" target="_blank">here is an example using QxOrm trigger</a>)
+ * \brief Callback after deleting an object into database (<a href="https://www.qxorm.com/qxorm_en/faq.html#faq_130" target="_blank">here is an example using QxOrm trigger</a>)
  */
 template <class T>
 inline void on_after_delete(T * t, qx::dao::detail::IxDao_Helper * dao)
@@ -778,7 +778,7 @@ inline void on_after_delete(T * t, qx::dao::detail::IxDao_Helper * dao)
 
 /*!
  * \ingroup QxDao
- * \brief Callback after fetching an object from database (<a href="http://www.qxorm.com/qxorm_en/faq.html#faq_130" target="_blank">here is an example using QxOrm trigger</a>)
+ * \brief Callback after fetching an object from database (<a href="https://www.qxorm.com/qxorm_en/faq.html#faq_130" target="_blank">here is an example using QxOrm trigger</a>)
  */
 template <class T>
 inline void on_after_fetch(T * t, qx::dao::detail::IxDao_Helper * dao)

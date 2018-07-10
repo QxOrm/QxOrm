@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -90,6 +90,11 @@ qx_bool QxDataMember_QObject::fromVariant(void * pOwner, const QVariant & v, con
 {
    Q_UNUSED(sFormat); Q_UNUSED(iIndexName); Q_UNUSED(ctx);
    return m_metaProperty.write(static_cast<QObject *>(pOwner), v);
+}
+
+QString QxDataMember_QObject::getType() const
+{
+   return QString(m_metaProperty.typeName());
 }
 
 #ifndef _QX_NO_JSON

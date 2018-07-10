@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -83,17 +83,35 @@ template <> struct QxConvert_FromJson< unsigned long long > {
 static inline qx_bool fromJson(const QJsonValue & j, unsigned long long & t, const QString & format)
 { Q_UNUSED(format); t = static_cast<unsigned long long>(qRound64(j.toDouble())); return qx_bool(true); } };
 
+template <> struct QxConvert_FromJson< QDateTime > {
+static inline qx_bool fromJson(const QJsonValue & j, QDateTime & t, const QString & format)
+{
+#ifdef _QX_ENABLE_MONGODB
+   if ((j.isObject()) && (format.left(7) == "mongodb"))
+   {
+      QJsonObject obj = j.toObject(); QString dt;
+      if (obj.contains("$date")) { dt = obj.value("$date").toString(); }
+      if (! dt.isEmpty()) { t = QDateTime::fromString(dt, Qt::ISODate); return qx_bool(true); }
+   }
+#endif // _QX_ENABLE_MONGODB
+
+   Q_UNUSED(format); t = (j.isNull() ? QDateTime() : QDateTime::fromString(j.toString(), Qt::ISODate)); return qx_bool(true); }
+};
+
 template <> struct QxConvert_FromJson< QDate > {
 static inline qx_bool fromJson(const QJsonValue & j, QDate & t, const QString & format)
-{ Q_UNUSED(format); t = (j.isNull() ? QDate() : QDate::fromString(j.toString(), Qt::ISODate)); return qx_bool(true); } };
+{
+#ifdef _QX_ENABLE_MONGODB
+   if ((j.isObject()) && (format.left(7) == "mongodb"))
+   { QDateTime dt; QxConvert_FromJson<QDateTime>::fromJson(j, dt, format); t = dt.date(); return qx_bool(true); }
+#endif // _QX_ENABLE_MONGODB
+
+   Q_UNUSED(format); t = (j.isNull() ? QDate() : QDate::fromString(j.toString(), Qt::ISODate)); return qx_bool(true); }
+};
 
 template <> struct QxConvert_FromJson< QTime > {
 static inline qx_bool fromJson(const QJsonValue & j, QTime & t, const QString & format)
 { Q_UNUSED(format); t = (j.isNull() ? QTime() : QTime::fromString(j.toString(), Qt::ISODate)); return qx_bool(true); } };
-
-template <> struct QxConvert_FromJson< QDateTime > {
-static inline qx_bool fromJson(const QJsonValue & j, QDateTime & t, const QString & format)
-{ Q_UNUSED(format); t = (j.isNull() ? QDateTime() : QDateTime::fromString(j.toString(), Qt::ISODate)); return qx_bool(true); } };
 
 template <> struct QxConvert_FromJson< QByteArray > {
 static inline qx_bool fromJson(const QJsonValue & j, QByteArray & t, const QString & format)
@@ -101,7 +119,20 @@ static inline qx_bool fromJson(const QJsonValue & j, QByteArray & t, const QStri
 
 template <> struct QxConvert_FromJson< QString > {
 static inline qx_bool fromJson(const QJsonValue & j, QString & t, const QString & format)
-{ Q_UNUSED(format); t = j.toString(); return qx_bool(true); } };
+{
+   Q_UNUSED(format); t = j.toString();
+
+#ifdef _QX_ENABLE_MONGODB
+   if (t.isEmpty() && j.isObject() && (format.left(7) == "mongodb"))
+   {
+      QJsonObject obj = j.toObject();
+      if (obj.contains("$oid")) { t = obj.value("$oid").toString(); }
+      if (! t.isEmpty()) { t = "qx_oid:" + t; }
+   }
+#endif // _QX_ENABLE_MONGODB
+
+   return qx_bool(true);
+} };
 
 template <> struct QxConvert_FromJson< QVariant > {
 static inline qx_bool fromJson(const QJsonValue & j, QVariant & t, const QString & format)

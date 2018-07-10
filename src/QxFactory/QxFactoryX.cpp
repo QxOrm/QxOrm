@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -56,12 +56,12 @@ void QxFactoryX::unregisterFactory(const QString & sKey)
    m_mapFactoryX.remove(sKey);
 }
 
-qx::any QxFactoryX::createObject(const QString & sKey) const
+qx::any QxFactoryX::createObject(const QString & sKey, bool bRawPointer /* = false */) const
 {
    IxFactory * pFactory = (m_mapFactoryX.contains(sKey) ? m_mapFactoryX.value(sKey) : NULL);
    if (! pFactory) { qDebug("[QxOrm] cannot create an instance of type '%s'", qPrintable(sKey)); }
 
-   return (pFactory ? pFactory->createObject() : qx::any());
+   return (pFactory ? pFactory->createObject(bRawPointer) : qx::any());
 }
 
 void * QxFactoryX::createObjectNudePtr(const QString & sKey) const

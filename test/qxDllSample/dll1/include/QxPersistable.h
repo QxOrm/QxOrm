@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -140,7 +140,7 @@ public:
    virtual QSqlError qxDestroyByQuery(const qx::QxSqlQuery & query, QSqlDatabase * pDatabase = NULL);
    virtual qx_bool qxExist(const QVariant & id = QVariant(), QSqlDatabase * pDatabase = NULL);
    virtual qx::QxInvalidValueX qxValidate(const QStringList & groups = QStringList());
-   virtual qx::IxCollection_ptr qxNewPersistableCollection() const;
+   virtual qx::IxPersistableCollection_ptr qxNewPersistableCollection() const;
    virtual qx::IxClass * qxClass() const;
 */
 

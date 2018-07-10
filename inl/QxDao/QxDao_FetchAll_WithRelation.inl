@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -45,6 +45,18 @@ struct QxDao_FetchAll_WithRelation_Generic
       type_dao_helper dao(t, pDatabase, "fetch all with relation", new qx::QxSqlQueryBuilder_FetchAll_WithRelation<T>());
       if (! dao.isValid()) { return dao.error(); }
       if (! dao.updateSqlRelationX(relation)) { return dao.errInvalidRelation(); }
+
+#ifdef _QX_ENABLE_MONGODB
+      if (dao.isMongoDB())
+      {
+         qx::dao::on_before_fetch<T>((& t), (& dao)); if (! dao.isValid()) { return dao.error(); }
+         QString json = qx::serialization::json::to_string(t, 1, "mongodb:only_id");
+         qx::dao::mongodb::QxMongoDB_Helper::findOne((& dao), dao.getDataMemberX()->getClass(), json, (& query)); if (! dao.isValid()) { return dao.error(); }
+         qx::serialization::json::from_string(t, json, 1, "mongodb");
+         qx::dao::on_after_fetch<T>((& t), (& dao)); if (! dao.isValid()) { return dao.error(); }
+         return dao.error();
+      }
+#endif // _QX_ENABLE_MONGODB
 
       QStringList columns;
       QString sql = dao.builder().buildSql(columns, dao.getSqlRelationLinked()).getSqlQuery();
@@ -97,6 +109,17 @@ struct QxDao_FetchAll_WithRelation_Container
       if (! dao.isValid()) { return dao.error(); }
       if (! dao.updateSqlRelationX(relation)) { return dao.errInvalidRelation(); }
 
+#ifdef _QX_ENABLE_MONGODB
+      if (dao.isMongoDB())
+      {
+         QStringList & itemsAsJson = dao.itemsAsJson();
+         qx::dao::mongodb::QxMongoDB_Helper::findMany((& dao), dao.getDataMemberX()->getClass(), itemsAsJson, (& query)); if (! dao.isValid()) { return dao.error(); }
+         qx::trait::generic_container<T>::reserve(t, itemsAsJson.size());
+         for (int i = (itemsAsJson.size() - 1); i >= 0; i--) { insertHelper<type_item::is_value_pointer, 0>::insertNewItem(t, dao); if (! dao.isValid()) { return dao.error(); } }
+         return dao.error();
+      }
+#endif // _QX_ENABLE_MONGODB
+
       bool bComplex = dao.getCartesianProduct(); QVariant vId; QStringList columns;
       QString sql = dao.builder().buildSql(columns, dao.getSqlRelationLinked()).getSqlQuery();
       if (sql.isEmpty()) { return dao.errEmpty(); }
@@ -129,6 +152,29 @@ private:
       {
          type_item item = type_generic_container::createItem();
          qx::IxDataMember * pId = dao.getDataId(); qAssert(pId);
+
+#ifdef _QX_ENABLE_MONGODB
+         if (dao.isMongoDB())
+         {
+            if (dao.itemsAsJson().isEmpty()) { return; }
+            QString json = dao.itemsAsJson().takeFirst(); if (json.isEmpty()) { return; }
+            type_value_qx & item_val_tmp = item.value_qx();
+            qx::serialization::json::from_string(item_val_tmp, json, 1, "mongodb:columns{,_id," + pId->getKey() + ",}");
+            for (int i = 0; i < (pId ? pId->getNameCount() : 0); i++)
+            {
+               QVariant id = pId->toVariant((& item_val_tmp), "", i, qx::cvt::context::e_database);
+               qx::cvt::from_variant(id, item.key(), "", i, qx::cvt::context::e_database);
+            }
+            type_value * pValue = type_generic_container::insertItem(t, item);
+            type_value_qx & item_val = (pValue ? (* static_cast<type_value_qx *>(pValue)) : item.value_qx());
+            qx::dao::on_before_fetch<type_value_qx>((& item_val), (& dao)); if (! dao.isValid()) { return; }
+            qx::serialization::json::from_string(item_val, json, 1, "mongodb");
+            qx::dao::on_after_fetch<type_value_qx>((& item_val), (& dao)); if (! dao.isValid()) { return; }
+            qx::dao::detail::QxDao_Keep_Original<type_item>::backup(item);
+            return;
+         }
+#endif // _QX_ENABLE_MONGODB
+
          if (pId) { for (int i = 0; i < pId->getNameCount(); i++) { QVariant v = dao.query().value(i); qx::cvt::from_variant(v, item.key(), "", i, qx::cvt::context::e_database); } }
          type_value * pValue = type_generic_container::insertItem(t, item);
          type_value_qx & item_val = (pValue ? (* static_cast<type_value_qx *>(pValue)) : item.value_qx());
@@ -147,6 +193,26 @@ private:
          type_item item = type_generic_container::createItem();
          type_value_qx & item_val = item.value_qx();
          qx::IxDataMember * pId = dao.getDataId(); qAssert(pId);
+
+#ifdef _QX_ENABLE_MONGODB
+         if (dao.isMongoDB())
+         {
+            if (dao.itemsAsJson().isEmpty()) { return; }
+            qx::dao::on_before_fetch<type_value_qx>((& item_val), (& dao)); if (! dao.isValid()) { return; }
+            QString json = dao.itemsAsJson().takeFirst(); if (json.isEmpty()) { return; }
+            qx::serialization::json::from_string(item_val, json, 1, "mongodb");
+            for (int i = 0; i < (pId ? pId->getNameCount() : 0); i++)
+            {
+               QVariant id = pId->toVariant((& item_val), "", i, qx::cvt::context::e_database);
+               qx::cvt::from_variant(id, item.key(), "", i, qx::cvt::context::e_database);
+            }
+            qx::dao::on_after_fetch<type_value_qx>((& item_val), (& dao)); if (! dao.isValid()) { return; }
+            qx::dao::detail::QxDao_Keep_Original<type_item>::backup(item);
+            qx::trait::generic_container<T>::insertItem(t, item);
+            return;
+         }
+#endif // _QX_ENABLE_MONGODB
+
          if (pId) { for (int i = 0; i < pId->getNameCount(); i++) { QVariant v = dao.query().value(i); qx::cvt::from_variant(v, item.key(), "", i, qx::cvt::context::e_database); } }
          qx::dao::on_before_fetch<type_value_qx>((& item_val), (& dao)); if (! dao.isValid()) { return; }
          type_query_helper::resolveOutput(dao.getSqlRelationLinked(), item_val, dao.query(), dao.builder()); if (! dao.isValid()) { return; }

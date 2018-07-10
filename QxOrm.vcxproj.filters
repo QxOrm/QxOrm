@@ -195,6 +195,12 @@
     <Filter Include="include\QxExtras">
       <UniqueIdentifier>{7e6f220a-2896-41a3-8f89-c055c44ba6f2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\QxDao\QxMongoDB">
+      <UniqueIdentifier>{d75f2b82-8ce5-42db-882d-8086898edab3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\QxDao\QxMongoDB">
+      <UniqueIdentifier>{0a5ab864-95c9-4876-a256-dce6bd8e0f66}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -327,6 +333,9 @@
       <Filter>src\QxDao</Filter>
     </ClCompile>
     <ClCompile Include="src\QxDao\IxPersistable.cpp">
+      <Filter>src\QxDao</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QxDao\IxPersistableCollection.cpp">
       <Filter>src\QxDao</Filter>
     </ClCompile>
     <ClCompile Include="src\QxDao\IxSqlQueryBuilder.cpp">
@@ -575,6 +584,9 @@
     <ClCompile Include="src\QxModelView\QxModelRowCompare.cpp">
       <Filter>src\QxModelView</Filter>
     </ClCompile>
+    <ClCompile Include="src\QxDao\QxMongoDB\QxMongoDB_Helper.cpp">
+      <Filter>src\QxDao\QxMongoDB</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\QxMemLeak.h">
@@ -695,6 +707,9 @@
       <Filter>include\QxTraits</Filter>
     </ClInclude>
     <ClInclude Include="include\QxTraits\construct_ptr.h">
+      <Filter>include\QxTraits</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxTraits\construct_null_qvariant.h">
       <Filter>include\QxTraits</Filter>
     </ClInclude>
     <ClInclude Include="include\QxTraits\generic_container.h">
@@ -866,6 +881,9 @@
       <Filter>include\QxDao</Filter>
     </ClInclude>
     <ClInclude Include="include\QxDao\IxPersistable.h">
+      <Filter>include\QxDao</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxDao\IxPersistableCollection.h">
       <Filter>include\QxDao</Filter>
     </ClInclude>
     <ClInclude Include="include\QxDao\IxSqlQueryBuilder.h">
@@ -1498,6 +1516,9 @@
     <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_IxSqlElement.h">
       <Filter>include\QxSerialize\QJson</Filter>
     </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_IxPersistable.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
     <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QBrush.h">
       <Filter>include\QxSerialize\QJson</Filter>
     </ClInclude>
@@ -1665,6 +1686,15 @@
     </ClInclude>
     <ClInclude Include="include\QxExtras\QxStdOptional.h">
       <Filter>include\QxExtras</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxDao\QxMongoDB\QxMongoDB_Helper.h">
+      <Filter>include\QxDao\QxMongoDB</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QVariantHash.h">
+      <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QVariantMap.h">
+      <Filter>include\QxSerialize\QJson</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

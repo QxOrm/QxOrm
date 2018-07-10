@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -204,6 +204,10 @@ bool IxDataMember::hasSqlRelation() const { return (m_pImpl->m_pSqlRelation.get(
 
 bool IxDataMember::getAccessDataPointer() const { return m_pImpl->m_bAccessDataPointer; }
 
+QString IxDataMember::getType() const { return ""; }
+
+QString IxDataMember::getTypeParent() const { IxClass * pClass = (m_pImpl->m_pParent ? m_pImpl->m_pParent->getClass() : NULL); return (pClass ? pClass->getKey() : QString()); }
+
 void IxDataMember::setName(const QString & sName) { m_pImpl->m_sName = sName; m_pImpl->updateNamePtr(); }
 
 void IxDataMember::setNameParent(const QString & sName) { m_pImpl->m_sNameParent = sName; }
@@ -371,7 +375,7 @@ QString IxDataMember::getSqlAlias(const QString & sTable /* = QString() */, bool
 
    // Standard SQL disallows references to column aliases in a WHERE clause
    // cf. <http://dev.mysql.com/doc/refman/5.0/en/problems-with-alias.html>
-   if (bClauseWhere && ! sTableAlias.isEmpty()) { return (sTableAlias + "." + getName(iIndexName)); }
+   if (bClauseWhere && ! sTableAlias.isEmpty()) { return (getSqlTableName(sTableAlias) + "." + getSqlColumnName(getName(iIndexName))); }
 
    QString sSqlAlias = m_pImpl->m_sSqlAlias;
    if (! sSqlAlias.isEmpty()) { return sSqlAlias; }
@@ -491,7 +495,7 @@ QString IxDataMember::getSqlNameEqualToPlaceHolder(const QString & sAppend /* = 
    for (int i = 0; i < m_pImpl->m_lstNames.count(); i++)
    {
       if (bCheckFKPartOfPK && m_pImpl->m_bIsPrimaryKey && isThereRelationPartOfPrimaryKey(i, pRelation, iIndexNameFK)) { continue; }
-      sResult += getName(i) + " = " + getSqlPlaceHolder(sAppend, i) + sSep;
+      sResult += getSqlColumnName(getName(i)) + " = " + getSqlPlaceHolder(sAppend, i) + sSep;
    }
 
    if (! sResult.isEmpty())
@@ -506,11 +510,16 @@ QString IxDataMember::getSqlTablePointNameAsAlias(const QString & sTable, const 
    IxSqlRelation * pRelation = NULL;
    QString sTableAlias = sTable;
    sTableAlias.replace(".", "_");
+   sTableAlias = getSqlTableName(sTableAlias);
+
+   QString sTableAliasSep = " AS ";
+   qx::dao::detail::IxSqlGenerator * pSqlGenerator = QxSqlDatabase::getSingleton()->getSqlGenerator();
+   if (pSqlGenerator) { sTableAliasSep = pSqlGenerator->getTableAliasSep(); }
 
    for (int i = 0; i < m_pImpl->m_lstNames.count(); i++)
    {
       if (bCheckFKPartOfPK && m_pImpl->m_bIsPrimaryKey && isThereRelationPartOfPrimaryKey(i, pRelation, iIndexNameFK)) { continue; }
-      sResult += sTableAlias + "." + getName(i) + " AS " + getSqlAlias(sTable, false, i) + sSuffixAlias + sSep;
+      sResult += sTableAlias + "." + getSqlColumnName(getName(i)) + sTableAliasSep + getSqlAlias(sTable, false, i) + sSuffixAlias + sSep;
    }
 
    if (! sResult.isEmpty())
@@ -527,7 +536,7 @@ QString IxDataMember::getSqlName(const QString & sSep /* = QString(", ") */, con
    for (int i = 0; i < m_pImpl->m_lstNames.count(); i++)
    {
       if (bCheckFKPartOfPK && m_pImpl->m_bIsPrimaryKey && isThereRelationPartOfPrimaryKey(i, pRelation, iIndexNameFK)) { continue; }
-      sResult += getName(i, sOtherName) + sSep;
+      sResult += getSqlColumnName(getName(i, sOtherName)) + sSep;
    }
 
    if (! sResult.isEmpty())
@@ -544,7 +553,7 @@ QString IxDataMember::getSqlNameAndTypeAndParams(const QString & sSep /* = QStri
    for (int i = 0; i < m_pImpl->m_lstNames.count(); i++)
    {
       if (bCheckFKPartOfPK && m_pImpl->m_bIsPrimaryKey && isThereRelationPartOfPrimaryKey(i, pRelation, iIndexNameFK)) { continue; }
-      sResult += getName(i, sOtherName) + " " + getSqlTypeAndParams(i) + sSep;
+      sResult += getSqlColumnName(getName(i, sOtherName)) + " " + getSqlTypeAndParams(i) + sSep;
    }
 
    if (! sResult.isEmpty())
@@ -554,10 +563,41 @@ QString IxDataMember::getSqlNameAndTypeAndParams(const QString & sSep /* = QStri
 
 QString IxDataMember::getSqlFromTable(const QString & sTable)
 {
-   if (! sTable.contains(".")) { return sTable; }
+   if (! sTable.contains(".")) { return getSqlTableName(sTable); }
    QString sTableAlias = sTable;
    sTableAlias.replace(".", "_");
-   return (sTable + " AS " + sTableAlias);
+
+   QString sTableAliasSep = " AS ";
+   qx::dao::detail::IxSqlGenerator * pSqlGenerator = QxSqlDatabase::getSingleton()->getSqlGenerator();
+   if (pSqlGenerator) { sTableAliasSep = pSqlGenerator->getTableAliasSep(); }
+
+   return (getSqlTableName(sTable) + sTableAliasSep + sTableAlias);
+}
+
+QString IxDataMember::getSqlTableName(const QString & sTable)
+{
+   QStringList lstDelimiter = QxSqlDatabase::getSingleton()->getSqlDelimiterForTableName();
+   bool bAddSquareBracketsForTableName = QxSqlDatabase::getSingleton()->getAddSqlSquareBracketsForTableName();
+   QString sStart = (bAddSquareBracketsForTableName ? QString("[") : QString());
+   QString sEnd = (bAddSquareBracketsForTableName ? QString("]") : QString());
+   if (lstDelimiter.count() > 0) { sStart = lstDelimiter.at(0); sEnd = lstDelimiter.at(0); }
+   if (lstDelimiter.count() > 1) { sEnd = lstDelimiter.at(1); }
+   if (sStart.isEmpty() || sEnd.isEmpty() || sTable.contains(sStart) || sTable.contains(sEnd)) { return sTable; }
+   QString sResult = (sStart + sTable + sEnd); sResult.replace(".", (sEnd + "." + sStart));
+   return sResult;
+}
+
+QString IxDataMember::getSqlColumnName(const QString & sColumn)
+{
+   QStringList lstDelimiter = QxSqlDatabase::getSingleton()->getSqlDelimiterForColumnName();
+   bool bAddSquareBracketsForColumnName = QxSqlDatabase::getSingleton()->getAddSqlSquareBracketsForColumnName();
+   QString sStart = (bAddSquareBracketsForColumnName ? QString("[") : QString());
+   QString sEnd = (bAddSquareBracketsForColumnName ? QString("]") : QString());
+   if (lstDelimiter.count() > 0) { sStart = lstDelimiter.at(0); sEnd = lstDelimiter.at(0); }
+   if (lstDelimiter.count() > 1) { sEnd = lstDelimiter.at(1); }
+   if (sStart.isEmpty() || sEnd.isEmpty() || sColumn.contains(sStart) || sColumn.contains(sEnd)) { return sColumn; }
+   QString sResult = (sStart + sColumn + sEnd); sResult.replace(".", (sEnd + "." + sStart));
+   return sResult;
 }
 
 } // namespace qx

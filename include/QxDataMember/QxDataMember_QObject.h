@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -79,6 +79,7 @@ public:
    virtual qx_bool fromString(void * pOwner, const QString & s, const QString & sFormat, int iIndexName = -1);
    virtual QVariant toVariant(const void * pOwner, const QString & sFormat, int iIndexName = -1, qx::cvt::context::ctx_type ctx = qx::cvt::context::e_no_context) const;
    virtual qx_bool fromVariant(void * pOwner, const QVariant & v, const QString & sFormat, int iIndexName = -1, qx::cvt::context::ctx_type ctx = qx::cvt::context::e_no_context);
+   virtual QString getType() const;
 
 #ifndef _QX_NO_JSON
    virtual QJsonValue toJson(const void * pOwner, const QString & sFormat) const;

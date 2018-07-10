@@ -1,3 +1,6 @@
+Changes in version 1.4.5:
+- TODO...
+
 Changes in version 1.4.4:
 QxOrm library doesn't depend on boost framework anymore (the boost dependency has been fully removed, replaced by some C++11 features).
 So QxOrm library is now a pure Qt library which depends only on QtCore and QtSql by default.
@@ -45,7 +48,7 @@ Changes in version 1.4.3:
 
 Changes in version 1.4.2:
 - Support JSON serialization : each C++ class registered in QxOrm context can be serialized/deserialized in JSON format (JSON feature requires Qt5)
-- For more details about JSON serialization, read QxOrm manual here : http://www.qxorm.com/qxorm_en/manual.html#manual_606
+- For more details about JSON serialization, read QxOrm manual here : https://www.qxorm.com/qxorm_en/manual.html#manual_606
 - With JSON serialization and QxService module : it is now possible to create REST Web Services to send data to a javascript engine (web pages for example)
 - Fix some compilation errors with recent (and less permissive) compilers and latest versions of boost and Qt
 - Fix relationship initialization assertion with complex, deep and circular relationships in large database schema
@@ -110,7 +113,7 @@ Changes in version 1.2.7:
 
 Changes in version 1.2.6:
 - First version full compatible with QxEntityEditor application : the graphic editor for QxOrm library !
-- For more details about QxEntityEditor, go to QxOrm website : http://www.qxorm.com/
+- For more details about QxEntityEditor, go to QxOrm website : https://www.qxorm.com/
 - Thanks to the recent release of Qt 5.2, QxOrm library can now be used on Android and iOS
 - Improve relationships and triggers engine
 - Triggers onBeforeFetch() and onAfterFetch() called when fetching relationships
@@ -183,7 +186,7 @@ Changes in version 1.1.7:
 - Fix a bug when QVariant type is used for a property of a persistent class : so, it's now possible to insert NULL value into database
 
 Changes in version 1.1.6:
-- QxOrm library online documentation available : <http://www.qxorm.com/doxygen/index.html>
+- QxOrm library online documentation available : <https://www.qxorm.com/doxygen/index.html>
 - Possibility to disable QtGui dependency using compilation option in 'QxConfig.h' file : _QX_ENABLE_QT_GUI_DEPENDENCY
 - Possibility to disable QtNetwork dependency (so QxService module too) using compilation option in 'QxConfig.h' file : _QX_ENABLE_QT_NETWORK_DEPENDENCY
 - Provide a new macro to register abstract class into QxOrm context : QX_REGISTER_ABSTRACT_CLASS()

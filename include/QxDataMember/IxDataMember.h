@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -120,6 +120,8 @@ public:
    IxSqlRelation * getSqlRelation() const;
    bool hasSqlRelation() const;
    bool getAccessDataPointer() const;
+   virtual QString getType() const;
+   QString getTypeParent() const;
 
    void setName(const QString & s);
    void setNameParent(const QString & s);
@@ -168,6 +170,8 @@ public:
    QString getSqlNameAndTypeAndParams(const QString & sSep = QString(", "), const QString & sOtherName = QString(), bool bCheckFKPartOfPK = false) const;
 
    static QString getSqlFromTable(const QString & sTable);
+   static QString getSqlTableName(const QString & sTable);
+   static QString getSqlColumnName(const QString & sColumn);
 
    virtual bool isEqual(const void * pOwner1, const void * pOwner2) const = 0;
    virtual QVariant toVariant(const void * pOwner, const QString & sFormat, int iIndexName = -1, qx::cvt::context::ctx_type ctx = qx::cvt::context::e_no_context) const = 0;

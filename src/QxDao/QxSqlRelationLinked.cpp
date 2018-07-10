@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -77,6 +77,10 @@ long QxSqlRelationLinked::getRootColumnsCount() const { return m_pImpl->m_lstRoo
 long QxSqlRelationLinked::getRootColumnsOffset() const { return m_pImpl->m_lRootColumnsOffset; }
 
 void QxSqlRelationLinked::setRootColumnsOffset(long l) { m_pImpl->m_lRootColumnsOffset = l; }
+
+QxSqlRelationLinked::type_lst_relation_linked QxSqlRelationLinked::getRelationLinkedX() const { return m_pImpl->m_relationLinkedX; }
+
+QxSqlRelationLinked::type_lst_relation QxSqlRelationLinked::getRelationX() const { return m_pImpl->m_relationX; }
 
 qx_bool QxSqlRelationLinked::buildHierarchy(IxSqlRelationX * pRelationX, const QStringList & sRelationX)
 {

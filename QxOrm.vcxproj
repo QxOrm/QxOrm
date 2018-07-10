@@ -98,6 +98,7 @@
     <ClCompile Include="src\QxConvert\QxConvert_Export.cpp" />
     <ClCompile Include="src\QxDao\QxDateNeutral.cpp" />
     <ClCompile Include="src\QxDao\QxDateTimeNeutral.cpp" />
+    <ClCompile Include="src\QxDao\QxMongoDB\QxMongoDB_Helper.cpp" />
     <ClCompile Include="src\QxDao\QxSoftDelete.cpp" />
     <ClCompile Include="src\QxDao\QxTimeNeutral.cpp" />
     <ClCompile Include="src\QxModelView\IxModel.cpp" />
@@ -176,6 +177,7 @@
     <ClCompile Include="src\QxSerialize\boost\QxExportDllBoostArchive.cpp" />
     <ClCompile Include="src\QxDao\IxDao_Helper.cpp" />
     <ClCompile Include="src\QxDao\IxPersistable.cpp" />
+    <ClCompile Include="src\QxDao\IxPersistableCollection.cpp" />
     <ClCompile Include="src\QxDao\IxSqlQueryBuilder.cpp" />
     <ClCompile Include="src\QxDao\IxSqlRelation.cpp" />
     <ClCompile Include="src\QxDao\QxDaoAsync.cpp" />
@@ -227,6 +229,7 @@
     <ClInclude Include="include\QxConvert\QxConvert_Impl.h" />
     <ClInclude Include="include\QxDaoRepository.h" />
     <ClInclude Include="include\QxDao\QxDaoThrowable.h" />
+    <ClInclude Include="include\QxDao\QxMongoDB\QxMongoDB_Helper.h" />
     <ClInclude Include="include\QxDao\QxSqlSaveMode.h" />
     <ClInclude Include="include\QxExtras\QxBoostOptionalOnly.h" />
     <ClInclude Include="include\QxExtras\QxStdOptional.h" />
@@ -307,6 +310,7 @@
     <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_IxParameter.h" />
     <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_IxService.h" />
     <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_IxSqlElement.h" />
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_IxPersistable.h" />
     <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QBrush.h" />
     <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QColor.h" />
     <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QFlags.h" />
@@ -333,6 +337,8 @@
     <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QSqlError.h" />
     <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QStringList.h" />
     <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QUrl.h" />
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QVariantHash.h" />
+    <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QVariantMap.h" />
     <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QVector.h" />
     <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QWeakPointer.h" />
     <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QxCollection.h" />
@@ -370,6 +376,7 @@
     <ClInclude Include="include\QxTraits\archive_printable.h" />
     <ClInclude Include="include\QxTraits\archive_wide_traits.h" />
     <ClInclude Include="include\QxTraits\construct_ptr.h" />
+    <ClInclude Include="include\QxTraits\construct_null_qvariant.h" />
     <ClInclude Include="include\QxTraits\generic_container.h" />
     <ClInclude Include="include\QxTraits\get_base_class.h" />
     <ClInclude Include="include\QxTraits\get_class_name.h" />
@@ -432,6 +439,7 @@
     <ClInclude Include="include\QxXml\QxXmlWriter.h" />
     <ClInclude Include="include\QxDao\IxDao_Helper.h" />
     <ClInclude Include="include\QxDao\IxPersistable.h" />
+    <ClInclude Include="include\QxDao\IxPersistableCollection.h" />
     <ClInclude Include="include\QxDao\IxSqlQueryBuilder.h" />
     <ClInclude Include="include\QxDao\IxSqlRelation.h" />
     <ClInclude Include="include\QxDao\QxDao.h" />

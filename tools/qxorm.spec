@@ -1,4 +1,4 @@
-%define version 1.4.4
+%define version 1.4.5
 
 Name: QxOrm
 Version: %{version}
@@ -6,7 +6,7 @@ Release: 1%{?dist}
 License: GPLv3+
 Group: System Environment/Libraries
 Summary: C++ Object Relational Mapping (ORM) library
-URL: http://www.qxorm.com/
+URL: https://www.qxorm.com/
 
 Source0: QxOrm_%{version}.zip
 

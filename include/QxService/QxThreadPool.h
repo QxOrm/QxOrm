@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -68,7 +68,7 @@ class QxThread;
  * \ingroup QxService
  * \brief qx::service::QxThreadPool : thread-safe thread pool to manage list of threads for executing all transactions of QxService module
  *
- * <a href="http://www.qxorm.com/qxorm_en/tutorial_2.html" target="_blank">Click here to access to a tutorial to explain how to work with QxService module.</a>
+ * <a href="https://www.qxorm.com/qxorm_en/tutorial_2.html" target="_blank">Click here to access to a tutorial to explain how to work with QxService module.</a>
  */
 class QX_DLL_EXPORT QxThreadPool : public QThread
 {

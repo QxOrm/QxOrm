@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -54,8 +54,8 @@ class QxInvalidValueX;
  * \ingroup QxValidator
  * \brief qx::IxValidator : common interface for validator engine
  *
- * For more informations about <b>QxValidator module</b>, <a href="http://www.qxorm.com/qxorm_en/faq.html#faq_250" target="_blank">goto the FAQ of QxOrm website</a> :
- * <a href="http://www.qxorm.com/qxorm_en/faq.html#faq_250" target="_blank">http://www.qxorm.com/qxorm_en/faq.html#faq_250</a>
+ * For more informations about <b>QxValidator module</b>, <a href="https://www.qxorm.com/qxorm_en/faq.html#faq_250" target="_blank">goto the FAQ of QxOrm website</a> :
+ * <a href="https://www.qxorm.com/qxorm_en/faq.html#faq_250" target="_blank">https://www.qxorm.com/qxorm_en/faq.html#faq_250</a>
  */
 class QX_DLL_EXPORT IxValidator : public QxPropertyBag
 {

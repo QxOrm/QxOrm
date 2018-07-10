@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -55,6 +55,7 @@ boost_132::detail::sp_counted_base_impl< T *, boost_132::serialization::detail::
 #endif // (BOOST_VERSION >= 104100)
 #endif // _QX_SUPPORT_BOOST_SERIALIZE_SHARED_PTR_132
 
+#if (BOOST_VERSION < 106600)
 #define QX_BOOST_EXPORT_SERIALIZATION_IMPL_POINTER_ISERIALIZER_HPP(ArchiveIn, ArchiveOut, T) \
 QX_DLL_EXPORT_TEMPLATE_T_P1_P2_HPP(class, boost::archive::detail::pointer_iserializer, ArchiveIn, T) \
 QX_DLL_EXPORT_TEMPLATE_T_U_P1_P2_HPP(class, boost::serialization::singleton, boost::archive::detail::pointer_iserializer, ArchiveIn, T)
@@ -62,6 +63,13 @@ QX_DLL_EXPORT_TEMPLATE_T_U_P1_P2_HPP(class, boost::serialization::singleton, boo
 #define QX_BOOST_EXPORT_SERIALIZATION_IMPL_POINTER_OSERIALIZER_HPP(ArchiveIn, ArchiveOut, T) \
 QX_DLL_EXPORT_TEMPLATE_T_P1_P2_HPP(class, boost::archive::detail::pointer_oserializer, ArchiveOut, T) \
 QX_DLL_EXPORT_TEMPLATE_T_U_P1_P2_HPP(class, boost::serialization::singleton, boost::archive::detail::pointer_oserializer, ArchiveOut, T)
+#else // (BOOST_VERSION < 106600)
+#define QX_BOOST_EXPORT_SERIALIZATION_IMPL_POINTER_ISERIALIZER_HPP(ArchiveIn, ArchiveOut, T) \
+QX_DLL_EXPORT_TEMPLATE_T_P1_P2_HPP(class, boost::archive::detail::pointer_iserializer, ArchiveIn, T)
+
+#define QX_BOOST_EXPORT_SERIALIZATION_IMPL_POINTER_OSERIALIZER_HPP(ArchiveIn, ArchiveOut, T) \
+QX_DLL_EXPORT_TEMPLATE_T_P1_P2_HPP(class, boost::archive::detail::pointer_oserializer, ArchiveOut, T)
+#endif // (BOOST_VERSION < 106600)
 
 #if _QX_SUPPORT_BOOST_SERIALIZE_SHARED_PTR_132
 #define QX_BOOST_EXPORT_SERIALIZATION_IMPL_POINTER_ISERIALIZER_BOOST_132_HELPER_HPP(ArchiveIn, ArchiveOut, T) \

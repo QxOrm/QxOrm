@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -66,6 +66,7 @@ public:
    virtual void init();
    virtual QString getAutoIncrement() const;
    virtual QString getWildCard() const;
+   virtual QString getTableAliasSep() const;
    virtual QString getLimit(const QxSqlLimit * pLimit) const;
    virtual void resolveLimit(QSqlQuery & query, const QxSqlLimit * pLimit) const;
    virtual void postProcess(QString & sql, const QxSqlLimit * pLimit) const;
@@ -76,6 +77,8 @@ public:
    virtual void onBeforeDelete(IxDao_Helper * pDaoHelper, void * pOwner) const;
    virtual void onAfterDelete(IxDao_Helper * pDaoHelper, void * pOwner) const;
    virtual void checkSqlInsert(IxDao_Helper * pDaoHelper, QString & sql) const;
+   virtual void onBeforeSqlPrepare(IxDao_Helper * pDaoHelper, QString & sql) const;
+   virtual void formatSqlQuery(IxDao_Helper * pDaoHelper, QString & sql) const;
 
 };
 

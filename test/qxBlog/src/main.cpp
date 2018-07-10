@@ -21,6 +21,7 @@ int main(int argc, char * argv[])
    qx::QxSqlDatabase::getSingleton()->setHostName("localhost");
    qx::QxSqlDatabase::getSingleton()->setUserName("root");
    qx::QxSqlDatabase::getSingleton()->setPassword("");
+   qx::QxSqlDatabase::getSingleton()->setFormatSqlQueryBeforeLogging(true);
 
    // Only for debug purpose : assert if invalid offset detected fetching a relation
    qx::QxSqlDatabase::getSingleton()->setVerifyOffsetRelation(true);

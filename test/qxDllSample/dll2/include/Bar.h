@@ -9,6 +9,7 @@ class QX_DLL2_EXPORT Bar : public BaseClassTrigger
 {
 
    QX_REGISTER_FRIEND_CLASS(Bar)
+   QX_PERSISTABLE_HPP(Bar)
 
 public:
 

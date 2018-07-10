@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -48,6 +48,8 @@
 #include <QtCore/qdatastream.h>
 
 #include <QxOrm.h>
+
+#include <QxTraits/construct_null_qvariant.h>
 
 template <typename T>
 QDataStream & operator<< (QDataStream & stream, const std::optional<T> & t)
@@ -110,7 +112,7 @@ static inline qx_bool fromString(const QString & s, std::optional<T> & t, const 
 
 template <typename T> struct QxConvert_ToVariant< std::optional<T> > {
 static inline QVariant toVariant(const std::optional<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
-{ if (t) { return qx::cvt::to_variant((* t), format, index, ctx); }; return QVariant(); } };
+{ if (t) { return qx::cvt::to_variant((* t), format, index, ctx); }; return qx::trait::construct_null_qvariant<T>::get(); } };
 
 template <typename T> struct QxConvert_FromVariant< std::optional<T> > {
 static inline qx_bool fromVariant(const QVariant & v, std::optional<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)

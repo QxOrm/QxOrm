@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -87,8 +87,8 @@ namespace qx {
  * \ingroup QxValidator
  * \brief qx::QxInvalidValueX : list of invalid values
  *
- * For more informations about <b>QxValidator module</b>, <a href="http://www.qxorm.com/qxorm_en/faq.html#faq_250" target="_blank">goto the FAQ of QxOrm website</a> :
- * <a href="http://www.qxorm.com/qxorm_en/faq.html#faq_250" target="_blank">http://www.qxorm.com/qxorm_en/faq.html#faq_250</a>
+ * For more informations about <b>QxValidator module</b>, <a href="https://www.qxorm.com/qxorm_en/faq.html#faq_250" target="_blank">goto the FAQ of QxOrm website</a> :
+ * <a href="https://www.qxorm.com/qxorm_en/faq.html#faq_250" target="_blank">https://www.qxorm.com/qxorm_en/faq.html#faq_250</a>
  */
 class QX_DLL_EXPORT QxInvalidValueX
 {
@@ -97,14 +97,14 @@ class QX_DLL_EXPORT QxInvalidValueX
    friend class boost::serialization::access;
 #endif // _QX_ENABLE_BOOST_SERIALIZATION
 
-   friend QDataStream & ::operator<< (QDataStream & stream, const qx::QxInvalidValueX & t);
-   friend QDataStream & ::operator>> (QDataStream & stream, qx::QxInvalidValueX & t);
+   friend QX_DLL_EXPORT QDataStream & ::operator<< (QDataStream & stream, const qx::QxInvalidValueX & t);
+   friend QX_DLL_EXPORT QDataStream & ::operator>> (QDataStream & stream, qx::QxInvalidValueX & t);
 
 #ifndef _QX_NO_JSON
    friend struct qx::cvt::detail::QxConvert_ToJson< qx::QxInvalidValueX >;
    friend struct qx::cvt::detail::QxConvert_FromJson< qx::QxInvalidValueX >;
-   friend QJsonValue qx::cvt::detail::QxConvert_ToJson_Helper(const qx::QxInvalidValueX & t, const QString & format);
-   friend qx_bool qx::cvt::detail::QxConvert_FromJson_Helper(const QJsonValue & j, qx::QxInvalidValueX & t, const QString & format);
+   friend QX_DLL_EXPORT QJsonValue qx::cvt::detail::QxConvert_ToJson_Helper(const qx::QxInvalidValueX & t, const QString & format);
+   friend QX_DLL_EXPORT qx_bool qx::cvt::detail::QxConvert_FromJson_Helper(const QJsonValue & j, qx::QxInvalidValueX & t, const QString & format);
 #endif // _QX_NO_JSON
 
 protected:

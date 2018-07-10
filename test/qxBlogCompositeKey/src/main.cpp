@@ -21,9 +21,13 @@ int main(int argc, char * argv[])
    qx::QxSqlDatabase::getSingleton()->setHostName("localhost");
    qx::QxSqlDatabase::getSingleton()->setUserName("root");
    qx::QxSqlDatabase::getSingleton()->setPassword("");
+   qx::QxSqlDatabase::getSingleton()->setAddSqlSquareBracketsForTableName(true);
+   qx::QxSqlDatabase::getSingleton()->setAddSqlSquareBracketsForColumnName(true);
 
    // Only for debug purpose : assert if invalid offset detected fetching a relation
    qx::QxSqlDatabase::getSingleton()->setVerifyOffsetRelation(true);
+   qx::IxSqlRelation::setTraceRelationInit(true);
+   qx::QxClassX::registerAllClasses(true);
 
    // Create all tables in database
    QSqlError daoError = qx::dao::create_table<author>();

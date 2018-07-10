@@ -1,6 +1,6 @@
 #############################################################################
 ##
-## http://www.qxorm.com/
+## https://www.qxorm.com/
 ## Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 ##
 ## This file is part of the QxOrm library
@@ -103,6 +103,41 @@ find_package(Qt5Core REQUIRED)
 find_package(Qt5Sql REQUIRED)
 
 set(QX_LIBRARIES Qt5::Core Qt5::Sql)
+
+#######################################
+# MongoDB Driver Library Dependencies #
+#######################################
+
+option(_QX_ENABLE_MONGODB "If you enable _QX_ENABLE_MONGODB option, then QxOrm library will be able to use mongoc driver to store all QxOrm registered classes in a MongoDB database" OFF)
+
+if(_QX_ENABLE_MONGODB)
+
+   add_definitions(-D_QX_ENABLE_MONGODB)
+
+   set(QX_MONGOC_INCLUDE "$ENV{MONGOC_INCLUDE}")
+   if(NOT QX_MONGOC_INCLUDE STREQUAL "")
+
+      include_directories("$ENV{BSON_INCLUDE}")
+      include_directories("${QX_MONGOC_INCLUDE}")
+
+      link_directories("$ENV{BSON_LIB}")
+      link_directories("$ENV{MONGOC_LIB}")
+
+      set(QX_LIBRARIES ${QX_LIBRARIES} bson-1.0 mongoc-1.0)
+
+   else() # (NOT QX_MONGOC_INCLUDE STREQUAL "")
+
+      find_package(libbson-1.0 REQUIRED)
+      find_package(libmongoc-1.0 REQUIRED)
+
+      include_directories(${BSON_INCLUDE_DIRS})
+      include_directories(${MONGOC_INCLUDE_DIRS})
+
+      set(QX_LIBRARIES ${QX_LIBRARIES} ${BSON_LIBRARIES} ${MONGOC_LIBRARIES})
+
+   endif() # (NOT QX_MONGOC_INCLUDE STREQUAL "")
+
+endif() # _QX_ENABLE_MONGODB
 
 ##############################
 # Build Mode Debug / Release #
@@ -240,7 +275,7 @@ endif() # _QX_ENABLE_QT_GUI
 
 # By default, QxOrm library doesn't depend on Qt Network shared library => it means that QxService module (network transactions to transfer your persistent layer) is not enabled by default
 # To enable this feature, just define the compilation option : _QX_ENABLE_QT_NETWORK
-# For more details about QxService module, a tutorial (qxClientServer) is available on QxOrm website : http://www.qxorm.com/qxorm_en/tutorial_2.html
+# For more details about QxService module, a tutorial (qxClientServer) is available on QxOrm website : https://www.qxorm.com/qxorm_en/tutorial_2.html
 
 option(_QX_ENABLE_QT_NETWORK "If you enable _QX_ENABLE_QT_NETWORK option, then QxService module of QxOrm library will be available (network transactions to transfer persistent data layer)" OFF)
 
@@ -310,6 +345,7 @@ if(WIN32)
          set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /OPT:NOREF")
       endif() # MSVC_VERSION LESS 1700
    elseif(MINGW)
+         # For MinGW : we need to add these linker flags because of some issues to dll export extern template instantiations from shared library
          set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-export-all-symbols -Wl,-enable-auto-import")
    endif() # MSVC
 endif() # WIN32

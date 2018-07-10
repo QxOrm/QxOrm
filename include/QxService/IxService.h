@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -88,19 +88,19 @@ namespace service {
  * \ingroup QxService
  * \brief qx::service::IxService : common interface for all services defined with QxService module of QxOrm library
  *
- * <a href="http://www.qxorm.com/qxorm_en/tutorial_2.html" target="_blank">Click here to access to a tutorial to explain how to work with QxService module.</a>
+ * <a href="https://www.qxorm.com/qxorm_en/tutorial_2.html" target="_blank">Click here to access to a tutorial to explain how to work with QxService module.</a>
  */
 class QX_DLL_EXPORT IxService
 {
 
-   friend QDataStream & ::operator<< (QDataStream & stream, const qx::service::IxService & t);
-   friend QDataStream & ::operator>> (QDataStream & stream, qx::service::IxService & t);
+   friend QX_DLL_EXPORT QDataStream & ::operator<< (QDataStream & stream, const qx::service::IxService & t);
+   friend QX_DLL_EXPORT QDataStream & ::operator>> (QDataStream & stream, qx::service::IxService & t);
 
 #ifndef _QX_NO_JSON
    friend struct qx::cvt::detail::QxConvert_ToJson< qx::service::IxService >;
    friend struct qx::cvt::detail::QxConvert_FromJson< qx::service::IxService >;
-   friend QJsonValue qx::cvt::detail::QxConvert_ToJson_Helper(const qx::service::IxService & t, const QString & format);
-   friend qx_bool qx::cvt::detail::QxConvert_FromJson_Helper(const QJsonValue & j, qx::service::IxService & t, const QString & format);
+   friend QX_DLL_EXPORT QJsonValue qx::cvt::detail::QxConvert_ToJson_Helper(const qx::service::IxService & t, const QString & format);
+   friend QX_DLL_EXPORT qx_bool qx::cvt::detail::QxConvert_FromJson_Helper(const QJsonValue & j, qx::service::IxService & t, const QString & format);
 #endif // _QX_NO_JSON
 
 protected:

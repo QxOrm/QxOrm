@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -120,7 +120,9 @@ public:
    IxSqlGenerator * getSqlGenerator() const;
    void addInvalidValues(const qx::QxInvalidValueX & lst);
    bool getAddAutoIncrementIdToUpdateQuery() const;
+   QStringList & itemsAsJson();
    bool isReadOnly() const;
+   bool isMongoDB() const;
 
    QSqlError errFailed(bool bPrepare = false);
    QSqlError errEmpty();
@@ -133,11 +135,13 @@ public:
    bool nextRecord();
    void quiet();
    bool exec();
+   bool prepare(QString & sql);
 
    QSqlError updateError(const QSqlError & error);
    bool updateSqlRelationX(const QStringList & relation);
-   void dumpRecord() const;
    void addQuery(const qx::QxSqlQuery & query, bool bResolve);
+   void setTimeDatabase(int ms);
+   void dumpRecord() const;
 
    template <class U>
    inline bool isValidPrimaryKey(const U & u)

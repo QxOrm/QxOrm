@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -73,16 +73,16 @@ struct QxDaoAsyncParams
                      dao_update, dao_save, dao_delete_by_id, dao_delete_all, dao_delete_by_query, 
                      dao_destroy_by_id, dao_destroy_all, dao_destroy_by_query, dao_execute_query, dao_call_query };
 
-   dao_action           daoAction;           //!< Action to execute into the thread (asynchronous way)
-   QString              className;           //!< Classname parameter to execute action (must implement qx::IxPersistable interface)
-   qx::QxSqlQuery       query;               //!< Query parameter to execute action
-   QSqlDatabase *       pDatabase;           //!< Database parameter to execute action
-   IxPersistable_ptr    pInstance;           //!< Current instance parameter to execute action
-   IxCollection_ptr     pListOfInstances;    //!< List of instances fetched by query
-   QStringList          listColumns;         //!< List of columns parameter to execute action
-   QStringList          listRelations;       //!< List of relationships parameter to execute action
-   QVariant             id;                  //!< Current instance id parameter to execute action
-   long                 daoCount;            //!< Dao count value returned by qx::dao::count query
+   dao_action                    daoAction;           //!< Action to execute into the thread (asynchronous way)
+   QString                       className;           //!< Classname parameter to execute action (must implement qx::IxPersistable interface)
+   qx::QxSqlQuery                query;               //!< Query parameter to execute action
+   QSqlDatabase *                pDatabase;           //!< Database parameter to execute action
+   IxPersistable_ptr             pInstance;           //!< Current instance parameter to execute action
+   IxPersistableCollection_ptr   pListOfInstances;    //!< List of instances fetched by query
+   QStringList                   listColumns;         //!< List of columns parameter to execute action
+   QStringList                   listRelations;       //!< List of relationships parameter to execute action
+   QVariant                      id;                  //!< Current instance id parameter to execute action
+   long                          daoCount;            //!< Dao count value returned by qx::dao::count query
 
    QxDaoAsyncParams() : daoAction(dao_none), pDatabase(NULL), daoCount(0) { ; }
    ~QxDaoAsyncParams() { ; }
@@ -161,7 +161,7 @@ void MyWidget::onQueryFinished(const QSqlError & daoError, qx::dao::detail::QxDa
    // If the async query is associated to a simple object, just use 'pDaoParams->pInstance' method
    qx::IxPersistable_ptr ptr = pDaoParams->pInstance;
    // If the async query is associated to a list of objects, just use 'pDaoParams->pListOfInstances' method
-   qx::IxCollection_ptr lst = pDaoParams->pListOfInstances;
+   qx::IxPersistableCollection_ptr lst = pDaoParams->pListOfInstances;
    //...
 }
  * \endcode

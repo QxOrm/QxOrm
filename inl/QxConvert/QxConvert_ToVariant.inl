@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -34,6 +34,8 @@
 #else // _QX_ENABLE_BOOST_SERIALIZATION
 #define QX_CVT_DEFAULT_ARCHIVE_TO_VARIANT QX_CVT_DEFAULT_ARCHIVE::to_byte_array(t)
 #endif // _QX_ENABLE_BOOST_SERIALIZATION
+
+#include <QxTraits/construct_null_qvariant.h>
 
 namespace qx {
 namespace cvt {
@@ -158,7 +160,7 @@ static inline QVariant toVariant(const qx_bool & t, const QString & format, int 
 
 template <typename T> struct QxConvert_ToVariant< boost::optional<T> > {
 static inline QVariant toVariant(const boost::optional<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
-{ if (t) { return qx::cvt::to_variant((* t), format, index, ctx); }; return QVariant(); } };
+{ if (t) { return qx::cvt::to_variant((* t), format, index, ctx); }; return qx::trait::construct_null_qvariant<T>::get(); } };
 
 #endif // _QX_ENABLE_BOOST
 

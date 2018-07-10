@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -38,6 +38,7 @@
 #include <QxSerialize/QJson/QxSerializeQJson_QHash.h>
 #include <QxSerialize/QJson/QxSerializeQJson_QVector.h>
 #include <QxSerialize/QJson/QxSerializeQJson_QFlags.h>
+#include <QxSerialize/QJson/QxSerializeQJson_QStringList.h>
 #include <QxSerialize/QJson/QxSerializeQJson_IxSqlElement.h>
 #include <QxSerialize/QJson/QxSerializeQJson_QxCollection.h>
 
@@ -60,13 +61,15 @@ QJsonValue QxConvert_ToJson_Helper(const qx::QxSqlQuery & t, const QString & for
       lstResultValues = t.m_pSqlResult->values;
    }
 
-   obj.insert("query", QJsonValue(t.m_sQuery));
+   obj.insert("query", qx::cvt::to_json(t.m_sQuery));
    obj.insert("list_values", qx::cvt::to_json(t.m_lstValue, format));
    obj.insert("sql_element_index", QJsonValue(t.m_iSqlElementIndex));
    obj.insert("parenthesis_count", QJsonValue(t.m_iParenthesisCount));
    obj.insert("distinct", QJsonValue(t.m_bDistinct));
    obj.insert("result_position_by_key", qx::cvt::to_json(lstResultPosByKey, format));
    obj.insert("result_values", qx::cvt::to_json(lstResultValues, format));
+   obj.insert("response", QJsonValue(t.m_vResponse.toString()));
+   obj.insert("type", QJsonValue(t.m_sType));
 
    if (! t.m_pSqlElementTemp)
    {
@@ -101,13 +104,15 @@ qx_bool QxConvert_FromJson_Helper(const QJsonValue & j, qx::QxSqlQuery & t, cons
    QHash<QString, int> lstResultPosByKey;
    QVector< QVector<QVariant> > lstResultValues;
 
-   t.m_sQuery = obj.value("query").toString();
+   qx::cvt::from_json(obj.value("query"), t.m_sQuery);
    qx::cvt::from_json(obj.value("list_values"), t.m_lstValue, format);
    t.m_iSqlElementIndex = qRound(obj.value("sql_element_index").toDouble());
    t.m_iParenthesisCount = qRound(obj.value("parenthesis_count").toDouble());
    t.m_bDistinct = obj.value("distinct").toBool();
    qx::cvt::from_json(obj.value("result_position_by_key"), lstResultPosByKey, format);
    qx::cvt::from_json(obj.value("result_values"), lstResultValues, format);
+   t.m_vResponse = obj.value("response").toVariant();
+   t.m_sType = obj.value("type").toString();
 
    t.m_pSqlResult.reset();
    if ((lstResultPosByKey.count() > 0) || (lstResultValues.count() > 0))

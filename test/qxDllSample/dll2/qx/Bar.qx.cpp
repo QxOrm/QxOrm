@@ -6,6 +6,7 @@
 #include <QxOrm_Impl.h>
 
 QX_REGISTER_CPP_QX_DLL2(Bar)
+QX_PERSISTABLE_CPP(Bar)
 
 namespace qx {
 template <> void register_class(QxClass<Bar> & t)

@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -82,6 +82,13 @@ namespace qx {
 class QX_DLL_EXPORT QxSqlRelationLinked
 {
 
+public:
+
+   typedef std::shared_ptr<QxSqlRelationLinked> type_ptr;
+   typedef std::tuple<qx::dao::sql_join::join_type, IxSqlRelation *, QPair<QSet<QString>, long> > type_relation;
+   typedef qx::QxCollection<QString, type_relation> type_lst_relation;
+   typedef QHash<QString, type_ptr> type_lst_relation_linked;
+
 private:
 
    struct QxSqlRelationLinkedImpl;
@@ -108,6 +115,8 @@ public:
    long getAllRelationCount() const;
    long getRelationCount() const;
    bool existRelation(const QString & sKey) const;
+   type_lst_relation_linked getRelationLinkedX() const;
+   type_lst_relation getRelationX() const;
 
    bool checkRootColumns(const QString & s) const;
    long getRootColumnsCount() const;

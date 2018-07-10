@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -55,6 +55,14 @@
 #include <QxTraits/construct_ptr.h>
 #include <QxTraits/generic_container.h>
 #include <QxTraits/is_valid_primary_key.h>
+
+#ifdef _QX_ENABLE_MONGODB
+#include <QxDao/QxMongoDB/QxMongoDB_Helper.h>
+#ifndef _QX_NO_JSON
+#include <QxSerialize/QJson/QxSerializeQJson_qx_registered_class.h>
+#include <QxSerialize/QxSerializeQJson.h>
+#endif // _QX_NO_JSON
+#endif // _QX_ENABLE_MONGODB
 
 #include "../../inl/QxDao/QxDao_Helper.inl"
 #include "../../inl/QxDao/QxDao_Count.inl"

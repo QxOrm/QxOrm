@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -80,8 +80,8 @@ public:
    QxFactory(const QString & sKey) : IxFactory(sKey) { QX_AUTO_REGISTER_REPOSITORY(T, sKey); }
    virtual ~QxFactory() { ; }
 
-   virtual qx::any createObject() const
-   { QxClass<T>::getSingleton(); return qxCreateInstance<std::is_abstract<T>::value, 0>::create(); }
+   virtual qx::any createObject(bool bRawPointer = false) const
+   { QxClass<T>::getSingleton(); return qxCreateInstance<std::is_abstract<T>::value, 0>::create(bRawPointer); }
 
    virtual void * createObjectNudePtr() const
    { QxClass<T>::getSingleton(); return qxCreateInstance<std::is_abstract<T>::value, 0>::createNudePtr(); }
@@ -96,15 +96,15 @@ private:
    template <bool bIsAbstract /* = false */, int dummy>
    struct qxCreateInstance
    {
-      static inline qx::any create()      { std::shared_ptr<T> ptr; ptr.reset(new T()); return qx::any(ptr); }
-      static inline void * createNudePtr()   { return static_cast<void *>(new T()); }
+      static inline qx::any create(bool bRawPointer)  { if (bRawPointer) { T * p = new T(); return qx::any(p); }; std::shared_ptr<T> ptr; ptr.reset(new T()); return qx::any(ptr); }
+      static inline void * createNudePtr()            { return static_cast<void *>(new T()); }
    };
 
    template <int dummy>
    struct qxCreateInstance<true, dummy>
    {
-      static inline qx::any create()      { qDebug(QX_STR_CANNOT_INSTANTIATE_ABSTRACT_CLASS, qx::trait::get_class_name<T>::get()); return qx::any(); }
-      static inline void * createNudePtr()   { qDebug(QX_STR_CANNOT_INSTANTIATE_ABSTRACT_CLASS, qx::trait::get_class_name<T>::get()); return NULL; }
+      static inline qx::any create(bool bRawPointer)  { Q_UNUSED(bRawPointer); qDebug(QX_STR_CANNOT_INSTANTIATE_ABSTRACT_CLASS, qx::trait::get_class_name<T>::get()); return qx::any(); }
+      static inline void * createNudePtr()            { qDebug(QX_STR_CANNOT_INSTANTIATE_ABSTRACT_CLASS, qx::trait::get_class_name<T>::get()); return NULL; }
    };
 
 };

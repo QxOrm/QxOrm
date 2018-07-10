@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -83,16 +83,33 @@ template <> struct QxConvert_ToJson< unsigned long long > {
 static inline QJsonValue toJson(const unsigned long long & t, const QString & format)
 { Q_UNUSED(format); return QJsonValue(static_cast<double>(t)); } };
 
+template <> struct QxConvert_ToJson< QDateTime > {
+static inline QJsonValue toJson(const QDateTime & t, const QString & format)
+{
+#ifdef _QX_ENABLE_MONGODB
+   if ((t.isValid()) && (format.left(7) == "mongodb"))
+   {
+      QString dt = t.toString(Qt::ISODate); if (dt.count() <= 19) { dt += "Z"; }
+      QJsonObject obj; obj.insert("$date", QJsonValue(dt)); return QJsonValue(obj);
+   }
+#endif // _QX_ENABLE_MONGODB
+
+   Q_UNUSED(format); if (t.isValid()) { return QJsonValue(t.toString(Qt::ISODate)); }; return QJsonValue(); }
+};
+
 template <> struct QxConvert_ToJson< QDate > {
 static inline QJsonValue toJson(const QDate & t, const QString & format)
-{ Q_UNUSED(format); if (t.isValid()) { return QJsonValue(t.toString(Qt::ISODate)); }; return QJsonValue(); } };
+{
+#ifdef _QX_ENABLE_MONGODB
+   if ((t.isValid()) && (format.left(7) == "mongodb"))
+   { QDateTime dt(t); return QxConvert_ToJson<QDateTime>::toJson(dt, format); }
+#endif // _QX_ENABLE_MONGODB
+
+   Q_UNUSED(format); if (t.isValid()) { return QJsonValue(t.toString(Qt::ISODate)); }; return QJsonValue(); }
+};
 
 template <> struct QxConvert_ToJson< QTime > {
 static inline QJsonValue toJson(const QTime & t, const QString & format)
-{ Q_UNUSED(format); if (t.isValid()) { return QJsonValue(t.toString(Qt::ISODate)); }; return QJsonValue(); } };
-
-template <> struct QxConvert_ToJson< QDateTime > {
-static inline QJsonValue toJson(const QDateTime & t, const QString & format)
 { Q_UNUSED(format); if (t.isValid()) { return QJsonValue(t.toString(Qt::ISODate)); }; return QJsonValue(); } };
 
 template <> struct QxConvert_ToJson< QByteArray > {
@@ -101,7 +118,14 @@ static inline QJsonValue toJson(const QByteArray & t, const QString & format)
 
 template <> struct QxConvert_ToJson< QString > {
 static inline QJsonValue toJson(const QString & t, const QString & format)
-{ Q_UNUSED(format); return QJsonValue(t); } };
+{
+#ifdef _QX_ENABLE_MONGODB
+   if ((t.left(7) == "qx_oid:") && (format.left(7) == "mongodb"))
+   { QJsonObject obj; obj.insert("$oid", QJsonValue(t.right(t.size() - 7))); return QJsonValue(obj); }
+#endif // _QX_ENABLE_MONGODB
+
+   Q_UNUSED(format); return QJsonValue(t);
+} };
 
 template <> struct QxConvert_ToJson< QVariant > {
 static inline QJsonValue toJson(const QVariant & t, const QString & format)

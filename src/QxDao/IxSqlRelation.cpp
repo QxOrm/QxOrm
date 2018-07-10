@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -596,14 +596,16 @@ void IxSqlRelation::eagerJoin_ManyToMany(QxSqlRelationParams & params) const
    qAssert(pIdOwner->getNameCount() == lstForeignKeyOwner.count());
    qAssert(pIdData->getNameCount() == lstForeignKeyDataType.count());
    QString sExtraTableAlias = m_pImpl->m_sExtraTable + "_" + QString::number(params.index());
-   sql += this->getSqlJoin(params.joinType()) + m_pImpl->m_sExtraTable + " " + sExtraTableAlias + " ON ";
+   sql += this->getSqlJoin(params.joinType()) + qx::IxDataMember::getSqlTableName(m_pImpl->m_sExtraTable) + " " + sExtraTableAlias + " ON ";
    for (int i = 0; i < pIdOwner->getNameCount(); i++)
    { sql += pIdOwner->getSqlAlias(tableOwner, true, i) + " = " + sExtraTableAlias + "." + lstForeignKeyOwner.at(i) + " AND "; }
    sql = sql.left(sql.count() - 5); // Remove last " AND "
-   sql += this->getSqlJoin(params.joinType()) + table + " " + tableAlias + " ON ";
+   sql += this->getSqlJoin(params.joinType()) + qx::IxDataMember::getSqlTableName(table) + " " + tableAlias + " ON ";
    params.builder().addSqlQueryAlias(table, tableAlias);
    for (int i = 0; i < pIdData->getNameCount(); i++)
    { sql += sExtraTableAlias + "." + lstForeignKeyDataType.at(i) + " = " + pIdData->getSqlAlias(tableAlias, true, i) + " AND "; }
+   if (! this->m_pImpl->m_oSoftDelete.isEmpty() && this->m_pImpl->m_oSoftDelete.getSqlFetchInJoin())
+   { sql += this->m_pImpl->m_oSoftDelete.buildSqlQueryToFetch(tableAlias) + " AND "; }
    sql = sql.left(sql.count() - 5); // Remove last " AND "
 }
 
@@ -615,10 +617,12 @@ void IxSqlRelation::eagerJoin_ManyToOne(QxSqlRelationParams & params) const
    QString table = this->table(); QString tableAlias = this->tableAlias(params);
    QString tableRef = this->tableAliasOwner(params);
    if (! pId || ! pData) { return; }
-   sql += this->getSqlJoin(params.joinType()) + table + " " + tableAlias + " ON ";
+   sql += this->getSqlJoin(params.joinType()) + qx::IxDataMember::getSqlTableName(table) + " " + tableAlias + " ON ";
    params.builder().addSqlQueryAlias(table, tableAlias);
    for (int i = 0; i < pId->getNameCount(); i++)
    { sql += pId->getSqlAlias(tableAlias, true, i) + " = " + pData->getSqlAlias(tableRef, true, i) + " AND "; }
+   if (! this->m_pImpl->m_oSoftDelete.isEmpty() && this->m_pImpl->m_oSoftDelete.getSqlFetchInJoin())
+   { sql += this->m_pImpl->m_oSoftDelete.buildSqlQueryToFetch(tableAlias) + " AND "; }
    sql = sql.left(sql.count() - 5); // Remove last " AND "
 }
 
@@ -630,10 +634,12 @@ void IxSqlRelation::eagerJoin_OneToMany(QxSqlRelationParams & params) const
    QString table = this->table(); QString tableAlias = this->tableAlias(params);
    QString tableRef = this->tableAliasOwner(params);
    if (! pId || ! pForeign) { return; }
-   sql += this->getSqlJoin(params.joinType()) + table + " " + tableAlias + " ON ";
+   sql += this->getSqlJoin(params.joinType()) + qx::IxDataMember::getSqlTableName(table) + " " + tableAlias + " ON ";
    params.builder().addSqlQueryAlias(table, tableAlias);
    for (int i = 0; i < pId->getNameCount(); i++)
    { sql += pForeign->getSqlAlias(tableAlias, true, i) + " = " + pId->getSqlAlias(tableRef, true, i) + " AND "; }
+   if (! this->m_pImpl->m_oSoftDelete.isEmpty() && this->m_pImpl->m_oSoftDelete.getSqlFetchInJoin())
+   { sql += this->m_pImpl->m_oSoftDelete.buildSqlQueryToFetch(tableAlias) + " AND "; }
    sql = sql.left(sql.count() - 5); // Remove last " AND "
 }
 
@@ -645,16 +651,19 @@ void IxSqlRelation::eagerJoin_OneToOne(QxSqlRelationParams & params) const
    QString table = this->table(); QString tableAlias = this->tableAlias(params);
    QString tableRef = this->tableAliasOwner(params);
    if (! pId || ! pIdRef) { return; }
-   sql += this->getSqlJoin(params.joinType()) + table + " " + tableAlias + " ON ";
+   sql += this->getSqlJoin(params.joinType()) + qx::IxDataMember::getSqlTableName(table) + " " + tableAlias + " ON ";
    params.builder().addSqlQueryAlias(table, tableAlias);
    for (int i = 0; i < pId->getNameCount(); i++)
    { sql += pId->getSqlAlias(tableAlias, true, i) + " = " + pIdRef->getSqlAlias(tableRef, true, i) + " AND "; }
+   if (! this->m_pImpl->m_oSoftDelete.isEmpty() && this->m_pImpl->m_oSoftDelete.getSqlFetchInJoin())
+   { sql += this->m_pImpl->m_oSoftDelete.buildSqlQueryToFetch(tableAlias) + " AND "; }
    sql = sql.left(sql.count() - 5); // Remove last " AND "
 }
 
 void IxSqlRelation::eagerWhereSoftDelete_ManyToMany(QxSqlRelationParams & params) const
 {
    if (this->m_pImpl->m_oSoftDelete.isEmpty()) { return; }
+   if (this->m_pImpl->m_oSoftDelete.getSqlFetchInJoin()) { return; }
    QString & sql = params.sql();
    QString tableAlias = this->tableAlias(params);
    sql += qx::IxSqlQueryBuilder::addSqlCondition(sql);
@@ -664,6 +673,7 @@ void IxSqlRelation::eagerWhereSoftDelete_ManyToMany(QxSqlRelationParams & params
 void IxSqlRelation::eagerWhereSoftDelete_ManyToOne(QxSqlRelationParams & params) const
 {
    if (this->m_pImpl->m_oSoftDelete.isEmpty()) { return; }
+   if (this->m_pImpl->m_oSoftDelete.getSqlFetchInJoin()) { return; }
    QString & sql = params.sql();
    QString tableAlias = this->tableAlias(params);
    sql += qx::IxSqlQueryBuilder::addSqlCondition(sql);
@@ -673,6 +683,7 @@ void IxSqlRelation::eagerWhereSoftDelete_ManyToOne(QxSqlRelationParams & params)
 void IxSqlRelation::eagerWhereSoftDelete_OneToMany(QxSqlRelationParams & params) const
 {
    if (this->m_pImpl->m_oSoftDelete.isEmpty()) { return; }
+   if (this->m_pImpl->m_oSoftDelete.getSqlFetchInJoin()) { return; }
    QString & sql = params.sql();
    QString tableAlias = this->tableAlias(params);
    sql += qx::IxSqlQueryBuilder::addSqlCondition(sql);
@@ -682,6 +693,7 @@ void IxSqlRelation::eagerWhereSoftDelete_OneToMany(QxSqlRelationParams & params)
 void IxSqlRelation::eagerWhereSoftDelete_OneToOne(QxSqlRelationParams & params) const
 {
    if (this->m_pImpl->m_oSoftDelete.isEmpty()) { return; }
+   if (this->m_pImpl->m_oSoftDelete.getSqlFetchInJoin()) { return; }
    QString & sql = params.sql();
    QString tableAlias = this->tableAlias(params);
    sql += qx::IxSqlQueryBuilder::addSqlCondition(sql);

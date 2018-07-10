@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -43,14 +43,21 @@ namespace qx {
 namespace dao {
 namespace detail {
 
-QxSqlGenerator_Oracle::QxSqlGenerator_Oracle() : QxSqlGenerator_Standard() { this->initSqlTypeByClassName(); }
+QxSqlGenerator_Oracle::QxSqlGenerator_Oracle() : QxSqlGenerator_Standard(), m_bOldLimitSyntax(false) { this->initSqlTypeByClassName(); }
 
 QxSqlGenerator_Oracle::~QxSqlGenerator_Oracle() { ; }
+
+bool QxSqlGenerator_Oracle::getOldLimitSyntax() const { return m_bOldLimitSyntax; }
+
+void QxSqlGenerator_Oracle::setOldLimitSyntax(bool b) { m_bOldLimitSyntax = b; }
+
+QString QxSqlGenerator_Oracle::getTableAliasSep() const { return " "; }
 
 QString QxSqlGenerator_Oracle::getLimit(const QxSqlLimit * pLimit) const { Q_UNUSED(pLimit); return ""; }
 
 void QxSqlGenerator_Oracle::resolveLimit(QSqlQuery & query, const QxSqlLimit * pLimit) const
 {
+   if (! m_bOldLimitSyntax) { return; }
    if (! pLimit) { qAssert(false); return; }
    QString sMinRow = pLimit->getStartRow_ParamKey();
    QString sMaxRow = pLimit->getMaxRow_ParamKey();
@@ -65,16 +72,33 @@ void QxSqlGenerator_Oracle::postProcess(QString & sql, const QxSqlLimit * pLimit
    if (! pLimit) { qAssert(false); return; }
    QString sMinRow = pLimit->getStartRow_ParamKey();
    QString sMaxRow = pLimit->getMaxRow_ParamKey();
-   QString sReplace = "%SQL_QUERY%";
+   int iMinRow(pLimit->getStartRow()), iRowsCount(pLimit->getRowsCount());
+   bool bWithTies = pLimit->getWithTies();
 
-   QString sqlPaging;
-   sqlPaging += "SELECT * FROM ";
-   sqlPaging += "   ( SELECT a.*, ROWNUM rnum FROM ";
-   sqlPaging += "      ( " + sReplace + " ) a ";
-   sqlPaging += "     WHERE ROWNUM <= " + sMaxRow + " ) ";
-   sqlPaging += "WHERE rnum >= " + sMinRow;
-   sqlPaging.replace(sReplace, sql);
-   sql = sqlPaging;
+   if (m_bOldLimitSyntax)
+   {
+      QString sqlPaging;
+      QString sReplace = "%SQL_QUERY%";
+      sqlPaging += "SELECT * FROM ";
+      sqlPaging += "   ( SELECT a.*, ROWNUM rnum FROM ";
+      sqlPaging += "      ( " + sReplace + " ) a ";
+      sqlPaging += "     WHERE ROWNUM <= " + sMaxRow + " ) ";
+      sqlPaging += "WHERE rnum >= " + sMinRow;
+      sqlPaging.replace(sReplace, sql);
+      sql = sqlPaging;
+      return;
+   }
+
+   if (iMinRow <= 0)
+   {
+      if (bWithTies) { sql += " FETCH FIRST " + QString::number(iRowsCount) + " ROWS WITH TIES"; }
+      else { sql += " FETCH FIRST " + QString::number(iRowsCount) + " ROWS ONLY"; }
+   }
+   else
+   {
+      if (bWithTies) { sql += " OFFSET " + QString::number(iMinRow) + " ROWS FETCH NEXT " + QString::number(iRowsCount) + " ROWS WITH TIES"; }
+      else { sql += " OFFSET " + QString::number(iMinRow) + " ROWS FETCH NEXT " + QString::number(iRowsCount) + " ROWS ONLY"; }
+   }
 }
 
 void QxSqlGenerator_Oracle::initSqlTypeByClassName() const

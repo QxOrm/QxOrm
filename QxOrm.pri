@@ -1,6 +1,6 @@
 #############################################################################
 ##
-## http://www.qxorm.com/
+## https://www.qxorm.com/
 ## Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 ##
 ## This file is part of the QxOrm library
@@ -143,7 +143,7 @@ QT += gui
 
 # By default, QxOrm library doesn't depend on Qt Network shared library => it means that QxService module (network transactions to transfer your persistent layer) is not enabled by default
 # To enable this feature, just define the compilation option : _QX_ENABLE_QT_NETWORK
-# For more details about QxService module, a tutorial (qxClientServer) is available on QxOrm website : http://www.qxorm.com/qxorm_en/tutorial_2.html
+# For more details about QxService module, a tutorial (qxClientServer) is available on QxOrm website : https://www.qxorm.com/qxorm_en/tutorial_2.html
 
 # DEFINES += _QX_ENABLE_QT_NETWORK
 
@@ -173,6 +173,67 @@ DEFINES += _QX_ENABLE_BOOST_SERIALIZATION_XML
 # DEFINES += _QX_ENABLE_BOOST_SERIALIZATION_WIDE_XML
 
 } # contains(DEFINES, _QX_ENABLE_BOOST_SERIALIZATION)
+
+#######################################
+# MongoDB Driver Library Dependencies #
+#######################################
+
+# If you enable _QX_ENABLE_MONGODB option, then QxOrm library will be able to use mongoc driver to store all QxOrm registered classes in a MongoDB database
+# When _QX_ENABLE_MONGODB compilation option is defined, you must provide following paths to manage mongoc library dependencies :
+#  - a BSON_INCLUDE environment variable to define where bson library source code is located (or a QX_BSON_INCLUDE_PATH qmake variable)
+#  - a MONGOC_INCLUDE environment variable to define where mongoc library source code is located (or a QX_MONGOC_INCLUDE_PATH qmake variable)
+#  - a BSON_LIB environment variable to define where bson library is located (or a QX_BSON_LIB_PATH qmake variable)
+#  - a MONGOC_LIB environment variable to define where mongoc library is located (or a QX_MONGOC_LIB_PATH qmake variable)
+
+# DEFINES += _QX_ENABLE_MONGODB
+
+contains(DEFINES, _QX_ENABLE_MONGODB) {
+
+# Check bson library include path
+isEmpty(QX_BSON_INCLUDE_PATH) { QX_BSON_INCLUDE_PATH = $$quote($$(BSON_INCLUDE)) }
+isEmpty(QX_BSON_INCLUDE_PATH) {
+error("Error in QxOrm.pri configuration file : QX_BSON_INCLUDE_PATH variable is empty, please define in QX_BSON_INCLUDE_PATH variable where bson library source code is located, or define an environment variable named BSON_INCLUDE (read QxOrm.pri configuration file for more details)")
+} # isEmpty(QX_BSON_INCLUDE_PATH)
+QX_CHECK_BSON_INCLUDE_PATH = $${QX_BSON_INCLUDE_PATH}/bson.h
+greaterThan(QT_MAJOR_VERSION, 4) {
+QX_CHECK_BSON_INCLUDE_PATH = $$clean_path($${QX_CHECK_BSON_INCLUDE_PATH})
+} else { # greaterThan(QT_MAJOR_VERSION, 4)
+QX_CHECK_BSON_INCLUDE_PATH = $$replace(QX_CHECK_BSON_INCLUDE_PATH, \\\\, /)
+QX_CHECK_BSON_INCLUDE_PATH = $$replace(QX_CHECK_BSON_INCLUDE_PATH, \\, /)
+} # greaterThan(QT_MAJOR_VERSION, 4)
+!exists($${QX_CHECK_BSON_INCLUDE_PATH}) {
+message("Check if bson header file exists : $${QX_CHECK_BSON_INCLUDE_PATH}")
+error("Error in QxOrm.pri configuration file : QX_BSON_INCLUDE_PATH variable is not valid ($${QX_BSON_INCLUDE_PATH}), please define in QX_BSON_INCLUDE_PATH variable where bson library source code is located, or define an environment variable named BSON_INCLUDE (read QxOrm.pri configuration file for more details)")
+} # !exists($${QX_CHECK_BSON_INCLUDE_PATH})
+
+# Check mongoc library include path
+isEmpty(QX_MONGOC_INCLUDE_PATH) { QX_MONGOC_INCLUDE_PATH = $$quote($$(MONGOC_INCLUDE)) }
+isEmpty(QX_MONGOC_INCLUDE_PATH) {
+error("Error in QxOrm.pri configuration file : QX_MONGOC_INCLUDE_PATH variable is empty, please define in QX_MONGOC_INCLUDE_PATH variable where mongoc library source code is located, or define an environment variable named MONGOC_INCLUDE (read QxOrm.pri configuration file for more details)")
+} # isEmpty(QX_MONGOC_INCLUDE_PATH)
+QX_CHECK_MONGOC_INCLUDE_PATH = $${QX_MONGOC_INCLUDE_PATH}/mongoc.h
+greaterThan(QT_MAJOR_VERSION, 4) {
+QX_CHECK_MONGOC_INCLUDE_PATH = $$clean_path($${QX_CHECK_MONGOC_INCLUDE_PATH})
+} else { # greaterThan(QT_MAJOR_VERSION, 4)
+QX_CHECK_MONGOC_INCLUDE_PATH = $$replace(QX_CHECK_MONGOC_INCLUDE_PATH, \\\\, /)
+QX_CHECK_MONGOC_INCLUDE_PATH = $$replace(QX_CHECK_MONGOC_INCLUDE_PATH, \\, /)
+} # greaterThan(QT_MAJOR_VERSION, 4)
+!exists($${QX_CHECK_MONGOC_INCLUDE_PATH}) {
+message("Check if mongoc header file exists : $${QX_CHECK_MONGOC_INCLUDE_PATH}")
+error("Error in QxOrm.pri configuration file : QX_MONGOC_INCLUDE_PATH variable is not valid ($${QX_MONGOC_INCLUDE_PATH}), please define in QX_MONGOC_INCLUDE_PATH variable where mongoc library source code is located, or define an environment variable named MONGOC_INCLUDE (read QxOrm.pri configuration file for more details)")
+} # !exists($${QX_CHECK_MONGOC_INCLUDE_PATH})
+
+INCLUDEPATH += $${QX_BSON_INCLUDE_PATH}
+INCLUDEPATH += $${QX_MONGOC_INCLUDE_PATH}
+
+isEmpty(QX_BSON_LIB_PATH) { QX_BSON_LIB_PATH = $$quote($$(BSON_LIB)) }
+isEmpty(QX_MONGOC_LIB_PATH) { QX_MONGOC_LIB_PATH = $$quote($$(MONGOC_LIB)) }
+LIBS += -L$${QX_BSON_LIB_PATH}
+LIBS += -L$${QX_MONGOC_LIB_PATH}
+LIBS += -lbson-1.0
+LIBS += -lmongoc-1.0
+
+} # contains(DEFINES, _QX_ENABLE_MONGODB)
 
 #####################
 # Global Parameters #
@@ -232,6 +293,15 @@ LIBS += -l$${QX_BOOST_LIB_SERIALIZATION_RELEASE}
 # QMAKE_CXXFLAGS_RELEASE += -ffunction-sections -fdata-sections -Os -pipe
 # QMAKE_CFLAGS_RELEASE += -ffunction-sections -fdata-sections -Os -pipe
 # QMAKE_LFLAGS_RELEASE += -Wl,--gc-sections -s
+
+#############################
+# Compiler / Linker Options #
+#############################
+
+win32 {
+# For MinGW : we need to add these linker flags because of some issues to dll export extern template instantiations from shared library
+win32-g++: QMAKE_LFLAGS += -Wl,-export-all-symbols -Wl,-enable-auto-import
+} # win32
 
 #########################
 # No Precompiled Header #

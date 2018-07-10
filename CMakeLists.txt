@@ -1,6 +1,6 @@
 #############################################################################
 ##
-## http://www.qxorm.com/
+## https://www.qxorm.com/
 ## Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 ##
 ## This file is part of the QxOrm library
@@ -31,7 +31,7 @@
 
 cmake_minimum_required(VERSION 3.1)
 
-project(QxOrm VERSION 1.4.4 LANGUAGES CXX)
+project(QxOrm VERSION 1.4.5 LANGUAGES CXX)
 
 # Include QxOrm library configuration file (should be included by all projects which depend on QxOrm)
 include(./QxOrm.cmake)
@@ -120,6 +120,7 @@ set(QX_HEADERS
     ./include/QxDao/QxDateTimeNeutral.h
     ./include/QxDao/IxDao_Helper.h
     ./include/QxDao/IxPersistable.h
+    ./include/QxDao/IxPersistableCollection.h
     ./include/QxDao/QxSqlJoin.h
     ./include/QxDao/QxSqlRelationLinked.h
     ./include/QxDao/QxDaoAsync.h
@@ -147,6 +148,7 @@ set(QX_HEADERS
     ./include/QxDao/QxRepository/IxRepository.h
     ./include/QxDao/QxRepository/QxRepository.h
     ./include/QxDao/QxRepository/QxRepositoryX.h
+    ./include/QxDao/QxMongoDB/QxMongoDB_Helper.h
     ./include/QxSerialize/QxArchive.h
     ./include/QxSerialize/QxClone.h
     ./include/QxSerialize/QxDump.h
@@ -252,6 +254,7 @@ set(QX_HEADERS
     ./include/QxSerialize/QJson/QxSerializeQJson_IxParameter.h
     ./include/QxSerialize/QJson/QxSerializeQJson_IxService.h
     ./include/QxSerialize/QJson/QxSerializeQJson_IxSqlElement.h
+    ./include/QxSerialize/QJson/QxSerializeQJson_IxPersistable.h
     ./include/QxSerialize/QJson/QxSerializeQJson_QBrush.h
     ./include/QxSerialize/QJson/QxSerializeQJson_QColor.h
     ./include/QxSerialize/QJson/QxSerializeQJson_QFlags.h
@@ -280,6 +283,8 @@ set(QX_HEADERS
     ./include/QxSerialize/QJson/QxSerializeQJson_QUrl.h
     ./include/QxSerialize/QJson/QxSerializeQJson_QVector.h
     ./include/QxSerialize/QJson/QxSerializeQJson_QWeakPointer.h
+    ./include/QxSerialize/QJson/QxSerializeQJson_QVariantHash.h
+    ./include/QxSerialize/QJson/QxSerializeQJson_QVariantMap.h
     ./include/QxSerialize/QJson/QxSerializeQJson_qx_registered_class.h
     ./include/QxSerialize/QJson/QxSerializeQJson_QxCollection.h
     ./include/QxSerialize/QJson/QxSerializeQJson_QxDaoPointer.h
@@ -341,6 +346,7 @@ set(QX_HEADERS
     ./include/QxTraits/remove_attr.h
     ./include/QxTraits/remove_smart_ptr.h
     ./include/QxTraits/construct_ptr.h
+    ./include/QxTraits/construct_null_qvariant.h
     ./include/QxTraits/get_sql_type.h
     ./include/QxTraits/generic_container.h
     ./include/QxTraits/is_valid_primary_key.h
@@ -440,6 +446,7 @@ else() # _QX_UNITY_BUILD
        ./src/QxDao/QxSession.cpp
        ./src/QxDao/IxDao_Helper.cpp
        ./src/QxDao/IxPersistable.cpp
+       ./src/QxDao/IxPersistableCollection.cpp
        ./src/QxDao/QxSqlRelationLinked.cpp
        ./src/QxDao/QxDaoAsync.cpp
        ./src/QxDao/QxSqlRelationParams.cpp
@@ -466,6 +473,7 @@ else() # _QX_UNITY_BUILD
        ./src/QxDao/QxSqlGenerator/QxSqlGenerator_Standard.cpp
        ./src/QxDao/QxRepository/IxRepository.cpp
        ./src/QxDao/QxRepository/QxRepositoryX.cpp
+       ./src/QxDao/QxMongoDB/QxMongoDB_Helper.cpp
        ./src/QxSerialize/QxSerializeCheckInstance.cpp
        ./src/QxSerialize/QxBoostSerializeHelper/IxBoostSerializeRegisterHelper.cpp
        ./src/QxSerialize/QxBoostSerializeHelper/QxBoostSerializeRegisterHelperX.cpp

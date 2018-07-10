@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -37,11 +37,11 @@
 
 namespace qx {
 
-QxSoftDelete::QxSoftDelete() : m_eMode(QxSoftDelete::mode_date_time) { ; }
+QxSoftDelete::QxSoftDelete() : m_eMode(QxSoftDelete::mode_date_time), m_bFetchInJoin(true) { ; }
 
-QxSoftDelete::QxSoftDelete(const QString & sColumn) : m_sColumn(sColumn), m_eMode(QxSoftDelete::mode_date_time) { ; }
+QxSoftDelete::QxSoftDelete(const QString & sColumn) : m_sColumn(sColumn), m_eMode(QxSoftDelete::mode_date_time), m_bFetchInJoin(true) { ; }
 
-QxSoftDelete::QxSoftDelete(const QString & sColumn, QxSoftDelete::mode eMode) : m_sColumn(sColumn), m_eMode(eMode) { ; }
+QxSoftDelete::QxSoftDelete(const QString & sColumn, QxSoftDelete::mode eMode) : m_sColumn(sColumn), m_eMode(eMode), m_bFetchInJoin(true) { ; }
 
 QxSoftDelete::~QxSoftDelete() { ; }
 
@@ -57,6 +57,8 @@ QString QxSoftDelete::getSqlQueryToCreateTable() const { return m_sSqlQueryToCre
 
 QxSoftDelete::mode QxSoftDelete::getMode() const { return m_eMode; }
 
+bool QxSoftDelete::getSqlFetchInJoin() const { return m_bFetchInJoin; }
+
 void QxSoftDelete::setTableName(const QString & sTable) { m_sTable = sTable; }
 
 void QxSoftDelete::setColumnName(const QString & sColumn) { m_sColumn = sColumn; }
@@ -68,6 +70,8 @@ void QxSoftDelete::setSqlQueryToUpdate(const QString & s) { m_sSqlQueryToUpdate 
 void QxSoftDelete::setSqlQueryToCreateTable(const QString & s) { m_sSqlQueryToCreateTable = s; }
 
 void QxSoftDelete::setMode(QxSoftDelete::mode eMode) { m_eMode = eMode; }
+
+void QxSoftDelete::setSqlFetchInJoin(bool b) { m_bFetchInJoin = b; }
 
 bool QxSoftDelete::isEmpty() const { return (m_sTable.isEmpty() || m_sColumn.isEmpty()); }
 

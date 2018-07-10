@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -111,7 +111,7 @@ public:
    static bool implementIxPersistable(const QString & sKey, bool bTraceIfFalse = true);
 
    static QxCollection<QString, IxClass *> * getAllClasses();
-   static void registerAllClasses();
+   static void registerAllClasses(bool bInitAllRelations = false);
    static QString dumpAllClasses();
    static QString dumpSqlSchema();
 

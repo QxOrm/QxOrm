@@ -127,7 +127,7 @@ void main_dlg::onQueryFinished(const QSqlError & daoError, qx::dao::detail::QxDa
    // If the async query is associated to a simple object, just use 'pDaoParams->pInstance' method
    qx::IxPersistable_ptr ptr = pDaoParams->pInstance;
    // If the async query is associated to a list of objects, just use 'pDaoParams->pListOfInstances' method
-   qx::IxCollection_ptr lst = pDaoParams->pListOfInstances;
+   qx::IxPersistableCollection_ptr lst = pDaoParams->pListOfInstances;
    // etc...
    Q_UNUSED(query); Q_UNUSED(ptr); Q_UNUSED(lst);
 }

@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -43,6 +43,15 @@ struct QxDao_Count
       qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "count", new qx::QxSqlQueryBuilder_Count<T>());
       if (! dao.isValid()) { return 0; }
 
+#ifdef _QX_ENABLE_MONGODB
+      if (dao.isMongoDB())
+      {
+         long cnt = 0;
+         qx::dao::mongodb::QxMongoDB_Helper::count((& dao), dao.getDataMemberX()->getClass(), cnt, (& query)); if (! dao.isValid()) { return 0; }
+         return cnt;
+      }
+#endif // _QX_ENABLE_MONGODB
+
       QString sql = dao.builder().buildSql().getSqlQuery();
       if (sql.isEmpty()) { dao.errEmpty(); return 0; }
       if (! query.isEmpty()) { dao.addQuery(query, true); sql = dao.builder().getSqlQuery(); }
@@ -57,6 +66,14 @@ struct QxDao_Count
       T t; Q_UNUSED(t); lCount = 0;
       qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "count", new qx::QxSqlQueryBuilder_Count<T>());
       if (! dao.isValid()) { return dao.error(); }
+
+#ifdef _QX_ENABLE_MONGODB
+      if (dao.isMongoDB())
+      {
+         qx::dao::mongodb::QxMongoDB_Helper::count((& dao), dao.getDataMemberX()->getClass(), lCount, (& query)); if (! dao.isValid()) { return dao.error(); }
+         return dao.error();
+      }
+#endif // _QX_ENABLE_MONGODB
 
       QString sql = dao.builder().buildSql().getSqlQuery();
       if (sql.isEmpty()) { return dao.errEmpty(); }

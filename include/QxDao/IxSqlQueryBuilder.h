@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -104,7 +104,7 @@ public:
    void addSqlQueryAlias(const QString & sql, const QString & sqlAlias);
    bool getAddAutoIncrementIdToUpdateQuery() const;
    void replaceSqlQueryAlias(QString & sql) const;
-   void displaySqlQuery(int time_ms = -1, int time_db = -1) const;
+   void displaySqlQuery(int time_ms = -1, int time_db = -1, const QString & query = QString()) const;
 
    virtual void init();
    virtual void clone(const IxSqlQueryBuilder & other);
@@ -149,6 +149,7 @@ protected:
    const QHash<QString, QString> & listSqlQueryAlias() const;
    static QHash<QString, QString> & listSqlQuery();
    static QHash<QString, QHash<QString, QString> > & listSqlAlias();
+   static QMutex & getMutex();
 
 };
 

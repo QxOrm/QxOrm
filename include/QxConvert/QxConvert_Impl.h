@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -43,6 +43,7 @@
 #include <QxDao/QxTimeNeutral.h>
 #include <QxDao/QxDateTimeNeutral.h>
 #include <QxDao/QxSqlQuery.h>
+#include <QxDao/IxPersistable.h>
 
 #include <QxCollection/QxCollection.h>
 
@@ -106,6 +107,7 @@ namespace helper {
 struct QxConvertHelper_Generic { };
 struct QxConvertHelper_Ptr { };
 struct QxConvertHelper_Registered { };
+struct QxConvertHelper_Persistable { };
 struct QxConvertHelper_Container { };
 struct QxConvertHelper_Enum { };
 
@@ -241,6 +243,100 @@ struct QxConvertHelper_FromJson<T, qx::cvt::detail::helper::QxConvertHelper_Gene
 {
    static inline qx_bool fromJson(const QJsonValue & j, T & t, const QString & format)
    { QVariant v = j.toVariant(); return qx::cvt::detail::QxConvertHelper_FromVariant<T, qx::cvt::detail::helper::QxConvertHelper_Generic>::fromVariant(v, t, format, -1, qx::cvt::context::e_no_context); }
+};
+
+#endif // _QX_NO_JSON
+
+template <typename T>
+struct QxConvertHelper_ToString<T, qx::cvt::detail::helper::QxConvertHelper_Persistable>
+{
+
+   enum { qx_need_to_specialize_template_convert_to_string_from_string = 0 };
+
+   static inline QString toString(const T & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
+   {
+      Q_UNUSED(t); Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx);
+#ifndef _QX_NO_JSON
+      return t.toJson(format);
+#else // _QX_NO_JSON
+      static_assert(qx_need_to_specialize_template_convert_to_string_from_string, "qx_need_to_specialize_template_convert_to_string_from_string"); // If a compilation error occurred here : you have to specialize template 'qx::cvt::detail::QxConvert_ToString< MyType >'
+      return QString();
+#endif // _QX_NO_JSON
+   }
+
+};
+
+template <typename T>
+struct QxConvertHelper_FromString<T, qx::cvt::detail::helper::QxConvertHelper_Persistable>
+{
+
+   enum { qx_need_to_specialize_template_convert_to_string_from_string = 0 };
+
+   static inline qx_bool fromString(const QString & s, T & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
+   {
+      Q_UNUSED(s); Q_UNUSED(t); Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx);
+#ifndef _QX_NO_JSON
+      return t.fromJson(s, format);
+#else // _QX_NO_JSON
+      static_assert(qx_need_to_specialize_template_convert_to_string_from_string, "qx_need_to_specialize_template_convert_to_string_from_string"); // If a compilation error occurred here : you have to specialize template 'qx::cvt::detail::QxConvert_FromString< MyType >'
+      return qx_bool(true);
+#endif // _QX_NO_JSON
+   }
+
+};
+
+template <typename T>
+struct QxConvertHelper_ToVariant<T, qx::cvt::detail::helper::QxConvertHelper_Persistable>
+{
+
+   enum { qx_need_to_specialize_template_convert_to_variant_from_variant = 0 };
+
+   static inline QVariant toVariant(const T & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
+   {
+      Q_UNUSED(t); Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx);
+#ifndef _QX_NO_JSON
+      return QVariant(t.toJson(format));
+#else // _QX_NO_JSON
+      static_assert(qx_need_to_specialize_template_convert_to_variant_from_variant, "qx_need_to_specialize_template_convert_to_variant_from_variant"); // If a compilation error occurred here : you have to specialize template 'qx::cvt::detail::QxConvert_ToVariant< MyType >'
+      return QVariant();
+#endif // _QX_NO_JSON
+   }
+
+};
+
+template <typename T>
+struct QxConvertHelper_FromVariant<T, qx::cvt::detail::helper::QxConvertHelper_Persistable>
+{
+
+   enum { qx_need_to_specialize_template_convert_to_variant_from_variant = 0 };
+
+   static inline qx_bool fromVariant(const QVariant & v, T & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
+   {
+      Q_UNUSED(v); Q_UNUSED(t); Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx);
+#ifndef _QX_NO_JSON
+      return t.fromJson(v.toString(), format);
+#else // _QX_NO_JSON
+      static_assert(qx_need_to_specialize_template_convert_to_variant_from_variant, "qx_need_to_specialize_template_convert_to_variant_from_variant"); // If a compilation error occurred here : you have to specialize template 'qx::cvt::detail::QxConvert_FromVariant< MyType >'
+      return qx_bool(true);
+#endif // _QX_NO_JSON
+   }
+
+};
+
+#ifndef _QX_NO_JSON
+
+template <typename T>
+struct QxConvertHelper_ToJson<T, qx::cvt::detail::helper::QxConvertHelper_Persistable>
+{
+   static inline QJsonValue toJson(const T & t, const QString & format)
+   { const qx::IxPersistable * p = static_cast<const qx::IxPersistable *>(& t); return qx::cvt::to_json((* p), format); }
+};
+
+template <typename T>
+struct QxConvertHelper_FromJson<T, qx::cvt::detail::helper::QxConvertHelper_Persistable>
+{
+   static inline qx_bool fromJson(const QJsonValue & j, T & t, const QString & format)
+   { qx::IxPersistable * p = static_cast<qx::IxPersistable *>(& t); return qx::cvt::from_json(j, (* p), format); }
 };
 
 #endif // _QX_NO_JSON
@@ -451,7 +547,8 @@ struct QxConvertHelper
 
 private:
 
-   typedef typename std::conditional< std::is_pointer<T>::value, qx::cvt::detail::helper::QxConvertHelper_Ptr, qx::cvt::detail::helper::QxConvertHelper_Generic >::type type_str_cvt_helper_1;
+   typedef typename std::conditional< qx::trait::is_ix_persistable<T>::value, qx::cvt::detail::helper::QxConvertHelper_Persistable, qx::cvt::detail::helper::QxConvertHelper_Generic >::type type_str_cvt_helper_0;
+   typedef typename std::conditional< std::is_pointer<T>::value, qx::cvt::detail::helper::QxConvertHelper_Ptr, type_str_cvt_helper_0 >::type type_str_cvt_helper_1;
    typedef typename std::conditional< qx::trait::is_smart_ptr<T>::value, qx::cvt::detail::helper::QxConvertHelper_Ptr, type_str_cvt_helper_1 >::type type_str_cvt_helper_2;
    typedef typename std::conditional< qx::trait::is_container<T>::value, qx::cvt::detail::helper::QxConvertHelper_Container, type_str_cvt_helper_2 >::type type_str_cvt_helper_3;
    typedef typename std::conditional< qx::trait::is_qx_registered<T>::value, qx::cvt::detail::helper::QxConvertHelper_Registered, type_str_cvt_helper_3 >::type type_str_cvt_helper_4;

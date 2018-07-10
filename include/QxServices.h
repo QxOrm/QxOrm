@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -40,7 +40,7 @@
  * \file QxServices.h
  * \author Lionel Marty
  * \ingroup QxService
- * \brief Include all headers required to use QxService module : http://www.qxorm.com/qxorm_en/manual.html#manual_80
+ * \brief Include all headers required to use QxService module : https://www.qxorm.com/qxorm_en/manual.html#manual_80
  */
 
 #include <QxOrm.h>

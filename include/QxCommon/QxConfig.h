@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -43,8 +43,8 @@
  * \brief List of parameters to compile and build QxOrm library
  */
 
-#define QX_VERSION         0x010404
-#define QX_VERSION_STR     "1.4.4"
+#define QX_VERSION         0x010405
+#define QX_VERSION_STR     "1.4.5"
 
 #ifndef _QX_MODE_DEBUG
 #ifndef _QX_MODE_RELEASE
@@ -162,7 +162,7 @@
 #define _QX_MEM_LEAK_ONLY_KNOWN_SRC_FILE                                1
 #define _QX_SUPPORT_BOOST_SERIALIZE_SHARED_PTR_132                      0
 #define _QX_USE_QX_CONVERT_EXPORT                                       0
-#define _QX_USE_GCC_EXPORT_ALL_SYMBOLS                                  1
+#define _QX_USE_GCC_EXPORT_ALL_SYMBOLS                                  0
 #define _QX_USE_GCC_VISIBILITY                                          0
 #define _QX_USE_ASSERT                                                  1
 #define _QX_SUPPORT_COVARIANT_RETURN_TYPE                               1

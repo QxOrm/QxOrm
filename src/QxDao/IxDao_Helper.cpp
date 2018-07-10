@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -55,8 +55,8 @@
 #define QX_CONSTRUCT_IX_DAO_HELPER() \
 m_timeDatabase(0), m_lDataCount(0), m_bTransaction(false), m_bQuiet(false), \
 m_bTraceQuery(true), m_bTraceRecord(false), m_bCartesianProduct(false), \
-m_bValidatorThrowable(false), m_pDataMemberX(NULL), m_pDataId(NULL), \
-m_pSqlGenerator(NULL)
+m_bValidatorThrowable(false), m_bNeedToClearDatabaseByThread(false), \
+m_bMongoDB(false), m_pDataMemberX(NULL), m_pDataId(NULL), m_pSqlGenerator(NULL)
 
 namespace qx {
 namespace dao {
@@ -65,20 +65,23 @@ namespace detail {
 struct IxDao_Helper::IxDao_HelperImpl
 {
 
-   QTime          m_time;                 //!< Time (in ms) to execute query (total time : SQL + fetch C++ classes)
-   int            m_timeDatabase;         //!< Time (in ms) to execute SQL query in database
-   QSqlDatabase   m_database;             //!< Connection to database to execute query
-   QSqlQuery      m_query;                //!< Query to execute
-   QSqlError      m_error;                //!< Error executing query
-   QString        m_context;              //!< Description of context : fetch, insert, update, delete, etc...
-   long           m_lDataCount;           //!< Data member collection count
-   bool           m_bTransaction;         //!< Transaction in progress : commit if valid, rollback if error
-   bool           m_bQuiet;               //!< Display message and assert in debug mode
-   bool           m_bTraceQuery;          //!< Trace sql query
-   bool           m_bTraceRecord;         //!< Trace sql record
-   bool           m_bCartesianProduct;    //!< Recordset can return cartesian product => same id in multiple records
-   bool           m_bValidatorThrowable;  //!< An exception of type qx::validator_error is thrown when invalid values are detected inserting or updating an element into database
-   QStringList    m_lstColumns;           //!< List of columns to execute sql query (if empty => all columns)
+   QTime          m_time;                             //!< Time (in ms) to execute query (total time : SQL + fetch C++ classes)
+   int            m_timeDatabase;                     //!< Time (in ms) to execute SQL query in database
+   QSqlDatabase   m_database;                         //!< Connection to database to execute query
+   QSqlQuery      m_query;                            //!< Query to execute
+   QSqlError      m_error;                            //!< Error executing query
+   QString        m_context;                          //!< Description of context : fetch, insert, update, delete, etc...
+   long           m_lDataCount;                       //!< Data member collection count
+   bool           m_bTransaction;                     //!< Transaction in progress : commit if valid, rollback if error
+   bool           m_bQuiet;                           //!< Display message and assert in debug mode
+   bool           m_bTraceQuery;                      //!< Trace sql query
+   bool           m_bTraceRecord;                     //!< Trace sql record
+   bool           m_bCartesianProduct;                //!< Recordset can return cartesian product => same id in multiple records
+   bool           m_bValidatorThrowable;              //!< An exception of type qx::validator_error is thrown when invalid values are detected inserting or updating an element into database
+   QStringList    m_lstColumns;                       //!< List of columns to execute sql query (if empty => all columns)
+   bool           m_bNeedToClearDatabaseByThread;     //!< Internal purpose only to clear current database context by thread in destructor
+   bool           m_bMongoDB;                         //!< Current database context is a MongoDB database
+   QStringList    m_lstItemsAsJson;                   //!< List of items to insert/update/delete as JSON (used for MongoDB database)
 
    qx::IxSqlQueryBuilder_ptr     m_pQueryBuilder;        //!< Sql query builder
    qx::IxDataMemberX *           m_pDataMemberX;         //!< Collection of data member
@@ -95,7 +98,7 @@ struct IxDao_Helper::IxDao_HelperImpl
 
 IxDao_Helper::IxDao_Helper(qx::IxSqlQueryBuilder * pBuilder) : m_pImpl(new IxDao_HelperImpl(pBuilder)) { ; }
 
-IxDao_Helper::~IxDao_Helper() { terminate(); }
+IxDao_Helper::~IxDao_Helper() { terminate(); if (m_pImpl->m_bNeedToClearDatabaseByThread) { qx::QxSqlDatabase::getSingleton()->clearCurrentDatabaseByThread(); } }
 
 bool IxDao_Helper::isValid() const { return (! m_pImpl->m_error.isValid() && m_pImpl->m_pQueryBuilder); }
 
@@ -141,7 +144,13 @@ void IxDao_Helper::quiet() { m_pImpl->m_bQuiet = true; }
 
 bool IxDao_Helper::isReadOnly() const { return ((m_pImpl->m_pDataMemberX && m_pImpl->m_pDataMemberX->getClass()) ? m_pImpl->m_pDataMemberX->getClass()->isDaoReadOnly() : false); }
 
+bool IxDao_Helper::isMongoDB() const { return m_pImpl->m_bMongoDB; }
+
 bool IxDao_Helper::getAddAutoIncrementIdToUpdateQuery() const { return qx::QxSqlDatabase::getSingleton()->getAddAutoIncrementIdToUpdateQuery(); }
+
+QStringList & IxDao_Helper::itemsAsJson() { return m_pImpl->m_lstItemsAsJson; }
+
+void IxDao_Helper::setTimeDatabase(int ms) { m_pImpl->m_timeDatabase = ms; }
 
 bool IxDao_Helper::exec()
 {
@@ -150,6 +159,14 @@ bool IxDao_Helper::exec()
    else { bExec = this->query().exec(); }
    m_pImpl->m_timeDatabase = timeDB.elapsed();
    return bExec;
+}
+
+bool IxDao_Helper::prepare(QString & sql)
+{
+   QString sqlTemp = sql;
+   if (m_pImpl->m_pSqlGenerator) { m_pImpl->m_pSqlGenerator->onBeforeSqlPrepare(this, sql); }
+   if (sqlTemp != sql) { qDebug("[QxOrm] SQL query has been changed by SQL generator (onBeforeSqlPrepare) :\n   - before : '%s'\n   - after : '%s'", qPrintable(sqlTemp), qPrintable(sql)); }
+   return this->query().prepare(sql);
 }
 
 void IxDao_Helper::addInvalidValues(const qx::QxInvalidValueX & lst)
@@ -180,6 +197,8 @@ const qx::IxSqlQueryBuilder & IxDao_Helper::builder() const
 QSqlError IxDao_Helper::errFailed(bool bPrepare /* = false */)
 {
    QString sql = this->sql();
+   bool bFormatSql = qx::QxSqlDatabase::getSingleton()->getFormatSqlQueryBeforeLogging();
+   if (bFormatSql && m_pImpl->m_pSqlGenerator) { m_pImpl->m_pSqlGenerator->formatSqlQuery(this, sql); }
    if (bPrepare) { qDebug(QX_DAO_ERR_PREPARE_SQL_QUERY, qPrintable(sql)); }
    else { qDebug(QX_DAO_ERR_EXECUTE_SQL_QUERY, qPrintable(sql)); }
    return updateError(m_pImpl->m_query.lastError());
@@ -202,6 +221,7 @@ QSqlError IxDao_Helper::errReadOnly() { return updateError(QX_DAO_ERR_READ_ONLY)
 
 bool IxDao_Helper::transaction()
 {
+   if (m_pImpl->m_bMongoDB) { return false; }
    if (isValid() && hasFeature(QSqlDriver::Transactions))
    { m_pImpl->m_bTransaction = m_pImpl->m_database.transaction(); }
    return m_pImpl->m_bTransaction;
@@ -259,7 +279,7 @@ void IxDao_Helper::addQuery(const qx::QxSqlQuery & query, bool bResolve)
 
    if (bResolve)
    {
-      if (! this->query().prepare(sql)) { this->errFailed(true); }
+      if (! this->prepare(sql)) { this->errFailed(true); }
       m_pImpl->m_qxQuery.resolve(this->query());
    }
 }
@@ -294,19 +314,32 @@ void IxDao_Helper::init(QSqlDatabase * pDatabase, const QString & sContext)
    m_pImpl->m_context = sContext;
    m_pImpl->m_bTraceQuery = qx::QxSqlDatabase::getSingleton()->getTraceSqlQuery();
    m_pImpl->m_bTraceRecord = qx::QxSqlDatabase::getSingleton()->getTraceSqlRecord();
+   m_pImpl->m_bMongoDB = (qx::QxSqlDatabase::getSingleton()->getDriverName() == "QXMONGODB");
    qAssert(! m_pImpl->m_context.isEmpty());
 
-   QSqlError dbError;
-   m_pImpl->m_database = (pDatabase ? (* pDatabase) : qx::QxSqlDatabase::getDatabase(dbError));
-   if (dbError.isValid()) { updateError(dbError); return; }
-   if (! m_pImpl->m_database.isValid()) { updateError(QX_DAO_ERR_NO_CONNECTION); return; }
-   if (! m_pImpl->m_database.isOpen() && ! m_pImpl->m_database.open()) { updateError(QX_DAO_ERR_OPEN_CONNECTION); return; }
-   if (! m_pImpl->m_pQueryBuilder) { updateError(QX_DAO_ERR_NO_QUERY_BUILDER); return; }
+#ifndef _QX_ENABLE_MONGODB
+   if (m_pImpl->m_bMongoDB)
+   {
+      qAssertMsg(false, "[QxOrm] QXMONGODB driver", "_QX_ENABLE_MONGODB compilation option is required to connect to MongoDB database");
+      updateError("[QxOrm] QXMONGODB driver : _QX_ENABLE_MONGODB compilation option is required to connect to MongoDB database"); return;
+   }
+#endif // _QX_ENABLE_MONGODB
+
+   if (! m_pImpl->m_bMongoDB)
+   {
+      QSqlError dbError;
+      if (pDatabase) { m_pImpl->m_bNeedToClearDatabaseByThread = qx::QxSqlDatabase::getSingleton()->setCurrentDatabaseByThread(pDatabase); }
+      m_pImpl->m_database = (pDatabase ? (* pDatabase) : qx::QxSqlDatabase::getDatabase(dbError));
+      if (dbError.isValid()) { updateError(dbError); return; }
+      if (! m_pImpl->m_database.isValid()) { updateError(QX_DAO_ERR_NO_CONNECTION); return; }
+      if (! m_pImpl->m_database.isOpen() && ! m_pImpl->m_database.open()) { updateError(QX_DAO_ERR_OPEN_CONNECTION); return; }
+      if (! m_pImpl->m_pQueryBuilder) { updateError(QX_DAO_ERR_NO_QUERY_BUILDER); return; }
+      m_pImpl->m_query = QSqlQuery(m_pImpl->m_database);
+      m_pImpl->m_query.setForwardOnly(true);
+   }
 
    m_pImpl->m_pQueryBuilder->init();
    m_pImpl->m_pQueryBuilder->setDaoHelper(this);
-   m_pImpl->m_query = QSqlQuery(m_pImpl->m_database);
-   m_pImpl->m_query.setForwardOnly(true);
    m_pImpl->m_pDataMemberX = (m_pImpl->m_pQueryBuilder ? m_pImpl->m_pQueryBuilder->getDataMemberX() : NULL);
    m_pImpl->m_lDataCount = (m_pImpl->m_pQueryBuilder ? m_pImpl->m_pQueryBuilder->getDataCount() : 0);
    m_pImpl->m_pDataId = (m_pImpl->m_pQueryBuilder ? m_pImpl->m_pQueryBuilder->getDataId() : NULL);
@@ -323,12 +356,19 @@ void IxDao_Helper::terminate()
    else if (! isValid())
    {
       if (m_pImpl->m_bTransaction) { m_pImpl->m_database.rollback(); }
-      if (! m_pImpl->m_bQuiet) { int ierr = m_pImpl->m_error.number(); QString tmp = m_pImpl->m_error.driverText(); qDebug("Database error number '%d' : %s", ierr, qPrintable(tmp)); tmp = m_pImpl->m_error.databaseText(); qDebug("%s", qPrintable(tmp)); }
+      if (! m_pImpl->m_bQuiet)
+      {
+         int ierr = m_pImpl->m_error.number();
+         QString tmp = m_pImpl->m_error.driverText();
+         qDebug("Database error number '%d' : %s", ierr, qPrintable(tmp));
+         tmp = m_pImpl->m_error.databaseText(); qDebug("%s", qPrintable(tmp));
+         if (m_pImpl->m_bMongoDB) { tmp = m_pImpl->m_qxQuery.queryAt(0); qDebug("%s", qPrintable(tmp)); }
+      }
    }
    else if (m_pImpl->m_pQueryBuilder)
    {
       if (m_pImpl->m_bTransaction) { m_pImpl->m_database.commit(); }
-      if (! m_pImpl->m_bQuiet && m_pImpl->m_bTraceQuery) { m_pImpl->m_pQueryBuilder->displaySqlQuery(m_pImpl->m_time.elapsed(), m_pImpl->m_timeDatabase); }
+      if (! m_pImpl->m_bQuiet && m_pImpl->m_bTraceQuery) { m_pImpl->m_pQueryBuilder->displaySqlQuery(m_pImpl->m_time.elapsed(), m_pImpl->m_timeDatabase, (m_pImpl->m_bMongoDB ? m_pImpl->m_qxQuery.queryAt(0) : QString())); }
    }
    else
    {
@@ -342,6 +382,7 @@ void IxDao_Helper::terminate()
 
 void IxDao_Helper::dumpBoundValues() const
 {
+   if (m_pImpl->m_bMongoDB) { return; }
    qx::QxSqlDatabase * pDatabase = qx::QxSqlDatabase::getSingleton(); if (! pDatabase) { return; }
    bool bBoundValues = pDatabase->getTraceSqlBoundValues();
    bool bBoundValuesOnError = pDatabase->getTraceSqlBoundValuesOnError();

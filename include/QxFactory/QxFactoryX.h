@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -52,7 +52,7 @@
 
 namespace qx {
 
-inline qx::any create(const QString & sKey);
+inline qx::any create(const QString & sKey, bool bRawPointer = false);
 template <typename T> inline T * create_nude_ptr(const QString & sKey);
 inline void * create_void_ptr(const QString & sKey);
 
@@ -68,7 +68,7 @@ class QX_DLL_EXPORT QxFactoryX : public QxSingleton<QxFactoryX>
    friend class QxClassX;
    friend class IxFactory;
    friend class QxSingleton<QxFactoryX>;
-   friend inline qx::any create(const QString & sKey);
+   friend inline qx::any create(const QString & sKey, bool bRawPointer);
    template <typename T> friend inline T * create_nude_ptr(const QString & sKey);
    friend inline void * create_void_ptr(const QString & sKey);
 
@@ -87,15 +87,15 @@ private:
    void registerFactory(const QString & sKey, IxFactory * pFactory);
    void unregisterFactory(const QString & sKey);
 
-   qx::any createObject(const QString & sKey) const;
+   qx::any createObject(const QString & sKey, bool bRawPointer = false) const;
    void * createObjectNudePtr(const QString & sKey) const;
 
 #ifndef _QX_NO_RTTI
    const std::type_info & typeInfo(const QString & sKey) const;
 #endif // _QX_NO_RTTI
 
-   static inline qx::any createInstance(const QString & sKey)           { return QxFactoryX::getSingleton()->createObject(sKey); }
-   static inline void * createInstanceNudePtr(const QString & sKey)        { return QxFactoryX::getSingleton()->createObjectNudePtr(sKey); }
+   static inline qx::any createInstance(const QString & sKey, bool bRawPointer = false)   { return QxFactoryX::getSingleton()->createObject(sKey, bRawPointer); }
+   static inline void * createInstanceNudePtr(const QString & sKey)                       { return QxFactoryX::getSingleton()->createObjectNudePtr(sKey); }
 
 #ifndef _QX_NO_RTTI
    static inline const std::type_info & getTypeInfo(const QString & sKey)  { return QxFactoryX::getSingleton()->typeInfo(sKey); }
@@ -107,8 +107,8 @@ private:
  * \ingroup QxFactory
  * \brief Return a smart-pointer new instance of object (std::shared_ptr<T>) associated by key sKey using qx::any type (for example : qx::create("drug") return a new instance of smart-pointer drug class into qx::any type)
  */
-inline qx::any create(const QString & sKey)
-{ return qx::QxFactoryX::createInstance(sKey); }
+inline qx::any create(const QString & sKey, bool bRawPointer /* = false */)
+{ return qx::QxFactoryX::createInstance(sKey, bRawPointer); }
 
 /*!
  * \ingroup QxFactory

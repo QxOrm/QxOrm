@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -44,12 +44,23 @@ struct QxDao_Insert_Generic
       if (dao.isReadOnly()) { return dao.errReadOnly(); }
       if (! dao.validateInstance(t)) { return dao.error(); }
 
+#ifdef _QX_ENABLE_MONGODB
+      if (dao.isMongoDB())
+      {
+         qx::dao::on_before_insert<T>((& t), (& dao)); if (! dao.isValid()) { return dao.error(); }
+         QString insertedId; qx::dao::mongodb::QxMongoDB_Helper::insertOne((& dao), dao.getDataMemberX()->getClass(), qx::serialization::json::to_string(t, 1, "mongodb"), insertedId); if (! dao.isValid()) { return dao.error(); }
+         if (! insertedId.isEmpty() && dao.getDataId()) { dao.getDataId()->fromVariant((& t), insertedId, -1, qx::cvt::context::e_database); }
+         qx::dao::on_after_insert<T>((& t), (& dao)); if (! dao.isValid()) { return dao.error(); }
+         return dao.error();
+      }
+#endif // _QX_ENABLE_MONGODB
+
       IxSqlGenerator * pSqlGenerator = dao.getSqlGenerator();
       QString sql = dao.builder().buildSql().getSqlQuery();
       if (sql.isEmpty()) { return dao.errEmpty(); }
       if (! pDatabase) { dao.transaction(); }
       if (pSqlGenerator) { pSqlGenerator->checkSqlInsert((& dao), sql); }
-      if (! dao.query().prepare(sql)) { return dao.errFailed(true); }
+      if (! dao.prepare(sql)) { return dao.errFailed(true); }
 
       if (pSqlGenerator) { pSqlGenerator->onBeforeInsert((& dao), (& t)); }
       qx::dao::on_before_insert<T>((& t), (& dao)); if (! dao.isValid()) { return dao.error(); }
@@ -78,12 +89,24 @@ struct QxDao_Insert_Container
       if (dao.isReadOnly()) { return dao.errReadOnly(); }
       if (! dao.validateInstance(t)) { return dao.error(); }
 
+#ifdef _QX_ENABLE_MONGODB
+      if (dao.isMongoDB())
+      {
+         for (typename T::iterator it = t.begin(); it != t.end(); ++it) { if (! insertItem((* it), dao)) { return dao.error(); } }
+         QStringList & itemsAsJson = dao.itemsAsJson(); QStringList insertedId;
+         qx::dao::mongodb::QxMongoDB_Helper::insertMany((& dao), dao.getDataMemberX()->getClass(), itemsAsJson, insertedId); if (! dao.isValid()) { return dao.error(); }
+         dao.qxQuery().queryAt(2, "<done>"); dao.itemsAsJson().clear(); dao.itemsAsJson().append(insertedId);
+         for (typename T::iterator it = t.begin(); it != t.end(); ++it) { if (! insertItem((* it), dao)) { return dao.error(); } }
+         return dao.error();
+      }
+#endif // _QX_ENABLE_MONGODB
+
       IxSqlGenerator * pSqlGenerator = dao.getSqlGenerator();
       QString sql = dao.builder().buildSql().getSqlQuery();
       if (sql.isEmpty()) { return dao.errEmpty(); }
       if (! pDatabase) { dao.transaction(); }
       if (pSqlGenerator) { pSqlGenerator->checkSqlInsert((& dao), sql); }
-      if (! dao.query().prepare(sql)) { return dao.errFailed(true); }
+      if (! dao.prepare(sql)) { return dao.errFailed(true); }
 
       for (typename T::iterator it = t.begin(); it != t.end(); ++it)
       { if (! insertItem((* it), dao)) { return dao.error(); } }
@@ -141,6 +164,20 @@ private:
    {
       static bool insert(U & item, qx::dao::detail::QxDao_Helper_Container<T> & dao)
       {
+#ifdef _QX_ENABLE_MONGODB
+         if (dao.isMongoDB())
+         {
+            if (dao.qxQuery().queryAt(2) == "<done>")
+            {
+               if (! dao.itemsAsJson().isEmpty()) { QString oid = dao.itemsAsJson().takeFirst(); if (! oid.isEmpty() && dao.getDataId()) { dao.getDataId()->fromVariant((& item), oid, -1, qx::cvt::context::e_database); } }
+               qx::dao::on_after_insert<U>((& item), (& dao)); return dao.isValid();
+            }
+            qx::dao::on_before_insert<U>((& item), (& dao)); if (! dao.isValid()) { return false; }
+            dao.itemsAsJson().append(qx::serialization::json::to_string(item, 1, "mongodb"));
+            return dao.isValid();
+         }
+#endif // _QX_ENABLE_MONGODB
+
          IxSqlGenerator * pSqlGenerator = dao.getSqlGenerator();
          if (pSqlGenerator) { pSqlGenerator->onBeforeInsert((& dao), (& item)); }
          qx::dao::on_before_insert<U>((& item), (& dao)); if (! dao.isValid()) { return false; }

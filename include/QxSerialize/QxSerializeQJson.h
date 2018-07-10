@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -64,16 +64,16 @@ namespace serialization {
 namespace json {
 
 template <class T>
-inline QByteArray to_byte_array(const T & obj, void * owner = NULL, unsigned int flags = 1 /* boost::archive::no_header */)
+inline QByteArray to_byte_array(const T & obj, void * owner = NULL, unsigned int flags = 1 /* boost::archive::no_header */, const QString & format = QString())
 {
    Q_UNUSED(flags); Q_UNUSED(owner);
-   QJsonValue val = qx::cvt::to_json(obj);
+   QJsonValue val = qx::cvt::to_json(obj, format);
    QJsonDocument doc = (val.isArray() ? QJsonDocument(val.toArray()) : QJsonDocument(val.toObject()));
    return doc.toJson();
 }
 
 template <class T>
-inline qx_bool from_byte_array(T & obj, const QByteArray & data, unsigned int flags = 1 /* boost::archive::no_header */)
+inline qx_bool from_byte_array(T & obj, const QByteArray & data, unsigned int flags = 1 /* boost::archive::no_header */, const QString & format = QString())
 {
    Q_UNUSED(flags);
    QJsonParseError err;
@@ -81,21 +81,21 @@ inline qx_bool from_byte_array(T & obj, const QByteArray & data, unsigned int fl
    if (err.error != QJsonParseError::NoError)
    { return qx_bool(false, static_cast<long>(err.error), err.errorString()); }
    QJsonValue val = (doc.isArray() ? QJsonValue(doc.array()) : QJsonValue(doc.object()));
-   return qx::cvt::from_json(val, obj);
+   return qx::cvt::from_json(val, obj, format);
 }
 
 template <class T>
-inline QString to_string(const T & obj, unsigned int flags = 1 /* boost::archive::no_header */)
-{ return QString::fromUtf8(qx::serialization::json::to_byte_array(obj, NULL, flags)); }
+inline QString to_string(const T & obj, unsigned int flags = 1 /* boost::archive::no_header */, const QString & format = QString())
+{ return QString::fromUtf8(qx::serialization::json::to_byte_array(obj, NULL, flags, format)); }
 
 template <class T>
-inline qx_bool from_string(T & obj, const QString & sString, unsigned int flags = 1 /* boost::archive::no_header */)
-{ return qx::serialization::json::from_byte_array(obj, sString.toUtf8(), flags); }
+inline qx_bool from_string(T & obj, const QString & sString, unsigned int flags = 1 /* boost::archive::no_header */, const QString & format = QString())
+{ return qx::serialization::json::from_byte_array(obj, sString.toUtf8(), flags, format); }
 
 template <class T>
-inline qx_bool to_file(const T & obj, const QString & sFileName, unsigned int flags = 1 /* boost::archive::no_header */)
+inline qx_bool to_file(const T & obj, const QString & sFileName, unsigned int flags = 1 /* boost::archive::no_header */, const QString & format = QString())
 {
-   QByteArray data = qx::serialization::json::to_byte_array(obj, NULL, flags);
+   QByteArray data = qx::serialization::json::to_byte_array(obj, NULL, flags, format);
    QFile file(sFileName);
    if (! file.open(QIODevice::WriteOnly | QIODevice::Truncate))
    { return qx_bool(false, "cannot open file : " + sFileName); }
@@ -104,19 +104,19 @@ inline qx_bool to_file(const T & obj, const QString & sFileName, unsigned int fl
 }
 
 template <class T>
-inline qx_bool from_file(T & obj, const QString & sFileName, unsigned int flags = 1 /* boost::archive::no_header */)
+inline qx_bool from_file(T & obj, const QString & sFileName, unsigned int flags = 1 /* boost::archive::no_header */, const QString & format = QString())
 {
    QFile file(sFileName);
    if (! file.open(QIODevice::ReadOnly))
    { return qx_bool(false, "cannot open file : " + sFileName); }
    QByteArray data = file.readAll(); file.close();
-   return qx::serialization::json::from_byte_array(obj, data, flags);
+   return qx::serialization::json::from_byte_array(obj, data, flags, format);
 }
 
 template <class T>
-inline qx_bool to_file_compressed(const T & obj, const QString & sFileName, unsigned int flags = 1 /* boost::archive::no_header */, int iCompressionLevel = -1)
+inline qx_bool to_file_compressed(const T & obj, const QString & sFileName, unsigned int flags = 1 /* boost::archive::no_header */, int iCompressionLevel = -1, const QString & format = QString())
 {
-   QByteArray data = qx::serialization::json::to_byte_array(obj, NULL, flags);
+   QByteArray data = qx::serialization::json::to_byte_array(obj, NULL, flags, format);
    QByteArray compressed = qCompress(data, iCompressionLevel);
    QFile file(sFileName);
    if (! file.open(QIODevice::WriteOnly | QIODevice::Truncate))
@@ -126,14 +126,14 @@ inline qx_bool to_file_compressed(const T & obj, const QString & sFileName, unsi
 }
 
 template <class T>
-inline qx_bool from_file_compressed(T & obj, const QString & sFileName, unsigned int flags = 1 /* boost::archive::no_header */)
+inline qx_bool from_file_compressed(T & obj, const QString & sFileName, unsigned int flags = 1 /* boost::archive::no_header */, const QString & format = QString())
 {
    QFile file(sFileName);
    if (! file.open(QIODevice::ReadOnly))
    { return qx_bool(false, "cannot open file : " + sFileName); }
    QByteArray data = file.readAll(); file.close();
    QByteArray uncompressed = qUncompress(data);
-   return qx::serialization::json::from_byte_array(obj, uncompressed, flags);
+   return qx::serialization::json::from_byte_array(obj, uncompressed, flags, format);
 }
 
 } // namespace json

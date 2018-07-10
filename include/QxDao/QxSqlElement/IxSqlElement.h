@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -100,14 +100,14 @@ namespace detail {
 class QX_DLL_EXPORT IxSqlElement
 {
 
-   friend QDataStream & ::operator<< (QDataStream & stream, const qx::dao::detail::IxSqlElement & t);
-   friend QDataStream & ::operator>> (QDataStream & stream, qx::dao::detail::IxSqlElement & t);
+   friend QX_DLL_EXPORT QDataStream & ::operator<< (QDataStream & stream, const qx::dao::detail::IxSqlElement & t);
+   friend QX_DLL_EXPORT QDataStream & ::operator>> (QDataStream & stream, qx::dao::detail::IxSqlElement & t);
 
 #ifndef _QX_NO_JSON
    friend struct qx::cvt::detail::QxConvert_ToJson< qx::dao::detail::IxSqlElement >;
    friend struct qx::cvt::detail::QxConvert_FromJson< qx::dao::detail::IxSqlElement >;
-   friend QJsonValue qx::cvt::detail::QxConvert_ToJson_Helper(const qx::dao::detail::IxSqlElement & t, const QString & format);
-   friend qx_bool qx::cvt::detail::QxConvert_FromJson_Helper(const QJsonValue & j, qx::dao::detail::IxSqlElement & t, const QString & format);
+   friend QX_DLL_EXPORT QJsonValue qx::cvt::detail::QxConvert_ToJson_Helper(const qx::dao::detail::IxSqlElement & t, const QString & format);
+   friend QX_DLL_EXPORT qx_bool qx::cvt::detail::QxConvert_FromJson_Helper(const QJsonValue & j, qx::dao::detail::IxSqlElement & t, const QString & format);
 #endif // _QX_NO_JSON
 
 public:

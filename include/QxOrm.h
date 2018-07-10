@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -120,6 +120,7 @@
 #include <QxDao/QxTimeNeutral.h>
 #include <QxDao/QxDateTimeNeutral.h>
 #include <QxDao/IxPersistable.h>
+#include <QxDao/IxPersistableCollection.h>
 #include <QxDao/QxSqlJoin.h>
 #include <QxDao/QxSqlRelationLinked.h>
 #include <QxDao/QxDaoAsync.h>
@@ -128,6 +129,10 @@
 #include <QxDao/QxSqlElement/QxSqlElement.h>
 
 #include <QxDao/QxSqlGenerator/QxSqlGenerator.h>
+
+#ifdef _QX_ENABLE_MONGODB
+#include <QxDao/QxMongoDB/QxMongoDB_Helper.h>
+#endif // _QX_ENABLE_MONGODB
 
 #ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #include <QxSerialize/QxSerialize.h>

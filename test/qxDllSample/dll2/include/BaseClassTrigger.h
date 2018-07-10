@@ -1,7 +1,7 @@
 #ifndef _QX_BASE_CLASS_TRIGGER_H_
 #define _QX_BASE_CLASS_TRIGGER_H_
 
-class QX_DLL2_EXPORT BaseClassTrigger
+class QX_DLL2_EXPORT BaseClassTrigger : public qx::IxPersistable
 {
 
    QX_REGISTER_FRIEND_CLASS(BaseClassTrigger)

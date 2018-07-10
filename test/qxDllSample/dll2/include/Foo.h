@@ -4,7 +4,7 @@
 #include "../include/BaseClassTrigger.h"
 #include "../include/Bar.h"
 
-class QX_DLL2_EXPORT Foo : public BaseClassTrigger, public qx::IxPersistable
+class QX_DLL2_EXPORT Foo : public BaseClassTrigger
 {
 
    QX_REGISTER_FRIEND_CLASS(Foo)

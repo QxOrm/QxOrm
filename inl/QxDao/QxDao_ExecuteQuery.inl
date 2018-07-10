@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -42,10 +42,21 @@ struct QxDao_ExecuteQuery_Generic
       qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "execute custom sql query or stored procedure", new qx::QxSqlQueryBuilder_Count<T>());
       if (! dao.isValid()) { return dao.error(); }
 
+#ifdef _QX_ENABLE_MONGODB
+      if (dao.isMongoDB())
+      {
+         qx::dao::on_before_fetch<T>((& t), (& dao)); if (! dao.isValid()) { return dao.error(); }
+         qx::dao::mongodb::QxMongoDB_Helper::executeCommand((& dao), dao.getDataMemberX()->getClass(), (& query)); if (! dao.isValid()) { return dao.error(); }
+         QString json = query.response().toString(); qx::serialization::json::from_string(t, json, 1, "mongodb");
+         qx::dao::on_after_fetch<T>((& t), (& dao)); if (! dao.isValid()) { return dao.error(); }
+         return dao.error();
+      }
+#endif // _QX_ENABLE_MONGODB
+
       QString sql = query.query();
       if (sql.isEmpty()) { return dao.errEmpty(); }
       dao.builder().setSqlQuery(sql);
-      if (! dao.query().prepare(sql)) { return dao.errFailed(true); }
+      if (! dao.prepare(sql)) { return dao.errFailed(true); }
       query.resolve(dao.query());
       if (! dao.query().exec()) { return dao.errFailed(); }
       query.resolveOutput(dao.query(), false);
@@ -82,10 +93,19 @@ struct QxDao_ExecuteQuery_Container
       qx::dao::detail::QxDao_Helper_Container<T> dao(t, pDatabase, "execute custom sql query or stored procedure", pBuilder);
       if (! dao.isValid()) { return dao.error(); }
 
+#ifdef _QX_ENABLE_MONGODB
+      if (dao.isMongoDB())
+      {
+         qx::dao::mongodb::QxMongoDB_Helper::executeCommand((& dao), dao.getDataMemberX()->getClass(), (& query)); if (! dao.isValid()) { return dao.error(); }
+         QString json = query.response().toString(); qx::serialization::json::from_string(t, json, 1, "mongodb");
+         return dao.error();
+      }
+#endif // _QX_ENABLE_MONGODB
+
       QString sql = query.query();
       if (sql.isEmpty()) { return dao.errEmpty(); }
       dao.builder().setSqlQuery(sql);
-      if (! dao.query().prepare(sql)) { return dao.errFailed(true); }
+      if (! dao.prepare(sql)) { return dao.errFailed(true); }
       query.resolve(dao.query());
       if (! dao.query().exec()) { return dao.errFailed(); }
       query.resolveOutput(dao.query(), false);

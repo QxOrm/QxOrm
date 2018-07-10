@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -47,11 +47,23 @@ struct QxDao_FetchById_WithRelation_Generic
       if (! dao.isValidPrimaryKey(t)) { return dao.errInvalidId(); }
       if (! dao.updateSqlRelationX(relation)) { return dao.errInvalidRelation(); }
 
+#ifdef _QX_ENABLE_MONGODB
+      if (dao.isMongoDB())
+      {
+         qx::dao::on_before_fetch<T>((& t), (& dao)); if (! dao.isValid()) { return dao.error(); }
+         QString json = qx::serialization::json::to_string(t, 1, "mongodb:only_id");
+         qx::dao::mongodb::QxMongoDB_Helper::findOne((& dao), dao.getDataMemberX()->getClass(), json, NULL); if (! dao.isValid()) { return dao.error(); }
+         qx::serialization::json::from_string(t, json, 1, "mongodb");
+         qx::dao::on_after_fetch<T>((& t), (& dao)); if (! dao.isValid()) { return dao.error(); }
+         return dao.error();
+      }
+#endif // _QX_ENABLE_MONGODB
+
       QStringList columns;
       QString sql = dao.builder().buildSql(columns, dao.getSqlRelationLinked()).getSqlQuery();
       if (! dao.getDataId() || sql.isEmpty()) { return dao.errEmpty(); }
 
-      if (! dao.query().prepare(sql)) { return dao.errFailed(true); }
+      if (! dao.prepare(sql)) { return dao.errFailed(true); }
       type_query_helper::resolveInput(dao.getSqlRelationLinked(), t, dao.query(), dao.builder());
       if (! dao.query().exec()) { return dao.errFailed(); }
 
@@ -100,10 +112,22 @@ struct QxDao_FetchById_WithRelation_Container
       if (! dao.isValid()) { return dao.error(); }
       if (! dao.updateSqlRelationX(relation)) { return dao.errInvalidRelation(); }
 
+#ifdef _QX_ENABLE_MONGODB
+      if (dao.isMongoDB())
+      {
+         for (typename T::iterator it = t.begin(); it != t.end(); ++it) { if (! fetchItem((* it), dao)) { return dao.error(); } }
+         QStringList & itemsAsJson = dao.itemsAsJson();
+         qx::dao::mongodb::QxMongoDB_Helper::findMany((& dao), dao.getDataMemberX()->getClass(), itemsAsJson, NULL); if (! dao.isValid()) { return dao.error(); }
+         dao.qxQuery().queryAt(2, "<done>");
+         for (typename T::iterator it = t.begin(); it != t.end(); ++it) { if (! fetchItem((* it), dao)) { return dao.error(); } }
+         return dao.error();
+      }
+#endif // _QX_ENABLE_MONGODB
+
       QStringList columns;
       QString sql = dao.builder().buildSql(columns, dao.getSqlRelationLinked()).getSqlQuery();
       if (! dao.getDataId() || sql.isEmpty()) { return dao.errEmpty(); }
-      if (! dao.query().prepare(sql)) { return dao.errFailed(true); }
+      if (! dao.prepare(sql)) { return dao.errFailed(true); }
 
       for (typename T::iterator it = t.begin(); it != t.end(); ++it)
       { if (! fetchItem((* it), dao)) { return dao.error(); } }
@@ -165,6 +189,22 @@ private:
       static bool fetch(U & item, type_dao_helper & dao)
       {
          if (! dao.isValidPrimaryKey(item)) { dao.errInvalidId(); return false; }
+
+#ifdef _QX_ENABLE_MONGODB
+         if (dao.isMongoDB())
+         {
+            if (dao.qxQuery().queryAt(2) == "<done>")
+            {
+               if (! dao.itemsAsJson().isEmpty()) { QString json = dao.itemsAsJson().takeFirst(); if (! json.isEmpty()) { qx::serialization::json::from_string(item, json, 1, "mongodb"); } }
+               qx::dao::on_after_fetch<U>((& item), (& dao)); return dao.isValid();
+            }
+            qx::dao::on_before_fetch<U>((& item), (& dao)); if (! dao.isValid()) { return false; }
+            QVariant id = (dao.getDataId() ? dao.getDataId()->toVariant(& item) : QVariant());
+            if (! id.isNull() && ! id.toString().isEmpty()) { dao.itemsAsJson().append(id.toString()); }
+            return dao.isValid();
+         }
+#endif // _QX_ENABLE_MONGODB
+
          type_query_helper::resolveInput(dao.getSqlRelationLinked(), item, dao.query(), dao.builder());
          if (! dao.query().exec()) { dao.errFailed(); return false; }
          qx::dao::on_before_fetch<U>((& item), (& dao)); if (! dao.isValid()) { return false; }

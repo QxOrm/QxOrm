@@ -66,11 +66,11 @@
     <table cellspacing="0" cellpadding="1"><col><col><tbody>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow">Current version :&nbsp;</font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.4 - <a href="../doxygen/index.html" target="_blank">QxOrm library online class documentation</a></font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.5 - <a href="../doxygen/index.html" target="_blank">QxOrm library online class documentation</a> - <a href="https://github.com/QxOrm/QxOrm" target="_blank">GitHub</a></font></td>
       </tr>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow"></font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.2.2</font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.2.3</font></td>
       </tr>
     </tbody></table>
   </td>
@@ -198,7 +198,7 @@
            <td valign="middle" width="30"></td>
            <td align="justify">
            If you find a bug or if you have a question about <b>QxOrm</b> library, you can send an e-mail to : <u><i>support@qxorm.com</i></u>.<br>
-           A forum dedicated to <b>QxOrm</b> is available <a href="http://www.qxorm.com/forum/phpbb/" target="_blank">here</a>.
+           A forum dedicated to <b>QxOrm</b> is available <a href="https://www.qxorm.com/forum/phpbb/" target="_blank">here</a>.
            </td>
          </tr>
        </tbody>
@@ -2165,7 +2165,7 @@ virtual</span> QSqlError qxDestroyAll<span class="operator">(</span>QSqlDatabase
 virtual</span> QSqlError qxDestroyByQuery<span class="operator">(</span><span class="keyword">const</span> qx<span class="operator">::</span>QxSqlQuery<span class="operator"> &amp;</span> query<span class="operator">,</span> QSqlDatabase<span class="operator"> *</span> pDatabase<span class="operator"> =</span> NULL<span class="operator">);</span><span class="keyword">
 virtual</span> qx_bool qxExist<span class="operator">(</span><span class="keyword">const</span> QVariant<span class="operator"> &amp;</span> id<span class="operator"> =</span> QVariant<span class="operator">(),</span> QSqlDatabase<span class="operator"> *</span> pDatabase<span class="operator"> =</span> NULL<span class="operator">);</span><span class="keyword">
 virtual</span> qx<span class="operator">::</span>QxInvalidValueX qxValidate<span class="operator">(</span><span class="keyword">const</span> QStringList<span class="operator"> &amp;</span> groups<span class="operator"> =</span> QStringList<span class="operator">());</span><span class="keyword">
-virtual</span> qx<span class="operator">::</span>IxCollection_ptr qxNewPersistableCollection<span class="operator">()</span><span class="keyword"> const</span><span class="operator">;</span><span class="keyword">
+virtual</span> qx<span class="operator">::</span>IxPersistableCollection_ptr qxNewPersistableCollection<span class="operator">()</span><span class="keyword"> const</span><span class="operator">;</span><span class="keyword">
 virtual</span> qx<span class="operator">::</span>IxClass<span class="operator"> *</span> qxClass<span class="operator">()</span><span class="keyword"> const</span><span class="operator">;</span></pre>
            </div>
            <br>
@@ -2523,7 +2523,7 @@ void</span> MyWidget<span class="operator">::</span>onQueryFinished<span class="
    // If the async query is associated to a simple object, just use 'pDaoParams-&gt;pInstance' method
 </span>   qx<span class="operator">::</span>IxPersistable_ptr ptr<span class="operator"> =</span> pDaoParams<span class="operator">-&gt;</span>pInstance<span class="operator">;</span><span class="comment">
    // If the async query is associated to a list of objects, just use 'pDaoParams-&gt;pListOfInstances' method
-</span>   qx<span class="operator">::</span>IxCollection_ptr lst<span class="operator"> =</span> pDaoParams<span class="operator">-&gt;</span>pListOfInstances<span class="operator">;</span><span class="comment">
+</span>   qx<span class="operator">::</span>IxPersistableCollection_ptr lst<span class="operator"> =</span> pDaoParams<span class="operator">-&gt;</span>pListOfInstances<span class="operator">;</span><span class="comment">
    //...
 </span><span class="operator">}</span></pre>
            </td></tr></tbody></table>
@@ -2649,7 +2649,7 @@ Item<span class="operator"> {</span>
         <img alt="QxOrm" src="./resource/logo_qxorm_small.png" width="168" height="40">
       </td>
       <td align="center" valign="middle">
-        <font size="2">© 2017 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
+        <font size="2">© 2018 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
       </td>
       <td align="right" valign="middle">
         <form action="https://www.paypal.com/cgi-bin/webscr" method="post">

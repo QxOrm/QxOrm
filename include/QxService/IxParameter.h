@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -68,13 +68,13 @@ namespace service {
  * \ingroup QxService
  * \brief qx::service::IxParameter : common interface for all parameters transfered by QxService module of QxOrm library
  *
- * <a href="http://www.qxorm.com/qxorm_en/tutorial_2.html" target="_blank">Click here to access to a tutorial to explain how to work with QxService module.</a>
+ * <a href="https://www.qxorm.com/qxorm_en/tutorial_2.html" target="_blank">Click here to access to a tutorial to explain how to work with QxService module.</a>
  */
 class QX_DLL_EXPORT IxParameter
 {
 
-   friend QDataStream & ::operator<< (QDataStream & stream, const qx::service::IxParameter & t);
-   friend QDataStream & ::operator>> (QDataStream & stream, qx::service::IxParameter & t);
+   friend QX_DLL_EXPORT QDataStream & ::operator<< (QDataStream & stream, const qx::service::IxParameter & t);
+   friend QX_DLL_EXPORT QDataStream & ::operator>> (QDataStream & stream, qx::service::IxParameter & t);
 
 public:
 

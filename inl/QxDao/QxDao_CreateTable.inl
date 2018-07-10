@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -48,7 +48,7 @@ struct QxDao_CreateTable
          QString sWarningMsg = "-- WARNING -- the function qx::dao::create_table<T>() can be used only with a SQLite database to create examples or prototypes, for other databases, it is recommended :";
          sWarningMsg += "\n\t - to use QxEntityEditor application and its DDL SQL database schema export plugin ;";
          sWarningMsg += "\n\t - or to manage the database schema with an external tool provided by the SGBD (SQLite Manager for SQLite, pgAdmin for PostgreSQL, MySQL Workbench for MySQL, etc...) ;";
-         sWarningMsg += "\n\t - or to generate database schema using the introspection engine of QxOrm library : go to 'http://www.qxorm.com/qxorm_en/faq.html#faq_230' web page for more details.";
+         sWarningMsg += "\n\t - or to generate database schema using the introspection engine of QxOrm library : go to 'https://www.qxorm.com/qxorm_en/faq.html#faq_230' web page for more details.";
          qDebug("[QxOrm] %s", qPrintable(sWarningMsg));
       }
 

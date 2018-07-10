@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -108,6 +108,7 @@ private:
    QString m_sSqlQueryToUpdate;           //!< Overrided user SQL query to update an item, if empty QxOrm library builds a default SQL query
    QString m_sSqlQueryToCreateTable;      //!< Overrided user SQL query to create table, if empty QxOrm library builds a default SQL query
    mode m_eMode;                          //!< Soft delete mode : 'mode_flag' with a boolean column, 'mode_date_time' with a date-time column containing deletion date-time
+   bool m_bFetchInJoin;                   //!< Add SQL condition to fetch in the JOIN part (default value), for backward compatibility with previous versions of QxOrm library set this value to false (means fetch in the WHERE part)
 
 public:
 
@@ -122,6 +123,7 @@ public:
    QString getSqlQueryToUpdate() const;
    QString getSqlQueryToCreateTable() const;
    mode getMode() const;
+   bool getSqlFetchInJoin() const;
 
    void setTableName(const QString & sTable);
    void setColumnName(const QString & sColumn);
@@ -129,6 +131,7 @@ public:
    void setSqlQueryToUpdate(const QString & s);
    void setSqlQueryToCreateTable(const QString & s);
    void setMode(mode eMode);
+   void setSqlFetchInJoin(bool b);
 
    bool isEmpty() const;
 

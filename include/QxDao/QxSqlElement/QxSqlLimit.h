@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -69,6 +69,7 @@ public:
    int getStartRow() const;
    int getRowsCount() const;
    int getMaxRow() const;
+   bool getWithTies() const;
 
    QString getStartRow_ParamKey() const;
    QString getRowsCount_ParamKey() const;

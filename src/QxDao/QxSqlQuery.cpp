@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -35,6 +35,7 @@
 
 #include <QxDao/QxSqlQuery.h>
 #include <QxDao/QxSqlDatabase.h>
+#include <QxDao/QxMongoDB/QxMongoDB_Helper.h>
 
 #include <QxCollection/QxCollectionIterator.h>
 
@@ -54,10 +55,56 @@
 
 namespace qx {
 
+QxSqlQuery::QxSqlQuery() : m_iSqlElementIndex(0), m_iParenthesisCount(0), m_bDistinct(false) { m_sQuery << QString(); }
+
+QxSqlQuery::QxSqlQuery(const char * query) : m_iSqlElementIndex(0), m_iParenthesisCount(0), m_bDistinct(false) { m_sQuery << QString(query); }
+
+QxSqlQuery::QxSqlQuery(const QString & query) : m_iSqlElementIndex(0), m_iParenthesisCount(0), m_bDistinct(false) { m_sQuery << query; }
+
+QxSqlQuery::QxSqlQuery(const QStringList & query) : m_sQuery(query), m_iSqlElementIndex(0), m_iParenthesisCount(0), m_bDistinct(false) { ; }
+
+QxSqlQuery::QxSqlQuery(const QString & type, const QString & query) : m_iSqlElementIndex(0), m_iParenthesisCount(0), m_bDistinct(false), m_sType(type) { m_sQuery << query; }
+
+QxSqlQuery::QxSqlQuery(const QString & type, const QStringList & query) : m_sQuery(query), m_iSqlElementIndex(0), m_iParenthesisCount(0), m_bDistinct(false), m_sType(type) { ; }
+
+#ifndef _QX_NO_JSON
+#ifdef Q_COMPILER_INITIALIZER_LISTS
+
+QxSqlQuery::QxSqlQuery(std::initializer_list<QPair<QString, QJsonValue> > json) : m_iSqlElementIndex(0), m_iParenthesisCount(0), m_bDistinct(false)
+{
+   QJsonObject obj; for (std::initializer_list<QPair<QString, QJsonValue> >::const_iterator itr = json.begin(); itr != json.end(); ++itr) { obj.insert(itr->first, itr->second); }
+   QJsonDocument doc(obj); m_sQuery << QString::fromUtf8(doc.toJson());
+}
+
+QxSqlQuery::QxSqlQuery(std::initializer_list<QPair<QString, QJsonValue> > json, std::initializer_list<QPair<QString, QJsonValue> > opts) : m_iSqlElementIndex(0), m_iParenthesisCount(0), m_bDistinct(false)
+{
+   QJsonObject obj1; for (std::initializer_list<QPair<QString, QJsonValue> >::const_iterator itr = json.begin(); itr != json.end(); ++itr) { obj1.insert(itr->first, itr->second); }
+   QJsonObject obj2; for (std::initializer_list<QPair<QString, QJsonValue> >::const_iterator itr = opts.begin(); itr != opts.end(); ++itr) { obj2.insert(itr->first, itr->second); }
+   QJsonDocument doc1(obj1); QJsonDocument doc2(obj2); m_sQuery << QString::fromUtf8(doc1.toJson()) << QString::fromUtf8(doc2.toJson());
+}
+
+QxSqlQuery::QxSqlQuery(const QString & type, std::initializer_list<QPair<QString, QJsonValue> > json) : m_iSqlElementIndex(0), m_iParenthesisCount(0), m_bDistinct(false), m_sType(type)
+{
+   QJsonObject obj; for (std::initializer_list<QPair<QString, QJsonValue> >::const_iterator itr = json.begin(); itr != json.end(); ++itr) { obj.insert(itr->first, itr->second); }
+   QJsonDocument doc(obj); m_sQuery << QString::fromUtf8(doc.toJson());
+}
+
+QxSqlQuery::QxSqlQuery(const QString & type, std::initializer_list<QPair<QString, QJsonValue> > json, std::initializer_list<QPair<QString, QJsonValue> > opts) : m_iSqlElementIndex(0), m_iParenthesisCount(0), m_bDistinct(false), m_sType(type)
+{
+   QJsonObject obj1; for (std::initializer_list<QPair<QString, QJsonValue> >::const_iterator itr = json.begin(); itr != json.end(); ++itr) { obj1.insert(itr->first, itr->second); }
+   QJsonObject obj2; for (std::initializer_list<QPair<QString, QJsonValue> >::const_iterator itr = opts.begin(); itr != opts.end(); ++itr) { obj2.insert(itr->first, itr->second); }
+   QJsonDocument doc1(obj1); QJsonDocument doc2(obj2); m_sQuery << QString::fromUtf8(doc1.toJson()) << QString::fromUtf8(doc2.toJson());
+}
+
+#endif // Q_COMPILER_INITIALIZER_LISTS
+#endif // _QX_NO_JSON
+
+QxSqlQuery::~QxSqlQuery() { ; }
+
 void QxSqlQuery::verifyQuery() const
 {
 #ifdef _QX_MODE_DEBUG
-   if (m_sQuery.isEmpty() || (m_lstSqlElement.count() <= 0)) { return; }
+   if (queryAt(0).isEmpty() || (m_lstSqlElement.count() <= 0)) { return; }
    qDebug("[QxOrm] qx::QxSqlQuery::verifyQuery() : '%s'", "invalid SQL query, you cannot mix classic SQL and C++ syntax");
    qAssert(false);
 #endif // _QX_MODE_DEBUG
@@ -66,7 +113,7 @@ void QxSqlQuery::verifyQuery() const
 QString QxSqlQuery::query()
 {
    verifyQuery();
-   if (m_lstSqlElement.count() <= 0) { return m_sQuery; }
+   if (m_lstSqlElement.count() <= 0) { return queryAt(0); }
    while (m_iParenthesisCount > 0) { closeParenthesis(); }
 
    QString sQuery;
@@ -75,9 +122,41 @@ QString QxSqlQuery::query()
    return sQuery;
 }
 
+QString QxSqlQuery::queryAt(int idx) const
+{
+   if ((idx < 0) || (idx >= m_sQuery.count())) { return QString(); }
+   return m_sQuery.at(idx);
+}
+
+void QxSqlQuery::queryAt(int idx, const QString & query)
+{
+   while ((m_sQuery.count() - 1) < idx) { m_sQuery << QString(); }
+   m_sQuery.replace(idx, query); qAssert(m_sQuery.at(idx) == query);
+}
+
+QVariant QxSqlQuery::response() const
+{
+   return m_vResponse;
+}
+
+void QxSqlQuery::setResponse(const QVariant & v)
+{
+   m_vResponse = v;
+}
+
+QString QxSqlQuery::type() const
+{
+   return m_sType;
+}
+
+void QxSqlQuery::setType(const QString & s)
+{
+   m_sType = s;
+}
+
 bool QxSqlQuery::isEmpty() const
 {
-   return (m_sQuery.isEmpty() && (m_lstSqlElement.count() <= 0));
+   return (queryAt(0).isEmpty() && (m_lstSqlElement.count() <= 0));
 }
 
 bool QxSqlQuery::isDistinct() const
@@ -87,12 +166,14 @@ bool QxSqlQuery::isDistinct() const
 
 void QxSqlQuery::clear()
 {
-   m_sQuery = "";
+   m_sQuery.clear();
    m_lstValue.clear();
    m_pSqlElementTemp.reset();
    m_lstSqlElement.clear();
    m_iSqlElementIndex = 0;
    m_iParenthesisCount = 0;
+   m_vResponse = QVariant();
+   m_sType = "";
 }
 
 QxSqlQuery & QxSqlQuery::query(const QString & sQuery)
@@ -101,7 +182,7 @@ QxSqlQuery & QxSqlQuery::query(const QString & sQuery)
    { qAssert(m_lstSqlElement.count() <= 0); }
 
    clear();
-   m_sQuery = sQuery;
+   m_sQuery << sQuery;
    return (* this);
 }
 
@@ -109,7 +190,7 @@ QxSqlQuery & QxSqlQuery::bind(const QVariant & vValue, QSql::ParamType paramType
 {
    verifyQuery();
    qAssert(m_lstSqlElement.count() <= 0);
-   qAssert(! m_sQuery.isEmpty() && (qx::QxSqlDatabase::getSingleton()->getSqlPlaceHolderStyle() == qx::QxSqlDatabase::ph_style_question_mark));
+   qAssert(! queryAt(0).isEmpty() && (qx::QxSqlDatabase::getSingleton()->getSqlPlaceHolderStyle() == qx::QxSqlDatabase::ph_style_question_mark));
 
    QString sKey = QString::number(m_lstValue.count() + 1);
    m_lstValue.insert(sKey, type_bind_value(vValue, paramType));
@@ -120,10 +201,10 @@ QxSqlQuery & QxSqlQuery::bind(const QString & sKey, const QVariant & vValue, QSq
 {
    verifyQuery();
    qAssert(m_lstSqlElement.count() <= 0);
-   qAssert(! m_sQuery.isEmpty() && (qx::QxSqlDatabase::getSingleton()->getSqlPlaceHolderStyle() != qx::QxSqlDatabase::ph_style_question_mark));
+   qAssert(! queryAt(0).isEmpty() && (qx::QxSqlDatabase::getSingleton()->getSqlPlaceHolderStyle() != qx::QxSqlDatabase::ph_style_question_mark));
 
    if (sKey.isEmpty() || m_lstValue.exist(sKey)) { qAssert(false); return (* this); }
-   if (! m_sQuery.contains(sKey)) { qAssert(false); return (* this); }
+   if (! queryAt(0).contains(sKey)) { qAssert(false); return (* this); }
    m_lstValue.insert(sKey, type_bind_value(vValue, paramType));
    return (* this);
 }
@@ -497,11 +578,11 @@ QxSqlQuery & QxSqlQuery::groupBy(const QString & col1, const QString & col2, con
    return groupBy(QStringList() << col1 << col2 << col3 << col4 << col5 << col6 << col7 << col8 << col9);
 }
 
-QxSqlQuery & QxSqlQuery::limit(int rowsCount, int startRow /* = 0 */)
+QxSqlQuery & QxSqlQuery::limit(int rowsCount, int startRow /* = 0 */, bool withTies /* = false */)
 {
    qx::dao::detail::QxSqlLimit_ptr p;
    p.reset(new qx::dao::detail::QxSqlLimit(m_iSqlElementIndex++));
-   p->setValues(QVariantList() << QVariant(startRow) << QVariant(rowsCount));
+   p->setValues(QVariantList() << QVariant(startRow) << QVariant(rowsCount) << QVariant(withTies));
    m_lstSqlElement.append(p);
    return (* this);
 }
@@ -798,6 +879,11 @@ namespace helper {
 
 QSqlError call_query_helper(qx::QxSqlQuery & query, QSqlDatabase * pDatabase, bool bPrepare)
 {
+#ifdef _QX_ENABLE_MONGODB
+   if (qx::QxSqlDatabase::getSingleton()->getDriverName() == "QXMONGODB")
+   { return qx::dao::mongodb::QxMongoDB_Helper::executeCommand(NULL, NULL, (& query)); }
+#endif // _QX_ENABLE_MONGODB
+
    QSqlError dbError;
    QSqlDatabase d = (pDatabase ? (* pDatabase) : qx::QxSqlDatabase::getDatabase(dbError));
    if (dbError.isValid()) { return dbError; }
@@ -855,6 +941,8 @@ inline void qx_save(Archive & ar, const qx::QxSqlQuery & t, const unsigned int f
    ar << boost::serialization::make_nvp("distinct", t.m_bDistinct);
    ar << boost::serialization::make_nvp("result_position_by_key", lstResultPosByKey);
    ar << boost::serialization::make_nvp("result_values", lstResultValues);
+   ar << boost::serialization::make_nvp("response", t.m_vResponse);
+   ar << boost::serialization::make_nvp("type", t.m_sType);
 
    if (! t.m_pSqlElementTemp)
    {
@@ -892,6 +980,8 @@ inline void qx_load(Archive & ar, qx::QxSqlQuery & t, const unsigned int file_ve
    ar >> boost::serialization::make_nvp("distinct", t.m_bDistinct);
    ar >> boost::serialization::make_nvp("result_position_by_key", lstResultPosByKey);
    ar >> boost::serialization::make_nvp("result_values", lstResultValues);
+   ar >> boost::serialization::make_nvp("response", t.m_vResponse);
+   ar >> boost::serialization::make_nvp("type", t.m_sType);
 
    t.m_pSqlResult.reset();
    if ((lstResultPosByKey.count() > 0) || (lstResultValues.count() > 0))
@@ -953,6 +1043,8 @@ QDataStream & operator<< (QDataStream & stream, const qx::QxSqlQuery & t)
    stream << t.m_bDistinct;
    stream << lstResultPosByKey;
    stream << lstResultValues;
+   stream << t.m_vResponse;
+   stream << t.m_sType;
 
    if (! t.m_pSqlElementTemp)
    {
@@ -991,6 +1083,8 @@ QDataStream & operator>> (QDataStream & stream, qx::QxSqlQuery & t)
    stream >> t.m_bDistinct;
    stream >> lstResultPosByKey;
    stream >> lstResultValues;
+   stream >> t.m_vResponse;
+   stream >> t.m_sType;
 
    t.m_pSqlResult.reset();
    if ((lstResultPosByKey.count() > 0) || (lstResultValues.count() > 0))

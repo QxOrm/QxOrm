@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** http://www.qxorm.com/
+** https://www.qxorm.com/
 ** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
@@ -80,6 +80,8 @@
 #include <QxSerialize/QJson/QxSerializeQJson_QUrl.h>
 #include <QxSerialize/QJson/QxSerializeQJson_QVector.h>
 #include <QxSerialize/QJson/QxSerializeQJson_QWeakPointer.h>
+#include <QxSerialize/QJson/QxSerializeQJson_QVariantHash.h>
+#include <QxSerialize/QJson/QxSerializeQJson_QVariantMap.h>
 #include <QxSerialize/QJson/QxSerializeQJson_std_list.h>
 #include <QxSerialize/QJson/QxSerializeQJson_std_map.h>
 #include <QxSerialize/QJson/QxSerializeQJson_std_pair.h>
@@ -94,6 +96,7 @@
 #include <QxSerialize/QJson/QxSerializeQJson_IxParameter.h>
 #include <QxSerialize/QJson/QxSerializeQJson_IxService.h>
 #include <QxSerialize/QJson/QxSerializeQJson_IxSqlElement.h>
+#include <QxSerialize/QJson/QxSerializeQJson_IxPersistable.h>
 #include <QxSerialize/QJson/QxSerializeQJson_QxCollection.h>
 #include <QxSerialize/QJson/QxSerializeQJson_QxDaoPointer.h>
 #include <QxSerialize/QJson/QxSerializeQJson_QxInvalidValue.h>
