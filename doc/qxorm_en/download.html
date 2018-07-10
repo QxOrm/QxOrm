@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
-  <title>QxOrm - C++ Object Relational Mapping library</title>
+  <title>QxOrm - C++ Object Relational Mapping library (ORM)</title>
   <meta name="generator" content="Amaya, see http://www.w3.org/Amaya/">
   <style type="text/css">
    .comment { color: #008000; font-style: italic; }
@@ -21,14 +21,16 @@
 </head>
 <body>
 <table border="0" style="width: 80%" align="center">
-  <col><col>
+  <col><col><col>
   <tbody>
     <tr>
-      <td><a href="./home.html"><img alt="QxOrm"
-        src="./resource/logo_qxorm.jpg" width="256" align="left" height="61"
-        border="0"></a></td>
-      <td><img alt="C++" src="./resource/logo_cpp.jpg" width="50" align="right"
-        height="50"></td>
+      <td><a href="./home.html"><img alt="QxOrm" src="./resource/logo_qxorm.jpg" width="256" height="61" align="left" border="0"></a></td>
+      <td align="right" style="vertical-align:bottom">
+        <img alt="Windows" src="./resource/logo_windows.gif" width="35" height="35">
+        <img alt="Linux" src="./resource/logo_linux.gif" width="35" height="35">
+        <img alt="Macintosh" src="./resource/logo_mac.gif" width="35" height="35">
+      </td>
+      <td width="70"><img alt="C++" src="./resource/logo_cpp.jpg" width="50" height="50" align="right"></td>
     </tr>
   </tbody>
 </table>
@@ -63,7 +65,7 @@
   <col><col><col><col><col>
   <tbody><tr>
   <td align="left" valign="top"><font size="2">QxOrm  &gt;&gt;  Download</font></td>
-  <td align="right" valign="top"><font size="2">Current version : QxOrm 1.1.8 (LGPL) - <a href="../doxygen/index.html" target="_blank">QxOrm library online documentation</a></font></td>
+  <td align="right" valign="top"><font size="2">Current version : QxOrm 1.1.9 (LGPL) - <a href="../doxygen/index.html" target="_blank">QxOrm library online documentation</a></font></td>
   <td width="10px"></td>
   <td width="40px" height="30px"><a href="../qxorm_fr/download.html"><img alt="Version française du site" src="./resource/FR.png" width="40" height="30" border="0"></a></td>
   <td width="40px" height="30px"><a href="../qxorm_en/download.html"><img alt="Web site english version" src="./resource/GB.png" width="40" height="30" border="0"></a></td>
@@ -87,14 +89,14 @@
                        <td valign="middle" width="80" align="center"><a href="http://sourceforge.net/projects/qxorm/files/" target="_blank"><img alt="Download QxOrm" src="./resource/download.jpg" width="40" height="48" border="0"></a> </td>
                        <td align="justify">
                          <a href="http://sourceforge.net/projects/qxorm/files/" target="_blank">
-                         <b>Download QxOrm 1.1.8 (source + test + documentation)</b></a><br>
-                         This version has been tested with <b>Visual Studio 2008 and 2010</b> on Windows, <b>GCC 4.4.1</b> on Linux and <b>MinGW</b> on Windows
+                         <b>Download QxOrm 1.1.9 (source + test + documentation)</b></a><br>
+                         This version has been tested with <b>Visual Studio 2008 and 2010</b> on Windows, <b>GCC 4.4.1</b> on Linux and Mac OS X, and <b>MinGW</b> on Windows
                        </td>
                      </tr>
                    </tbody>
                   </table>
                  <br>
-                 <i>Note : you can also download last version of QxOrm <a href="../version/QxOrm_1.1.8.zip">here</a>.</i><br>
+                 <i>Note : you can also download last version of QxOrm <a href="../version/QxOrm_1.1.9.zip">here</a>.</i><br>
                  <p align="justify">
                  Before you install and compile <b>QxOrm</b>, you need the following libraries : <a href="http://www.boost.org/" target="_blank"><b>boost</b></a> (from version 1.38) and <a href="http://qt.nokia.com/" target="_blank"><b>Qt</b></a> (from version 4.5.0) :</p>
               </td>
@@ -138,6 +140,15 @@
           <tbody>
             <tr>
               <td><i>
+Changes in version 1.1.9:<br>
+- Possibility to register automatically Qt meta-properties (using Q_PROPERTY macro) to QxOrm context without writing mapping function per class (void qx::register_class&lt;T&gt;())<br>
+- Strong integration with Qt introspection/moc engine : for more details about this new feature, goto the FAQ 'How to register automatically Qt meta-properties to QxOrm context ?'<br>
+- Improve introspection/reflection engine : see the FAQ (How to use introspection engine (or reflection engine) of QxOrm library ?) for more details<br>
+- Possibility to add meta-data (using a property bag) to introspection engine : see 'IxClass', 'IxDataMember' and 'IxFunction' classes for more details<br>
+- Add function 'qx::QxClassX::dumpSqlSchema()' to explain how to create your own SQL schema based on C++ classes<br>
+- New class 'qx::QxSimpleCrypt' to provide encryption/decryption (thanks very much to Andre Somers) : so it's now possible to store encrypted data into database without using an external library<br>
+- QxService module : new feature to encrypt/decrypt data before transfering it over network<br>
+<br>
 Changes in version 1.1.8:<br>
 - QxOrm library can now be used on Mac (thanks very much to Dominique Billet) : see 'osx_build_all_debug.sh' and 'osx_build_all_release.sh' scripts to build QxOrm library and all samples in './test/' directory<br>
 - Add 'qx::QxSession' class : define a session to manage automatically database transactions (using C++ RAII), see the FAQ for more details<br>

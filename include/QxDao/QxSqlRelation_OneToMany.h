@@ -68,6 +68,7 @@ public:
    QxSqlRelation_OneToMany(IxDataMember * p, const QString & sForeignKey) : QxSqlRelation<DataType, Owner>(p), m_sForeignKey(sForeignKey) { qAssert(! m_sForeignKey.isEmpty()); }
    virtual ~QxSqlRelation_OneToMany() { BOOST_STATIC_ASSERT(is_data_container); }
 
+   virtual QString getDescription() const                                     { return "relation one-to-many"; }
    virtual bool getCartesianProduct() const                                   { return true; }
    virtual void createTable(QxSqlRelationParams & params) const               { Q_UNUSED(params); }
    virtual void lazySelect(QxSqlRelationParams & params) const                { Q_UNUSED(params); }

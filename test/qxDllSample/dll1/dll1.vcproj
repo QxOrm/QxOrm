@@ -72,6 +72,10 @@
 				RelativePath=".\src\main.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\src\TestQtProperty.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="include"
@@ -88,6 +92,10 @@
 			</File>
 			<File
 				RelativePath=".\include\precompiled.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\TestQtProperty.h"
 				>
 			</File>
 		</Filter>

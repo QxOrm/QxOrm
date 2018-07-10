@@ -107,7 +107,7 @@
     <property name="geometry">
      <rect>
       <x>180</x>
-      <y>20</y>
+      <y>15</y>
       <width>81</width>
       <height>16</height>
      </rect>
@@ -187,7 +187,7 @@
     <property name="geometry">
      <rect>
       <x>180</x>
-      <y>50</y>
+      <y>40</y>
       <width>101</width>
       <height>17</height>
      </rect>
@@ -252,7 +252,7 @@ Stop Server</string>
     <property name="geometry">
      <rect>
       <x>260</x>
-      <y>20</y>
+      <y>15</y>
       <width>51</width>
       <height>22</height>
      </rect>
@@ -265,6 +265,22 @@ Stop Server</string>
     </property>
     <property name="maximum">
      <number>999</number>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="chkEncryptData">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>55</y>
+      <width>101</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>Encrypt Data</string>
+    </property>
+    <property name="text">
+     <string>Encrypt Data</string>
     </property>
    </widget>
   </widget>

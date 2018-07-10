@@ -51,6 +51,7 @@
 #include <QxCollection/QxCollection.h>
 
 #include <QxTraits/is_smart_ptr.h>
+#include <QxTraits/get_sql_type.h>
 
 namespace qx {
 
@@ -71,17 +72,20 @@ public:
 protected:
 
    QxCollection<QString, IxClass *> m_lstClass;
+   QHash<QString, QString> m_lstSqlTypeByClassName;
 
 private:
 
-   QxClassX() : QxSingleton<QxClassX>("qx::QxClassX") { ; }
+   QxClassX() : QxSingleton<QxClassX>("qx::QxClassX") { this->initSqlTypeByClassName(); }
    virtual ~QxClassX() { ; }
 
+   QxCollection<QString, IxClass *> * getAll();
    IxClass * get(const QString & sKey) const;
    bool exist(const QString & sKey) const;
    bool insert(const QString & sKey, IxClass * pClass);
    bool remove(const QString & sKey);
    void clear();
+   void initSqlTypeByClassName();
 
 public:
 
@@ -91,6 +95,14 @@ public:
    static IxFunctionX * getFctMemberX(const QString & sKey);
    static IxDataMember * getDataMember(const QString & sClassKey, const QString & sDataKey, bool bRecursive = true);
    static IxFunction * getFctMember(const QString & sClassKey, const QString & sFctKey, bool bRecursive = true);
+
+   static QxCollection<QString, IxClass *> * getAllClasses();
+   static void registerAllClasses();
+   static QString dumpAllClasses();
+   static QString dumpSqlSchema();
+
+   static QHash<QString, QString> * getAllSqlTypeByClassName()       { return (& QxClassX::getSingleton()->m_lstSqlTypeByClassName); }
+   static QString getSqlTypeByClassName(const QString & sClassName)  { return (QxClassX::getAllSqlTypeByClassName()->value(sClassName)); }
 
    template <class U>
    static inline qx_bool invoke(const QString & sClassKey, const QString & sFctKey, U & pOwner, const QString & params = QString(), boost::any * ret = NULL)
@@ -130,6 +142,9 @@ private:
 
    static qx_bool invokeVoidPtr(const QString & sClassKey, const QString & sFctKey, void * pOwner, const QString & params = QString(), boost::any * ret = NULL);
    static qx_bool invokeVoidPtr(const QString & sClassKey, const QString & sFctKey, void * pOwner, const type_any_params & params, boost::any * ret = NULL);
+
+   static bool isValid_DataMember(IxDataMember * p);
+   static bool isValid_SqlRelation(IxDataMember * p);
 
 };
 

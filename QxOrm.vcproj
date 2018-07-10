@@ -123,6 +123,10 @@
 					RelativePath=".\src\QxDataMember\IxDataMemberX.cpp"
 					>
 				</File>
+				<File
+					RelativePath=".\src\QxDataMember\QxDataMember_QObject.cpp"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="QxTraits"
@@ -303,6 +307,14 @@
 					RelativePath=".\src\QxCommon\QxCache.cpp"
 					>
 				</File>
+				<File
+					RelativePath=".\src\QxCommon\QxSimpleCrypt.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\QxCommon\QxStringCvt_Export.cpp"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="QxRegister"
@@ -394,6 +406,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\include\QxCommon\QxPropertyBag.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\QxCommon\QxSimpleCrypt.h"
+					>
+				</File>
+				<File
 					RelativePath=".\include\QxCommon\QxStringCvt.h"
 					>
 				</File>
@@ -419,6 +439,10 @@
 				</File>
 				<File
 					RelativePath=".\include\QxDataMember\QxDataMember.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\QxDataMember\QxDataMember_QObject.h"
 					>
 				</File>
 				<File
@@ -703,6 +727,10 @@
 				</File>
 				<File
 					RelativePath=".\include\QxTraits\is_valid_primary_key.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\QxTraits\qt_meta_object.h"
 					>
 				</File>
 				<File
@@ -1223,6 +1251,10 @@
 				</File>
 				<File
 					RelativePath=".\include\QxRegister\QxRegisterInternalHelper.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\QxRegister\QxRegisterQtProperty.h"
 					>
 				</File>
 			</Filter>

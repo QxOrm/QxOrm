@@ -34,7 +34,7 @@ CONFIG += dll
 DEFINES += _QX_BUILDING_QX_ORM
 PRECOMPILED_HEADER = ./include/QxPrecompiled.h
 
-unix { VERSION = 1.1.8 }
+unix { VERSION = 1.1.9 }
 
 #############################
 # Compiler / Linker Options #
@@ -86,6 +86,8 @@ HEADERS += ./include/QxCommon/QxCache.h
 HEADERS += ./include/QxCommon/QxStringCvt.h
 HEADERS += ./include/QxCommon/QxStringCvt_Impl.h
 HEADERS += ./include/QxCommon/QxStringCvt_Export.h
+HEADERS += ./include/QxCommon/QxPropertyBag.h
+HEADERS += ./include/QxCommon/QxSimpleCrypt.h
 
 HEADERS += ./include/QxRegister/IxClass.h
 HEADERS += ./include/QxRegister/QxClass.h
@@ -94,6 +96,7 @@ HEADERS += ./include/QxRegister/QxClassName.h
 HEADERS += ./include/QxRegister/QxRegister.h
 HEADERS += ./include/QxRegister/QxRegisterInternalHelper.h
 HEADERS += ./include/QxRegister/IxTypeInfo.h
+HEADERS += ./include/QxRegister/QxRegisterQtProperty.h
 
 HEADERS += ./include/QxCollection/IxCollection.h
 HEADERS += ./include/QxCollection/QxCollection.h
@@ -104,6 +107,7 @@ HEADERS += ./include/QxDataMember/IxDataMember.h
 HEADERS += ./include/QxDataMember/IxDataMemberX.h
 HEADERS += ./include/QxDataMember/QxDataMember.h
 HEADERS += ./include/QxDataMember/QxDataMemberX.h
+HEADERS += ./include/QxDataMember/QxDataMember_QObject.h
 
 HEADERS += ./include/QxDao/IxSqlQueryBuilder.h
 HEADERS += ./include/QxDao/QxSqlQueryBuilder.h
@@ -246,6 +250,7 @@ HEADERS += ./include/QxTraits/generic_container.h
 HEADERS += ./include/QxTraits/is_valid_primary_key.h
 HEADERS += ./include/QxTraits/is_qx_dao_ptr.h
 HEADERS += ./include/QxTraits/is_equal.h
+HEADERS += ./include/QxTraits/qt_meta_object.h
 HEADERS += ./include/QxTraits/qx_traits.h
 
 HEADERS += ./include/QxFunction/IxFunction.h
@@ -301,12 +306,14 @@ SOURCES += ./src/QxCollection/QxCollection.cpp
 
 SOURCES += ./src/QxCommon/QxCache.cpp
 SOURCES += ./src/QxCommon/QxStringCvt_Export.cpp
+SOURCES += ./src/QxCommon/QxSimpleCrypt.cpp
 
 SOURCES += ./src/QxRegister/IxClass.cpp
 SOURCES += ./src/QxRegister/QxClassX.cpp
 
 SOURCES += ./src/QxDataMember/IxDataMember.cpp
 SOURCES += ./src/QxDataMember/IxDataMemberX.cpp
+SOURCES += ./src/QxDataMember/QxDataMember_QObject.cpp
 
 SOURCES += ./src/QxTraits/unit_test_is_smart_ptr.cpp
 SOURCES += ./src/QxTraits/unit_test_is_container.cpp

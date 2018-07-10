@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'qxServer.ui'
 **
-** Created: Mon 21. Feb 10:45:40 2011
+** Created: Mon 19. Sep 16:59:36 2011
 **      by: Qt User Interface Compiler version 4.7.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -43,6 +43,7 @@ public:
     QFrame *lineServerParams;
     QLabel *imgIsRunning;
     QSpinBox *spinThreadCount;
+    QCheckBox *chkEncryptData;
     QGroupBox *grpTransaction;
     QPlainTextEdit *txtTransaction;
 
@@ -75,7 +76,7 @@ public:
         grpServerParams->setGeometry(QRect(10, 10, 531, 81));
         lblThreadCount = new QLabel(grpServerParams);
         lblThreadCount->setObjectName(QString::fromUtf8("lblThreadCount"));
-        lblThreadCount->setGeometry(QRect(180, 20, 81, 16));
+        lblThreadCount->setGeometry(QRect(180, 15, 81, 16));
         lblSerializationType = new QLabel(grpServerParams);
         lblSerializationType->setObjectName(QString::fromUtf8("lblSerializationType"));
         lblSerializationType->setGeometry(QRect(10, 50, 91, 16));
@@ -92,7 +93,7 @@ public:
         spinPortNumber->setMaximum(32000);
         chkCompressData = new QCheckBox(grpServerParams);
         chkCompressData->setObjectName(QString::fromUtf8("chkCompressData"));
-        chkCompressData->setGeometry(QRect(180, 50, 101, 17));
+        chkCompressData->setGeometry(QRect(180, 40, 101, 17));
         btnStartStop = new QPushButton(grpServerParams);
         btnStartStop->setObjectName(QString::fromUtf8("btnStartStop"));
         btnStartStop->setGeometry(QRect(330, 20, 111, 51));
@@ -111,9 +112,12 @@ public:
         imgIsRunning->setAlignment(Qt::AlignCenter);
         spinThreadCount = new QSpinBox(grpServerParams);
         spinThreadCount->setObjectName(QString::fromUtf8("spinThreadCount"));
-        spinThreadCount->setGeometry(QRect(260, 20, 51, 22));
+        spinThreadCount->setGeometry(QRect(260, 15, 51, 22));
         spinThreadCount->setMinimum(1);
         spinThreadCount->setMaximum(999);
+        chkEncryptData = new QCheckBox(grpServerParams);
+        chkEncryptData->setObjectName(QString::fromUtf8("chkEncryptData"));
+        chkEncryptData->setGeometry(QRect(180, 55, 101, 17));
         grpTransaction = new QGroupBox(dlgServer);
         grpTransaction->setObjectName(QString::fromUtf8("grpTransaction"));
         grpTransaction->setGeometry(QRect(10, 100, 531, 201));
@@ -163,6 +167,10 @@ public:
 #ifndef QT_NO_TOOLTIP
         spinThreadCount->setToolTip(QApplication::translate("dlgServer", "Thread Count", 0, QApplication::UnicodeUTF8));
 #endif // QT_NO_TOOLTIP
+#ifndef QT_NO_TOOLTIP
+        chkEncryptData->setToolTip(QApplication::translate("dlgServer", "Encrypt Data", 0, QApplication::UnicodeUTF8));
+#endif // QT_NO_TOOLTIP
+        chkEncryptData->setText(QApplication::translate("dlgServer", "Encrypt Data", 0, QApplication::UnicodeUTF8));
         grpTransaction->setTitle(QApplication::translate("dlgServer", "Log last client-server reply-request transaction", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 

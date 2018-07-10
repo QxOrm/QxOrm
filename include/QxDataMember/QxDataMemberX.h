@@ -42,6 +42,7 @@
 
 #include <QxDataMember/IxDataMemberX.h>
 #include <QxDataMember/QxDataMember.h>
+#include <QxDataMember/QxDataMember_QObject.h>
 
 #include <QxDao/QxSqlRelation.h>
 
@@ -52,6 +53,7 @@
 #include <QxTraits/get_base_class.h>
 #include <QxTraits/get_primary_key.h>
 #include <QxTraits/get_sql_type.h>
+#include <QxTraits/qt_meta_object.h>
 
 namespace qx {
 
@@ -72,7 +74,7 @@ public:
 
 protected:
 
-   QxDataMember<type_primary_key, T> * m_pDataMemberId;  //!< Data member id with primary key type
+   IxDataMember * m_pDataMemberId;  //!< Data member id with primary key type
 
 protected:
 
@@ -91,6 +93,8 @@ public:
 
    IxDataMember * id(type_primary_key T::* pDataMemberId, const QString & sKey);
    IxDataMember * id(type_primary_key T::* pDataMemberId, const QString & sKey, long lVersion);
+   IxDataMember * id(const QString & sKey, long lVersion);
+   IxDataMember * add(const QString & sKey, long lVersion);
 
    template <typename V, typename U> IxDataMember * add(V U::* pData, const QString & sKey);
    template <typename V, typename U> IxDataMember * add(V U::* pData, const QString & sKey, long lVersion);
@@ -110,6 +114,9 @@ public:
    template <class Archive> inline void fromArchive(T * pOwner, Archive & ar, const unsigned int file_version);
 
 private:
+
+   IxDataMember * initId(IxDataMember * pId, long lVersion);
+   IxDataMember * initData(IxDataMember * pData, long lVersion);
 
    inline IxDataMemberX * getBaseClass_Helper() const { return QxDataMemberX<type_base_class>::getSingleton(); }
 

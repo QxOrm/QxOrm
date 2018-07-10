@@ -55,6 +55,7 @@ void main_dlg::onClickStartStop()
       qx::service::QxConnect::getSingleton()->setThreadCount(spinThreadCount->value());
       qx::service::QxConnect::getSingleton()->setSerializationType((qx::service::QxConnect::serialization_type)(cboSerializationType->itemData(cboSerializationType->currentIndex()).toInt()));
       qx::service::QxConnect::getSingleton()->setCompressData(chkCompressData->isChecked());
+      qx::service::QxConnect::getSingleton()->setEncryptData(chkEncryptData->isChecked());
 
       m_pThreadPool.reset(new qx::service::QxThreadPool());
       QObject::connect(m_pThreadPool.get(), SIGNAL(error(const QString &, qx::service::QxTransaction_ptr)), this, SLOT(onError(const QString &, qx::service::QxTransaction_ptr)));
@@ -82,6 +83,7 @@ void main_dlg::onServerIsRunning(bool bIsRunning, qx::service::QxServer * pServe
    spinThreadCount->setEnabled(! bIsRunning);
    cboSerializationType->setEnabled(! bIsRunning);
    chkCompressData->setEnabled(! bIsRunning);
+   chkEncryptData->setEnabled(! bIsRunning);
 }
 
 void main_dlg::onError(const QString & err, qx::service::QxTransaction_ptr transaction)

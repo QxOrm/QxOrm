@@ -59,6 +59,7 @@ public:
    QxSqlRelation_ManyToOne(IxDataMember * p) : QxSqlRelation<DataType, Owner>(p) { ; }
    virtual ~QxSqlRelation_ManyToOne() { ; }
 
+   virtual QString getDescription() const                                     { return "relation many-to-one"; }
    virtual bool getCartesianProduct() const                                   { return false; }
    virtual void lazyFrom(QxSqlRelationParams & params) const                  { Q_UNUSED(params); }
    virtual void eagerFrom(QxSqlRelationParams & params) const                 { Q_UNUSED(params); }

@@ -24,8 +24,10 @@ LIBS += -l"QxOrm"
 HEADERS += ./include/precompiled.h
 HEADERS += ./include/export.h
 HEADERS += ./include/CPerson.h
+HEADERS += ./include/TestQtProperty.h
 
 SOURCES += ./qx/CPerson.qx.cpp
 
 SOURCES += ./src/CPerson.cpp
+SOURCES += ./src/TestQtProperty.cpp
 SOURCES += ./src/main.cpp

@@ -26,6 +26,41 @@
 namespace qx {
 
 template <class T>
+IxDataMember * QxDataMemberX<T>::initId(IxDataMember * pId, long lVersion)
+{
+   if (! pId) { qAssert(false); return NULL; }
+   qAssert(lVersion <= getVersion());
+   QString sKey = pId->getKey();
+
+   m_pDataMemberId = pId;
+   m_pDataMemberId->setSqlType(qx::trait::get_sql_type<typename QxDataMemberX<T>::type_primary_key>::get());
+   m_pDataMemberId->setAutoIncrement(boost::is_integral<typename QxDataMemberX<T>::type_primary_key>::value);
+   m_pDataMemberId->setNameParent(getName());
+   m_pDataMemberId->setIsPrimaryKey(true);
+   m_pDataMemberId->setNotNull(true);
+   m_pDataMemberId->setVersion(lVersion);
+   m_pDataMemberId->setParent(this);
+   m_lstDataMember.insert(sKey, m_pDataMemberId);
+
+   return m_pDataMemberId;
+}
+
+template <class T>
+IxDataMember * QxDataMemberX<T>::initData(IxDataMember * pData, long lVersion)
+{
+   if (! pData) { qAssert(false); return NULL; }
+   qAssert(lVersion <= getVersion());
+   QString sKey = pData->getKey();
+
+   pData->setVersion(lVersion);
+   pData->setNameParent(getName());
+   pData->setParent(this);
+   m_lstDataMember.insert(sKey, pData);
+
+   return pData;
+}
+
+template <class T>
 template <typename V, typename U>
 IxDataMember * QxDataMemberX<T>::add(V U::* pData, const QString & sKey, long lVersion, bool bSerialize, bool bDao)
 {
@@ -33,14 +68,17 @@ IxDataMember * QxDataMemberX<T>::add(V U::* pData, const QString & sKey, long lV
    BOOST_STATIC_ASSERT(is_valid_class_tmp::value);
    if (exist_WithDaoStrategy(sKey)) { qAssert(false); return NULL; }
 
-   qAssert(lVersion <= getVersion());
    IxDataMember * pNewDataMember = new QxDataMember<V, T>(pData, sKey, lVersion, bSerialize, bDao);
    pNewDataMember->setSqlType(qx::trait::get_sql_type<V>::get());
-   pNewDataMember->setNameParent(getName());
-   pNewDataMember->setParent(this);
-   m_lstDataMember.insert(sKey, pNewDataMember);
+   return this->initData(pNewDataMember, lVersion);
+}
 
-   return pNewDataMember;
+template <class T>
+IxDataMember * QxDataMemberX<T>::add(const QString & sKey, long lVersion)
+{
+   if (! qx::trait::qt_meta_object<T>::is_valid) { qDebug("[QxOrm] qx::QxDataMemberX<T>::add() : '%s'", "Qt introspection engine works only with QObject class"); qAssert(false); return NULL; }
+   if (exist_WithDaoStrategy(sKey)) { qAssert(false); return NULL; }
+   return this->initData(new QxDataMember_QObject(qx::trait::qt_meta_object<T>::get(), sKey), lVersion);
 }
 
 template <class T>
@@ -67,19 +105,16 @@ IxDataMember * QxDataMemberX<T>::id(typename QxDataMemberX<T>::type_primary_key 
 {
    if (getId_WithDaoStrategy()) { qDebug("[QxOrm] qx::QxDataMemberX<T> id (primary key) already defined '%s'", qPrintable(getId_WithDaoStrategy()->getName())); }
    if (exist_WithDaoStrategy(sKey) || getId_WithDaoStrategy()) { qAssert(false); return getId_WithDaoStrategy(); }
+   return this->initId(new QxDataMember<typename QxDataMemberX<T>::type_primary_key, T>(pDataMemberId, sKey), lVersion);
+}
 
-   qAssert(lVersion <= getVersion());
-   m_pDataMemberId = new QxDataMember<typename QxDataMemberX<T>::type_primary_key, T>(pDataMemberId, sKey);
-   m_pDataMemberId->setSqlType(qx::trait::get_sql_type<typename QxDataMemberX<T>::type_primary_key>::get());
-   m_pDataMemberId->setAutoIncrement(boost::is_integral<typename QxDataMemberX<T>::type_primary_key>::value);
-   m_pDataMemberId->setNameParent(getName());
-   m_pDataMemberId->setIsPrimaryKey(true);
-   m_pDataMemberId->setNotNull(true);
-   m_pDataMemberId->setVersion(lVersion);
-   m_pDataMemberId->setParent(this);
-   m_lstDataMember.insert(sKey, m_pDataMemberId);
-
-   return m_pDataMemberId;
+template <class T>
+IxDataMember * QxDataMemberX<T>::id(const QString & sKey, long lVersion)
+{
+   if (! qx::trait::qt_meta_object<T>::is_valid) { qDebug("[QxOrm] qx::QxDataMemberX<T>::id() : '%s'", "Qt introspection engine works only with QObject class"); qAssert(false); return NULL; }
+   if (getId_WithDaoStrategy()) { qDebug("[QxOrm] qx::QxDataMemberX<T> id (primary key) already defined '%s'", qPrintable(getId_WithDaoStrategy()->getName())); }
+   if (exist_WithDaoStrategy(sKey) || getId_WithDaoStrategy()) { qAssert(false); return getId_WithDaoStrategy(); }
+   return this->initId(new QxDataMember_QObject(qx::trait::qt_meta_object<T>::get(), sKey), lVersion);
 }
 
 template <class T>

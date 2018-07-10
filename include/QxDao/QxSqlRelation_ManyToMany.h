@@ -71,6 +71,7 @@ public:
    QxSqlRelation_ManyToMany(IxDataMember * p, const QString & sExtraTable, const QString & sForeignKeyOwner, const QString & sForeignKeyDataType) : QxSqlRelation<DataType, Owner>(p), m_sExtraTable(sExtraTable), m_sForeignKeyOwner(sForeignKeyOwner), m_sForeignKeyDataType(sForeignKeyDataType) { this->verifyParameters(); }
    virtual ~QxSqlRelation_ManyToMany() { BOOST_STATIC_ASSERT(is_data_container); }
 
+   virtual QString getDescription() const                                     { return "relation many-to-many"; }
    virtual bool getCartesianProduct() const                                   { return true; }
    virtual void createTable(QxSqlRelationParams & params) const               { Q_UNUSED(params); }
    virtual void lazySelect(QxSqlRelationParams & params) const                { Q_UNUSED(params); }

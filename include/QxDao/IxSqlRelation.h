@@ -98,6 +98,7 @@ public:
    QString getSqlJoin() const;
 
    virtual void init() = 0;
+   virtual QString getDescription() const = 0;
    virtual bool getCartesianProduct() const = 0;
    virtual QVariant getIdFromQuery(bool bEager, QxSqlRelationParams & params) const = 0;
    virtual void updateOffset(bool bEager, QxSqlRelationParams & params) const = 0;

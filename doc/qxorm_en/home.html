@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
-  <title>QxOrm - C++ Object Relational Mapping library</title>
+  <title>QxOrm - C++ Object Relational Mapping library (ORM)</title>
   <meta name="generator" content="Amaya, see http://www.w3.org/Amaya/">
   <style type="text/css">
    .comment { color: #008000; font-style: italic; }
@@ -21,14 +21,16 @@
 </head>
 <body>
 <table border="0" style="width: 80%" align="center">
-  <col><col>
+  <col><col><col>
   <tbody>
     <tr>
-      <td><a href="./home.html"><img alt="QxOrm"
-        src="./resource/logo_qxorm.jpg" width="256" align="left" height="61"
-        border="0"></a></td>
-      <td><img alt="C++" src="./resource/logo_cpp.jpg" width="50" align="right"
-        height="50"></td>
+      <td><a href="./home.html"><img alt="QxOrm" src="./resource/logo_qxorm.jpg" width="256" height="61" align="left" border="0"></a></td>
+      <td align="right" style="vertical-align:bottom">
+        <img alt="Windows" src="./resource/logo_windows.gif" width="35" height="35">
+        <img alt="Linux" src="./resource/logo_linux.gif" width="35" height="35">
+        <img alt="Macintosh" src="./resource/logo_mac.gif" width="35" height="35">
+      </td>
+      <td width="70"><img alt="C++" src="./resource/logo_cpp.jpg" width="50" height="50" align="right"></td>
     </tr>
   </tbody>
 </table>
@@ -63,7 +65,7 @@
   <col><col><col><col><col>
   <tbody><tr>
   <td align="left" valign="top"><font size="2">QxOrm  &gt;&gt;  Home</font></td>
-  <td align="right" valign="top"><font size="2">Current version : QxOrm 1.1.8 (LGPL) - <a href="../doxygen/index.html" target="_blank">QxOrm library online documentation</a></font></td>
+  <td align="right" valign="top"><font size="2">Current version : QxOrm 1.1.9 (LGPL) - <a href="../doxygen/index.html" target="_blank">QxOrm library online documentation</a></font></td>
   <td width="10px"></td>
   <td width="40px" height="30px"><a href="../qxorm_fr/home.html"><img alt="Version française du site" src="./resource/FR.png" width="40" height="30" border="0"></a></td>
   <td width="40px" height="30px"><a href="../qxorm_en/home.html"><img alt="Web site english version" src="./resource/GB.png" width="40" height="30" border="0"></a></td>
@@ -79,11 +81,11 @@
           <tbody>
             <tr>
               <td><b>QxOrm is a C++ library designed to provide <i>Object Relational Mapping (ORM)</i> feature to C++ users.</b><br>
-                 With a simple <b>C++ setting function by class</b> (like <i>Hibernate</i> xml mapping file), you will have access to the following features :<br>
+                 With a simple <b>C++ setting function by class</b> (like <i>Hibernate</i> XML mapping file), you will have access to the following features :<br>
                  <ul>
                    <li><b><font style="background-color:yellow">persistence</font></b> : communication with a lot of databases (with <i>1-1</i>, <i>1-n</i>, <i>n-1</i> and <i>n-n</i> relationships)
                    </li>
-                   <li><b><font style="background-color:yellow">serialization</font></b> : binary and xml format
+                   <li><b><font style="background-color:yellow">serialization</font></b> : binary and XML format
                    </li>
                    <li><b><font style="background-color:yellow">reflection</font></b> (or <b><font style="background-color:yellow">introspection</font></b>) : access to classes definitions, retrieve properties and call classes methods
                    </li>
@@ -93,10 +95,10 @@
                  <ul>
                    <li><b>non intrusive</b> : the <i>C++ setting function</i> doesn't modified class definition, QxOrm can be used in existing projects</li>
                    <li><b>no code generation</b></li>
-                   <li><b>no xml mapping file</b></li>
+                   <li><b>no XML mapping file</b></li>
                    <li><b>classes doesn't need to inherit from a 'super object'</b></li>
                    <li><b>template meta-programming</b> : no macro hack</li>
-                   <li>works with <b>Visual C++ 2008 or 2010</b> on Windows, <b>GCC 4.4.1</b> on Linux and <b>MinGW</b> on Windows (other platforms will be tested soon : Mac, phones...)</li>
+                   <li>works with <b>Visual C++ 2008 or 2010</b> on Windows, <b>GCC 4.4.1</b> on Linux and Mac OS X, and <b>MinGW</b> on Windows (other platforms will be tested soon : smartphones, etc...)</li>
                    <li>only one file <i>&lt;QxOrm.h&gt;</i> to include in precompiled-header (need <b>precompiled-header</b> file to reduce compilation times)</li>
                  </ul>
               </td>
@@ -126,7 +128,7 @@
           <tbody>
             <tr>
               <td valign="middle" width="161" align="center"><a href="http://qt.nokia.com/" target="_blank"><img alt="Qt" src="./resource/logo_qt.jpg" width="42" height="50" border="0"></a></td>
-              <td align="justify"><b>Qt</b> : cross-platform application development framework : ihm (<i>QtGui</i>), network (<i>QtNetwork</i>), xml (<i>QtXml</i>), database (<i>QtSql</i>)...<br>
+              <td align="justify"><b>Qt</b> : cross-platform application development framework : ihm (<i>QtGui</i>), network (<i>QtNetwork</i>), XML (<i>QtXml</i>), database (<i>QtSql</i>)...<br>
               Qt provides excellent support and documentation. Using Qt, you can write simple and powerful C++ code.<br>
               Qt is produced by Nokia's Qt Development Frameworks division and is available under LGPL license.<br>
               QxOrm is compatible with a lot of Qt's objects : <i>QObject, QString, QDate, QTime, QDateTime, QList, QHash, QSharedPointer, QScopedPointer...</i><br>
@@ -145,7 +147,7 @@
           </li>
           <li><p><b>QxCollection&lt;Key, Value&gt;</b> : based on <a href="http://www.boost.org/doc/libs/1_42_0/libs/multi_index/doc/index.html" target="_blank"><i>boost::multi_index_container</i></a>, this collection has advantages of <i>std::vector&lt;T&gt;</i> (insertion order + quick access by index) and <i>boost::unordered_map&lt;Key, Value&gt;</i> or <i>QHash&lt;Key, Value&gt;</i> (quick access by a key : <i>hash-map</i>). <b>QxCollection&lt;Key, Value&gt;</b> is adapted to contain the elements resulting from a database.</p> 
           </li>
-          <li><p><b>QxSerialize</b> : this module is based on the excellent library <a href="http://www.boost.org/doc/libs/1_42_0/libs/serialization/doc/index.html" target="_blank"><i>boost::serialization</i></a>. Any class defined by QxOrm can be serialize into binary and xml format. This module also allows to clone all instances of objects. Most of Qt objects (<i>QObject, QString, QDate, QTime, QDateTime, QList, QHash...</i>) are compatible with <i>QxSerialize</i> module.</p> 
+          <li><p><b>QxSerialize</b> : this module is based on the excellent library <a href="http://www.boost.org/doc/libs/1_42_0/libs/serialization/doc/index.html" target="_blank"><i>boost::serialization</i></a>. Any class defined by QxOrm can be serialize into binary and XML format. This module also allows to clone all instances of objects. Most of Qt objects (<i>QObject, QString, QDate, QTime, QDateTime, QList, QHash...</i>) are compatible with <i>QxSerialize</i> module.</p> 
           </li>
           <li><p><b>QxTraits</b> : boost library provides a lot of generic traits. QxOrm uses them but needs new functionalities that are not present in boost.</p> 
           </li>

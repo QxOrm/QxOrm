@@ -53,6 +53,8 @@
 #include <QxCommon/QxHashValue.h>
 #include <QxCommon/QxBool.h>
 #include <QxCommon/QxCache.h>
+#include <QxCommon/QxPropertyBag.h>
+#include <QxCommon/QxSimpleCrypt.h>
 
 #include <QxMemLeak/bool_array.h>
 #include <QxMemLeak/class_level_lock.h>
@@ -85,6 +87,7 @@
 #include <QxDataMember/IxDataMemberX.h>
 #include <QxDataMember/QxDataMember.h>
 #include <QxDataMember/QxDataMemberX.h>
+#include <QxDataMember/QxDataMember_QObject.h>
 
 #include <QxFunction/QxFunctionInclude.h>
 
@@ -130,6 +133,7 @@
 #include <QxRegister/QxRegister.h>
 #include <QxRegister/QxRegisterInternalHelper.h>
 #include <QxRegister/IxTypeInfo.h>
+#include <QxRegister/QxRegisterQtProperty.h>
 
 #include <QxService/IxParameter.h>
 #include <QxService/IxService.h>

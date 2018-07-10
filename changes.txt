@@ -1,3 +1,12 @@
+Changes in version 1.1.9:
+- Possibility to register automatically Qt meta-properties (using Q_PROPERTY macro) to QxOrm context without writing mapping function per class (void qx::register_class<T>())
+- Strong integration with Qt introspection/moc engine : for more details about this new feature, goto the FAQ 'How to register automatically Qt meta-properties to QxOrm context ?'
+- Improve introspection/reflection engine : see the FAQ (How to use introspection engine (or reflection engine) of QxOrm library ?) for more details
+- Possibility to add meta-data (using a property bag) to introspection engine : see 'IxClass', 'IxDataMember' and 'IxFunction' classes for more details
+- Add function 'qx::QxClassX::dumpSqlSchema()' to explain how to create your own SQL schema based on C++ classes
+- New class 'qx::QxSimpleCrypt' to provide encryption/decryption (thanks very much to Andre Somers) : so it's now possible to store encrypted data into database without using an external library
+- QxService module : new feature to encrypt/decrypt data before transfering it over network
+
 Changes in version 1.1.8:
 - QxOrm library can now be used on Mac (thanks very much to Dominique Billet) : see 'osx_build_all_debug.sh' and 'osx_build_all_release.sh' scripts to build QxOrm library and all samples in './test/' directory
 - Add 'qx::QxSession' class : define a session to manage automatically database transactions (using C++ RAII), see the FAQ for more details

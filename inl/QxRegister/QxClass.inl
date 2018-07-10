@@ -33,12 +33,15 @@ void QxClass<T>::init()
    m_pFctMemberX.reset(new IxFunctionX());
    m_lVersion = boost::serialization::version<T>::value;
    m_sKey = qx::trait::get_class_name<T>::get();
-   m_sKeyBaseClass = qx::trait::get_class_name<typename QxClass<T>::type_base_class>::get();
    m_eDaoStrategy = QxClass<typename QxClass<T>::type_base_class>::getSingleton()->getDaoStrategy();
    this->setName(qx::trait::get_class_name<T>::get_xml_tag());
    this->updateClassX();
    beforeRegisterClass();
 }
+
+template <class T>
+IxDataMember * QxClass<T>::data(const QString & sKey, long lVersion)
+{ return this->dataMemberX()->add(sKey, lVersion); }
 
 template <class T>
 template <typename V, typename U>
@@ -59,6 +62,10 @@ template <class T>
 template <typename V, typename U>
 IxDataMember * QxClass<T>::data(V U::* pData, const QString & sKey)
 { return this->dataMemberX()->add(pData, sKey); }
+
+template <class T>
+IxDataMember * QxClass<T>::id(const QString & sKey, long lVersion)
+{ return this->dataMemberX()->id(sKey, lVersion); }
 
 template <class T>
 IxDataMember * QxClass<T>::id(typename QxClass<T>::type_primary_key T::* pDataMemberId, const QString & sKey)
@@ -113,6 +120,7 @@ IxFunction * QxClass<T>::insertFct(IxFunction_ptr pFct, const QString & sKey)
 {
    if (! m_pFctMemberX || sKey.isEmpty() || m_pFctMemberX->exist(sKey)) { qAssert(false); return NULL; }
    bool bInsertOk = m_pFctMemberX->insert(sKey, pFct);
+   if (bInsertOk) { pFct->setKey(sKey); }
    return (bInsertOk ? pFct.get() : NULL);
 }
 
@@ -170,7 +178,7 @@ template <> QX_GCC_WORKAROUND_TEMPLATE_SPEC_INLINE
 QxClass<qx::trait::no_base_class_defined>::QxClass() : IxClass(), QxSingleton< QxClass<qx::trait::no_base_class_defined> >("qx::QxClass_no_base_class_defined") { setName("qx::trait::no_base_class_defined"); m_bFinalClass = true; }
 
 template <> QX_GCC_WORKAROUND_TEMPLATE_SPEC_INLINE
-QxClass<QObject>::QxClass() : IxClass(), QxSingleton< QxClass<QObject> >("qx::QxClass_QObject") { setName("QObject"); m_bFinalClass = true; }
+QxClass<QObject>::QxClass() : IxClass(), QxSingleton< QxClass<QObject> >("qx::QxClass_QObject") { m_sKey = "QObject"; setName("QObject"); m_bFinalClass = true; }
 
 template <> QX_GCC_WORKAROUND_TEMPLATE_SPEC_INLINE
 void QxClass<qx::trait::no_base_class_defined>::registerClass() { ; }

@@ -40,6 +40,7 @@
 #include <QtCore/qstring.h>
 #include <QtCore/qdatetime.h>
 #include <QtCore/qvariant.h>
+#include <QtCore/qpair.h>
 
 #include <boost/tuple/tuple.hpp>
 #include <boost/tuple/tuple_comparison.hpp>
@@ -50,6 +51,18 @@ inline std::size_t hash_value(const QDate & d)        { return qHash(d.toJulianD
 inline std::size_t hash_value(const QTime & t)        { return qHash(t.toString()); }
 inline std::size_t hash_value(const QDateTime & dt)   { return qHash(dt.toString()); }
 inline std::size_t hash_value(const QVariant & v)     { return qHash(v.toString()); }
+
+template <typename T0, typename T1>
+inline std::size_t hash_value(const QPair<T0, T1> & p)
+{
+   std::size_t seed = 0;
+   boost::hash_combine(seed, p.first);
+   boost::hash_combine(seed, p.second);
+   return seed;
+}
+
+namespace boost {
+namespace tuples {
 
 template <typename T0, typename T1>
 inline std::size_t hash_value(const boost::tuple<T0, T1> & tu)
@@ -167,5 +180,8 @@ inline std::size_t hash_value(const boost::tuple<T0, T1, T2, T3, T4, T5, T6, T7,
    boost::hash_combine(seed, boost::get<9>(tu));
    return seed;
 }
+
+} // namespace tuples
+} // namespace boost
 
 #endif // _QX_HASH_VALUE_H_

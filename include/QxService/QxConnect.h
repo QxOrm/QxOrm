@@ -58,6 +58,8 @@
 #define QX_SERVICE_DEFAULT_SERIALIZATION_TYPE serialization_wide_xml
 #endif // _QX_SERIALIZE_BINARY
 
+#define QX_SERVICE_DEFAULT_ENCRYPT_KEY Q_UINT64_C(0x0f2aac3b24358a1a)
+
 namespace qx {
 namespace service {
 
@@ -86,10 +88,12 @@ protected:
    long                 m_lThreadCount;         //!< Thread count to execute all transactions (cf. 'QxThreadPool')
    int                  m_iMaxWait;             //!< Max wait in milliseconds for network processes
    bool                 m_bCompressData;        //!< Compress data over network
+   bool                 m_bEncryptData;         //!< Encrypt data before transfering it over network
+   quint64              m_uiEncryptKey;         //!< 64 bit key to encrypt/decrypt data
 
 public:
 
-   QxConnect() : qx::QxSingleton<QxConnect>("qx::service::QxConnect"), m_lPort(0), m_eSerializationType(QX_SERVICE_DEFAULT_SERIALIZATION_TYPE), m_lThreadCount(30), m_iMaxWait(30000), m_bCompressData(false) { ; }
+   QxConnect() : qx::QxSingleton<QxConnect>("qx::service::QxConnect"), m_lPort(0), m_eSerializationType(QX_SERVICE_DEFAULT_SERIALIZATION_TYPE), m_lThreadCount(30), m_iMaxWait(30000), m_bCompressData(false), m_bEncryptData(false) { m_uiEncryptKey = QX_SERVICE_DEFAULT_ENCRYPT_KEY; }
    virtual ~QxConnect();
 
    QString getIp() const                              { return m_sIp; }
@@ -98,6 +102,8 @@ public:
    long getThreadCount() const                        { return m_lThreadCount; }
    int getMaxWait() const                             { return m_iMaxWait; }
    bool getCompressData() const                       { return m_bCompressData; }
+   bool getEncryptData() const                        { return m_bEncryptData; }
+   quint64 getEncryptKey() const                      { return m_uiEncryptKey; }
 
    void setIp(const QString & s)                      { m_sIp = s; }
    void setPort(long l)                               { m_lPort = l; }
@@ -105,6 +111,7 @@ public:
    void setThreadCount(long l)                        { qAssert(l > 0); m_lThreadCount = l; }
    void setMaxWait(int i)                             { qAssert(i > 0); m_iMaxWait = i; }
    void setCompressData(bool b)                       { m_bCompressData = b; }
+   void setEncryptData(bool b, quint64 key = 0)       { m_bEncryptData = b; if (key != 0) { m_uiEncryptKey = key; } }
 
 };
 

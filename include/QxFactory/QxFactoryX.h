@@ -51,6 +51,8 @@ namespace qx {
 inline boost::any create(const QString & sKey);
 template <typename T> inline T * create_nude_ptr(const QString & sKey);
 
+class QxClassX;
+
 /*!
  * \ingroup QxFactory
  * \brief qx::QxFactoryX : list of all classes registered with QxOrm library factory pattern to create object instance dynamically using the class name
@@ -58,6 +60,7 @@ template <typename T> inline T * create_nude_ptr(const QString & sKey);
 class QX_DLL_EXPORT QxFactoryX : public QxSingleton<QxFactoryX>
 {
 
+   friend class QxClassX;
    friend class IxFactory;
    friend class QxSingleton<QxFactoryX>;
    friend inline boost::any create(const QString & sKey);
@@ -72,6 +75,8 @@ private:
 
    QxFactoryX() : QxSingleton<QxFactoryX>("qx::QxFactoryX") { ; }
    virtual ~QxFactoryX() { ; }
+
+   QHash<QString, IxFactory *> * getAllFactory() { return (& m_mapFactoryX); }
 
    void registerFactory(const QString & sKey, IxFactory * pFactory);
    void unregisterFactory(const QString & sKey);

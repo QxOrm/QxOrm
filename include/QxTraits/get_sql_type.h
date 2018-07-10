@@ -87,6 +87,9 @@ template <typename T>
 struct get_sql_type
 { static inline const char * get() { return ""; } };
 
+/* Implemented into './src/QxRegister/QxClassX.cpp' file */
+QX_DLL_EXPORT const char * get_sql_type_by_class_name(const char * sClassName, const char * sDefaultValue);
+
 } // namespace detail
 
 /*!
@@ -166,110 +169,39 @@ template <typename T1, typename T2, typename T3, typename T4, typename T5, typen
 struct get_sql_type< boost::tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9> >
 { static inline const char * get() { static std::string s; s = (std::string(qx::trait::get_sql_type<T1>::get()) + "|" + std::string(qx::trait::get_sql_type<T2>::get()) + "|" + std::string(qx::trait::get_sql_type<T3>::get()) + "|" + std::string(qx::trait::get_sql_type<T4>::get()) + "|" + std::string(qx::trait::get_sql_type<T5>::get()) + "|" + std::string(qx::trait::get_sql_type<T6>::get()) + "|" + std::string(qx::trait::get_sql_type<T7>::get()) + "|" + std::string(qx::trait::get_sql_type<T8>::get()) + "|" + std::string(qx::trait::get_sql_type<T9>::get())); return s.c_str(); } };
 
-namespace detail {
-
-template <>
-struct get_sql_type< bool >
-{ static inline const char * get() { return "SMALLINT"; } };
-
-template <>
-struct get_sql_type< qx_bool >
-{ static inline const char * get() { return "SMALLINT"; } };
-
-template <>
-struct get_sql_type< short >
-{ static inline const char * get() { return "SMALLINT"; } };
-
-template <>
-struct get_sql_type< int >
-{ static inline const char * get() { return "INTEGER"; } };
-
-template <>
-struct get_sql_type< long >
-{ static inline const char * get() { return "INTEGER"; } };
-
-template <>
-struct get_sql_type< long long >
-{ static inline const char * get() { return "INTEGER"; } };
-
-template <>
-struct get_sql_type< float >
-{ static inline const char * get() { return "FLOAT"; } };
-
-template <>
-struct get_sql_type< double >
-{ static inline const char * get() { return "FLOAT"; } };
-
-template <>
-struct get_sql_type< long double >
-{ static inline const char * get() { return "FLOAT"; } };
-
-template <>
-struct get_sql_type< unsigned short >
-{ static inline const char * get() { return "SMALLINT"; } };
-
-template <>
-struct get_sql_type< unsigned int >
-{ static inline const char * get() { return "INTEGER"; } };
-
-template <>
-struct get_sql_type< unsigned long >
-{ static inline const char * get() { return "INTEGER"; } };
-
-template <>
-struct get_sql_type< unsigned long long >
-{ static inline const char * get() { return "INTEGER"; } };
-
-template <>
-struct get_sql_type< std::string >
-{ static inline const char * get() { return "TEXT"; } };
-
-template <>
-struct get_sql_type< std::wstring >
-{ static inline const char * get() { return "TEXT"; } };
-
-template <>
-struct get_sql_type< QString >
-{ static inline const char * get() { return "TEXT"; } };
-
-template <>
-struct get_sql_type< QVariant >
-{ static inline const char * get() { return "TEXT"; } };
-
-template <>
-struct get_sql_type< QUuid >
-{ static inline const char * get() { return "TEXT"; } };
-
-template <>
-struct get_sql_type< QDate >
-{ static inline const char * get() { return "DATE"; } };
-
-template <>
-struct get_sql_type< QTime >
-{ static inline const char * get() { return "TIME"; } };
-
-template <>
-struct get_sql_type< QDateTime >
-{ static inline const char * get() { return "TIMESTAMP"; } };
-
-template <>
-struct get_sql_type< QByteArray >
-{ static inline const char * get() { return "BLOB"; } };
-
-template <>
-struct get_sql_type< qx::QxDateNeutral >
-{ static inline const char * get() { return "TEXT"; } };
-
-template <>
-struct get_sql_type< qx::QxTimeNeutral >
-{ static inline const char * get() { return "TEXT"; } };
-
-template <>
-struct get_sql_type< qx::QxDateTimeNeutral >
-{ static inline const char * get() { return "TEXT"; } };
-
-} // namespace detail
 } // namespace trait
 } // namespace qx
+
+#define QX_REGISTER_TRAIT_GET_SQL_TYPE(className, sqlType) \
+namespace qx { namespace trait { namespace detail { \
+template <> \
+struct get_sql_type< className > \
+{ static inline const char * get() { return get_sql_type_by_class_name(#className, sqlType); } }; }}}
+
+QX_REGISTER_TRAIT_GET_SQL_TYPE(bool, "SMALLINT")
+QX_REGISTER_TRAIT_GET_SQL_TYPE(qx_bool, "SMALLINT")
+QX_REGISTER_TRAIT_GET_SQL_TYPE(short, "SMALLINT")
+QX_REGISTER_TRAIT_GET_SQL_TYPE(int, "INTEGER")
+QX_REGISTER_TRAIT_GET_SQL_TYPE(long, "INTEGER")
+QX_REGISTER_TRAIT_GET_SQL_TYPE(long long, "INTEGER")
+QX_REGISTER_TRAIT_GET_SQL_TYPE(float, "FLOAT")
+QX_REGISTER_TRAIT_GET_SQL_TYPE(double, "FLOAT")
+QX_REGISTER_TRAIT_GET_SQL_TYPE(long double, "FLOAT")
+QX_REGISTER_TRAIT_GET_SQL_TYPE(unsigned short, "SMALLINT")
+QX_REGISTER_TRAIT_GET_SQL_TYPE(unsigned int, "INTEGER")
+QX_REGISTER_TRAIT_GET_SQL_TYPE(unsigned long, "INTEGER")
+QX_REGISTER_TRAIT_GET_SQL_TYPE(unsigned long long, "INTEGER")
+QX_REGISTER_TRAIT_GET_SQL_TYPE(std::string, "TEXT")
+QX_REGISTER_TRAIT_GET_SQL_TYPE(std::wstring, "TEXT")
+QX_REGISTER_TRAIT_GET_SQL_TYPE(QString, "TEXT")
+QX_REGISTER_TRAIT_GET_SQL_TYPE(QVariant, "TEXT")
+QX_REGISTER_TRAIT_GET_SQL_TYPE(QUuid, "TEXT")
+QX_REGISTER_TRAIT_GET_SQL_TYPE(QDate, "DATE")
+QX_REGISTER_TRAIT_GET_SQL_TYPE(QTime, "TIME")
+QX_REGISTER_TRAIT_GET_SQL_TYPE(QDateTime, "TIMESTAMP")
+QX_REGISTER_TRAIT_GET_SQL_TYPE(QByteArray, "BLOB")
+QX_REGISTER_TRAIT_GET_SQL_TYPE(qx::QxDateNeutral, "TEXT")
+QX_REGISTER_TRAIT_GET_SQL_TYPE(qx::QxTimeNeutral, "TEXT")
+QX_REGISTER_TRAIT_GET_SQL_TYPE(qx::QxDateTimeNeutral, "TEXT")
 
 #endif // _QX_GET_SQL_TYPE_H_

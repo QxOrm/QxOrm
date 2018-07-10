@@ -198,5 +198,8 @@ int main(int argc, char * argv[])
    { qAssert(lst_blog_with_only_date_creation[0]->m_text.isEmpty()); }
    qx::dump(lst_blog_with_only_date_creation);
 
+   // Dump all registered classes into QxOrm context (introspection engine)
+   qx::QxClassX::dumpAllClasses();
+
    return 0;
 }

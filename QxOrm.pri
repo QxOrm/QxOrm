@@ -69,12 +69,9 @@ QT += xml
 QT += sql
 MOC_DIR = ./qt/moc
 RCC_DIR = ./qt/rcc/src
-
-gui {
 UI_DIR = ./qt/ui
 UI_HEADERS_DIR = ./qt/ui/include
 UI_SOURCES_DIR = ./qt/ui/src
-} # gui
 
 #############################
 # Compiler / Linker Options #

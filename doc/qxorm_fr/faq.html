@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
-  <title>QxOrm - C++ Object Relational Mapping library</title>
+  <title>QxOrm - C++ Object Relational Mapping library (ORM)</title>
   <meta name="generator" content="Amaya, see http://www.w3.org/Amaya/">
   <style type="text/css">
    .comment { color: #008000; font-style: italic; }
@@ -21,14 +21,16 @@
 </head>
 <body>
 <table border="0" style="width: 80%" align="center">
-  <col><col>
+  <col><col><col>
   <tbody>
     <tr>
-      <td><a href="./home.html"><img alt="QxOrm"
-        src="./resource/logo_qxorm.jpg" width="256" align="left" height="61"
-        border="0"></a></td>
-      <td><img alt="C++" src="./resource/logo_cpp.jpg" width="50" align="right"
-        height="50"></td>
+      <td><a href="./home.html"><img alt="QxOrm" src="./resource/logo_qxorm.jpg" width="256" height="61" align="left" border="0"></a></td>
+      <td align="right" style="vertical-align:bottom">
+        <img alt="Windows" src="./resource/logo_windows.gif" width="35" height="35">
+        <img alt="Linux" src="./resource/logo_linux.gif" width="35" height="35">
+        <img alt="Macintosh" src="./resource/logo_mac.gif" width="35" height="35">
+      </td>
+      <td width="70"><img alt="C++" src="./resource/logo_cpp.jpg" width="50" height="50" align="right"></td>
     </tr>
   </tbody>
 </table>
@@ -63,7 +65,7 @@
   <col><col><col><col><col>
   <tbody><tr>
   <td align="left" valign="top"><font size="2">QxOrm  &gt;&gt;  Faq</font></td>
-  <td align="right" valign="top"><font size="2">Version courante : QxOrm 1.1.8 (LGPL) - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
+  <td align="right" valign="top"><font size="2">Version courante : QxOrm 1.1.9 (LGPL) - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
   <td width="10px"></td>
   <td width="40px" height="30px"><a href="../qxorm_fr/faq.html"><img alt="Version française du site" src="./resource/FR.png" width="40" height="30" border="0"></a></td>
   <td width="40px" height="30px"><a href="../qxorm_en/faq.html"><img alt="Web site english version" src="./resource/GB.png" width="40" height="30" border="0"></a></td>
@@ -99,6 +101,9 @@
                 </li><li><a href="#faq_150">Comment déclarer une classe définie dans un espace de nom (<i>namespace</i>) dans le contexte QxOrm ?</a><br>
                 </li><li><a href="#faq_160">Comment utiliser le mécanisme de suppression logique (<i>soft delete</i>) ?</a><br>
                 </li><li><a href="#faq_170">Comment utiliser les sessions (classe <i>qx::QxSession</i>) pour simplifier la gestion des transactions des bases de données (C++ RAII) ?</a><br>
+                </li><li><a href="#faq_180">Comment persister un type dont on ne possède pas le code source (classe provenant d'une bibliothèque tierce par exemple) ?</a><br>
+                </li><li><a href="#faq_190">Comment utiliser le moteur d'introspection (ou réflexion) de la bibliothèque QxOrm ?</a><br>
+                </li><li><a href="#faq_200">Comment déclarer automatiquement les méta-propriétés de Qt (définies par la macro <i>Q_PROPERTY</i>) dans le contexte QxOrm ?</a><br>
                 </li></ul>
               </td>
               <td width="200" align="center" valign="top"><a href="./resource/qt_ambassador_logo.png" target="_blank"><img alt="qt_ambassador" src="./resource/qt_ambassador_logo_150x150.png" width="150" height="150" border="0"></a><br>
@@ -309,13 +314,18 @@
            Oui, si la <i>serialization</i> des données au format XML n'est pas utilisée dans le projet, vous pouvez désactiver cette fonctionnalité.<br>
            Les temps de compilation seront alors réduits mais vous n'aurez plus accès au namespace <i>qx::serialization:xml</i>.<br>
            Pour désactiver la <i>serialization XML</i>, il faut ouvrir le fichier <i>QxConfig.h</i> et modifier la constante <b><i>_QX_SERIALIZE_XML</i></b>.<br>
-           Une recompilation de la bibliothèque QxOrm est nécessaire pour prendre en compte cette modification.<br><br>
+           Une recompilation de la bibliothèque QxOrm est nécessaire pour prendre en compte cette modification.<br>
+           <br>
            Une autre possibilité est d'utiliser les classes <i>polymorphiques</i> de la bibliothèque <a href="http://www.boost.org/doc/libs/1_42_0/libs/serialization/doc/index.html" target="_blank"><i>boost::serialization</i></a> (à la place des classes <i>template</i>).<br>
            Cette fonctionnalité réduit les temps de compilation ainsi que la taille de l'éxecutable généré.<br>
            En contre-partie, la vitesse d'exécution du programme sera réduite puisqu'une partie du travail effectué lors de la compilation devra être réalisé à l'exécution de l'application.<br>
            Pour activer cette fonctionnalité dans <b>QxOrm</b>, vous devez modifier la constante <b><i>_QX_SERIALIZE_POLYMORPHIC</i></b> du fichier <i>QxConfig.h</i>.<br>
            <b>Attention</b> : les fonctions de <i>serialization</i> seront alors accessibles depuis les <i>namespace</i> suivants : <i>qx::serialization::polymorphic_binary</i>, <i>qx::serialization::polymorphic_text</i> et <i>qx::serialization::polymorphic_xml</i>.<br>
-           Une recompilation de la bibliothèque QxOrm est nécessaire pour prendre en compte cette modification.
+           Une recompilation de la bibliothèque QxOrm est nécessaire pour prendre en compte cette modification.<br>
+           <br>
+           Enfin, il est également possible d'utiliser la macro <i>Q_PROPERTY</i> pour déclarer les propriétés si la classe hérite du type <i>QObject</i>.<br>
+           Dans ce cas, il existe deux manières différentes pour enregistrer les propriétés dans le contexte QxOrm, dont une qui réduit sensiblement les temps de compilation du projet.<br>
+           Pour plus d'informations sur cette fonctionnalité, <a href="./faq.html#faq_200">rendez-vous sur cette Question-Réponse de la FAQ</a>.
            </td>
          </tr>
        </tbody>
@@ -726,9 +736,9 @@ int</span> author<span class="operator">::</span>age<span class="operator">()</s
            <td align="justify">
            On retrouve généralement dans les différents outils de type <i>ORM</i> trois différentes stratégies pour gérer la notion d'héritage avec la base de données :
            <ul>
-           <li><i>Single Table Inheritance</i> ;
-           </li><li><i>Class Table Inheritance</i> ;
-           </li><li><i>Concrete Table Inheritance</i>.
+           <li><i><a href="http://martinfowler.com/eaaCatalog/singleTableInheritance.html" target="_blank">Single Table Inheritance</a></i> (une seule table regroupant toutes les propriétés d'une hiérarchie d'héritage de classes) ;
+           </li><li><i><a href="http://martinfowler.com/eaaCatalog/classTableInheritance.html" target="_blank">Class Table Inheritance</a></i> (à chaque classe d'une hiérarchie d'héritage est associée une table dans la base de données) ;
+           </li><li><i><a href="http://martinfowler.com/eaaCatalog/concreteTableInheritance.html" target="_blank">Concrete Table Inheritance</a></i> (une table par classe concrète dans la hiérarchie d'héritage).
            </li></ul>
            <b>QxOrm</b> utilise par défaut la stratégie <i>Concrete Table Inheritance</i> (les autres stratégies ne sont pas fonctionnelles à l'heure actuelle).<br>
            De nombreux tutoriaux et forums sont disponibles sur internet pour plus de détails sur cette notion d'héritage.<br>
@@ -1001,6 +1011,359 @@ daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<s
             <br>
             <b>Autre remarque :</b> il est important de ne pas oublier de passer la connection à la base de données de la session à chaque fonction <i>qx::dao::xxx</i> (en utilisant la méthode <i>session.database()</i>).<br>
             De plus, il est possible d'initialiser une session avec sa propre connection (provenant d'un pool de connections par exemple) en utilisant le constructeur de la classe <i>qx::QxSession</i>.<br>
+           </td>
+         </tr>
+       </tbody>
+      </table>
+      <br><br>
+      <a name="faq_180"><u><b>Comment persister un type dont on ne possède pas le code source (classe provenant d'une bibliothèque tierce par exemple) ?</b></u></a><br><br>
+      <table border="0" style="width: 100%" align="center">
+       <col>
+       <col>
+       <tbody>
+         <tr>
+           <td valign="middle" width="30"></td>
+           <td align="justify">
+           La bibliothèque QxOrm permet de persister n'importe quel type, même si ce dernier n'est pas enregistré dans le contexte QxOrm par la méthode <i>qx::register_class&lt;T&gt;()</i>.<br>
+           <br>
+           Il est nécessaire d'écrire les fonctions de sérialisation de la bibliothèque boost, en utilisant la méthode <b>non intrusive</b> (puisque le code source n'est pas disponible ou ne peut pas être modifié).
+           Pour plus d'informations sur la sérialisation des données avec la bibliothèque boost, rendez-vous sur <a href="http://khayyam.developpez.com/articles/cpp/boost/serialization/" target="_blank">le tutoriel de developpez.com</a>.<br>
+           <br>
+           Par exemple, imaginons une classe '<i>ExtObject3D</i>' provenant d'une bibliothèque tierce et dont le code source n'est pas disponible ou ne peut pas être modifié.
+           Voici le code nécessaire pour pouvoir persister une instance de type '<i>ExtObject3D</i>' en base de données :<br>
+           <br>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="pre">#ifndef _PERSIST_EXTOBJECT3D_H_
+#define _PERSIST_EXTOBJECT3D_H_
+
+#include "ExtObject3D.h"
+
+#include &lt;boost/serialization/serialization.hpp&gt;
+#include &lt;boost/serialization/split_free.hpp&gt;
+#include &lt;boost/serialization/nvp.hpp&gt;
+</span><span class="keyword"> 
+namespace</span> boost<span class="operator"> {</span><span class="keyword">
+namespace</span> serialization<span class="operator"> {</span><span class="keyword">
+
+template</span><span class="operator"> &lt;</span><span class="keyword">class</span> Archive<span class="operator">&gt;</span><span class="type">
+void</span> save<span class="operator">(</span>Archive<span class="operator"> &amp;</span> ar<span class="operator">,</span><span class="keyword"> const</span> ExtObject3D<span class="operator"> &amp;</span> t<span class="operator">,</span><span class="type"> unsigned int</span> version<span class="operator">)
+{</span>
+   Q_UNUSED<span class="operator">(</span>version<span class="operator">);</span><span class="type">
+   double</span> x<span class="operator">(</span>t<span class="operator">.</span>getX<span class="operator">()),</span> y<span class="operator">(</span>t<span class="operator">.</span>getY<span class="operator">()),</span> z<span class="operator">(</span>t<span class="operator">.</span>getZ<span class="operator">()),</span> angle<span class="operator">(</span>t<span class="operator">.</span>getAngle<span class="operator">());</span>
+
+   ar<span class="operator"> &lt;&lt;</span> boost<span class="operator">::</span>serialization<span class="operator">::</span>make_nvp<span class="operator">(</span><span class="string">"x"</span><span class="operator">,</span> x<span class="operator">);</span>
+   ar<span class="operator"> &lt;&lt;</span> boost<span class="operator">::</span>serialization<span class="operator">::</span>make_nvp<span class="operator">(</span><span class="string">"y"</span><span class="operator">,</span> y<span class="operator">);</span>
+   ar<span class="operator"> &lt;&lt;</span> boost<span class="operator">::</span>serialization<span class="operator">::</span>make_nvp<span class="operator">(</span><span class="string">"z"</span><span class="operator">,</span> z<span class="operator">);</span>
+   ar<span class="operator"> &lt;&lt;</span> boost<span class="operator">::</span>serialization<span class="operator">::</span>make_nvp<span class="operator">(</span><span class="string">"angle"</span><span class="operator">,</span> angle<span class="operator">);
+}</span><span class="keyword">
+
+template</span><span class="operator"> &lt;</span><span class="keyword">class</span> Archive<span class="operator">&gt;</span><span class="type">
+void</span> load<span class="operator">(</span>Archive<span class="operator"> &amp;</span> ar<span class="operator">,</span> ExtObject3D<span class="operator"> &amp;</span> t<span class="operator">,</span><span class="type"> unsigned int</span> version<span class="operator">)
+{</span>
+   Q_UNUSED<span class="operator">(</span>version<span class="operator">);</span><span class="type">
+   double</span> x<span class="operator">(</span><span class="float">0.0</span><span class="operator">),</span> y<span class="operator">(</span><span class="float">0.0</span><span class="operator">),</span> z<span class="operator">(</span><span class="float">0.0</span><span class="operator">),</span> angle<span class="operator">(</span><span class="float">0.0</span><span class="operator">);</span>
+
+   ar<span class="operator"> &gt;&gt;</span> boost<span class="operator">::</span>serialization<span class="operator">::</span>make_nvp<span class="operator">(</span><span class="string">"x"</span><span class="operator">,</span> x<span class="operator">);</span>
+   ar<span class="operator"> &gt;&gt;</span> boost<span class="operator">::</span>serialization<span class="operator">::</span>make_nvp<span class="operator">(</span><span class="string">"y"</span><span class="operator">,</span> y<span class="operator">);</span>
+   ar<span class="operator"> &gt;&gt;</span> boost<span class="operator">::</span>serialization<span class="operator">::</span>make_nvp<span class="operator">(</span><span class="string">"z"</span><span class="operator">,</span> z<span class="operator">);</span>
+   ar<span class="operator"> &gt;&gt;</span> boost<span class="operator">::</span>serialization<span class="operator">::</span>make_nvp<span class="operator">(</span><span class="string">"angle"</span><span class="operator">,</span> angle<span class="operator">);</span>
+
+   t<span class="operator">.</span>setX<span class="operator">(</span>x<span class="operator">);</span>
+   t<span class="operator">.</span>setY<span class="operator">(</span>y<span class="operator">);</span>
+   t<span class="operator">.</span>setZ<span class="operator">(</span>z<span class="operator">);</span>
+   t<span class="operator">.</span>setAngle<span class="operator">(</span>angle<span class="operator">);
+}
+
+}</span><span class="comment"> // namespace serialization
+</span><span class="operator">}</span><span class="comment"> // namespace boost
+</span> 
+BOOST_SERIALIZATION_SPLIT_FREE<span class="operator">(</span>ExtObject3D<span class="operator">)</span><span class="pre">
+
+#endif // _PERSIST_EXTOBJECT3D_H_</span></pre>
+           </td></tr></tbody></table>
+           <br>
+           Le code ci-dessus est suffisant pour persister une instance de type '<i>ExtObject3D</i>' en base de données : il est ainsi possible d'utiliser une propriété de type '<i>ExtObject3D</i>' dans une classe persistante enregistrée dans le contexte QxOrm.
+           Cette propriété peut être mappée sur une colonne de type <i>TEXT</i> ou <i>VARCHAR</i> en base de données.<br>
+           <br>
+           Le comportement par défaut de la bibliothèque QxOrm est le suivant : l'instance est sérialisée au format XML avant d'être insérée ou mise à jour en base de données.
+           Ce comportement par défaut peut être utile par exemple si l'on souhaite enregistrer une collection d'objets sans vouloir faire de relation (et donc gérer une autre table dans la base de données).
+           Par exemple, si l'on utilise une propriété de type <i>std::vector&lt;mon_objet&gt;</i> dans une classe persistante sans relation associée, la liste d'éléments sera automatiquement enregistrée au format XML en base de données.<br>
+           <br>
+           <b>Remarque :</b> ce comportement par défaut peut être facilement modifié pour un type donné.
+           Le moteur <i>QtSql</i> utilise le type <i>QVariant</i> pour faire le lien entre le code C++ et la base de données.
+           Le type <i>QVariant</i> peut contenir du texte, des valeurs numériques, du binaire, etc.
+           Il peut donc être intéressant de spécialiser le comportement par défaut (sérialisation XML) si l'on souhaite stocker des données au format binaire ou bien optimiser les performances (la sérialisation XML peut être couteuse en temps d'exécution).
+           Il suffit de proposer (en plus des fonctions de sérialisation boost) les conversions nécessaires en <i>QVariant</i>, par exemple avec la classe '<i>ExtObject3D</i>' :<br>
+           <br>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="keyword">namespace</span> qx<span class="operator"> {</span><span class="keyword">
+namespace</span> cvt<span class="operator"> {</span><span class="keyword">
+namespace</span> detail<span class="operator"> {</span><span class="keyword">
+
+template</span><span class="operator"> &lt;&gt;</span><span class="keyword"> struct</span> QxStringCvt_ToVariant<span class="operator">&lt;</span> ExtObject3D<span class="operator"> &gt; {</span><span class="keyword">
+static inline</span> QVariant toVariant<span class="operator">(</span><span class="keyword">const</span> ExtObject3D<span class="operator"> &amp;</span> t<span class="operator">,</span><span class="keyword"> const</span> QString<span class="operator"> &amp;</span> format<span class="operator">,</span><span class="type"> int</span> index<span class="operator">)
+{</span><span class="comment"> /* Ici je convertis ExtObject3D en QVariant */</span><span class="operator"> } };</span><span class="keyword">
+
+template</span><span class="operator"> &lt;&gt;</span><span class="keyword"> struct</span> QxStringCvt_FromVariant<span class="operator">&lt;</span> ExtObject3D<span class="operator"> &gt; {</span><span class="keyword">
+static inline</span> qx_bool fromVariant<span class="operator">(</span><span class="keyword">const</span> QVariant<span class="operator"> &amp;</span> v<span class="operator">,</span> ExtObject3D<span class="operator"> &amp;</span> t<span class="operator">,</span><span class="keyword"> const</span> QString<span class="operator"> &amp;</span> format<span class="operator">,</span><span class="type"> int</span> index<span class="operator">)
+{</span><span class="comment"> /* Ici je convertis QVariant en ExtObject3D */</span><span class="operator">;</span><span class="flow"> return</span> qx_bool<span class="operator">(</span><span class="bool">true</span><span class="operator">); } };
+
+}</span><span class="comment"> // namespace detail
+</span><span class="operator">}</span><span class="comment"> // namespace cvt
+</span><span class="operator">}</span><span class="comment"> // namespace qx</span></pre>
+           </td></tr></tbody></table>
+           <br>
+           </td>
+         </tr>
+       </tbody>
+      </table>
+      <br><br>
+      <a name="faq_190"><u><b>Comment utiliser le moteur d'introspection (ou réflexion) de la bibliothèque QxOrm ?</b></u></a><br><br>
+      <table border="0" style="width: 100%" align="center">
+       <col>
+       <col>
+       <tbody>
+         <tr>
+           <td valign="middle" width="30"></td>
+           <td align="justify">
+           Toute classe enregistrée dans le contexte QxOrm par la méthode <i>qx::register_class&lt;T&gt;()</i> peut être utilisée par le moteur d'introspection (ou réflexion) de la bibliothèque QxOrm.
+           Le moteur d'introspection permet d'obtenir de façon dynamique (donc pendant l'exécution du programme) des informations propres à un type.
+           Ces informations correspondent à des <i>méta-données</i> et décrivent de façon exhaustive les caractéristiques d'une classe (propriétés, méthodes, etc.).
+           De nombreux langages de programmation (par exemple Java ou C#) intègrent nativement ce mécanisme, ce n'est pas le cas du C++, c'est pourquoi la bibliothèque QxOrm émule un moteur d'introspection.<br>
+           <br>
+           Voici la liste des classes disponibles pour accéder aux <i>méta-données</i> :
+           <ul>
+             <li><a href="../doxygen/html/classqx_1_1_qx_class_x.html" target="_blank">qx::QxClassX</a> : singleton permettant de parcourir l'ensemble des classes enregistrées dans le contexte QxOrm par la méthode <i>qx::register_class&lt;T&gt;()</i> ;</li>
+             <li><a href="../doxygen/html/classqx_1_1_ix_class.html" target="_blank">qx::IxClass</a> : interface pour une classe enregistrée dans le contexte QxOrm ;</li>
+             <li><a href="../doxygen/html/classqx_1_1_ix_data_member_x.html" target="_blank">qx::IxDataMemberX</a> : liste des propriétés associées à une classe ;</li>
+             <li><a href="../doxygen/html/classqx_1_1_ix_data_member.html" target="_blank">qx::IxDataMember</a> : interface pour une propriété d'une classe ;</li>
+             <li><a href="../doxygen/html/classqx_1_1_ix_function.html" target="_blank">qx::IxFunctionX</a> : liste des méthodes associées à une classe ;</li>
+             <li><a href="../doxygen/html/classqx_1_1_ix_function.html" target="_blank">qx::IxFunction</a> : interface pour une méthode d'une classe.</li>
+           </ul>
+           Une instance de type <i>qx::IxClass</i> possède la liste des propriétés d'une classe (<i>qx::IxDataMemberX</i>) ainsi que la liste des méthodes d'une classe (<i>qx::IxFunctionX</i>).<br>
+           <br>
+           Le moteur d'introspection de la bibliothèque QxOrm permet par exemple de :
+           <ul>
+             <li>créer dynamiquement une instance en fonction du nom d'une classe sous forme de chaîne de caractères (<i>qx::create()</i>) ;</li>
+             <li>accéder/modifier le contenu d'un champ d'un objet de façon dynamique en prenant pour paramètres un objet et le nom du champ qu'on souhaite accéder/modifier (<i>qx::IxDataMember::getValue()</i> et <i>qx::IxDataMember::setValue()</i>) ;</li>
+             <li>invoquer une méthode de classe de façon dynamique, en gérant bien entendu le passage des paramètres souhaités à la méthode (<i>qx::IxFunction::invoke()</i>) ;</li>
+             <li>accéder à la hiérarchie d'une classe (<i>qx::IxClass::getBaseClass()</i>).</li>
+           </ul>
+           <b>Remarque :</b> le module <a href="../doxygen/html/group___qx_service.html" target="_blank">QxService</a> de la bibliothèque QxOrm (<a href="./tutorial_2.html" target="_blank">cliquez ici pour accéder au tutoriel</a>) permettant de créer un serveur d'applications C++ est basé sur le moteur d'introspection pour appeler dynamiquement les méthodes de type service (demande du client) sur le serveur.<br>
+           <br>
+           Voici un exemple d'utilisation du moteur d'introspection de la bibliothèque QxOrm : comment lister toutes les classes, propriétés et méthodes enregistrées dans le contexte QxOrm ?<br>
+           <br>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre>QString QxClassX<span class="operator">::</span>dumpAllClasses<span class="operator">()
+{</span>
+   QxClassX<span class="operator">::</span>registerAllClasses<span class="operator">();</span>
+   QxCollection<span class="operator">&lt;</span>QString<span class="operator">,</span> IxClass<span class="operator"> *&gt; *</span> pAllClasses<span class="operator"> =</span> QxClassX<span class="operator">::</span>getAllClasses<span class="operator">();</span><span class="flow">
+   if</span><span class="operator"> (!</span> pAllClasses<span class="operator">) {</span> qAssert<span class="operator">(</span><span class="bool">false</span><span class="operator">);</span><span class="flow"> return</span><span class="string"> ""</span><span class="operator">; }</span>
+
+   QString sDump<span class="operator">;</span><span class="type">
+   long</span> lCount<span class="operator"> =</span> pAllClasses<span class="operator">-&gt;</span>count<span class="operator">();</span>
+   qDebug<span class="operator">(</span><span class="string">"[QxOrm] start dump all registered classes (%ld)"</span><span class="operator">,</span> lCount<span class="operator">);</span>
+   _foreach<span class="operator">(</span>IxClass<span class="operator"> *</span> pClass<span class="operator">, (*</span> pAllClasses<span class="operator">))
+   {</span><span class="flow"> if</span><span class="operator"> (</span>pClass<span class="operator">) {</span> sDump<span class="operator"> +=</span> pClass<span class="operator">-&gt;</span>dumpClass<span class="operator">(); } }</span>
+   qDebug<span class="operator">(</span><span class="string">"[QxOrm] %s"</span><span class="operator">,</span><span class="string"> "end dump all registered classes"</span><span class="operator">);</span><span class="flow">
+
+   return</span> sDump<span class="operator">;
+}</span>
+
+QString IxClass<span class="operator">::</span>dumpClass<span class="operator">()</span><span class="keyword"> const</span><span class="operator">
+{</span>
+   QString sDump<span class="operator">;</span>
+   sDump<span class="operator"> +=</span><span class="string"> "-- class '"</span><span class="operator"> +</span> m_sKey<span class="operator"> +</span><span class="string"> "' (name '"</span><span class="operator"> +</span> m_sName<span class="operator"> +</span><span class="string"> "', "</span><span class="operator">;</span>
+   sDump<span class="operator"> +=</span><span class="string"> "description '"</span><span class="operator"> +</span> m_sDescription<span class="operator"> +</span><span class="string"> "', version '"</span><span class="operator"> +</span> QString<span class="operator">::</span>number<span class="operator">(</span>m_lVersion<span class="operator">) +</span><span class="string"> "', "</span><span class="operator">;</span>
+   sDump<span class="operator"> +=</span><span class="string"> "base class '"</span><span class="operator"> + (</span>getBaseClass<span class="operator">() ?</span> getBaseClass<span class="operator">()-&gt;</span>getKey<span class="operator">() :</span><span class="string"> ""</span><span class="operator">) +</span><span class="string"> "')\n"</span><span class="operator">;</span><span class="type">
+
+   long</span> lCount<span class="operator"> = (</span>m_pDataMemberX<span class="operator"> ?</span> m_pDataMemberX<span class="operator">-&gt;</span>count<span class="operator">() :</span><span class="int"> 0</span><span class="operator">);</span>
+   sDump<span class="operator"> +=</span><span class="string"> "\t* list of registered properties ("</span><span class="operator"> +</span> QString<span class="operator">::</span>number<span class="operator">(</span>lCount<span class="operator">) +</span><span class="string"> ")\n"</span><span class="operator">;</span><span class="flow">
+   if</span><span class="operator"> (</span>m_pDataMemberX<span class="operator">)
+   {</span>
+      IxDataMember<span class="operator"> *</span> pId<span class="operator"> =</span><span class="keyword"> this</span><span class="operator">-&gt;</span>getId<span class="operator">();</span><span class="flow">
+      for</span><span class="operator"> (</span><span class="type">long</span> l<span class="operator"> =</span><span class="int"> 0</span><span class="operator">;</span> l<span class="operator"> &lt;</span> lCount<span class="operator">;</span> l<span class="operator">++)
+      {</span>
+         IxDataMember<span class="operator"> *</span> p<span class="operator"> =</span> m_pDataMemberX<span class="operator">-&gt;</span>get<span class="operator">(</span>l<span class="operator">);</span><span class="flow"> if</span><span class="operator"> (!</span> p<span class="operator">) {</span><span class="flow"> continue</span><span class="operator">; }</span>
+         IxSqlRelation<span class="operator"> *</span> pRelation<span class="operator"> =</span> p<span class="operator">-&gt;</span>getSqlRelation<span class="operator">();</span>
+         QString sInfos<span class="operator"> =</span> p<span class="operator">-&gt;</span>getKey<span class="operator">() + ((</span>p<span class="operator"> ==</span> pId<span class="operator">) ?</span> QString<span class="operator">(</span><span class="string">" (id)"</span><span class="operator">) :</span> QString<span class="operator">());</span>
+         sInfos<span class="operator"> += (</span>pRelation<span class="operator"> ? (</span>QString<span class="operator">(</span><span class="string">" ("</span><span class="operator">) +</span> pRelation<span class="operator">-&gt;</span>getDescription<span class="operator">() +</span> QString<span class="operator">(</span><span class="string">")"</span><span class="operator">)) :</span> QString<span class="operator">());</span>
+         sDump<span class="operator"> +=</span><span class="string"> "\t\t"</span><span class="operator"> +</span> sInfos<span class="operator"> +</span><span class="string"> "\n"</span><span class="operator">;
+      }
+   }</span>
+
+   lCount<span class="operator"> = (</span>m_pFctMemberX<span class="operator"> ?</span> m_pFctMemberX<span class="operator">-&gt;</span>count<span class="operator">() :</span><span class="int"> 0</span><span class="operator">);</span>
+   sDump<span class="operator"> +=</span><span class="string"> "\t* list of registered functions ("</span><span class="operator"> +</span> QString<span class="operator">::</span>number<span class="operator">(</span>lCount<span class="operator">) +</span><span class="string"> ")\n"</span><span class="operator">;</span><span class="flow">
+   if</span><span class="operator"> (</span>m_pFctMemberX<span class="operator">)
+   {</span>
+      _foreach_if<span class="operator">(</span>IxFunction_ptr p<span class="operator">, (*</span> m_pFctMemberX<span class="operator">), (</span>p<span class="operator">))
+      {</span> QString sKey<span class="operator"> =</span> p<span class="operator">-&gt;</span>getKey<span class="operator">();</span> sDump<span class="operator"> +=</span><span class="string"> "\t\t"</span><span class="operator"> +</span> sKey<span class="operator"> +</span><span class="string"> "\n"</span><span class="operator">; }
+   }</span>
+
+   qDebug<span class="operator">(</span><span class="string">"%s"</span><span class="operator">,</span> qPrintable<span class="operator">(</span>sDump<span class="operator">));</span><span class="flow">
+   return</span> sDump<span class="operator">;
+}</span></pre>
+           </td></tr></tbody></table>
+           <br>
+           Si on utilise la méthode <i>qx::QxClassX::dumpAllClasses()</i> avec le <a href="./tutorial.html" target="_blank">tutoriel qxBlog</a>, voici le résultat obtenu :<br>
+           <br>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="operator">[</span>QxOrm<span class="operator">]</span> start dump all registered classes<span class="operator"> (</span><span class="int">4</span><span class="operator">)
+--</span><span class="keyword"> class</span><span class="char"> 'author'</span><span class="operator"> (</span>name<span class="char"> 'author'</span><span class="operator">,</span> description<span class="char"> ''</span><span class="operator">,</span> version<span class="char"> '0'</span><span class="operator">,</span> base<span class="keyword"> class</span><span class="char"> ''</span><span class="operator">)
+	*</span> list of registered properties<span class="operator"> (</span><span class="int">5</span><span class="operator">)</span>
+		author_id<span class="operator"> (</span>id<span class="operator">)</span>
+		name
+		birthdate
+		sex
+		list_blog<span class="operator"> (</span>relation one<span class="operator">-</span>to<span class="operator">-</span>many<span class="operator">)
+	*</span> list of registered functions<span class="operator"> (</span><span class="int">1</span><span class="operator">)</span>
+		age<span class="operator">
+
+--</span><span class="keyword"> class</span><span class="char"> 'blog'</span><span class="operator"> (</span>name<span class="char"> 'blog'</span><span class="operator">,</span> description<span class="char"> ''</span><span class="operator">,</span> version<span class="char"> '0'</span><span class="operator">,</span> base<span class="keyword"> class</span><span class="char"> ''</span><span class="operator">)
+	*</span> list of registered properties<span class="operator"> (</span><span class="int">6</span><span class="operator">)</span>
+		blog_id<span class="operator"> (</span>id<span class="operator">)</span>
+		blog_text
+		date_creation
+		author_id<span class="operator"> (</span>relation many<span class="operator">-</span>to<span class="operator">-</span>one<span class="operator">)</span>
+		list_comment<span class="operator"> (</span>relation one<span class="operator">-</span>to<span class="operator">-</span>many<span class="operator">)</span>
+		list_category<span class="operator"> (</span>relation many<span class="operator">-</span>to<span class="operator">-</span>many<span class="operator">)
+	*</span> list of registered functions<span class="operator"> (</span><span class="int">0</span><span class="operator">)
+
+--</span><span class="keyword"> class</span><span class="char"> 'comment'</span><span class="operator"> (</span>name<span class="char"> 'comment'</span><span class="operator">,</span> description<span class="char"> ''</span><span class="operator">,</span> version<span class="char"> '0'</span><span class="operator">,</span> base<span class="keyword"> class</span><span class="char"> ''</span><span class="operator">)
+	*</span> list of registered properties<span class="operator"> (</span><span class="int">4</span><span class="operator">)</span>
+		comment_id<span class="operator"> (</span>id<span class="operator">)</span>
+		comment_text
+		date_creation
+		blog_id<span class="operator"> (</span>relation many<span class="operator">-</span>to<span class="operator">-</span>one<span class="operator">)
+	*</span> list of registered functions<span class="operator"> (</span><span class="int">0</span><span class="operator">)
+
+--</span><span class="keyword"> class</span><span class="char"> 'category'</span><span class="operator"> (</span>name<span class="char"> 'category'</span><span class="operator">,</span> description<span class="char"> ''</span><span class="operator">,</span> version<span class="char"> '0'</span><span class="operator">,</span> base<span class="keyword"> class</span><span class="char"> ''</span><span class="operator">)
+	*</span> list of registered properties<span class="operator"> (</span><span class="int">4</span><span class="operator">)</span>
+		category_id<span class="operator"> (</span>id<span class="operator">)</span>
+		name
+		description
+		list_blog<span class="operator"> (</span>relation many<span class="operator">-</span>to<span class="operator">-</span>many<span class="operator">)
+	*</span> list of registered functions<span class="operator"> (</span><span class="int">0</span><span class="operator">)
+
+[</span>QxOrm<span class="operator">]</span> end dump all registered classes</pre>
+           </td></tr></tbody></table>
+           <br>
+           <b>Remarque :</b> il est possible d'ajouter de nouvelles informations au moteur d'introspection en utilisant la notion de <i>property bag</i>.
+           En effet, les classes <i>qx::IxClass</i>, <i>qx::IxDataMember</i> et <i>qx::IxFunction</i> possèdent chacune une liste d'éléments de type <i>QVariant</i> accessibles par clé de type <i>QString</i> (voir la classe <i>qx::QxPropertyBag</i> pour plus de détails sur cette notion).<br>
+           <br>
+           </td>
+         </tr>
+       </tbody>
+      </table>
+      <br><br>
+      <a name="faq_200"><u><b>Comment déclarer automatiquement les méta-propriétés de Qt (définies par la macro <i>Q_PROPERTY</i>) dans le contexte QxOrm ?</b></u></a><br><br>
+      <table border="0" style="width: 100%" align="center">
+       <col>
+       <col>
+       <tbody>
+         <tr>
+           <td valign="middle" width="30"></td>
+           <td align="justify">
+           Toute classe héritant du type <i>QObject</i> peut déclarer ses propriétés avec la macro <i><a href="http://doc.qt.nokia.com/latest/properties.html" target="_blank">Q_PROPERTY</a></i> : les propriétés deviennent alors des méta-propriétés.
+           Ce mécanisme permet au framework Qt de proposer un moteur d'introspection grâce au pré-compilateur <i>moc</i>.
+           Les méta-propriétés peuvent alors être utilisées par exemple par le moteur <i>QML</i>, <i>QtScript</i>, etc.<br>
+           <br>
+           La bibliothèque <b>QxOrm</b> nécessite une déclaration de chacune des propriétés d'une classe dans la fonction de mapping <i>void qx::register_class&lt;T&gt;()</i> afin de proposer l'ensemble de ses fonctionnalités (persistance des données, sérialisation XML et binaire, etc.).
+           Il est possible de déclarer automatiquement dans le contexte QxOrm l'ensemble des méta-propriétés sans maintenir une fonction de mapping <i>void qx::register_class&lt;T&gt;()</i> : la macro <b>QX_REGISTER_ALL_QT_PROPERTIES()</b> utilise le moteur d'introspection de Qt pour parcourir la liste des méta-propriétés.<br>
+           <br>
+           Voici un exemple d'utilisation avec la classe <i>TestQtProperty</i> se trouvant dans le dossier <i>./test/qxDllSample/dll1/include/</i> de la distribution QxOrm :<br>
+           <br>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="TestQtProperty.h">
+<pre><span class="pre">#ifndef _QX_TEST_QT_META_PROPERTY_H_
+#define _QX_TEST_QT_META_PROPERTY_H_
+</span><span class="keyword"> 
+class</span> QX_DLL1_EXPORT TestQtProperty<span class="operator"> :</span><span class="keyword"> public</span> QObject<span class="operator">
+{</span>
+
+   Q_OBJECT
+   Q_PROPERTY<span class="operator">(</span><span class="type">int</span> id READ id WRITE setId<span class="operator">)</span>
+   Q_PROPERTY<span class="operator">(</span><span class="type">long</span> number READ number WRITE setNumber<span class="operator">)</span>
+   Q_PROPERTY<span class="operator">(</span>QString desc READ desc WRITE setDesc<span class="operator">)</span>
+   Q_PROPERTY<span class="operator">(</span>QDateTime birthDate READ birthDate WRITE setBirthDate<span class="operator">)</span>
+   Q_PROPERTY<span class="operator">(</span>QVariant photo READ photo WRITE setPhoto<span class="operator">)</span><span class="keyword">
+
+protected</span><span class="operator">:</span><span class="type">
+
+   int</span>         m_id<span class="operator">;</span><span class="type">
+   long</span>        m_number<span class="operator">;</span>
+   QString     m_desc<span class="operator">;</span>
+   QDateTime   m_birthDate<span class="operator">;</span>
+   QVariant    m_photo<span class="operator">;</span><span class="keyword">
+
+public</span><span class="operator">:</span>
+
+   TestQtProperty<span class="operator">() :</span> QObject<span class="operator">(),</span> m_id<span class="operator">(</span><span class="int">0</span><span class="operator">),</span> m_number<span class="operator">(</span><span class="int">0</span><span class="operator">) { ; }</span><span class="keyword">
+   virtual</span><span class="operator"> ~</span>TestQtProperty<span class="operator">() { ; }</span><span class="type">
+
+   int</span> id<span class="operator">()</span><span class="keyword"> const</span><span class="operator">                {</span><span class="flow"> return</span> m_id<span class="operator">; }</span><span class="type">
+   long</span> number<span class="operator">()</span><span class="keyword"> const</span><span class="operator">           {</span><span class="flow"> return</span> m_number<span class="operator">; }</span>
+   QString desc<span class="operator">()</span><span class="keyword"> const</span><span class="operator">          {</span><span class="flow"> return</span> m_desc<span class="operator">; }</span>
+   QDateTime birthDate<span class="operator">()</span><span class="keyword"> const</span><span class="operator">   {</span><span class="flow"> return</span> m_birthDate<span class="operator">; }</span>
+   QVariant photo<span class="operator">()</span><span class="keyword"> const</span><span class="operator">        {</span><span class="flow"> return</span> m_photo<span class="operator">; }</span><span class="type">
+
+   void</span> setId<span class="operator">(</span><span class="type">int</span> i<span class="operator">)                         {</span> m_id<span class="operator"> =</span> i<span class="operator">; }</span><span class="type">
+   void</span> setNumber<span class="operator">(</span><span class="type">long</span> l<span class="operator">)                    {</span> m_number<span class="operator"> =</span> l<span class="operator">; }</span><span class="type">
+   void</span> setDesc<span class="operator">(</span><span class="keyword">const</span> QString<span class="operator"> &amp;</span> s<span class="operator">)           {</span> m_desc<span class="operator"> =</span> s<span class="operator">; }</span><span class="type">
+   void</span> setBirthDate<span class="operator">(</span><span class="keyword">const</span> QDateTime<span class="operator"> &amp;</span> dt<span class="operator">)   {</span> m_birthDate<span class="operator"> =</span> dt<span class="operator">; }</span><span class="type">
+   void</span> setPhoto<span class="operator">(</span><span class="keyword">const</span> QVariant<span class="operator"> &amp;</span> v<span class="operator">)         {</span> m_photo<span class="operator"> =</span> v<span class="operator">; }
+ 
+};</span>
+
+QX_REGISTER_HPP_QX_DLL1<span class="operator">(</span>TestQtProperty<span class="operator">,</span> QObject<span class="operator">,</span><span class="int"> 0</span><span class="operator">)</span><span class="pre">
+
+#endif // _QX_TEST_QT_META_PROPERTY_H_</span></pre>
+           </td></tr></tbody></table>
+           <br>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="TestQtProperty.cpp">
+<pre><span class="pre">#include "../include/precompiled.h"
+
+#include "../include/TestQtProperty.h"
+
+#include &lt;QxMemLeak.h&gt;
+</span> 
+QX_REGISTER_CPP_QX_DLL1<span class="operator">(</span>TestQtProperty<span class="operator">)</span>
+QX_REGISTER_ALL_QT_PROPERTIES<span class="operator">(</span>TestQtProperty<span class="operator">,</span><span class="string"> "id"</span><span class="operator">)</span></pre>
+           </td></tr></tbody></table>
+           <br>
+           Pour ceux qui ne souhaitent pas utiliser la macro <i>QX_REGISTER_ALL_QT_PROPERTIES</i>, il est possible d'écrire à la place les quatre lignes de code suivantes :<br>
+           <br>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="keyword">namespace</span> qx<span class="operator"> {</span><span class="keyword">
+template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</span> register_class<span class="operator">(</span>QxClass<span class="operator">&lt;</span>TestQtProperty<span class="operator">&gt; &amp;</span> t<span class="operator">)
+{</span> qx<span class="operator">::</span>register_all_qt_properties<span class="operator">&lt;</span>TestQtProperty<span class="operator">&gt;(</span>t<span class="operator">,</span><span class="string"> "id"</span><span class="operator">); }
+}</span><span class="comment"> // namespace qx</span></pre>
+           </td></tr></tbody></table>
+           <br>
+           <b>Remarque :</b> le deuxième paramètre de la macro <i>QX_REGISTER_ALL_QT_PROPERTIES</i> permet d'indiquer la propriété qui servira de clé primaire dans la base de données.
+           Si ce paramètre est vide, cela signifie que la classe ne possède pas de clé primaire ou bien que celle-ci est définie dans une classe de base.<br>
+           <br>
+           Toute propriété définie avec la macro <i>Q_PROPERTY</i> peut s'enregistrer dans le contexte QxOrm de deux manières différentes :<br>
+           <b>1-</b> par la méthode classique : <i>t.data(& MyQObject::my_property, "my_property", 0);</i><br>
+           <b>2-</b> ou bien sans mentionner le pointeur vers la donnée membre de la classe : <i>t.data("my_property", 0);</i><br>
+           <br>
+           Peu importe la méthode d'enregistrement des propriétés dans le contexte QxOrm, elles seront accessibles par la même interface <i><a href="http://www.qxorm.com/doxygen/html/classqx_1_1_ix_data_member.html" target="_blank">qx::IxDataMember</a></i> et proposent donc les mêmes fonctionnalités.
+           Il est possible d'utiliser les deux méthodes dans une même fonction de mapping <i>void qx::register_class&lt;T&gt;()</i>.
+           Chaque méthode d'enregistrement présente des avantages et inconvénients.<br>
+           <br>
+           Voici la liste des avantages de la deuxième méthode d'enregistrement des propriétés dans le contexte QxOrm :
+           <ul>
+             <li>temps de compilation du projet beaucoup plus rapide ;</li>
+             <li>taille de l'exécutable généré plus petite ;</li>
+             <li>forte intégration avec le moteur d'introspection du framework Qt ;</li>
+             <li>pas besoin de maintenir la fonction de mapping en utilisant la macro <i>QX_REGISTER_ALL_QT_PROPERTIES</i>.</li>
+           </ul>
+           Voici les inconvénients par rapport à la méthode classique d'enregistrement des propriétés :
+           <ul>
+             <li>nécessite un héritage de la classe <i>QObject</i> pour pouvoir utiliser la macro <i>Q_PROPERTY</i> ;</li>
+             <li>exécution du programme plus lente (utilisation du type <i>QVariant</i> à la place des <i>template</i> C++) ;</li>
+             <li>ne supporte pas la notion de relation entre tables de la base de données (<i>one-to-one</i>, <i>one-to-many</i>, <i>many-to-one</i> et <i>many-to-many</i>) ;</li>
+             <li>pas d'accès au pointeur sur la donnée membre de la classe (conversion nécessaire au type <i>QVariant</i> pour accéder et modifier une valeur).</li>
+           </ul>
            </td>
          </tr>
        </tbody>

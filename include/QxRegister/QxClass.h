@@ -97,6 +97,8 @@ public:
 
    IxDataMember * id(type_primary_key T::* pDataMemberId, const QString & sKey);
    IxDataMember * id(type_primary_key T::* pDataMemberId, const QString & sKey, long lVersion);
+   IxDataMember * id(const QString & sKey, long lVersion);
+   IxDataMember * data(const QString & sKey, long lVersion);
 
    template <typename V, typename U> IxDataMember * data(V U::* pData, const QString & sKey);
    template <typename V, typename U> IxDataMember * data(V U::* pData, const QString & sKey, long lVersion);
@@ -125,6 +127,8 @@ public:
 
    static qx_bool invoke(const QString & sKey, T * pOwner, const QString & params = QString(), boost::any * ret = NULL) { return QxClass<T>::getSingleton()->invokeHelper(sKey, pOwner, params, ret); }
    static qx_bool invoke(const QString & sKey, T * pOwner, const type_any_params & params, boost::any * ret = NULL)     { return QxClass<T>::getSingleton()->invokeHelper(sKey, pOwner, params, ret); }
+
+   virtual IxClass * getBaseClass() const { return (boost::is_same<type_base_class, qx::trait::no_base_class_defined>::value ? NULL : QxClass<type_base_class>::getSingleton()); }
 
 private:
 

@@ -132,7 +132,7 @@ private:
 protected:
 
    inline DataType * getDataTypePtr(QxSqlRelationParams & params) const
-   { qAssert(params.owner() && m_pDataMember); return static_cast<DataType *>(m_pDataMember->getDataVoidPtr(params.owner())); }
+   { qAssert(params.owner() && m_pDataMember); return static_cast<DataType *>(m_pDataMember->getValueVoidPtr(params.owner())); }
 
    inline type_owner & getOwner(QxSqlRelationParams & params) const
    { qAssert(params.owner()); return (* static_cast<type_owner *>(params.owner())); }

@@ -79,5 +79,6 @@
 #include <QxTraits/is_valid_primary_key.h>
 #include <QxTraits/is_qx_dao_ptr.h>
 #include <QxTraits/is_equal.h>
+#include <QxTraits/qt_meta_object.h>
 
 #endif // _QX_TRAITS_H_

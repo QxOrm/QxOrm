@@ -44,6 +44,7 @@
 #include <boost/type_traits/is_same.hpp>
 
 #include <QxCommon/QxBool.h>
+#include <QxCommon/QxPropertyBag.h>
 
 #include <QxCollection/QxCollection.h>
 
@@ -58,21 +59,25 @@ namespace qx {
  * \ingroup QxFunction
  * \brief qx::IxFunction : common interface for all functions registered into QxOrm context (used by introspection engine)
  */
-class IxFunction
+class IxFunction : public qx::QxPropertyBag
 {
 
 protected:
 
+   QString m_sKey;         //!< Function key
    QString m_sSeparator;   //!< Separator character(s) for 'QString' parameters type
 
 public:
 
    typedef std::vector<boost::any> type_any_params;
 
-   IxFunction() : m_sSeparator("|") { ; }
+   IxFunction() : qx::QxPropertyBag(), m_sSeparator("|") { ; }
    virtual ~IxFunction() { ; }
 
+   QString getKey() const                 { return m_sKey; }
    QString getSeparator() const           { return m_sSeparator; }
+
+   void setKey(const QString & s)         { m_sKey = s; }
    void setSeparator(const QString & s)   { m_sSeparator = s; }
 
    virtual qx_bool invoke(const QString & params = QString(), boost::any * ret = NULL) const = 0;

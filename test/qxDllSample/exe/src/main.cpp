@@ -3,6 +3,8 @@
 #include "../include/precompiled.h"
 
 #include "../../dll1/include/CPerson.h"
+#include "../../dll1/include/TestQtProperty.h"
+
 #include "../../dll2/include/CUser.h"
 #include "../../dll2/include/CTestAll.h"
 #include "../../dll2/include/Bar.h"
@@ -323,6 +325,31 @@ int main(int argc, char * argv[])
       session += qx::dao::delete_by_id(pFoo, session.database());
       qAssert(session.isValid());
    }
+
+   //--------------------------------
+
+   // Dump all registered classes into QxOrm context (introspection engine)
+   qx::QxClassX::dumpAllClasses();
+
+   pBar.reset(new Bar());
+   qx::IxDataMember * pDataMember = qx::QxClassX::getDataMember("Bar", "code"); qAssert(pDataMember != NULL);
+   bool bIntrospectionOk = pDataMember->setValue<QString>(pBar.get(), QString("test introspection engine")); qAssert(bIntrospectionOk);
+   QString sIntrospectionTest = pDataMember->getValue<QString>(pBar.get(), (& bIntrospectionOk));
+   qAssert(bIntrospectionOk && (sIntrospectionTest == "test introspection engine"));
+   qAssert(pBar->getCode() == "test introspection engine");
+
+   //--------------------------------
+
+   daoError = qx::dao::create_table<TestQtProperty>();
+   TestQtProperty testQtMetaProperty;
+   QString sQtPropertyDesc = "test Qt introspection engine : meta-property using Q_PROPERTY() macro";
+   testQtMetaProperty.setDesc(sQtPropertyDesc);
+   testQtMetaProperty.setBirthDate(QDateTime::currentDateTime());
+   daoError = qx::dao::insert(testQtMetaProperty);       qAssert(! daoError.isValid());
+   daoError = qx::dao::fetch_by_id(testQtMetaProperty);  qAssert(! daoError.isValid());
+   qx::IxDataMember * pQtMetaProperty = qx::QxClassX::getDataMember("TestQtProperty", "desc"); Q_UNUSED(pQtMetaProperty);
+   qAssert(pQtMetaProperty && pQtMetaProperty->getValue<QString>(& testQtMetaProperty) == sQtPropertyDesc);
+   qx::dump(testQtMetaProperty);
 
    //--------------------------------
 

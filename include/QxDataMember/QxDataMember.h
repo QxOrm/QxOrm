@@ -72,17 +72,13 @@ protected:
 
 public:
 
-   QxDataMember(type_data_member_ptr pData, const QString & sKey) : IxDataMember(sKey), m_pData(pData) { ; }
-   QxDataMember(type_data_member_ptr pData, const QString & sKey, long lVersion, bool bSerialize, bool bDao) : IxDataMember(sKey, lVersion, bSerialize, bDao), m_pData(pData) { ; }
+   QxDataMember(type_data_member_ptr pData, const QString & sKey) : IxDataMember(sKey), m_pData(pData) { m_bAccessDataPointer = true; }
+   QxDataMember(type_data_member_ptr pData, const QString & sKey, long lVersion, bool bSerialize, bool bDao) : IxDataMember(sKey, lVersion, bSerialize, bDao), m_pData(pData) { m_bAccessDataPointer = true; }
    virtual ~QxDataMember() { ; }
 
    inline DataType * getData(void * pOwner) const              { return (pOwner ? (& ((static_cast<Owner *>(pOwner))->*m_pData)) : NULL); }
    inline const DataType * getData(const void * pOwner) const  { return (pOwner ? (& ((static_cast<const Owner *>(pOwner))->*m_pData)) : NULL); }
 
-   virtual boost::any getDataPtr(const void * pOwner) const    { return boost::any(getData(pOwner)); }
-   virtual boost::any getDataPtr(void * pOwner)                { return boost::any(getData(pOwner)); }
-   virtual void * getDataVoidPtr(const void * pOwner) const    { return static_cast<void *>(const_cast<DataType *>(getData(pOwner))); }
-   virtual void * getDataVoidPtr(void * pOwner)                { return static_cast<void *>(getData(pOwner)); }
    virtual qx_bool isValid(const void * pOwner) const          { Q_UNUSED(pOwner); return true; }
    virtual qx_bool isValid(void * pOwner)                      { Q_UNUSED(pOwner); return true; }
 
@@ -97,6 +93,13 @@ public:
       if (pOwner1 == pOwner2) { return true; }
       return qxCompareDataMember<qx::trait::has_operator_equal_equal<DataType>::value, 0>::isEqual((* this), pOwner1, pOwner2);
    }
+
+protected:
+
+   virtual boost::any getDataPtr(const void * pOwner) const    { return boost::any(getData(pOwner)); }
+   virtual boost::any getDataPtr(void * pOwner)                { return boost::any(getData(pOwner)); }
+   virtual void * getDataVoidPtr(const void * pOwner) const    { return static_cast<void *>(const_cast<DataType *>(getData(pOwner))); }
+   virtual void * getDataVoidPtr(void * pOwner)                { return static_cast<void *>(getData(pOwner)); }
 
 public:
 

@@ -59,6 +59,7 @@ public:
    QxSqlRelation_OneToOne(IxDataMember * p) : QxSqlRelation<DataType, Owner>(p) { ; }
    virtual ~QxSqlRelation_OneToOne() { ; }
 
+   virtual QString getDescription() const                                     { return "relation one-to-one"; }
    virtual bool getCartesianProduct() const                                   { return false; }
    virtual void createTable(QxSqlRelationParams & params) const               { Q_UNUSED(params); }
    virtual void lazySelect(QxSqlRelationParams & params) const                { Q_UNUSED(params); }

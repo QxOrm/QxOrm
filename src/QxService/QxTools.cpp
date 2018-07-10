@@ -30,9 +30,11 @@
 #include <QxService/QxTools.h>
 #include <QxService/QxConnect.h>
 
+#include <QxCommon/QxSimpleCrypt.h>
+
 #include <QxMemLeak/mem_leak.h>
 
-#define QX_SERVICE_TOOLS_HEADER_SIZE (sizeof(quint32) + sizeof(quint16) + sizeof(quint16)) // (serialized data size) + (serialization type) + (compress data)
+#define QX_SERVICE_TOOLS_HEADER_SIZE (sizeof(quint32) + sizeof(quint16) + sizeof(quint16) + sizeof(quint16)) // (serialized data size) + (serialization type) + (compress data) + (encrypt data)
 #define QX_SERVICE_MIN_SIZE_TO_COMPRESS_DATA 2000
 
 namespace qx {
@@ -44,8 +46,7 @@ qx_bool QxTools::readSocket(QTcpSocket & socket, QxTransaction & transaction, qu
    { if (! socket.waitForReadyRead(QxConnect::getSingleton()->getMaxWait())) { return qx_bool(0, "invalid bytes count available to retrieve transaction header"); } }
 
    quint32 uiSerializedSize = 0;
-   quint16 uiSerializationType = 0;
-   quint16 uiCompressData = 0;
+   quint16 uiSerializationType(0), uiCompressData(0), uiEncryptData(0);
    QByteArray dataHeader = socket.read((qint64)(QX_SERVICE_TOOLS_HEADER_SIZE));
    qAssert(dataHeader.size() == (int)(QX_SERVICE_TOOLS_HEADER_SIZE));
    QDataStream in(& dataHeader, QIODevice::ReadOnly);
@@ -53,6 +54,7 @@ qx_bool QxTools::readSocket(QTcpSocket & socket, QxTransaction & transaction, qu
    in >> uiSerializedSize;
    in >> uiSerializationType;
    in >> uiCompressData;
+   in >> uiEncryptData;
 
    while (socket.bytesAvailable() < (qint64)(uiSerializedSize))
    { if (! socket.waitForReadyRead(QxConnect::getSingleton()->getMaxWait())) { return qx_bool(0, "invalid bytes count available to retrieve transaction serialized data"); } }
@@ -60,6 +62,14 @@ qx_bool QxTools::readSocket(QTcpSocket & socket, QxTransaction & transaction, qu
    QByteArray dataSerialized = socket.read((qint64)(uiSerializedSize));
    qAssert(dataSerialized.size() == (int)(uiSerializedSize));
    size = (quint32)(QX_SERVICE_TOOLS_HEADER_SIZE + uiSerializedSize);
+
+   if (uiEncryptData != 0)
+   {
+      QxSimpleCrypt crypto(QxConnect::getSingleton()->getEncryptKey());
+      QByteArray decrypted = crypto.decryptToByteArray(dataSerialized);
+      if ((crypto.lastError() != QxSimpleCrypt::ErrorNoError) || decrypted.isEmpty()) { return qx_bool(0, "an error occured during decryption of data"); }
+      dataSerialized = decrypted;
+   }
 
    if (uiCompressData != 0)
    { QByteArray uncompressed = qUncompress(dataSerialized); if (! uncompressed.isEmpty()) { dataSerialized = uncompressed; } }
@@ -142,12 +152,25 @@ qx_bool QxTools::writeSocket(QTcpSocket & socket, QxTransaction & transaction, q
    if (QxConnect::getSingleton()->getCompressData() && (dataSerialized.size() > QX_SERVICE_MIN_SIZE_TO_COMPRESS_DATA))
    { QByteArray compressed = qCompress(dataSerialized, -1); if (! compressed.isEmpty()) { dataSerialized = compressed; uiCompressData = 1; } }
 
+   quint16 uiEncryptData = 0;
+   if (QxConnect::getSingleton()->getEncryptData())
+   {
+      QxSimpleCrypt crypto(QxConnect::getSingleton()->getEncryptKey());
+      crypto.setCompressionMode(QxSimpleCrypt::CompressionNever);
+      crypto.setIntegrityProtectionMode(QxSimpleCrypt::ProtectionChecksum);
+      QByteArray encrypted = crypto.encryptToByteArray(dataSerialized);
+      if ((crypto.lastError() != QxSimpleCrypt::ErrorNoError) || encrypted.isEmpty()) { return qx_bool(0, "an error occured during encryption of data"); }
+      dataSerialized = encrypted;
+      uiEncryptData = 1;
+   }
+
    QByteArray dataHeader;
    QDataStream out(& dataHeader, QIODevice::WriteOnly);
    out.setVersion(QDataStream::Qt_4_5);
    out << (quint32)(dataSerialized.size());
    out << (quint16)(QxConnect::getSingleton()->getSerializationType());
    out << (quint16)(uiCompressData);
+   out << (quint16)(uiEncryptData);
    qAssert(dataHeader.size() == (int)(QX_SERVICE_TOOLS_HEADER_SIZE));
 
    qint64 iTotalWritten = 0;

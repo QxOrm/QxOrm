@@ -37,6 +37,8 @@
  * \brief Common interface for all classes registered into QxOrm context
  */
 
+#include <QxCommon/QxPropertyBag.h>
+
 #include <QxDataMember/IxDataMemberX.h>
 
 #include <QxFunction/IxFunction.h>
@@ -49,7 +51,7 @@ namespace qx {
  * \ingroup QxRegister
  * \brief qx::IxClass : common interface for all classes registered into QxOrm context
  */
-class QX_DLL_EXPORT IxClass
+class QX_DLL_EXPORT IxClass : public qx::QxPropertyBag
 {
 
 protected:
@@ -58,7 +60,6 @@ protected:
    IxFunctionX_ptr m_pFctMemberX;                     //!< List of function member
 
    QString m_sKey;                                    //!< 'IxClass' key <=> class name
-   QString m_sKeyBaseClass;                           //!< 'IxClass' base class key <=> base class name
    QString m_sName;                                   //!< 'IxClass' name <=> database table name (if empty => class name)
    QString m_sDescription;                            //!< 'IxClass' description
    long m_lVersion;                                   //!< 'IxClass' version
@@ -71,7 +72,7 @@ protected:
 
 protected:
 
-   IxClass() : m_pDataMemberX(NULL), m_lVersion(-1), m_bFinalClass(false), m_eDaoStrategy(qx::dao::strategy::concrete_table_inheritance), m_pName(NULL) { ; }
+   IxClass() : qx::QxPropertyBag(), m_pDataMemberX(NULL), m_lVersion(-1), m_bFinalClass(false), m_eDaoStrategy(qx::dao::strategy::concrete_table_inheritance), m_pName(NULL) { ; }
    virtual ~IxClass() = 0;
 
    void updateClassX();
@@ -79,14 +80,13 @@ protected:
 public:
 
    inline QString getKey() const                                  { return m_sKey; }
-   inline QString getKeyBaseClass() const                         { return m_sKeyBaseClass; }
    inline QString getName() const                                 { return m_sName; }
    inline const char * getNamePtr() const                         { return m_pName; }
    inline QString getDescription() const                          { return m_sDescription; }
    inline long getVersion() const                                 { return m_lVersion; }
    inline qx::dao::strategy::inheritance getDaoStrategy() const   { return m_eDaoStrategy; }
    inline qx::QxSoftDelete getSoftDelete() const                  { return m_oSoftDelete; }
-   inline bool getFinalClass() const                              { return m_bFinalClass; }
+   inline bool isFinalClass() const                               { return m_bFinalClass; }
    inline IxDataMemberX * getDataMemberX() const                  { return m_pDataMemberX; }
    inline IxFunctionX * getFctMemberX() const                     { return m_pFctMemberX.get(); }
    inline IxDataMember * getId() const                            { return (m_pDataMemberX ? m_pDataMemberX->getId() : NULL); }
@@ -95,6 +95,11 @@ public:
    inline void setDescription(const QString & sDesc)                          { m_sDescription = sDesc; }
    inline void setDaoStrategy(qx::dao::strategy::inheritance eDaoStrategy)    { m_eDaoStrategy = eDaoStrategy; }
    inline void setSoftDelete(const qx::QxSoftDelete & oSoftDelete)            { m_oSoftDelete = oSoftDelete; if (m_oSoftDelete.getTableName().isEmpty()) { m_oSoftDelete.setTableName(m_sName); } }
+
+   virtual IxClass * getBaseClass() const = 0;
+
+   bool isKindOf(const QString & sClassName) const;
+   QString dumpClass() const;
 
 private:
 
