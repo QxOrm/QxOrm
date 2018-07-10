@@ -60,65 +60,54 @@
 </table>
 <hr style="width: 80%" align="center" size="1" color="#100D5A">
 <table border="0" style="width: 80%" align="center">
-  <col><col>
+  <col><col><col><col><col>
   <tbody><tr>
-  <td align="left" valign="middle"><font size="2">QxOrm  &gt;&gt;  Exemple rapide</font></td>
-  <td align="right" valign="middle"><font size="2">Version courante : QxOrm 1.1.1</font></td>
+  <td align="left" valign="top"><font size="2">QxOrm  &gt;&gt;  Quick sample</font></td>
+  <td align="right" valign="top"><font size="2">Current version : QxOrm 1.1.2 (LGPL)</font></td>
+  <td width="10px"></td>
+  <td width="40px" height="30px"><a href="../qxorm_fr/quick_sample.html"><img alt="Version française du site" src="./resource/FR.png" width="40" height="30" border="0"></a></td>
+  <td width="40px" height="30px"><a href="../qxorm_en/quick_sample.html"><img alt="Web site english version" src="./resource/GB.png" width="40" height="30" border="0"></a></td>
   </tr></tbody>
-</table><br>
+</table>
 <table border="1" frame="vsides" rules="cols" style="width: 80%" align="center" cellpadding="6" bgcolor="#F2F2F4">
   <col>
   <tbody>
     <tr>
-      <td align="justify"><b>Dans ce chapitre, nous allons traiter un exemple
-        rapide d'utilisation qui présente les fonctionnalités de base de la
-        librairie QxOrm.</b> <br>
+      <td align="justify"><b>In this chapter, we will see a quick sample with the basic functionalities of QxOrm library.</b> <br>
         <br>
-        <i>Remarque :</i> la librairie <b>QxOrm</b> utilise les <b>conventions d'écriture de code C++</b> suivantes :
-        <ul><li>toutes les classes, fonctions, variables, etc... sont définies sous le <a href="./resource/qxorm.namespace.qx.jpg"><i>namespace qx</i></a>
-        </li><li>les macro de QxOrm sont écrites sous la forme <i>QX_...</i>
-        </li><li>les classes abstraites (ou interfaces) commencent par <i>Ix</i> (par exemple <i>IxFactory</i> est une interface pour la création d'instances)
-        </li><li>les autres classes commencent par <i>Qx</i> (par exemple <i>QxDataMember</i>)
-        </li><li>les collections d'objets se terminent par <i>X</i> (par exemple <i>QxDataMemberX</i> est une collection de <i>QxDataMember</i>)
-        </li><li>les fonctions pour communiquer avec les bases de données se trouvent sous le <a href="./resource/qxorm.namespace.qx.dao.jpg"><i>namespace qx::dao</i></a> (par exemple <i>qx::dao::fetch_by_id()</i>)
-        </li><li>les fonctions pour la <i>serialization</i> des données se trouvent sous le <a href="./resource/qxorm.namespace.qx.serialization.jpg"><i>namespace qx::serialization</i></a> (par exemple <i>qx::serialization::xml::to_file()</i>)
-        </li><li>le moteur de <i>reflection</i> est accessible depuis la classe <b><i>qx::QxClassX</i></b> (par exemple <i>qx::QxClassX::invoke()</i> pour invoquer une méthode de classe)
-        </li><li>les classes de traits se trouvent sous le <a href="./resource/qxorm.namespace.qx.trait.jpg"><i>namespace qx::trait</i></a> (par exemple <i>qx::trait::is_smart_ptr&lt;T&gt;</i>)
+        <i>Note :</i> <b>QxOrm</b> library uses the following syntax for C++ source code :
+        <ul><li>all classes, functions, properties, etc... are defined under <a href="./resource/qxorm.namespace.qx.jpg"><i>namespace qx</i></a>
+        </li><li>all macros of QxOrm library start with <i>QX_...</i>
+        </li><li>all abstracts classes (or interfaces) start with <i>Ix</i> (for example <i>IxFactory</i> is an interface to create an instance of object)
+        </li><li>other classes start with <i>Qx</i> (for example <i>QxDataMember</i>)
+        </li><li>containers of objects end with <i>X</i> (for example <i>QxDataMemberX</i> is a list of <i>QxDataMember</i>)
+        </li><li>functions to interact with databases are under <a href="./resource/qxorm.namespace.qx.dao.jpg"><i>namespace qx::dao</i></a> (for example <i>qx::dao::fetch_by_id()</i>)
+        </li><li>functions to <i>serialize</i> are under <a href="./resource/qxorm.namespace.qx.serialization.jpg"><i>namespace qx::serialization</i></a> (for example <i>qx::serialization::xml::to_file()</i>)
+        </li><li>the <i>reflection</i> engine can be used with <b><i>qx::QxClassX</i></b> (for example <i>qx::QxClassX::invoke()</i> to call a class method)
+        </li><li>all traits classes are under <a href="./resource/qxorm.namespace.qx.trait.jpg"><i>namespace qx::trait</i></a> (for example <i>qx::trait::is_smart_ptr&lt;T&gt;</i>)
         </li></ul>
-        <i>Autre Remarque :</i> un exemple plus complet (avec notion d'héritage, de
-        relations entre tables, de collections, de libraries partagées, de
-        memory leak, etc...) est présent dans le dossier <i>./test/</i> de la
-        distribution de QxOrm. Ce dossier <i>./test/</i> contient 2 projets de
-        type dll et 1 projet de type exécutable : <i>./dll1/</i>,
-        <i>./dll2/</i> et <i>./exe/</i>. La solution complète peut-être
-        compilée avec <b>Visual C++ 2008 ou 2010</b> sous Windows (ouvrir le fichier
-        <i>./test/test.sln</i>) et <b>GCC 4.4.1</b> sous Linux en utilisant la
-        commande <i>qmake</i>. <br>
+        <i>Additional note :</i> you can find a more complex sample (with inheritance, polymorphism, 
+        relationships, collections, shared libraries,
+        memory leak, etc...) in the folder <i>./test/</i> of your QxOrm directory.
+        The <i>./test/</i> folder contains 2 projects of
+        dll type and 1 project of exe type : <i>./dll1/</i>,
+        <i>./dll2/</i> et <i>./exe/</i>. This solution can be compiled with <b>Visual C++ 2008 or 2010</b> under Windows (open the file 
+        <i>./test/test.sln</i>) and <b>GCC 4.4.1</b> under Linux with <i>qmake</i> command. <br>
         <br>
-        L'exemple qui suit présente différentes étapes : 
+        Quick sample step by step :
         <ul>
-          <li><a href="#quick_sample_1">1- fichier <i>drug.h</i> : définition
-            d'une classe <i>drug</i> avec 3 attributs : <i>id</i>, <i>name</i>
-            et <i>description</i></a></li>
-          <li><a href="#quick_sample_2">2- fichier <i>drug.cpp</i> :
-            implémentation de la 'fonction de paramétrage' : <i>void
-            qx::register_class()</i></a></li>
-          <li><a href="#quick_sample_3">3- fichier <i>main.cpp</i> :
-            présentation des fonctionnalités de base de QxOrm avec la classe
-            <i>drug</i></a></li>
-          <li><a href="#quick_sample_4">4- exécution du programme de test et
-            affichage des traces générées</a></li>
-          <li><a href="#quick_sample_5">5- contenu du fichier
-            <i>./export_drugs.xml</i> créé par le programme de test</a></li>
+          <li><a href="#quick_sample_1">1- <i>drug.h</i> file : <i>drug</i> class definition with 3 properties : <i>id</i>, <i>name</i> and <i>description</i></a></li>
+          <li><a href="#quick_sample_2">2- <i>drug.cpp</i> file : 'setting function' implementation : <i>void qx::register_class()</i></a></li>
+          <li><a href="#quick_sample_3">3- <i>main.cpp</i> file : basic functionalities of QxOrm library with <i>drug</i> class</a></li>
+          <li><a href="#quick_sample_4">4- execute program and trace output debug</a></li>
+          <li><a href="#quick_sample_5">5- <i>./export_drugs.xml</i> file created by the program</a></li>
         </ul>
         <br>
         <font color="#100D5A"><a name="quick_sample_1">*
         -----------------------------------------------------------------------------------------------------<br>
-        * 1- fichier <i>drug.h</i> : définition d'une classe <i>drug</i> avec 3
-        attributs : <i>id</i>, <i>name</i> et <i>description</i></a><br>
-        *
+        * 1- <i>drug.h</i> file : <i>drug</i> class definition with 3 properties : <i>id</i>, <i>name</i> and <i>description</i><br> *
         -----------------------------------------------------------------------------------------------------<br>
-        </font><br>
+        </a></font><br>
         <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="drug.h">
 <pre><span class="pre">#ifndef _CLASS_DRUG_H_
 #define _CLASS_DRUG_H_
@@ -146,9 +135,7 @@ QX_REGISTER_HPP_MY_TEST_EXE<span class="operator">(</span>drug<span class="opera
         <br><br>
         <font color="#100D5A"><a name="quick_sample_2">*
         ----------------------------------------------------------------------------------------------------<br>
-        * 2- fichier <i>drug.cpp</i> : implémentation de la 'fonction de
-        paramétrage' : <i>void qx::register_class()</i><br>
-        *
+        * 2- <i>drug.cpp</i> file : 'setting function' implementation : <i>void qx::register_class()</i><br> *
         ----------------------------------------------------------------------------------------------------
         </a></font><br><br>
         <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="drug.cpp">
@@ -170,9 +157,7 @@ template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</
         <br>
         <font color="#100D5A"><a name="quick_sample_3">*
         -----------------------------------------------------------------------------------------------<br>
-        * 3- fichier <i>main.cpp</i> : présentation des fonctionnalités de base
-        de QxOrm avec la classe <i>drug</i><br>
-        *
+        * 3- <i>main.cpp</i> file : basic functionalities of QxOrm library with <i>drug</i> class<br> *
         -----------------------------------------------------------------------------------------------
         </a></font><br><br>
         <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="main.cpp">
@@ -257,10 +242,9 @@ int</span><span class="keyword"> main</span><span class="operator">(</span><span
         <br>
         <p><font color="#100D5A"><a name="quick_sample_4">*
         -------------------------------------------------------------------------<br>
-        * 4- exécution du programme de test et affichage des traces générées<br>
-        *
-        -------------------------------------------------------------------------</a>
-        </font><br></p>
+        * 4- execute program and trace output debug<br> *
+        -------------------------------------------------------------------------
+        </a></font><br></p>
         <p></p>
         <font size="2">[QxOrm] qx::QxSqlDatabase : create new database
         connection in thread '3616' with key
@@ -282,16 +266,15 @@ int</span><span class="keyword"> main</span><span class="operator">(</span><span
         <p></p>
         <font color="#100D5A"><a name="quick_sample_5">*
         ------------------------------------------------------------------------------<br>
-        * 5- contenu du fichier <i>./export_drugs.xml</i> créé par le programme
-        de test<br>
-        *
+        * 5- <i>./export_drugs.xml</i> file created by the program<br> *
         ------------------------------------------------------------------------------</a>
         </font><br>
         <br>
         <a href="./resource/quick_sample.export_drugs.xml.txt"><img
         alt="quick_sample.export_drugs.xml"
         src="./resource/quick_sample.export_drugs.xml.jpg" width="642"
-        height="452" border="0"></a> </td>
+        height="452" border="0"></a>
+      </td>
     </tr>
   </tbody>
 </table>
@@ -302,7 +285,7 @@ int</span><span class="keyword"> main</span><span class="operator">(</span><span
     <tr>
       <td align="left" valign="middle"><img alt="QxOrm"
         src="./resource/logo_qxorm_small.jpg" width="168" height="40"></td>
-      <td align="right" valign="middle"><font size="2">Copyright © 2010 QxOrm France</font> </td>
+      <td align="right" valign="middle"><font size="2"></font> </td>
     </tr>
   </tbody>
 </table>

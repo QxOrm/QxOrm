@@ -1,0 +1,11 @@
+Changes in version 1.1.0:
+- First release
+
+Changes in version 1.1.1:
+- This version supports Visual Studio 2010
+
+Changes in version 1.1.2:
+- License LGPL
+- Fix compilation problems on Linux and boost > 1.38
+- Fix sql query with MySql database
+- Disable assert when qx::dao functions return an error

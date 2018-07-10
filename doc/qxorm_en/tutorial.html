@@ -60,45 +60,45 @@
 </table>
 <hr style="width: 80%" align="center" size="1" color="#100D5A">
 <table border="0" style="width: 80%" align="center">
-  <col><col>
+  <col><col><col><col><col>
   <tbody><tr>
-  <td align="left" valign="middle"><font size="2">QxOrm  &gt;&gt;  Tutoriel</font></td>
-  <td align="right" valign="middle"><font size="2">Version courante : QxOrm 1.1.1</font></td>
+  <td align="left" valign="top"><font size="2">QxOrm  &gt;&gt;  Tutorial</font></td>
+  <td align="right" valign="top"><font size="2">Current version : QxOrm 1.1.2 (LGPL)</font></td>
+  <td width="10px"></td>
+  <td width="40px" height="30px"><a href="../qxorm_fr/tutorial.html"><img alt="Version française du site" src="./resource/FR.png" width="40" height="30" border="0"></a></td>
+  <td width="40px" height="30px"><a href="../qxorm_en/tutorial.html"><img alt="Web site english version" src="./resource/GB.png" width="40" height="30" border="0"></a></td>
   </tr></tbody>
-</table><br>
+</table>
 <table border="1" frame="vsides" rules="cols" style="width: 80%" align="center" cellpadding="6" bgcolor="#F2F2F4">
   <col>
   <tbody>
     <tr>
       <td align="justify">
-        Dans ce chapitre, nous allons traiter plusieurs fonctionnalités de la librarie <b>QxOrm</b> avec la création 
-        d'un projet de <b>gestion d'un blog en C++</b>.<br>
-        Le tutoriel <b>qxBlog</b> est constitué des étapes suivantes :
+        In this chapter, we will see a lot of functionalities of <b>QxOrm</b> library with the creation of a C++ project : <b>qxBlog - blog management in C++</b>.<br>
+        <b>qxBlog</b> tutorial step by step :
         <ul>
-          <li><a href="#tuto_1">1- Projet <b>qxBlog</b> - gestion d'un blog en C++</a></li>
-          <li><a href="#tuto_2">2- Arborescence du projet <b>qxBlog</b></a></li>
-          <li><a href="#tuto_3">3- Contenu du fichier <i>qxBlog.pro</i></a></li>
-          <li><a href="#tuto_4">4- Contenu du fichier <i>export.h</i></a></li>
-          <li><a href="#tuto_5">5- Contenu du fichier <i>precompiled.h</i></a></li>
-          <li><a href="#tuto_6">6- Contenu des fichiers <i>author.h</i> et <i>author.cpp</i></a></li>
-          <li><a href="#tuto_7">7- Contenu des fichiers <i>comment.h</i> et <i>comment.cpp</i></a></li>
-          <li><a href="#tuto_8">8- Contenu des fichiers <i>category.h</i> et <i>category.cpp</i></a></li>
-          <li><a href="#tuto_9">9- Contenu des fichiers <i>blog.h</i> et <i>blog.cpp</i></a></li>
-          <li><a href="#tuto_10">10- Contenu du fichier <i>main.cpp</i></a></li>
-          <li><a href="#tuto_11">11- Annexe - exemple de relation <i>one-to-one</i> avec la classe <i>person</i></a></li>
+          <li><a href="#tuto_1">1- <b>qxBlog</b> project - blog management in C++</a></li>
+          <li><a href="#tuto_2">2- all files in <b>qxBlog</b> project</a></li>
+          <li><a href="#tuto_3">3- <i>qxBlog.pro</i> file</a></li>
+          <li><a href="#tuto_4">4- <i>export.h</i> file</a></li>
+          <li><a href="#tuto_5">5- <i>precompiled.h</i> file</a></li>
+          <li><a href="#tuto_6">6- <i>author.h</i> and <i>author.cpp</i> (relationship <i>one-to-many</i>)</a></li>
+          <li><a href="#tuto_7">7- <i>comment.h</i> and <i>comment.cpp</i> (relationship <i>many-to-one</i>)</a></li>
+          <li><a href="#tuto_8">8- <i>category.h</i> and <i>category.cpp</i> (relationship <i>many-to-many</i>)</a></li>
+          <li><a href="#tuto_9">9- <i>blog.h</i> and <i>blog.cpp</i> (relationship <i>one-to-many</i>, <i>many-to-one</i> and <i>many-to-many</i>)</a></li>
+          <li><a href="#tuto_10">10- <i>main.cpp</i> file</a></li>
+          <li><a href="#tuto_11">11- relationship <i>one-to-one</i> with <i>person</i> class</a></li>
         </ul>
         <br>
-        <a name="tuto_1"><u><font color="#100D5A">1- Projet <b>qxBlog</b> -
-        gestion d'un blog en C++ avec les tables suivantes :</font></u></a> 
+        <a name="tuto_1"><u><font color="#100D5A">1- <b>qxBlog</b> project - blog management in C++ :</font></u></a> 
         <ul>
-          <li><b>blog</b> : 1 <i>blog</i> est écrit par 1 <i>author</i>, peut avoir plusieurs <i>comment</i> et peut être associé à plusieurs <i>category</i>
-          </li><li><b>author</b> : 1 <i>author</i> peut rédiger plusieurs <i>blog</i>
-          </li><li><b>comment</b> : 1 <i>comment</i> est associé à 1 <i>blog</i>
-          </li><li><b>category</b> : 1 <i>category</i> référence plusieurs <i>blog</i>
+          <li><b>blog</b> : 1 <i>blog</i> is written by 1 <i>author</i>, can have many <i>comment</i> and can be put inside many <i>category</i>
+          </li><li><b>author</b> : 1 <i>author</i> can write many <i>blog</i>
+          </li><li><b>comment</b> : 1 <i>comment</i> belongs to 1 <i>blog</i>
+          </li><li><b>category</b> : 1 <i>category</i> contains many <i>blog</i>
         </li></ul>
         <br>
-        <a name="tuto_2"><u><font color="#100D5A">2- Le projet <b>qxBlog</b> du tutoriel a
-        l'arborescence suivante :</font></u></a><br>
+        <a name="tuto_2"><u><font color="#100D5A">2- all files in <b>qxBlog</b> project :</font></u></a><br>
         <br>
         <table border="1" style="width: 100%" bgcolor="#FFFFFF">
           <col><col><col>
@@ -121,53 +121,33 @@
             </tr>
           </tbody>
         </table>
-        <p><i>Remarque</i> : le code de ce tutoriel est disponible dans le dossier
-        <i>./test/qxBlog/</i> de la distribution de <b>QxOrm</b>.<br>
-        Le fichier <i>qxBlog.sqlite</i> correspond à la base de données du tutoriel au format <a href="http://sqlite.org/" target="_blank"><i>sqlite</i></a>.</p>
+        <p><i>Note</i> : tutorial source code is available in the folder
+        <i>./test/qxBlog/</i> of your <b>QxOrm</b> directory.<br>
+        <i>qxBlog.sqlite</i> file is the tutorial database in the format <a href="http://sqlite.org/" target="_blank"><i>sqlite</i></a>.</p>
         <p><br>
-        <a name="tuto_3"><u><font color="#100D5A">3- Contenu du fichier <b>qxBlog.pro</b>
-        :</font></u></a><br>
+        <a name="tuto_3"><u><font color="#100D5A">3- <i>qxBlog.pro</i> file :</font></u></a><br>
         <br>
-        Ce fichier permet la compilation du projet par l'outil <i>qmake</i>
-        fourni par la librairie Qt. <br>
-        L'outil <i>qmake</i> est multi-plateforme, ce qui signifie que le
-        projet <b>qxBlog</b> peut être compilé sous Windows, Linux, Mac, etc...
+        This file is necessary to compile and build the project with the command <i>qmake</i>
+        provided by Qt library. <br>
+        The tool <i>qmake</i> is multi-platform, so <b>qxBlog</b> project can be compiled under Windows, Linux, Mac, etc...
         <br>
-        Le fichier <i>qxBlog.pro</i> décrit la liste de tous les fichiers du
-        projet (header + source) ainsi que les dépendances du projet. <br>
-        Le projet <b>qxBlog</b> est dépendant de la librarie <b>QxOrm</b> qui est
-        elle-même dépendante des excellentes librairies <b>boost</b> et <b>Qt</b>. <br>
-        Pour simplifier la gestion des dépendances du projet, il est possible
-        d'inclure le fichier <i>QxOrm.pri</i>.<br>
-        Une information importante à renseigner dans le fichier
-        <i>qxBlog.pro</i> est la définition d'une variable indiquant que l'on
-        est en train de compiler le projet (voir le fichier <i>export.h</i>).
-        En effet, tout comme le mécanisme des dll sous Windows, la librairie
-        QxOrm a besoin de cette information pour exporter ou importer certaines
-        classes. Pour notre projet, cette variable se nomme
-        <b><i>_BUILDING_QX_BLOG</i></b>.</p>
+        The file <i>qxBlog.pro</i> contains the list of all files in the project (header + source) and all dependencies
+        (<i>QxOrm.pri</i> file contains all dependencies with boost and Qt libraries).<br>
+        <i>qxBlog.pro</i> contains an important constant (<b><i>_BUILDING_QX_BLOG</i></b>) to know if the project is compiling (cf. <i>export.h</i> and dll mechanism under Windows to import or export functions, classes...).
+        </p>
         <p><a href="./resource/qxBlog.qxBlog.pro"><img alt="qxBlog.pro"
         src="./resource/qxBlog.pro.jpg" width="417" height="551"
         border="0"></a></p>
         <p><br>
-        <a name="tuto_4"><u><font color="#100D5A">4- Contenu du fichier <i>export.h</i>
-        :</font></u></a><br>
+        <a name="tuto_4"><u><font color="#100D5A">4- <i>export.h</i> file :</font></u></a><br>
         <br>
-        L'écriture d'une <i>dll</i> sous Windows impose d'avoir un fichier de ce type
-        pour la gestion des <i>'export/import'</i> des classes, fonctions,
-        variables, etc... <br>
-        <b>QxOrm</b> utilise ce même mécanisme pour fournir certaines fonctionnalités
-        : le fichier <i>export.h</i> est donc indispensable pour tous les
-        projets dépendants de <b>QxOrm</b>.<br>
-        <br>
-        <i>Remarque</i> : pour simplifier, il est possible de schématiser le mécanisme des <i>dll</i>
-        de la façon suivante : </p>
+        A Windows <i>dll</i> needs this file to manage <i>'export/import'</i> of classes, functions... <br>
+        <b>QxOrm</b> uses the same mechanism to provide some functionalities :
+        so the file <i>export.h</i> is necessary to all projects using <b>QxOrm</b> library.<br><br>
+        <i>Note</i> : quick resume of dll mechanism under Windows :</p>
         <ul>
-          <li>lorsque la dll est compilée, l'outil de compilation exporte
-            chaque classe</li>
-          <li>lorsque 1 autre dll dépendante de la précédente est compilée,
-            l'outil de compilation importe les classes nécessaires de la dll
-            précédente</li>
+          <li>when a dll is compiling, each class is exported</li>
+          <li>when another dll is compiling, each class of the first dll needs to be imported to be used</li>
         </ul><br>
         <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="export.h">
 <pre><span class="pre">#ifndef _QX_BLOG_EXPORT_H_
@@ -200,25 +180,15 @@
 </span></pre>
         </td></tr></tbody></table>
         <br><br>
-        <a name="tuto_5"><u><font color="#100D5A">5- Contenu du fichier <i>precompiled.h</i>
-        :</font></u></a><br>
+        <a name="tuto_5"><u><font color="#100D5A">5- <i>precompiled.h</i> file :</font></u></a><br>
         <br>
-        Il s'agit d'un en-tête précompilé (<i>precompiled header</i>) permettant
-        d'optimiser les temps de compilation du projet. <br>
-        En effet, <b>QxOrm</b> utilise les techniques de <b>méta-programmation</b> pour
-        fournir l'ensemble de ses fonctionnalités. <br>
-        La méta-programmation étant couteuse en temps de compilation, votre
-        projet se compilera beaucoup plus vite avec ce fichier
-        <i>precompiled.h</i>. <br>
-        Un autre avantage (et non des moindres) est que le fichier
-        <i>QxOrm.h</i> regroupe les fonctionnalités de base des librairies
-        boost et Qt. <br>
-        Il n'est donc plus nécessaire d'écrire <i>#include
-        &lt;QtCore/QString.h&gt;</i> pour utiliser la classe QString de Qt par
-        exemple. <br>
-        De même, pour utiliser les pointeurs intelligents de boost, il n'est
-        plus nécessaire d'écrire <i>#include
-        &lt;boost/shared_ptr.hpp&gt;</i>.<br>
+        <i>precompiled header</i> file reduces compilation times of a C++ project.<br>
+        <b>QxOrm</b> uses <b>meta-programming</b> concept to provide a lot of functionalities.<br>
+        <b>meta-programming</b> is costly in compilation times, so your project will be compiled much more quickly with the file 
+        <i>precompiled.h</i>.<br><br>
+        Last but not least, another advantage is that the file <i>QxOrm.h</i> includes the basic functionalities of libraries boost and Qt.<br>
+        It is thus not necessary anymore to write <i>#include &lt;QtCore/QString.h&gt;</i> to use the class QString of Qt for example.<br>
+        In the same way, there is no need anymore to write <i>#include &lt;boost/shared_ptr.hpp&gt;</i> to use smart pointers of boost library.<br>
         <br>
         <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="precompiled.h">
 <pre><span class="pre">#ifndef _QX_BLOG_PRECOMPILED_HEADER_H_
@@ -232,29 +202,22 @@
 </span></pre>
         </td></tr></tbody></table>
         <br><br>
-        <a name="tuto_6"><u><font color="#100D5A">6- Contenu des fichiers <i>author.h</i> et
-        <i>author.cpp</i> :</font></u></a><br>
+        <a name="tuto_6"><u><font color="#100D5A">6- <i>author.h</i> and <i>author.cpp</i> (relationship <i>one-to-many</i>) :</font></u></a><br>
         <br>
-        1 <i>author</i> est une personne qui peut rédiger plusieurs <i>blog</i>
-        : nous allons ainsi montrer comment utiliser la relation de type
-        <b><i>one-to-many</i></b>. <br>
-        Au niveau base de données, voici les 2 tables qui correspondent : <br>
+        1 <i>author</i> can write many <i>blog</i>
+        : we will see how to use relationship <b><i>one-to-many</i></b>. <br>
+        In the database, there is 2 tables : <br>
         <br>
         <img alt="qxBlog.table.author" src="./resource/qxBlog.table.author.jpg"
         width="318" height="118"><br>
         <br>
-        Dans le code C++, les propriétés de la classe <i>author</i> sont le
-        symétrique des champs de la table <i>author</i> dans la base de
-        données. <br>
-        Donc 1 instance de la classe <i>author</i> dans le code C++ correspond
-        à une ligne de la table <i>author</i> dans la base de données. <br>
-        Ce principe permet d'écrire du code C++ simple de compréhension et
-        facile à maintenir.<br><br>
-        Nous ajoutons 1 méthode à notre classe <i>author</i> : <i>int age()</i> qui calculera l'âge en fonction de la
-        date de naissance envoyée par la base de données.<br>
-        Nous définissons également 2 <i>typedef</i> pour représenter un pointeur (<i>smart-pointer</i>) vers un objet <i>author</i> ainsi qu'une collection de <i>author</i>.<br>
-        La classe <i>author</i> a un identifiant de type <i>QString</i> (par défaut, un identifiant dans le contexte <b>QxOrm</b> est de type <i>long</i>) : nous utilisons la macro <b><i>QX_REGISTER_PRIMARY_KEY(author, QString)</i></b> pour spécialiser le template.<br>
-        La classe <i>author</i> s'écrit de la façon suivante :<br>
+        In the C++ source code, the properties of <i>author</i> class belong to columns of <i>author</i> table in the database. <br>
+        So 1 instance of <i>author</i> class in the C++ source code belong to 1 row of <i>author</i> table in the database. <br>
+        This mechanism provides C++ source code easy to develop and to maintain.<br>
+        <br>
+        We add 1 method to our <i>author</i> class : <i>int age()</i> to retrieve the age with the data returned by the database.<br>
+        We define also 2 <i>typedef</i> : a <i>smart-pointer</i> to an object <i>author</i>, and a list of <i>author</i>.<br>
+        <i>author</i> class need an id of <i>QString</i> type (by default, <b>QxOrm</b> provides id of <i>long</i> type) : we use the macro <b><i>QX_REGISTER_PRIMARY_KEY(author, QString)</i></b> to specialize the template.<br>
         <br>
         <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="author.h">
 <pre><span class="pre">#ifndef _QX_BLOG_AUTHOR_H_
@@ -325,21 +288,15 @@ int</span> author<span class="operator">::</span>age<span class="operator">()</s
 </pre>
         </td></tr></tbody></table>
         <br><br>
-        <a name="tuto_7"><u><font color="#100D5A">7- Contenu des fichiers <i>comment.h</i> et
-        <i>comment.cpp</i> :</font></u></a><br>
+        <a name="tuto_7"><u><font color="#100D5A">7- <i>comment.h</i> and <i>comment.cpp</i> (relationship <i>many-to-one</i>) :</font></u></a><br>
         <br>
-        1 <i>comment</i> est associé à 1 <i>blog</i> et 1 <i>blog</i> peut
-        contenir plusieurs <i>comment</i> : nous allons ainsi montrer comment
-        utiliser la relation de type <b><i>many-to-one</i></b>. <br>
-        Au niveau base de données, voici les 2 tables qui correspondent (nous
-        reprenons la table <i>blog</i> vue précédemment) : <br>
+        1 <i>comment</i> belongs to 1 <i>blog</i> and 1 <i>blog</i> can contain many <i>comment</i> : we will see how to use relationship <b><i>many-to-one</i></b>. <br>
+        In the database, there is 2 tables : <br>
         <br>
         <img alt="qxBlog.table.comment"
         src="./resource/qxBlog.table.comment.jpg" width="335" height="116"><br>
         <br>
-        De même que pour la classe <i>author</i>, nous définissons 2 <i>typedef</i>
-        pour représenter un pointeur vers un objet <i>comment</i> ainsi qu'une collection de <i>comment</i>.<br>
-        La classe <i>comment</i> s'écrit de la façon suivante :<br>
+        Like <i>author</i> class, we define 2 <i>typedef</i> : a <i>smart-pointer</i> to a <i>comment</i> object and a list of <i>comment</i>.<br>
         <br>
         <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="comment.h">
 <pre><span class="pre">#ifndef _QX_BLOG_COMMENT_H_
@@ -395,24 +352,18 @@ template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</
         </td></tr></tbody></table>
         <br>
         <br>
-        <a name="tuto_8"><u><font color="#100D5A">8- Contenu des fichiers <i>category.h</i> et
-        <i>category.cpp</i> :</font></u></a><br>
+        <a name="tuto_8"><u><font color="#100D5A">8- <i>category.h</i> and <i>category.cpp</i> (relationship <i>many-to-many</i>) :</font></u></a><br>
         <br>
-        1 <i>category</i> référence plusieurs <i>blog</i> et 1 <i>blog</i> peut
-        appartenir à plusieurs <i>category</i> : nous allons ainsi montrer
-        comment utiliser la relation de type <b><i>many-to-many</i></b>.<br>
-        Ce type de relation implique une table supplémentaire dans la base de
-        données pour stocker la liste des <i>id</i> de chaque côté des
-        relations. <br>
-        Au niveau base de données, voici les 3 tables qui correspondent (nous
-        reprenons la table <i>blog</i> vue précédemment) : <br>
+        1 <i>category</i> contains many <i>blog</i> and 1 <i>blog</i> can be put inside many <i>category</i> : 
+        we will see how to use relationship <b><i>many-to-many</i></b>.<br>
+        This kind of relationship need a new table in the database to save the list of <i>id</i> for each relationship.<br>
+        So in the database, there is 3 tables : <br>
         <br>
         <img alt="qxBlog.table.category"
         src="./resource/qxBlog.table.category.jpg" width="464" height="115"><br>
         <br>
-        De même que pour les classes <i>author</i> et <i>comment</i>, nous définissons 2 <i>typedef</i>
-        pour représenter un pointeur vers un objet <i>category</i> ainsi qu'une collection de <i>category</i>.<br>
-        La classe <i>category</i> s'écrit de la façon suivante :<br>
+        Like <i>author</i> class and <i>comment</i> class, we define 2 <i>typedef</i> :
+        a <i>smart-pointer</i> to a <i>category</i> object and a list of <i>category</i>.<br>
         <br>
         <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="category.h">
 <pre><span class="pre">#ifndef _QX_BLOG_CATEGORY_H_
@@ -469,23 +420,14 @@ template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</
         </td></tr></tbody></table>
         <br>
         <br>
-        <a name="tuto_9"><u><font color="#100D5A">9- Contenu des fichiers <i>blog.h</i> et
-        <i>blog.cpp</i> :</font></u></a><br>
+        <a name="tuto_9"><u><font color="#100D5A">9- <i>blog.h</i> and <i>blog.cpp</i> (relationship <i>one-to-many</i>, <i>many-to-one</i> and <i>many-to-many</i>) :</font></u></a><br>
         <br>
-        1 <i>blog</i> est écrit par 1 <i>author</i>, peut avoir plusieurs
-        <i>comment</i> et peut être associé à plusieurs <i>category</i>. Cette
-        classe contient donc 3 relations : <b><i>one-to-many</i>,
+        1 <i>blog</i> is written by 1 <i>author</i>, can have many
+        <i>comment</i> and can be put inside many <i>category</i>.<br>
+        So this class has 3 relationships : <b><i>one-to-many</i>,
         <i>many-to-one</i> et <i>many-to-many</i></b>.<br>
-        <br>
-        <i>Remarque</i> : <b>QxOrm</b> gère également le type de relation <b><i>one-to-one</i></b>
-        qui est cependant beaucoup moins utilisée que les autres relations. <br>
-        Un exemple de type de relation <b><i>one-to-one</i></b> est disponible en
-        annexe de ce tutoriel avec la classe/table <i>person</i> : 1
-        <i>person</i> correspond à 1 <i>author</i>. <br>
-        <br>
-        De même que pour les autres classes, nous définissons 2 <i>typedef</i>
-        pour représenter un pointeur vers un objet <i>blog</i> ainsi qu'une collection de <i>blog</i>.<br>
-        La classe <i>blog</i> s'écrit de la façon suivante :<br>
+        Like other classes, we define 2 <i>typedef</i> :
+        a <i>smart-pointer</i> to a <i>blog</i> object and a list of <i>blog</i>.<br>
         <br>
         <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="blog.h">
 <pre><span class="pre">#ifndef _QX_BLOG_BLOG_H_
@@ -544,20 +486,18 @@ template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</
         </td></tr></tbody></table>
         <br>
         <br>
-        <a name="tuto_10"><u><font color="#100D5A">10- Contenu du fichier <i>main.cpp</i>
-        :</font></u></a><br>
+        <a name="tuto_10"><u><font color="#100D5A">10- <i>main.cpp</i> file :</font></u></a><br>
         <br>
-        <b>QxOrm</b> permet de communiquer de manière simple et performante avec de
-        nombreuses bases de données (<a href="http://doc.trolltech.com/4.6/sql-programming.html" target="_blank">voir la liste des bases de données sur le
-        site de Qt</a>).<br>
-        Outre la <font style="background-color:yellow"><b>persistance</b></font>, <b>QxOrm</b> possède également d'autres
-        fonctionnalités intéressantes liées à la gestion des données :
-        <ul><li>
-        la <font style="background-color:yellow"><b>serialization</b></font> automatique des données ou collections de données au
-        format binaire et xml
-        </li><li>la <font style="background-color:yellow"><b>reflection</b></font> permettant d'accéder à la
-        définition des classes paramétrées dans le contexte QxOrm ainsi que
-        l'appel automatique des méthodes de classes</li></ul><br>
+        <b>QxOrm</b> can communicate with many databases (<a href="http://doc.trolltech.com/4.6/sql-programming.html" target="_blank">see the list of databases in Qt web site</a>) 
+        =&gt; <font style="background-color:yellow"><b>persistence</b></font>.<br>
+        <b>QxOrm</b> provides also 2 other important functionalities :
+        <ul>
+          <li><b><font style="background-color:yellow">serialization</font></b> : binary and xml format
+          </li>
+          <li><b><font style="background-color:yellow">reflection</font></b> : access to classes definitions, retrieve properties and call classes methods
+          </li>
+        </ul>
+        <br>
         <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="main.cpp">
 <pre><span class="pre">#include <span class="string">"../include/precompiled.h"</span>
 
@@ -713,51 +653,29 @@ int</span><span class="keyword"> main</span><span class="operator">(</span><span
 </pre>
         </td></tr></tbody></table>
         <br>
-        <a href="./resource/qxBlog.main.exec.result.txt"><i>Cliquez ici pour afficher les traces après exécution du programme <b>qxBlog</b>...</i></a>
+        <a href="./resource/qxBlog.main.exec.result.txt"><i>Click here to see output debug trace after execution of <b>qxBlog</b> program...</i></a>
         <br><br>
-        <i>Remarque importante</i> : <b>QxOrm</b> n'a pas pour objectif de 'cacher' le code sql (par
-        défaut toutes les requêtes sont tracées). Même si <b>QxOrm</b> simplifie
-        énormément le code C++ et optimise ainsi les temps de développement et
-        de maintenance d'un produit, il est très important d'avoir de bonnes
-        connaissances sql.<br>
-        <b>QxOrm</b> ne résoudra pas toutes les problématiques liées aux bases de
-        données, il sera alors nécessaire d'utiliser directement le module
-        <a href="http://doc.trolltech.com/4.6/sql-programming.html" target="_blank"><i>QtSql</i></a> de Qt en écrivant soi-même les requêtes sql ou les procédures
-        stockées.<br>
-        Enfin, il faut être extrêmement vigilant au nombre de requêtes
-        effectuées entre le programme C++ et la base de données : un trop grand
-        nombre d'appels à la base de données peut écrouler les performances
-        d'une application. Il est important de maîtriser la notion de
-        <i>relation entre les classes</i> (voir le syndrôme <i>n+1</i> que l'on peut
-        rencontrer avec <i>Hibernate</i> ou tout autre ORM).<br>
-        <br>
-        <i>Autre remarque</i> : Il est important de signaler que les méthodes <i>void
-        register_class(...)</i> liées à vos classes sont appelées automatiquement
-        et lorsque c'est nécessaire par la librairie <b>QxOrm</b>. <br>
-        Par rapport à d'autres librairies qui nécessitent un appel pour
-        enregistrer les types de chaque classe, <b>QxOrm</b> permet un enregistrement
-        automatique des classes, ce qui simplifie encore un peu plus le
-        développement d'applications.<br>
+        <i>Important note</i> : <b>QxOrm</b> doesn't want to hide sql query (by default, all sql queries are displayed).<br>
+        <b>QxOrm</b> cannot resolve all problems with sql and databases, 
+        so it is sometimes necessary to use <a href="http://doc.trolltech.com/4.6/sql-programming.html" target="_blank"><i>QtSql</i></a> engine of Qt library 
+        to write your own sql query or stored procedure.<br>
         <br>
         <br>
-        <a name="tuto_11"><u><font color="#100D5A">11- Annexe - exemple de relation <i>one-to-one</i>
-        avec la classe <i>person</i> :</font></u></a><br>
+        <a name="tuto_11"><u><font color="#100D5A">11- relationship <i>one-to-one</i> with <i>person</i> class :</font></u></a><br>
         <br>
-        Ajoutons à notre projet la classe <i>person</i> (fichiers <i>person.h</i> et
-        <i>person.cpp</i>) : 1 <i>person</i> correspond à 1 <i>author</i> dans la base de
-        données.<br> Ils partagent donc le même identifiant, c'est ce qu'on
-        appelle une relation de type <b><i>one-to-one</i></b>. <br>
-        Voici les 2 tables de notre base de données (nous reprenons la table
-        <i>author</i> vue précédemment) : <br><br>
+        <b>QxOrm</b> can also be used with relationship <i>one-to-one</i>.<br>
+        We add to our project the class <i>person</i> (<i>person.h</i> and 
+        <i>person.cpp</i> files) : 1 <i>person</i> is 1 <i>author</i>.<br>
+        So <i>person</i> and <i>author</i> share the same id in the database : this is a relationship <b><i>one-to-one</i></b>. <br>
+        There is 2 tables in the database : <br><br>
         <img alt="qxBlog.table.person" src="resource/qxBlog.table.person.jpg"
         width="279" height="118"><br>
         <br>
-        <i>Remarque</i> : Nous ajoutons à la table <i>person</i> le champ <i>mother_id</i>. Nous pouvons
-        ainsi connaître la mère (de type <i>person</i>) associée à 1 <i>person</i>, ce
-        qui correspond à une relation <i>many-to-one</i> sur la même table <i>person</i>.
-        De plus, si 1 <i>person</i> est une mère, nous pouvons connaître la liste de
-        ses enfants (de type <i>person</i>), ce qui correspond à une relation
-        <i>one-to-many</i> sur la même table <i>person</i>. </p>
+        <i>Note</i> : we add to <i>person</i> table the column <i>mother_id</i>. So we 
+        can retrieve the mother (of type <i>person</i>) belongs to 1 <i>person</i> : 
+        this is a relationship <i>many-to-one</i> on the same table <i>person</i>.
+        Moreover, if 1 <i>person</i> is a mother, we can retrieve the list of childs (of type <i>person</i>) : 
+        this is a relationship <i>one-to-many</i> on the same table <i>person</i>. </p>
       </td>
     </tr>
   </tbody>
@@ -769,7 +687,7 @@ int</span><span class="keyword"> main</span><span class="operator">(</span><span
     <tr>
       <td align="left" valign="middle"><img alt="QxOrm"
         src="./resource/logo_qxorm_small.jpg" width="168" height="40"></td>
-      <td align="right" valign="middle"><font size="2">Copyright © 2010 QxOrm France</font> </td>
+      <td align="right" valign="middle"><font size="2"></font> </td>
     </tr>
   </tbody>
 </table>

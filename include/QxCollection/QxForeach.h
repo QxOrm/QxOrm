@@ -1,26 +1,25 @@
 /****************************************************************************
 **
-** Copyright (C) 2010 QxOrm France and/or its subsidiary(-ies)
-** Contact: QxOrm France Information (contact@qxorm.com)
+** http://www.qxorm.com/
+** http://sourceforge.net/projects/qxorm/
+** Original file by Lionel Marty
 **
 ** This file is part of the QxOrm library
 **
-** Commercial Usage
-** Licensees holding valid QxOrm Commercial licenses may use this file in
-** accordance with the QxOrm Commercial License Agreement provided with the
-** Software or, alternatively, in accordance with the terms contained in
-** a written agreement between you and QxOrm France
+** This software is provided 'as-is', without any express or implied
+** warranty. In no event will the authors be held liable for any
+** damages arising from the use of this software.
 **
-** GNU General Public License Usage
-** Alternatively, this file may be used under the terms of the GNU
-** General Public License version 3.0 as published by the Free Software
-** Foundation and appearing in the file 'license.gpl3.txt' included in the
-** packaging of this file. Please review the following information to
-** ensure the GNU General Public License version 3.0 requirements will be
-** met: http://www.gnu.org/copyleft/gpl.html
+** GNU Lesser General Public License Usage
+** This file must be used under the terms of the GNU Lesser
+** General Public License version 2.1 as published by the Free Software
+** Foundation and appearing in the file 'license.lgpl.txt' included in the
+** packaging of this file.  Please review the following information to
+** ensure the GNU Lesser General Public License version 2.1 requirements
+** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
 **
-** If you are unsure which license is appropriate for your use, please
-** contact the support department at support@qxorm.com
+** If you have questions regarding the use of this file, please contact :
+** contact@qxorm.com
 **
 ****************************************************************************/
 
@@ -32,6 +31,10 @@
 #endif
 
 #include <boost/foreach.hpp>
+
+#ifndef BOOST_FOREACH_ID
+#define BOOST_FOREACH_ID(x) x
+#endif
 
 #include "../../include/QxTraits/is_qx_collection.h"
 
@@ -93,32 +96,32 @@ struct qx_deref
 } // namespace qx
 
 #define QX_FOREACH_DEREF(COL) \
-   qx::foreach::qx_deref::deref(_foreach_cur, BOOST_FOREACH_TYPEOF(COL))
+   qx::foreach::qx_deref::deref(BOOST_FOREACH_ID(_foreach_cur), BOOST_FOREACH_TYPEOF(COL))
 
 #define QX_FOREACH_DEREF_REVERSE(COL) \
-   qx::foreach::qx_deref::deref_reverse(_foreach_cur, BOOST_FOREACH_TYPEOF(COL))
+   qx::foreach::qx_deref::deref_reverse(BOOST_FOREACH_ID(_foreach_cur), BOOST_FOREACH_TYPEOF(COL))
 
 #define QX_FOREACH(VAR, COL)                                                                    \
    BOOST_FOREACH_PREAMBLE()                                                                     \
-   if (boost::foreach_detail_::auto_any_t _foreach_col = BOOST_FOREACH_CONTAIN(COL)) {} else    \
-   if (boost::foreach_detail_::auto_any_t _foreach_cur = BOOST_FOREACH_BEGIN(COL)) {} else      \
-   if (boost::foreach_detail_::auto_any_t _foreach_end = BOOST_FOREACH_END(COL)) {} else        \
-   for (bool _foreach_continue = true;                                                          \
-         _foreach_continue && !BOOST_FOREACH_DONE(COL);                                         \
-         _foreach_continue ? BOOST_FOREACH_NEXT(COL) : (void)0)                                 \
-      if  (boost::foreach_detail_::set_false(_foreach_continue)) {} else                        \
-      for (VAR = QX_FOREACH_DEREF(COL); !_foreach_continue; _foreach_continue = true)
+   if (boost::foreach_detail_::auto_any_t BOOST_FOREACH_ID(_foreach_col) = BOOST_FOREACH_CONTAIN(COL)) {} else    \
+   if (boost::foreach_detail_::auto_any_t BOOST_FOREACH_ID(_foreach_cur) = BOOST_FOREACH_BEGIN(COL)) {} else      \
+   if (boost::foreach_detail_::auto_any_t BOOST_FOREACH_ID(_foreach_end) = BOOST_FOREACH_END(COL)) {} else        \
+   for (bool BOOST_FOREACH_ID(_foreach_continue) = true;                                                          \
+         BOOST_FOREACH_ID(_foreach_continue) && !BOOST_FOREACH_DONE(COL);                                         \
+         BOOST_FOREACH_ID(_foreach_continue) ? BOOST_FOREACH_NEXT(COL) : (void)0)                                 \
+      if  (boost::foreach_detail_::set_false(BOOST_FOREACH_ID(_foreach_continue))) {} else                        \
+      for (VAR = QX_FOREACH_DEREF(COL); !BOOST_FOREACH_ID(_foreach_continue); BOOST_FOREACH_ID(_foreach_continue) = true)
 
 #define QX_FOREACH_REVERSE(VAR, COL)                                                            \
    BOOST_FOREACH_PREAMBLE()                                                                     \
-   if (boost::foreach_detail_::auto_any_t _foreach_col = BOOST_FOREACH_CONTAIN(COL)) {} else    \
-   if (boost::foreach_detail_::auto_any_t _foreach_cur = BOOST_FOREACH_RBEGIN(COL)) {} else     \
-   if (boost::foreach_detail_::auto_any_t _foreach_end = BOOST_FOREACH_REND(COL)) {} else       \
-   for (bool _foreach_continue = true;                                                          \
-         _foreach_continue && !BOOST_FOREACH_RDONE(COL);                                        \
-         _foreach_continue ? BOOST_FOREACH_RNEXT(COL) : (void)0)                                \
-      if  (boost::foreach_detail_::set_false(_foreach_continue)) {} else                        \
-      for (VAR = QX_FOREACH_DEREF_REVERSE(COL); !_foreach_continue; _foreach_continue = true)
+   if (boost::foreach_detail_::auto_any_t BOOST_FOREACH_ID(_foreach_col) = BOOST_FOREACH_CONTAIN(COL)) {} else    \
+   if (boost::foreach_detail_::auto_any_t BOOST_FOREACH_ID(_foreach_cur) = BOOST_FOREACH_RBEGIN(COL)) {} else     \
+   if (boost::foreach_detail_::auto_any_t BOOST_FOREACH_ID(_foreach_end) = BOOST_FOREACH_REND(COL)) {} else       \
+   for (bool BOOST_FOREACH_ID(_foreach_continue) = true;                                                          \
+         BOOST_FOREACH_ID(_foreach_continue) && !BOOST_FOREACH_RDONE(COL);                                        \
+         BOOST_FOREACH_ID(_foreach_continue) ? BOOST_FOREACH_RNEXT(COL) : (void)0)                                \
+      if  (boost::foreach_detail_::set_false(BOOST_FOREACH_ID(_foreach_continue))) {} else                        \
+      for (VAR = QX_FOREACH_DEREF_REVERSE(COL); !BOOST_FOREACH_ID(_foreach_continue); BOOST_FOREACH_ID(_foreach_continue) = true)
 
 #ifdef _foreach
 #undef _foreach

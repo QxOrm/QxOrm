@@ -1,26 +1,25 @@
 /****************************************************************************
 **
-** Copyright (C) 2010 QxOrm France and/or its subsidiary(-ies)
-** Contact: QxOrm France Information (contact@qxorm.com)
+** http://www.qxorm.com/
+** http://sourceforge.net/projects/qxorm/
+** Original file by Lionel Marty
 **
 ** This file is part of the QxOrm library
 **
-** Commercial Usage
-** Licensees holding valid QxOrm Commercial licenses may use this file in
-** accordance with the QxOrm Commercial License Agreement provided with the
-** Software or, alternatively, in accordance with the terms contained in
-** a written agreement between you and QxOrm France
+** This software is provided 'as-is', without any express or implied
+** warranty. In no event will the authors be held liable for any
+** damages arising from the use of this software.
 **
-** GNU General Public License Usage
-** Alternatively, this file may be used under the terms of the GNU
-** General Public License version 3.0 as published by the Free Software
-** Foundation and appearing in the file 'license.gpl3.txt' included in the
-** packaging of this file. Please review the following information to
-** ensure the GNU General Public License version 3.0 requirements will be
-** met: http://www.gnu.org/copyleft/gpl.html
+** GNU Lesser General Public License Usage
+** This file must be used under the terms of the GNU Lesser
+** General Public License version 2.1 as published by the Free Software
+** Foundation and appearing in the file 'license.lgpl.txt' included in the
+** packaging of this file.  Please review the following information to
+** ensure the GNU Lesser General Public License version 2.1 requirements
+** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
 **
-** If you are unsure which license is appropriate for your use, please
-** contact the support department at support@qxorm.com
+** If you have questions regarding the use of this file, please contact :
+** contact@qxorm.com
 **
 ****************************************************************************/
 
@@ -108,7 +107,7 @@ public:
       IxDataMember * pId = this->getDataId(); qAssert(pId);
       IxDataMember * pData = this->getDataMember(); qAssert(pData);
       QString table = this->table(); QString tableAlias = this->tableAlias(params); QString tableRef = params.builder().table();
-      if (pId && pData) { sql += this->getSqlJoin() + table + " " + tableAlias + " ON " + pId->getSqlAlias(& tableAlias) + " = " + pData->getSqlAlias(& tableRef); }
+      if (pId && pData) { sql += this->getSqlJoin() + table + " " + tableAlias + " ON " + pId->getSqlAlias(& tableAlias, true) + " = " + pData->getSqlAlias(& tableRef, true); }
    }
 
    virtual void lazyFetch_ResolveOutput(QxSqlRelationParams & params) const
