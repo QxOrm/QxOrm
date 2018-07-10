@@ -41,6 +41,10 @@
 #include <QtCore/qstringlist.h>
 
 namespace qx {
+template <class T> QSharedPointer<T> clone_to_qt_shared_ptr(const T & obj);
+} // namespace qx
+
+namespace qx {
 namespace dao {
 
 namespace detail {
@@ -163,6 +167,8 @@ public:
    inline void reset()                                         { m_pWork.clear(); m_pOriginal.clear(); }
    inline void reset(const QSharedPointer<T> & ptr)            { m_pWork = ptr; m_pOriginal.clear(); }
    inline void resetOriginal(const QSharedPointer<T> & ptr)    { m_pOriginal = ptr; }
+   inline void saveToOriginal()                                { m_pOriginal.clear(); if (m_pWork) { m_pOriginal = qx::clone_to_qt_shared_ptr(* m_pWork); } }
+   inline void restoreFromOriginal()                           { m_pWork.clear(); if (m_pOriginal) { m_pWork = qx::clone_to_qt_shared_ptr(* m_pOriginal); } }
    inline bool isDirty() const                                 { QStringList lstDiff; return isDirty(lstDiff); }
    inline QSharedPointer<T> toQtSharedPointer() const          { return m_pWork; }
 

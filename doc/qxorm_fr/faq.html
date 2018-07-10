@@ -65,7 +65,7 @@
   <col><col><col><col><col><col>
   <tbody><tr>
   <td align="left" valign="top"><font size="2">QxOrm  &gt;&gt;  Faq</font></td>
-  <td align="right" valign="top"><font size="2">Version courante : QxOrm 1.2.1 (LGPL) - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
+  <td align="right" valign="top"><font size="2">Version courante : QxOrm 1.2.2 (LGPL) - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
   <td width="10px"></td>
   <td width="40px" height="30px"><a href="../qxorm_fr/faq.html"><img alt="Version française du site" src="./resource/FR.png" width="40" height="30" border="0"></a></td>
   <td width="40px" height="30px"><a href="../qxorm_en/faq.html"><img alt="Web site english version" src="./resource/GB.png" width="40" height="30" border="0"></a></td>
@@ -109,6 +109,7 @@
                 </li><li><a href="#faq_220">Comment utiliser le cache (fonctions du namespace <i>qx::cache</i>) pour stocker tous types de données ?</a><br>
                 </li><li><a href="#faq_230">Comment générer le schéma SQL (création et mise à jour des tables) en fonction des classes persistantes C++ définies dans le contexte QxOrm ?</a><br>
                 </li><li><a href="#faq_240">Comment associer un type SQL à une classe C++ ?</a><br>
+                </li><li><a href="#faq_250">Comment utiliser le module <i>QxValidator</i> pour valider automatiquement les données ?</a><br>
                 </li></ul>
               </td>
               <td width="200" align="center" valign="top"><a href="./resource/qt_ambassador_logo.png" target="_blank"><img alt="qt_ambassador" src="./resource/qt_ambassador_logo_150x150.png" width="150" height="150" border="0"></a><br>
@@ -582,12 +583,36 @@ qx<span class="operator">::</span>dump<span class="operator">(</span>lst_blog_wi
          <tr>
            <td valign="middle" width="30"></td>
            <td align="justify">
-           Il est possible de définir un identifiant unique de type <i>QString</i> ou autre avec la bibliothèque <b>QxOrm</b>.<br>
-           Par défaut, l'identifiant unique est de type <i>long</i>.<br>
-           Pour indiquer qu'une classe a un identifiant unique de type <i>QString</i> ou autre, il faut spécialiser le template <i>qx::trait::get_primary_key</i>.<br>
-           Pour simplifier, vous pouvez utiliser la macro : <b><i>QX_REGISTER_PRIMARY_KEY(myClass, QString)</i></b>.<br>
-           <br>
-           <b>Attention :</b> la macro <b><i>QX_REGISTER_PRIMARY_KEY</i></b> doit être utilisée avant la macro <b><i>QX_REGISTER_HPP_...</i></b> dans la définition de la classe, sinon une erreur de compilation se produit.
+            Par défaut, lorsqu'un mapping d'une classe C++ est écrit avec la méthode <i>void qx::register_class</i>, l'identifiant associé à la classe est de type <i>long</i> (clé primaire avec auto-incrémentation dans la base de données).<br>
+            <br>
+            Il est possible de définir un identifiant d'un autre type en utilisant la macro <b>QX_REGISTER_PRIMARY_KEY</b>.<br>
+            Cette macro spécialise le template <i>qx::trait::get_primary_key</i> pour associer un type d'identifiant à une classe C++.<br>
+            <br>
+            Par exemple, pour définir un identifiant unique de type <i>QString</i> pour la classe C++ <i>myClass</i> (mappée vers une table de la BDD avec une colonne de type <i>VARCHAR</i> pour clé primaire), il suffit d'écrire :<br>
+            <i><b>QX_REGISTER_PRIMARY_KEY(myClass, QString)</b></i><br>
+            <br>
+            Voici un exemple d'utilisation de la macro <b>QX_REGISTER_PRIMARY_KEY</b> avec une classe <i>author</i> possédant un identifiant de type <i>QString</i> :<br>
+            <br>
+            <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="pre">#ifndef _QX_BLOG_AUTHOR_H_
+#define _QX_BLOG_AUTHOR_H_
+</span><span class="keyword"> 
+class</span> author<span class="operator">
+{</span><span class="keyword">
+public</span><span class="operator">:</span><span class="comment">
+// -- propriétés
+</span>   QString  m_id<span class="operator">;</span>
+   QString  m_name<span class="operator">;</span><span class="comment">
+// -- constructeur, destructeur virtuel
+</span>   author<span class="operator">() { ; }</span><span class="keyword">
+   virtual</span><span class="operator"> ~</span>author<span class="operator">() { ; }
+};</span>
+
+QX_REGISTER_PRIMARY_KEY<span class="operator">(</span>author<span class="operator">,</span> QString<span class="operator">)</span>
+QX_REGISTER_HPP_QX_BLOG<span class="operator">(</span>author<span class="operator">,</span> qx<span class="operator">::</span>trait<span class="operator">::</span>no_base_class_defined<span class="operator">,</span><span class="int"> 0</span><span class="operator">)</span><span class="pre">
+
+#endif // _QX_BLOG_AUTHOR_H_</span></pre>
+            </td></tr></tbody></table>
            </td>
          </tr>
        </tbody>
@@ -912,9 +937,14 @@ void</span> BaseClassTrigger<span class="operator">::</span>onBeforeUpdate<span 
            <td align="justify">
            Si une classe est définie dans un espace de nom (<i>namespace</i>), alors une erreur de compilation se produit avec l'utilisation des macros : <b>QX_REGISTER_HPP</b> et <b>QX_REGISTER_CPP</b>.<br>
            Pour éviter ces erreurs de compilation, il est nécessaire d'utiliser les macros suivantes : <b>QX_REGISTER_COMPLEX_CLASS_NAME_HPP</b> et <b>QX_REGISTER_COMPLEX_CLASS_NAME_CPP</b>.<br>
-           Vous trouverez un exemple d'utilisation dans le dossier <i>./test/qxDllSample/dll1/</i> de la distribution de QxOrm avec la classe <i>CPerson</i> définie dans l'espace de nom <i>qx::test</i> :<br>
            <br>
-           * <i><b>QX_REGISTER_COMPLEX_CLASS_NAME_HPP_QX_DLL1(qx::test::CPerson, QObject, 0, qx_test_CPerson)</b></i>
+           Vous trouverez un exemple d'utilisation dans le dossier <i>./test/qxDllSample/dll1/</i> de la distribution de QxOrm avec la classe <i>CPerson</i> définie dans l'espace de nom <i>qx::test</i> :<br>
+           * <i><b>QX_REGISTER_COMPLEX_CLASS_NAME_HPP_QX_DLL1(qx::test::CPerson, QObject, 0, qx_test_CPerson)</b></i><br>
+           <br>
+           Les macros <b>QX_REGISTER_COMPLEX_CLASS_NAME...</b> nécessitent un paramètre supplémentaire (dans l'exemple ci-dessus il s'agit du paramètre <i>qx_test_CPerson</i>) afin de créer une variable globale.<br>
+           Celle-ci est appelée dès le lancement de l'application.<br>
+           La construction de cette instance globale déclare la classe dans le module <i>QxFactory</i> (modèle de conception fabrique ou design pattern factory).<br>
+           Un objet C++ ne pouvant pas se nommer avec des caractères "<i>::</i>", le paramètre supplémentaire de la macro permet de remplacer tous les "<i>::</i>" par des "<i>_</i>".<br>
            </td>
          </tr>
        </tbody>
@@ -1701,7 +1731,7 @@ template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</
     // Si plusieurs utilisateurs lancent l'application en même temps et qu'une mise à jour
     // est nécessaire, le premier fera la mise à jour, et les autres seront en attente
 </span>    DatabaseVersion dbVersion<span class="operator">;</span>
-    session<span class="operator">.</span>fetchByQuery<span class="operator">(</span>qx_query<span class="operator">(</span><span class="string">"WHERE id='MyAppName' FOR UPDATE"</span><span class="operator">),</span> dbVersion<span class="operator">);</span><span class="comment">
+    session<span class="operator">.</span>fetchByQuery<span class="operator">(</span>qx_query<span class="operator">(</span><span class="string">"WHERE name='MyAppName' FOR UPDATE"</span><span class="operator">),</span> dbVersion<span class="operator">);</span><span class="comment">
 
     // Pour les autres utilisateurs, une fois le verrou levé, on vérifie si la mise à jour est toujours nécessaire
 </span><span class="flow">    if</span><span class="operator"> (</span>dbVersion<span class="operator">.</span>version<span class="operator"> &gt;=</span> domainVersion<span class="operator">) {</span><span class="flow"> return</span><span class="operator">; }</span><span class="comment">
@@ -1876,6 +1906,198 @@ template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</
 <pre>QX_REGISTER_TRAIT_GET_SQL_TYPE<span class="operator">(</span>MyClass<span class="operator">,</span><span class="string"> "my_sql_type"</span><span class="operator">)</span></pre>
            </td></tr></tbody></table>
            <br>
+           </td>
+         </tr>
+       </tbody>
+      </table>
+      <br><br>
+      <a name="faq_250"><u><b>Comment utiliser le module <i>QxValidator</i> pour valider automatiquement les données ?</b></u></a><br><br>
+      <table border="0" style="width: 100%" align="center">
+       <col>
+       <col>
+       <tbody>
+         <tr>
+           <td valign="middle" width="30"></td>
+           <td align="justify">
+            Le module <b><a href="../doxygen/html/group___qx_validator.html" target="_blank">QxValidator</a></b> de la bibliothèque <b>QxOrm</b> permet d'ajouter des contraintes sur les propriétés enregistrées dans le contexte QxOrm.<br>
+            Ces contraintes sont définies dans la méthode de mapping : <i>void qx::register_class</i>.<br>
+            Si pour une instance de classe donnée, au moins une contrainte n'est pas respectée, alors l'instance est considérée comme invalide : l'objet ne peut alors pas être sauvegardé en base de données (<i>INSERT</i> ou <i>UPDATE</i>).<br>
+            <br>
+            Il est également possible d'utiliser le module <b>QxValidator</b> pour valider les données au niveau de la couche présentation de l'application : si les données saisies par un utilisateur ne sont pas valides, un message d'erreur peut être signalé, il n'est alors pas nécessaire d'essayer d'enregistrer l'instance courante en base de données.<br>
+            Les règles de validation n'ont pas besoin d'être dupliquées : elles peuvent être utilisées aussi bien par la couche présentation que par la couche d'accès aux données de l'application.<br>
+            <br>
+            Voici la description de quelques classes du module <b>QxValidator</b> :
+            <ul>
+                <li><a href="../doxygen/html/classqx_1_1_ix_validator.html" target="_blank">qx::IxValidator</a> : chaque contrainte définie dans la fonction de mapping <i>void qx::register_class</i> est associée à une interface de type <i>qx::IxValidator</i> ;</li>
+                <li><a href="../doxygen/html/classqx_1_1_ix_validator_x.html" target="_blank">qx::IxValidatorX</a> : pour une classe donnée, la liste des contraintes est associée à une interface de type <i>qx::IxValidatorX</i>. Cette collection peut être parcourue à l'exécution du programme : ça peut être intéressant par exemple pour générer le schéma SQL et prendre en compte les contraintes au niveau de la base de données (voir la Q&R de la FAQ : <a href="./faq.html#faq_230" target="_blank">Comment générer le schéma SQL (création et mise à jour des tables) en fonction des classes persistantes C++ définies dans le contexte QxOrm ?</a>) ;</li>
+                <li><a href="../doxygen/html/classqx_1_1_qx_invalid_value_x.html" target="_blank">qx::QxInvalidValueX</a> : au moment du processus de validation, lorsqu'une instance n'est pas valide, la liste des contraintes non respectées est représentée par une collection de type <i>qx::QxInvalidValueX</i> ;</li>
+                <li><a href="../doxygen/html/classqx_1_1_qx_invalid_value.html" target="_blank">qx::QxInvalidValue</a> : chaque élément de cette collection est de type <i>qx::QxInvalidValue</i> et contient un message d'erreur (description expliquant pourquoi l'instance est invalide).</li>
+            </ul>
+            Le module <b>QxValidator</b> gère automatiquement la notion d'héritage de classe : si des contraintes sont définies au niveau de la classe de base, alors elles seront automatiquement vérifiées pour chaque validation d'une classe dérivée.<br>
+            <br>
+            Voici un exemple d'utilisation du module <b>QxValidator</b> avec une classe '<i>person</i>' :<br>
+            <br>
+            * fichier '<i>person.h</i>' :<br>
+            <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="pre">#ifndef _CLASS_PERSON_H_
+#define _CLASS_PERSON_H_
+</span><span class="keyword"> 
+class</span> person<span class="operator">
+{</span><span class="keyword">
+
+public</span><span class="operator">:</span><span class="keyword">
+
+   enum</span> sex<span class="operator"> {</span> male<span class="operator">,</span> female<span class="operator">,</span> unknown<span class="operator"> };</span><span class="type">
+
+   long</span>        _id<span class="operator">;</span>
+   QString     _firstName<span class="operator">;</span>
+   QString     _lastName<span class="operator">;</span>
+   QDateTime   _birthDate<span class="operator">;</span>
+   sex         _sex<span class="operator">;</span>
+
+   person<span class="operator">() :</span> _id<span class="operator">(</span><span class="int">0</span><span class="operator">),</span> _sex<span class="operator">(</span>unknown<span class="operator">) { ; }</span>
+   person<span class="operator">(</span><span class="type">long</span> id<span class="operator">) :</span> _id<span class="operator">(</span>id<span class="operator">),</span> _sex<span class="operator">(</span>unknown<span class="operator">) { ; }</span><span class="keyword">
+   virtual</span><span class="operator"> ~</span>person<span class="operator">() { ; }</span><span class="keyword">
+
+private</span><span class="operator">:</span><span class="type">
+
+   void</span> isValid<span class="operator">(</span>qx<span class="operator">::</span>QxInvalidValueX<span class="operator"> &amp;</span> invalidValues<span class="operator">);
+
+};</span>
+
+QX_REGISTER_HPP_MY_EXE<span class="operator">(</span>person<span class="operator">,</span> qx<span class="operator">::</span>trait<span class="operator">::</span>no_base_class_defined<span class="operator">,</span><span class="int"> 0</span><span class="operator">)</span><span class="pre">
+
+#endif // _CLASS_PERSON_H_</span></pre>
+            </td></tr></tbody></table>
+            <br>
+            * fichier '<i>person.cpp</i>' :<br>
+            <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="pre">#include "../include/precompiled.h"
+
+#include "../include/person.h"
+#include "../include/global_validator.h"
+
+#include &lt;QxMemLeak.h&gt;
+</span>
+QX_REGISTER_CPP_MY_EXE<span class="operator">(</span>person<span class="operator">)</span><span class="keyword">
+
+namespace</span> qx<span class="operator"> {</span><span class="keyword">
+template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</span> register_class<span class="operator">(</span>QxClass<span class="operator">&lt;</span>person<span class="operator">&gt; &amp;</span> t<span class="operator">)
+{</span>
+   t<span class="operator">.</span>id<span class="operator">(&amp;</span> person<span class="operator">::</span>_id<span class="operator">,</span><span class="string"> "id"</span><span class="operator">);</span>
+
+   t<span class="operator">.</span>data<span class="operator">(&amp;</span> person<span class="operator">::</span>_firstName<span class="operator">,</span><span class="string"> "firstName"</span><span class="operator">);</span>
+   t<span class="operator">.</span>data<span class="operator">(&amp;</span> person<span class="operator">::</span>_lastName<span class="operator">,</span><span class="string"> "lastName"</span><span class="operator">);</span>
+   t<span class="operator">.</span>data<span class="operator">(&amp;</span> person<span class="operator">::</span>_birthDate<span class="operator">,</span><span class="string"> "birthDate"</span><span class="operator">);</span>
+   t<span class="operator">.</span>data<span class="operator">(&amp;</span> person<span class="operator">::</span>_sex<span class="operator">,</span><span class="string"> "sex"</span><span class="operator">);</span>
+
+   QxValidatorX<span class="operator">&lt;</span>person<span class="operator">&gt; *</span> pAllValidator<span class="operator"> =</span> t<span class="operator">.</span>getAllValidator<span class="operator">();</span>
+   pAllValidator<span class="operator">-&gt;</span>add_NotEmpty<span class="operator">(</span><span class="string">"firstName"</span><span class="operator">);</span>
+   pAllValidator<span class="operator">-&gt;</span>add_NotEmpty<span class="operator">(</span><span class="string">"lastName"</span><span class="operator">,</span><span class="string"> "a person must have a lastname"</span><span class="operator">);</span>
+   pAllValidator<span class="operator">-&gt;</span>add_CustomValidator<span class="operator">(&amp;</span> person<span class="operator">::</span>isValid<span class="operator">);</span>
+   pAllValidator<span class="operator">-&gt;</span>add_CustomValidator_QVariant<span class="operator">(&amp;</span> validateFirstName<span class="operator">,</span><span class="string"> "firstName"</span><span class="operator">);</span>
+   pAllValidator<span class="operator">-&gt;</span>add_CustomValidator_DataType<span class="operator">&lt;</span>QDateTime<span class="operator">&gt;(&amp;</span> validateDateTime<span class="operator">,</span><span class="string"> "birthDate"</span><span class="operator">);
+}}</span><span class="type">
+
+void</span> person<span class="operator">::</span>isValid<span class="operator">(</span>qx<span class="operator">::</span>QxInvalidValueX<span class="operator"> &amp;</span> invalidValues<span class="operator">)
+{</span><span class="comment">
+   // Cette méthode est appelée automatiquement par le module 'QxValidator' :
+   // - avant d'insérer ou mettre à jour une instance de type 'person' par les fonctions du namespace 'qx::dao' ;
+   // - en utilisant la fonction 'qx::validate()' avec pour paramètre une instance de type 'person'.
+
+   // L'enregistrement de la méthode 'person::isValid()' est effectué dans la fonction de mapping :
+   // pAllValidator-&gt;add_CustomValidator(&amp; person::isValid);
+
+   // Dans cette méthode, il est possible de vérifier n'importe quelle valeur de l'instance courante
+   // Si une propriété est non valide, il suffit d'insérer un élément dans la collection 'invalidValues'
+
+   // Remarque : cette méthode est déclarée 'private' pour forcer l'utilisateur à utiliser la fonction 'qx::validate()'
+   // Mais ce n'est pas une obligation : cette méthode peut être déclarée 'public' ou 'protected'
+
+   // Par exemple, si on souhaite vérifier la propriété '_sex' d'une personne :
+</span><span class="flow">   if</span><span class="operator"> ((</span>_sex<span class="operator"> !=</span> male<span class="operator">) &amp;&amp; (</span>_sex<span class="operator"> !=</span> female<span class="operator">))
+   {</span> invalidValues<span class="operator">.</span>insert<span class="operator">(</span><span class="string">"le sexe de la personne doit être défini : masculin ou féminin"</span><span class="operator">); }
+}</span></pre>
+            </td></tr></tbody></table>
+            <br>
+            * fichier '<i>global_validator.h</i>' :<br>
+            <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="comment">// Les fonctions suivantes ('validateFirstName()' et 'validateDateTime()') sont globales (non liées à une classe)
+// Elles peuvent ainsi être utilisées par plusieurs classes pour valider une propriété (par exemple : valider la saisie d'une adresse IP).
+// Ces fonctions seront appelées automatiquement par le module 'QxValidator' :
+// - avant d'insérer ou mettre à jour une instance de classe par les fonctions du namespace 'qx::dao' ;
+// - en utilisant la fonction 'qx::validate()'.
+</span><span class="type"> 
+void</span> validateFirstName<span class="operator">(</span><span class="keyword">const</span> QVariant<span class="operator"> &amp;</span> value<span class="operator">,</span><span class="keyword"> const</span> qx<span class="operator">::</span>IxValidator<span class="operator"> *</span> validator<span class="operator">,</span> qx<span class="operator">::</span>QxInvalidValueX<span class="operator"> &amp;</span> invalidValues<span class="operator">)
+{</span><span class="comment">
+   // Ici, on peut tester la valeur d'une propriété (convertie en type QVariant)
+   // Si la valeur est invalide, il suffit d'insérer un message à la collection 'invalidValues'
+
+   // Par exemple, si la valeur ne doit jamais être égale à "admin" :
+</span><span class="flow">   if</span><span class="operator"> (</span>value<span class="operator">.</span>toString<span class="operator">() ==</span><span class="string"> "admin"</span><span class="operator">)
+   {</span> invalidValues<span class="operator">.</span>insert<span class="operator">(</span><span class="string">"la valeur ne peut pas être égale à 'admin'"</span><span class="operator">); }
+}</span><span class="type">
+
+void</span> validateDateTime<span class="operator">(</span><span class="keyword">const</span> QDateTime<span class="operator"> &amp;</span> value<span class="operator">,</span><span class="keyword"> const</span> qx<span class="operator">::</span>IxValidator<span class="operator"> *</span> validator<span class="operator">,</span> qx<span class="operator">::</span>QxInvalidValueX<span class="operator"> &amp;</span> invalidValues<span class="operator">)
+{</span><span class="comment">
+   // Ici, on peut tester la valeur d'une propriété (en conservant son vrai type, ici il s'agit de tester une date-heure de type 'QDateTime')
+   // Si la valeur est invalide, il suffit d'insérer un message à la collection 'invalidValues'
+
+   // Par exemple, si la date-heure doit forcément être renseignée :
+</span><span class="flow">   if</span><span class="operator"> (!</span> value<span class="operator">.</span>isValid<span class="operator">())
+   {</span> invalidValues<span class="operator">.</span>insert<span class="operator">(</span><span class="string">"la date-heure doit être renseignée et doit être valide"</span><span class="operator">); }
+}</span></pre>
+            </td></tr></tbody></table>
+            <br>
+            * fichier '<i>main.cpp</i>' :<br>
+            <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre>person personValidate<span class="operator">;</span>
+personValidate<span class="operator">.</span>_lastName<span class="operator"> =</span><span class="string"> "admin"</span><span class="operator">;</span>
+qx<span class="operator">::</span>QxInvalidValueX invalidValues<span class="operator"> =</span> qx<span class="operator">::</span>validate<span class="operator">(</span>personValidate<span class="operator">);</span>
+QString sInvalidValues<span class="operator"> =</span> invalidValues<span class="operator">.</span>text<span class="operator">();</span>
+qDebug<span class="operator">(</span><span class="string">"[QxOrm] test 'QxValidator' module :\n%s"</span><span class="operator">,</span> qPrintable<span class="operator">(</span>sInvalidValues<span class="operator">));</span></pre>
+            </td></tr></tbody></table>
+            <br>
+A l'exécution de ce bout de code, l'instance '<i>personValidate</i>' est non valide : la collection '<i>invalidValues</i>' contient quatre éléments :<br>
+- "<i>la valeur de la propriété 'firstName' ne peut pas être vide</i>" ;<br>
+- "<i>le sexe de la personne doit être défini : masculin ou féminin</i>" ;<br>
+- "<i>la valeur ne peut pas être égale à 'admin'</i>" ;<br>
+- "<i>la date-heure doit être renseignée et doit être valide</i>".<br>
+<br>
+Le module <b>QxValidator</b> fournit plusieurs validateurs pour effectuer des vérifications basiques :
+<ul>
+    <li><i>add_NotNull()</i> : vérifie que la valeur n'est pas nulle ;</li>
+    <li><i>add_NotEmpty()</i> : vérifie que la chaîne de caractères n'est pas vide ;</li>
+    <li><i>add_MinValue()</i> : vérifie que la valeur numérique n'est pas inférieure au paramètre ;</li>
+    <li><i>add_MaxValue()</i> : vérifie que la valeur numérique n'est pas supérieure au paramètre ;</li>
+    <li><i>add_Range()</i> : vérifie que la valeur numérique est comprise entre les deux paramètres ;</li>
+    <li><i>add_MinDecimal()</i> : vérifie que la valeur décimale n'est pas inférieure au paramètre ;</li>
+    <li><i>add_MaxDecimal()</i> : vérifie que la valeur décimale n'est pas supérieure au paramètre ;</li>
+    <li><i>add_RangeDecimal()</i> : vérifie que la valeur décimale est comprise entre les deux paramètres ;</li>
+    <li><i>add_MinLength()</i> : vérifie que la chaîne de caractères a une taille minimale ;</li>
+    <li><i>add_MaxLength()</i> : vérifie que la chaîne de caractères ne dépasse pas un certain nombre de caractères ;</li>
+    <li><i>add_Size()</i> : vérifie que la taille de la chaîne de caractères est comprise entre les deux paramètres ;</li>
+    <li><i>add_DatePast()</i> : vérifie que la date-heure est dans le passé ;</li>
+    <li><i>add_DateFuture()</i> : vérifie que la date-heure est dans le futur ;</li>
+    <li><i>add_RegExp()</i> : vérifie que la chaîne de caractères est compatible avec l'expression régulière passée en paramètre ;</li>
+    <li><i>add_EMail()</i> : vérifie que la chaîne de caractères correspond à un e-mail.</li>
+</ul>
+Comme dans l'exemple de la classe '<i>person</i>', il est possible de définir également des validateurs personnalisés : ce sont des fonctions ou méthodes de classe qui seront appelées automatiquement par le module <b>QxValidator</b> pour valider une propriété ou une instance de classe.<br>
+Il existe trois types de validateurs personnalisés :
+<ul>
+    <li><i>add_CustomValidator()</i> : méthode de classe, la signature de la méthode doit être "<i>void my_class::my_method(qx::QxInvalidValueX &)</i>" ;</li>
+    <li><i>add_CustomValidator_QVariant()</i> : fonction globale avec type <i>QVariant</i> (propriété convertie en <i>QVariant</i>), la signature de la fonction doit être "<i>void my_validator(const QVariant &, const qx::IxValidator *, qx::QxInvalidValueX &)</i>" ;</li>
+    <li><i>add_CustomValidator_DataType()</i> : fonction globale avec le type réel de la propriété, la signature de la fonction doit être "<i>void my_validator(const T &, const qx::IxValidator *, qx::QxInvalidValueX &)</i>" ;</li>
+</ul>
+<b>Remarque :</b> à chaque validateur peut être associé un groupe (paramètre optionnel pour chaque méthode <i>add_XXX()</i> de la classe <i>qx::IxValidatorX</i>).<br>
+Il est ainsi possible de créer des groupes de validation suivant le contexte d'exécution : par exemple, valider la saisie d'une personne sur une IHM A ne nécessite peut-être pas les mêmes vérifications que valider une personne sur une IHM B.<br>
+Pour exécuter la validation d'une instance pour un groupe donné (par exemple "<i>myGroup</i>"), il faut appeler la fonction suivante : "<i>qx::QxInvalidValueX invalidValues = qx::validate(personValidate, "myGroup");</i>".<br>
+<br>
+<b>Autre remarque :</b> le module <b>QxValidator</b> définit des messages par défaut lorsqu'une contrainte n'est pas vérifiée.<br>
+Il est possible de redéfinir ces messages par défaut en modifiant la collection suivante : "<i>QHash<QString, QString> * lstMessage = QxClassX::getAllValidatorMessage();</i>".<br>
+Par exemple : "<i>lstMessage->insert("min_value", "la valeur '%NAME%' doit être inférieure ou égale à '%CONSTRAINT%'");</i>".<br>
+Les champs <i>%NAME%</i> et <i>%CONSTRAINT%</i> seront automatiquement remplacés par les valeurs correspondantes.<br>
+Pour modifier le message pour un validateur donné (et non de manière globale), il faut utiliser le paramètre optionnel disponible pour les méthodes <i>add_XXX()</i> de la classe <i>qx::IxValidatorX</i>.<br>
            </td>
          </tr>
        </tbody>

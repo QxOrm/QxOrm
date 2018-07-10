@@ -27,17 +27,51 @@
 
 #include <QxDao/QxSqlGenerator/QxSqlGenerator_MySQL.h>
 
+#include <QxRegister/QxClassX.h>
+
 #include <QxMemLeak/mem_leak.h>
 
 namespace qx {
 namespace dao {
 namespace detail {
 
-QxSqlGenerator_MySQL::QxSqlGenerator_MySQL() : QxSqlGenerator_Standard() { ; }
+QxSqlGenerator_MySQL::QxSqlGenerator_MySQL() : QxSqlGenerator_Standard() { this->initSqlTypeByClassName(); }
 
 QxSqlGenerator_MySQL::~QxSqlGenerator_MySQL() { ; }
 
 QString QxSqlGenerator_MySQL::getAutoIncrement() const { return "AUTO_INCREMENT"; }
+
+void QxSqlGenerator_MySQL::initSqlTypeByClassName() const
+{
+   QHash<QString, QString> * lstSqlType = qx::QxClassX::getAllSqlTypeByClassName();
+   if (! lstSqlType) { qAssert(false); return; }
+
+   lstSqlType->insert("bool", "SMALLINT");
+   lstSqlType->insert("qx_bool", "SMALLINT");
+   lstSqlType->insert("short", "SMALLINT");
+   lstSqlType->insert("int", "INTEGER");
+   lstSqlType->insert("long", "INTEGER");
+   lstSqlType->insert("long long", "BIGINT");
+   lstSqlType->insert("float", "FLOAT");
+   lstSqlType->insert("double", "DOUBLE");
+   lstSqlType->insert("long double", "DOUBLE");
+   lstSqlType->insert("unsigned short", "SMALLINT");
+   lstSqlType->insert("unsigned int", "INTEGER");
+   lstSqlType->insert("unsigned long", "INTEGER");
+   lstSqlType->insert("unsigned long long", "BIGINT");
+   lstSqlType->insert("std::string", "TEXT");
+   lstSqlType->insert("std::wstring", "TEXT");
+   lstSqlType->insert("QString", "TEXT");
+   lstSqlType->insert("QVariant", "TEXT");
+   lstSqlType->insert("QUuid", "TEXT");
+   lstSqlType->insert("QDate", "DATE");
+   lstSqlType->insert("QTime", "TIME");
+   lstSqlType->insert("QDateTime", "TIMESTAMP");
+   lstSqlType->insert("QByteArray", "LONGBLOB");
+   lstSqlType->insert("qx::QxDateNeutral", "TEXT");
+   lstSqlType->insert("qx::QxTimeNeutral", "TEXT");
+   lstSqlType->insert("qx::QxDateTimeNeutral", "TEXT");
+}
 
 } // namespace detail
 } // namespace dao

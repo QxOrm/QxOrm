@@ -158,7 +158,11 @@ struct QxDao_Update_WithRelation
 {
 
    static inline QSqlError update(const QString & relation, const qx::QxSqlQuery & query, T & t, QSqlDatabase * pDatabase)
-   { return QxDao_Update_WithRelation<T>::update((relation.isEmpty() ? QStringList() : (QStringList() << relation)), query, t, pDatabase); }
+   {
+      QStringList lst;
+      if (! relation.isEmpty()) { lst = relation.split("|"); }
+      return QxDao_Update_WithRelation<T>::update(lst, query, t, pDatabase);
+   }
 
    static inline QSqlError update(const QStringList & relation, const qx::QxSqlQuery & query, T & t, QSqlDatabase * pDatabase)
    {

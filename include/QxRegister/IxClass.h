@@ -45,6 +45,8 @@
 
 #include <QxDao/QxSoftDelete.h>
 
+#include <QxValidator/IxValidatorX.h>
+
 namespace qx {
 
 /*!
@@ -66,6 +68,7 @@ protected:
    bool m_bFinalClass;                                //!< Class without base class (for example, qx::trait::no_base_class_defined and QObject)
    qx::dao::strategy::inheritance m_eDaoStrategy;     //!< Dao class strategy to access data member
    qx::QxSoftDelete m_oSoftDelete;                    //!< Soft delete (or logical delete) behavior
+   IxValidatorX_ptr m_pAllValidator;                  //!< List of validator associated to the class
 
    QByteArray m_byteName;                             //!< Optimization to retrieve name under "const char *" format
    const char * m_pName;                              //!< Optimization to retrieve name under "const char *" format
@@ -97,6 +100,7 @@ public:
    inline void setSoftDelete(const qx::QxSoftDelete & oSoftDelete)            { m_oSoftDelete = oSoftDelete; if (m_oSoftDelete.getTableName().isEmpty()) { m_oSoftDelete.setTableName(m_sName); } }
 
    virtual IxClass * getBaseClass() const = 0;
+   virtual IxValidatorX * getAllValidator();
 
    bool isKindOf(const QString & sClassName) const;
    QString dumpClass() const;

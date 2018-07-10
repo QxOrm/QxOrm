@@ -1,3 +1,10 @@
+Changes in version 1.2.2:
+- New module to provide a validation engine : QxValidator module
+- For more details about QxValidator module, goto the FAQ of QxOrm library : 'How to use QxValidator module to validate automatically an instance ?'
+- Fix last insert ID with PostgreSQL using 'RETURNING' keyword : fetch inserted ID instead of OID
+- Improve SQL generator providing the good SQL type for all databases
+- Add support for special database keywords using '[', ']' and '"' characters
+
 Changes in version 1.2.1:
 - Improve 'qx::QxSqlQuery' class : new engine to build queries without writing SQL, for more details, see the FAQ 'How to build a query without writing SQL with the class qx::QxSqlQuery ?'
 - Improve 'qx::QxSession' class : provide persistent methods (CRUD) without using 'qx::dao::xxx' functions, for more details, see the FAQ 'How to use a session (qx::QxSession class) to manage automatically database transactions (using C++ RAII) ?'

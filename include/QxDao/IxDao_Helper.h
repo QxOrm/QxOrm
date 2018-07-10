@@ -53,9 +53,19 @@
 #include <QxDao/QxSqlQuery.h>
 #include <QxDao/IxSqlRelation.h>
 
+#include <QxDao/QxSqlGenerator/IxSqlGenerator.h>
+
 #include <QxCollection/QxCollection.h>
 
 #include <QxDataMember/IxDataMemberX.h>
+
+#include <QxValidator/QxInvalidValueX.h>
+#include <QxValidator/QxValidatorError.h>
+
+namespace qx {
+template <class T>
+QxInvalidValueX validate(T & t, const QString & group);
+} // namespace qx
 
 namespace qx {
 namespace dao {
@@ -81,12 +91,15 @@ protected:
    bool           m_bTraceQuery;          //!< Trace sql query
    bool           m_bTraceRecord;         //!< Trace sql record
    bool           m_bCartesianProduct;    //!< Recordset can return cartesian product => same id in multiple records
+   bool           m_bValidatorThrowable;  //!< An exception of type qx::validator_error is thrown when invalid values are detected inserting or updating an element into database
    QStringList    m_lstColumns;           //!< List of columns to execute sql query (if empty => all columns)
 
    qx::IxSqlQueryBuilder_ptr  m_pQueryBuilder;     //!< Sql query builder
    qx::IxDataMemberX *        m_pDataMemberX;      //!< Collection of data member
    qx::IxDataMember *         m_pDataId;           //!< Data member id
    qx::QxSqlQuery             m_qxQuery;           //!< Query sql with place-holder
+   IxSqlGenerator *           m_pSqlGenerator;     //!< SQL generator to build SQL query specific for each database
+   qx::QxInvalidValueX        m_lstInvalidValues;  //!< List of invalid values using validator engine
 
    typedef qx::QxCollection<QString, qx::IxSqlRelation *> type_lst_relation;
    typedef boost::scoped_ptr< type_lst_relation > type_lst_relation_ptr;
@@ -121,6 +134,8 @@ public:
    bool getCartesianProduct() const;
    QStringList getSqlColumns() const;
    void setSqlColumns(const QStringList & lst);
+   IxSqlGenerator * getSqlGenerator() const;
+   void addInvalidValues(const qx::QxInvalidValueX & lst);
 
    QSqlError errFailed();
    QSqlError errEmpty();
@@ -147,6 +162,14 @@ public:
    {
       if (m_pDataId && m_pDataId->getAutoIncrement() && this->hasFeature(QSqlDriver::LastInsertId))
       { m_pDataId->fromVariant((& u), m_query.lastInsertId()); }
+   }
+
+   template <class U>
+   inline bool validateInstance(U & u)
+   {
+      qx::QxInvalidValueX invalidValues = qx::validate(u, "");
+      this->addInvalidValues(invalidValues);
+      return (invalidValues.count() <= 0);
    }
 
 protected:

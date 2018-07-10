@@ -43,10 +43,13 @@ struct QxDao_DeleteById_Generic
       if (! dao.getDataId() || sql.isEmpty()) { return dao.errEmpty(); }
       dao.query().prepare(sql);
 
+      IxSqlGenerator * pSqlGenerator = dao.getSqlGenerator();
+      if (pSqlGenerator) { pSqlGenerator->onBeforeDelete((& dao), (& t)); }
       qx::dao::on_before_delete<T>((& t), (& dao));
       qx::dao::detail::QxSqlQueryHelper_DeleteById<T>::resolveInput(t, dao.query(), dao.builder());
       if (! dao.query().exec()) { return dao.errFailed(); }
       qx::dao::on_after_delete<T>((& t), (& dao));
+      if (pSqlGenerator) { pSqlGenerator->onAfterDelete((& dao), (& t)); }
 
       return dao.error();
    }
@@ -122,10 +125,13 @@ private:
       static bool deleteById(U & item, qx::dao::detail::QxDao_Helper_Container<T> & dao)
       {
          if (! dao.isValidPrimaryKey(item)) { dao.errInvalidId(); return false; }
+         IxSqlGenerator * pSqlGenerator = dao.getSqlGenerator();
+         if (pSqlGenerator) { pSqlGenerator->onBeforeDelete((& dao), (& item)); }
          qx::dao::on_before_delete<U>((& item), (& dao));
          qx::dao::detail::QxSqlQueryHelper_DeleteById<U>::resolveInput(item, dao.query(), dao.builder());
          if (! dao.query().exec()) { dao.errFailed(); return false; }
          qx::dao::on_after_delete<U>((& item), (& dao));
+         if (pSqlGenerator) { pSqlGenerator->onAfterDelete((& dao), (& item)); }
 
          return dao.isValid();
       }

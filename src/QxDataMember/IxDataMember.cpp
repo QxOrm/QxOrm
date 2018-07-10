@@ -26,6 +26,7 @@
 #include <QxPrecompiled.h>
 
 #include <QxDataMember/IxDataMember.h>
+#include <QxDataMember/IxDataMemberX.h>
 
 #include <QxDao/QxSqlDatabase.h>
 
@@ -34,6 +35,9 @@
 #include <QxCommon/QxStringCvt_Impl.h>
 
 #include <QxRegister/QxRegister.h>
+#include <QxRegister/IxClass.h>
+
+#include <QxValidator/IxValidatorX.h>
 
 #include <QxMemLeak/mem_leak.h>
 
@@ -67,6 +71,62 @@ void IxDataMember::serialize(Archive & ar, const unsigned int version)
    ar & boost::serialization::make_nvp("isPrimaryKey", m_bIsPrimaryKey);
 }
 
+void IxDataMember::setMinValue(long lMinValue, const QString & sMessage /* = QString() */)
+{
+   m_vMinValue = (qlonglong)lMinValue;
+   IxClass * pClass = (m_pParent ? m_pParent->getClass() : NULL); if (! pClass) { return; }
+   IxValidatorX * pAllValidator = pClass->getAllValidator(); if (! pAllValidator) { return; }
+   pAllValidator->add_MinValue(m_sKey, lMinValue, sMessage);
+}
+
+void IxDataMember::setMinValue(double dMinValue, const QString & sMessage /* = QString() */)
+{
+   m_vMinValue = dMinValue;
+   IxClass * pClass = (m_pParent ? m_pParent->getClass() : NULL); if (! pClass) { return; }
+   IxValidatorX * pAllValidator = pClass->getAllValidator(); if (! pAllValidator) { return; }
+   pAllValidator->add_MinDecimal(m_sKey, dMinValue, sMessage);
+}
+
+void IxDataMember::setMaxValue(long lMaxValue, const QString & sMessage /* = QString() */)
+{
+   m_vMaxValue = (qlonglong)lMaxValue;
+   IxClass * pClass = (m_pParent ? m_pParent->getClass() : NULL); if (! pClass) { return; }
+   IxValidatorX * pAllValidator = pClass->getAllValidator(); if (! pAllValidator) { return; }
+   pAllValidator->add_MaxValue(m_sKey, lMaxValue, sMessage);
+}
+
+void IxDataMember::setMaxValue(double dMaxValue, const QString & sMessage /* = QString() */)
+{
+   m_vMaxValue = dMaxValue;
+   IxClass * pClass = (m_pParent ? m_pParent->getClass() : NULL); if (! pClass) { return; }
+   IxValidatorX * pAllValidator = pClass->getAllValidator(); if (! pAllValidator) { return; }
+   pAllValidator->add_MaxDecimal(m_sKey, dMaxValue, sMessage);
+}
+
+void IxDataMember::setMinLength(int iMinLength, const QString & sMessage /* = QString() */)
+{
+   m_iMinLength = iMinLength;
+   IxClass * pClass = (m_pParent ? m_pParent->getClass() : NULL); if (! pClass) { return; }
+   IxValidatorX * pAllValidator = pClass->getAllValidator(); if (! pAllValidator) { return; }
+   pAllValidator->add_MinLength(m_sKey, (long)m_iMinLength, sMessage);
+}
+
+void IxDataMember::setMaxLength(int iMaxLength, const QString & sMessage /* = QString() */)
+{
+   m_iMaxLength = iMaxLength;
+   IxClass * pClass = (m_pParent ? m_pParent->getClass() : NULL); if (! pClass) { return; }
+   IxValidatorX * pAllValidator = pClass->getAllValidator(); if (! pAllValidator) { return; }
+   pAllValidator->add_MaxLength(m_sKey, (long)m_iMaxLength, sMessage);
+}
+
+void IxDataMember::setNotNull(bool bNotNull, const QString & sMessage /* = QString() */)
+{
+   m_bNotNull = bNotNull;
+   IxClass * pClass = (m_pParent ? m_pParent->getClass() : NULL); if (! pClass) { return; }
+   IxValidatorX * pAllValidator = pClass->getAllValidator(); if (! pAllValidator) { return; }
+   if (m_bNotNull) { pAllValidator->add_NotNull(m_sKey, sMessage); }
+}
+
 QString IxDataMember::getName(int iIndex, const QString & sOtherName /* = QString() */) const
 {
    if (! sOtherName.isEmpty())
@@ -85,9 +145,16 @@ QString IxDataMember::getSqlAlias(const QString & sTable /* = QString() */, bool
    // cf. <http://dev.mysql.com/doc/refman/5.0/en/problems-with-alias.html>
    if (bClauseWhere && ! sTable.isEmpty()) { return (sTable + "." + getName(iIndexName)); }
 
-   if (! m_sSqlAlias.isEmpty()) { return m_sSqlAlias; }
-   if (! sTable.isEmpty()) { return (sTable + "_" + getName(iIndexName) + "_0"); }
-   return (m_sNameParent + "_" + getName(iIndexName) + "_0");
+   QString sSqlAlias = m_sSqlAlias;
+   if (! sSqlAlias.isEmpty()) { return sSqlAlias; }
+   if (! sTable.isEmpty()) { sSqlAlias = (sTable + "_" + getName(iIndexName) + "_0"); }
+   else { sSqlAlias = (m_sNameParent + "_" + getName(iIndexName) + "_0"); }
+
+   // Special database keywords using '[', ']' or '"' characters
+   sSqlAlias.replace("[", "");
+   sSqlAlias.replace("]", "");
+   sSqlAlias.replace("\"", "");
+   return sSqlAlias;
 }
 
 QString IxDataMember::getSqlType(int iIndexName /* = -1 */) const
@@ -124,12 +191,18 @@ QString IxDataMember::getSqlPlaceHolder(const QString & sAppend /* = QString() *
       return sResult;
    }
 
+   // Special database keywords using '[', ']' or '"' characters
+   QString sSqlPlaceHolder = getName(iIndexName, sOtherName) + sAppend;
+   sSqlPlaceHolder.replace("[", "");
+   sSqlPlaceHolder.replace("]", "");
+   sSqlPlaceHolder.replace("\"", "");
+
    switch (QxSqlDatabase::getSingleton()->getSqlPlaceHolderStyle())
    {
-      case QxSqlDatabase::ph_style_question_mark:  sResult = "?";                                                 break;
-      case QxSqlDatabase::ph_style_2_point_name:   sResult = ":" + getName(iIndexName, sOtherName) + sAppend;     break;
-      case QxSqlDatabase::ph_style_at_name:        sResult = "@" + getName(iIndexName, sOtherName) + sAppend;     break;
-      default:                                     sResult = ":" + getName(iIndexName, sOtherName) + sAppend;     break;
+      case QxSqlDatabase::ph_style_question_mark:  sResult = "?";                      break;
+      case QxSqlDatabase::ph_style_2_point_name:   sResult = ":" + sSqlPlaceHolder;    break;
+      case QxSqlDatabase::ph_style_at_name:        sResult = "@" + sSqlPlaceHolder;    break;
+      default:                                     sResult = ":" + sSqlPlaceHolder;    break;
    }
 
    return sResult;

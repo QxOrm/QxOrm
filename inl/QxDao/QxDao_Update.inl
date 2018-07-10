@@ -36,6 +36,7 @@ struct QxDao_Update_Generic
       qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "update");
       if (! dao.isValid()) { return dao.error(); }
       if (! dao.isValidPrimaryKey(t)) { return dao.errInvalidId(); }
+      if (! dao.validateInstance(t)) { return dao.error(); }
 
       QString sql = dao.builder().update(columns).getSqlQuery();
       if (! dao.getDataId() || sql.isEmpty()) { return dao.errEmpty(); }
@@ -43,11 +44,14 @@ struct QxDao_Update_Generic
       if (! pDatabase) { dao.transaction(); }
       dao.query().prepare(sql);
 
+      IxSqlGenerator * pSqlGenerator = dao.getSqlGenerator();
+      if (pSqlGenerator) { pSqlGenerator->onBeforeUpdate((& dao), (& t)); }
       qx::dao::on_before_update<T>((& t), (& dao));
       qx::dao::detail::QxSqlQueryHelper_Update<T>::resolveInput(t, dao.query(), dao.builder(), columns);
       if (! query.isEmpty()) { query.resolve(dao.query()); }
       if (! dao.query().exec()) { return dao.errFailed(); }
       qx::dao::on_after_update<T>((& t), (& dao));
+      if (pSqlGenerator) { pSqlGenerator->onAfterUpdate((& dao), (& t)); }
 
       return dao.error();
    }
@@ -63,6 +67,7 @@ struct QxDao_Update_Container
       if (qx::trait::generic_container<T>::size(t) <= 0) { return QSqlError(); }
       qx::dao::detail::QxDao_Helper_Container<T> dao(t, pDatabase, "update");
       if (! dao.isValid()) { return dao.error(); }
+      if (! dao.validateInstance(t)) { return dao.error(); }
 
       QString sql = dao.builder().update(columns).getSqlQuery();
       if (! dao.getDataId() || sql.isEmpty()) { return dao.errEmpty(); }
@@ -129,11 +134,14 @@ private:
       {
          QStringList columns = dao.getSqlColumns();
          if (! dao.isValidPrimaryKey(item)) { dao.errInvalidId(); return false; }
+         IxSqlGenerator * pSqlGenerator = dao.getSqlGenerator();
+         if (pSqlGenerator) { pSqlGenerator->onBeforeUpdate((& dao), (& item)); }
          qx::dao::on_before_update<U>((& item), (& dao));
          qx::dao::detail::QxSqlQueryHelper_Update<U>::resolveInput(item, dao.query(), dao.builder(), columns);
          if (! dao.qxQuery().isEmpty()) { dao.qxQuery().resolve(dao.query()); }
          if (! dao.query().exec()) { dao.errFailed(); return false; }
          qx::dao::on_after_update<U>((& item), (& dao));
+         if (pSqlGenerator) { pSqlGenerator->onAfterUpdate((& dao), (& item)); }
 
          return dao.isValid();
       }

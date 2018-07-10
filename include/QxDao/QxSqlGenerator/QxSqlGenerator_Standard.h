@@ -62,6 +62,12 @@ public:
    virtual QString getLimit(const QxSqlLimit * pLimit) const;
    virtual void resolveLimit(QSqlQuery & query, const QxSqlLimit * pLimit) const;
    virtual void postProcess(QString & sql, const QxSqlLimit * pLimit) const;
+   virtual void onBeforeInsert(IxDao_Helper * pDaoHelper, void * pOwner) const;
+   virtual void onAfterInsert(IxDao_Helper * pDaoHelper, void * pOwner) const;
+   virtual void onBeforeUpdate(IxDao_Helper * pDaoHelper, void * pOwner) const;
+   virtual void onAfterUpdate(IxDao_Helper * pDaoHelper, void * pOwner) const;
+   virtual void onBeforeDelete(IxDao_Helper * pDaoHelper, void * pOwner) const;
+   virtual void onAfterDelete(IxDao_Helper * pDaoHelper, void * pOwner) const;
 
 };
 

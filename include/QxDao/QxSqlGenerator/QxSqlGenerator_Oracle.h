@@ -59,6 +59,10 @@ public:
    virtual void resolveLimit(QSqlQuery & query, const QxSqlLimit * pLimit) const;
    virtual void postProcess(QString & sql, const QxSqlLimit * pLimit) const;
 
+private:
+
+   void initSqlTypeByClassName() const;
+
 };
 
 typedef boost::shared_ptr<QxSqlGenerator_Oracle> QxSqlGenerator_Oracle_ptr;

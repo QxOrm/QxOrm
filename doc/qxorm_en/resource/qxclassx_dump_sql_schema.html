@@ -90,10 +90,13 @@
       // Create extra-table from relations (for example, many-to-many relation needs an extra-table)
 </span><span class="flow">      for</span><span class="operator"> (</span><span class="type">long</span> l<span class="operator"> =</span><span class="int"> 0</span><span class="operator">; (</span>pDataMemberX<span class="operator"> &amp;&amp; (</span>l<span class="operator"> &lt;</span> pDataMemberX<span class="operator">-&gt;</span>count_WithDaoStrategy<span class="operator">()));</span> l<span class="operator">++)
       {</span>
-         IxDataMember<span class="operator"> *</span> p<span class="operator"> =</span> pDataMemberX<span class="operator">-&gt;</span>get_WithDaoStrategy<span class="operator">(</span>l<span class="operator">);</span>
-         QxSqlRelationParams params<span class="operator">(</span><span class="int">0</span><span class="operator">,</span><span class="int"> 0</span><span class="operator">, (&amp;</span> sql<span class="operator">),</span> NULL<span class="operator">,</span> NULL<span class="operator">,</span> NULL<span class="operator">);</span><span class="flow">
+         IxDataMember<span class="operator"> *</span> p<span class="operator"> =</span> pDataMemberX<span class="operator">-&gt;</span>get_WithDaoStrategy<span class="operator">(</span>l<span class="operator">);</span><span class="flow">
          if</span><span class="operator"> (</span>isValid_SqlRelation<span class="operator">(</span>p<span class="operator">) &amp;&amp; (</span>p<span class="operator"> !=</span> pId<span class="operator">) &amp;&amp; (</span>bCreateTable<span class="operator"> || (</span>p<span class="operator">-&gt;</span>getVersion<span class="operator">() &gt;=</span> lVersion<span class="operator">)))
-         {</span><span class="comment"> /* TODO... p-&gt;getSqlRelation()-&gt;createExtraTable(params); */</span><span class="operator"> }
+         {</span>
+            QString sqlExtraTable<span class="operator"> =</span> p<span class="operator">-&gt;</span>getSqlRelation<span class="operator">()-&gt;</span>createExtraTable<span class="operator">();</span><span class="flow">
+            if</span><span class="operator"> (</span>sqlExtraTable<span class="operator">.</span>isEmpty<span class="operator">()) {</span><span class="flow"> continue</span><span class="operator">; }</span>
+            sql<span class="operator"> +=</span> sqlExtraTable<span class="operator"> +</span><span class="string"> "\n"</span><span class="operator">;
+         }
       }
    }</span>
 
@@ -102,5 +105,17 @@
    qDebug<span class="operator">(</span><span class="string">"[QxOrm] %s"</span><span class="operator">,</span><span class="string"> "end dump SQL schema"</span><span class="operator">);</span><span class="flow">
 
    return</span> sql<span class="operator">;
+}</span><span class="type">
+
+bool</span> QxClassX<span class="operator">::</span>isValid_DataMember<span class="operator">(</span>IxDataMember<span class="operator"> *</span> p<span class="operator">)
+{</span><span class="flow">
+   return</span><span class="operator"> (</span>p<span class="operator"> &amp;&amp;</span> p<span class="operator">-&gt;</span>getDao<span class="operator">() &amp;&amp; !</span> p<span class="operator">-&gt;</span>hasSqlRelation<span class="operator">());
+}</span><span class="type">
+
+bool</span> QxClassX<span class="operator">::</span>isValid_SqlRelation<span class="operator">(</span>IxDataMember<span class="operator"> *</span> p<span class="operator">)
+{</span><span class="type">
+   bool</span> bIsValid<span class="operator"> = (</span>p<span class="operator"> &amp;&amp;</span> p<span class="operator">-&gt;</span>getDao<span class="operator">() &amp;&amp;</span> p<span class="operator">-&gt;</span>hasSqlRelation<span class="operator">());</span><span class="flow">
+   if</span><span class="operator"> (</span>bIsValid<span class="operator">) {</span> p<span class="operator">-&gt;</span>getSqlRelation<span class="operator">()-&gt;</span>init<span class="operator">(); }</span><span class="flow">
+   return</span> bIsValid<span class="operator">;
 }</span></pre>
 </body></html>

@@ -87,6 +87,14 @@ int main(int argc, char * argv[])
    qx_bool bCacheOk = qx::cache::get("user", userClone);
    qAssert(! bCacheOk && (ptrTmp.get() != NULL));
 
+   boost::shared_ptr<qx::test::CPerson> personValidate = qx::clone(person);
+   if (! personValidate) { personValidate.reset(new qx::test::CPerson()); }
+   personValidate->setLastName("admin");
+   personValidate->setDouble(305.86);
+   qx::QxInvalidValueX invalidValues = qx::validate(personValidate);
+   QString sInvalidValues = invalidValues.text();
+   qDebug("[QxOrm] test 'QxValidator' module :\n%s", qPrintable(sInvalidValues));
+
 #if _QX_SERIALIZE_POLYMORPHIC
    qx::serialization::polymorphic_binary::to_file(user, "user.bin");
    qx::serialization::polymorphic_binary::from_file(user, "user.bin");
@@ -200,6 +208,7 @@ int main(int argc, char * argv[])
    pBrother->setFirstName("brother firstname");
    pBrother->setLastName("brother lastname");
    pUser->setBrother(pBrother);
+   pUser->setLastName("user lastname");
 
    QSqlError daoError = qx::dao::create_table<CUser>();
    daoError = qx::dao::create_table<qx::test::CPerson>();
@@ -223,8 +232,12 @@ int main(int argc, char * argv[])
    pUser->setBrother(NULL);
 
    typedef qx::QxCollection< long, boost::shared_ptr<CUser> > type_lstUser;
-   boost::shared_ptr<CUser> ppp1; ppp1.reset(new CUser(53)); ppp1->setProfil("profil n°10");
-   boost::shared_ptr<CUser> ppp2; ppp2.reset(new CUser(108)); ppp2->setDateModif(QDateTime::currentDateTime());
+   boost::shared_ptr<CUser> ppp1; ppp1.reset(new CUser(53));
+   ppp1->setProfil("profil n°10");
+   ppp1->setLastName("ppp1 lastname");
+   boost::shared_ptr<CUser> ppp2; ppp2.reset(new CUser(108));
+   ppp2->setDateModif(QDateTime::currentDateTime());
+   ppp2->setLastName("ppp1 lastname");
    type_lstUser lstUser;
    lstUser.insert(ppp1->getUserId(), ppp1);
    lstUser.insert(ppp2->getUserId(), ppp2);

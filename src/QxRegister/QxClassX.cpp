@@ -41,6 +41,14 @@ QX_DLL_EXPORT_QX_SINGLETON_CPP(qx::QxClassX)
 
 namespace qx {
 
+QxClassX::QxClassX() : QxSingleton<QxClassX>("qx::QxClassX")
+{
+   initSqlTypeByClassName();
+   initValidatorMessage();
+}
+
+QxClassX::~QxClassX() { ; }
+
 QxCollection<QString, IxClass *> * QxClassX::getAll()
 {
    return (& m_lstClass);
@@ -202,6 +210,7 @@ QString QxClassX::dumpSqlSchema()
       sql += (bCreateTable ? "CREATE TABLE " : "ALTER TABLE ");
       sql += pClass->getName() + " ";
       sql += (bCreateTable ? "(" : "ADD (");
+      int iSqlCountRef = sql.count();
 
       // Get the primary key (id) of table, all columns into table, and other parameters associated to table
       IxDataMember * pId = pClass->getId();
@@ -240,17 +249,22 @@ QString QxClassX::dumpSqlSchema()
       }
 
       // Terminate SQL schema for current class
+      bool bAddBracket = (sql.count() != iSqlCountRef);
       sql = sql.left(sql.count() - 2); // Remove last ", "
-      sql += ")\n";
+      if (bAddBracket) { sql += ")\n"; }
+      else { sql += "\n"; }
       lSqlCount++;
 
       // Create extra-table from relations (for example, many-to-many relation needs an extra-table)
       for (long l = 0; (pDataMemberX && (l < pDataMemberX->count_WithDaoStrategy())); l++)
       {
          IxDataMember * p = pDataMemberX->get_WithDaoStrategy(l);
-         QxSqlRelationParams params(0, 0, (& sql), NULL, NULL, NULL);
          if (isValid_SqlRelation(p) && (p != pId) && (bCreateTable || (p->getVersion() >= lVersion)))
-         { /* TODO... p->getSqlRelation()->createExtraTable(params); */ }
+         {
+            QString sqlExtraTable = p->getSqlRelation()->createExtraTable();
+            if (sqlExtraTable.isEmpty()) { continue; }
+            sql += sqlExtraTable + "\n";
+         }
       }
    }
 
@@ -302,6 +316,24 @@ void QxClassX::initSqlTypeByClassName()
    m_lstSqlTypeByClassName.insert("qx::QxDateNeutral", "TEXT");
    m_lstSqlTypeByClassName.insert("qx::QxTimeNeutral", "TEXT");
    m_lstSqlTypeByClassName.insert("qx::QxDateTimeNeutral", "TEXT");
+}
+
+void QxClassX::initValidatorMessage()
+{
+   m_lstValidatorMessage.clear();
+
+   m_lstValidatorMessage.insert("not_null", "value '%NAME%' cannot be null");
+   m_lstValidatorMessage.insert("not_empty", "value '%NAME%' cannot be empty");
+   m_lstValidatorMessage.insert("min_value", "value '%NAME%' must be greater than or equal to '%CONSTRAINT%'");
+   m_lstValidatorMessage.insert("max_value", "value '%NAME%' must be lesser than or equal to '%CONSTRAINT%'");
+   m_lstValidatorMessage.insert("min_length", "size of '%NAME%' must be greater than or equal to '%CONSTRAINT%' characters");
+   m_lstValidatorMessage.insert("max_length", "size of '%NAME%' must be lesser than or equal to '%CONSTRAINT%' characters");
+   m_lstValidatorMessage.insert("date_past", "date '%NAME%' must be in the past");
+   m_lstValidatorMessage.insert("date_future", "date '%NAME%' must be in the future");
+   m_lstValidatorMessage.insert("min_decimal", "value '%NAME%' must be greater than or equal to '%CONSTRAINT%'");
+   m_lstValidatorMessage.insert("max_decimal", "value '%NAME%' must be lesser than or equal to '%CONSTRAINT%'");
+   m_lstValidatorMessage.insert("regular_expression", "value '%NAME%' doesn't match the regular expression '%CONSTRAINT%'");
+   m_lstValidatorMessage.insert("e_mail", "value '%NAME%' is not a valid e-mail");
 }
 
 namespace trait {

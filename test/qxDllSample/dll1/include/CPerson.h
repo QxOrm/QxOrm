@@ -44,6 +44,10 @@ public:
    void setDouble(double d)               { m_dDouble = d; }
    void setSex(sex e)                     { m_eSex = e; }
 
+private:
+
+   void isValid(qx::QxInvalidValueX & invalidValues);
+
 };
 
 } // namespace test

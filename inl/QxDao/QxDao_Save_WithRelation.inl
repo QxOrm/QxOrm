@@ -143,7 +143,11 @@ struct QxDao_Save_WithRelation
 {
 
    static inline QSqlError save(const QString & relation, T & t, QSqlDatabase * pDatabase)
-   { return QxDao_Save_WithRelation<T>::save((relation.isEmpty() ? QStringList() : (QStringList() << relation)), t, pDatabase); }
+   {
+      QStringList lst;
+      if (! relation.isEmpty()) { lst = relation.split("|"); }
+      return QxDao_Save_WithRelation<T>::save(lst, t, pDatabase);
+   }
 
    static inline QSqlError save(const QStringList & relation, T & t, QSqlDatabase * pDatabase)
    {

@@ -60,6 +60,8 @@ public:
    virtual ~QxSqlRelation_ManyToOne() { ; }
 
    virtual QString getDescription() const                                     { return "relation many-to-one"; }
+   virtual QString getExtraTable() const                                      { return ""; }
+   virtual QString createExtraTable() const                                   { return ""; }
    virtual bool getCartesianProduct() const                                   { return false; }
    virtual void lazyFrom(QxSqlRelationParams & params) const                  { Q_UNUSED(params); }
    virtual void eagerFrom(QxSqlRelationParams & params) const                 { Q_UNUSED(params); }
@@ -70,7 +72,6 @@ public:
    virtual void lazyFetch_ResolveInput(QxSqlRelationParams & params) const    { Q_UNUSED(params); }
    virtual void eagerFetch_ResolveInput(QxSqlRelationParams & params) const   { Q_UNUSED(params); }
    virtual QSqlError onBeforeSave(QxSqlRelationParams & params) const         { Q_UNUSED(params); return QSqlError(); }
-   virtual QSqlError createExtraTable(QxSqlRelationParams & params) const     { Q_UNUSED(params); return QSqlError(); }
 
    virtual QSqlError onAfterSave(QxSqlRelationParams & params) const
    { return qx::dao::save(this->getData(params), (& params.database())); }

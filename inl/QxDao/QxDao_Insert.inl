@@ -35,17 +35,21 @@ struct QxDao_Insert_Generic
    {
       qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "insert");
       if (! dao.isValid()) { return dao.error(); }
+      if (! dao.validateInstance(t)) { return dao.error(); }
 
       QString sql = dao.builder().insert().getSqlQuery();
       if (sql.isEmpty()) { return dao.errEmpty(); }
       if (! pDatabase) { dao.transaction(); }
       dao.query().prepare(sql);
 
+      IxSqlGenerator * pSqlGenerator = dao.getSqlGenerator();
+      if (pSqlGenerator) { pSqlGenerator->onBeforeInsert((& dao), (& t)); }
       qx::dao::on_before_insert<T>((& t), (& dao));
       qx::dao::detail::QxSqlQueryHelper_Insert<T>::resolveInput(t, dao.query(), dao.builder());
       if (! dao.query().exec()) { return dao.errFailed(); }
       dao.updateLastInsertId(t);
       qx::dao::on_after_insert<T>((& t), (& dao));
+      if (pSqlGenerator) { pSqlGenerator->onAfterInsert((& dao), (& t)); }
 
       return dao.error();
    }
@@ -61,6 +65,7 @@ struct QxDao_Insert_Container
       if (qx::trait::generic_container<T>::size(t) <= 0) { return QSqlError(); }
       qx::dao::detail::QxDao_Helper_Container<T> dao(t, pDatabase, "insert");
       if (! dao.isValid()) { return dao.error(); }
+      if (! dao.validateInstance(t)) { return dao.error(); }
 
       QString sql = dao.builder().insert().getSqlQuery();
       if (sql.isEmpty()) { return dao.errEmpty(); }
@@ -123,11 +128,14 @@ private:
    {
       static bool insert(U & item, qx::dao::detail::QxDao_Helper_Container<T> & dao)
       {
+         IxSqlGenerator * pSqlGenerator = dao.getSqlGenerator();
+         if (pSqlGenerator) { pSqlGenerator->onBeforeInsert((& dao), (& item)); }
          qx::dao::on_before_insert<U>((& item), (& dao));
          qx::dao::detail::QxSqlQueryHelper_Insert<U>::resolveInput(item, dao.query(), dao.builder());
          if (! dao.query().exec()) { dao.errFailed(); return false; }
          dao.updateLastInsertId(item);
          qx::dao::on_after_insert<U>((& item), (& dao));
+         if (pSqlGenerator) { pSqlGenerator->onAfterInsert((& dao), (& item)); }
 
          return dao.isValid();
       }

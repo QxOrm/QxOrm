@@ -41,6 +41,7 @@
  * \defgroup QxSerialize QxSerialize : QxOrm library serialization engine based on 'boost::serialization' library
  * \defgroup QxTraits QxTraits : QxOrm library traits (template metaprogramming) not available in 'boost::type_traits' library
  * \defgroup QxDao QxDao : QxOrm library database communication used by persistence engine (ORM - Object Relational Mapping)
+ * \defgroup QxValidator QxValidator : QxOrm library validation engine using validator pattern
  * \defgroup QxService QxService : QxOrm library services engine to provide easy and powerful way to create C++ application server (to transfer data over network)
  * \defgroup QxCache QxCache : QxOrm library basic thread-safe cache feature to backup and restore any kind of objects (for example, object fetched from database)
  * \defgroup QxMemLeak QxMemLeak : QxOrm library memory leak detection (by Wu Yongwei)
@@ -153,5 +154,14 @@
 #include <QxService/QxThreadPool.h>
 #include <QxService/QxTools.h>
 #include <QxService/QxTransaction.h>
+
+#include <QxValidator/IxValidator.h>
+#include <QxValidator/IxValidatorX.h>
+#include <QxValidator/QxInvalidValue.h>
+#include <QxValidator/QxInvalidValueX.h>
+#include <QxValidator/QxValidator.h>
+#include <QxValidator/QxValidatorX.h>
+#include <QxValidator/QxValidatorError.h>
+#include <QxValidator/QxValidatorFct.h>
 
 #endif // _QX_ORM_H_

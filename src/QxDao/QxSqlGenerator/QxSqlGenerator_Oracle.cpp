@@ -29,13 +29,15 @@
 
 #include <QxDao/QxSqlDatabase.h>
 
+#include <QxRegister/QxClassX.h>
+
 #include <QxMemLeak/mem_leak.h>
 
 namespace qx {
 namespace dao {
 namespace detail {
 
-QxSqlGenerator_Oracle::QxSqlGenerator_Oracle() : QxSqlGenerator_Standard() { ; }
+QxSqlGenerator_Oracle::QxSqlGenerator_Oracle() : QxSqlGenerator_Standard() { this->initSqlTypeByClassName(); }
 
 QxSqlGenerator_Oracle::~QxSqlGenerator_Oracle() { ; }
 
@@ -67,6 +69,38 @@ void QxSqlGenerator_Oracle::postProcess(QString & sql, const QxSqlLimit * pLimit
    sqlPaging += "WHERE rnum >= " + sMinRow;
    sqlPaging.replace(sReplace, sql);
    sql = sqlPaging;
+}
+
+void QxSqlGenerator_Oracle::initSqlTypeByClassName() const
+{
+   QHash<QString, QString> * lstSqlType = qx::QxClassX::getAllSqlTypeByClassName();
+   if (! lstSqlType) { qAssert(false); return; }
+
+   lstSqlType->insert("bool", "SMALLINT");
+   lstSqlType->insert("qx_bool", "SMALLINT");
+   lstSqlType->insert("short", "SMALLINT");
+   lstSqlType->insert("int", "INTEGER");
+   lstSqlType->insert("long", "INTEGER");
+   lstSqlType->insert("long long", "INTEGER");
+   lstSqlType->insert("float", "FLOAT");
+   lstSqlType->insert("double", "FLOAT");
+   lstSqlType->insert("long double", "FLOAT");
+   lstSqlType->insert("unsigned short", "SMALLINT");
+   lstSqlType->insert("unsigned int", "INTEGER");
+   lstSqlType->insert("unsigned long", "INTEGER");
+   lstSqlType->insert("unsigned long long", "INTEGER");
+   lstSqlType->insert("std::string", "VARCHAR2(4000)");
+   lstSqlType->insert("std::wstring", "VARCHAR2(4000)");
+   lstSqlType->insert("QString", "VARCHAR2(4000)");
+   lstSqlType->insert("QVariant", "CLOB");
+   lstSqlType->insert("QUuid", "VARCHAR2(255)");
+   lstSqlType->insert("QDate", "DATE");
+   lstSqlType->insert("QTime", "DATE");
+   lstSqlType->insert("QDateTime", "TIMESTAMP");
+   lstSqlType->insert("QByteArray", "BLOB");
+   lstSqlType->insert("qx::QxDateNeutral", "VARCHAR2(8)");
+   lstSqlType->insert("qx::QxTimeNeutral", "VARCHAR2(6)");
+   lstSqlType->insert("qx::QxDateTimeNeutral", "VARCHAR2(14)");
 }
 
 } // namespace detail

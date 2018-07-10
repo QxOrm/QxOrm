@@ -59,18 +59,6 @@ bool QxDataMember_QObject::isEqual(const void * pOwner1, const void * pOwner2) c
    return (var1 == var2);
 }
 
-qx_bool QxDataMember_QObject::isValid(const void * pOwner) const
-{
-   Q_UNUSED(pOwner);
-   return true;
-}
-
-qx_bool QxDataMember_QObject::isValid(void * pOwner)
-{
-   Q_UNUSED(pOwner);
-   return true;
-}
-
 QString QxDataMember_QObject::toString(const void * pOwner, const QString & sFormat, int iIndexName /* = -1 */) const
 {
    Q_UNUSED(sFormat); Q_UNUSED(iIndexName);

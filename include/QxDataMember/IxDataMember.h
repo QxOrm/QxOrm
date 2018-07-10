@@ -148,18 +148,21 @@ public:
    inline void setSerialize(bool bSerialize)                   { m_bSerialize = bSerialize; }
    inline void setDao(bool bDao)                               { m_bDao = bDao; }
    inline void setDefaultValue(const QVariant & var)           { m_vDefaultValue = var; }
-   inline void setMinValue(const QVariant & var)               { m_vMinValue = var; }
-   inline void setMaxValue(const QVariant & var)               { m_vMaxValue = var; }
    inline void setPrecision(int iPrecision)                    { m_iPrecision = iPrecision; }
-   inline void setMinLength(int iMinLength)                    { m_iMinLength = iMinLength; }
-   inline void setMaxLength(int iMaxLength)                    { m_iMaxLength = iMaxLength; }
    inline void setRequired(bool bRequired)                     { m_bRequired = bRequired; }
    inline void setReadOnly(bool bReadOnly)                     { m_bReadOnly = bReadOnly; }
    inline void setAutoIncrement(bool bAutoIncrement)           { m_bAutoIncrement = bAutoIncrement; }
-   inline void setNotNull(bool bNotNull)                       { m_bNotNull = bNotNull; }
    inline void setIsPrimaryKey(bool bIsPrimaryKey)             { m_bIsPrimaryKey = bIsPrimaryKey; }
    inline void setParent(IxDataMemberX * pParent)              { m_pParent = pParent; }
    inline void setSqlRelation(IxSqlRelation * pSqlRelation)    { m_pSqlRelation.reset(pSqlRelation); }
+
+   void setMinValue(long lMinValue, const QString & sMessage = QString());
+   void setMinValue(double dMinValue, const QString & sMessage = QString());
+   void setMaxValue(long lMaxValue, const QString & sMessage = QString());
+   void setMaxValue(double dMaxValue, const QString & sMessage = QString());
+   void setMinLength(int iMinLength, const QString & sMessage = QString());
+   void setMaxLength(int iMaxLength, const QString & sMessage = QString());
+   void setNotNull(bool bNotNull, const QString & sMessage = QString());
 
    QString getName(int iIndex, const QString & sOtherName = QString()) const;
    QString getSqlAlias(const QString & sTable = QString(), bool bClauseWhere = false, int iIndexName = 0) const;
@@ -174,9 +177,6 @@ public:
    QString getSqlNameAndTypeAndParams(const QString & sSep = QString(", "), const QString & sOtherName = QString()) const;
 
    virtual bool isEqual(const void * pOwner1, const void * pOwner2) const = 0;
-   virtual qx_bool isValid(const void * pOwner) const = 0;
-   virtual qx_bool isValid(void * pOwner) = 0;
-
    virtual QString toString(const void * pOwner, const QString & sFormat, int iIndexName = -1) const = 0;
    virtual qx_bool fromString(void * pOwner, const QString & s, const QString & sFormat, int iIndexName = -1) = 0;
    virtual QVariant toVariant(const void * pOwner, const QString & sFormat, int iIndexName = -1) const = 0;

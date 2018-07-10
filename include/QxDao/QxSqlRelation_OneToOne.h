@@ -60,6 +60,8 @@ public:
    virtual ~QxSqlRelation_OneToOne() { ; }
 
    virtual QString getDescription() const                                     { return "relation one-to-one"; }
+   virtual QString getExtraTable() const                                      { return ""; }
+   virtual QString createExtraTable() const                                   { return ""; }
    virtual bool getCartesianProduct() const                                   { return false; }
    virtual void createTable(QxSqlRelationParams & params) const               { Q_UNUSED(params); }
    virtual void lazySelect(QxSqlRelationParams & params) const                { Q_UNUSED(params); }
@@ -78,7 +80,6 @@ public:
    virtual void lazyInsert_ResolveInput(QxSqlRelationParams & params) const   { Q_UNUSED(params); }
    virtual void lazyUpdate_ResolveInput(QxSqlRelationParams & params) const   { Q_UNUSED(params); }
    virtual QSqlError onBeforeSave(QxSqlRelationParams & params) const         { Q_UNUSED(params); return QSqlError(); }
-   virtual QSqlError createExtraTable(QxSqlRelationParams & params) const     { Q_UNUSED(params); return QSqlError(); }
 
    virtual QSqlError onAfterSave(QxSqlRelationParams & params) const
    { return qx::dao::save(this->getData(params), (& params.database())); }

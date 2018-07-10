@@ -40,12 +40,19 @@
 #define QX_DAO_ERR_NO_ELEMENT_IN_CONTAINER   "[QxOrm] no element in container"
 #define QX_DAO_ERR_INVALID_PRIMARY_KEY       "[QxOrm] invalid primary key"
 #define QX_DAO_ERR_INVALID_SQL_RELATION      "[QxOrm] invalid sql relation"
+#define QX_DAO_ERR_INVALID_VALUES_DETECTED   "[QxOrm] validator engine : invalid values detected"
+
+#define QX_CONSTRUCT_IX_DAO_HELPER() \
+m_lDataCount(0), m_bTransaction(false), m_bQuiet(false), \
+m_bTraceQuery(true), m_bTraceRecord(false), m_bCartesianProduct(false), \
+m_bValidatorThrowable(false), m_pDataMemberX(NULL), m_pDataId(NULL), \
+m_pSqlGenerator(NULL)
 
 namespace qx {
 namespace dao {
 namespace detail {
 
-IxDao_Helper::IxDao_Helper() : m_lDataCount(0), m_bTransaction(false), m_bQuiet(false), m_bTraceQuery(true), m_bTraceRecord(false), m_bCartesianProduct(false), m_pDataMemberX(NULL), m_pDataId(NULL) { ; }
+IxDao_Helper::IxDao_Helper() : QX_CONSTRUCT_IX_DAO_HELPER() { ; }
 
 IxDao_Helper::~IxDao_Helper() { terminate(); }
 
@@ -89,11 +96,26 @@ QStringList IxDao_Helper::getSqlColumns() const { return m_lstColumns; }
 
 void IxDao_Helper::setSqlColumns(const QStringList & lst) { m_lstColumns = lst; }
 
+IxSqlGenerator * IxDao_Helper::getSqlGenerator() const { return m_pSqlGenerator; }
+
 void IxDao_Helper::updateError(const QSqlError & error) { m_error = error; }
 
 void IxDao_Helper::quiet() { m_bQuiet = true; }
 
 bool IxDao_Helper::exec() { return (m_qxQuery.isEmpty() ? this->query().exec(this->builder().getSqlQuery()) : this->query().exec()); }
+
+void IxDao_Helper::addInvalidValues(const qx::QxInvalidValueX & lst)
+{
+   m_lstInvalidValues.insert(lst);
+   if (m_lstInvalidValues.count() > 0)
+   {
+      QString sInvalidValues = QX_DAO_ERR_INVALID_VALUES_DETECTED;
+      sInvalidValues += QString("\n") + m_lstInvalidValues.text();
+      updateError(sInvalidValues);
+      if (m_bValidatorThrowable) { qDebug("[QxOrm] invalid values detected, throw 'qx::validator_error' exception : '%s'", qPrintable(m_lstInvalidValues.text())); }
+      if (m_bValidatorThrowable) { throw qx::validator_error(m_lstInvalidValues); }
+   }
+}
 
 qx::IxSqlQueryBuilder & IxDao_Helper::builder()
 {
@@ -200,7 +222,9 @@ void IxDao_Helper::addQuery(const qx::QxSqlQuery & query, bool bResolve)
 
 QSqlError IxDao_Helper::updateError(const QString & sError)
 {
-   m_error = QSqlError((QX_DAO_ERR_INTERNAL + QString(" <") + m_context + QString(">") + (sql().isEmpty() ? QString("") : (QString(" : ") + sql()))), sError, QSqlError::UnknownError);
+   QString sDriverText = (QX_DAO_ERR_INTERNAL + QString(" <") + m_context + QString(">"));
+   sDriverText += (sql().isEmpty() ? QString("") : (QString(" : ") + sql()));
+   m_error = QSqlError(sDriverText, sError, QSqlError::UnknownError);
    return m_error;
 }
 
@@ -225,11 +249,17 @@ void IxDao_Helper::init(QSqlDatabase * pDatabase, const QString & sContext)
    m_pDataMemberX = (m_pQueryBuilder ? m_pQueryBuilder->getDataMemberX() : NULL);
    m_lDataCount = (m_pQueryBuilder ? m_pQueryBuilder->getDataCount() : 0);
    m_pDataId = (m_pQueryBuilder ? m_pQueryBuilder->getDataId() : NULL);
+   m_pSqlGenerator = qx::QxSqlDatabase::getSingleton()->getSqlGenerator();
+   m_bValidatorThrowable = qx::QxSqlDatabase::getSingleton()->getValidatorThrowable();
 }
 
 void IxDao_Helper::terminate()
 {
-   if (! isValid())
+   if ((m_lstInvalidValues.count() > 0) && m_bValidatorThrowable)
+   {
+      if (m_bTransaction) { m_database.rollback(); }
+   }
+   else if (! isValid())
    {
       if (m_bTransaction) { m_database.rollback(); }
       if (! m_bQuiet) { qDebug("%s", qPrintable(m_error.driverText())); qDebug("%s", qPrintable(m_error.databaseText())); }

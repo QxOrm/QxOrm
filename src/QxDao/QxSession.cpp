@@ -88,6 +88,7 @@ bool QxSession::commit()
 bool QxSession::rollback()
 {
    if (! m_bTransaction) { clear(); return false; }
+   qDebug("[QxOrm] qx::QxSession : '%s'", "rollback transaction");
    bool bRollback = m_database.rollback();
    if (bRollback) { clear(); return true; }
    appendSqlError(m_database.lastError());

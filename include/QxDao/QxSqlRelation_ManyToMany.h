@@ -72,6 +72,7 @@ public:
    virtual ~QxSqlRelation_ManyToMany() { BOOST_STATIC_ASSERT(is_data_container); }
 
    virtual QString getDescription() const                                     { return "relation many-to-many"; }
+   virtual QString getExtraTable() const                                      { return m_sExtraTable; }
    virtual bool getCartesianProduct() const                                   { return true; }
    virtual void createTable(QxSqlRelationParams & params) const               { Q_UNUSED(params); }
    virtual void lazySelect(QxSqlRelationParams & params) const                { Q_UNUSED(params); }
@@ -180,16 +181,16 @@ public:
       return QSqlError();
    }
 
-   virtual QSqlError createExtraTable(QxSqlRelationParams & params) const
+   virtual QString createExtraTable() const
    {
-      IxDataMember * pIdOwner = params.builder().getDataId(); qAssert(pIdOwner);
+      IxDataMember * pIdOwner = this->getDataIdOwner(); qAssert(pIdOwner);
       IxDataMember * pIdData = this->getDataId(); qAssert(pIdData);
-      if (! pIdOwner || ! pIdData) { return QSqlError(); }
+      if (! pIdOwner || ! pIdData) { return ""; }
 
       bool bOldPKOwner = pIdOwner->getIsPrimaryKey(); pIdOwner->setIsPrimaryKey(false);
-      bool bOldPKData = pIdData->getIsPrimaryKey(); pIdData->setIsPrimaryKey(false);
+      bool bOldPKData = ((pIdOwner == pIdData) ? bOldPKOwner : pIdData->getIsPrimaryKey()); pIdData->setIsPrimaryKey(false);
       bool bOldAIOwner = pIdOwner->getAutoIncrement(); pIdOwner->setAutoIncrement(false);
-      bool bOldAIData = pIdData->getAutoIncrement(); pIdData->setAutoIncrement(false);
+      bool bOldAIData = ((pIdOwner == pIdData) ? bOldAIOwner : pIdData->getAutoIncrement()); pIdData->setAutoIncrement(false);
 
       QString sql = "CREATE TABLE IF NOT EXISTS " + m_sExtraTable + " (";
       sql += pIdOwner->getSqlNameAndTypeAndParams(", ", m_sForeignKeyOwner) + ", "; qAssert(! pIdOwner->getSqlType().isEmpty());
@@ -200,9 +201,7 @@ public:
       pIdOwner->setIsPrimaryKey(bOldPKOwner); pIdData->setIsPrimaryKey(bOldPKData);
       pIdOwner->setAutoIncrement(bOldAIOwner); pIdData->setAutoIncrement(bOldAIData);
       qDebug("[QxOrm] create extra-table (relation many-to-many) : %s", qPrintable(sql));
-      QSqlQuery queryCreateTable(params.database());
-      if (! queryCreateTable.exec(sql)) { return queryCreateTable.lastError(); }
-      return QSqlError();
+      return sql;
    }
 
 private:

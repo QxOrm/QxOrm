@@ -50,6 +50,11 @@
 
 #include <QxDao/QxSqlGenerator/IxSqlGenerator.h>
 
+#define QX_CONSTRUCT_QX_SQL_DATABASE() \
+m_iPort(-1), m_bTraceSqlQuery(true), m_bTraceSqlRecord(false), \
+m_ePlaceHolderStyle(ph_style_2_point_name), m_bSessionThrowable(false), \
+m_bSessionAutoTransaction(true), m_bValidatorThrowable(false)
+
 namespace qx {
 
 /*!
@@ -81,11 +86,12 @@ private:
    ph_style m_ePlaceHolderStyle;                            //!< Place holder style to build sql query
    bool m_bSessionThrowable;                                //!< An exception of type qx::dao::sql_error is thrown when a SQL error is appended to qx::QxSession object
    bool m_bSessionAutoTransaction;                          //!< A transaction is automatically beginned when a qx::QxSession object is instantiated
+   bool m_bValidatorThrowable;                              //!< An exception of type qx::validator_error is thrown when invalid values are detected inserting or updating an element into database
    qx::dao::detail::IxSqlGenerator_ptr m_pSqlGenerator;     //!< SQL generator to build SQL query specific for each database
 
 private:
 
-   QxSqlDatabase() : QxSingleton<QxSqlDatabase>("qx::QxSqlDatabase"), m_iPort(-1), m_bTraceSqlQuery(true), m_bTraceSqlRecord(false), m_ePlaceHolderStyle(ph_style_2_point_name), m_bSessionThrowable(false), m_bSessionAutoTransaction(true) { ; }
+   QxSqlDatabase() : QxSingleton<QxSqlDatabase>("qx::QxSqlDatabase"), QX_CONSTRUCT_QX_SQL_DATABASE() { ; }
    virtual ~QxSqlDatabase() { ; }
 
 public:
@@ -102,6 +108,7 @@ public:
    ph_style getSqlPlaceHolderStyle() const      { return m_ePlaceHolderStyle; }
    bool getSessionThrowable() const             { return m_bSessionThrowable; }
    bool getSessionAutoTransaction() const       { return m_bSessionAutoTransaction; }
+   bool getValidatorThrowable() const           { return m_bValidatorThrowable; }
 
    void setDriverName(const QString & s)                          { m_sDriverName = s; }
    void setConnectOptions(const QString & s)                      { m_sConnectOptions = s; }
@@ -115,6 +122,7 @@ public:
    void setSqlPlaceHolderStyle(ph_style e)                        { m_ePlaceHolderStyle = e; }
    void setSessionThrowable(bool b)                               { m_bSessionThrowable = b; }
    void setSessionAutoTransaction(bool b)                         { m_bSessionAutoTransaction = b; }
+   void setValidatorThrowable(bool b)                             { m_bValidatorThrowable = b; }
    void setSqlGenerator(qx::dao::detail::IxSqlGenerator_ptr p)    { m_pSqlGenerator = p; }
 
    static QSqlDatabase getDatabase()         { return qx::QxSqlDatabase::getSingleton()->getDatabaseByCurrThreadId(); }

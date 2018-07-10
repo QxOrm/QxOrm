@@ -28,6 +28,7 @@
 #include <QxDao/QxSqlGenerator/QxSqlGenerator_Standard.h>
 
 #include <QxDao/QxSqlDatabase.h>
+#include <QxDao/IxDao_Helper.h>
 
 #include <QxMemLeak/mem_leak.h>
 
@@ -63,6 +64,18 @@ void QxSqlGenerator_Standard::resolveLimit(QSqlQuery & query, const QxSqlLimit *
 }
 
 void QxSqlGenerator_Standard::postProcess(QString & sql, const QxSqlLimit * pLimit) const { Q_UNUSED(sql); Q_UNUSED(pLimit); }
+
+void QxSqlGenerator_Standard::onBeforeInsert(IxDao_Helper * pDaoHelper, void * pOwner) const { Q_UNUSED(pDaoHelper); Q_UNUSED(pOwner); }
+
+void QxSqlGenerator_Standard::onAfterInsert(IxDao_Helper * pDaoHelper, void * pOwner) const { Q_UNUSED(pDaoHelper); Q_UNUSED(pOwner); }
+
+void QxSqlGenerator_Standard::onBeforeUpdate(IxDao_Helper * pDaoHelper, void * pOwner) const { Q_UNUSED(pDaoHelper); Q_UNUSED(pOwner); }
+
+void QxSqlGenerator_Standard::onAfterUpdate(IxDao_Helper * pDaoHelper, void * pOwner) const { Q_UNUSED(pDaoHelper); Q_UNUSED(pOwner); }
+
+void QxSqlGenerator_Standard::onBeforeDelete(IxDao_Helper * pDaoHelper, void * pOwner) const { Q_UNUSED(pDaoHelper); Q_UNUSED(pOwner); }
+
+void QxSqlGenerator_Standard::onAfterDelete(IxDao_Helper * pDaoHelper, void * pOwner) const { Q_UNUSED(pDaoHelper); Q_UNUSED(pOwner); }
 
 } // namespace detail
 } // namespace dao

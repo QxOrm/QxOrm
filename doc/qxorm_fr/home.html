@@ -65,7 +65,7 @@
   <col><col><col><col><col><col>
   <tbody><tr>
   <td align="left" valign="top"><font size="2">QxOrm  &gt;&gt;  Accueil</font></td>
-  <td align="right" valign="top"><font size="2">Version courante : QxOrm 1.2.1 (LGPL) - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
+  <td align="right" valign="top"><font size="2">Version courante : QxOrm 1.2.2 (LGPL) - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
   <td width="10px"></td>
   <td width="40px" height="30px"><a href="../qxorm_fr/home.html"><img alt="Version française du site" src="./resource/FR.png" width="40" height="30" border="0"></a></td>
   <td width="40px" height="30px"><a href="../qxorm_en/home.html"><img alt="Web site english version" src="./resource/GB.png" width="40" height="30" border="0"></a></td>
@@ -250,6 +250,12 @@
             issues d'une base de données pour éviter des requêtes trop
             fréquentes. Ce cache est générique et peut être utilisé dans d'autres contextes que
             celui de QxOrm.</p>
+          </li>
+          <li><p><b><a href="../doxygen/html/group___qx_validator.html" target="_blank">QxValidator</a></b> : ce module permet d'ajouter des contraintes 
+            sur les propriétés enregistrées dans le contexte QxOrm. Ces contraintes sont définies dans la méthode de mapping : <i>void qx::register_class</i>.
+            Si pour une instance de classe donnée, au moins une contrainte n'est pas respectée, alors l'instance est considérée comme invalide : 
+            l'objet ne peut alors pas être sauvegardé en base de données (<i>INSERT</i> ou <i>UPDATE</i>). Pour plus d'informations sur le module <i>QxValidator</i>, 
+            <a href="./faq.html#faq_250">rendez-vous sur la FAQ de QxOrm</a>.</p>
           </li>
           <li><p><b><a href="../doxygen/html/group___qx_mem_leak.html" target="_blank">QxMemLeak</a></b> : permet une détection rapide des fuites
             mémoire en mode <i>Debug</i> une fois l'exécution du programme terminée

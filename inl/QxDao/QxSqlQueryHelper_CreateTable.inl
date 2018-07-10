@@ -42,12 +42,14 @@ struct QxSqlQueryHelper_CreateTable
       qx::QxSoftDelete oSoftDelete = builder.getSoftDelete();
       QString table = builder.table();
       sql = "CREATE TABLE " + table + " (";
+      int iSqlCountRef = sql.count();
       if (pId) { sql += pId->getSqlNameAndTypeAndParams(", ") + ", "; qAssert(! pId->getSqlType().isEmpty()); }
       while ((p = builder.nextData(l1))) { sql += p->getSqlNameAndTypeAndParams(", ") + ", "; qAssert(! p->getSqlType().isEmpty()); }
       if (! oSoftDelete.isEmpty()) { sql += oSoftDelete.buildSqlQueryToCreateTable() + ", "; }
       while ((pRelation = builder.nextRelation(l2))) { params.setIndex(l2); pRelation->createTable(params); }
+      bool bAddBracket = (sql.count() != iSqlCountRef);
       sql = sql.left(sql.count() - 2); // Remove last ", "
-      sql += ")";
+      if (bAddBracket) { sql += ")"; }
    }
 
    static void resolveInput(T & t, QSqlQuery & query, qx::IxSqlQueryBuilder & builder)

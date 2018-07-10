@@ -69,6 +69,8 @@ public:
    virtual ~QxSqlRelation_OneToMany() { BOOST_STATIC_ASSERT(is_data_container); }
 
    virtual QString getDescription() const                                     { return "relation one-to-many"; }
+   virtual QString getExtraTable() const                                      { return ""; }
+   virtual QString createExtraTable() const                                   { return ""; }
    virtual bool getCartesianProduct() const                                   { return true; }
    virtual void createTable(QxSqlRelationParams & params) const               { Q_UNUSED(params); }
    virtual void lazySelect(QxSqlRelationParams & params) const                { Q_UNUSED(params); }
@@ -87,7 +89,6 @@ public:
    virtual void lazyInsert_ResolveInput(QxSqlRelationParams & params) const   { Q_UNUSED(params); }
    virtual void lazyUpdate_ResolveInput(QxSqlRelationParams & params) const   { Q_UNUSED(params); }
    virtual QSqlError onBeforeSave(QxSqlRelationParams & params) const         { Q_UNUSED(params); return QSqlError(); }
-   virtual QSqlError createExtraTable(QxSqlRelationParams & params) const     { Q_UNUSED(params); return QSqlError(); }
 
    virtual QSqlError onAfterSave(QxSqlRelationParams & params) const
    { return qx::dao::save(this->getContainer(params), (& params.database())); }

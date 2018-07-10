@@ -98,12 +98,15 @@ public:
    {
       if (m_bInitInEvent) { return; }; m_bInitInEvent = true;
       QMutexLocker locker(& QxSqlRelation<DataType, Owner>::m_oMutex);
-      m_pDataMemberX = QxClass<type_data>::getSingleton()->dataMemberX();
+      m_pClass = QxClass<type_data>::getSingleton();
+      m_pClassOwner = QxClass<type_owner>::getSingleton();
+      m_pDataMemberX = (m_pClass ? m_pClass->getDataMemberX() : NULL);
       m_pDataMemberId = (m_pDataMemberX ? m_pDataMemberX->getId_WithDaoStrategy() : NULL);
+      m_pDataMemberIdOwner = ((m_pClassOwner && m_pClassOwner->getDataMemberX()) ? m_pClassOwner->getDataMemberX()->getId_WithDaoStrategy() : NULL);
       m_lstDataMemberPtr = (& QxSqlRelation<DataType, Owner>::m_lstDataMember);
       m_lstSqlRelationPtr = (& QxSqlRelation<DataType, Owner>::m_lstSqlRelation);
-      m_oSoftDelete = QxClass<type_data>::getSingleton()->getSoftDelete();
-      qAssert(m_pDataMember && m_pDataMemberX && m_pDataMemberId);
+      if (m_pClass) { m_oSoftDelete = m_pClass->getSoftDelete(); }
+      qAssert(m_pClass && m_pClassOwner && m_pDataMember && m_pDataMemberX && m_pDataMemberId);
       if (getDataCount() > 0 || getRelationCount() > 0) { m_bInitInEvent = false; return; }
       IxDataMember * p = NULL; long lCount = m_pDataMemberX->count_WithDaoStrategy();
       for (long l = 0; l < lCount; ++l) { if ((p = isValid_DataMember(l))) { m_lstDataMember.insert(p->getKey(), p); } }

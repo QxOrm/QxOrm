@@ -76,13 +76,14 @@ protected:
 
    QxCollection<QString, IxClass *> m_lstClass;                   //!< Collection of classes registered into QxOrm context
    QHash<QString, QString> m_lstSqlTypeByClassName;               //!< List of SQL types by class name
+   QHash<QString, QString> m_lstValidatorMessage;                 //!< List of validator message when an invalid value is detected
    type_fct_save_qvariant_usertype m_fctSaveQVariantUserType;     //!< Serialization of QVariant UserType => function to save a QVariant UserType (cf. QxSerialize_QVariant.cpp file)
    type_fct_load_qvariant_usertype m_fctLoadQVariantUserType;     //!< Serialization of QVariant UserType => function to load a QVariant UserType (cf. QxSerialize_QVariant.cpp file)
 
 private:
 
-   QxClassX() : QxSingleton<QxClassX>("qx::QxClassX") { this->initSqlTypeByClassName(); }
-   virtual ~QxClassX() { ; }
+   QxClassX();
+   virtual ~QxClassX();
 
    QxCollection<QString, IxClass *> * getAll();
    IxClass * get(const QString & sKey) const;
@@ -91,6 +92,7 @@ private:
    bool remove(const QString & sKey);
    void clear();
    void initSqlTypeByClassName();
+   void initValidatorMessage();
 
 public:
 
@@ -106,6 +108,7 @@ public:
    static QString dumpAllClasses();
    static QString dumpSqlSchema();
 
+   static QHash<QString, QString> * getAllValidatorMessage()         { return (& QxClassX::getSingleton()->m_lstValidatorMessage); }
    static QHash<QString, QString> * getAllSqlTypeByClassName()       { return (& QxClassX::getSingleton()->m_lstSqlTypeByClassName); }
    static QString getSqlTypeByClassName(const QString & sClassName)  { return (QxClassX::getAllSqlTypeByClassName()->value(sClassName)); }
 

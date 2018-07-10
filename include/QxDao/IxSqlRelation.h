@@ -37,13 +37,21 @@
  * \brief Common interface for all relationships defined between 2 classes (or between 2 tables in database)
  */
 
+#include <QxCommon/QxPropertyBag.h>
+
 #include <QxDao/QxSqlRelationParams.h>
 #include <QxDao/QxSoftDelete.h>
 
 #include <QxCollection/QxCollection.h>
 
+#define QX_CONSTRUCT_IX_RELATION() \
+m_pClass(NULL), m_pClassOwner(NULL), m_pDataMember(p), m_pDataMemberX(NULL), \
+m_pDataMemberId(NULL), m_pDataMemberIdOwner(NULL), m_lOffsetRelation(100), \
+m_eJoinType(left_outer_join), m_lstDataMemberPtr(NULL), m_lstSqlRelationPtr(NULL)
+
 namespace qx {
 
+class IxClass;
 class IxDataMember;
 class IxDataMemberX;
 class IxSqlRelation;
@@ -54,7 +62,7 @@ typedef QxCollection<QString, IxSqlRelation *> IxSqlRelationX;
  * \ingroup QxDao
  * \brief qx::IxSqlRelation : common interface for all relationships defined between 2 classes (or between 2 tables in database)
  */
-class QX_DLL_EXPORT IxSqlRelation
+class QX_DLL_EXPORT IxSqlRelation : public qx::QxPropertyBag
 {
 
 public:
@@ -63,19 +71,22 @@ public:
 
 protected:
 
-   IxDataMember *    m_pDataMember;       //!< 'IxDataMember' associated wth sql relation
-   IxDataMemberX *   m_pDataMemberX;      //!< Collection of 'IxDataMember' : parent of 'm_pDataMember'
-   IxDataMember *    m_pDataMemberId;     //!< 'IxDataMember' id of 'm_pDataMemberX'
-   long              m_lOffsetRelation;   //!< Generic offset for sql relation
-   join_type         m_eJoinType;         //!< Join type to build sql query
-   QxSoftDelete      m_oSoftDelete;       //!< Soft delete (or logical delete) behavior
+   IxClass *         m_pClass;               //!< 'IxClass' associated wth sql relation
+   IxClass *         m_pClassOwner;          //!< 'IxClass' of the owner
+   IxDataMember *    m_pDataMember;          //!< 'IxDataMember' associated wth sql relation
+   IxDataMemberX *   m_pDataMemberX;         //!< Collection of 'IxDataMember' : parent of 'm_pDataMember'
+   IxDataMember *    m_pDataMemberId;        //!< 'IxDataMember' id of 'm_pDataMemberX'
+   IxDataMember *    m_pDataMemberIdOwner;   //!< 'IxDataMember' id of the owner
+   long              m_lOffsetRelation;      //!< Generic offset for sql relation
+   join_type         m_eJoinType;            //!< Join type to build sql query
+   QxSoftDelete      m_oSoftDelete;          //!< Soft delete (or logical delete) behavior
 
    QxCollection<QString, IxDataMember *> * m_lstDataMemberPtr;    //!< Optimization : handle to collection of 'IxDataMember'
    IxSqlRelationX * m_lstSqlRelationPtr;                          //!< Optimization : handle to collection of 'IxSqlRelation'
 
 public:
 
-   IxSqlRelation(IxDataMember * p) : m_pDataMember(p), m_pDataMemberX(NULL), m_pDataMemberId(NULL), m_lOffsetRelation(100), m_eJoinType(left_outer_join), m_lstDataMemberPtr(NULL), m_lstSqlRelationPtr(NULL) { qAssert(p); }
+   IxSqlRelation(IxDataMember * p) : qx::QxPropertyBag(), QX_CONSTRUCT_IX_RELATION() { qAssert(p); }
    virtual ~IxSqlRelation() = 0;
 
    inline QxCollection<QString, IxDataMember *> * getLstDataMember() const { return m_lstDataMemberPtr; }
@@ -83,9 +94,12 @@ public:
 
    inline void setSqlJoinType(join_type e)         { m_eJoinType = e; }
    inline join_type getSqlJoinType() const         { return m_eJoinType; }
+   inline IxClass * getClass() const               { return m_pClass; }
+   inline IxClass * getClassOwner() const          { return m_pClassOwner; }
    inline IxDataMember * getDataMember() const     { return m_pDataMember; }
    inline IxDataMemberX * getDataMemberX() const   { return m_pDataMemberX; }
    inline IxDataMember * getDataId() const         { return m_pDataMemberId; }
+   inline IxDataMember * getDataIdOwner() const    { return m_pDataMemberIdOwner; }
 
    QString getKey() const;
    long getDataCount() const;
@@ -99,6 +113,8 @@ public:
 
    virtual void init() = 0;
    virtual QString getDescription() const = 0;
+   virtual QString getExtraTable() const = 0;
+   virtual QString createExtraTable() const = 0;
    virtual bool getCartesianProduct() const = 0;
    virtual QVariant getIdFromQuery(bool bEager, QxSqlRelationParams & params) const = 0;
    virtual void updateOffset(bool bEager, QxSqlRelationParams & params) const = 0;
@@ -124,7 +140,6 @@ public:
    virtual void lazyUpdate_ResolveInput(QxSqlRelationParams & params) const = 0;
    virtual QSqlError onBeforeSave(QxSqlRelationParams & params) const = 0;
    virtual QSqlError onAfterSave(QxSqlRelationParams & params) const = 0;
-   virtual QSqlError createExtraTable(QxSqlRelationParams & params) const = 0;
 
 #ifndef NDEBUG
    bool verifyOffset(QxSqlRelationParams & params, bool bId) const;

@@ -34,6 +34,8 @@
 #include <QxDataMember/IxDataMember.h>
 #include <QxDataMember/IxDataMemberX.h>
 
+#include <QxRegister/IxClass.h>
+
 #include <QxMemLeak/mem_leak.h>
 
 namespace qx {

@@ -69,9 +69,6 @@ public:
    virtual ~QxDataMember_QObject() { ; }
 
    virtual bool isEqual(const void * pOwner1, const void * pOwner2) const;
-   virtual qx_bool isValid(const void * pOwner) const;
-   virtual qx_bool isValid(void * pOwner);
-
    virtual QString toString(const void * pOwner, const QString & sFormat, int iIndexName = -1) const;
    virtual qx_bool fromString(void * pOwner, const QString & s, const QString & sFormat, int iIndexName = -1);
    virtual QVariant toVariant(const void * pOwner, const QString & sFormat, int iIndexName = -1) const;

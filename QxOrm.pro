@@ -34,7 +34,7 @@ CONFIG += dll
 DEFINES += _QX_BUILDING_QX_ORM
 PRECOMPILED_HEADER = ./include/QxPrecompiled.h
 
-unix { VERSION = 1.2.1 }
+unix { VERSION = 1.2.2 }
 
 #############################
 # Compiler / Linker Options #
@@ -310,6 +310,15 @@ HEADERS += ./include/QxXml/QxXmlReader.h
 HEADERS += ./include/QxXml/QxXmlWriter.h
 HEADERS += ./include/QxXml/QxXml.h
 
+HEADERS += ./include/QxValidator/IxValidator.h
+HEADERS += ./include/QxValidator/IxValidatorX.h
+HEADERS += ./include/QxValidator/QxInvalidValue.h
+HEADERS += ./include/QxValidator/QxInvalidValueX.h
+HEADERS += ./include/QxValidator/QxValidator.h
+HEADERS += ./include/QxValidator/QxValidatorError.h
+HEADERS += ./include/QxValidator/QxValidatorFct.h
+HEADERS += ./include/QxValidator/QxValidatorX.h
+
 HEADERS += ./include/QxOrm.h
 HEADERS += ./include/QxMemLeak.h
 
@@ -412,5 +421,10 @@ SOURCES += ./src/QxService/QxThread.cpp
 SOURCES += ./src/QxService/QxThreadPool.cpp
 SOURCES += ./src/QxService/QxTools.cpp
 SOURCES += ./src/QxService/QxTransaction.cpp
+
+SOURCES += ./src/QxValidator/IxValidator.cpp
+SOURCES += ./src/QxValidator/IxValidatorX.cpp
+SOURCES += ./src/QxValidator/QxInvalidValue.cpp
+SOURCES += ./src/QxValidator/QxInvalidValueX.cpp
 
 SOURCES += ./src/main.cpp

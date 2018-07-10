@@ -54,6 +54,8 @@
 #include <QxTraits/get_base_class.h>
 #include <QxTraits/get_primary_key.h>
 
+#include <QxValidator/QxValidatorX.h>
+
 namespace qx {
 
 /*!
@@ -128,7 +130,22 @@ public:
    static qx_bool invoke(const QString & sKey, T * pOwner, const QString & params = QString(), boost::any * ret = NULL) { return QxClass<T>::getSingleton()->invokeHelper(sKey, pOwner, params, ret); }
    static qx_bool invoke(const QString & sKey, T * pOwner, const type_any_params & params, boost::any * ret = NULL)     { return QxClass<T>::getSingleton()->invokeHelper(sKey, pOwner, params, ret); }
 
-   virtual IxClass * getBaseClass() const { return (boost::is_same<type_base_class, qx::trait::no_base_class_defined>::value ? NULL : QxClass<type_base_class>::getSingleton()); }
+   virtual IxClass * getBaseClass() const
+   { return (boost::is_same<type_base_class, qx::trait::no_base_class_defined>::value ? NULL : QxClass<type_base_class>::getSingleton()); }
+
+#if _QX_SUPPORT_COVARIANT_RETURN_TYPE
+   virtual QxValidatorX<T> * getAllValidator()
+   {
+      if (! m_pAllValidator) { m_pAllValidator.reset(new QxValidatorX<T>()); IxClass::getAllValidator(); }
+      return static_cast<QxValidatorX<T> *>(m_pAllValidator.get());
+   }
+#else // _QX_SUPPORT_COVARIANT_RETURN_TYPE
+   virtual IxValidatorX * getAllValidator()
+   {
+      if (! m_pAllValidator) { m_pAllValidator.reset(new QxValidatorX<T>()); IxClass::getAllValidator(); }
+      return m_pAllValidator.get();
+   }
+#endif // _QX_SUPPORT_COVARIANT_RETURN_TYPE
 
 private:
 

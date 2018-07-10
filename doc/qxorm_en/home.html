@@ -65,7 +65,7 @@
   <col><col><col><col><col><col>
   <tbody><tr>
   <td align="left" valign="top"><font size="2">QxOrm  &gt;&gt;  Home</font></td>
-  <td align="right" valign="top"><font size="2">Current version : QxOrm 1.2.1 (LGPL) - <a href="../doxygen/index.html" target="_blank">QxOrm library online documentation</a></font></td>
+  <td align="right" valign="top"><font size="2">Current version : QxOrm 1.2.2 (LGPL) - <a href="../doxygen/index.html" target="_blank">QxOrm library online documentation</a></font></td>
   <td width="10px"></td>
   <td width="40px" height="30px"><a href="../qxorm_fr/home.html"><img alt="Version française du site" src="./resource/FR.png" width="40" height="30" border="0"></a></td>
   <td width="40px" height="30px"><a href="../qxorm_en/home.html"><img alt="Web site english version" src="./resource/GB.png" width="40" height="30" border="0"></a></td>
@@ -153,6 +153,8 @@
           <li><p><b><a href="../doxygen/html/group___qx_traits.html" target="_blank">QxTraits</a></b> : boost library provides a lot of generic traits. QxOrm uses them but needs new functionalities that are not present in boost.</p> 
           </li>
           <li><p><b><a href="../doxygen/html/group___qx_cache.html" target="_blank">QxCache</a></b> : QxOrm's cache can contain all types of objects. It can make it possible for example to memorize data resulting from a database to avoid too frequent requests. This cache is generic and can be used in other contexts than QxOrm.</p> 
+          </li>
+          <li><p><b><a href="../doxygen/html/group___qx_validator.html" target="_blank">QxValidator</a></b> : this module provides a validation engine for classes registered into QxOrm context. To use this validation engine, you have to define your constraints into the mapping function per class : <i>void qx::register_class</i>. If for an instance of class, at least one constraint violation is detected, then the instance is invalid : the object cannot be saved into database (<i>INSERT</i> or <i>UPDATE</i>). For more informations about <i>QxValidator</i> module, <a href="./faq.html#faq_250">goto the FAQ of QxOrm library</a>.</p> 
           </li>
           <li><p><b><a href="../doxygen/html/group___qx_mem_leak.html" target="_blank">QxMemLeak</a></b> : fast detection of memory leaks in <i>Debug</i> mode (with indication of the file and the line =&gt; style MFC from Microsoft). This module is developed by <a href="http://wyw.dcweb.cn/leakage.htm" target="_blank">Wu Yongwei</a>. If another tool is already used in your projects (<i>Valgrind</i> for example), this functionality should not be activated. By default, <i>QxMemLeak</i> module is disabled.</p> 
           </li>

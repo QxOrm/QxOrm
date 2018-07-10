@@ -55,6 +55,10 @@ public:
    QxSqlGenerator_SQLite();
    virtual ~QxSqlGenerator_SQLite();
 
+private:
+
+   void initSqlTypeByClassName() const;
+
 };
 
 typedef boost::shared_ptr<QxSqlGenerator_SQLite> QxSqlGenerator_SQLite_ptr;

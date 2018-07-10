@@ -43,6 +43,7 @@ namespace qx {
 namespace dao {
 namespace detail {
 
+class IxDao_Helper;
 class IxSqlElement;
 class QxSqlCompare;
 class QxSqlElementTemp;
@@ -71,6 +72,12 @@ public:
    virtual QString getLimit(const QxSqlLimit * pLimit) const = 0;
    virtual void resolveLimit(QSqlQuery & query, const QxSqlLimit * pLimit) const = 0;
    virtual void postProcess(QString & sql, const QxSqlLimit * pLimit) const = 0;
+   virtual void onBeforeInsert(IxDao_Helper * pDaoHelper, void * pOwner) const = 0;
+   virtual void onAfterInsert(IxDao_Helper * pDaoHelper, void * pOwner) const = 0;
+   virtual void onBeforeUpdate(IxDao_Helper * pDaoHelper, void * pOwner) const = 0;
+   virtual void onAfterUpdate(IxDao_Helper * pDaoHelper, void * pOwner) const = 0;
+   virtual void onBeforeDelete(IxDao_Helper * pDaoHelper, void * pOwner) const = 0;
+   virtual void onAfterDelete(IxDao_Helper * pDaoHelper, void * pOwner) const = 0;
 
 };
 

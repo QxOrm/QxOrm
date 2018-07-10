@@ -456,6 +456,26 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="QxValidator"
+				>
+				<File
+					RelativePath=".\src\QxValidator\IxValidator.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\QxValidator\IxValidatorX.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\QxValidator\QxInvalidValue.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\QxValidator\QxInvalidValueX.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="include"
@@ -1495,6 +1515,42 @@
 				</File>
 				<File
 					RelativePath=".\include\QxService\QxTransaction.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="QxValidator"
+				>
+				<File
+					RelativePath=".\include\QxValidator\IxValidator.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\QxValidator\IxValidatorX.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\QxValidator\QxInvalidValue.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\QxValidator\QxInvalidValueX.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\QxValidator\QxValidator.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\QxValidator\QxValidatorError.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\QxValidator\QxValidatorFct.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\QxValidator\QxValidatorX.h"
 					>
 				</File>
 			</Filter>

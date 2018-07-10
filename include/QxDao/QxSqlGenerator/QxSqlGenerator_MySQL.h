@@ -57,6 +57,10 @@ public:
 
    virtual QString getAutoIncrement() const;
 
+private:
+
+   void initSqlTypeByClassName() const;
+
 };
 
 typedef boost::shared_ptr<QxSqlGenerator_MySQL> QxSqlGenerator_MySQL_ptr;

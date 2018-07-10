@@ -45,6 +45,13 @@ void IxClass::updateClassX()
    QxClassX::getSingleton()->insert(m_sKey, this);
 }
 
+IxValidatorX * IxClass::getAllValidator()
+{
+   if (! m_pAllValidator) { return NULL; }
+   m_pAllValidator->setClass(this);
+   return m_pAllValidator.get();
+}
+
 bool IxClass::isKindOf(const QString & sClassName) const
 {
    if (sClassName.isEmpty()) { qAssert(false); return false; }

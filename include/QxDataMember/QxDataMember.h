@@ -79,9 +79,6 @@ public:
    inline DataType * getData(void * pOwner) const              { return (pOwner ? (& ((static_cast<Owner *>(pOwner))->*m_pData)) : NULL); }
    inline const DataType * getData(const void * pOwner) const  { return (pOwner ? (& ((static_cast<const Owner *>(pOwner))->*m_pData)) : NULL); }
 
-   virtual qx_bool isValid(const void * pOwner) const          { Q_UNUSED(pOwner); return true; }
-   virtual qx_bool isValid(void * pOwner)                      { Q_UNUSED(pOwner); return true; }
-
    virtual QString toString(const void * pOwner, const QString & sFormat, int iIndexName = -1) const              { return qx::cvt::to_string((* getData(pOwner)), sFormat, iIndexName); }
    virtual qx_bool fromString(void * pOwner, const QString & s, const QString & sFormat, int iIndexName = -1)     { return qx::cvt::from_string(s, (* getData(pOwner)), sFormat, iIndexName); }
    virtual QVariant toVariant(const void * pOwner, const QString & sFormat, int iIndexName = -1) const            { return qx::cvt::to_variant((* getData(pOwner)), sFormat, iIndexName); }

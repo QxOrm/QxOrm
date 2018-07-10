@@ -29,13 +29,15 @@
 
 #include <QxDao/QxSqlDatabase.h>
 
+#include <QxRegister/QxClassX.h>
+
 #include <QxMemLeak/mem_leak.h>
 
 namespace qx {
 namespace dao {
 namespace detail {
 
-QxSqlGenerator_MSSQLServer::QxSqlGenerator_MSSQLServer() : QxSqlGenerator_Standard() { ; }
+QxSqlGenerator_MSSQLServer::QxSqlGenerator_MSSQLServer() : QxSqlGenerator_Standard() { this->initSqlTypeByClassName(); }
 
 QxSqlGenerator_MSSQLServer::~QxSqlGenerator_MSSQLServer() { ; }
 
@@ -58,6 +60,38 @@ void QxSqlGenerator_MSSQLServer::postProcess(QString & sql, const QxSqlLimit * p
    QString sRowsCount = pLimit->getRowsCount_ParamKey();
    sql = sql.right(sql.size() - 7);
    sql = "SELECT TOP " + sRowsCount + " " + sql;
+}
+
+void QxSqlGenerator_MSSQLServer::initSqlTypeByClassName() const
+{
+   QHash<QString, QString> * lstSqlType = qx::QxClassX::getAllSqlTypeByClassName();
+   if (! lstSqlType) { qAssert(false); return; }
+
+   lstSqlType->insert("bool", "TINYINT");
+   lstSqlType->insert("qx_bool", "TINYINT");
+   lstSqlType->insert("short", "SMALLINT");
+   lstSqlType->insert("int", "INT");
+   lstSqlType->insert("long", "INT");
+   lstSqlType->insert("long long", "BIGINT");
+   lstSqlType->insert("float", "FLOAT");
+   lstSqlType->insert("double", "FLOAT");
+   lstSqlType->insert("long double", "FLOAT");
+   lstSqlType->insert("unsigned short", "SMALLINT");
+   lstSqlType->insert("unsigned int", "INT");
+   lstSqlType->insert("unsigned long", "INT");
+   lstSqlType->insert("unsigned long long", "BIGINT");
+   lstSqlType->insert("std::string", "TEXT");
+   lstSqlType->insert("std::wstring", "TEXT");
+   lstSqlType->insert("QString", "TEXT");
+   lstSqlType->insert("QVariant", "TEXT");
+   lstSqlType->insert("QUuid", "TEXT");
+   lstSqlType->insert("QDate", "DATE");
+   lstSqlType->insert("QTime", "TIME");
+   lstSqlType->insert("QDateTime", "TIMESTAMP");
+   lstSqlType->insert("QByteArray", "IMAGE");
+   lstSqlType->insert("qx::QxDateNeutral", "TEXT");
+   lstSqlType->insert("qx::QxTimeNeutral", "TEXT");
+   lstSqlType->insert("qx::QxDateTimeNeutral", "TEXT");
 }
 
 } // namespace detail
