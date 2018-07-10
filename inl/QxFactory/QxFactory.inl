@@ -29,7 +29,7 @@
 #pragma warning(disable:4094)
 #endif // _MSC_VER
 
-#include "../../include/QxSerialize/QxSerialize.h"
+#include <QxSerialize/QxSerialize.h>
 
 #ifndef QX_REGISTER_FACTORY_HPP
 #define QX_REGISTER_FACTORY_COMPLEX_CLASS_NAME_HPP(className, classNameFormatted) \

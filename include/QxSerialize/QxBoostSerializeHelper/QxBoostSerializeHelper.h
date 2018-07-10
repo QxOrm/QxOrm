@@ -33,9 +33,9 @@
 #include <boost/type_traits/is_same.hpp>
 #include <boost/serialization/void_cast.hpp>
 
-#include "../../../include/QxTraits/get_base_class.h"
+#include <QxTraits/get_base_class.h>
 
-#include "../../../include/QxSerialize/QxBoostSerializeHelper/QxBoostInitGuid.h"
+#include <QxSerialize/QxBoostSerializeHelper/QxBoostInitGuid.h>
 
 namespace qx {
 

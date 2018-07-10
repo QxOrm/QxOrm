@@ -23,15 +23,17 @@
 **
 ****************************************************************************/
 
-#include "../../include/QxPrecompiled.h"
+#include <QxPrecompiled.h>
 
 #include <stdlib.h>
 
 #include <QtCore/qcoreapplication.h>
 
-#include "../../include/QxSingleton/QxSingletonX.h"
+#include <QxSingleton/QxSingletonX.h>
 
-#include "../../include/QxMemLeak/mem_leak.h"
+#include <QxMemLeak/mem_leak.h>
+
+QX_DLL_EXPORT_QX_SINGLETON_CPP(qx::QxSingletonX)
 
 namespace qx {
 

@@ -23,14 +23,14 @@
 **
 ****************************************************************************/
 
-#include "../../include/QxPrecompiled.h"
+#include <QxPrecompiled.h>
 
 #include <QtCore/qcoreapplication.h>
 
-#include "../../include/QxSingleton/IxSingleton.h"
-#include "../../include/QxSingleton/QxSingletonX.h"
+#include <QxSingleton/IxSingleton.h>
+#include <QxSingleton/QxSingletonX.h>
 
-#include "../../include/QxMemLeak/mem_leak.h"
+#include <QxMemLeak/mem_leak.h>
 
 namespace qx {
 

@@ -37,10 +37,9 @@
 
 #include <QtGui/qregion.h>
 
-#include "../../../include/QxSerialize/Qt/QxSerialize_QVector.h"
-#include "../../../include/QxSerialize/Qt/QxSerialize_QRect.h"
-
-#include "../../../include/QxSerialize/QxSerializeFastCompil.h"
+#include <QxSerialize/Qt/QxSerialize_QVector.h>
+#include <QxSerialize/Qt/QxSerialize_QRect.h>
+#include <QxSerialize/QxSerializeFastCompil.h>
 
 BOOST_CLASS_VERSION(QRegion, 0)
 

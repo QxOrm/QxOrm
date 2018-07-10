@@ -34,7 +34,7 @@
 #include <boost/mpl/logical.hpp>
 #include <boost/type_traits/is_base_of.hpp>
 
-#include "../../include/QxTraits/is_smart_ptr.h"
+#include <QxTraits/is_smart_ptr.h>
 
 #define qx_smart_ptr_base_of_test_0() (sizeof(qx::trait::is_smart_ptr_base_of<B, D>::removeSmartPtr(b, d)) == sizeof(char))
 #define qx_smart_ptr_base_of_test_1() (sizeof(qx::trait::is_smart_ptr_base_of<B, D>::removeSmartPtr((* b_boost_scoped_ptr), d)) == sizeof(char))

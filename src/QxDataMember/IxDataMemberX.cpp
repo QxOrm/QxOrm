@@ -23,13 +23,13 @@
 **
 ****************************************************************************/
 
-#include "../../include/QxPrecompiled.h"
+#include <QxPrecompiled.h>
 
-#include "../../include/QxDataMember/IxDataMemberX.h"
+#include <QxDataMember/IxDataMemberX.h>
 
-#include "../../include/QxRegister/IxClass.h"
+#include <QxRegister/IxClass.h>
 
-#include "../../include/QxMemLeak/mem_leak.h"
+#include <QxMemLeak/mem_leak.h>
 
 namespace qx {
 

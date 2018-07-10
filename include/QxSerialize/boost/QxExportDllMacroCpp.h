@@ -30,9 +30,9 @@
 #pragma once
 #endif
 
-#include "../../../include/QxCommon/QxConfig.h"
+#include <QxCommon/QxConfig.h>
 
-#include "../../../include/QxSerialize/boost/QxExportDllMacroHpp.h"
+#include <QxSerialize/boost/QxExportDllMacroHpp.h>
 
 #if _QX_USE_EXPORT_DLL_BOOST_SERIALIZATION_SINGLETON
 

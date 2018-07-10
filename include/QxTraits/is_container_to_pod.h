@@ -33,8 +33,8 @@
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/logical.hpp>
 
-#include "../../include/QxTraits/is_container.h"
-#include "../../include/QxTraits/is_qx_pod.h"
+#include <QxTraits/is_container.h>
+#include <QxTraits/is_qx_pod.h>
 
 namespace qx {
 namespace trait {

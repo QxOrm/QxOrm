@@ -76,7 +76,7 @@
 #include <QtCore/qscopedpointer.h>
 #endif // (QT_VERSION >= 0x040600)
 
-#include "../../include/QxTraits/get_class_name.h"
+#include <QxTraits/get_class_name.h>
 
 QX_REGISTER_CLASS_NAME(bool)
 QX_REGISTER_CLASS_NAME(int)

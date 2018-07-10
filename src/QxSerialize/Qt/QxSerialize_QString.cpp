@@ -23,14 +23,14 @@
 **
 ****************************************************************************/
 
-#include "../../../include/QxPrecompiled.h"
+#include <QxPrecompiled.h>
 
-#include "../../../include/QxSerialize/Qt/QxSerialize_QString.h"
+#include <QxSerialize/Qt/QxSerialize_QString.h>
 
-#include "../../../include/QxTraits/archive_wide_traits.h"
-#include "../../../include/QxTraits/archive_printable.h"
+#include <QxTraits/archive_wide_traits.h>
+#include <QxTraits/archive_printable.h>
 
-#include "../../../include/QxMemLeak.h"
+#include <QxMemLeak.h>
 
 namespace boost {
 namespace serialization {

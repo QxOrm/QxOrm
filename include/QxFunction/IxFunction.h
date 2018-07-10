@@ -36,14 +36,14 @@
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_same.hpp>
 
-#include "../../include/QxCommon/QxBool.h"
+#include <QxCommon/QxBool.h>
 
-#include "../../include/QxCollection/QxCollection.h"
+#include <QxCollection/QxCollection.h>
 
-#include "../../include/QxFunction/QxFunctionError.h"
-#include "../../include/QxFunction/QxFunctionMacro.h"
+#include <QxFunction/QxFunctionError.h>
+#include <QxFunction/QxFunctionMacro.h>
 
-#include "../../include/QxTraits/remove_attr.h"
+#include <QxTraits/remove_attr.h>
 
 namespace qx {
 

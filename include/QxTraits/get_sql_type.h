@@ -43,12 +43,12 @@
 #include <QtCore/qscopedpointer.h>
 #endif // (QT_VERSION >= 0x040600)
 
-#include "../../include/QxTraits/is_qx_registered.h"
-#include "../../include/QxTraits/get_primary_key.h"
-#include "../../include/QxTraits/remove_attr.h"
-#include "../../include/QxTraits/get_class_name_primitive.h"
+#include <QxTraits/is_qx_registered.h>
+#include <QxTraits/get_primary_key.h>
+#include <QxTraits/remove_attr.h>
+#include <QxTraits/get_class_name_primitive.h>
 
-#include "../../include/QxCommon/QxBool.h"
+#include <QxCommon/QxBool.h>
 
 namespace qx {
 namespace trait {

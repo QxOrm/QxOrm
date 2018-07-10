@@ -37,7 +37,7 @@
 #include <QtSql/qsqlerror.h>
 #include <QtSql/qsqldriver.h>
 
-#include "../../include/QxDao/QxSqlQuery.h"
+#include <QxDao/QxSqlQuery.h>
 
 namespace qx {
 namespace dao {

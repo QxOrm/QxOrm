@@ -30,7 +30,7 @@
 CONFIG += debug_and_release
 CONFIG += precompile_header
 DEPENDPATH += .
-INCLUDEPATH += .
+INCLUDEPATH += ./include
 QT += network
 QT += xml
 QT += sql
@@ -48,8 +48,11 @@ win32 {
 CONFIG(debug, debug|release) {
 } else {
 DEFINES += NDEBUG
-QMAKE_LFLAGS += /OPT:NOREF
+win32-msvc2005: QMAKE_LFLAGS += /OPT:NOREF
+win32-msvc2008: QMAKE_LFLAGS += /OPT:NOREF
+win32-msvc2010: QMAKE_LFLAGS += /OPT:NOREF
 } # CONFIG(debug, debug|release)
+win32-g++: QMAKE_LFLAGS += -export-all-symbols
 } # win32
 
 #######################

@@ -23,11 +23,13 @@
 **
 ****************************************************************************/
 
-#include "../../include/QxPrecompiled.h"
+#include <QxPrecompiled.h>
 
-#include "../../include/QxDao/QxSqlDatabase.h"
+#include <QxDao/QxSqlDatabase.h>
 
-#include "../../include/QxMemLeak/mem_leak.h"
+#include <QxMemLeak/mem_leak.h>
+
+QX_DLL_EXPORT_QX_SINGLETON_CPP(qx::QxSqlDatabase)
 
 namespace qx {
 

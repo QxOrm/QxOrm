@@ -34,7 +34,7 @@
 #include <boost/mpl/logical.hpp>
 #include <boost/type_traits/is_base_of.hpp>
 
-#include "../../include/QxTraits/is_container.h"
+#include <QxTraits/is_container.h>
 
 #define qx_container_base_of_test_0() (sizeof(qx::trait::is_container_base_of<B, D>::removeContainer(b, d)) == sizeof(char))
 #define qx_container_base_of_test_1() (sizeof(qx::trait::is_container_base_of<B, D>::removeContainer((* b_std_vector), d)) == sizeof(char))

@@ -30,9 +30,9 @@
 #pragma once
 #endif
 
-#include "../../include/QxDataMember/IxDataMember.h"
+#include <QxDataMember/IxDataMember.h>
 
-#include "../../include/QxCollection/QxCollection.h"
+#include <QxCollection/QxCollection.h>
 
 #define QX_TABLE_PER_CLASS       1
 #define QX_TABLE_PER_HIERARCHY   2

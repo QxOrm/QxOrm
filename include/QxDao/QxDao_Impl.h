@@ -35,23 +35,23 @@
 #include <boost/mpl/logical.hpp>
 #include <boost/type_traits/is_pointer.hpp>
 
-#include "../../include/QxDao/QxDao.h"
-#include "../../include/QxDao/QxSqlDatabase.h"
-#include "../../include/QxDao/QxSqlQueryBuilder.h"
-#include "../../include/QxDao/QxSqlQueryHelper.h"
+#include <QxDao/QxDao.h>
+#include <QxDao/QxSqlDatabase.h>
+#include <QxDao/QxSqlQueryBuilder.h>
+#include <QxDao/QxSqlQueryHelper.h>
 
-#include "../../include/QxCollection/QxCollection.h"
+#include <QxCollection/QxCollection.h>
 
-#include "../../include/QxRegister/QxClass.h"
+#include <QxRegister/QxClass.h>
 
-#include "../../include/QxTraits/is_qx_registered.h"
-#include "../../include/QxTraits/is_container.h"
-#include "../../include/QxTraits/is_smart_ptr.h"
-#include "../../include/QxTraits/get_base_class.h"
-#include "../../include/QxTraits/get_class_name_primitive.h"
-#include "../../include/QxTraits/construct_ptr.h"
-#include "../../include/QxTraits/generic_container.h"
-#include "../../include/QxTraits/is_valid_primary_key.h"
+#include <QxTraits/is_qx_registered.h>
+#include <QxTraits/is_container.h>
+#include <QxTraits/is_smart_ptr.h>
+#include <QxTraits/get_base_class.h>
+#include <QxTraits/get_class_name_primitive.h>
+#include <QxTraits/construct_ptr.h>
+#include <QxTraits/generic_container.h>
+#include <QxTraits/is_valid_primary_key.h>
 
 #include "../../inl/QxDao/QxDao_Helper.inl"
 #include "../../inl/QxDao/QxDao_Count.inl"

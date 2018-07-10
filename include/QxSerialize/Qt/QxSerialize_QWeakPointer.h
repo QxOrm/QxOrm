@@ -37,7 +37,7 @@
 
 #include <QtCore/QWeakPointer>
 
-#include "../../../include/QxSerialize/Qt/QxSerialize_QSharedPointer.h"
+#include <QxSerialize/Qt/QxSerialize_QSharedPointer.h>
 
 namespace boost {
 namespace serialization {

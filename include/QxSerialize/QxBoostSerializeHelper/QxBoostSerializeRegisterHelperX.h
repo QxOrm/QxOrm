@@ -32,14 +32,14 @@
 
 #include <QtCore/qmutex.h>
 
-#include "../../../include/QxCommon/QxConfig.h"
+#include <QxCommon/QxConfig.h>
 
-#include "../../../include/QxSerialize/QxBoostSerializeHelper/IxBoostSerializeRegisterHelper.h"
+#include <QxSerialize/QxBoostSerializeHelper/IxBoostSerializeRegisterHelper.h>
 
-#include "../../../include/QxSingleton/QxSingleton.h"
+#include <QxSingleton/QxSingleton.h>
 
-#include "../../../include/QxCollection/QxCollection.h"
-#include "../../../include/QxCollection/QxForeach.h"
+#include <QxCollection/QxCollection.h>
+#include <QxCollection/QxForeach.h>
 
 namespace qx {
 
@@ -103,5 +103,7 @@ private:
 };
 
 } // namespace qx
+
+QX_DLL_EXPORT_QX_SINGLETON_HPP(qx::QxBoostSerializeRegisterHelperX)
 
 #endif // _QX_BOOST_SERIALIZE_REGISTER_HELPER_X_H_

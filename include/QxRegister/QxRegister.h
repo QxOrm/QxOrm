@@ -40,18 +40,19 @@
 #include <boost/mpl/logical.hpp>
 #include <boost/static_assert.hpp>
 
-#include "../../include/QxCommon/QxConfig.h"
+#include <QxCommon/QxConfig.h>
+#include <QxCommon/QxMacro.h>
 
-#include "../../include/QxRegister/QxClass.h"
+#include <QxRegister/QxClass.h>
 
-#include "../../include/QxFactory/QxFactory.h"
+#include <QxFactory/QxFactory.h>
 
-#include "../../include/QxSerialize/QxSerializeInvoker.h"
-#include "../../include/QxSerialize/QxBoostSerializeHelper/QxBoostSerializeRegisterHelper.h"
-#include "../../include/QxSerialize/boost/QxExportDllMacroHpp.h"
-#include "../../include/QxSerialize/boost/QxExportDllMacroCpp.h"
+#include <QxSerialize/QxSerializeInvoker.h>
+#include <QxSerialize/QxBoostSerializeHelper/QxBoostSerializeRegisterHelper.h>
+#include <QxSerialize/boost/QxExportDllMacroHpp.h>
+#include <QxSerialize/boost/QxExportDllMacroCpp.h>
 
-#include "../../include/QxTraits/is_qx_registered.h"
+#include <QxTraits/is_qx_registered.h>
 
 #define QX_SERIALIZE_IMPLEMENT_ARCHIVE_CPP(Archive, className) \
 namespace boost { namespace serialization { \
@@ -265,22 +266,10 @@ QX_SERIALIZE_IMPLEMENT_LIST_ARCHIVE_CPP(className)
 QX_REGISTER_COMPLEX_CLASS_NAME_CPP(className, className)
 
 #ifdef _MSC_VER
-#define QX_REGISTER_DLL_EXPORT __declspec(dllexport)
-#else
-#define QX_REGISTER_DLL_EXPORT
-#endif // _MSC_VER
-
-#ifdef _MSC_VER
-#define QX_REGISTER_DLL_IMPORT __declspec(dllimport)
-#else
-#define QX_REGISTER_DLL_IMPORT
-#endif // _MSC_VER
-
-#ifdef _MSC_VER
 #define QX_REGISTER_COMPLEX_CLASS_NAME_HPP_EXPORT_DLL(className, baseClass, version, classNameFormatted) \
 QX_REGISTER_COMPLEX_CLASS_NAME_HPP(className, baseClass, version, classNameFormatted) \
-QX_SERIALIZE_LIST_ARCHIVE_HPP(QX_REGISTER_DLL_EXPORT, className) \
-namespace qx { template <> QX_REGISTER_DLL_EXPORT void register_class(QxClass< className > & t) BOOST_USED; }
+QX_SERIALIZE_LIST_ARCHIVE_HPP(QX_DLL_EXPORT_HELPER, className) \
+namespace qx { template <> QX_DLL_EXPORT_HELPER void register_class(QxClass< className > & t) BOOST_USED; }
 // ---
 #define QX_REGISTER_HPP_EXPORT_DLL(className, baseClass, version) \
 QX_REGISTER_COMPLEX_CLASS_NAME_HPP_EXPORT_DLL(className, baseClass, version, className)
@@ -289,8 +278,8 @@ QX_REGISTER_COMPLEX_CLASS_NAME_HPP_EXPORT_DLL(className, baseClass, version, cla
 QX_REGISTER_COMPLEX_CLASS_NAME_HPP(className, baseClass, version, classNameFormatted) \
 QX_DLL_EXPORT_TEMPLATE_QX_CLASS_HPP(className) \
 QX_BOOST_EXPORT_SERIALIZATION_HPP(className) \
-QX_SERIALIZE_LIST_ARCHIVE_HPP(QX_REGISTER_DLL_EXPORT, className) \
-namespace qx { template <> QX_REGISTER_DLL_EXPORT void register_class(QxClass< className > & t) BOOST_USED; }
+QX_SERIALIZE_LIST_ARCHIVE_HPP(QX_DLL_EXPORT_HELPER, className) \
+namespace qx { template <> QX_DLL_EXPORT_HELPER void register_class(QxClass< className > & t) BOOST_USED; }
 // ---
 #define QX_REGISTER_HPP_EXPORT_DLL(className, baseClass, version) \
 QX_REGISTER_COMPLEX_CLASS_NAME_HPP_EXPORT_DLL(className, baseClass, version, className)
@@ -300,8 +289,8 @@ QX_REGISTER_COMPLEX_CLASS_NAME_HPP_EXPORT_DLL(className, baseClass, version, cla
 QX_REGISTER_COMPLEX_CLASS_NAME_HPP(className, baseClass, version, classNameFormatted) \
 QX_DLL_EXPORT_TEMPLATE_QX_CLASS_HPP(className) \
 QX_BOOST_EXPORT_SERIALIZATION_HPP(className) \
-QX_SERIALIZE_LIST_ARCHIVE_HPP(QX_REGISTER_DLL_IMPORT, className) \
-namespace qx { template <> QX_REGISTER_DLL_IMPORT void register_class(QxClass< className > & t) BOOST_USED; }
+QX_SERIALIZE_LIST_ARCHIVE_HPP(QX_DLL_IMPORT_HELPER, className) \
+namespace qx { template <> QX_DLL_IMPORT_HELPER void register_class(QxClass< className > & t) BOOST_USED; }
 
 #define QX_REGISTER_HPP_IMPORT_DLL(className, baseClass, version) \
 QX_REGISTER_COMPLEX_CLASS_NAME_HPP_IMPORT_DLL(className, baseClass, version, className)

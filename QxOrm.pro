@@ -83,6 +83,7 @@ HEADERS += ./include/QxCommon/QxBool.h
 HEADERS += ./include/QxCommon/QxCache.h
 HEADERS += ./include/QxCommon/QxStringCvt.h
 HEADERS += ./include/QxCommon/QxStringCvt_Impl.h
+HEADERS += ./include/QxCommon/QxStringCvt_Export.h
 
 HEADERS += ./include/QxRegister/IxClass.h
 HEADERS += ./include/QxRegister/QxClass.h
@@ -271,6 +272,7 @@ SOURCES += ./src/QxFactory/QxFactoryX.cpp
 SOURCES += ./src/QxCollection/QxCollection.cpp
 
 SOURCES += ./src/QxCommon/QxCache.cpp
+SOURCES += ./src/QxCommon/QxStringCvt_Export.cpp
 
 SOURCES += ./src/QxRegister/IxClass.cpp
 SOURCES += ./src/QxRegister/QxClassX.cpp

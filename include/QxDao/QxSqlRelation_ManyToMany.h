@@ -30,7 +30,7 @@
 #pragma once
 #endif
 
-#include "../../include/QxDao/QxSqlRelation.h"
+#include <QxDao/QxSqlRelation.h>
 
 namespace qx {
 

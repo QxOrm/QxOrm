@@ -30,8 +30,8 @@
 #pragma once
 #endif
 
-#include "../../../include/QxSerialize/QxBoostSerializeHelper/IxBoostSerializeRegisterHelper.h"
-#include "../../../include/QxSerialize/QxBoostSerializeHelper/QxBoostSerializeHelper.h"
+#include <QxSerialize/QxBoostSerializeHelper/IxBoostSerializeRegisterHelper.h>
+#include <QxSerialize/QxBoostSerializeHelper/QxBoostSerializeHelper.h>
 
 #define QX_BOOST_SERIALIZE_REGISTER_HELPER_IMPLEMENT_VIRTUAL_ARCHIVE(ArchiveIn, ArchiveOut) \
 virtual void helper(ArchiveIn & ar) const { private_helper(ar); } \

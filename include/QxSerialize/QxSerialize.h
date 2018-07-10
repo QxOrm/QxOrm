@@ -30,10 +30,10 @@
 #pragma once
 #endif
 
-#include "../../include/QxCommon/QxConfig.h"
+#include <QxCommon/QxConfig.h>
 
-#include "../../include/QxSerialize/QxSerializeFastCompil.h"
-#include "../../include/QxSerialize/boost/QxSerializeInclude.h"
+#include <QxSerialize/QxSerializeFastCompil.h>
+#include <QxSerialize/boost/QxSerializeInclude.h>
 
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/extended_type_info_typeid.hpp>
@@ -66,62 +66,62 @@
 #pragma warning(disable:4189)
 #endif // _MSC_VER
 
-#include "../../include/QxSerialize/boost/QxExportDllMacroHpp.h"
-#include "../../include/QxSerialize/boost/QxExportDllMacroCpp.h"
-#include "../../include/QxSerialize/boost/QxExportDllBoostArchive.h"
-#include "../../include/QxSerialize/boost/QxImportDllBoostArchive.h"
-#include "../../include/QxSerialize/boost/QxSerialize_shared_ptr.h"
-#include "../../include/QxSerialize/boost/QxSerialize_tuple.h"
-#include "../../include/QxSerialize/boost/QxSerialize_unordered_map.h"
-#include "../../include/QxSerialize/boost/QxSerialize_unordered_set.h"
+#include <QxSerialize/boost/QxExportDllMacroHpp.h>
+#include <QxSerialize/boost/QxExportDllMacroCpp.h>
+#include <QxSerialize/boost/QxExportDllBoostArchive.h>
+#include <QxSerialize/boost/QxImportDllBoostArchive.h>
+#include <QxSerialize/boost/QxSerialize_shared_ptr.h>
+#include <QxSerialize/boost/QxSerialize_tuple.h>
+#include <QxSerialize/boost/QxSerialize_unordered_map.h>
+#include <QxSerialize/boost/QxSerialize_unordered_set.h>
 
-#include "../../include/QxSerialize/Qt/QxSerialize_QBrush.h"
-#include "../../include/QxSerialize/Qt/QxSerialize_QByteArray.h"
-#include "../../include/QxSerialize/Qt/QxSerialize_QColor.h"
-#include "../../include/QxSerialize/Qt/QxSerialize_QDate.h"
-#include "../../include/QxSerialize/Qt/QxSerialize_QDateTime.h"
-#include "../../include/QxSerialize/Qt/QxSerialize_QFont.h"
-#include "../../include/QxSerialize/Qt/QxSerialize_QHash.h"
-#include "../../include/QxSerialize/Qt/QxSerialize_QImage.h"
-#include "../../include/QxSerialize/Qt/QxSerialize_QLinkedList.h"
-#include "../../include/QxSerialize/Qt/QxSerialize_QList.h"
-#include "../../include/QxSerialize/Qt/QxSerialize_QMap.h"
-#include "../../include/QxSerialize/Qt/QxSerialize_QMatrix.h"
-#include "../../include/QxSerialize/Qt/QxSerialize_QObject.h"
-#include "../../include/QxSerialize/Qt/QxSerialize_QPair.h"
-#include "../../include/QxSerialize/Qt/QxSerialize_QPicture.h"
-#include "../../include/QxSerialize/Qt/QxSerialize_QPixmap.h"
-#include "../../include/QxSerialize/Qt/QxSerialize_QPoint.h"
-#include "../../include/QxSerialize/Qt/QxSerialize_QRect.h"
-#include "../../include/QxSerialize/Qt/QxSerialize_QRegExp.h"
-#include "../../include/QxSerialize/Qt/QxSerialize_QRegion.h"
-#include "../../include/QxSerialize/Qt/QxSerialize_QScopedPointer.h"
-#include "../../include/QxSerialize/Qt/QxSerialize_QSharedPointer.h"
-#include "../../include/QxSerialize/Qt/QxSerialize_QSize.h"
-#include "../../include/QxSerialize/Qt/QxSerialize_QString.h"
-#include "../../include/QxSerialize/Qt/QxSerialize_QStringList.h"
-#include "../../include/QxSerialize/Qt/QxSerialize_QTime.h"
-#include "../../include/QxSerialize/Qt/QxSerialize_QUrl.h"
-#include "../../include/QxSerialize/Qt/QxSerialize_QVariant.h"
-#include "../../include/QxSerialize/Qt/QxSerialize_QVector.h"
-#include "../../include/QxSerialize/Qt/QxSerialize_QWeakPointer.h"
-#include "../../include/QxSerialize/Qt/QxSerialize_QMultiHash.h"
-#include "../../include/QxSerialize/Qt/QxSerialize_QMultiMap.h"
+#include <QxSerialize/Qt/QxSerialize_QBrush.h>
+#include <QxSerialize/Qt/QxSerialize_QByteArray.h>
+#include <QxSerialize/Qt/QxSerialize_QColor.h>
+#include <QxSerialize/Qt/QxSerialize_QDate.h>
+#include <QxSerialize/Qt/QxSerialize_QDateTime.h>
+#include <QxSerialize/Qt/QxSerialize_QFont.h>
+#include <QxSerialize/Qt/QxSerialize_QHash.h>
+#include <QxSerialize/Qt/QxSerialize_QImage.h>
+#include <QxSerialize/Qt/QxSerialize_QLinkedList.h>
+#include <QxSerialize/Qt/QxSerialize_QList.h>
+#include <QxSerialize/Qt/QxSerialize_QMap.h>
+#include <QxSerialize/Qt/QxSerialize_QMatrix.h>
+#include <QxSerialize/Qt/QxSerialize_QObject.h>
+#include <QxSerialize/Qt/QxSerialize_QPair.h>
+#include <QxSerialize/Qt/QxSerialize_QPicture.h>
+#include <QxSerialize/Qt/QxSerialize_QPixmap.h>
+#include <QxSerialize/Qt/QxSerialize_QPoint.h>
+#include <QxSerialize/Qt/QxSerialize_QRect.h>
+#include <QxSerialize/Qt/QxSerialize_QRegExp.h>
+#include <QxSerialize/Qt/QxSerialize_QRegion.h>
+#include <QxSerialize/Qt/QxSerialize_QScopedPointer.h>
+#include <QxSerialize/Qt/QxSerialize_QSharedPointer.h>
+#include <QxSerialize/Qt/QxSerialize_QSize.h>
+#include <QxSerialize/Qt/QxSerialize_QString.h>
+#include <QxSerialize/Qt/QxSerialize_QStringList.h>
+#include <QxSerialize/Qt/QxSerialize_QTime.h>
+#include <QxSerialize/Qt/QxSerialize_QUrl.h>
+#include <QxSerialize/Qt/QxSerialize_QVariant.h>
+#include <QxSerialize/Qt/QxSerialize_QVector.h>
+#include <QxSerialize/Qt/QxSerialize_QWeakPointer.h>
+#include <QxSerialize/Qt/QxSerialize_QMultiHash.h>
+#include <QxSerialize/Qt/QxSerialize_QMultiMap.h>
 
-#include "../../include/QxSerialize/Qx/QxSerialize_QxCollection.h"
-#include "../../include/QxSerialize/Qx/QxSerialize_QxXmlReader.h"
-#include "../../include/QxSerialize/Qx/QxSerialize_QxXmlWriter.h"
+#include <QxSerialize/Qx/QxSerialize_QxCollection.h>
+#include <QxSerialize/Qx/QxSerialize_QxXmlReader.h>
+#include <QxSerialize/Qx/QxSerialize_QxXmlWriter.h>
 
-#include "../../include/QxSerialize/QxBoostSerializeHelper/IxBoostSerializeRegisterHelper.h"
-#include "../../include/QxSerialize/QxBoostSerializeHelper/QxBoostInitGuid.h"
-#include "../../include/QxSerialize/QxBoostSerializeHelper/QxBoostSerializeHelper.h"
-#include "../../include/QxSerialize/QxBoostSerializeHelper/QxBoostSerializeRegisterHelper.h"
-#include "../../include/QxSerialize/QxBoostSerializeHelper/QxBoostSerializeRegisterHelperX.h"
+#include <QxSerialize/QxBoostSerializeHelper/IxBoostSerializeRegisterHelper.h>
+#include <QxSerialize/QxBoostSerializeHelper/QxBoostInitGuid.h>
+#include <QxSerialize/QxBoostSerializeHelper/QxBoostSerializeHelper.h>
+#include <QxSerialize/QxBoostSerializeHelper/QxBoostSerializeRegisterHelper.h>
+#include <QxSerialize/QxBoostSerializeHelper/QxBoostSerializeRegisterHelperX.h>
 
-#include "../../include/QxSerialize/QxArchive.h"
-#include "../../include/QxSerialize/QxClone.h"
-#include "../../include/QxSerialize/QxDump.h"
-#include "../../include/QxSerialize/QxSerializeInvoker.h"
+#include <QxSerialize/QxArchive.h>
+#include <QxSerialize/QxClone.h>
+#include <QxSerialize/QxDump.h>
+#include <QxSerialize/QxSerializeInvoker.h>
 
 #ifdef _MSC_VER
 #pragma warning(pop)

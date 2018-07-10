@@ -32,9 +32,9 @@
 
 #include <QtCore/qhash.h>
 
-#include "../../include/QxSingleton/QxSingleton.h"
+#include <QxSingleton/QxSingleton.h>
 
-#include "../../include/QxCollection/QxForeach.h"
+#include <QxCollection/QxForeach.h>
 
 namespace qx {
 
@@ -62,5 +62,7 @@ private:
 };
 
 } // namespace qx
+
+QX_DLL_EXPORT_QX_SINGLETON_HPP(qx::QxSingletonX)
 
 #endif // _QX_SINGLETON_X_H_

@@ -23,13 +23,15 @@
 **
 ****************************************************************************/
 
-#include "../../include/QxPrecompiled.h"
+#include <QxPrecompiled.h>
 
-#include "../../include/QxRegister/QxClassX.h"
+#include <QxRegister/QxClassX.h>
 
-#include "../../include/QxFactory/QxFactoryX.h"
+#include <QxFactory/QxFactoryX.h>
 
-#include "../../include/QxMemLeak/mem_leak.h"
+#include <QxMemLeak/mem_leak.h>
+
+QX_DLL_EXPORT_QX_SINGLETON_CPP(qx::QxClassX)
 
 namespace qx {
 

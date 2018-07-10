@@ -30,8 +30,8 @@
 #pragma once
 #endif
 
-#include "../../include/QxCommon/QxStringCvt.h"
-#include "../../include/QxCommon/QxStringCvt_Impl.h"
+#include <QxCommon/QxStringCvt.h>
+#include <QxCommon/QxStringCvt_Impl.h>
 
 QX_STR_CVT_BY_USING_ARCHIVE_IMPL(QBrush)
 QX_STR_CVT_BY_USING_ARCHIVE_IMPL(QColor)

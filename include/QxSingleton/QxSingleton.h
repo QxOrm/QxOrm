@@ -33,7 +33,7 @@
 #include <QtCore/qmutex.h>
 #include <QtCore/qcoreapplication.h>
 
-#include "../../include/QxSingleton/IxSingleton.h"
+#include <QxSingleton/IxSingleton.h>
 
 namespace qx {
 

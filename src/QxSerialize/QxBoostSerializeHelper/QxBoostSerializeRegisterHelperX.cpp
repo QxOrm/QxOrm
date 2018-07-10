@@ -23,11 +23,13 @@
 **
 ****************************************************************************/
 
-#include "../../../include/QxPrecompiled.h"
+#include <QxPrecompiled.h>
 
-#include "../../../include/QxSerialize/QxBoostSerializeHelper/QxBoostSerializeRegisterHelperX.h"
+#include <QxSerialize/QxBoostSerializeHelper/QxBoostSerializeRegisterHelperX.h>
 
-#include "../../../include/QxMemLeak/mem_leak.h"
+#include <QxMemLeak/mem_leak.h>
+
+QX_DLL_EXPORT_QX_SINGLETON_CPP(qx::QxBoostSerializeRegisterHelperX)
 
 namespace qx {
 

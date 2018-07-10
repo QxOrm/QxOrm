@@ -23,11 +23,11 @@
 **
 ****************************************************************************/
 
-#include "../../../include/QxPrecompiled.h"
+#include <QxPrecompiled.h>
 
-#include "../../../include/QxSerialize/Qt/QxSerialize_QImage.h"
+#include <QxSerialize/Qt/QxSerialize_QImage.h>
 
-#include "../../../include/QxMemLeak.h"
+#include <QxMemLeak.h>
 
 QX_BOOST_EXPORT_SERIALIZATION_FAST_COMPIL_CPP(QImage)
 

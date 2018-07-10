@@ -30,9 +30,9 @@
 #pragma once
 #endif
 
-#include "../../include/QxDataMember/IxDataMemberX.h"
+#include <QxDataMember/IxDataMemberX.h>
 
-#include "../../include/QxDao/IxSqlRelation.h"
+#include <QxDao/IxSqlRelation.h>
 
 namespace qx {
 

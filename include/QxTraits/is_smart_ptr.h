@@ -34,14 +34,14 @@
 #include <boost/mpl/or.hpp>
 #include <boost/mpl/logical.hpp>
 
-#include "../../include/QxTraits/is_boost_intrusive_ptr.h"
-#include "../../include/QxTraits/is_boost_scoped_ptr.h"
-#include "../../include/QxTraits/is_boost_shared_ptr.h"
-#include "../../include/QxTraits/is_boost_weak_ptr.h"
-#include "../../include/QxTraits/is_qt_shared_data_ptr.h"
-#include "../../include/QxTraits/is_qt_scoped_ptr.h"
-#include "../../include/QxTraits/is_qt_shared_ptr.h"
-#include "../../include/QxTraits/is_qt_weak_ptr.h"
+#include <QxTraits/is_boost_intrusive_ptr.h>
+#include <QxTraits/is_boost_scoped_ptr.h>
+#include <QxTraits/is_boost_shared_ptr.h>
+#include <QxTraits/is_boost_weak_ptr.h>
+#include <QxTraits/is_qt_shared_data_ptr.h>
+#include <QxTraits/is_qt_scoped_ptr.h>
+#include <QxTraits/is_qt_shared_ptr.h>
+#include <QxTraits/is_qt_weak_ptr.h>
 
 namespace qx {
 namespace trait {

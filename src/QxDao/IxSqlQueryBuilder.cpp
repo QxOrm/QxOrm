@@ -23,11 +23,11 @@
 **
 ****************************************************************************/
 
-#include "../../include/QxPrecompiled.h"
+#include <QxPrecompiled.h>
 
-#include "../../include/QxDao/IxSqlQueryBuilder.h"
+#include <QxDao/IxSqlQueryBuilder.h>
 
-#include "../../include/QxMemLeak/mem_leak.h"
+#include <QxMemLeak/mem_leak.h>
 
 namespace qx {
 

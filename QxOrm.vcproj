@@ -357,6 +357,10 @@
 					RelativePath=".\include\QxCommon\QxStringCvt_Impl.h"
 					>
 				</File>
+				<File
+					RelativePath=".\include\QxCommon\QxStringCvt_Export.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="QxDataMember"

@@ -23,11 +23,11 @@
 **
 ****************************************************************************/
 
-#include "../../include/QxPrecompiled.h"
+#include <QxPrecompiled.h>
 
-#include "../../include/QxCommon/QxCache.h"
+#include <QxCommon/QxCache.h>
 
-#include "../../include/QxMemLeak/mem_leak.h"
+#include <QxMemLeak/mem_leak.h>
 
 namespace qx {
 namespace cache {

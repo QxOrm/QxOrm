@@ -23,15 +23,15 @@
 **
 ****************************************************************************/
 
-#include "../../../include/QxPrecompiled.h"
+#include <QxPrecompiled.h>
 
 #if _QX_USE_EXPORT_DLL_BOOST_SERIALIZATION_SINGLETON
 
-#include "../../../include/QxSerialize/QxSerialize.h"
+#include <QxSerialize/QxSerialize.h>
 
-#include "../../../include/QxCommon/QxStringCvt_Impl.h"
+#include <QxCommon/QxStringCvt_Impl.h>
 
-#include "../../../include/QxMemLeak.h"
+#include <QxMemLeak.h>
 
 #if (BOOST_VERSION > 103800)
 #define QX_BOOST_EXPORT_ARCHIVE_SERIALIZER_MAP_SINGLETON_CPP(Archive) \

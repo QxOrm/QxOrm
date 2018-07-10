@@ -30,11 +30,11 @@
 #pragma once
 #endif
 
-#include "../../../include/QxCommon/QxConfig.h"
+#include <QxCommon/QxConfig.h>
 
-#include "../../../include/QxSerialize/boost/QxSerialize_shared_ptr.h"
+#include <QxSerialize/boost/QxSerialize_shared_ptr.h>
 
-#include "../../../include/QxTraits/get_base_class.h"
+#include <QxTraits/get_base_class.h>
 
 #if _QX_USE_EXPORT_DLL_BOOST_SERIALIZATION_SINGLETON
 

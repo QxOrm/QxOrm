@@ -37,7 +37,7 @@
 
 #include <QtCore/qpoint.h>
 
-#include "../../../include/QxSerialize/QxSerializeFastCompil.h"
+#include <QxSerialize/QxSerializeFastCompil.h>
 
 BOOST_CLASS_VERSION(QPoint, 0)
 

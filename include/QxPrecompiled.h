@@ -97,7 +97,7 @@
 #pragma warning(pop)
 #endif // _MSC_VER
 
-#include "../include/QxCommon/QxConfig.h"
-#include "../include/QxCommon/QxMacro.h"
+#include <QxCommon/QxConfig.h>
+#include <QxCommon/QxMacro.h>
 
 #endif // _QX_ORM_PRECOMPILED_HEADER_H_

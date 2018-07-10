@@ -40,19 +40,19 @@
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/nvp.hpp>
 
-#include "../../include/QxTraits/archive_wide_traits.h"
-#include "../../include/QxTraits/get_class_name.h"
-#include "../../include/QxTraits/is_qx_registered.h"
+#include <QxTraits/archive_wide_traits.h>
+#include <QxTraits/get_class_name.h>
+#include <QxTraits/is_qx_registered.h>
 
-#include "../../include/QxCommon/QxConfig.h"
-#include "../../include/QxCommon/QxBool.h"
+#include <QxCommon/QxConfig.h>
+#include <QxCommon/QxBool.h>
 
-#include "../../include/QxRegister/QxClass.h"
-#include "../../include/QxRegister/QxClassName.h"
+#include <QxRegister/QxClass.h>
+#include <QxRegister/QxClassName.h>
 
-#include "../../include/QxSerialize/QxSerializeMacro.h"
-#include "../../include/QxSerialize/boost/QxSerializeInclude.h"
-#include "../../include/QxSerialize/QxBoostSerializeHelper/QxBoostSerializeRegisterHelperX.h"
+#include <QxSerialize/QxSerializeMacro.h>
+#include <QxSerialize/boost/QxSerializeInclude.h>
+#include <QxSerialize/QxBoostSerializeHelper/QxBoostSerializeRegisterHelperX.h>
 
 #define QX_STR_SERIALIZATION_ERROR "Serialization error : '%ERR%'"
 #define QX_STR_DESERIALIZATION_ERROR "Deserialization error : '%ERR%'"

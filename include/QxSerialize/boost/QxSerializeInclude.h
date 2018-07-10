@@ -30,7 +30,7 @@
 #pragma once
 #endif
 
-#include "../../../include/QxCommon/QxConfig.h"
+#include <QxCommon/QxConfig.h>
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -65,8 +65,8 @@
 #endif // _QX_SERIALIZE_XML
 
 #if _QX_SERIALIZE_PORTABLE_BINARY
-#include "../../../include/QxSerialize/boost/portable_binary/portable_iarchive.hpp"
-#include "../../../include/QxSerialize/boost/portable_binary/portable_oarchive.hpp"
+#include <QxSerialize/boost/portable_binary/portable_iarchive.hpp>
+#include <QxSerialize/boost/portable_binary/portable_oarchive.hpp>
 #endif // _QX_SERIALIZE_PORTABLE_BINARY
 
 #if _QX_SERIALIZE_WIDE_BINARY

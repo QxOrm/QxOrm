@@ -37,9 +37,9 @@
 
 #include <boost/archive/archive_exception.hpp>
 
-#include "../../include/QxSerialize/boost/QxSerializeInclude.h"
-#include "../../include/QxSerialize/QxBoostSerializeHelper/QxBoostSerializeRegisterHelperX.h"
-#include "../../include/QxSerialize/QxSerializeInvoker.h"
+#include <QxSerialize/boost/QxSerializeInclude.h>
+#include <QxSerialize/QxBoostSerializeHelper/QxBoostSerializeRegisterHelperX.h>
+#include <QxSerialize/QxSerializeInvoker.h>
 
 #define QX_STR_CLONE_SERIALIZATION_ERROR "[QxOrm] qx::clone() serialization error : '%s'"
 #define QX_STR_CLONE_DESERIALIZATION_ERROR "[QxOrm] qx::clone() deserialization error : '%s'"

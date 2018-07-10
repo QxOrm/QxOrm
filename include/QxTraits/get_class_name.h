@@ -34,7 +34,7 @@
 
 #include <boost/algorithm/string.hpp>
 
-#include "../../include/QxTraits/remove_attr.h"
+#include <QxTraits/remove_attr.h>
 
 #define QX_REGISTER_CLASS_NAME_SEP_INF std::string("<")
 #define QX_REGISTER_CLASS_NAME_SEP_SUP std::string(">")

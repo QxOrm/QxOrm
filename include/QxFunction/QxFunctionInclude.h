@@ -30,16 +30,16 @@
 #pragma once
 #endif
 
-#include "../../include/QxFunction/IxFunction.h"
-#include "../../include/QxFunction/QxFunction_0.h"
-#include "../../include/QxFunction/QxFunction_1.h"
-#include "../../include/QxFunction/QxFunction_2.h"
-#include "../../include/QxFunction/QxFunction_3.h"
-#include "../../include/QxFunction/QxFunction_4.h"
-#include "../../include/QxFunction/QxFunction_5.h"
-#include "../../include/QxFunction/QxFunction_6.h"
-#include "../../include/QxFunction/QxFunction_7.h"
-#include "../../include/QxFunction/QxFunction_8.h"
-#include "../../include/QxFunction/QxFunction_9.h"
+#include <QxFunction/IxFunction.h>
+#include <QxFunction/QxFunction_0.h>
+#include <QxFunction/QxFunction_1.h>
+#include <QxFunction/QxFunction_2.h>
+#include <QxFunction/QxFunction_3.h>
+#include <QxFunction/QxFunction_4.h>
+#include <QxFunction/QxFunction_5.h>
+#include <QxFunction/QxFunction_6.h>
+#include <QxFunction/QxFunction_7.h>
+#include <QxFunction/QxFunction_8.h>
+#include <QxFunction/QxFunction_9.h>
 
 #endif // _QX_FUNCTION_INCLUDE_H_

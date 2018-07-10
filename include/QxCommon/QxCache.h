@@ -32,11 +32,11 @@
 
 #include <boost/any.hpp>
 
-#include "../../include/QxCommon/QxBool.h"
+#include <QxCommon/QxBool.h>
 
-#include "../../include/QxCollection/QxCollection.h"
+#include <QxCollection/QxCollection.h>
 
-#include "../../include/QxSingleton/QxSingleton.h"
+#include <QxSingleton/QxSingleton.h>
 
 namespace qx {
 namespace cache {

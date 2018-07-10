@@ -30,10 +30,10 @@
 #pragma once
 #endif
 
-#include "../../include/QxXml/QxXmlReader.h"
-#include "../../include/QxXml/QxXmlWriter.h"
+#include <QxXml/QxXmlReader.h>
+#include <QxXml/QxXmlWriter.h>
 
-#include "../../include/QxDataMember/QxDataMemberX.h"
+#include <QxDataMember/QxDataMemberX.h>
 
 namespace qx {
 

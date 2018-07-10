@@ -30,12 +30,12 @@
 #pragma once
 #endif
 
-#include "../../include/QxCommon/QxConfig.h"
+#include <QxCommon/QxConfig.h>
 
-#include "../../include/QxSerialize/QxSerializeInvoker.h"
-#include "../../include/QxSerialize/QxArchive.h"
+#include <QxSerialize/QxSerializeInvoker.h>
+#include <QxSerialize/QxArchive.h>
 
-#include "../../include/QxRegister/QxClassName.h"
+#include <QxRegister/QxClassName.h>
 
 namespace qx {
 

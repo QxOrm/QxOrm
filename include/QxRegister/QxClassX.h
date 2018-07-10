@@ -35,15 +35,15 @@
 #include <boost/mpl/logical.hpp>
 #include <boost/type_traits/is_pointer.hpp>
 
-#include "../../include/QxCommon/QxBool.h"
+#include <QxCommon/QxBool.h>
 
-#include "../../include/QxRegister/IxClass.h"
+#include <QxRegister/IxClass.h>
 
-#include "../../include/QxSingleton/QxSingleton.h"
+#include <QxSingleton/QxSingleton.h>
 
-#include "../../include/QxCollection/QxCollection.h"
+#include <QxCollection/QxCollection.h>
 
-#include "../../include/QxTraits/is_smart_ptr.h"
+#include <QxTraits/is_smart_ptr.h>
 
 namespace qx {
 
@@ -123,5 +123,7 @@ private:
 };
 
 } // namespace qx
+
+QX_DLL_EXPORT_QX_SINGLETON_HPP(qx::QxClassX)
 
 #endif // _QX_CLASS_X_H_

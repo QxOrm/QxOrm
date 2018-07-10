@@ -34,7 +34,7 @@
 #include <boost/mpl/or.hpp>
 #include <boost/mpl/logical.hpp>
 
-#include "../../include/QxTraits/is_container.h"
+#include <QxTraits/is_container.h>
 
 namespace qx {
 namespace trait {

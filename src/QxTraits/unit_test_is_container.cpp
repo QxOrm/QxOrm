@@ -23,18 +23,18 @@
 **
 ****************************************************************************/
 
-#include "../../include/QxPrecompiled.h"
+#include <QxPrecompiled.h>
 
 #include <boost/static_assert.hpp>
 
-#include "../../include/QxTraits/is_container.h"
-#include "../../include/QxTraits/is_container_base_of.h"
-#include "../../include/QxTraits/is_container_to_pod.h"
-#include "../../include/QxTraits/is_container_key_value.h"
+#include <QxTraits/is_container.h>
+#include <QxTraits/is_container_base_of.h>
+#include <QxTraits/is_container_to_pod.h>
+#include <QxTraits/is_container_key_value.h>
 
-#include "../../include/QxCollection/QxCollection.h"
+#include <QxCollection/QxCollection.h>
 
-#include "../../include/QxMemLeak/mem_leak.h"
+#include <QxMemLeak/mem_leak.h>
 
 namespace qx {
 namespace unit_test {

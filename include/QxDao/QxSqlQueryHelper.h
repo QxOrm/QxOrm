@@ -34,11 +34,11 @@
 
 #include <QtSql/qsqlquery.h>
 
-#include "../../include/QxDao/IxSqlQueryBuilder.h"
+#include <QxDao/IxSqlQueryBuilder.h>
 
-#include "../../include/QxDataMember/IxDataMember.h"
+#include <QxDataMember/IxDataMember.h>
 
-#include "../../include/QxTraits/is_qx_registered.h"
+#include <QxTraits/is_qx_registered.h>
 
 namespace qx {
 namespace dao {

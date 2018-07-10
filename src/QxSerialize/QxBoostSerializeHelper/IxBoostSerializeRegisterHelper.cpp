@@ -23,12 +23,12 @@
 **
 ****************************************************************************/
 
-#include "../../../include/QxPrecompiled.h"
+#include <QxPrecompiled.h>
 
-#include "../../../include/QxSerialize/QxBoostSerializeHelper/IxBoostSerializeRegisterHelper.h"
-#include "../../../include/QxSerialize/QxBoostSerializeHelper/QxBoostSerializeRegisterHelperX.h"
+#include <QxSerialize/QxBoostSerializeHelper/IxBoostSerializeRegisterHelper.h>
+#include <QxSerialize/QxBoostSerializeHelper/QxBoostSerializeRegisterHelperX.h>
 
-#include "../../../include/QxMemLeak/mem_leak.h"
+#include <QxMemLeak/mem_leak.h>
 
 namespace qx {
 

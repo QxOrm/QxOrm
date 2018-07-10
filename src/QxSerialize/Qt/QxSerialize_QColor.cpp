@@ -23,11 +23,11 @@
 **
 ****************************************************************************/
 
-#include "../../../include/QxPrecompiled.h"
+#include <QxPrecompiled.h>
 
-#include "../../../include/QxSerialize/Qt/QxSerialize_QColor.h"
+#include <QxSerialize/Qt/QxSerialize_QColor.h>
 
-#include "../../../include/QxMemLeak.h"
+#include <QxMemLeak.h>
 
 namespace boost {
 namespace serialization {

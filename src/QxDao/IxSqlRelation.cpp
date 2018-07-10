@@ -23,18 +23,18 @@
 **
 ****************************************************************************/
 
-#include "../../include/QxPrecompiled.h"
+#include <QxPrecompiled.h>
 
 #include <QtSql/qsqlquery.h>
 #include <QtSql/qsqlrecord.h>
 
-#include "../../include/QxDao/IxSqlRelation.h"
-#include "../../include/QxDao/IxSqlQueryBuilder.h"
+#include <QxDao/IxSqlRelation.h>
+#include <QxDao/IxSqlQueryBuilder.h>
 
-#include "../../include/QxDataMember/IxDataMember.h"
-#include "../../include/QxDataMember/IxDataMemberX.h"
+#include <QxDataMember/IxDataMember.h>
+#include <QxDataMember/IxDataMemberX.h>
 
-#include "../../include/QxMemLeak/mem_leak.h"
+#include <QxMemLeak/mem_leak.h>
 
 namespace qx {
 

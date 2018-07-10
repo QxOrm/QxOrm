@@ -23,11 +23,11 @@
 **
 ****************************************************************************/
 
-#ifdef _MSC_VER
+#include <QxPrecompiled.h>
+
+#ifdef Q_OS_WIN
 
 #include <windows.h>
-
-#include "../include/QxPrecompiled.h"
 
 extern "C"
 int WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /* lpReservedt */)
@@ -44,4 +44,4 @@ int WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /* lpReservedt */
    return 1;
 }
 
-#endif // _MSC_VER
+#endif // Q_OS_WIN

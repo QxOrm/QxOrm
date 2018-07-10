@@ -33,9 +33,9 @@
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/nvp.hpp>
 
-#include "../../include/QxSerialize/Qt/QxSerialize_QString.h"
+#include <QxSerialize/Qt/QxSerialize_QString.h>
 
-#include "../../include/QxTraits/get_class_name.h"
+#include <QxTraits/get_class_name.h>
 
 namespace qx {
 

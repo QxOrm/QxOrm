@@ -38,9 +38,8 @@
 
 #include <QtCore/qobject.h>
 
-#include "../../../include/QxSerialize/Qt/QxSerialize_QVariant.h"
-
-#include "../../../include/QxSerialize/QxSerializeFastCompil.h"
+#include <QxSerialize/Qt/QxSerialize_QVariant.h>
+#include <QxSerialize/QxSerializeFastCompil.h>
 
 BOOST_CLASS_VERSION(QObject, 0)
 

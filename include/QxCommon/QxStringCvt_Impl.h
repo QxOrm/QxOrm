@@ -36,22 +36,22 @@
 #include <boost/type_traits/is_pointer.hpp>
 #include <boost/type_traits/is_enum.hpp>
 
-#include "../../include/QxCommon/QxStringCvt.h"
-#include "../../include/QxCommon/QxBool.h"
+#include <QxCommon/QxStringCvt.h>
+#include <QxCommon/QxBool.h>
 
-#include "../../include/QxCollection/QxCollection.h"
+#include <QxCollection/QxCollection.h>
 
-#include "../../include/QxRegister/QxClass.h"
+#include <QxRegister/QxClass.h>
 
-#include "../../include/QxSerialize/QxArchive.h"
+#include <QxSerialize/QxArchive.h>
 
-#include "../../include/QxTraits/is_smart_ptr.h"
-#include "../../include/QxTraits/is_container.h"
-#include "../../include/QxTraits/is_qx_registered.h"
-#include "../../include/QxTraits/is_qt_variant_compatible.h"
-#include "../../include/QxTraits/get_class_name_primitive.h"
-#include "../../include/QxTraits/construct_ptr.h"
-#include "../../include/QxTraits/generic_container.h"
+#include <QxTraits/is_smart_ptr.h>
+#include <QxTraits/is_container.h>
+#include <QxTraits/is_qx_registered.h>
+#include <QxTraits/is_qt_variant_compatible.h>
+#include <QxTraits/get_class_name_primitive.h>
+#include <QxTraits/construct_ptr.h>
+#include <QxTraits/generic_container.h>
 
 #define QX_STR_CVT_QDATE_FORMAT        "yyyyMMdd"
 #define QX_STR_CVT_QTIME_FORMAT        "hhmmsszzz"
@@ -220,19 +220,23 @@ public:
 
 };
 
-template <typename T> struct QxStringCvt_ToString {
+template <typename T>
+struct QxStringCvt_ToString {
 static inline QString toString(const T & t, const QString & format)
 { return qx::cvt::detail::QxStringCvtHelper<T>::type::toString(t, format); } };
 
-template <typename T> struct QxStringCvt_FromString {
+template <typename T>
+struct QxStringCvt_FromString {
 static inline qx_bool fromString(const QString & s, T & t, const QString & format)
 { return qx::cvt::detail::QxStringCvtHelper<T>::type::fromString(s, t, format); } };
 
-template <typename T> struct QxStringCvt_ToVariant {
+template <typename T>
+struct QxStringCvt_ToVariant {
 static inline QVariant toVariant(const T & t, const QString & format)
 { return qx::cvt::detail::QxStringCvtHelper<T>::type::toVariant(t, format); } };
 
-template <typename T> struct QxStringCvt_FromVariant {
+template <typename T>
+struct QxStringCvt_FromVariant {
 static inline qx_bool fromVariant(const QVariant & v, T & t, const QString & format)
 { return qx::cvt::detail::QxStringCvtHelper<T>::type::fromVariant(v, t, format); } };
 

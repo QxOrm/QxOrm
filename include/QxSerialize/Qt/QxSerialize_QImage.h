@@ -40,9 +40,8 @@
 #include <QtCore/qbytearray.h>
 #include <QtCore/qbuffer.h>
 
-#include "../../../include/QxSerialize/Qt/QxSerialize_QByteArray.h"
-
-#include "../../../include/QxSerialize/QxSerializeFastCompil.h"
+#include <QxSerialize/Qt/QxSerialize_QByteArray.h>
+#include <QxSerialize/QxSerializeFastCompil.h>
 
 BOOST_CLASS_VERSION(QImage, 0)
 

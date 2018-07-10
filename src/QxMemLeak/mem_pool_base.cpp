@@ -36,7 +36,7 @@
  *
  */
 
-#include "../../include/QxCommon/QxConfig.h"
+#include <QxCommon/QxConfig.h>
 
 #ifndef NDEBUG
 #ifndef QT_NO_DEBUG
@@ -48,7 +48,7 @@
 #include <new>
 #endif
 
-#include "../../include/QxMemLeak/mem_pool_base.h"
+#include <QxMemLeak/mem_pool_base.h>
 
 /* Defines macros to abstract system memory routines */
 # ifdef _MEM_POOL_USE_MALLOC

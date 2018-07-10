@@ -23,14 +23,14 @@
 **
 ****************************************************************************/
 
-#include "../../include/QxPrecompiled.h"
+#include <QxPrecompiled.h>
 
-#include "../../include/QxDao/QxSqlQuery.h"
-#include "../../include/QxDao/QxSqlDatabase.h"
+#include <QxDao/QxSqlQuery.h>
+#include <QxDao/QxSqlDatabase.h>
 
-#include "../../include/QxCollection/QxCollectionIterator.h"
+#include <QxCollection/QxCollectionIterator.h>
 
-#include "../../include/QxMemLeak/mem_leak.h"
+#include <QxMemLeak/mem_leak.h>
 
 namespace qx {
 

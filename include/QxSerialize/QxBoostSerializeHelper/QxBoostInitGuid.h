@@ -36,7 +36,7 @@
 #include <boost/archive/detail/register_archive.hpp>
 #include <boost/mpl/bool.hpp>
 
-#include "../../../include/QxTraits/get_class_name_primitive.h"
+#include <QxTraits/get_class_name_primitive.h>
 
 namespace qx {
 

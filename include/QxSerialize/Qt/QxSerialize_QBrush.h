@@ -37,10 +37,9 @@
 
 #include <QtGui/qbrush.h>
 
-#include "../../../include/QxSerialize/Qt/QxSerialize_QColor.h"
-#include "../../../include/QxSerialize/Qt/QxSerialize_QPixmap.h"
-
-#include "../../../include/QxSerialize/QxSerializeFastCompil.h"
+#include <QxSerialize/Qt/QxSerialize_QColor.h>
+#include <QxSerialize/Qt/QxSerialize_QPixmap.h>
+#include <QxSerialize/QxSerializeFastCompil.h>
 
 BOOST_CLASS_VERSION(QBrush, 0)
 

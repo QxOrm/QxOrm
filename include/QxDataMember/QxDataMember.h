@@ -33,9 +33,9 @@
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/nvp.hpp>
 
-#include "../../include/QxDataMember/IxDataMember.h"
+#include <QxDataMember/IxDataMember.h>
 
-#include "../../include/QxCommon/QxStringCvt.h"
+#include <QxCommon/QxStringCvt.h>
 
 #define QX_DATA_MEMBER_IMPL_VIRTUAL_ARCHIVE(ArchiveInput, ArchiveOutput) \
 virtual void toArchive(const void * pOwner, ArchiveOutput & ar) const   { QxDataMember::toArchive(ar, getNamePtr(), getData(pOwner)); } \

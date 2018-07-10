@@ -30,7 +30,7 @@
 #pragma once
 #endif
 
-#include "../../include/QxSerialize/boost/QxSerializeInclude.h"
+#include <QxSerialize/boost/QxSerializeInclude.h>
 
 namespace qx {
 namespace trait {

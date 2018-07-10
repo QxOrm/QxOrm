@@ -2,8 +2,8 @@ include(../../QxOrm.pri)
 
 TEMPLATE = app
 DEFINES += _BUILDING_QX_BLOG
-DESTDIR = ../../../QxOrm/test/_bin/
 INCLUDEPATH += ../../../QxOrm/include/
+DESTDIR = ../../../QxOrm/test/_bin/
 LIBS += -L"../../../QxOrm/test/_bin"
 PRECOMPILED_HEADER = ./include/precompiled.h
 

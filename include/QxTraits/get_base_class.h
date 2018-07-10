@@ -34,7 +34,7 @@
 #include <boost/mpl/logical.hpp>
 #include <boost/type_traits/is_same.hpp>
 
-#include "../../include/QxTraits/get_class_name.h"
+#include <QxTraits/get_class_name.h>
 
 namespace qx {
 namespace trait {

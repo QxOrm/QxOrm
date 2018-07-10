@@ -37,9 +37,8 @@
 
 #include <QtCore/qregexp.h>
 
-#include "../../../include/QxSerialize/Qt/QxSerialize_QString.h"
-
-#include "../../../include/QxSerialize/QxSerializeFastCompil.h"
+#include <QxSerialize/Qt/QxSerialize_QString.h>
+#include <QxSerialize/QxSerializeFastCompil.h>
 
 BOOST_CLASS_VERSION(QRegExp, 0)
 

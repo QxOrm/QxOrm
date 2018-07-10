@@ -32,13 +32,13 @@
 
 #include <QtCore/qmutex.h>
 
-#include "../../include/QxDao/IxSqlQueryBuilder.h"
-#include "../../include/QxDao/QxSqlQueryHelper.h"
+#include <QxDao/IxSqlQueryBuilder.h>
+#include <QxDao/QxSqlQueryHelper.h>
 
-#include "../../include/QxRegister/QxClass.h"
+#include <QxRegister/QxClass.h>
 
-#include "../../include/QxTraits/remove_attr.h"
-#include "../../include/QxTraits/remove_smart_ptr.h"
+#include <QxTraits/remove_attr.h>
+#include <QxTraits/remove_smart_ptr.h>
 
 #define QX_SQL_ERR_NO_DATA_MEMBER_REGISTERED    "'QxSqlQueryBuilder<T>' error : 'qx::register_class()' not called or no data member registered"
 #define QX_SQL_ERR_NO_ID_REGISTERED             "'QxSqlQueryBuilder<T>' error : no id registered"

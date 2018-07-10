@@ -34,7 +34,7 @@
 #include <boost/mpl/logical.hpp>
 #include <boost/type_traits/is_pointer.hpp>
 
-#include "../../include/QxTraits/is_qx_pod.h"
+#include <QxTraits/is_qx_pod.h>
 
 namespace qx {
 namespace trait {

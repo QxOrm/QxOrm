@@ -32,10 +32,10 @@
 
 #include <boost/type_traits/is_pointer.hpp>
 
-#include "../../include/QxTraits/is_smart_ptr.h"
-#include "../../include/QxTraits/remove_attr.h"
-#include "../../include/QxTraits/remove_smart_ptr.h"
-#include "../../include/QxTraits/construct_ptr.h"
+#include <QxTraits/is_smart_ptr.h>
+#include <QxTraits/remove_attr.h>
+#include <QxTraits/remove_smart_ptr.h>
+#include <QxTraits/construct_ptr.h>
 
 namespace qx {
 namespace trait {

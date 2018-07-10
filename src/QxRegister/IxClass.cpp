@@ -23,12 +23,12 @@
 **
 ****************************************************************************/
 
-#include "../../include/QxPrecompiled.h"
+#include <QxPrecompiled.h>
 
-#include "../../include/QxRegister/IxClass.h"
-#include "../../include/QxRegister/QxClassX.h"
+#include <QxRegister/IxClass.h>
+#include <QxRegister/QxClassX.h>
 
-#include "../../include/QxMemLeak/mem_leak.h"
+#include <QxMemLeak/mem_leak.h>
 
 namespace qx {
 

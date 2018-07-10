@@ -35,17 +35,17 @@
 #include <boost/type_traits/is_base_of.hpp>
 #include <boost/serialization/version.hpp>
 
-#include "../../include/QxRegister/IxClass.h"
+#include <QxRegister/IxClass.h>
 
-#include "../../include/QxDataMember/QxDataMemberX.h"
+#include <QxDataMember/QxDataMemberX.h>
 
-#include "../../include/QxFunction/QxFunctionInclude.h"
+#include <QxFunction/QxFunctionInclude.h>
 
-#include "../../include/QxSingleton/QxSingleton.h"
+#include <QxSingleton/QxSingleton.h>
 
-#include "../../include/QxTraits/get_class_name.h"
-#include "../../include/QxTraits/get_base_class.h"
-#include "../../include/QxTraits/get_primary_key.h"
+#include <QxTraits/get_class_name.h>
+#include <QxTraits/get_base_class.h>
+#include <QxTraits/get_primary_key.h>
 
 namespace qx {
 

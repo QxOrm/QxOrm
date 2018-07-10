@@ -32,9 +32,9 @@
 
 #include <boost/noncopyable.hpp>
 
-#include "../../../include/QxCommon/QxConfig.h"
+#include <QxCommon/QxConfig.h>
 
-#include "../../../include/QxSerialize/boost/QxSerializeInclude.h"
+#include <QxSerialize/boost/QxSerializeInclude.h>
 
 #define QX_IX_BOOST_SERIALIZE_REGISTER_HELPER_PURE_VIRTUAL_ARCHIVE(ArchiveIn, ArchiveOut) \
 virtual void helper(ArchiveIn & ar) const = 0; \

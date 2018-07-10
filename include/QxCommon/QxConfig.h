@@ -30,7 +30,7 @@
 #pragma once
 #endif
 
-#define QX_VERSION   0x010102 // QxOrm version 1.1.2
+#define QX_VERSION   0x010103 // QxOrm version 1.1.3
 
 #define _QX_SERIALIZE_POLYMORPHIC            0
 
@@ -55,6 +55,10 @@
 #define _QX_INCLUDE_BOOST_SERIALIZE_ARCHIVE_IMPL_IPP                    0
 #define _QX_MEM_LEAK_ONLY_KNOWN_SRC_FILE                                1
 #define _QX_SUPPORT_BOOST_SERIALIZE_SHARED_PTR_132                      0
+#define _QX_USE_QX_STRING_CVT_EXPORT                                    0
+#define _QX_USE_GCC_EXPORT_ALL_SYMBOLS                                  1
+#define _QX_USE_GCC_VISIBILITY                                          0
+#define _QX_USE_ASSERT                                                  1
 
 #ifdef _MSC_VER
 /* -- Link error with VC++ 9.0 => Qt uses "-Zc:wchar_t-" option to compile and boost serialization library is compiled without this option -- */

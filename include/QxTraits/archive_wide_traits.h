@@ -40,7 +40,7 @@
 
 #include <QtCore/qstring.h>
 
-#include "../../include/QxSerialize/boost/QxSerializeInclude.h"
+#include <QxSerialize/boost/QxSerializeInclude.h>
 
 namespace qx {
 namespace trait {

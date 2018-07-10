@@ -30,7 +30,7 @@
 #pragma once
 #endif
 
-#include "../../../include/QxCommon/QxConfig.h"
+#include <QxCommon/QxConfig.h>
 
 #if _QX_SUPPORT_BOOST_SERIALIZE_SHARED_PTR_132
 #include <boost/serialization/shared_ptr_132.hpp>

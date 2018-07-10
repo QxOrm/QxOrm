@@ -23,17 +23,17 @@
 **
 ****************************************************************************/
 
-#include "../../include/QxPrecompiled.h"
+#include <QxPrecompiled.h>
 
 #include <boost/static_assert.hpp>
 
-#include "../../include/QxTraits/is_smart_ptr.h"
-#include "../../include/QxTraits/is_smart_ptr_base_of.h"
-#include "../../include/QxTraits/is_smart_ptr_to_pod.h"
-#include "../../include/QxTraits/is_ptr_base_of.h"
-#include "../../include/QxTraits/is_ptr_to_pod.h"
+#include <QxTraits/is_smart_ptr.h>
+#include <QxTraits/is_smart_ptr_base_of.h>
+#include <QxTraits/is_smart_ptr_to_pod.h>
+#include <QxTraits/is_ptr_base_of.h>
+#include <QxTraits/is_ptr_to_pod.h>
 
-#include "../../include/QxMemLeak/mem_leak.h"
+#include <QxMemLeak/mem_leak.h>
 
 namespace qx {
 namespace unit_test {

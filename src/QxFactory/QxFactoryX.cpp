@@ -23,11 +23,13 @@
 **
 ****************************************************************************/
 
-#include "../../include/QxPrecompiled.h"
+#include <QxPrecompiled.h>
 
-#include "../../include/QxFactory/QxFactoryX.h"
+#include <QxFactory/QxFactoryX.h>
 
-#include "../../include/QxMemLeak/mem_leak.h"
+#include <QxMemLeak/mem_leak.h>
+
+QX_DLL_EXPORT_QX_SINGLETON_CPP(qx::QxFactoryX)
 
 namespace qx {
 
@@ -50,10 +52,8 @@ void QxFactoryX::unregisterFactory(const QString & sKey)
 
 boost::any QxFactoryX::createObject(const QString & sKey) const
 {
-   if (! m_mapFactoryX.contains(sKey))
-      return boost::any();
-
-   IxFactory * pFactory = m_mapFactoryX.value(sKey);
+   IxFactory * pFactory = (m_mapFactoryX.contains(sKey) ? m_mapFactoryX.value(sKey) : NULL);
+   if (! pFactory) { qDebug("[QxOrm] cannot create an instance of type '%s'", qPrintable(sKey)); }
 
    return (pFactory ? pFactory->createObject() : boost::any());
 }

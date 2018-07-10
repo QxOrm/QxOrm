@@ -34,11 +34,11 @@
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_abstract.hpp>
 
-#include "../../include/QxFactory/IxFactory.h"
+#include <QxFactory/IxFactory.h>
 
-#include "../../include/QxTraits/get_base_class.h"
-#include "../../include/QxTraits/get_class_name.h"
-#include "../../include/QxTraits/get_primary_key.h"
+#include <QxTraits/get_base_class.h>
+#include <QxTraits/get_class_name.h>
+#include <QxTraits/get_primary_key.h>
 
 #define QX_STR_CANNOT_INSTANTIATE_ABSTRACT_CLASS "[QxOrm] qx::QxFactory<T> ---> cannot instantiate abstract class '%s'"
 

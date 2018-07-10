@@ -36,7 +36,7 @@
  *
  */
 
-#include "../../include/QxCommon/QxConfig.h"
+#include <QxCommon/QxConfig.h>
 
 #ifndef NDEBUG
 #ifndef QT_NO_DEBUG
@@ -45,7 +45,7 @@
 #include <limits.h>
 #include <string.h>
 
-#include "../../include/QxMemLeak/bool_array.h"
+#include <QxMemLeak/bool_array.h>
 
 namespace qx {
 namespace memory {

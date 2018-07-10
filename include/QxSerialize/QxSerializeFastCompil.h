@@ -30,13 +30,13 @@
 #pragma once
 #endif
 
-#include "../../include/QxCommon/QxConfig.h"
+#include <QxCommon/QxConfig.h>
 
-#include "../../include/QxSerialize/boost/QxSerializeInclude.h"
-#include "../../include/QxSerialize/boost/QxExportDllMacroHpp.h"
-#include "../../include/QxSerialize/boost/QxExportDllMacroCpp.h"
-#include "../../include/QxSerialize/boost/QxImportDllBoostArchive.h"
-#include "../../include/QxSerialize/QxBoostSerializeHelper/QxBoostSerializeRegisterHelper.h"
+#include <QxSerialize/boost/QxSerializeInclude.h>
+#include <QxSerialize/boost/QxExportDllMacroHpp.h>
+#include <QxSerialize/boost/QxExportDllMacroCpp.h>
+#include <QxSerialize/boost/QxImportDllBoostArchive.h>
+#include <QxSerialize/QxBoostSerializeHelper/QxBoostSerializeRegisterHelper.h>
 
 #if _QX_BUILDING_QX_ORM
 #define QX_BOOST_EXPORT_SERIALIZATION_FAST_COMPIL_HPP(T) /* Nothing */

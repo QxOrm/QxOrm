@@ -44,13 +44,13 @@
 
 #include <QtCore/qpair.h>
 
-#include "../../include/QxCollection/IxCollection.h"
-#include "../../include/QxCollection/QxForeach.h"
+#include <QxCollection/IxCollection.h>
+#include <QxCollection/QxForeach.h>
 
-#include "../../include/QxCommon/QxHashValue.h"
+#include <QxCommon/QxHashValue.h>
 
-#include "../../include/QxTraits/get_class_name.h"
-#include "../../include/QxTraits/is_smart_ptr.h"
+#include <QxTraits/get_class_name.h>
+#include <QxTraits/is_smart_ptr.h>
 
 namespace qx {
 

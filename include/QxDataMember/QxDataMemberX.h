@@ -32,18 +32,18 @@
 
 #include <boost/type_traits/is_integral.hpp>
 
-#include "../../include/QxDataMember/IxDataMemberX.h"
-#include "../../include/QxDataMember/QxDataMember.h"
+#include <QxDataMember/IxDataMemberX.h>
+#include <QxDataMember/QxDataMember.h>
 
-#include "../../include/QxDao/QxSqlRelation.h"
+#include <QxDao/QxSqlRelation.h>
 
-#include "../../include/QxSingleton/QxSingleton.h"
+#include <QxSingleton/QxSingleton.h>
 
-#include "../../include/QxFactory/QxFactory.h"
+#include <QxFactory/QxFactory.h>
 
-#include "../../include/QxTraits/get_base_class.h"
-#include "../../include/QxTraits/get_primary_key.h"
-#include "../../include/QxTraits/get_sql_type.h"
+#include <QxTraits/get_base_class.h>
+#include <QxTraits/get_primary_key.h>
+#include <QxTraits/get_sql_type.h>
 
 namespace qx {
 

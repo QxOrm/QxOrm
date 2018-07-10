@@ -30,7 +30,7 @@
 #pragma once
 #endif
 
-#include "../../include/QxFunction/IxFunction.h"
+#include <QxFunction/IxFunction.h>
 
 namespace qx {
 namespace function {

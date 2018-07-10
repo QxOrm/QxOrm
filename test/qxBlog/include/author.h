@@ -18,7 +18,7 @@ public:
    enum_sex    m_sex;
    list_blog   m_blogX;
 // -- contructor, virtual destructor
-   author() : m_id(0), m_sex(unknown) { ; }
+   author() : m_id("0"), m_sex(unknown) { ; }
    virtual ~author() { ; }
 // -- methods
    int age() const;

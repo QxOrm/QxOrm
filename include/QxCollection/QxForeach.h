@@ -36,7 +36,7 @@
 #define BOOST_FOREACH_ID(x) x
 #endif
 
-#include "../../include/QxTraits/is_qx_collection.h"
+#include <QxTraits/is_qx_collection.h>
 
 namespace qx {
 

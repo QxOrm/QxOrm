@@ -42,6 +42,7 @@ template <> void register_class(QxClass<CTestAll> & t)
    pData = t.data(& CTestAll::m_oQHash, "m_oQHash", 0);
    pData = t.data(& CTestAll::m_oQMultiHash, "m_oQMultiHash", 0);
 
+#if ((! defined(Q_OS_WIN)) || (! defined(__GNUC__))) // MinGW bug ?
    pData = t.data(& CTestAll::m_oQMap, "m_oQMap", 1);
    pData = t.data(& CTestAll::m_oQMultiMap, "m_oQMultiMap", 1);
    pData = t.data(& CTestAll::m_oQxCollection, "m_oQxCollection", 1);
@@ -55,4 +56,5 @@ template <> void register_class(QxClass<CTestAll> & t)
    pData = t.data(& CTestAll::m_oQSharedPointer, "m_oQSharedPointer", 1);
    pData = t.data(& CTestAll::m_oQSize, "m_oQSize", 1);
    pData = t.data(& CTestAll::m_oQMatrix, "m_oQMatrix", 1);
+#endif // ((! defined(Q_OS_WIN)) || (! defined(__GNUC__)))
 }}

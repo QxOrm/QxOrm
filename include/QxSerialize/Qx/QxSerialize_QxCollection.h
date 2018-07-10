@@ -36,7 +36,7 @@
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/utility.hpp>
 
-#include "../../../include/QxCollection/QxCollection.h"
+#include <QxCollection/QxCollection.h>
 
 namespace boost {
 namespace serialization {

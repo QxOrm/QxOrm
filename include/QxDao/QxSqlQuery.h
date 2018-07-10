@@ -32,7 +32,7 @@
 
 #include <QtSql/qsqlquery.h>
 
-#include "../../include/QxCollection/QxCollection.h"
+#include <QxCollection/QxCollection.h>
 
 namespace qx {
 

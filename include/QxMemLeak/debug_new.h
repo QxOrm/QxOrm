@@ -50,7 +50,7 @@
 #include <new>
 #include <stdio.h>
 
-#include "../../include/QxCommon/QxMacro.h"
+#include <QxCommon/QxMacro.h>
 
 /**
  * @def HAVE_PLACEMENT_DELETE

@@ -36,7 +36,7 @@
 
 #include <QtXml/QXmlStreamReader>
 
-#include "../../include/QxXml/QxXmlWriter.h"
+#include <QxXml/QxXmlWriter.h>
 
 namespace qx {
 

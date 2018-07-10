@@ -30,7 +30,7 @@
 #pragma once
 #endif
 
-#include "../../include/QxTraits/get_class_name.h"
+#include <QxTraits/get_class_name.h>
 
 namespace qx {
 

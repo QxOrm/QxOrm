@@ -35,15 +35,15 @@
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/is_pointer.hpp>
 
-#include "../../include/QxDao/QxDao.h"
-#include "../../include/QxDao/IxSqlRelation.h"
-#include "../../include/QxDao/IxSqlQueryBuilder.h"
+#include <QxDao/QxDao.h>
+#include <QxDao/IxSqlRelation.h>
+#include <QxDao/IxSqlQueryBuilder.h>
 
-#include "../../include/QxTraits/remove_attr.h"
-#include "../../include/QxTraits/remove_smart_ptr.h"
-#include "../../include/QxTraits/generic_container.h"
-#include "../../include/QxTraits/is_container.h"
-#include "../../include/QxTraits/is_valid_primary_key.h"
+#include <QxTraits/remove_attr.h>
+#include <QxTraits/remove_smart_ptr.h>
+#include <QxTraits/generic_container.h>
+#include <QxTraits/is_container.h>
+#include <QxTraits/is_valid_primary_key.h>
 
 namespace qx {
 
@@ -183,10 +183,10 @@ template <class DataType, class Owner> QMutex QxSqlRelation<DataType, Owner>::m_
 
 } // namespace qx
 
-#include "../../include/QxDao/QxSqlRelation_OneToOne.h"
-#include "../../include/QxDao/QxSqlRelation_OneToMany.h"
-#include "../../include/QxDao/QxSqlRelation_ManyToOne.h"
-#include "../../include/QxDao/QxSqlRelation_ManyToMany.h"
-#include "../../include/QxDao/QxSqlRelation_RawData.h"
+#include <QxDao/QxSqlRelation_OneToOne.h>
+#include <QxDao/QxSqlRelation_OneToMany.h>
+#include <QxDao/QxSqlRelation_ManyToOne.h>
+#include <QxDao/QxSqlRelation_ManyToMany.h>
+#include <QxDao/QxSqlRelation_RawData.h>
 
 #endif // _QX_SQL_RELATION_H_

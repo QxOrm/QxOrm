@@ -30,7 +30,7 @@
 #pragma once
 #endif
 
-#include "../../include/QxCommon/QxBool.h"
+#include <QxCommon/QxBool.h>
 
 namespace qx {
 namespace cvt {

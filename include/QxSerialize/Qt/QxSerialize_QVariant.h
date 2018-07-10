@@ -37,24 +37,24 @@
 
 #include <QtCore/qvariant.h>
 
-#include "../../../include/QxSerialize/Qt/QxSerialize_QString.h"
-#include "../../../include/QxSerialize/Qt/QxSerialize_QDate.h"
-#include "../../../include/QxSerialize/Qt/QxSerialize_QDateTime.h"
-#include "../../../include/QxSerialize/Qt/QxSerialize_QTime.h"
-#include "../../../include/QxSerialize/Qt/QxSerialize_QByteArray.h"
-#include "../../../include/QxSerialize/Qt/QxSerialize_QBrush.h"
-#include "../../../include/QxSerialize/Qt/QxSerialize_QColor.h"
-#include "../../../include/QxSerialize/Qt/QxSerialize_QFont.h"
-#include "../../../include/QxSerialize/Qt/QxSerialize_QImage.h"
-#include "../../../include/QxSerialize/Qt/QxSerialize_QPixmap.h"
-#include "../../../include/QxSerialize/Qt/QxSerialize_QPoint.h"
-#include "../../../include/QxSerialize/Qt/QxSerialize_QRect.h"
-#include "../../../include/QxSerialize/Qt/QxSerialize_QRegExp.h"
-#include "../../../include/QxSerialize/Qt/QxSerialize_QRegion.h"
-#include "../../../include/QxSerialize/Qt/QxSerialize_QSize.h"
-#include "../../../include/QxSerialize/Qt/QxSerialize_QUrl.h"
+#include <QxSerialize/Qt/QxSerialize_QString.h>
+#include <QxSerialize/Qt/QxSerialize_QDate.h>
+#include <QxSerialize/Qt/QxSerialize_QDateTime.h>
+#include <QxSerialize/Qt/QxSerialize_QTime.h>
+#include <QxSerialize/Qt/QxSerialize_QByteArray.h>
+#include <QxSerialize/Qt/QxSerialize_QBrush.h>
+#include <QxSerialize/Qt/QxSerialize_QColor.h>
+#include <QxSerialize/Qt/QxSerialize_QFont.h>
+#include <QxSerialize/Qt/QxSerialize_QImage.h>
+#include <QxSerialize/Qt/QxSerialize_QPixmap.h>
+#include <QxSerialize/Qt/QxSerialize_QPoint.h>
+#include <QxSerialize/Qt/QxSerialize_QRect.h>
+#include <QxSerialize/Qt/QxSerialize_QRegExp.h>
+#include <QxSerialize/Qt/QxSerialize_QRegion.h>
+#include <QxSerialize/Qt/QxSerialize_QSize.h>
+#include <QxSerialize/Qt/QxSerialize_QUrl.h>
 
-#include "../../../include/QxSerialize/QxSerializeFastCompil.h"
+#include <QxSerialize/QxSerializeFastCompil.h>
 
 BOOST_CLASS_VERSION(QVariant, 0)
 

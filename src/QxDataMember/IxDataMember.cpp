@@ -23,19 +23,19 @@
 **
 ****************************************************************************/
 
-#include "../../include/QxPrecompiled.h"
+#include <QxPrecompiled.h>
 
-#include "../../include/QxDataMember/IxDataMember.h"
+#include <QxDataMember/IxDataMember.h>
 
-#include "../../include/QxDao/QxSqlDatabase.h"
+#include <QxDao/QxSqlDatabase.h>
 
-#include "../../include/QxSerialize/QxSerialize.h"
+#include <QxSerialize/QxSerialize.h>
 
-#include "../../include/QxCommon/QxStringCvt_Impl.h"
+#include <QxCommon/QxStringCvt_Impl.h>
 
-#include "../../include/QxRegister/QxRegister.h"
+#include <QxRegister/QxRegister.h>
 
-#include "../../include/QxMemLeak/mem_leak.h"
+#include <QxMemLeak/mem_leak.h>
 
 namespace qx {
 

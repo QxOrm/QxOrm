@@ -30,11 +30,11 @@
 #pragma once
 #endif
 
-#include "../include/QxMemLeak/mem_leak.h"
+#include <QxMemLeak/mem_leak.h>
 
 #if _QX_INCLUDE_BOOST_SERIALIZE_EXPORT_HPP_INTO_QX_MEM_LEAK_HPP
 #if _QX_USE_MODIFY_BOOST_SERIALIZATION_EXPORT_HPP
-#include "../include/QxSerialize/boost/class_export/qx_boost_class_export.h"
+#include <QxSerialize/boost/class_export/qx_boost_class_export.h>
 #else
 #include <boost/serialization/export.hpp>
 #endif // _QX_USE_MODIFY_BOOST_SERIALIZATION_EXPORT_HPP

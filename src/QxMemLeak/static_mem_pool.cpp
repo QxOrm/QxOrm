@@ -36,7 +36,7 @@
  *
  */
 
-#include "../../include/QxCommon/QxConfig.h"
+#include <QxCommon/QxConfig.h>
 
 #ifndef NDEBUG
 #ifndef QT_NO_DEBUG
@@ -44,8 +44,8 @@
 
 #include <algorithm>
 
-#include "../../include/QxMemLeak/cont_ptr_utils.h"
-#include "../../include/QxMemLeak/static_mem_pool.h"
+#include <QxMemLeak/cont_ptr_utils.h>
+#include <QxMemLeak/static_mem_pool.h>
 
 namespace qx {
 namespace memory {

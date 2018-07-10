@@ -34,21 +34,21 @@
 #include <boost/mpl/or.hpp>
 #include <boost/mpl/logical.hpp>
 
-#include "../../include/QxTraits/is_boost_unordered_map.h"
-#include "../../include/QxTraits/is_boost_unordered_set.h"
-#include "../../include/QxTraits/is_qt_hash.h"
-#include "../../include/QxTraits/is_qt_linked_list.h"
-#include "../../include/QxTraits/is_qt_list.h"
-#include "../../include/QxTraits/is_qt_map.h"
-#include "../../include/QxTraits/is_qt_multi_hash.h"
-#include "../../include/QxTraits/is_qt_multi_map.h"
-#include "../../include/QxTraits/is_qt_set.h"
-#include "../../include/QxTraits/is_qt_vector.h"
-#include "../../include/QxTraits/is_qx_collection.h"
-#include "../../include/QxTraits/is_std_list.h"
-#include "../../include/QxTraits/is_std_map.h"
-#include "../../include/QxTraits/is_std_set.h"
-#include "../../include/QxTraits/is_std_vector.h"
+#include <QxTraits/is_boost_unordered_map.h>
+#include <QxTraits/is_boost_unordered_set.h>
+#include <QxTraits/is_qt_hash.h>
+#include <QxTraits/is_qt_linked_list.h>
+#include <QxTraits/is_qt_list.h>
+#include <QxTraits/is_qt_map.h>
+#include <QxTraits/is_qt_multi_hash.h>
+#include <QxTraits/is_qt_multi_map.h>
+#include <QxTraits/is_qt_set.h>
+#include <QxTraits/is_qt_vector.h>
+#include <QxTraits/is_qx_collection.h>
+#include <QxTraits/is_std_list.h>
+#include <QxTraits/is_std_map.h>
+#include <QxTraits/is_std_set.h>
+#include <QxTraits/is_std_vector.h>
 
 namespace qx {
 namespace trait {

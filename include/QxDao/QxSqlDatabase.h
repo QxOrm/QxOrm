@@ -39,7 +39,7 @@
 #include <QtSql/qsqlquery.h>
 #include <QtSql/qsqlerror.h>
 
-#include "../../include/QxSingleton/QxSingleton.h"
+#include <QxSingleton/QxSingleton.h>
 
 namespace qx {
 
@@ -111,5 +111,7 @@ private:
 };
 
 } // namespace qx
+
+QX_DLL_EXPORT_QX_SINGLETON_HPP(qx::QxSqlDatabase)
 
 #endif // _QX_SQL_DATABASE_H_

@@ -37,11 +37,11 @@
 
 #include <boost/any.hpp>
 
-#include "../../include/QxCommon/QxBool.h"
+#include <QxCommon/QxBool.h>
 
-#include "../../include/QxSerialize/boost/QxSerializeInclude.h"
+#include <QxSerialize/boost/QxSerializeInclude.h>
 
-#include "../../include/QxDao/IxSqlRelation.h"
+#include <QxDao/IxSqlRelation.h>
 
 #ifdef _MSC_VER
 #pragma warning(pop)
@@ -213,7 +213,7 @@ typedef boost::shared_ptr<IxDataMember> IxDataMember_ptr;
 
 } // namespace qx
 
-QX_DLL_EXPORT inline bool operator< (const qx::IxDataMember & i1, const qx::IxDataMember & i2);
-QX_DLL_EXPORT inline bool operator> (const qx::IxDataMember & i1, const qx::IxDataMember & i2);
+QX_DLL_EXPORT_INLINE_FCT inline bool operator< (const qx::IxDataMember & i1, const qx::IxDataMember & i2);
+QX_DLL_EXPORT_INLINE_FCT inline bool operator> (const qx::IxDataMember & i1, const qx::IxDataMember & i2);
 
 #endif // _IX_DATA_MEMBER_H_

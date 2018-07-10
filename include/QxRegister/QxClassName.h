@@ -30,10 +30,10 @@
 #pragma once
 #endif
 
-#include "../../include/QxTraits/get_class_name.h"
-#include "../../include/QxTraits/is_qx_registered.h"
+#include <QxTraits/get_class_name.h>
+#include <QxTraits/is_qx_registered.h>
 
-#include "../../include/QxRegister/QxClass.h"
+#include <QxRegister/QxClass.h>
 
 namespace qx {
 

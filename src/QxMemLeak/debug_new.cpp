@@ -36,8 +36,8 @@
  *
  */
 
-#include "../../include/QxCommon/QxConfig.h"
-#include "../../include/QxCommon/QxMacro.h"
+#include <QxCommon/QxConfig.h>
+#include <QxCommon/QxMacro.h>
 
 #ifndef NDEBUG
 #ifndef QT_NO_DEBUG
@@ -62,8 +62,8 @@
 
 #include <QtCore/qglobal.h>
 
-#include "../../include/QxMemLeak/fast_mutex.h"
-#include "../../include/QxMemLeak/static_assert.h"
+#include <QxMemLeak/fast_mutex.h>
+#include <QxMemLeak/static_assert.h>
 
 #ifndef _QX_MEM_LEAK_ONLY_KNOWN_SRC_FILE
 #define _QX_MEM_LEAK_ONLY_KNOWN_SRC_FILE 0
@@ -191,7 +191,7 @@
  * is defined to \c 0 to disable the redefinition of \c new.
  */
 #define _DEBUG_NEW_REDEFINE_NEW 0
-#include "../../include/QxMemLeak/debug_new.h"
+#include <QxMemLeak/debug_new.h>
 
 /**
  * Gets the aligned value of memory block size.

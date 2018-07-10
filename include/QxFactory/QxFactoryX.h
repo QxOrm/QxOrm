@@ -35,9 +35,9 @@
 #include <QtCore/qhash.h>
 #include <QtCore/qmutex.h>
 
-#include "../../include/QxFactory/IxFactory.h"
+#include <QxFactory/IxFactory.h>
 
-#include "../../include/QxSingleton/QxSingleton.h"
+#include <QxSingleton/QxSingleton.h>
 
 namespace qx {
 
@@ -71,5 +71,7 @@ public:
 inline boost::any create(const QString & sKey) { return qx::QxFactoryX::createInstance(sKey); }
 
 } // namespace qx
+
+QX_DLL_EXPORT_QX_SINGLETON_HPP(qx::QxFactoryX)
 
 #endif // _QX_FACTORY_X_H_

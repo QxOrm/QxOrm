@@ -63,7 +63,7 @@
   <col><col><col><col><col>
   <tbody><tr>
   <td align="left" valign="top"><font size="2">QxOrm  &gt;&gt;  Tutoriel</font></td>
-  <td align="right" valign="top"><font size="2">Version courante : QxOrm 1.1.2 (LGPL)</font></td>
+  <td align="right" valign="top"><font size="2">Version courante : QxOrm 1.1.3 (LGPL)</font></td>
   <td width="10px"></td>
   <td width="40px" height="30px"><a href="../qxorm_fr/tutorial.html"><img alt="Version française du site" src="./resource/FR.png" width="40" height="30" border="0"></a></td>
   <td width="40px" height="30px"><a href="../qxorm_en/tutorial.html"><img alt="Web site english version" src="./resource/GB.png" width="40" height="30" border="0"></a></td>
@@ -177,29 +177,20 @@
 #define _QX_BLOG_EXPORT_H_
 
 #ifdef _BUILDING_QX_BLOG
-#define QX_REGISTER_HPP_QX_BLOG   QX_REGISTER_HPP_EXPORT_DLL
-#define QX_REGISTER_CPP_QX_BLOG   QX_REGISTER_CPP_EXPORT_DLL
-#else
-#define QX_REGISTER_HPP_QX_BLOG   QX_REGISTER_HPP_IMPORT_DLL
-#define QX_REGISTER_CPP_QX_BLOG   QX_REGISTER_CPP_IMPORT_DLL
+#define QX_BLOG_DLL_EXPORT QX_DLL_EXPORT_HELPER
+#else <span class="comment">// _BUILDING_QX_BLOG</span>
+#define QX_BLOG_DLL_EXPORT QX_DLL_IMPORT_HELPER
 #endif <span class="comment">// _BUILDING_QX_BLOG</span>
 
-#ifdef Q_OS_WIN
-#define QX_BLOG_DLL_EXPORT   __declspec(dllexport)
-#define QX_BLOG_DLL_IMPORT   __declspec(dllimport)
-#else
-#define QX_BLOG_DLL_EXPORT
-#define QX_BLOG_DLL_IMPORT
-#endif <span class="comment">// Q_OS_WIN</span>
-
-#ifdef Q_OS_WIN
-#ifndef _BUILDING_QX_BLOG
-#undef QX_BLOG_DLL_EXPORT
-#define QX_BLOG_DLL_EXPORT QX_BLOG_DLL_IMPORT
+#ifdef _BUILDING_QX_BLOG
+#define QX_REGISTER_HPP_QX_BLOG QX_REGISTER_HPP_EXPORT_DLL
+#define QX_REGISTER_CPP_QX_BLOG QX_REGISTER_CPP_EXPORT_DLL
+#else <span class="comment">// _BUILDING_QX_BLOG</span>
+#define QX_REGISTER_HPP_QX_BLOG QX_REGISTER_HPP_IMPORT_DLL
+#define QX_REGISTER_CPP_QX_BLOG QX_REGISTER_CPP_IMPORT_DLL
 #endif <span class="comment">// _BUILDING_QX_BLOG</span>
-#endif <span class="comment">// Q_OS_WIN</span>
 
-#endif <span class="comment">// _QX_BLOG_EXPORT_H_
+#endif <span class="comment">// _QX_BLOG_EXPORT_H_</span>
 </span></pre>
         </td></tr></tbody></table>
         <br><br>

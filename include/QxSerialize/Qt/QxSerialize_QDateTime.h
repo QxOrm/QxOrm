@@ -37,9 +37,8 @@
 
 #include <QtCore/qdatetime.h>
 
-#include "../../../include/QxSerialize/Qt/QxSerialize_QString.h"
-
-#include "../../../include/QxSerialize/QxSerializeFastCompil.h"
+#include <QxSerialize/Qt/QxSerialize_QString.h>
+#include <QxSerialize/QxSerializeFastCompil.h>
 
 #define QX_SERIALIZE_QDATETIME_FORMAT "yyyyMMddhhmmsszzz"
 

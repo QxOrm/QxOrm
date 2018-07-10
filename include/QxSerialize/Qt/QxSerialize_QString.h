@@ -39,7 +39,7 @@
 
 #include <QtCore/qstring.h>
 
-#include "../../../include/QxSerialize/QxSerializeFastCompil.h"
+#include <QxSerialize/QxSerializeFastCompil.h>
 
 BOOST_CLASS_VERSION(QString, 0)
 BOOST_CLASS_TRACKING(QString, boost::serialization::track_never)

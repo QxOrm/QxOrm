@@ -30,7 +30,7 @@
 #pragma once
 #endif
 
-#include "../../../../include/QxCommon/QxConfig.h"
+#include <QxCommon/QxConfig.h>
 
 #if _QX_USE_MODIFY_BOOST_SERIALIZATION_EXPORT_HPP
 

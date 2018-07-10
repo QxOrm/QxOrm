@@ -147,7 +147,10 @@ public:
 
    template <class U>
    inline void updateLastInsertId(U & u)
-   { if (m_pDataId && m_pDataId->getAutoIncrement() && this->hasFeature(QSqlDriver::LastInsertId)) { m_pDataId->fromVariant((& u), m_query.lastInsertId()); } }
+   {
+      if (m_pDataId && m_pDataId->getAutoIncrement() && this->hasFeature(QSqlDriver::LastInsertId))
+      { m_pDataId->fromVariant((& u), m_query.lastInsertId()); }
+   }
 
 protected:
 

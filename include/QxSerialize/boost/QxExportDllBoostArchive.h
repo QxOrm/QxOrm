@@ -30,12 +30,12 @@
 #pragma once
 #endif
 
-#include "../../../include/QxCommon/QxConfig.h"
+#include <QxCommon/QxConfig.h>
 
 #if _QX_USE_EXPORT_DLL_BOOST_SERIALIZATION_SINGLETON
 #if (! _QX_BUILDING_QX_ORM)
 
-#include "../../../include/QxSerialize/boost/QxImportDllBoostArchive.h"
+#include <QxSerialize/boost/QxImportDllBoostArchive.h>
 
 #if (BOOST_VERSION > 103800)
 #define QX_BOOST_EXPORT_ARCHIVE_SERIALIZER_MAP_SINGLETON_HPP(Archive) \
