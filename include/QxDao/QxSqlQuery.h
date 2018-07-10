@@ -37,6 +37,10 @@
  * \brief Define a user SQL query added to default SQL query builded by QxOrm library, and used by qx::dao::xxx functions to filter elements fetched from database
  */
 
+#include <boost/tuple/tuple.hpp>
+#include <boost/tuple/tuple_comparison.hpp>
+#include <boost/tuple/tuple_io.hpp>
+
 #include <QtSql/qsqlquery.h>
 
 #include <QxCollection/QxCollection.h>
@@ -152,19 +156,43 @@ qx::QxRepository<T>::destroyByQuery()
  * <i>Note :</i> those functions have 2 other optionals parameters :
  * - <i>const QStringList & columns</i> : to indicate columns to fetch (by default, all columns are fetched) ;
  * - <i>const QStringList & relation</i> : to indicate relations to fetch (<i>one-to-one</i>, <i>one-to-many</i>, <i>many-to-one</i> and <i>many-to-many</i> defined into <i>void qx::register_class<T>()</i> mapping function by class), by default there is no relation fetched.
+ *
+ * <i>Other note :</i> it's possible to call a stored procedure using <i>qx::QxSqlQuery</i> class, for example :
+ * \code
+qx_query query("CALL MyStoredProc(:param1, :param2)");
+query.bind(":param1", "myValue1");
+query.bind(":param2", 5024, QSql::InOut);
+QSqlError daoError = qx::dao::call_query(query);
+QVariant vNewValue = query.boundValue(":param2");
+query.dumpSqlResult();
+ * \endcode
+ *
+ * If the stored procedure returns a resultset, you can iterate over each rows and fields using the following methods (after calling <i>qx::dao::call_query()</i> function) :
+ * - <i>long qx::QxSqlQuery::getSqlResultRowCount() const;</i>
+ * - <i>long qx::QxSqlQuery::getSqlResultColumnCount() const;</i>
+ * - <i>QVariant qx::QxSqlQuery::getSqlResultAt(long row, long column) const;</i>
+ * - <i>QVariant qx::QxSqlQuery::getSqlResultAt(long row, const QString & column) const;</i>
+ * - <i>QVector qx::QxSqlQuery::getSqlResultAllColumns() const;</i>
+ * - <i>void qx::QxSqlQuery::dumpSqlResult();</i>
  */
 class QX_DLL_EXPORT QxSqlQuery
 {
 
 protected:
 
+   struct QxSqlResult
+   { QHash<QString, int> positionByKey; QVector< QVector<QVariant> > values; };
+
+   typedef boost::tuple<QVariant, QSql::ParamType> type_bind_value;
+
    QString                                   m_sQuery;               //!< Query SQL with place-holder
-   QxCollection<QString, QVariant>           m_lstValue;             //!< Bind value in this array
+   QxCollection<QString, type_bind_value>    m_lstValue;             //!< Bind value in this array
    qx::dao::detail::IxSqlElement_ptr         m_pSqlElementTemp;      //!< Temporary SQL element
    QList<qx::dao::detail::IxSqlElement_ptr>  m_lstSqlElement;        //!< List of all SQL elements to build SQL query
    int                                       m_iSqlElementIndex;     //!< Current index of SQL element
    int                                       m_iParenthesisCount;    //!< Current parenthesis count
    bool                                      m_bDistinct;            //!< Replace SELECT by SELECT DISTINCT in SQL query
+   boost::shared_ptr<QxSqlResult>            m_pSqlResult;           //!< All results returning by SQL query or stored procedure (after calling qx::dao::call_query function)
 
 public:
 
@@ -178,11 +206,23 @@ public:
    bool isDistinct() const;
    void clear();
    void resolve(QSqlQuery & query) const;
+   void resolveOutput(QSqlQuery & query, bool bFetchSqlResult);
    void postProcess(QString & sql) const;
 
    QxSqlQuery & query(const QString & sQuery);
-   QxSqlQuery & bind(const QVariant & vValue);
-   QxSqlQuery & bind(const QString & sKey, const QVariant & vValue);
+   QxSqlQuery & bind(const QVariant & vValue, QSql::ParamType paramType = QSql::In);
+   QxSqlQuery & bind(const QString & sKey, const QVariant & vValue, QSql::ParamType paramType = QSql::In);
+
+   QVariant boundValue(const QString & sKey) const;
+   QVariant boundValue(int iPosition) const;
+
+   long getSqlResultRowCount() const;
+   long getSqlResultColumnCount() const;
+   QVariant getSqlResultAt(long row, long column) const;
+   QVariant getSqlResultAt(long row, const QString & column) const;
+   QVector<QVariant> getSqlResultAt(long row) const;
+   QVector<QString> getSqlResultAllColumns() const;
+   void dumpSqlResult();
 
 private:
 
@@ -191,6 +231,8 @@ private:
 #else
    inline void verifyQuery() const { ; }
 #endif // NDEBUG
+
+   void fetchSqlResult(QSqlQuery & query);
 
 public:
 
@@ -303,5 +345,36 @@ private:
 } // namespace qx
 
 typedef qx::QxSqlQuery qx_query;
+
+namespace qx {
+namespace dao {
+
+/*!
+ * \ingroup QxDao
+ * \brief qx::dao::call_query function can be used to call a custom SQL query or a stored procedure
+ *
+ * To get an output value parameter (must be pass as <i>QSql::Out</i> or <i>QSql::InOut</i>) returned by a stored procedure, just call the following method : <i>QVariant qx::QxSqlQuery::boundValue(const QString & sKey) const;</i>.<br/>
+ * To iterate over all resultset, just use the following methods :
+ * - <i>long qx::QxSqlQuery::getSqlResultRowCount() const;</i>
+ * - <i>long qx::QxSqlQuery::getSqlResultColumnCount() const;</i>
+ * - <i>QVariant qx::QxSqlQuery::getSqlResultAt(long row, long column) const;</i>
+ * - <i>QVariant qx::QxSqlQuery::getSqlResultAt(long row, const QString & column) const;</i>
+ * - <i>QVector qx::QxSqlQuery::getSqlResultAllColumns() const;</i>
+ * - <i>void qx::QxSqlQuery::dumpSqlResult();</i>
+ *
+ * Here is an example of code using <i>qx::dao::call_query</i> function :
+ * \code
+qx_query query("CALL MyStoredProc(:param1, :param2)");
+query.bind(":param1", "myValue1");
+query.bind(":param2", 5024, QSql::InOut);
+QSqlError daoError = qx::dao::call_query(query);
+QVariant vNewValue = query.boundValue(":param2");
+query.dumpSqlResult();
+ * \endcode
+ */
+QX_DLL_EXPORT QSqlError call_query(qx::QxSqlQuery & query, QSqlDatabase * pDatabase = NULL);
+
+} // namespace dao
+} // namespace qx
 
 #endif // _QX_SQL_QUERY_H_

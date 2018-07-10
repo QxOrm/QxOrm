@@ -154,6 +154,8 @@ QString IxDataMember::getSqlAlias(const QString & sTable /* = QString() */, bool
    sSqlAlias.replace("[", "");
    sSqlAlias.replace("]", "");
    sSqlAlias.replace("\"", "");
+   sSqlAlias.replace(".", "_");
+
    return sSqlAlias;
 }
 
@@ -240,11 +242,11 @@ QString IxDataMember::getSqlNameEqualToPlaceHolder(const QString & sAppend /* = 
    return sResult;
 }
 
-QString IxDataMember::getSqlTablePointNameAsAlias(const QString & sTable, const QString & sSep /* = QString(", ") */) const
+QString IxDataMember::getSqlTablePointNameAsAlias(const QString & sTable, const QString & sSep /* = QString(", ") */, const QString & sSuffixAlias /* = QString() */) const
 {
    QString sResult;
    for (int i = 0; i < m_lstNames.count(); i++)
-   { sResult += sTable + "." + getName(i) + " AS " + getSqlAlias(sTable, false, i); sResult += sSep; }
+   { sResult += sTable + "." + getName(i) + " AS " + getSqlAlias(sTable, false, i) + sSuffixAlias; sResult += sSep; }
    sResult = sResult.left(sResult.count() - sSep.count()); // Remove last separator
    return sResult;
 }

@@ -121,6 +121,9 @@
 #include <QxDao/QxTimeNeutral.h>
 #include <QxDao/QxDateTimeNeutral.h>
 #include <QxDao/IxPersistable.h>
+#include <QxDao/QxSqlJoin.h>
+#include <QxDao/QxSqlRelationLinked.h>
+#include <QxDao/QxDaoAsync.h>
 
 #include <QxDao/QxSqlElement/QxSqlElement.h>
 

@@ -65,7 +65,7 @@
   <col><col><col><col><col><col>
   <tbody><tr>
   <td align="left" valign="top"><font size="2">QxOrm  &gt;&gt;  Faq</font></td>
-  <td align="right" valign="top"><font size="2">Current version : QxOrm 1.2.3 (LGPL) - <a href="../doxygen/index.html" target="_blank">QxOrm library online documentation</a></font></td>
+  <td align="right" valign="top"><font size="2">Current version : QxOrm 1.2.4 (LGPL) - <a href="../doxygen/index.html" target="_blank">QxOrm library online documentation</a></font></td>
   <td width="10px"></td>
   <td width="40px" height="30px"><a href="../qxorm_fr/faq.html"><img alt="Version française du site" src="./resource/FR.png" width="40" height="30" border="0"></a></td>
   <td width="40px" height="30px"><a href="../qxorm_en/faq.html"><img alt="Web site english version" src="./resource/GB.png" width="40" height="30" border="0"></a></td>
@@ -95,6 +95,7 @@
                </li><li><a href="#faq_95">Is it necessary to use <i>smart-pointers</i> ?</a><br>
                </li><li><a href="#faq_100">The primary key is <i>long</i> type by default. Is it possible to use a key of <i>QString</i> type or other ?</a><br>
                </li><li><a href="#faq_101">How to define a '<i>multi-columns primary key</i>' (<i>composite key</i>) ?</a><br>
+               </li><li><a href="#faq_105">How to register <i>private</i> or <i>protected</i> members into QxOrm context ?</a><br>
                </li><li><a href="#faq_110">How to enable/disable the module <i>QxMemLeak</i> for automatic detection of memory leaks ?</a><br>
                </li><li><a href="#faq_120">How to manage inheritance and database ?</a><br>
                </li><li><a href="#faq_130">How to define a '<i>Trigger</i>' with QxOrm ?</a><br>
@@ -111,6 +112,9 @@
                </li><li><a href="#faq_240">How to associate a SQL type to a C++ class ?</a><br>
                </li><li><a href="#faq_250">How to use <i>QxValidator</i> module to validate automatically an instance ?</a><br>
                </li><li><a href="#faq_260">How to use <i>qx::IxPersistable</i> interface ?</a><br>
+               </li><li><a href="#faq_270">How to use relationship engine to fetch datas from many tables ?</a><br>
+               </li><li><a href="#faq_280">How to execute a stored procedure or a custom SQL query ?</a><br>
+               </li><li><a href="#faq_290">How to use <i>qx::QxDaoAsync</i> class to execute queries in asynchronous way (multi-thread) ?</a><br>
                </li></ul>
               </td>
               <td width="200" align="center" valign="top"><a href="./resource/qt_ambassador_logo.png" target="_blank"><img alt="qt_ambassador" src="./resource/qt_ambassador_logo_150x150.png" width="150" height="150" border="0"></a><br>
@@ -689,6 +693,41 @@ int</span> author<span class="operator">::</span>age<span class="operator">()</s
 }</span>
 </pre>
            </td></tr></tbody></table>
+           </td>
+         </tr>
+       </tbody>
+      </table>
+      <br><br>
+      <a name="faq_105"><u><b>How to register <i>private</i> or <i>protected</i> members into QxOrm context ?</b></u></a><br><br>
+      <table border="0" style="width: 100%" align="center">
+       <col>
+       <col>
+       <tbody>
+         <tr>
+           <td valign="middle" width="30"></td>
+           <td align="justify">
+           To register <i>private</i> or <i>protected</i> members into QxOrm context (<i>qx::register_class&lt;T&gt;</i> function), it's necessary to declare some <i>friend class</i>.<br>
+           To simplify writing C++ <i>template</i>, QxOrm library provides this macro : <b>QX_REGISTER_FRIEND_CLASS(myClass)</b>.<br>
+           An example using this macro can be found in <i>./test/qxDllSample/dll1/</i> directory of QxOrm package with <i>CPerson</i> class :<br>
+           <br>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="keyword">namespace</span> qx<span class="operator"> {</span><span class="keyword">
+namespace</span> test<span class="operator"> {</span><span class="keyword">
+
+class</span> QX_DLL1_EXPORT CPerson<span class="operator"> :</span><span class="keyword"> public</span> QObject<span class="operator">
+{</span>
+
+   Q_OBJECT
+   <font style="background-color:yellow">QX_REGISTER_FRIEND_CLASS<span class="operator">(</span>qx<span class="operator">::</span>test<span class="operator">::</span>CPerson<span class="operator">)</span></font><span class="comment">
+
+   // etc...
+</span><span class="operator">
+};
+
+}</span><span class="comment"> // namespace test
+</span><span class="operator">}</span><span class="comment"> // namespace qx</span></pre>
+           </td></tr></tbody></table>
+           <br>
            </td>
          </tr>
        </tbody>
@@ -2001,47 +2040,47 @@ QString sInvalidValues<span class="operator"> =</span> invalidValues<span class=
 qDebug<span class="operator">(</span><span class="string">"[QxOrm] test 'QxValidator' module :\n%s"</span><span class="operator">,</span> qPrintable<span class="operator">(</span>sInvalidValues<span class="operator">));</span></pre>
             </td></tr></tbody></table>
             <br>
-During program execution of this code, '<i>personValidate</i>' instance is not valid : '<i>invalidValues</i>' collection contains 4 items :<br>
-- "<i>property 'firstName' must not be empty</i>" ;<br>
-- "<i>person sex must be defined : male or female</i>" ;<br>
-- "<i>value must not be equal to 'admin'</i>" ;<br>
-- "<i>date-time value must not be empty and must be valid</i>".<br>
-<br>
-<b>QxValidator</b> module provides some built-in constraints, which cover most of the basic data checks.<br>
-As we'll see later, you're not limited to them, you can literally in a minute write your own constraints :
-<ul>
-    <li><i>add_NotNull()</i> : checks if the value is not null ;</li>
-    <li><i>add_NotEmpty()</i> : checks if the string is not empty ;</li>
-    <li><i>add_MinValue()</i> : checks if the value is more than or equals to min ;</li>
-    <li><i>add_MaxValue()</i> : checks if the value is less than or equals to max ;</li>
-    <li><i>add_Range()</i> : checks if the value is between Min and Max (included) ;</li>
-    <li><i>add_MinDecimal()</i> : checks if the decimal value is more than or equals to min ;</li>
-    <li><i>add_MaxDecimal()</i> : checks if the decimal value is less than or equals to max ;</li>
-    <li><i>add_RangeDecimal()</i> : checks if the decimal value is between Min and Max (included) ;</li>
-    <li><i>add_MinLength()</i> : checks if the string length is more than or equals to min ;</li>
-    <li><i>add_MaxLength()</i> : checks if the string length is less than or equals to max ;</li>
-    <li><i>add_Size()</i> : checks if the string length is between the min-max range ;</li>
-    <li><i>add_DatePast()</i> : checks if the date is in the past ;</li>
-    <li><i>add_DateFuture()</i> : checks if the date is in the future ;</li>
-    <li><i>add_RegExp()</i> : checks if the property matches the regular expression given a match flag ;</li>
-    <li><i>add_EMail()</i> : checks whether the string conforms to the email address specification.</li>
-</ul>
-Like '<i>person</i>' class example, it's possible to define a custom validator : it's a function or a class method called automatically by <b>QxValidator</b> module to validate a property or an instance of class.<br>
-There are 3 kinds of custom validator :
-<ul>
-    <li><i>add_CustomValidator()</i> : class method, method signature must be "<i>void my_class::my_method(qx::QxInvalidValueX &)</i>" ;</li>
-    <li><i>add_CustomValidator_QVariant()</i> : global function with <i>QVariant</i> type (the property is converted into <i>QVariant</i> type), function signature must be "<i>void my_validator(const QVariant &, const qx::IxValidator *, qx::QxInvalidValueX &)</i>" ;</li>
-    <li><i>add_CustomValidator_DataType()</i> : global function with real type, function signature must be "<i>void my_validator(const T &, const qx::IxValidator *, qx::QxInvalidValueX &)</i>" ;</li>
-</ul>
-<b>Note :</b> each validator can be associated with a group (optional parameter for each function <i>add_XXX()</i> of <i>qx::IxValidatorX</i> class).<br>
-So it's possible to create a context validation during program execution : for example, a person from IHM A can have different validation rules than a person from IHM B.<br>
-To execute a validation process by group (for example "<i>myGroup</i>"), you have to call the following function : "<i>qx::QxInvalidValueX invalidValues = qx::validate(personValidate, "myGroup");</i>".<br>
-<br>
-<b>Other note :</b> <b>QxValidator</b> module provides default messages when a constraint violation is detected.<br>
-It's possible to modify those default messages (for example, a traduction) using the following collection : "<i>QHash<QString, QString> * lstMessage = QxClassX::getAllValidatorMessage();</i>".<br>
-For example : "<i>lstMessage->insert("min_value", "la valeur '%NAME%' doit être inférieure ou égale à '%CONSTRAINT%'");</i>".<br>
-<i>%NAME%</i> and <i>%CONSTRAINT%</i> fields will be automatically replaced by the good value.<br>
-To modify a message for a specific validator (and not globally), you have to use the optional parameter provided by each function <i>add_XXX()</i> of <i>qx::IxValidatorX</i> class.<br>
+            During program execution of this code, '<i>personValidate</i>' instance is not valid : '<i>invalidValues</i>' collection contains 4 items :<br>
+            - "<i>property 'firstName' must not be empty</i>" ;<br>
+            - "<i>person sex must be defined : male or female</i>" ;<br>
+            - "<i>value must not be equal to 'admin'</i>" ;<br>
+            - "<i>date-time value must not be empty and must be valid</i>".<br>
+            <br>
+            <b>QxValidator</b> module provides some built-in constraints, which cover most of the basic data checks.<br>
+            As we'll see later, you're not limited to them, you can literally in a minute write your own constraints :
+            <ul>
+                <li><i>add_NotNull()</i> : checks if the value is not null ;</li>
+                <li><i>add_NotEmpty()</i> : checks if the string is not empty ;</li>
+                <li><i>add_MinValue()</i> : checks if the value is more than or equals to min ;</li>
+                <li><i>add_MaxValue()</i> : checks if the value is less than or equals to max ;</li>
+                <li><i>add_Range()</i> : checks if the value is between Min and Max (included) ;</li>
+                <li><i>add_MinDecimal()</i> : checks if the decimal value is more than or equals to min ;</li>
+                <li><i>add_MaxDecimal()</i> : checks if the decimal value is less than or equals to max ;</li>
+                <li><i>add_RangeDecimal()</i> : checks if the decimal value is between Min and Max (included) ;</li>
+                <li><i>add_MinLength()</i> : checks if the string length is more than or equals to min ;</li>
+                <li><i>add_MaxLength()</i> : checks if the string length is less than or equals to max ;</li>
+                <li><i>add_Size()</i> : checks if the string length is between the min-max range ;</li>
+                <li><i>add_DatePast()</i> : checks if the date is in the past ;</li>
+                <li><i>add_DateFuture()</i> : checks if the date is in the future ;</li>
+                <li><i>add_RegExp()</i> : checks if the property matches the regular expression given a match flag ;</li>
+                <li><i>add_EMail()</i> : checks whether the string conforms to the email address specification.</li>
+            </ul>
+            Like '<i>person</i>' class example, it's possible to define a custom validator : it's a function or a class method called automatically by <b>QxValidator</b> module to validate a property or an instance of class.<br>
+            There are 3 kinds of custom validator :
+            <ul>
+                <li><i>add_CustomValidator()</i> : class method, method signature must be "<i>void my_class::my_method(qx::QxInvalidValueX &)</i>" ;</li>
+                <li><i>add_CustomValidator_QVariant()</i> : global function with <i>QVariant</i> type (the property is converted into <i>QVariant</i> type), function signature must be "<i>void my_validator(const QVariant &, const qx::IxValidator *, qx::QxInvalidValueX &)</i>" ;</li>
+                <li><i>add_CustomValidator_DataType()</i> : global function with real type, function signature must be "<i>void my_validator(const T &, const qx::IxValidator *, qx::QxInvalidValueX &)</i>" ;</li>
+            </ul>
+            <b>Note :</b> each validator can be associated with a group (optional parameter for each function <i>add_XXX()</i> of <i>qx::IxValidatorX</i> class).<br>
+            So it's possible to create a context validation during program execution : for example, a person from IHM A can have different validation rules than a person from IHM B.<br>
+            To execute a validation process by group (for example "<i>myGroup</i>"), you have to call the following function : "<i>qx::QxInvalidValueX invalidValues = qx::validate(personValidate, "myGroup");</i>".<br>
+            <br>
+            <b>Other note :</b> <b>QxValidator</b> module provides default messages when a constraint violation is detected.<br>
+            It's possible to modify those default messages (for example, a traduction) using the following collection : "<i>QHash<QString, QString> * lstMessage = QxClassX::getAllValidatorMessage();</i>".<br>
+            For example : "<i>lstMessage->insert("min_value", "la valeur '%NAME%' doit être inférieure ou égale à '%CONSTRAINT%'");</i>".<br>
+            <i>%NAME%</i> and <i>%CONSTRAINT%</i> fields will be automatically replaced by the good value.<br>
+            To modify a message for a specific validator (and not globally), you have to use the optional parameter provided by each function <i>add_XXX()</i> of <i>qx::IxValidatorX</i> class.<br>
            </td>
          </tr>
        </tbody>
@@ -2180,6 +2219,266 @@ int</span> author<span class="operator">::</span>age<span class="operator">()</s
            <li>access to <a href="./resource/qx_persistable_hpp.html" target="_blank"><i>QxPersistable.hpp</i></a> file ;</li>
            <li>access to <a href="./resource/qx_persistable_cpp.html" target="_blank"><i>QxPersistable.cpp</i></a> file.</li>
            </ul>
+           </td>
+         </tr>
+       </tbody>
+      </table>
+      <br><br>
+      <a name="faq_270"><u><b>How to use relationship engine to fetch datas from many tables ?</b></u></a><br><br>
+      <table border="0" style="width: 100%" align="center">
+       <col>
+       <col>
+       <tbody>
+         <tr>
+           <td valign="middle" width="30"></td>
+           <td align="justify">
+           QxOrm library supports 4 kind of relationships to link C++ classes registered into QxOrm context : <i>one-to-one</i>, <i>one-to-many</i>, <i>many-to-one</i> and <i>many-to-many</i>.<br>
+           For more details to define relationships, you can take a look at <a href="./tutorial.html" target="_blank">qxBlog tutorial</a>.<br>
+           We will explain here how to fetch datas from many tables (<a href="../doxygen/html/group___qx_dao.html" target="_blank">QxDao</a> module, functions of <a href="../doxygen/html/namespaceqx_1_1dao.html" target="_blank">qx::dao</a> namespace) :
+           <ul>
+           <li><a href="../doxygen/html/namespaceqx_1_1dao.html" target="_blank">fetch_by_id</a>, <a href="../doxygen/html/namespaceqx_1_1dao.html" target="_blank">fetch_all</a> and <a href="../doxygen/html/namespaceqx_1_1dao.html" target="_blank">fetch_by_query</a> : fetch datas from only 1 table from database (<i>lazy fetch</i>) ;</li>
+           <li><a href="../doxygen/html/namespaceqx_1_1dao.html" target="_blank">fetch_by_id_with_all_relation</a>, <a href="../doxygen/html/namespaceqx_1_1dao.html" target="_blank">fetch_all_with_all_relation</a> and <a href="../doxygen/html/namespaceqx_1_1dao.html" target="_blank">fetch_by_query_with_all_relation</a> : fetch datas from 1 table + all tables linked (<i>eager fetch</i>) ;</li>
+           <li><a href="../doxygen/html/namespaceqx_1_1dao.html" target="_blank">fetch_by_id_with_relation</a>, <a href="../doxygen/html/namespaceqx_1_1dao.html" target="_blank">fetch_all_with_relation</a> and <a href="../doxygen/html/namespaceqx_1_1dao.html" target="_blank">fetch_by_query_with_relation</a> : same as above (<i>eager fetch</i>) with possibility to indicate relationships to fetch on many levels.</li>
+           </ul>
+           The first parameter of <a href="../doxygen/html/namespaceqx_1_1dao.html" target="_blank">fetch_by_id_with_relation</a>, <a href="../doxygen/html/namespaceqx_1_1dao.html" target="_blank">fetch_all_with_relation</a> and <a href="../doxygen/html/namespaceqx_1_1dao.html" target="_blank">fetch_by_query_with_relation</a> functions is the list of relationships to fetch.<br>
+           This list of relationships can contain those items :
+           <ul>
+           <li>relation key : each relation is associated to a key defined into <i>qx::register_class&lt;T&gt;</i> setting function ;</li>
+           <li>"<i>*</i>" keyword means "<i>fetch all relationships defined into <i>qx::register_class&lt;T&gt;</i> function (1 level of relationships)</i>" ;</li>
+           <li>"<i>-></i>" keyword means "<i>LEFT OUTER JOIN</i>" join type between 2 tables ;</li>
+           <li>"<i>>></i>" keyword means "<i>INNER JOIN</i>" join type between 2 tables.</li>
+           </ul>
+           <b>Note :</b> using "*" keyword to indicate "<i>fetch all relationships defined into <i>qx::register_class&lt;T&gt;</i> function</i>", those calls are similar :
+           <ul>
+           <li><i>qx::dao::fetch_by_id_with_relation(<b>"*"</b>, ...)</i>  ==  <i>qx::dao::fetch_by_id_with_all_relation(...)</i> ;</li>
+           <li><i>qx::dao::fetch_by_query_with_relation(<b>"*"</b>, ...)</i>  ==  <i>qx::dao::fetch_by_query_with_all_relation(...)</i> ;</li>
+           <li><i>qx::dao::fetch_all_with_relation(<b>"*"</b>, ...)</i>  ==  <i>qx::dao::fetch_all_with_all_relation(...)</i>.</li>
+           </ul>
+           <br>
+           <b>Example :</b> from qxBlog tutorial, it's possible to fetch all those datas with only 1 query :<br>
+           <br>
+           <b>1-</b> fetch a <i>blog</i> and its <i>author</i> ;<br>
+           <b>2-</b> for the <i>author</i> fetched, fetch all <i>blog</i> he wrote ;<br>
+           <b>3-</b> for each <i>blog</i> written by <i>author</i> fetched, fetch all <i>comment</i> associated.<br>
+           <br>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="complex fetch with relationships">
+<pre>blog_ptr my_blog<span class="operator"> =</span> blog_ptr<span class="operator">(</span><span class="keyword">new</span> blog<span class="operator">(</span><span class="int">10</span><span class="operator">));</span>
+QSqlError daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<span class="operator">::</span>fetch_by_id_with_relation<span class="operator">(</span><span class="string">"author_id-&gt;list_blog-&gt;list_comment"</span><span class="operator">,</span> my_blog<span class="operator">);</span></pre>
+           </td></tr></tbody></table>
+           <br>
+           This code builds the following SQL query :
+           <div style="width:900px; height:180px; overflow:auto; background-color:white">
+<pre><span class="int">SELECT blog.blog_id AS blog_blog_id_0, blog.blog_text AS blog_blog_text_0, blog.date_creation AS blog_date_creation_0, blog.author_id AS blog_author_id_0, 
+       author_1.author_id AS author_1_author_id_0, author_1.name AS author_1_name_0, author_1.birthdate AS author_1_birthdate_0, author_1.sex AS author_1_sex_0, 
+       blog_2.blog_id AS blog_2_blog_id_0, blog_2.author_id AS blog_2_author_id_0, blog_2.blog_text AS blog_2_blog_text_0, blog_2.date_creation AS blog_2_date_creation_0, 
+       comment_4.comment_id AS comment_4_comment_id_0, comment_4.blog_id AS comment_4_blog_id_0, comment_4.comment_text AS comment_4_comment_text_0, comment_4.date_creation AS comment_4_date_creation_0 
+FROM blog 
+LEFT OUTER JOIN author author_1 ON author_1.author_id = blog.author_id 
+LEFT OUTER JOIN blog blog_2 ON blog_2.author_id = author_1.author_id 
+LEFT OUTER JOIN comment comment_4 ON comment_4.blog_id = blog_2.blog_id 
+WHERE blog.blog_id = :blog_id</span></pre>
+           </div>
+           <br><br>
+           <b>Another example :</b> it's also possible to create a list of relationships to fetch, like this :<br>
+           <br>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="complex fetch with relationships">
+<pre>blog_ptr my_blog<span class="operator"> =</span> blog_ptr<span class="operator">(</span><span class="keyword">new</span> blog<span class="operator">(</span><span class="int">10</span><span class="operator">));</span>
+QStringList relation<span class="operator">;</span>
+relation<span class="operator"> &lt;&lt;</span><span class="string"> "author_id-&gt;list_blog-&gt;list_comment"</span><span class="operator">;</span>
+relation<span class="operator"> &lt;&lt;</span><span class="string"> "author_id-&gt;list_blog-&gt;list_category"</span><span class="operator">;</span>
+relation<span class="operator"> &lt;&lt;</span><span class="string"> "list_comment"</span><span class="operator">;</span>
+relation<span class="operator"> &lt;&lt;</span><span class="string"> "list_category"</span><span class="operator">;</span>
+QSqlError daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<span class="operator">::</span>fetch_by_id_with_relation<span class="operator">(</span>relation<span class="operator">,</span> my_blog<span class="operator">);</span></pre>
+           </td></tr></tbody></table>
+           <br>
+           This code builds the following SQL query :
+           <div style="width:900px; height:270px; overflow:auto; background-color:white">
+<pre><span class="int">SELECT blog.blog_id AS blog_blog_id_0, blog.blog_text AS blog_blog_text_0, blog.date_creation AS blog_date_creation_0, blog.author_id AS blog_author_id_0, 
+       author_1.author_id AS author_1_author_id_0, author_1.name AS author_1_name_0, author_1.birthdate AS author_1_birthdate_0, author_1.sex AS author_1_sex_0, 
+       blog_2.blog_id AS blog_2_blog_id_0, blog_2.author_id AS blog_2_author_id_0, blog_2.blog_text AS blog_2_blog_text_0, blog_2.date_creation AS blog_2_date_creation_0, 
+       category_5.category_id AS category_5_category_id_0, category_5.name AS category_5_name_0, category_5.description AS category_5_description_0, 
+       comment_6.comment_id AS comment_6_comment_id_0, comment_6.blog_id AS comment_6_blog_id_0, comment_6.comment_text AS comment_6_comment_text_0, comment_6.date_creation AS comment_6_date_creation_0, 
+       category_7.category_id AS category_7_category_id_0, category_7.name AS category_7_name_0, category_7.description AS category_7_description_0 
+FROM blog 
+LEFT OUTER JOIN author author_1 ON author_1.author_id = blog.author_id 
+LEFT OUTER JOIN blog blog_2 ON blog_2.author_id = author_1.author_id 
+LEFT OUTER JOIN category_blog category_blog_5 ON blog_2.blog_id = category_blog_5.blog_id 
+LEFT OUTER JOIN category category_5 ON category_blog_5.category_id = category_5.category_id 
+LEFT OUTER JOIN comment comment_6 ON comment_6.blog_id = blog.blog_id 
+LEFT OUTER JOIN category_blog category_blog_7 ON blog.blog_id = category_blog_7.blog_id 
+LEFT OUTER JOIN category category_7 ON category_blog_7.category_id = category_7.category_id 
+WHERE blog.blog_id = :blog_id</span></pre>
+           </div>
+           <br><br>
+           <b>Another example :</b> to fetch all relationships per level, "*" keyword must be used.<br>
+           So to fetch all relationships on 3 levels, we can write :<br>
+           <br>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="complex fetch with relationships">
+<pre>blog_ptr my_blog<span class="operator"> =</span> blog_ptr<span class="operator">(</span><span class="keyword">new</span> blog<span class="operator">(</span><span class="int">10</span><span class="operator">));</span>
+QSqlError daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<span class="operator">::</span>fetch_by_id_with_relation<span class="operator">(</span><span class="string">"*-&gt;*-&gt;*"</span><span class="operator">,</span> my_blog<span class="operator">);</span></pre>
+           </td></tr></tbody></table>
+           <br>
+           This code builds the following SQL query :
+           <div style="width:900px; height:620px; overflow:auto; background-color:white">
+<pre><span class="int">SELECT blog.blog_id AS blog_blog_id_0, blog.blog_text AS blog_blog_text_0, blog.date_creation AS blog_date_creation_0, blog.author_id AS blog_author_id_0, 
+       author_1.author_id AS author_1_author_id_0, author_1.name AS author_1_name_0, author_1.birthdate AS author_1_birthdate_0, author_1.sex AS author_1_sex_0, 
+       blog_2.blog_id AS blog_2_blog_id_0, blog_2.author_id AS blog_2_author_id_0, blog_2.blog_text AS blog_2_blog_text_0, blog_2.date_creation AS blog_2_date_creation_0, blog_2.author_id AS blog_2_author_id_0_2, 
+       author_3.author_id AS author_3_author_id_0, author_3.name AS author_3_name_0, author_3.birthdate AS author_3_birthdate_0, author_3.sex AS author_3_sex_0, 
+       comment_4.comment_id AS comment_4_comment_id_0, comment_4.blog_id AS comment_4_blog_id_0, comment_4.comment_text AS comment_4_comment_text_0, comment_4.date_creation AS comment_4_date_creation_0, 
+       category_5.category_id AS category_5_category_id_0, category_5.name AS category_5_name_0, category_5.description AS category_5_description_0, 
+       comment_6.comment_id AS comment_6_comment_id_0, comment_6.blog_id AS comment_6_blog_id_0, comment_6.comment_text AS comment_6_comment_text_0, comment_6.date_creation AS comment_6_date_creation_0, comment_6.blog_id AS comment_6_blog_id_0_6, 
+       blog_7.blog_id AS blog_7_blog_id_0, blog_7.blog_text AS blog_7_blog_text_0, blog_7.date_creation AS blog_7_date_creation_0, blog_7.author_id AS blog_7_author_id_0_7, 
+       author_8.author_id AS author_8_author_id_0, author_8.name AS author_8_name_0, author_8.birthdate AS author_8_birthdate_0, author_8.sex AS author_8_sex_0, 
+       comment_9.comment_id AS comment_9_comment_id_0, comment_9.blog_id AS comment_9_blog_id_0, comment_9.comment_text AS comment_9_comment_text_0, comment_9.date_creation AS comment_9_date_creation_0, 
+       category_10.category_id AS category_10_category_id_0, category_10.name AS category_10_name_0, category_10.description AS category_10_description_0, 
+       category_11.category_id AS category_11_category_id_0, category_11.name AS category_11_name_0, category_11.description AS category_11_description_0, 
+       blog_12.blog_id AS blog_12_blog_id_0, blog_12.blog_text AS blog_12_blog_text_0, blog_12.date_creation AS blog_12_date_creation_0, blog_12.author_id AS blog_12_author_id_0_12, 
+       author_13.author_id AS author_13_author_id_0, author_13.name AS author_13_name_0, author_13.birthdate AS author_13_birthdate_0, author_13.sex AS author_13_sex_0, 
+       comment_14.comment_id AS comment_14_comment_id_0, comment_14.blog_id AS comment_14_blog_id_0, comment_14.comment_text AS comment_14_comment_text_0, comment_14.date_creation AS comment_14_date_creation_0, 
+       category_15.category_id AS category_15_category_id_0, category_15.name AS category_15_name_0, category_15.description AS category_15_description_0 
+FROM blog 
+LEFT OUTER JOIN author author_1 ON author_1.author_id = blog.author_id 
+LEFT OUTER JOIN blog blog_2 ON blog_2.author_id = author_1.author_id 
+LEFT OUTER JOIN author author_3 ON author_3.author_id = blog_2.author_id 
+LEFT OUTER JOIN comment comment_4 ON comment_4.blog_id = blog_2.blog_id 
+LEFT OUTER JOIN category_blog category_blog_5 ON blog_2.blog_id = category_blog_5.blog_id 
+LEFT OUTER JOIN category category_5 ON category_blog_5.category_id = category_5.category_id 
+LEFT OUTER JOIN comment comment_6 ON comment_6.blog_id = blog.blog_id 
+LEFT OUTER JOIN blog blog_7 ON blog_7.blog_id = comment_6.blog_id 
+LEFT OUTER JOIN author author_8 ON author_8.author_id = blog_7.author_id 
+LEFT OUTER JOIN comment comment_9 ON comment_9.blog_id = blog_7.blog_id 
+LEFT OUTER JOIN category_blog category_blog_10 ON blog_7.blog_id = category_blog_10.blog_id 
+LEFT OUTER JOIN category category_10 ON category_blog_10.category_id = category_10.category_id 
+LEFT OUTER JOIN category_blog category_blog_11 ON blog.blog_id = category_blog_11.blog_id 
+LEFT OUTER JOIN category category_11 ON category_blog_11.category_id = category_11.category_id 
+LEFT OUTER JOIN category_blog category_blog_12 ON category_11.category_id = category_blog_12.category_id 
+LEFT OUTER JOIN blog blog_12 ON category_blog_12.blog_id = blog_12.blog_id 
+LEFT OUTER JOIN author author_13 ON author_13.author_id = blog_12.author_id 
+LEFT OUTER JOIN comment comment_14 ON comment_14.blog_id = blog_12.blog_id 
+LEFT OUTER JOIN category_blog category_blog_15 ON blog_12.blog_id = category_blog_15.blog_id 
+LEFT OUTER JOIN category category_15 ON category_blog_15.category_id = category_15.category_id 
+WHERE blog.blog_id = :blog_id</span></pre>
+           </div>
+           <br>
+           </td>
+         </tr>
+       </tbody>
+      </table>
+      <br><br>
+      <a name="faq_280"><u><b>How to execute a stored procedure or a custom SQL query ?</b></u></a><br><br>
+      <table border="0" style="width: 100%" align="center">
+       <col>
+       <col>
+       <tbody>
+         <tr>
+           <td valign="middle" width="30"></td>
+           <td align="justify">
+           QxOrm library provides 2 functions to execute a stored procedure or a custom SQL query :
+           <ul>
+           <li><a href="../doxygen/html/namespaceqx_1_1dao.html" target="_blank">qx::dao::execute_query&lt;T&gt;()</a></li>
+           <li><a href="../doxygen/html/namespaceqx_1_1dao.html" target="_blank">qx::dao::call_query()</a></li>
+           </ul>
+           The first parameter of those functions, of <i><a href="../doxygen/html/classqx_1_1_qx_sql_query.html" target="_blank">qx::QxSqlQuery</a></i> type (or <i>qx_query</i>), contains the stored procedure or the custom SQL query to execute.<br>
+           For more informations about <i><a href="../doxygen/html/classqx_1_1_qx_sql_query.html" target="_blank">qx::QxSqlQuery</a></i> class, goto here : <a href="./faq.html#faq_210">How to build a query without writing SQL with the class <i>qx::QxSqlQuery</i> ?</a><br>
+           <br>
+           <a href="../doxygen/html/namespaceqx_1_1dao.html" target="_blank">qx::dao::execute_query&lt;T&gt;()</a> function is a <i>template</i> function : T type must be registered into QxOrm context (<i>qx::register_class&lt;T&gt;</i> function).<br>
+           All datas returned by the stored procedure or the custom SQL query which could be associated with members of the C++ class (of T type) will be fetched automatically.<br>
+           An automatic search is done on the name of each fields returned by the query.<br>
+           Here is an example from qxBlog project of QxOrm package :<br>
+           <br>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="comment">// Call a custom SQL query or a stored procedure and fetch automatically properties (with a collection of items)
+</span>qx_query testStoredProcBis<span class="operator">(</span><span class="string">"SELECT * FROM author"</span><span class="operator">);</span>
+daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<span class="operator">::</span>execute_query<span class="operator">(</span>testStoredProcBis<span class="operator">,</span> authorX<span class="operator">);</span>
+qAssert<span class="operator">(!</span> daoError<span class="operator">.</span>isValid<span class="operator">());</span> qAssert<span class="operator">(</span>authorX<span class="operator">.</span>count<span class="operator">() &gt;</span><span class="int"> 0</span><span class="operator">);</span>
+qx<span class="operator">::</span>dump<span class="operator">(</span>authorX<span class="operator">);</span></pre>
+           </td></tr></tbody></table>
+           <br><br>
+           <a href="../doxygen/html/namespaceqx_1_1dao.html" target="_blank">qx::dao::call_query()</a> function is not a <i>template</i> function : you have to iterate over each result using <i><a href="../doxygen/html/classqx_1_1_qx_sql_query.html" target="_blank">qx::QxSqlQuery</a></i> class (or <i>qx_query</i>).<br>
+           To get an output value parameter (must be pass as <i>QSql::Out</i> or <i>QSql::InOut</i>) returned by a stored procedure, just call the following method : <i>QVariant qx::QxSqlQuery::boundValue(const QString & sKey) const;</i>.<br>
+           <br>
+           To iterate over all resultset, just use the following methods :<br>
+             * <i>long qx::QxSqlQuery::getSqlResultRowCount() const;</i><br>
+             * <i>long qx::QxSqlQuery::getSqlResultColumnCount() const;</i><br>
+             * <i>QVariant qx::QxSqlQuery::getSqlResultAt(long row, long column) const;</i><br>
+             * <i>QVariant qx::QxSqlQuery::getSqlResultAt(long row, const QString & column) const;</i><br>
+             * <i>QVector qx::QxSqlQuery::getSqlResultAllColumns() const;</i><br>
+             * <i>void qx::QxSqlQuery::dumpSqlResult();</i><br>
+           <br>
+           Here is an example using <a href="../doxygen/html/namespaceqx_1_1dao.html" target="_blank">qx::dao::call_query()</a> function :<br>
+           <br>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre>qx_query query<span class="operator">(</span><span class="string">"CALL MyStoredProc(:param1, :param2)"</span><span class="operator">);</span>
+query<span class="operator">.</span>bind<span class="operator">(</span><span class="string">":param1"</span><span class="operator">,</span><span class="string"> "myValue1"</span><span class="operator">);</span>
+query<span class="operator">.</span>bind<span class="operator">(</span><span class="string">":param2"</span><span class="operator">,</span><span class="int"> 5024</span><span class="operator">,</span> QSql<span class="operator">::</span>InOut<span class="operator">);</span>
+QSqlError daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<span class="operator">::</span>call_query<span class="operator">(</span>query<span class="operator">);</span>
+QVariant vNewValue<span class="operator"> =</span> query<span class="operator">.</span>boundValue<span class="operator">(</span><span class="string">":param2"</span><span class="operator">);</span>
+query<span class="operator">.</span>dumpSqlResult<span class="operator">();</span></pre>
+           </td></tr></tbody></table>
+           <br>
+           </td>
+         </tr>
+       </tbody>
+      </table>
+      <br><br>
+      <a name="faq_290"><u><b>How to use <i>qx::QxDaoAsync</i> class to execute queries in asynchronous way (multi-thread) ?</b></u></a><br><br>
+      <table border="0" style="width: 100%" align="center">
+       <col>
+       <col>
+       <tbody>
+         <tr>
+           <td valign="middle" width="30"></td>
+           <td align="justify">
+           Sometimes, it's necessary to execute some queries to database in asynchronous way (multi-thread), for example to avoid to freeze a GUI if a query is too long to execute.<br>
+           To make easier to work with asynchronous queries, QxOrm library provides <i><a href="../doxygen/html/classqx_1_1_qx_dao_async.html" target="_blank">qx::QxDaoAsync</a></i> class.<br>
+           This class executes a query in another thread and returns the <i>queryFinished()</i> <i>SIGNAL</i> when query is terminated.<br>
+           To use <i><a href="../doxygen/html/classqx_1_1_qx_dao_async.html" target="_blank">qx::QxDaoAsync</a></i> class, you just have to :
+           <ul>
+           <li>be careful to work only with classes implementing <i><a href="../doxygen/html/classqx_1_1_ix_persistable.html" target="_blank">qx::IxPersistable</a></i> interface ;</li>
+           <li>create an instance of <i>qx::QxDaoAsync</i> type (for example, a property of a <i>QWidget</i> derived class) ;</li>
+           <li>connect a <i>SLOT</i> to the <i>qx::QxDaoAsync::queryFinished()</i> <i>SIGNAL</i> (for example, a <i>SLOT</i> of a <i>QWidget</i> derived class) ;</li>
+           <li>run a query using one of <i>qx::QxDaoAsync::asyncXXXX()</i> methods.</li>
+           </ul>
+           Here is an example with a class called <i>MyWidget</i> :<br>
+           <br>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="keyword">class</span> MyWidget<span class="operator"> :</span><span class="keyword"> public</span> QWidget<span class="operator">
+{</span> Q_OBJECT<span class="comment">
+
+   //...
+</span>   qx<span class="operator">::</span>QxDaoAsync m_daoAsync<span class="operator">;</span><span class="comment">
+   //...
+</span>Q_SLOTS<span class="operator">:</span><span class="type">
+   void</span> onQueryFinished<span class="operator">(</span><span class="keyword">const</span> QSqlError<span class="operator"> &amp;</span> daoError<span class="operator">,</span> qx<span class="operator">::</span>dao<span class="operator">::</span>detail<span class="operator">::</span>QxDaoAsyncParams_ptr pDaoParams<span class="operator">);</span><span class="comment">
+   //...
+
+</span><span class="operator">};</span></pre>
+           </td></tr></tbody></table>
+           <br>
+           And here is the implementation of <i>MyWidget</i> class :<br>
+           <br>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre>MyWidget<span class="operator">::</span>MyWidget<span class="operator">() :</span> QObject<span class="operator">()
+{</span><span class="comment">
+   //...
+</span>   QObject<span class="operator">::</span>connect<span class="operator">((&amp;</span> m_daoAsync<span class="operator">),</span> SIGNAL<span class="operator">(</span>queryFinished<span class="operator">(</span><span class="keyword">const</span> QSqlError<span class="operator"> &amp;,</span> qx<span class="operator">::</span>dao<span class="operator">::</span>detail<span class="operator">::</span>QxDaoAsyncParams_ptr<span class="operator">)),</span><span class="keyword"> 
+                    this</span><span class="operator">,</span> SLOT<span class="operator">(</span>onQueryFinished<span class="operator">(</span><span class="keyword">const</span> QSqlError<span class="operator"> &amp;,</span> qx<span class="operator">::</span>dao<span class="operator">::</span>detail<span class="operator">::</span>QxDaoAsyncParams_ptr<span class="operator">)));</span><span class="comment">
+   //...
+</span><span class="operator">}</span><span class="type">
+
+void</span> MyWidget<span class="operator">::</span>onQueryFinished<span class="operator">(</span><span class="keyword">const</span> QSqlError<span class="operator"> &amp;</span> daoError<span class="operator">,</span> qx<span class="operator">::</span>dao<span class="operator">::</span>detail<span class="operator">::</span>QxDaoAsyncParams_ptr pDaoParams<span class="operator">)
+{</span><span class="flow">
+   if</span><span class="operator"> (!</span> pDaoParams<span class="operator">) {</span><span class="flow"> return</span><span class="operator">; }</span>
+   qx<span class="operator">::</span>QxSqlQuery query<span class="operator"> =</span> pDaoParams<span class="operator">-&gt;</span>query<span class="operator">;</span><span class="flow">
+   if</span><span class="operator"> (!</span> daoError<span class="operator">.</span>isValid<span class="operator">()) { ; }</span><span class="comment">
+   // If the async query is associated to a simple object, just use 'pDaoParams-&gt;pInstance' method
+</span>   qx<span class="operator">::</span>IxPersistable_ptr ptr<span class="operator"> =</span> pDaoParams<span class="operator">-&gt;</span>pInstance<span class="operator">;</span><span class="comment">
+   // If the async query is associated to a list of objects, just use 'pDaoParams-&gt;pListOfInstances' method
+</span>   qx<span class="operator">::</span>IxCollection_ptr lst<span class="operator"> =</span> pDaoParams<span class="operator">-&gt;</span>pListOfInstances<span class="operator">;</span><span class="comment">
+   //...
+</span><span class="operator">}</span></pre>
+           </td></tr></tbody></table>
+           <br>
            </td>
          </tr>
        </tbody>

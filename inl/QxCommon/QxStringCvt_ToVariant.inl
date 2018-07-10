@@ -87,6 +87,10 @@ template <> struct QxStringCvt_ToVariant< QVariant > {
 static inline QVariant toVariant(const QVariant & t, const QString & format, int index)
 { Q_UNUSED(format); Q_UNUSED(index); return t; } };
 
+template <typename T> struct QxStringCvt_ToVariant< boost::optional<T> > {
+static inline QVariant toVariant(const boost::optional<T> & t, const QString & format, int index)
+{ if (t) { return qx::cvt::to_variant((* t), format, index); }; return QVariant(); } };
+
 } // namespace detail
 } // namespace cvt
 } // namespace qx

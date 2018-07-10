@@ -25,6 +25,8 @@
 
 #include <QxPrecompiled.h>
 
+#include <QtSql/qsqlrecord.h>
+
 #include <QxDao/QxSqlQuery.h>
 #include <QxDao/QxSqlDatabase.h>
 
@@ -85,18 +87,18 @@ QxSqlQuery & QxSqlQuery::query(const QString & sQuery)
    return (* this);
 }
 
-QxSqlQuery & QxSqlQuery::bind(const QVariant & vValue)
+QxSqlQuery & QxSqlQuery::bind(const QVariant & vValue, QSql::ParamType paramType /* = QSql::In */)
 {
    verifyQuery();
    qAssert(m_lstSqlElement.count() <= 0);
    qAssert(! m_sQuery.isEmpty() && (qx::QxSqlDatabase::getSingleton()->getSqlPlaceHolderStyle() == qx::QxSqlDatabase::ph_style_question_mark));
 
    QString sKey = QString::number(m_lstValue.count() + 1);
-   m_lstValue.insert(sKey, vValue);
+   m_lstValue.insert(sKey, type_bind_value(vValue, paramType));
    return (* this);
 }
 
-QxSqlQuery & QxSqlQuery::bind(const QString & sKey, const QVariant & vValue)
+QxSqlQuery & QxSqlQuery::bind(const QString & sKey, const QVariant & vValue, QSql::ParamType paramType /* = QSql::In */)
 {
    verifyQuery();
    qAssert(m_lstSqlElement.count() <= 0);
@@ -104,8 +106,20 @@ QxSqlQuery & QxSqlQuery::bind(const QString & sKey, const QVariant & vValue)
 
    if (sKey.isEmpty() || m_lstValue.exist(sKey)) { qAssert(false); return (* this); }
    if (! m_sQuery.contains(sKey)) { qAssert(false); return (* this); }
-   m_lstValue.insert(sKey, vValue);
+   m_lstValue.insert(sKey, type_bind_value(vValue, paramType));
    return (* this);
+}
+
+QVariant QxSqlQuery::boundValue(const QString & sKey) const
+{
+   if (sKey.isEmpty() || ! m_lstValue.exist(sKey)) { qAssert(false); return QVariant(); }
+   return m_lstValue.getByKey(sKey).get<0>();
+}
+
+QVariant QxSqlQuery::boundValue(int iPosition) const
+{
+   if ((iPosition < 0) || (iPosition >= m_lstValue.count())) { qAssert(false); return QVariant(); }
+   return m_lstValue.getByIndex(iPosition).get<0>();
 }
 
 void QxSqlQuery::resolve(QSqlQuery & query) const
@@ -119,13 +133,112 @@ void QxSqlQuery::resolve(QSqlQuery & query) const
    }
 
    bool bKey = (qx::QxSqlDatabase::getSingleton()->getSqlPlaceHolderStyle() != qx::QxSqlDatabase::ph_style_question_mark);
-   QxCollectionIterator<QString, QVariant> itr(m_lstValue);
-
+   QxCollectionIterator<QString, type_bind_value> itr(m_lstValue);
    while (itr.next())
    {
-      if (bKey) { query.bindValue(itr.key(), itr.value()); }
-      else { query.addBindValue(itr.value()); }
+      if (bKey) { query.bindValue(itr.key(), itr.value().get<0>(), itr.value().get<1>()); }
+      else { query.addBindValue(itr.value().get<0>(), itr.value().get<1>()); }
    }
+}
+
+void QxSqlQuery::resolveOutput(QSqlQuery & query, bool bFetchSqlResult)
+{
+   bool bKey = (qx::QxSqlDatabase::getSingleton()->getSqlPlaceHolderStyle() != qx::QxSqlDatabase::ph_style_question_mark);
+   for (long l = 0; l < m_lstValue.count(); l++)
+   {
+      type_bind_value val = m_lstValue.getByIndex(l);
+      if (val.get<1>() == QSql::In) { continue; }
+      if (bKey) { val.get<0>() = query.boundValue(m_lstValue.getKeyByIndex(l)); }
+      else { val.get<0>() = query.boundValue(l); }
+   }
+   if (bFetchSqlResult) { fetchSqlResult(query); }
+}
+
+void QxSqlQuery::fetchSqlResult(QSqlQuery & query)
+{
+   bool bCheckRecord = true;
+   m_pSqlResult.reset(new QxSqlResult());
+   if (query.size() > 0) { m_pSqlResult->values.reserve(query.size()); }
+   while (query.next())
+   {
+      if (bCheckRecord)
+      {
+         bCheckRecord = false;
+         QSqlRecord record = query.record();
+         m_pSqlResult->positionByKey.reserve(record.count());
+         for (int i = 0; i < record.count(); i++)
+         { m_pSqlResult->positionByKey.insert(record.fieldName(i), i); }
+         qAssert(record.count() == m_pSqlResult->positionByKey.count());
+      }
+      QVector<QVariant> lst;
+      lst.reserve(m_pSqlResult->positionByKey.count());
+      for (long j = 0; j < m_pSqlResult->positionByKey.count(); j++)
+      { lst.append(query.value(j)); }
+      qAssert(lst.count() == m_pSqlResult->positionByKey.count());
+      m_pSqlResult->values.append(lst);
+   }
+}
+
+long QxSqlQuery::getSqlResultRowCount() const
+{
+   if (! m_pSqlResult) { return 0; }
+   return m_pSqlResult->values.count();
+}
+
+long QxSqlQuery::getSqlResultColumnCount() const
+{
+   if (! m_pSqlResult) { return 0; }
+   return m_pSqlResult->positionByKey.count();
+}
+
+QVariant QxSqlQuery::getSqlResultAt(long row, long column) const
+{
+   if (! m_pSqlResult) { return QVariant(); }
+   if ((row < 0) || (row >= m_pSqlResult->values.count())) { return QVariant(); }
+   if ((column < 0) || (column >= m_pSqlResult->positionByKey.count())) { return QVariant(); }
+   return m_pSqlResult->values.at(row).at(column);
+}
+
+QVariant QxSqlQuery::getSqlResultAt(long row, const QString & column) const
+{
+   if (! m_pSqlResult) { return QVariant(); }
+   if ((row < 0) || (row >= m_pSqlResult->values.count())) { return QVariant(); }
+   int i(-1); int col = m_pSqlResult->positionByKey.value(column, i);
+   return ((col >= 0) ? m_pSqlResult->values.at(row).at(col) : QVariant());
+}
+
+QVector<QVariant> QxSqlQuery::getSqlResultAt(long row) const
+{
+   if (! m_pSqlResult) { return QVector<QVariant>(); }
+   if ((row < 0) || (row >= m_pSqlResult->values.count())) { return QVector<QVariant>(); }
+   return m_pSqlResult->values.at(row);
+}
+
+QVector<QString> QxSqlQuery::getSqlResultAllColumns() const
+{
+   if (! m_pSqlResult) { return QVector<QString>(); }
+   QVector<QString> lstAllColumns(m_pSqlResult->positionByKey.count());
+   QHashIterator<QString, int> itr(m_pSqlResult->positionByKey);
+   while (itr.hasNext()) { itr.next(); lstAllColumns[itr.value()] = itr.key(); }
+   return lstAllColumns;
+}
+
+void QxSqlQuery::dumpSqlResult()
+{
+   if (! m_pSqlResult) { return; }
+   QString sql(this->query()), sColumns("#"), sOutput;
+   qDebug("[QxOrm] start dump sql result : '%s'", qPrintable(sql));
+   QVector<QString> lstColumns = this->getSqlResultAllColumns();
+   for (long i = 0; i < lstColumns.count(); i++) { sColumns += "|" + lstColumns.at(i); }
+   qDebug("%s", qPrintable(sColumns));
+   for (long j = 0; j < m_pSqlResult->values.count(); j++)
+   {
+      sOutput = QString::number(j);
+      for (long k = 0; k < m_pSqlResult->positionByKey.count(); k++)
+      { sOutput += "|" + m_pSqlResult->values.at(j).at(k).toString(); }
+      qDebug("%s", qPrintable(sOutput));
+   }
+   qDebug("[QxOrm] end dump sql result : '%s'", qPrintable(sql));
 }
 
 void QxSqlQuery::postProcess(QString & sql) const
@@ -627,4 +740,29 @@ QxSqlQuery & QxSqlQuery::addSqlIsBetween(const QVariant & val1, const QVariant &
    return (* this);
 }
 
+} // namespace qx
+
+namespace qx {
+namespace dao {
+
+QSqlError call_query(qx::QxSqlQuery & query, QSqlDatabase * pDatabase /* = NULL */)
+{
+   QSqlError dbError;
+   QSqlDatabase d = (pDatabase ? (* pDatabase) : qx::QxSqlDatabase::getDatabase(dbError));
+   if (dbError.isValid()) { return dbError; }
+   QTime timeQuery; timeQuery.start();
+   QString sql = query.query();
+   QSqlQuery q = QSqlQuery(d);
+   q.setForwardOnly(true);
+   q.prepare(sql);
+   query.resolve(q);
+   if (! q.exec()) { return q.lastError(); }
+   query.resolveOutput(q, true);
+   int ms = timeQuery.elapsed();
+   if (qx::QxSqlDatabase::getSingleton()->getTraceSqlQuery())
+   { qDebug("[QxOrm] custom sql query (%d ms) : %s", ms, qPrintable(sql)); }
+   return QSqlError();
+}
+
+} // namespace dao
 } // namespace qx

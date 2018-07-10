@@ -29,7 +29,7 @@ template <> void register_class(QxClass<CTestAll> & t)
    pData = t.data(& CTestAll::m_oQDateTime, "m_oQDateTime");
    pData = t.data(& CTestAll::m_oQTime, "m_oQTime");
 
-#if ((! defined(Q_OS_WIN)) || (! defined(__GNUC__))) // MinGW memory bug ?
+#if (0) /* ((! defined(Q_OS_WIN)) || (! defined(__GNUC__))) // MinGW memory bug ? */
    pData = t.data(& CTestAll::m_oQFont, "m_oQFont", 0);
    pData = t.data(& CTestAll::m_oQImage, "m_oQImage", 0);
    pData = t.data(& CTestAll::m_oQPicture, "m_oQPicture", 0);

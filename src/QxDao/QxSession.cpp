@@ -34,7 +34,7 @@ namespace qx {
 
 QxSession::QxSession() : boost::noncopyable(), m_bTransaction(false), m_bThrowInEvent(false), m_bAutoOpenClose(false)
 {
-   m_database = qx::QxSqlDatabase::getSingleton()->getDatabaseCloned();
+   m_database = qx::QxSqlDatabase::getDatabaseCloned();
    m_bThrowable = qx::QxSqlDatabase::getSingleton()->getSessionThrowable();
    if (qx::QxSqlDatabase::getSingleton()->getSessionAutoTransaction()) { open(); }
 }

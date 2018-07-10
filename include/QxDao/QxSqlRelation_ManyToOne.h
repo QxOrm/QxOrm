@@ -56,7 +56,7 @@ private:
 
 public:
 
-   QxSqlRelation_ManyToOne(IxDataMember * p) : QxSqlRelation<DataType, Owner>(p) { ; }
+   QxSqlRelation_ManyToOne(IxDataMember * p) : QxSqlRelation<DataType, Owner>(p) { this->m_eRelationType = qx::IxSqlRelation::many_to_one; }
    virtual ~QxSqlRelation_ManyToOne() { ; }
 
    virtual QString getDescription() const                                     { return "relation many-to-one"; }
@@ -71,10 +71,13 @@ public:
    virtual void lazyWhereSoftDelete(QxSqlRelationParams & params) const       { Q_UNUSED(params); }
    virtual void lazyFetch_ResolveInput(QxSqlRelationParams & params) const    { Q_UNUSED(params); }
    virtual void eagerFetch_ResolveInput(QxSqlRelationParams & params) const   { Q_UNUSED(params); }
-   virtual QSqlError onBeforeSave(QxSqlRelationParams & params) const         { Q_UNUSED(params); return QSqlError(); }
+   virtual QSqlError onAfterSave(QxSqlRelationParams & params) const          { Q_UNUSED(params); return QSqlError(); }
 
-   virtual QSqlError onAfterSave(QxSqlRelationParams & params) const
-   { return qx::dao::save(this->getData(params), (& params.database())); }
+   virtual QSqlError onBeforeSave(QxSqlRelationParams & params) const
+   {
+      if (this->isNullData(params)) { return QSqlError(); }
+      return qx::dao::save(this->getData(params), (& params.database()));
+   }
 
    virtual void lazyUpdate_ResolveInput(QxSqlRelationParams & params) const
    { this->lazyInsert_ResolveInput(params); }
@@ -105,7 +108,7 @@ public:
    virtual void lazySelect(QxSqlRelationParams & params) const
    {
       QString & sql = params.sql();
-      QString tableRef = params.builder().table();
+      QString tableRef = this->tableAliasOwner(params);
       IxDataMember * pData = this->getDataMember(); qAssert(pData);
       if (pData) { sql += (pData->getSqlTablePointNameAsAlias(tableRef) + ", "); }
    }
@@ -116,8 +119,10 @@ public:
       QString & sql = params.sql();
       IxDataMember * pData = this->getDataMember(); qAssert(pData);
       IxDataMember * p = NULL; IxDataMember * pId = this->getDataId(); qAssert(pId);
-      QString table = this->table(); QString tableAlias = this->tableAlias(params); QString tableRef = params.builder().table();
-      if (pData) { sql += (pData->getSqlTablePointNameAsAlias(tableRef) + ", "); }
+      QString table = this->table(); QString tableAlias = this->tableAlias(params);
+      QString tableRef = this->tableAliasOwner(params); QString sSuffixAlias;
+      if (params.indexOwner() > 0) { sSuffixAlias = "_" + QString::number(params.indexOwner()); }
+      if (pData) { sql += (pData->getSqlTablePointNameAsAlias(tableRef, ", ", sSuffixAlias) + ", "); }
       if (pId) { sql += (pId->getSqlTablePointNameAsAlias(tableAlias) + ", "); }
       while ((p = this->nextData(l1))) { sql += (p->getSqlTablePointNameAsAlias(tableAlias) + ", "); }
       if (! this->m_oSoftDelete.isEmpty()) { sql += (this->m_oSoftDelete.buildSqlTablePointName(tableAlias) + ", "); }
@@ -128,9 +133,10 @@ public:
       QString & sql = params.sql();
       IxDataMember * pId = this->getDataId(); qAssert(pId);
       IxDataMember * pData = this->getDataMember(); qAssert(pData);
-      QString table = this->table(); QString tableAlias = this->tableAlias(params); QString tableRef = params.builder().table();
+      QString table = this->table(); QString tableAlias = this->tableAlias(params);
+      QString tableRef = this->tableAliasOwner(params);
       if (! pId || ! pData) { return; }
-      sql += this->getSqlJoin() + table + " " + tableAlias + " ON ";
+      sql += this->getSqlJoin(params.joinType()) + table + " " + tableAlias + " ON ";
       params.builder().addSqlQueryAlias(table, tableAlias);
       for (int i = 0; i < pId->getNameCount(); i++)
       { sql += pId->getSqlAlias(tableAlias, true, i) + " = " + pData->getSqlAlias(tableRef, true, i) + " AND "; }
@@ -157,13 +163,13 @@ public:
       this->updateOffset(false, params);
    }
 
-   virtual void eagerFetch_ResolveOutput(QxSqlRelationParams & params) const
+   virtual void * eagerFetch_ResolveOutput(QxSqlRelationParams & params) const
    {
-      if (! this->verifyOffset(params, false)) { return; }
+      if (! this->verifyOffset(params, false)) { return NULL; }
       QSqlQuery & query = params.query();
       typename QxSqlRelation<DataType, Owner>::type_owner & currOwner = this->getOwner(params);
-      IxDataMember * pData = this->getDataMember(); qAssert(pData); if (! pData) { return; }
-      IxDataMember * p = NULL; IxDataMember * pId = this->getDataId(); qAssert(pId); if (! pId) { return; }
+      IxDataMember * pData = this->getDataMember(); qAssert(pData); if (! pData) { return NULL; }
+      IxDataMember * p = NULL; IxDataMember * pId = this->getDataId(); qAssert(pId); if (! pId) { return NULL; }
       long lIndex = 0; long lOffsetId = (pId ? pId->getNameCount() : 0); long lOffsetData = (pData ? pData->getNameCount() : 0);
       long lOffsetOld = params.offset(); this->updateOffset(true, params);
       long lOffsetRelation = (lOffsetOld + lOffsetId + lOffsetData);
@@ -173,11 +179,12 @@ public:
       for (int i = 0; i < pId->getNameCount(); i++)
       { QVariant vIdBis = query.value(lOffsetOld + lOffsetData + i); bValidIdBis = (bValidIdBis || qx::trait::is_valid_primary_key(vIdBis)); }
       if (pData && bValidId) { for (int i = 0; i < pData->getNameCount(); i++) { pData->fromVariant((& currOwner), query.value(lOffsetOld + i), i); } }
-      if (! bValidIdBis) { return; }
+      if (! bValidIdBis) { return NULL; }
       type_data & currData = this->getData(params);
       if (pId) { for (int i = 0; i < pId->getNameCount(); i++) { pId->fromVariant((& currData), query.value(lOffsetOld + lOffsetData + i), i); } }
       while ((p = this->nextData(lIndex)))
       { p->fromVariant((& currData), query.value(lOffsetRelation++)); }
+      return (& currData);
    }
 
    virtual void lazyInsert(QxSqlRelationParams & params) const

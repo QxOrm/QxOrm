@@ -1,0 +1,162 @@
+/****************************************************************************
+**
+** http://www.qxorm.com/
+** http://sourceforge.net/projects/qxorm/
+** Original file by Lionel Marty
+**
+** This file is part of the QxOrm library
+**
+** This software is provided 'as-is', without any express or implied
+** warranty. In no event will the authors be held liable for any
+** damages arising from the use of this software.
+**
+** GNU Lesser General Public License Usage
+** This file must be used under the terms of the GNU Lesser
+** General Public License version 2.1 as published by the Free Software
+** Foundation and appearing in the file 'license.lgpl.txt' included in the
+** packaging of this file.  Please review the following information to
+** ensure the GNU Lesser General Public License version 2.1 requirements
+** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+**
+** If you have questions regarding the use of this file, please contact :
+** contact@qxorm.com
+**
+****************************************************************************/
+
+namespace qx {
+namespace dao {
+namespace detail {
+
+template <class T>
+struct QxDao_ExecuteQuery_Generic
+{
+
+   static QSqlError executeQuery(qx::QxSqlQuery & query, T & t, QSqlDatabase * pDatabase)
+   {
+      qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "execute custom sql query or stored procedure");
+      if (! dao.isValid()) { return dao.error(); }
+
+      QString sql = query.query();
+      if (sql.isEmpty()) { return dao.errEmpty(); }
+      dao.builder().setSqlQuery(sql);
+      dao.query().prepare(sql);
+      query.resolve(dao.query());
+      if (! dao.query().exec()) { return dao.errFailed(); }
+      query.resolveOutput(dao.query(), false);
+      if (! dao.nextRecord()) { return dao.error(); }
+      qx::dao::on_before_fetch<T>((& t), (& dao));
+
+      qx::IxDataMemberX * pDataMemberX = dao.builder().getDataMemberX();
+      if (! pDataMemberX) { qAssert(false); return dao.error(); }
+      QSqlRecord record = dao.query().record();
+      for (int i = 0; i < record.count(); i++)
+      {
+         if (! pDataMemberX->exist_WithDaoStrategy(record.fieldName(i))) { continue; }
+         qx::IxDataMember * pDataMember = pDataMemberX->get_WithDaoStrategy(record.fieldName(i));
+         if (pDataMember) { pDataMember->fromVariant((& t), record.value(i)); }
+      }
+
+      qx::dao::on_after_fetch<T>((& t), (& dao));
+      return dao.error();
+   }
+
+};
+
+template <class T>
+struct QxDao_ExecuteQuery_Container
+{
+
+   static QSqlError executeQuery(qx::QxSqlQuery & query, T & t, QSqlDatabase * pDatabase)
+   {
+      qx::trait::generic_container<T>::clear(t);
+      qx::dao::detail::QxDao_Helper_Container<T> dao(t, pDatabase, "execute custom sql query or stored procedure");
+      if (! dao.isValid()) { return dao.error(); }
+
+      QString sql = query.query();
+      if (sql.isEmpty()) { return dao.errEmpty(); }
+      dao.builder().setSqlQuery(sql);
+      dao.query().prepare(sql);
+      query.resolve(dao.query());
+      if (! dao.query().exec()) { return dao.errFailed(); }
+      query.resolveOutput(dao.query(), false);
+
+      QVector< QPair<int, qx::IxDataMember *> > vColumnToFetch;
+      bool bSize = (dao.hasFeature(QSqlDriver::QuerySize) && (dao.query().size() > 0));
+      if (bSize) { qx::trait::generic_container<T>::reserve(t, dao.query().size()); }
+      while (dao.nextRecord()) { insertNewItem(t, dao, vColumnToFetch); }
+      if (bSize) { qAssert(qx::trait::generic_container<T>::size(t) == static_cast<long>(dao.query().size())); }
+
+      return dao.error();
+   }
+
+private:
+
+   static void insertNewItem(T & t, qx::dao::detail::QxDao_Helper_Container<T> & dao, QVector< QPair<int, qx::IxDataMember *> > & vColumnToFetch)
+   {
+      typedef typename qx::trait::generic_container<T>::type_item type_item;
+      typedef typename type_item::type_value_qx type_value_qx;
+      type_item item = qx::trait::generic_container<T>::createItem();
+      type_value_qx & item_val = item.value_qx();
+      qx::IxDataMember * pId = dao.getDataId(); QVariant vId;
+      qx::dao::on_before_fetch<type_value_qx>((& item_val), (& dao));
+
+      if (vColumnToFetch.count() <= 0)
+      {
+         qx::IxDataMemberX * pDataMemberX = dao.builder().getDataMemberX();
+         if (! pDataMemberX) { qAssert(false); return; }
+         QSqlRecord record = dao.query().record();
+         vColumnToFetch.reserve(record.count());
+         for (int i = 0; i < record.count(); i++)
+         {
+            if (! pDataMemberX->exist_WithDaoStrategy(record.fieldName(i))) { continue; }
+            qx::IxDataMember * pDataMember = pDataMemberX->get_WithDaoStrategy(record.fieldName(i));
+            if (pDataMember) { vColumnToFetch.append(qMakePair(i, pDataMember)); }
+         }
+      }
+
+      for (int j = 0; j < vColumnToFetch.count(); j++)
+      {
+         QVariant vValue = dao.query().value(vColumnToFetch[j].first);
+         vColumnToFetch[j].second->fromVariant((& item_val), vValue);
+         if (pId == vColumnToFetch[j].second) { vId = vValue; }
+      }
+
+      if (! vId.isValid())
+      { vId = QVariant(static_cast<qlonglong>(qx::trait::generic_container<T>::size(t))); }
+      qx::cvt::from_variant(vId, item.key());
+      qx::dao::on_after_fetch<type_value_qx>((& item_val), (& dao));
+      qx::dao::detail::QxDao_Keep_Original<type_item>::backup(item);
+      qx::trait::generic_container<T>::insertItem(t, item);
+   }
+
+};
+
+template <class T>
+struct QxDao_ExecuteQuery_Ptr
+{
+
+   static inline QSqlError executeQuery(qx::QxSqlQuery & query, T & t, QSqlDatabase * pDatabase)
+   { if (! t) { qx::trait::construct_ptr<T>::get(t); }; return qx::dao::execute_query(query, (* t), pDatabase); }
+
+};
+
+template <class T>
+struct QxDao_ExecuteQuery
+{
+
+   static inline QSqlError executeQuery(qx::QxSqlQuery & query, T & t, QSqlDatabase * pDatabase)
+   {
+      typedef typename boost::mpl::if_c< boost::is_pointer<T>::value, qx::dao::detail::QxDao_ExecuteQuery_Ptr<T>, qx::dao::detail::QxDao_ExecuteQuery_Generic<T> >::type type_dao_1;
+      typedef typename boost::mpl::if_c< qx::trait::is_smart_ptr<T>::value, qx::dao::detail::QxDao_ExecuteQuery_Ptr<T>, type_dao_1 >::type type_dao_2;
+      typedef typename boost::mpl::if_c< qx::trait::is_container<T>::value, qx::dao::detail::QxDao_ExecuteQuery_Container<T>, type_dao_2 >::type type_dao_3;
+
+      QSqlError error = type_dao_3::executeQuery(query, t, pDatabase);
+      if (! error.isValid()) { qx::dao::detail::QxDao_Keep_Original<T>::backup(t); }
+      return error;
+   }
+
+};
+
+} // namespace detail
+} // namespace dao
+} // namespace qx

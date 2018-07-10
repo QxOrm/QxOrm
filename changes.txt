@@ -1,3 +1,12 @@
+Changes in version 1.2.4:
+- New relationship engine to fetch easily many levels of relationships per query
+- For more details about this new engine, goto the FAQ : 'How to use relationship engine to fetch datas from many tables ?'
+- Add 2 functions : qx::dao::execute_query and qx::dao::call_query to call a stored procedure or a custom SQL query
+- For more details about this new feature, goto the FAQ : 'How to execute a stored procedure or a custom SQL query ?'
+- Add support for boost::optional type to manage NULL database value without using QVariant type
+- New class : qx::QxDaoAsync to make easier to execute queries in asynchronous way (multi-thread)
+- For more details about this new class, goto the FAQ : 'How to use qx::QxDaoAsync class to execute queries in asynchronous way (multi-thread) ?'
+
 Changes in version 1.2.3:
 - New interface 'qx::IxPersistable' (abstract class) to simplify polymorphism using QxOrm library
 - For more details about this new interface, goto the FAQ : 'How to use qx::IxPersistable interface ?'

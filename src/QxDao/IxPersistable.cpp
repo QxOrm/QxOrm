@@ -30,6 +30,8 @@
 
 #include <QxFactory/QxFactoryX.h>
 
+#include <QxRegister/QxClassX.h>
+
 #include <QxMemLeak/mem_leak.h>
 
 namespace qx {
@@ -40,6 +42,7 @@ IxPersistable::~IxPersistable() { ; }
 
 qx::IxCollection_ptr IxPersistable::qxFetchAll(const QString & className, const QStringList & columns /* = QStringList() */, const QStringList & relation /* = QStringList() */, QSqlDatabase * pDatabase /* = NULL */)
 {
+   if (! QxClassX::implementIxPersistable(className)) { qAssert(false); return qx::IxCollection_ptr(); }
    qx::IxPersistable_ptr ptr = qx::IxPersistable_ptr(static_cast<qx::IxPersistable *>(qx::create_void_ptr(className)));
    if (! ptr) { throw qx::dao::sql_error(QSqlError("[QxOrm] qx::IxPersistable::qxFetchAll() : 'invalid classname, unable to create a new instance'", "", QSqlError::UnknownError)); }
    qx::IxCollection_ptr lst = ptr->qxNewPersistableCollection();
@@ -51,11 +54,24 @@ qx::IxCollection_ptr IxPersistable::qxFetchAll(const QString & className, const 
 
 qx::IxCollection_ptr IxPersistable::qxFetchByQuery(const QString & className, const qx::QxSqlQuery & query, const QStringList & columns /* = QStringList() */, const QStringList & relation /* = QStringList() */, QSqlDatabase * pDatabase /* = NULL */)
 {
+   if (! QxClassX::implementIxPersistable(className)) { qAssert(false); return qx::IxCollection_ptr(); }
    qx::IxPersistable_ptr ptr = qx::IxPersistable_ptr(static_cast<qx::IxPersistable *>(qx::create_void_ptr(className)));
    if (! ptr) { throw qx::dao::sql_error(QSqlError("[QxOrm] qx::IxPersistable::qxFetchByQuery() : 'invalid classname, unable to create a new instance'", "", QSqlError::UnknownError)); }
    qx::IxCollection_ptr lst = ptr->qxNewPersistableCollection();
    if (! lst) { throw qx::dao::sql_error(QSqlError("[QxOrm] qx::IxPersistable::qxFetchByQuery() : 'unable to create a new persistable collection'", "", QSqlError::UnknownError)); }
    QSqlError daoError = ptr->qxFetchByQuery(query, (* lst), columns, relation, pDatabase);
+   if (daoError.isValid()) { throw qx::dao::sql_error(daoError); }
+   return lst;
+}
+
+qx::IxCollection_ptr IxPersistable::qxExecuteQuery(const QString & className, qx::QxSqlQuery & query, QSqlDatabase * pDatabase /* = NULL */)
+{
+   if (! QxClassX::implementIxPersistable(className)) { qAssert(false); return qx::IxCollection_ptr(); }
+   qx::IxPersistable_ptr ptr = qx::IxPersistable_ptr(static_cast<qx::IxPersistable *>(qx::create_void_ptr(className)));
+   if (! ptr) { throw qx::dao::sql_error(QSqlError("[QxOrm] qx::IxPersistable::qxExecuteQuery() : 'invalid classname, unable to create a new instance'", "", QSqlError::UnknownError)); }
+   qx::IxCollection_ptr lst = ptr->qxNewPersistableCollection();
+   if (! lst) { throw qx::dao::sql_error(QSqlError("[QxOrm] qx::IxPersistable::qxExecuteQuery() : 'unable to create a new persistable collection'", "", QSqlError::UnknownError)); }
+   QSqlError daoError = ptr->qxExecuteQuery(query, (* lst), pDatabase);
    if (daoError.isValid()) { throw qx::dao::sql_error(daoError); }
    return lst;
 }

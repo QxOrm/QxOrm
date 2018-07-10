@@ -35,6 +35,7 @@ struct QxDao_Insert_Generic
    {
       qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "insert");
       if (! dao.isValid()) { return dao.error(); }
+      if (dao.isReadOnly()) { return dao.errReadOnly(); }
       if (! dao.validateInstance(t)) { return dao.error(); }
 
       QString sql = dao.builder().insert().getSqlQuery();
@@ -65,6 +66,7 @@ struct QxDao_Insert_Container
       if (qx::trait::generic_container<T>::size(t) <= 0) { return QSqlError(); }
       qx::dao::detail::QxDao_Helper_Container<T> dao(t, pDatabase, "insert");
       if (! dao.isValid()) { return dao.error(); }
+      if (dao.isReadOnly()) { return dao.errReadOnly(); }
       if (! dao.validateInstance(t)) { return dao.error(); }
 
       QString sql = dao.builder().insert().getSqlQuery();

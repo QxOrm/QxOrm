@@ -37,6 +37,8 @@
  * \brief Common interface (abstract class) for persistents classes using QX_PERSISTABLE_HPP() and QX_PERSISTABLE_CPP() macros
  */
 
+#include <boost/type_traits/is_base_of.hpp>
+
 #include <QxDao/QxSqlQuery.h>
 #include <QxDao/QxDao.h>
 
@@ -87,6 +89,18 @@ public:
     * <i>SELECT COUNT(*) FROM my_table</i> + <i>WHERE my_query...</i>
     */
    virtual long qxCount(const qx::QxSqlQuery & query = qx::QxSqlQuery(), QSqlDatabase * pDatabase = NULL) = 0;
+
+   /*!
+    * \brief Return the number of lines in the table (database) mapped to the current C++ class (registered into QxOrm context) and filtered by a user SQL query
+    * \param lCount Output parameter with the number of lines in the table associated to the SQL query
+    * \param query Define a user SQL query added to default SQL query builded by QxOrm library
+    * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class
+    *
+    * qx::IxPersistable * p = ...;<br>
+    * p->qxCount(...) execute following SQL query :<br>
+    * <i>SELECT COUNT(*) FROM my_table</i> + <i>WHERE my_query...</i>
+    */
+   virtual QSqlError qxCount(long & lCount, const qx::QxSqlQuery & query = qx::QxSqlQuery(), QSqlDatabase * pDatabase = NULL) = 0;
 
    /*!
     * \brief Fetch current instance (retrieve all its properties) mapped to a table in the database (current instance must have a valid id before to be fetched without error, or pass the id to the first parameter of this method)
@@ -253,6 +267,23 @@ public:
    virtual QSqlError qxDestroyByQuery(const qx::QxSqlQuery & query, QSqlDatabase * pDatabase = NULL) = 0;
 
    /*!
+    * \brief Execute a custom SQL query or a stored procedure, all columns that can be mapped to the instance of type T will be fetched automatically
+    * \param query Define a user SQL query added to default SQL query builded by QxOrm library
+    * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class
+    * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
+    */
+   virtual QSqlError qxExecuteQuery(qx::QxSqlQuery & query, QSqlDatabase * pDatabase = NULL) = 0;
+
+   /*!
+    * \brief Execute a custom SQL query or a stored procedure, all columns that can be mapped to the instance of type T will be fetched automatically
+    * \param query Define a user SQL query added to default SQL query builded by QxOrm library
+    * \param list Container to fetch all items (retrieve all elements and properties associated); list is cleared before executing SQL query
+    * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class
+    * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
+    */
+   virtual QSqlError qxExecuteQuery(qx::QxSqlQuery & query, qx::IxCollection & list, QSqlDatabase * pDatabase = NULL) = 0;
+
+   /*!
     * \brief Search if current instance already exists into database
     * \param id Unique id to check into database (if empty, check id of current instance)
     * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class
@@ -289,6 +320,7 @@ public:
 
    static qx::IxCollection_ptr qxFetchAll(const QString & className, const QStringList & columns = QStringList(), const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL);
    static qx::IxCollection_ptr qxFetchByQuery(const QString & className, const qx::QxSqlQuery & query, const QStringList & columns = QStringList(), const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL);
+   static qx::IxCollection_ptr qxExecuteQuery(const QString & className, qx::QxSqlQuery & query, QSqlDatabase * pDatabase = NULL);
 
 };
 
@@ -315,9 +347,24 @@ public:
 
 } // namespace qx
 
+namespace qx {
+namespace trait {
+
+/*!
+ * \ingroup QxTraits
+ * \brief qx::trait::is_ix_persistable<T>::value : return true if T implements qx::IxPersistable interface, otherwise return false
+ */
+template <typename T>
+struct is_ix_persistable
+{ enum { value = boost::is_base_of<qx::IxPersistable, T>::value }; };
+
+} // namespace trait
+} // namespace qx
+
 #define QX_PERSISTABLE_HPP(className) \
 public: \
 virtual long qxCount(const qx::QxSqlQuery & query = qx::QxSqlQuery(), QSqlDatabase * pDatabase = NULL); \
+virtual QSqlError qxCount(long & lCount, const qx::QxSqlQuery & query = qx::QxSqlQuery(), QSqlDatabase * pDatabase = NULL); \
 virtual QSqlError qxFetchById(const QVariant & id = QVariant(), const QStringList & columns = QStringList(), const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL); \
 virtual QSqlError qxFetchAll(qx::IxCollection & list, const QStringList & columns = QStringList(), const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL); \
 virtual QSqlError qxFetchByQuery(const qx::QxSqlQuery & query, qx::IxCollection & list, const QStringList & columns = QStringList(), const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL); \
@@ -330,6 +377,8 @@ virtual QSqlError qxDeleteByQuery(const qx::QxSqlQuery & query, QSqlDatabase * p
 virtual QSqlError qxDestroyById(const QVariant & id = QVariant(), QSqlDatabase * pDatabase = NULL); \
 virtual QSqlError qxDestroyAll(QSqlDatabase * pDatabase = NULL); \
 virtual QSqlError qxDestroyByQuery(const qx::QxSqlQuery & query, QSqlDatabase * pDatabase = NULL); \
+virtual QSqlError qxExecuteQuery(qx::QxSqlQuery & query, QSqlDatabase * pDatabase = NULL); \
+virtual QSqlError qxExecuteQuery(qx::QxSqlQuery & query, qx::IxCollection & list, QSqlDatabase * pDatabase = NULL); \
 virtual qx_bool qxExist(const QVariant & id = QVariant(), QSqlDatabase * pDatabase = NULL); \
 virtual qx::QxInvalidValueX qxValidate(const QStringList & groups = QStringList()); \
 virtual qx::IxCollection_ptr qxNewPersistableCollection() const; \
@@ -340,6 +389,11 @@ virtual qx::IxClass * qxClass() const;
 long className::qxCount(const qx::QxSqlQuery & query, QSqlDatabase * pDatabase) \
 { \
    return qx::dao::count< className >(query, pDatabase); \
+} \
+\
+QSqlError className::qxCount(long & lCount, const qx::QxSqlQuery & query, QSqlDatabase * pDatabase) \
+{ \
+   return qx::dao::count< className >(lCount, query, pDatabase); \
 } \
 \
 QSqlError className::qxFetchById(const QVariant & id, const QStringList & columns, const QStringList & relation, QSqlDatabase * pDatabase) \
@@ -448,6 +502,19 @@ QSqlError className::qxDestroyAll(QSqlDatabase * pDatabase) \
 QSqlError className::qxDestroyByQuery(const qx::QxSqlQuery & query, QSqlDatabase * pDatabase) \
 { \
    return qx::dao::destroy_by_query< className >(query, pDatabase); \
+} \
+\
+QSqlError className::qxExecuteQuery(qx::QxSqlQuery & query, QSqlDatabase * pDatabase) \
+{ \
+   return qx::dao::execute_query(query, (* this), pDatabase); \
+} \
+\
+QSqlError className::qxExecuteQuery(qx::QxSqlQuery & query, qx::IxCollection & list, QSqlDatabase * pDatabase) \
+{ \
+   qx::IxPersistableCollection< className >::type * list_typed = dynamic_cast< qx::IxPersistableCollection< className >::type * >(& list); \
+   if (! list_typed) { qDebug("[QxOrm] problem with 'qxExecuteQuery()' method : '%s'", "dynamic_cast failed using collection qx::QxCollection< type_primary_key, boost::shared_ptr<type> >"); qAssert(false); } \
+   if (! list_typed) { return QSqlError("[QxOrm] problem with 'qxExecuteQuery()' method : 'dynamic_cast failed using collection qx::QxCollection< type_primary_key, boost::shared_ptr<type> >'", "", QSqlError::UnknownError); } \
+   return qx::dao::execute_query(query, (* list_typed), pDatabase); \
 } \
 \
 qx_bool className::qxExist(const QVariant & id, QSqlDatabase * pDatabase) \

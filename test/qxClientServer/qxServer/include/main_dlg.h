@@ -9,6 +9,7 @@ class main_dlg : public QWidget, private Ui::dlgServer
 private:
 
    qx::service::QxThreadPool_ptr m_pThreadPool; // Server thread pool to receive all requests
+   qx::QxDaoAsync m_daoAsync;                   // To test to run queries in a different thread
 
 public:
 
@@ -27,6 +28,7 @@ private Q_SLOTS:
    void onError(const QString & err, qx::service::QxTransaction_ptr transaction);
    void onServerIsRunning(bool bIsRunning, qx::service::QxServer * pServer);
    void onTransactionFinished(qx::service::QxTransaction_ptr transaction);
+   void onQueryFinished(const QSqlError & daoError, qx::dao::detail::QxDaoAsyncParams_ptr pDaoParams);
 
 };
 

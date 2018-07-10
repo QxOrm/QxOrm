@@ -37,8 +37,6 @@
  * \brief Helper class to communicate with database
  */
 
-#include <boost/scoped_ptr.hpp>
-
 #include <QtSql/qsqldatabase.h>
 #include <QtSql/qsqlquery.h>
 #include <QtSql/qsqlerror.h>
@@ -52,6 +50,7 @@
 #include <QxDao/QxSqlQueryHelper.h>
 #include <QxDao/QxSqlQuery.h>
 #include <QxDao/IxSqlRelation.h>
+#include <QxDao/QxSqlRelationLinked.h>
 
 #include <QxDao/QxSqlGenerator/IxSqlGenerator.h>
 
@@ -94,16 +93,13 @@ protected:
    bool           m_bValidatorThrowable;  //!< An exception of type qx::validator_error is thrown when invalid values are detected inserting or updating an element into database
    QStringList    m_lstColumns;           //!< List of columns to execute sql query (if empty => all columns)
 
-   qx::IxSqlQueryBuilder_ptr  m_pQueryBuilder;     //!< Sql query builder
-   qx::IxDataMemberX *        m_pDataMemberX;      //!< Collection of data member
-   qx::IxDataMember *         m_pDataId;           //!< Data member id
-   qx::QxSqlQuery             m_qxQuery;           //!< Query sql with place-holder
-   IxSqlGenerator *           m_pSqlGenerator;     //!< SQL generator to build SQL query specific for each database
-   qx::QxInvalidValueX        m_lstInvalidValues;  //!< List of invalid values using validator engine
-
-   typedef qx::QxCollection<QString, qx::IxSqlRelation *> type_lst_relation;
-   typedef boost::scoped_ptr< type_lst_relation > type_lst_relation_ptr;
-   type_lst_relation_ptr m_pSqlRelationX;
+   qx::IxSqlQueryBuilder_ptr     m_pQueryBuilder;        //!< Sql query builder
+   qx::IxDataMemberX *           m_pDataMemberX;         //!< Collection of data member
+   qx::IxDataMember *            m_pDataId;              //!< Data member id
+   qx::QxSqlQuery                m_qxQuery;              //!< Query sql with place-holder
+   IxSqlGenerator *              m_pSqlGenerator;        //!< SQL generator to build SQL query specific for each database
+   qx::QxInvalidValueX           m_lstInvalidValues;     //!< List of invalid values using validator engine
+   qx::QxSqlRelationLinked_ptr   m_pSqlRelationLinked;   //!< List of relation linked to build a hierarchy of relationships
 
 protected:
 
@@ -130,18 +126,20 @@ public:
    qx::IxDataMember * getDataId() const;
    qx::IxDataMember * nextData(long & l) const;
    QString sql() const;
-   type_lst_relation * getSqlRelationX() const;
+   qx::QxSqlRelationLinked * getSqlRelationLinked() const;
    bool getCartesianProduct() const;
    QStringList getSqlColumns() const;
    void setSqlColumns(const QStringList & lst);
    IxSqlGenerator * getSqlGenerator() const;
    void addInvalidValues(const qx::QxInvalidValueX & lst);
+   bool isReadOnly() const;
 
    QSqlError errFailed();
    QSqlError errEmpty();
    QSqlError errNoData();
    QSqlError errInvalidId();
    QSqlError errInvalidRelation();
+   QSqlError errReadOnly();
 
    bool transaction();
    bool nextRecord();

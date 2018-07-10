@@ -41,6 +41,7 @@
 #define QX_DAO_ERR_INVALID_PRIMARY_KEY       "[QxOrm] invalid primary key"
 #define QX_DAO_ERR_INVALID_SQL_RELATION      "[QxOrm] invalid sql relation"
 #define QX_DAO_ERR_INVALID_VALUES_DETECTED   "[QxOrm] validator engine : invalid values detected"
+#define QX_DAO_ERR_READ_ONLY                 "[QxOrm] cannot execute INSERT, UPDATE or DELETE query with a read only entity"
 
 #define QX_CONSTRUCT_IX_DAO_HELPER() \
 m_lDataCount(0), m_bTransaction(false), m_bQuiet(false), \
@@ -88,7 +89,7 @@ qx::IxDataMember * IxDao_Helper::nextData(long & l) const { return (m_pQueryBuil
 
 QString IxDao_Helper::sql() const { return (m_pQueryBuilder ? m_pQueryBuilder->getSqlQuery() : ""); }
 
-IxDao_Helper::type_lst_relation * IxDao_Helper::getSqlRelationX() const { return m_pSqlRelationX.get(); }
+qx::QxSqlRelationLinked * IxDao_Helper::getSqlRelationLinked() const { return m_pSqlRelationLinked.get(); }
 
 bool IxDao_Helper::getCartesianProduct() const { return m_bCartesianProduct; }
 
@@ -103,6 +104,8 @@ void IxDao_Helper::updateError(const QSqlError & error) { m_error = error; }
 void IxDao_Helper::quiet() { m_bQuiet = true; }
 
 bool IxDao_Helper::exec() { return (m_qxQuery.isEmpty() ? this->query().exec(this->builder().getSqlQuery()) : this->query().exec()); }
+
+bool IxDao_Helper::isReadOnly() const { return ((m_pDataMemberX && m_pDataMemberX->getClass()) ? m_pDataMemberX->getClass()->isDaoReadOnly() : false); }
 
 void IxDao_Helper::addInvalidValues(const qx::QxInvalidValueX & lst)
 {
@@ -131,14 +134,16 @@ const qx::IxSqlQueryBuilder & IxDao_Helper::builder() const
 
 QSqlError IxDao_Helper::errFailed()
 {
-   qDebug(QX_DAO_ERR_EXECUTE_SQL_QUERY, qPrintable(sql()));
+   QString sql = this->sql();
+   qDebug(QX_DAO_ERR_EXECUTE_SQL_QUERY, qPrintable(sql));
    m_error = m_query.lastError();
    return m_error;
 }
 
 QSqlError IxDao_Helper::errEmpty()
 {
-   qDebug(QX_DAO_ERR_BUILD_SQL_QUERY, qPrintable(sql()));
+   QString sql = this->sql();
+   qDebug(QX_DAO_ERR_BUILD_SQL_QUERY, qPrintable(sql));
    m_error = m_query.lastError();
    return m_error;
 }
@@ -161,6 +166,12 @@ QSqlError IxDao_Helper::errInvalidRelation()
    return m_error;
 }
 
+QSqlError IxDao_Helper::errReadOnly()
+{
+   updateError(QX_DAO_ERR_READ_ONLY);
+   return m_error;
+}
+
 bool IxDao_Helper::transaction()
 {
    if (isValid() && hasFeature(QSqlDriver::Transactions))
@@ -178,44 +189,15 @@ bool IxDao_Helper::nextRecord()
 bool IxDao_Helper::updateSqlRelationX(const QStringList & relation)
 {
    m_bCartesianProduct = false;
-   bool bError = false;
-   QString sHashRelation;
-   m_pSqlRelationX.reset(new IxDao_Helper::type_lst_relation());
-   qx::IxSqlRelationX * pAllRelation = this->builder().getLstRelation();
-   bool bAllRelation = ((relation.count() == 1) && (relation.at(0) == "*"));
-   bAllRelation = (bAllRelation || (relation.count() == pAllRelation->count()));
-
-   if (bAllRelation)
-   {
-      sHashRelation = "*";
-      (* m_pSqlRelationX) = (* pAllRelation);
-   }
-   else
-   {
-      Q_FOREACH(QString sKey, relation)
-      {
-         if (pAllRelation->exist(sKey))
-         { sHashRelation += (sKey + "|"); m_pSqlRelationX->insert(sKey, pAllRelation->getByKey(sKey)); }
-         else { bError = true; }
-      }
-   }
-
-   if (bError || (m_pSqlRelationX->count() <= 0))
-   { m_pSqlRelationX.reset(NULL); }
-
-   if (m_pSqlRelationX)
-   {
-      _foreach(qx::IxSqlRelation * p, (* m_pSqlRelationX))
-      { m_bCartesianProduct = (m_bCartesianProduct || p->getCartesianProduct()); }
-   }
-
-   if (! bError && m_pQueryBuilder)
-   {
-      m_pQueryBuilder->setHashRelation(sHashRelation);
-      m_pQueryBuilder->setCartesianProduct(m_bCartesianProduct);
-   }
-
-   return (! bError && (m_pSqlRelationX.get() != NULL));
+   m_pSqlRelationLinked.reset(new qx::QxSqlRelationLinked());
+   qx_bool bBuildOk = m_pSqlRelationLinked->buildHierarchy(this->builder().getLstRelation(), relation);
+   if (! bBuildOk) { m_pSqlRelationLinked.reset(); }
+   if (! bBuildOk) { QString txt = bBuildOk.getDesc(); qDebug("[QxOrm] %s", qPrintable(txt)); return false; }
+   m_bCartesianProduct = m_pSqlRelationLinked->getCartesianProduct();
+   if (m_pQueryBuilder) { m_pQueryBuilder->setCartesianProduct(m_bCartesianProduct); }
+   if (m_pQueryBuilder) { m_pQueryBuilder->setHashRelation(relation.join("|")); }
+   if (m_bCartesianProduct) { m_pQueryBuilder->initIdX(m_pSqlRelationLinked->getAllRelationCount()); }
+   return bBuildOk.getValue();
 }
 
 void IxDao_Helper::dumpRecord() const
@@ -265,7 +247,9 @@ void IxDao_Helper::init(QSqlDatabase * pDatabase, const QString & sContext)
    m_bTraceRecord = qx::QxSqlDatabase::getSingleton()->getTraceSqlRecord();
    qAssert(! m_context.isEmpty());
 
-   m_database = (pDatabase ? (* pDatabase) : qx::QxSqlDatabase::getDatabase());
+   QSqlError dbError;
+   m_database = (pDatabase ? (* pDatabase) : qx::QxSqlDatabase::getDatabase(dbError));
+   if (dbError.isValid()) { updateError(dbError); return; }
    if (! m_database.isValid()) { updateError(QX_DAO_ERR_NO_CONNECTION); return; }
    if (! m_database.isOpen() && ! m_database.open()) { updateError(QX_DAO_ERR_OPEN_CONNECTION); return; }
 

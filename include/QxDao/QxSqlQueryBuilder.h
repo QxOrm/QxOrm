@@ -193,7 +193,7 @@ public:
       return (* this);
    }
 
-   virtual IxSqlQueryBuilder & fetchAll_WithRelation(IxSqlRelationX * pRelationX)
+   virtual IxSqlQueryBuilder & fetchAll_WithRelation(QxSqlRelationLinked * pRelationX)
    {
       QX_SQL_BUILDER_INIT_FCT_WITH_RELATION()
       qx::dao::detail::QxSqlQueryHelper_FetchAll_WithRelation<type_sql>::sql(pRelationX, sql, (* this));
@@ -203,7 +203,7 @@ public:
       return (* this);
    }
 
-   virtual IxSqlQueryBuilder & fetchById_WithRelation(IxSqlRelationX * pRelationX)
+   virtual IxSqlQueryBuilder & fetchById_WithRelation(QxSqlRelationLinked * pRelationX)
    {
       QX_SQL_BUILDER_INIT_FCT_WITH_RELATION()
       if (! getDataId()) { qDebug("[QxOrm] %s", QX_SQL_ERR_NO_ID_REGISTERED); qAssert(false); return (* this); }

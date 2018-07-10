@@ -68,6 +68,7 @@ protected:
    QString m_sDescription;                            //!< 'IxClass' description
    long m_lVersion;                                   //!< 'IxClass' version
    bool m_bFinalClass;                                //!< Class without base class (for example, qx::trait::no_base_class_defined and QObject)
+   bool m_bDaoReadOnly;                               //!< If 'true', cannot INSERT, UPDATE OR DELETE an instance of this class using qx::dao namespace
    qx::dao::strategy::inheritance m_eDaoStrategy;     //!< Dao class strategy to access data member
    qx::QxSoftDelete m_oSoftDelete;                    //!< Soft delete (or logical delete) behavior
    IxValidatorX_ptr m_pAllValidator;                  //!< List of validator associated to the class
@@ -77,7 +78,7 @@ protected:
 
 protected:
 
-   IxClass() : qx::QxPropertyBag(), m_pDataMemberX(NULL), m_lVersion(-1), m_bFinalClass(false), m_eDaoStrategy(qx::dao::strategy::concrete_table_inheritance), m_pName(NULL) { ; }
+   IxClass() : qx::QxPropertyBag(), m_pDataMemberX(NULL), m_lVersion(-1), m_bFinalClass(false), m_bDaoReadOnly(false), m_eDaoStrategy(qx::dao::strategy::concrete_table_inheritance), m_pName(NULL) { ; }
    virtual ~IxClass() = 0;
 
    void updateClassX();
@@ -92,6 +93,7 @@ public:
    inline qx::dao::strategy::inheritance getDaoStrategy() const   { return m_eDaoStrategy; }
    inline qx::QxSoftDelete getSoftDelete() const                  { return m_oSoftDelete; }
    inline bool isFinalClass() const                               { return m_bFinalClass; }
+   inline bool isDaoReadOnly() const                              { return m_bDaoReadOnly; }
    inline IxDataMemberX * getDataMemberX() const                  { return m_pDataMemberX; }
    inline IxFunctionX * getFctMemberX() const                     { return m_pFctMemberX.get(); }
    inline IxDataMember * getId() const                            { return (m_pDataMemberX ? m_pDataMemberX->getId() : NULL); }
@@ -100,7 +102,10 @@ public:
    inline void setDescription(const QString & sDesc)                          { m_sDescription = sDesc; }
    inline void setDaoStrategy(qx::dao::strategy::inheritance eDaoStrategy)    { m_eDaoStrategy = eDaoStrategy; }
    inline void setSoftDelete(const qx::QxSoftDelete & oSoftDelete)            { m_oSoftDelete = oSoftDelete; if (m_oSoftDelete.getTableName().isEmpty()) { m_oSoftDelete.setTableName(m_sName); } }
+   inline void setDaoReadOnly(bool bDaoReadOnly)                              { m_bDaoReadOnly = bDaoReadOnly; }
 
+   virtual bool isAbstract() const = 0;
+   virtual bool implementIxPersistable() const = 0;
    virtual const std::type_info & typeInfo() const = 0;
    virtual IxClass * getBaseClass() const = 0;
    virtual IxValidatorX * getAllValidator();

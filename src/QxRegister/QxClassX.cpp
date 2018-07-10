@@ -135,6 +135,14 @@ IxFunction * QxClassX::getFctMember(const QString & sClassKey, const QString & s
    return pFct;
 }
 
+bool QxClassX::implementIxPersistable(const QString & sKey, bool bTraceIfFalse /* = true */)
+{
+   IxClass * pClass = QxClassX::getClass(sKey);
+   bool bImplement = (pClass ? pClass->implementIxPersistable() : false);
+   if (! bImplement && bTraceIfFalse) { qDebug("[QxOrm] class '%s' doesn't implement qx::IxPersistable interface", qPrintable(sKey)); }
+   return bImplement;
+}
+
 qx_bool QxClassX::invokeVoidPtr(const QString & sClassKey, const QString & sFctKey, void * pOwner, const QString & params /* = QString() */, boost::any * ret /* = NULL */)
 {
    IxFunction * pFct = QxClassX::getFctMember(sClassKey, sFctKey, true);

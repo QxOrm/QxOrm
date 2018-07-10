@@ -41,6 +41,7 @@
 
 #include <QxDao/IxSqlRelation.h>
 #include <QxDao/QxSoftDelete.h>
+#include <QxDao/QxSqlRelationLinked.h>
 
 namespace qx {
 
@@ -95,15 +96,15 @@ public:
    inline IxDataMember * nextData(long & l) const        { if ((! m_lstDataMemberPtr) || (l < 0) || (l >= m_lstDataMemberPtr->count())) { return NULL; }; ++l; return m_lstDataMemberPtr->getByIndex(l - 1); }
    inline IxSqlRelation * nextRelation(long & l) const   { if ((! m_lstSqlRelationPtr) || (l < 0) || (l >= m_lstSqlRelationPtr->count())) { return NULL; }; ++l; return m_lstSqlRelationPtr->getByIndex(l - 1); }
 
-   void displaySqlQuery(int time_ms = -1) const;
+   void initIdX(long lAllRelationCount);
    bool insertIdX(long lIndex, const QVariant & idOwner, const QVariant & idData, void * ptr);
    void * existIdX(long lIndex, const QVariant & idOwner, const QVariant & idData);
    void addSqlQueryAlias(const QString & sql, const QString & sqlAlias);
    void replaceSqlQueryAlias(QString & sql) const;
+   void displaySqlQuery(int time_ms = -1) const;
 
    virtual void init() = 0;
    virtual IxDataMemberX * getDataMemberX() const = 0;
-
    virtual IxSqlQueryBuilder & count() = 0;
    virtual IxSqlQueryBuilder & exist() = 0;
    virtual IxSqlQueryBuilder & fetchAll() = 0;
@@ -115,19 +116,13 @@ public:
    virtual IxSqlQueryBuilder & deleteById() = 0;
    virtual IxSqlQueryBuilder & softDeleteById() = 0;
    virtual IxSqlQueryBuilder & createTable() = 0;
-
    virtual IxSqlQueryBuilder & fetchAll(const QStringList & columns) = 0;
    virtual IxSqlQueryBuilder & fetchById(const QStringList & columns) = 0;
    virtual IxSqlQueryBuilder & update(const QStringList & columns) = 0;
-
-   virtual IxSqlQueryBuilder & fetchAll_WithRelation(IxSqlRelationX * pRelationX) = 0;
-   virtual IxSqlQueryBuilder & fetchById_WithRelation(IxSqlRelationX * pRelationX) = 0;
+   virtual IxSqlQueryBuilder & fetchAll_WithRelation(QxSqlRelationLinked * pRelationX) = 0;
+   virtual IxSqlQueryBuilder & fetchById_WithRelation(QxSqlRelationLinked * pRelationX) = 0;
 
    static QString addSqlCondition(const QString & sql) { return (sql.contains(" WHERE ") ? " AND " : " WHERE "); }
-
-private:
-
-   void initIdX();
 
 };
 

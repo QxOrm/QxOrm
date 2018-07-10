@@ -46,6 +46,22 @@ struct QxDao_Count
       return static_cast<long>(dao.query().value(0).toLongLong());
    }
 
+   static QSqlError count(long & lCount, const qx::QxSqlQuery & query, QSqlDatabase * pDatabase)
+   {
+      T t; Q_UNUSED(t); lCount = 0;
+      qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "count");
+      if (! dao.isValid()) { return dao.error(); }
+
+      QString sql = dao.builder().count().getSqlQuery();
+      if (sql.isEmpty()) { return dao.errEmpty(); }
+      if (! query.isEmpty()) { dao.addQuery(query, true); sql = dao.builder().getSqlQuery(); }
+      if (! dao.exec()) { return dao.errFailed(); }
+      if (! dao.nextRecord()) { return dao.errNoData(); }
+      lCount = static_cast<long>(dao.query().value(0).toLongLong());
+
+      return dao.error();
+   }
+
 };
 
 } // namespace detail

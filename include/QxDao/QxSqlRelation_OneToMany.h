@@ -65,7 +65,7 @@ protected:
 
 public:
 
-   QxSqlRelation_OneToMany(IxDataMember * p, const QString & sForeignKey) : QxSqlRelation<DataType, Owner>(p), m_sForeignKey(sForeignKey) { qAssert(! m_sForeignKey.isEmpty()); }
+   QxSqlRelation_OneToMany(IxDataMember * p, const QString & sForeignKey) : QxSqlRelation<DataType, Owner>(p), m_sForeignKey(sForeignKey) { this->m_eRelationType = qx::IxSqlRelation::one_to_many; qAssert(! m_sForeignKey.isEmpty()); }
    virtual ~QxSqlRelation_OneToMany() { BOOST_STATIC_ASSERT(is_data_container); }
 
    virtual QString getDescription() const                                     { return "relation one-to-many"; }
@@ -91,7 +91,10 @@ public:
    virtual QSqlError onBeforeSave(QxSqlRelationParams & params) const         { Q_UNUSED(params); return QSqlError(); }
 
    virtual QSqlError onAfterSave(QxSqlRelationParams & params) const
-   { return qx::dao::save(this->getContainer(params), (& params.database())); }
+   {
+      if (this->isNullData(params)) { return QSqlError(); }
+      return qx::dao::save(this->getContainer(params), (& params.database()));
+   }
 
    virtual QVariant getIdFromQuery(bool bEager, QxSqlRelationParams & params) const
    {
@@ -128,11 +131,12 @@ public:
    virtual void eagerJoin(QxSqlRelationParams & params) const
    {
       QString & sql = params.sql();
-      IxDataMember * pId = params.builder().getDataId(); qAssert(pId);
+      IxDataMember * pId = this->getDataIdOwner(); qAssert(pId);
       IxDataMember * pForeign = this->getDataByKey(m_sForeignKey); qAssert(pForeign);
-      QString table = this->table(); QString tableAlias = this->tableAlias(params); QString tableRef = params.builder().table();
+      QString table = this->table(); QString tableAlias = this->tableAlias(params);
+      QString tableRef = this->tableAliasOwner(params);
       if (! pId || ! pForeign) { return; }
-      sql += this->getSqlJoin() + table + " " + tableAlias + " ON ";
+      sql += this->getSqlJoin(params.joinType()) + table + " " + tableAlias + " ON ";
       params.builder().addSqlQueryAlias(table, tableAlias);
       for (int i = 0; i < pId->getNameCount(); i++)
       { sql += pForeign->getSqlAlias(tableAlias, true, i) + " = " + pId->getSqlAlias(tableRef, true, i) + " AND "; }
@@ -148,12 +152,12 @@ public:
       sql += this->m_oSoftDelete.buildSqlQueryToFetch(tableAlias);
    }
 
-   virtual void eagerFetch_ResolveOutput(QxSqlRelationParams & params) const
+   virtual void * eagerFetch_ResolveOutput(QxSqlRelationParams & params) const
    {
-      if (! this->verifyOffset(params, true)) { return; }
+      if (! this->verifyOffset(params, true)) { return NULL; }
       QSqlQuery & query = params.query();
-      IxDataMember * p = NULL; IxDataMember * pId = this->getDataId(); qAssert(pId); if (! pId) { return; }
-      IxDataMember * pForeign = this->getDataByKey(m_sForeignKey); qAssert(pForeign); if (! pForeign) { return; }
+      IxDataMember * p = NULL; IxDataMember * pId = this->getDataId(); qAssert(pId); if (! pId) { return NULL; }
+      IxDataMember * pForeign = this->getDataByKey(m_sForeignKey); qAssert(pForeign); if (! pForeign) { return NULL; }
       long lIndex = 0; long lOffsetId = (pId ? pId->getNameCount() : 0); long lOffsetForeign = (pForeign ? pForeign->getNameCount() : 0);
       long lOffsetOld = params.offset(); this->updateOffset(true, params);
       long lOffsetRelation = (lOffsetOld + lOffsetId + lOffsetForeign);
@@ -162,7 +166,7 @@ public:
       { QVariant vId = query.value(lOffsetOld + i); bValidId = (bValidId || qx::trait::is_valid_primary_key(vId)); }
       for (int i = 0; i < pForeign->getNameCount(); i++)
       { QVariant vForeign = query.value(lOffsetOld + lOffsetId + i); bValidForeign = (bValidForeign || qx::trait::is_valid_primary_key(vForeign)); }
-      if (! bValidId || ! bValidForeign) { return; }
+      if (! bValidId || ! bValidForeign) { return NULL; }
       type_item item = this->createItem();
       type_data & item_val = item.value_qx();
       for (int i = 0; i < pId->getNameCount(); i++)
@@ -174,6 +178,7 @@ public:
       while ((p = this->nextData(lIndex)))
       { if (p != pForeign) { p->fromVariant((& item_val), query.value(lOffsetRelation++)); } }
       type_generic_container::insertItem(this->getContainer(params), item);
+      return (& item_val);
    }
 
 };

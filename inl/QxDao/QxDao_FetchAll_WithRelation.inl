@@ -40,7 +40,7 @@ struct QxDao_FetchAll_WithRelation_Generic
       if (! dao.isValid()) { return dao.error(); }
       if (! dao.updateSqlRelationX(relation)) { return dao.errInvalidRelation(); }
 
-      QString sql = dao.builder().fetchAll_WithRelation(dao.getSqlRelationX()).getSqlQuery();
+      QString sql = dao.builder().fetchAll_WithRelation(dao.getSqlRelationLinked()).getSqlQuery();
       if (sql.isEmpty()) { return dao.errEmpty(); }
       if (! query.isEmpty()) { dao.addQuery(query, true); sql = dao.builder().getSqlQuery(); }
       if (! dao.exec()) { return dao.errFailed(); }
@@ -58,13 +58,13 @@ private:
    static inline void fetchAll_Simple(T & t, type_dao_helper & dao)
    {
       if (dao.nextRecord())
-      { type_query_helper::resolveOutput(dao.getSqlRelationX(), t, dao.query(), dao.builder()); }
+      { type_query_helper::resolveOutput(dao.getSqlRelationLinked(), t, dao.query(), dao.builder()); }
    }
 
    static inline void fetchAll_Complex(T & t, type_dao_helper & dao)
    {
       while (dao.nextRecord())
-      { type_query_helper::resolveOutput(dao.getSqlRelationX(), t, dao.query(), dao.builder()); }
+      { type_query_helper::resolveOutput(dao.getSqlRelationLinked(), t, dao.query(), dao.builder()); }
    }
 
 };
@@ -88,7 +88,7 @@ struct QxDao_FetchAll_WithRelation_Container
       if (! dao.updateSqlRelationX(relation)) { return dao.errInvalidRelation(); }
 
       bool bComplex = dao.getCartesianProduct(); QVariant vId;
-      QString sql = dao.builder().fetchAll_WithRelation(dao.getSqlRelationX()).getSqlQuery();
+      QString sql = dao.builder().fetchAll_WithRelation(dao.getSqlRelationLinked()).getSqlQuery();
       if (sql.isEmpty()) { return dao.errEmpty(); }
       if (! query.isEmpty()) { dao.addQuery(query, true); sql = dao.builder().getSqlQuery(); }
       if (! dao.exec()) { return dao.errFailed(); }
@@ -102,7 +102,7 @@ struct QxDao_FetchAll_WithRelation_Container
          void * pItemTmp = (bComplex ? dao.builder().existIdX(0, vId, vId) : NULL);
          if (! pItemTmp) { insertNewItem(t, dao); continue; }
          type_value_qx * pItem = static_cast<type_value_qx *>(pItemTmp);
-         type_query_helper::resolveOutput(dao.getSqlRelationX(), (* pItem), dao.query(), dao.builder());
+         type_query_helper::resolveOutput(dao.getSqlRelationLinked(), (* pItem), dao.query(), dao.builder());
       }
 
       if (bSize) { type_generic_container::reserve(t, type_generic_container::size(t)); }
@@ -118,7 +118,7 @@ private:
       qx::IxDataMember * pId = dao.getDataId(); qAssert(pId);
       if (pId) { for (int i = 0; i < pId->getNameCount(); i++) { QVariant v = dao.query().value(i); qx::cvt::from_variant(v, item.key(), "", i); } }
       qx::dao::on_before_fetch<type_value_qx>((& item_val), (& dao));
-      type_query_helper::resolveOutput(dao.getSqlRelationX(), item_val, dao.query(), dao.builder());
+      type_query_helper::resolveOutput(dao.getSqlRelationLinked(), item_val, dao.query(), dao.builder());
       qx::dao::on_after_fetch<type_value_qx>((& item_val), (& dao));
       type_generic_container::insertItem(t, item);
       qx::dao::detail::QxDao_Keep_Original<type_item>::backup(item);

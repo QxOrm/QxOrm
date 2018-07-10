@@ -73,5 +73,6 @@
 #include "../../inl/QxDao/QxDao_Exist.inl"
 #include "../../inl/QxDao/QxDao_CreateTable.inl"
 #include "../../inl/QxDao/QxDao_Trigger.inl"
+#include "../../inl/QxDao/QxDao_ExecuteQuery.inl"
 
 #endif // _QX_DAO_IMPL_H_

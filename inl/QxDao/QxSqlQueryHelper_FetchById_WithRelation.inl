@@ -31,10 +31,10 @@ template <class T>
 struct QxSqlQueryHelper_FetchById_WithRelation
 {
 
-   static void sql(qx::IxSqlRelationX * pRelationX, QString & sql, qx::IxSqlQueryBuilder & builder)
+   static void sql(qx::QxSqlRelationLinked * pRelationX, QString & sql, qx::IxSqlQueryBuilder & builder)
    {
       BOOST_STATIC_ASSERT(qx::trait::is_qx_registered<T>::value);
-      if (! pRelationX || (pRelationX->count() <= 0)) { qAssert(false); QxSqlQueryHelper_FetchById<T>::sql(sql, builder); return; }
+      if (! pRelationX) { qAssert(false); QxSqlQueryHelper_FetchById<T>::sql(sql, builder); return; }
       qx::IxDataMember * pId = builder.getDataId(); qAssert(pId);
       QString table = builder.table();
       sql = builder.fetchAll_WithRelation(pRelationX).getSqlQuery();
@@ -42,16 +42,15 @@ struct QxSqlQueryHelper_FetchById_WithRelation
       sql += pId->getSqlAliasEqualToPlaceHolder(table, true);
    }
 
-   static void resolveInput(qx::IxSqlRelationX * pRelationX, T & t, QSqlQuery & query, qx::IxSqlQueryBuilder & builder)
+   static void resolveInput(qx::QxSqlRelationLinked * pRelationX, T & t, QSqlQuery & query, qx::IxSqlQueryBuilder & builder)
    {
-      Q_UNUSED(pRelationX);
       BOOST_STATIC_ASSERT(qx::trait::is_qx_registered<T>::value);
-      if (! pRelationX || (pRelationX->count() <= 0)) { qAssert(false); QxSqlQueryHelper_FetchById<T>::resolveInput(t, query, builder); return; }
+      if (! pRelationX) { qAssert(false); QxSqlQueryHelper_FetchById<T>::resolveInput(t, query, builder); return; }
       qx::IxDataMember * pId = builder.getDataId(); qAssert(pId);
       pId->setSqlPlaceHolder(query, (& t));
    }
 
-   static void resolveOutput(qx::IxSqlRelationX * pRelationX, T & t, QSqlQuery & query, qx::IxSqlQueryBuilder & builder)
+   static void resolveOutput(qx::QxSqlRelationLinked * pRelationX, T & t, QSqlQuery & query, qx::IxSqlQueryBuilder & builder)
    { QxSqlQueryHelper_FetchAll_WithRelation<T>::resolveOutput(pRelationX, t, query, builder); }
 
 };

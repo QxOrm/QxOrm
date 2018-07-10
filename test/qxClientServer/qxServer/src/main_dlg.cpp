@@ -3,6 +3,7 @@
 #include "../include/main_dlg.h"
 
 #include "../../qxService/include/service/server_infos.h"
+#include "../../qxService/include/dao/user_manager.h"
 
 #include <QxMemLeak.h>
 
@@ -12,6 +13,7 @@ void main_dlg::init()
 
    QObject::connect(btnStartStop, SIGNAL(clicked()), this, SLOT(onClickStartStop()));
    QObject::connect(cboSerializationType, SIGNAL(currentIndexChanged(int)), this, SLOT(onCboIndexChanged(int)));
+   QObject::connect((& m_daoAsync), SIGNAL(queryFinished(const QSqlError &, qx::dao::detail::QxDaoAsyncParams_ptr)), this, SLOT(onQueryFinished(const QSqlError &, qx::dao::detail::QxDaoAsyncParams_ptr)));
 
    cboSerializationType->addItem("0- serialization_binary", QVariant((int)qx::service::QxConnect::serialization_binary));
    cboSerializationType->addItem("1- serialization_xml", QVariant((int)qx::service::QxConnect::serialization_xml));
@@ -70,6 +72,12 @@ void main_dlg::onCboIndexChanged(int index)
 {
    if (index < 0) { cboSerializationType->setToolTip(""); }
    else { cboSerializationType->setToolTip(cboSerializationType->itemText(cboSerializationType->currentIndex())); }
+
+   // To test to run queries in a different thread : see 'onQueryFinished()' method to see the result
+   if (cboSerializationType->count() <= 1) { return; }
+   user_manager dummy; Q_UNUSED(dummy); // To init database parameters
+   qx_query query = "SELECT * FROM user";
+   m_daoAsync.asyncCallQuery(query);
 }
 
 void main_dlg::onServerIsRunning(bool bIsRunning, qx::service::QxServer * pServer)
@@ -99,4 +107,17 @@ void main_dlg::onTransactionFinished(qx::service::QxTransaction_ptr transaction)
    if (! transaction) { txtTransaction->setPlainText(""); return; }
    QString text = qx::serialization::xml::to_string(* transaction);
    txtTransaction->setPlainText(text.replace("\t", "    "));
+}
+
+void main_dlg::onQueryFinished(const QSqlError & daoError, qx::dao::detail::QxDaoAsyncParams_ptr pDaoParams)
+{
+   if (! pDaoParams) { return; }
+   qx::QxSqlQuery query = pDaoParams->query;
+   if (! daoError.isValid()) { /* ... */ }
+   // If the async query is associated to a simple object, just use 'pDaoParams->pInstance' method
+   qx::IxPersistable_ptr ptr = pDaoParams->pInstance;
+   // If the async query is associated to a list of objects, just use 'pDaoParams->pListOfInstances' method
+   qx::IxCollection_ptr lst = pDaoParams->pListOfInstances;
+   // etc...
+   Q_UNUSED(query); Q_UNUSED(ptr); Q_UNUSED(lst);
 }

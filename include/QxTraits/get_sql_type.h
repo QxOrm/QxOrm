@@ -42,6 +42,7 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/intrusive_ptr.hpp>
+#include <boost/optional.hpp>
 #include <boost/type_traits/is_enum.hpp>
 #include <boost/type_traits/is_same.hpp>
 
@@ -102,6 +103,10 @@ struct get_sql_type
    typedef typename qx::trait::detail::get_sql_type_helper<T>::type type_sql;
    static inline const char * get() { return (boost::is_same<T, type_sql>::value ? qx::trait::detail::get_sql_type<type_sql>::get() : qx::trait::get_sql_type<type_sql>::get()); }
 };
+
+template <typename T>
+struct get_sql_type< boost::optional<T> >
+{ static inline const char * get() { return qx::trait::get_sql_type<T>::get(); } };
 
 template <typename T>
 struct get_sql_type< boost::scoped_ptr<T> >

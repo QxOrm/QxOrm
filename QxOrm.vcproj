@@ -296,6 +296,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\QxDao\QxDaoAsync.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\src\QxDao\QxSession.cpp"
 					>
 				</File>
@@ -305,6 +309,10 @@
 				</File>
 				<File
 					RelativePath=".\src\QxDao\QxSqlQuery.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\QxDao\QxSqlRelationLinked.cpp"
 					>
 				</File>
 				<Filter
@@ -934,6 +942,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\include\QxDao\QxDaoAsync.h"
+					>
+				</File>
+				<File
 					RelativePath=".\include\QxDao\QxDaoPointer.h"
 					>
 				</File>
@@ -963,6 +975,10 @@
 				</File>
 				<File
 					RelativePath=".\include\QxDao\QxSqlError.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\QxDao\QxSqlJoin.h"
 					>
 				</File>
 				<File
@@ -999,6 +1015,10 @@
 				</File>
 				<File
 					RelativePath=".\include\QxDao\QxSqlRelation_RawData.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\QxDao\QxSqlRelationLinked.h"
 					>
 				</File>
 				<File
@@ -1627,6 +1647,10 @@
 				</File>
 				<File
 					RelativePath=".\inl\QxDao\QxDao_DeleteById.inl"
+					>
+				</File>
+				<File
+					RelativePath=".\inl\QxDao\QxDao_ExecuteQuery.inl"
 					>
 				</File>
 				<File

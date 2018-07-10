@@ -36,6 +36,7 @@ struct QxDao_DeleteAll
       T t; Q_UNUSED(t);
       qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "delete all");
       if (! dao.isValid()) { return dao.error(); }
+      if (dao.isReadOnly()) { return dao.errReadOnly(); }
 
       QString sql; qx::QxSoftDelete oSoftDelete = dao.builder().getSoftDelete();
       if (bVerifySoftDelete && ! oSoftDelete.isEmpty()) { sql = dao.builder().softDeleteAll().getSqlQuery(); }

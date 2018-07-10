@@ -23,44 +23,38 @@
 **
 ****************************************************************************/
 
-#ifndef _QX_DAO_STRATEGY_H_
-#define _QX_DAO_STRATEGY_H_
+#ifndef _QX_SQL_JOIN_H_
+#define _QX_SQL_JOIN_H_
 
 #ifdef _MSC_VER
 #pragma once
 #endif
 
 /*!
- * \file QxDaoStrategy.h
+ * \file QxSqlJoin.h
  * \author Lionel Marty
  * \ingroup QxDao
- * \brief Class inheritance strategy and database (Concrete Table Inheritance is the default strategy used by QxOrm library)
+ * \brief Define how to join 2 tables into SQL query (LEFT OUTER JOIN, INNER JOIN, etc...)
  */
+
+#define QX_LEFT_OUTER_JOIN    QString("->")
+#define QX_INNER_JOIN         QString(">>")
 
 namespace qx {
 namespace dao {
 
 /*!
  * \ingroup QxDao
- * \brief qx::dao::strategy : class inheritance strategy and database (Concrete Table Inheritance is the default strategy used by QxOrm library)
- *
- * With ORM tools, there is usually 3 strategies to manage inheritance and database :
- * - Single Table Inheritance
- * - Class Table Inheritance
- * - Concrete Table Inheritance
- *
- * QxOrm works by default with Concrete Table Inheritance strategy (others are not supported yet).
- * Many tutorials and forums are available on internet to more details about ORM inheritance and database.
- * You can find a sample in the directory ./test/qxDllSample/dll2/ with the class BaseClassTrigger.
+ * \brief qx::dao::sql_join : define how to join 2 tables into SQL query (LEFT OUTER JOIN, INNER JOIN, etc...)
  */
-struct strategy
+struct sql_join
 {
 
-   enum inheritance
+   enum join_type
    {
-      single_table_inheritance,
-      class_table_inheritance,
-      concrete_table_inheritance
+      no_join,
+      left_outer_join,
+      inner_join
    };
 
 };
@@ -68,4 +62,4 @@ struct strategy
 } // namespace dao
 } // namespace qx
 
-#endif // _QX_DAO_STRATEGY_H_
+#endif // _QX_SQL_JOIN_H_

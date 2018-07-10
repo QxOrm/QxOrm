@@ -149,6 +149,9 @@ protected:
    inline type_item createItem() const
    { return createItem_Helper<is_data_container, 0>::get(); }
 
+   inline bool isNullData(QxSqlRelationParams & params) const
+   { return isNullData_Helper<is_data_pointer, 0>::get(getDataTypePtr(params)); }
+
 private:
 
    template <bool bIsPointer /* = false */, bool bIsContainer /* = false */, int dummy>
@@ -190,6 +193,14 @@ private:
    template <int dummy>
    struct createItem_Helper<true, dummy>
    { static inline type_item get() { return type_generic_container::createItem(); } };
+
+   template <bool bIsPointer /* = false */, int dummy>
+   struct isNullData_Helper
+   { static inline bool get(DataType * t) { Q_UNUSED(t); return false; } };
+
+   template <int dummy>
+   struct isNullData_Helper<true, dummy>
+   { static inline bool get(DataType * t) { return ((! (* t)) ? true : false); } };
 
 };
 

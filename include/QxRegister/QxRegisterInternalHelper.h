@@ -47,6 +47,8 @@
 
 #include <QxTraits/get_class_name.h>
 
+#include <QxDao/IxPersistable.h>
+
 #define QX_REGISTER_INTERNAL_HELPER_HPP(dllImportExport, className, version) \
 BOOST_CLASS_VERSION(className, version) \
 QX_REGISTER_CLASS_NAME(className) \

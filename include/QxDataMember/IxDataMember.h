@@ -172,7 +172,7 @@ public:
    void setSqlPlaceHolder(QSqlQuery & query, void * pOwner, const QString & sAppend = QString(), const QString & sOtherName = QString()) const;
    QString getSqlAliasEqualToPlaceHolder(const QString & sTable = QString(), bool bClauseWhere = false, const QString & sAppend = QString(), const QString & sSep = QString(" AND ")) const;
    QString getSqlNameEqualToPlaceHolder(const QString & sAppend = QString(), const QString & sSep = QString(" AND ")) const;
-   QString getSqlTablePointNameAsAlias(const QString & sTable, const QString & sSep = QString(", ")) const;
+   QString getSqlTablePointNameAsAlias(const QString & sTable, const QString & sSep = QString(", "), const QString & sSuffixAlias = QString()) const;
    QString getSqlName(const QString & sSep = QString(", "), const QString & sOtherName = QString()) const;
    QString getSqlNameAndTypeAndParams(const QString & sSep = QString(", "), const QString & sOtherName = QString()) const;
 

@@ -35,6 +35,7 @@ struct QxDao_Insert_WithRelation_Generic
    {
       qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "insert with relation");
       if (! dao.isValid()) { return dao.error(); }
+      if (dao.isReadOnly()) { return dao.errReadOnly(); }
       if (! dao.updateSqlRelationX(relation)) { return dao.errInvalidRelation(); }
       if (! pDatabase) { dao.transaction(); }
       dao.quiet();
@@ -42,14 +43,15 @@ struct QxDao_Insert_WithRelation_Generic
       qx::QxSqlRelationParams params(0, 0, NULL, (& dao.builder()), (& dao.query()), (& t));
       params.setDatabase((& dao.database()));
 
-      _foreach(qx::IxSqlRelation * pRelation, (* dao.getSqlRelationX()))
-      { dao.updateError(pRelation->onBeforeSave(params)); if (! dao.isValid()) { return dao.error(); } }
+      qx::QxSqlRelationLinked * pRelationLinked = dao.getSqlRelationLinked();
+      if (pRelationLinked) { dao.updateError(pRelationLinked->hierarchyOnBeforeSave(params)); }
+      if (! dao.isValid()) { return dao.error(); }
 
       dao.updateError(qx::dao::insert(t, (& dao.database())));
       if (! dao.isValid()) { return dao.error(); }
 
-      _foreach(qx::IxSqlRelation * pRelation, (* dao.getSqlRelationX()))
-      { dao.updateError(pRelation->onAfterSave(params)); if (! dao.isValid()) { return dao.error(); } }
+      if (pRelationLinked) { dao.updateError(pRelationLinked->hierarchyOnAfterSave(params)); }
+      if (! dao.isValid()) { return dao.error(); }
 
       return dao.error();
    }
@@ -65,6 +67,7 @@ struct QxDao_Insert_WithRelation_Container
       if (qx::trait::generic_container<T>::size(t) <= 0) { return QSqlError(); }
       qx::dao::detail::QxDao_Helper_Container<T> dao(t, pDatabase, "insert with relation");
       if (! dao.isValid()) { return dao.error(); }
+      if (dao.isReadOnly()) { return dao.errReadOnly(); }
       if (! dao.updateSqlRelationX(relation)) { return dao.errInvalidRelation(); }
       if (! pDatabase) { dao.transaction(); }
       dao.quiet();
@@ -128,14 +131,15 @@ private:
          qx::QxSqlRelationParams params(0, 0, NULL, (& dao.builder()), (& dao.query()), (& item));
          params.setDatabase((& dao.database()));
 
-         _foreach(qx::IxSqlRelation * pRelation, (* dao.getSqlRelationX()))
-         { dao.updateError(pRelation->onBeforeSave(params)); if (! dao.isValid()) { return false; } }
+         qx::QxSqlRelationLinked * pRelationLinked = dao.getSqlRelationLinked();
+         if (pRelationLinked) { dao.updateError(pRelationLinked->hierarchyOnBeforeSave(params)); }
+         if (! dao.isValid()) { return false; }
 
          dao.updateError(qx::dao::insert(item, (& dao.database())));
          if (! dao.isValid()) { return false; }
 
-         _foreach(qx::IxSqlRelation * pRelation, (* dao.getSqlRelationX()))
-         { dao.updateError(pRelation->onAfterSave(params)); if (! dao.isValid()) { return false; } }
+         if (pRelationLinked) { dao.updateError(pRelationLinked->hierarchyOnAfterSave(params)); }
+         if (! dao.isValid()) { return false; }
 
          return dao.isValid();
       }

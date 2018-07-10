@@ -123,6 +123,14 @@ template <> struct QxStringCvt_FromVariant< qx_bool > {
 static inline qx_bool fromVariant(const QVariant & v, qx_bool & t, const QString & format, int index)
 { Q_UNUSED(format); Q_UNUSED(index); t = qx_bool(v.toBool()); return qx_bool(true); } };
 
+template <typename T> struct QxStringCvt_FromVariant< boost::optional<T> > {
+static inline qx_bool fromVariant(const QVariant & v, boost::optional<T> & t, const QString & format, int index)
+{
+   if (v.isNull()) { t = boost::none; return qx_bool(true); }
+   else if (! t) { t = T(); }
+   return qx::cvt::from_variant(v, (* t), format, index);
+} };
+
 } // namespace detail
 } // namespace cvt
 } // namespace qx

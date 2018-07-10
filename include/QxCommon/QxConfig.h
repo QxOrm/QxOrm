@@ -37,7 +37,7 @@
  * \brief List of parameters to compile and build QxOrm library
  */
 
-#define QX_VERSION   0x010203 // QxOrm version 1.2.3
+#define QX_VERSION   0x010204 // QxOrm version 1.2.4
 
 #define _QX_SERIALIZE_POLYMORPHIC            0
 

@@ -35,23 +35,55 @@ QX_DLL_EXPORT_QX_SINGLETON_CPP(qx::QxSqlDatabase)
 
 namespace qx {
 
-QSqlDatabase QxSqlDatabase::getDatabaseByCurrThreadId()
+QSqlDatabase QxSqlDatabase::getDatabase(QSqlError & dbError)
+{
+   return QxSqlDatabase::getSingleton()->getDatabaseByCurrThreadId(dbError);
+}
+
+QSqlDatabase QxSqlDatabase::getDatabase()
+{
+   QSqlError dbError; Q_UNUSED(dbError);
+   return QxSqlDatabase::getDatabase(dbError);
+}
+
+QSqlDatabase QxSqlDatabase::getDatabaseCloned()
+{
+   QSqlError dbError; Q_UNUSED(dbError);
+   QString sKeyClone = QUuid::createUuid().toString();
+   return QSqlDatabase::cloneDatabase(QxSqlDatabase::getDatabase(dbError), sKeyClone);
+}
+
+QSqlDatabase QxSqlDatabase::getDatabaseByCurrThreadId(QSqlError & dbError)
 {
    QMutexLocker locker(& m_oDbMutex);
-   if (! isValid()) { qDebug("[QxOrm] qx::QxSqlDatabase : %s", "parameters are not valid"); qAssert(false); return QSqlDatabase(); }
-   Qt::HANDLE lCurrThreadId = QThread::currentThreadId();
-   if (! lCurrThreadId) { qDebug("[QxOrm] qx::QxSqlDatabase : %s", "unable to find current thread id"); qAssert(false); return QSqlDatabase(); }
-   if (! m_lstDbByThread.contains(lCurrThreadId)) { return createDatabase(); }
-   QString sDbKey = m_lstDbByThread.value(lCurrThreadId);
-   if (! QSqlDatabase::contains(sDbKey)) { return createDatabase(); }
+   dbError = QSqlError();
 
+   if (! isValid())
+   {
+      qDebug("[QxOrm] qx::QxSqlDatabase : '%s'", "parameters are not valid");
+      dbError = QSqlError("[QxOrm] qx::QxSqlDatabase : 'parameters are not valid'", "", QSqlError::UnknownError);
+      qAssert(false); return QSqlDatabase();
+   }
+
+   Qt::HANDLE lCurrThreadId = QThread::currentThreadId();
+   if (! lCurrThreadId)
+   {
+      qDebug("[QxOrm] qx::QxSqlDatabase : '%s'", "unable to find current thread id");
+      dbError = QSqlError("[QxOrm] qx::QxSqlDatabase : 'unable to find current thread id'", "", QSqlError::UnknownError);
+      qAssert(false); return QSqlDatabase();
+   }
+
+   if (! m_lstDbByThread.contains(lCurrThreadId)) { return createDatabase(dbError); }
+   QString sDbKey = m_lstDbByThread.value(lCurrThreadId);
+   if (! QSqlDatabase::contains(sDbKey)) { return createDatabase(dbError); }
    return QSqlDatabase::database(sDbKey);
 }
 
-QSqlDatabase QxSqlDatabase::createDatabase()
+QSqlDatabase QxSqlDatabase::createDatabase(QSqlError & dbError)
 {
    Qt::HANDLE lCurrThreadId = QThread::currentThreadId();
    QString sDbKeyNew = QUuid::createUuid().toString();
+   dbError = QSqlError();
    bool bError = false;
 
    {
@@ -62,20 +94,23 @@ QSqlDatabase QxSqlDatabase::createDatabase()
       db.setPassword(m_sPassword);
       db.setHostName(m_sHostName);
       if (m_iPort != -1) { db.setPort(m_iPort); }
-      if (! db.open()) { displayLastError(db, "unable to open connection to database"); bError = true; qAssert(false); }
+      if (! db.open()) { displayLastError(db, "unable to open connection to database"); bError = true; }
+      if (bError) { dbError = db.lastError(); }
+      if (bError && ! dbError.isValid())
+      { dbError = QSqlError("[QxOrm] qx::QxSqlDatabase : 'unable to open connection to database'", "", QSqlError::UnknownError); }
    }
 
    if (bError) { QSqlDatabase::removeDatabase(sDbKeyNew); return QSqlDatabase(); }
    m_lstDbByThread.insert(lCurrThreadId, sDbKeyNew);
    qDebug("[QxOrm] qx::QxSqlDatabase : create new database connection in thread '%ld' with key '%s'", (long)(lCurrThreadId), qPrintable(sDbKeyNew));
-
    return QSqlDatabase::database(sDbKeyNew);
 }
 
 void QxSqlDatabase::displayLastError(const QSqlDatabase & db, const QString & sDesc) const
 {
-   if (sDesc.isEmpty()) { qDebug("[QxOrm] qx::QxSqlDatabase : %s", qPrintable(formatLastError(db))); }
-   else                 { qDebug("[QxOrm] qx::QxSqlDatabase : %s\n%s", qPrintable(sDesc), qPrintable(formatLastError(db))); }
+   QString sLastError = formatLastError(db);
+   if (sDesc.isEmpty()) { qDebug("[QxOrm] qx::QxSqlDatabase : '%s'", qPrintable(sLastError)); }
+   else { qDebug("[QxOrm] qx::QxSqlDatabase : '%s'\n%s", qPrintable(sDesc), qPrintable(sLastError)); }
 }
 
 QString QxSqlDatabase::formatLastError(const QSqlDatabase & db) const
@@ -84,7 +119,6 @@ QString QxSqlDatabase::formatLastError(const QSqlDatabase & db) const
    if (db.lastError().number() != -1) { sLastError += QString("Error number '") + QString::number(db.lastError().number()) + QString("' : "); }
    if (! db.lastError().text().isEmpty()) { sLastError += db.lastError().text(); }
    else { sLastError += "<no error description>"; }
-
    return sLastError;
 }
 

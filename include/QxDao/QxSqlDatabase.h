@@ -54,7 +54,7 @@
 m_iPort(-1), m_bTraceSqlQuery(true), m_bTraceSqlRecord(false), \
 m_ePlaceHolderStyle(ph_style_2_point_name), m_bSessionThrowable(false), \
 m_bSessionAutoTransaction(true), m_bValidatorThrowable(false), \
-m_bAutoReplaceSqlAliasIntoQuery(true)
+m_bAutoReplaceSqlAliasIntoQuery(true), m_bVerifyOffsetRelation(false)
 
 namespace qx {
 
@@ -90,6 +90,7 @@ private:
    bool m_bValidatorThrowable;                              //!< An exception of type qx::validator_error is thrown when invalid values are detected inserting or updating an element into database
    qx::dao::detail::IxSqlGenerator_ptr m_pSqlGenerator;     //!< SQL generator to build SQL query specific for each database
    bool m_bAutoReplaceSqlAliasIntoQuery;                    //!< Replace all sql alias into sql query automatically
+   bool m_bVerifyOffsetRelation;                            //!< Only for debug purpose : assert if invalid offset detected fetching a relation
 
 private:
 
@@ -112,8 +113,9 @@ public:
    bool getSessionAutoTransaction() const          { return m_bSessionAutoTransaction; }
    bool getValidatorThrowable() const              { return m_bValidatorThrowable; }
    bool getAutoReplaceSqlAliasIntoQuery() const    { return m_bAutoReplaceSqlAliasIntoQuery; }
+   bool getVerifyOffsetRelation() const            { return m_bVerifyOffsetRelation; }
 
-   void setDriverName(const QString & s)                          { m_sDriverName = s; }
+   void setDriverName(const QString & s)                          { m_sDriverName = s; getSqlGenerator(); }
    void setConnectOptions(const QString & s)                      { m_sConnectOptions = s; }
    void setDatabaseName(const QString & s)                        { m_sDatabaseName = s; }
    void setUserName(const QString & s)                            { m_sUserName = s; }
@@ -128,16 +130,18 @@ public:
    void setValidatorThrowable(bool b)                             { m_bValidatorThrowable = b; }
    void setSqlGenerator(qx::dao::detail::IxSqlGenerator_ptr p)    { m_pSqlGenerator = p; }
    void setAutoReplaceSqlAliasIntoQuery(bool b)                   { m_bAutoReplaceSqlAliasIntoQuery = b; }
+   void setVerifyOffsetRelation(bool b)                           { m_bVerifyOffsetRelation = b; }
 
-   static QSqlDatabase getDatabase()         { return qx::QxSqlDatabase::getSingleton()->getDatabaseByCurrThreadId(); }
-   static QSqlDatabase getDatabaseCloned()   { return QSqlDatabase::cloneDatabase(qx::QxSqlDatabase::getDatabase(), QUuid::createUuid().toString()); }
+   static QSqlDatabase getDatabase();
+   static QSqlDatabase getDatabase(QSqlError & dbError);
+   static QSqlDatabase getDatabaseCloned();
 
    qx::dao::detail::IxSqlGenerator * getSqlGenerator();
 
 private:
 
-   QSqlDatabase getDatabaseByCurrThreadId();
-   QSqlDatabase createDatabase();
+   QSqlDatabase getDatabaseByCurrThreadId(QSqlError & dbError);
+   QSqlDatabase createDatabase(QSqlError & dbError);
 
    void displayLastError(const QSqlDatabase & db, const QString & sDesc) const;
    QString formatLastError(const QSqlDatabase & db) const;

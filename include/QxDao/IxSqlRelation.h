@@ -41,13 +41,15 @@
 
 #include <QxDao/QxSqlRelationParams.h>
 #include <QxDao/QxSoftDelete.h>
+#include <QxDao/QxSqlJoin.h>
 
 #include <QxCollection/QxCollection.h>
 
 #define QX_CONSTRUCT_IX_RELATION() \
 m_pClass(NULL), m_pClassOwner(NULL), m_pDataMember(p), m_pDataMemberX(NULL), \
 m_pDataMemberId(NULL), m_pDataMemberIdOwner(NULL), m_lOffsetRelation(100), \
-m_eJoinType(left_outer_join), m_lstDataMemberPtr(NULL), m_lstSqlRelationPtr(NULL)
+m_eJoinType(qx::dao::sql_join::left_outer_join), m_eRelationType(no_relation), \
+m_lstDataMemberPtr(NULL), m_lstSqlRelationPtr(NULL)
 
 namespace qx {
 
@@ -67,39 +69,41 @@ class QX_DLL_EXPORT IxSqlRelation : public qx::QxPropertyBag
 
 public:
 
-   enum join_type { left_outer_join, inner_join };
+   enum relation_type { no_relation, one_to_one, one_to_many, many_to_one, many_to_many };
 
 protected:
 
-   IxClass *         m_pClass;               //!< 'IxClass' associated wth sql relation
-   IxClass *         m_pClassOwner;          //!< 'IxClass' of the owner
-   IxDataMember *    m_pDataMember;          //!< 'IxDataMember' associated wth sql relation
-   IxDataMemberX *   m_pDataMemberX;         //!< Collection of 'IxDataMember' : parent of 'm_pDataMember'
-   IxDataMember *    m_pDataMemberId;        //!< 'IxDataMember' id of 'm_pDataMemberX'
-   IxDataMember *    m_pDataMemberIdOwner;   //!< 'IxDataMember' id of the owner
-   long              m_lOffsetRelation;      //!< Generic offset for sql relation
-   join_type         m_eJoinType;            //!< Join type to build sql query
-   QxSoftDelete      m_oSoftDelete;          //!< Soft delete (or logical delete) behavior
+   IxClass *                        m_pClass;               //!< 'IxClass' associated wth sql relation
+   IxClass *                        m_pClassOwner;          //!< 'IxClass' of the owner
+   IxDataMember *                   m_pDataMember;          //!< 'IxDataMember' associated wth sql relation
+   IxDataMemberX *                  m_pDataMemberX;         //!< Collection of 'IxDataMember' : parent of 'm_pDataMember'
+   IxDataMember *                   m_pDataMemberId;        //!< 'IxDataMember' id of 'm_pDataMemberX'
+   IxDataMember *                   m_pDataMemberIdOwner;   //!< 'IxDataMember' id of the owner
+   long                             m_lOffsetRelation;      //!< Generic offset for sql relation
+   qx::dao::sql_join::join_type     m_eJoinType;            //!< Join type to build sql query
+   relation_type                    m_eRelationType;        //!< Relation type : one-to-one, one-to-many, etc.
+   QxSoftDelete                     m_oSoftDelete;          //!< Soft delete (or logical delete) behavior
 
    QxCollection<QString, IxDataMember *> * m_lstDataMemberPtr;    //!< Optimization : handle to collection of 'IxDataMember'
    IxSqlRelationX * m_lstSqlRelationPtr;                          //!< Optimization : handle to collection of 'IxSqlRelation'
 
 public:
 
-   IxSqlRelation(IxDataMember * p) : qx::QxPropertyBag(), QX_CONSTRUCT_IX_RELATION() { qAssert(p); }
+   IxSqlRelation(IxDataMember * p) : qx::QxPropertyBag(), QX_CONSTRUCT_IX_RELATION() { ; }
    virtual ~IxSqlRelation() = 0;
 
    inline QxCollection<QString, IxDataMember *> * getLstDataMember() const { return m_lstDataMemberPtr; }
    inline IxSqlRelationX * getLstRelation() const                          { return m_lstSqlRelationPtr; }
 
-   inline void setSqlJoinType(join_type e)         { m_eJoinType = e; }
-   inline join_type getSqlJoinType() const         { return m_eJoinType; }
-   inline IxClass * getClass() const               { return m_pClass; }
-   inline IxClass * getClassOwner() const          { return m_pClassOwner; }
-   inline IxDataMember * getDataMember() const     { return m_pDataMember; }
-   inline IxDataMemberX * getDataMemberX() const   { return m_pDataMemberX; }
-   inline IxDataMember * getDataId() const         { return m_pDataMemberId; }
-   inline IxDataMember * getDataIdOwner() const    { return m_pDataMemberIdOwner; }
+   inline void setSqlJoinType(qx::dao::sql_join::join_type e)     { m_eJoinType = e; }
+   inline qx::dao::sql_join::join_type getSqlJoinType() const     { return m_eJoinType; }
+   inline relation_type getRelationType() const                   { return m_eRelationType; }
+   inline IxClass * getClass() const                              { return m_pClass; }
+   inline IxClass * getClassOwner() const                         { return m_pClassOwner; }
+   inline IxDataMember * getDataMember() const                    { return m_pDataMember; }
+   inline IxDataMemberX * getDataMemberX() const                  { return m_pDataMemberX; }
+   inline IxDataMember * getDataId() const                        { return m_pDataMemberId; }
+   inline IxDataMember * getDataIdOwner() const                   { return m_pDataMemberIdOwner; }
 
    QString getKey() const;
    long getDataCount() const;
@@ -109,7 +113,9 @@ public:
    IxSqlRelation * nextRelation(long & lIndex) const;
    QString table() const;
    QString tableAlias(QxSqlRelationParams & params) const;
-   QString getSqlJoin() const;
+   QString tableAliasOwner(QxSqlRelationParams & params) const;
+   QString getSqlJoin(qx::dao::sql_join::join_type e = qx::dao::sql_join::no_join) const;
+   bool traceSqlQuery() const;
 
    virtual void init() = 0;
    virtual QString getDescription() const = 0;
@@ -132,7 +138,7 @@ public:
    virtual void lazyFetch_ResolveInput(QxSqlRelationParams & params) const = 0;
    virtual void eagerFetch_ResolveInput(QxSqlRelationParams & params) const = 0;
    virtual void lazyFetch_ResolveOutput(QxSqlRelationParams & params) const = 0;
-   virtual void eagerFetch_ResolveOutput(QxSqlRelationParams & params) const = 0;
+   virtual void * eagerFetch_ResolveOutput(QxSqlRelationParams & params) const = 0;
    virtual void lazyInsert(QxSqlRelationParams & params) const = 0;
    virtual void lazyInsert_Values(QxSqlRelationParams & params) const = 0;
    virtual void lazyUpdate(QxSqlRelationParams & params) const = 0;

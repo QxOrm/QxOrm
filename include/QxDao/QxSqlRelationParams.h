@@ -40,6 +40,8 @@
 #include <QtSql/qsqldatabase.h>
 #include <QtSql/qsqlquery.h>
 
+#include <QxDao/QxSqlJoin.h>
+
 namespace qx {
 
 class IxSqlQueryBuilder;
@@ -53,39 +55,49 @@ class QxSqlRelationParams
 
 protected:
 
-   long                 m_lIndex;      //!< Current SQL relation index
-   long                 m_lOffset;     //!< Current SQL query offset
-   QString *            m_sql;         //!< Current SQL query
-   IxSqlQueryBuilder *  m_builder;     //!< Current SQL query builder
-   QSqlQuery *          m_query;       //!< Current SQL query connected to database
-   QSqlDatabase *       m_database;    //!< Current SQL database connexion
-   void *               m_pOwner;      //!< Owner to current object to resolve input/output
+   QVariant                      m_vId;            //!< Current id
+   long                          m_lIndex;         //!< Current SQL relation index
+   long                          m_lIndexOwner;    //!< Current SQL relation owner index
+   long                          m_lOffset;        //!< Current SQL query offset
+   QString *                     m_sql;            //!< Current SQL query
+   IxSqlQueryBuilder *           m_builder;        //!< Current SQL query builder
+   QSqlQuery *                   m_query;          //!< Current SQL query connected to database
+   QSqlDatabase *                m_database;       //!< Current SQL database connexion
+   void *                        m_pOwner;         //!< Owner to current object to resolve input/output
+   qx::dao::sql_join::join_type  m_eJoinType;      //!< Current join type to build SQL query : LEFT OUTER JOIN, INNER JOIN, etc...
 
 public:
 
-   QxSqlRelationParams() : m_lIndex(0), m_lOffset(0), m_sql(NULL), m_builder(NULL), m_query(NULL), m_database(NULL), m_pOwner(NULL) { ; }
-   QxSqlRelationParams(long lIndex, long lOffset, QString * sql, IxSqlQueryBuilder * builder, QSqlQuery * query, void * pOwner) : m_lIndex(lIndex), m_lOffset(lOffset), m_sql(sql), m_builder(builder), m_query(query), m_database(NULL), m_pOwner(pOwner) { ; }
+   QxSqlRelationParams() : m_lIndex(0), m_lIndexOwner(0), m_lOffset(0), m_sql(NULL), m_builder(NULL), m_query(NULL), m_database(NULL), m_pOwner(NULL), m_eJoinType(qx::dao::sql_join::no_join) { ; }
+   QxSqlRelationParams(long lIndex, long lOffset, QString * sql, IxSqlQueryBuilder * builder, QSqlQuery * query, void * pOwner) : m_lIndex(lIndex), m_lIndexOwner(0), m_lOffset(lOffset), m_sql(sql), m_builder(builder), m_query(query), m_database(NULL), m_pOwner(pOwner), m_eJoinType(qx::dao::sql_join::no_join) { ; }
+   QxSqlRelationParams(long lIndex, long lOffset, QString * sql, IxSqlQueryBuilder * builder, QSqlQuery * query, void * pOwner, const QVariant & vId) : m_vId(vId), m_lIndex(lIndex), m_lIndexOwner(0), m_lOffset(lOffset), m_sql(sql), m_builder(builder), m_query(query), m_database(NULL), m_pOwner(pOwner), m_eJoinType(qx::dao::sql_join::no_join) { ; }
    virtual ~QxSqlRelationParams() { ; }
 
-   inline long index() const                          { return m_lIndex; }
-   inline long offset() const                         { return m_lOffset; }
-   inline QString & sql()                             { qAssert(m_sql); return (* m_sql); }
-   inline const QString & sql() const                 { qAssert(m_sql); return (* m_sql); }
-   inline QSqlQuery & query()                         { qAssert(m_query); return (* m_query); }
-   inline const QSqlQuery & query() const             { qAssert(m_query); return (* m_query); }
-   inline QSqlDatabase & database()                   { qAssert(m_database); return (* m_database); }
-   inline const QSqlDatabase & database() const       { qAssert(m_database); return (* m_database); }
-   inline IxSqlQueryBuilder & builder()               { qAssert(m_builder); return (* m_builder); }
-   inline const IxSqlQueryBuilder & builder() const   { qAssert(m_builder); return (* m_builder); }
-   inline void * owner() const                        { return m_pOwner; }
+   inline QVariant id() const                            { return m_vId; }
+   inline long index() const                             { return m_lIndex; }
+   inline long indexOwner() const                        { return m_lIndexOwner; }
+   inline long offset() const                            { return m_lOffset; }
+   inline QString & sql()                                { qAssert(m_sql); return (* m_sql); }
+   inline const QString & sql() const                    { qAssert(m_sql); return (* m_sql); }
+   inline QSqlQuery & query()                            { qAssert(m_query); return (* m_query); }
+   inline const QSqlQuery & query() const                { qAssert(m_query); return (* m_query); }
+   inline QSqlDatabase & database()                      { qAssert(m_database); return (* m_database); }
+   inline const QSqlDatabase & database() const          { qAssert(m_database); return (* m_database); }
+   inline IxSqlQueryBuilder & builder()                  { qAssert(m_builder); return (* m_builder); }
+   inline const IxSqlQueryBuilder & builder() const      { qAssert(m_builder); return (* m_builder); }
+   inline void * owner() const                           { return m_pOwner; }
+   inline qx::dao::sql_join::join_type joinType() const  { return m_eJoinType; }
 
-   inline void setIndex(long lIndex)                     { m_lIndex = lIndex; }
-   inline void setOffset(long lOffset)                   { m_lOffset = lOffset; }
-   inline void setSql(QString * sql)                     { m_sql = sql; }
-   inline void setBuilder(IxSqlQueryBuilder * builder)   { m_builder = builder; }
-   inline void setQuery(QSqlQuery * query)               { m_query = query; }
-   inline void setDatabase(QSqlDatabase * database)      { m_database = database; }
-   inline void setOwner(void * pOwner)                   { m_pOwner = pOwner; }
+   inline void setId(const QVariant & vId)                  { m_vId = vId; }
+   inline void setIndex(long lIndex)                        { m_lIndex = lIndex; }
+   inline void setIndexOwner(long lIndex)                   { m_lIndexOwner = lIndex; }
+   inline void setOffset(long lOffset)                      { m_lOffset = lOffset; }
+   inline void setSql(QString * sql)                        { m_sql = sql; }
+   inline void setBuilder(IxSqlQueryBuilder * builder)      { m_builder = builder; }
+   inline void setQuery(QSqlQuery * query)                  { m_query = query; }
+   inline void setDatabase(QSqlDatabase * database)         { m_database = database; }
+   inline void setOwner(void * pOwner)                      { m_pOwner = pOwner; }
+   inline void setJoinType(qx::dao::sql_join::join_type e)  { m_eJoinType = e; }
 
 };
 

@@ -86,6 +86,8 @@
 #include <boost/tuple/tuple.hpp>
 #include <boost/foreach.hpp>
 #include <boost/bind.hpp>
+#include <boost/none.hpp>
+#include <boost/optional.hpp>
 
 #ifdef _MSC_VER
 #include <boost/serialization/serialization.hpp> /* -- To avoid warning 4100 => header in precompiled header -- */

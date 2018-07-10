@@ -41,11 +41,11 @@ struct QxDao_FetchById_WithRelation_Generic
       if (! dao.isValidPrimaryKey(t)) { return dao.errInvalidId(); }
       if (! dao.updateSqlRelationX(relation)) { return dao.errInvalidRelation(); }
 
-      QString sql = dao.builder().fetchById_WithRelation(dao.getSqlRelationX()).getSqlQuery();
+      QString sql = dao.builder().fetchById_WithRelation(dao.getSqlRelationLinked()).getSqlQuery();
       if (! dao.getDataId() || sql.isEmpty()) { return dao.errEmpty(); }
 
       dao.query().prepare(sql);
-      type_query_helper::resolveInput(dao.getSqlRelationX(), t, dao.query(), dao.builder());
+      type_query_helper::resolveInput(dao.getSqlRelationLinked(), t, dao.query(), dao.builder());
       if (! dao.query().exec()) { return dao.errFailed(); }
 
       qx::dao::on_before_fetch<T>((& t), (& dao));
@@ -61,13 +61,13 @@ private:
    static inline void fetchById_Simple(T & t, type_dao_helper & dao)
    {
       if (! dao.nextRecord()) { dao.errNoData(); return; }
-      type_query_helper::resolveOutput(dao.getSqlRelationX(), t, dao.query(), dao.builder());
+      type_query_helper::resolveOutput(dao.getSqlRelationLinked(), t, dao.query(), dao.builder());
    }
 
    static inline void fetchById_Complex(T & t, type_dao_helper & dao)
    {
       while (dao.nextRecord())
-      { type_query_helper::resolveOutput(dao.getSqlRelationX(), t, dao.query(), dao.builder()); }
+      { type_query_helper::resolveOutput(dao.getSqlRelationLinked(), t, dao.query(), dao.builder()); }
    }
 
 };
@@ -86,7 +86,7 @@ struct QxDao_FetchById_WithRelation_Container
       if (! dao.isValid()) { return dao.error(); }
       if (! dao.updateSqlRelationX(relation)) { return dao.errInvalidRelation(); }
 
-      QString sql = dao.builder().fetchById_WithRelation(dao.getSqlRelationX()).getSqlQuery();
+      QString sql = dao.builder().fetchById_WithRelation(dao.getSqlRelationLinked()).getSqlQuery();
       if (! dao.getDataId() || sql.isEmpty()) { return dao.errEmpty(); }
       dao.query().prepare(sql);
 
@@ -150,7 +150,7 @@ private:
       static bool fetch(U & item, type_dao_helper & dao)
       {
          if (! dao.isValidPrimaryKey(item)) { dao.errInvalidId(); return false; }
-         type_query_helper::resolveInput(dao.getSqlRelationX(), item, dao.query(), dao.builder());
+         type_query_helper::resolveInput(dao.getSqlRelationLinked(), item, dao.query(), dao.builder());
          if (! dao.query().exec()) { dao.errFailed(); return false; }
          qx::dao::on_before_fetch<U>((& item), (& dao));
          if (dao.getCartesianProduct()) { fetch_Complex(item, dao); }
@@ -163,13 +163,13 @@ private:
       static inline void fetch_Simple(U & item, type_dao_helper & dao)
       {
          if (! dao.nextRecord()) { dao.errNoData(); return; }
-         type_query_helper::resolveOutput(dao.getSqlRelationX(), item, dao.query(), dao.builder());
+         type_query_helper::resolveOutput(dao.getSqlRelationLinked(), item, dao.query(), dao.builder());
       }
 
       static inline void fetch_Complex(U & item, type_dao_helper & dao)
       {
          while (dao.nextRecord())
-         { type_query_helper::resolveOutput(dao.getSqlRelationX(), item, dao.query(), dao.builder()); }
+         { type_query_helper::resolveOutput(dao.getSqlRelationLinked(), item, dao.query(), dao.builder()); }
       }
 
    };

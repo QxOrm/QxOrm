@@ -68,7 +68,7 @@ protected:
 
 public:
 
-   QxSqlRelation_ManyToMany(IxDataMember * p, const QString & sExtraTable, const QString & sForeignKeyOwner, const QString & sForeignKeyDataType) : QxSqlRelation<DataType, Owner>(p), m_sExtraTable(sExtraTable), m_sForeignKeyOwner(sForeignKeyOwner), m_sForeignKeyDataType(sForeignKeyDataType) { this->verifyParameters(); }
+   QxSqlRelation_ManyToMany(IxDataMember * p, const QString & sExtraTable, const QString & sForeignKeyOwner, const QString & sForeignKeyDataType) : QxSqlRelation<DataType, Owner>(p), m_sExtraTable(sExtraTable), m_sForeignKeyOwner(sForeignKeyOwner), m_sForeignKeyDataType(sForeignKeyDataType) { this->m_eRelationType = qx::IxSqlRelation::many_to_many; this->verifyParameters(); }
    virtual ~QxSqlRelation_ManyToMany() { BOOST_STATIC_ASSERT(is_data_container); }
 
    virtual QString getDescription() const                                     { return "relation many-to-many"; }
@@ -122,22 +122,24 @@ public:
    virtual void eagerJoin(QxSqlRelationParams & params) const
    {
       QString & sql = params.sql();
-      IxDataMember * pIdOwner = params.builder().getDataId(); qAssert(pIdOwner);
+      IxDataMember * pIdOwner = this->getDataIdOwner(); qAssert(pIdOwner);
       IxDataMember * pIdData = this->getDataId(); qAssert(pIdData);
-      QString table = this->table(); QString tableAlias = this->tableAlias(params); QString tableOwner = params.builder().table();
+      QString table = this->table(); QString tableAlias = this->tableAlias(params);
+      QString tableOwner = this->tableAliasOwner(params);
       if (! pIdOwner || ! pIdData) { return; }
       QStringList lstForeignKeyOwner = m_sForeignKeyOwner.split("|");
       QStringList lstForeignKeyDataType = m_sForeignKeyDataType.split("|");
       qAssert(pIdOwner->getNameCount() == lstForeignKeyOwner.count());
       qAssert(pIdData->getNameCount() == lstForeignKeyDataType.count());
-      sql += this->getSqlJoin() + m_sExtraTable + " ON ";
+      QString sExtraTableAlias = m_sExtraTable + "_" + QString::number(params.index());
+      sql += this->getSqlJoin(params.joinType()) + m_sExtraTable + " " + sExtraTableAlias + " ON ";
       for (int i = 0; i < pIdOwner->getNameCount(); i++)
-      { sql += pIdOwner->getSqlAlias(tableOwner, true, i) + " = " + m_sExtraTable + "." + lstForeignKeyOwner.at(i) + " AND "; }
+      { sql += pIdOwner->getSqlAlias(tableOwner, true, i) + " = " + sExtraTableAlias + "." + lstForeignKeyOwner.at(i) + " AND "; }
       sql = sql.left(sql.count() - 5); // Remove last " AND "
-      sql += this->getSqlJoin() + table + " " + tableAlias + " ON ";
+      sql += this->getSqlJoin(params.joinType()) + table + " " + tableAlias + " ON ";
       params.builder().addSqlQueryAlias(table, tableAlias);
       for (int i = 0; i < pIdData->getNameCount(); i++)
-      { sql += m_sExtraTable + "." + lstForeignKeyDataType.at(i) + " = " + pIdData->getSqlAlias(tableAlias, true, i) + " AND "; }
+      { sql += sExtraTableAlias + "." + lstForeignKeyDataType.at(i) + " = " + pIdData->getSqlAlias(tableAlias, true, i) + " AND "; }
       sql = sql.left(sql.count() - 5); // Remove last " AND "
    }
 
@@ -150,16 +152,16 @@ public:
       sql += this->m_oSoftDelete.buildSqlQueryToFetch(tableAlias);
    }
 
-   virtual void eagerFetch_ResolveOutput(QxSqlRelationParams & params) const
+   virtual void * eagerFetch_ResolveOutput(QxSqlRelationParams & params) const
    {
-      if (! this->verifyOffset(params, true)) { return; }
+      if (! this->verifyOffset(params, true)) { return NULL; }
       QSqlQuery & query = params.query();
       IxDataMember * p = NULL; IxDataMember * pId = this->getDataId(); qAssert(pId);
       long lIndex = 0; long lOffsetId = (pId ? pId->getNameCount() : 0); bool bValidId(false);
       long lOffsetOld = params.offset(); this->updateOffset(true, params);
       for (int i = 0; i < pId->getNameCount(); i++)
       { QVariant v = query.value(lOffsetOld + i); bValidId = (bValidId || qx::trait::is_valid_primary_key(v)); }
-      if (! bValidId) { return; }
+      if (! bValidId) { return NULL; }
       type_item item = this->createItem();
       type_data & item_val = item.value_qx();
       for (int i = 0; i < pId->getNameCount(); i++)
@@ -169,10 +171,12 @@ public:
       while ((p = this->nextData(lIndex)))
       { p->fromVariant((& item_val), query.value(lIndex + lOffsetOld + lOffsetId - 1)); }
       type_generic_container::insertItem(this->getContainer(params), item);
+      return (& item_val);
    }
 
    virtual QSqlError onAfterSave(QxSqlRelationParams & params) const
    {
+      if (this->isNullData(params)) { return this->deleteFromExtraTable(params); }
       QSqlError daoError = qx::dao::save(this->getContainer(params), (& params.database()));
       if (daoError.isValid()) { return daoError; }
       daoError = this->deleteFromExtraTable(params);
@@ -201,7 +205,7 @@ public:
 
       pIdOwner->setIsPrimaryKey(bOldPKOwner); pIdData->setIsPrimaryKey(bOldPKData);
       pIdOwner->setAutoIncrement(bOldAIOwner); pIdData->setAutoIncrement(bOldAIData);
-      qDebug("[QxOrm] create extra-table (relation many-to-many) : %s", qPrintable(sql));
+      if (this->traceSqlQuery()) { qDebug("[QxOrm] create extra-table (relation many-to-many) : %s", qPrintable(sql)); }
       return sql;
    }
 
@@ -212,14 +216,14 @@ private:
 
    QSqlError deleteFromExtraTable(QxSqlRelationParams & params) const
    {
-      IxDataMember * pIdOwner = params.builder().getDataId(); qAssert(pIdOwner);
+      IxDataMember * pIdOwner = this->getDataIdOwner(); qAssert(pIdOwner);
       QString sql = "DELETE FROM " + m_sExtraTable + " WHERE ";
       QStringList lstForeignKeyOwner = m_sForeignKeyOwner.split("|");
       qAssert(pIdOwner->getNameCount() == lstForeignKeyOwner.count());
       for (int i = 0; i < pIdOwner->getNameCount(); i++)
       { sql += m_sExtraTable + "." + lstForeignKeyOwner.at(i) + " = " + pIdOwner->getSqlPlaceHolder("", i) + " AND "; }
       sql = sql.left(sql.count() - 5); // Remove last " AND "
-      qDebug("[QxOrm] sql query (extra-table) : %s", qPrintable(sql));
+      if (this->traceSqlQuery()) { qDebug("[QxOrm] sql query (extra-table) : %s", qPrintable(sql)); }
 
       QSqlQuery queryDelete(params.database());
       queryDelete.prepare(sql);
@@ -230,7 +234,7 @@ private:
 
    QSqlError insertIntoExtraTable(QxSqlRelationParams & params) const
    {
-      IxDataMember * pIdOwner = params.builder().getDataId(); qAssert(pIdOwner);
+      IxDataMember * pIdOwner = this->getDataIdOwner(); qAssert(pIdOwner);
       IxDataMember * pIdData = this->getDataId(); qAssert(pIdData);
       if (! pIdOwner || ! pIdData) { return QSqlError(); }
       QStringList lstForeignKeyOwner = m_sForeignKeyOwner.split("|");
@@ -242,10 +246,10 @@ private:
       sql += pIdOwner->getSqlName(", ", m_sForeignKeyOwner) + ", " + pIdData->getSqlName(", ", m_sForeignKeyDataType);
       sql += ") VALUES (";
       sql += pIdOwner->getSqlPlaceHolder("", -1, ", ", m_sForeignKeyOwner) + ", " + pIdData->getSqlPlaceHolder("", -1, ", ", m_sForeignKeyDataType) + ")";
-      qDebug("[QxOrm] sql query (extra-table) : %s", qPrintable(sql));
+      if (this->traceSqlQuery()) { qDebug("[QxOrm] sql query (extra-table) : %s", qPrintable(sql)); }
 
       type_item item;
-      type_container container = this->getContainer(params);
+      type_container & container = this->getContainer(params);
       type_iterator itr = type_generic_container::begin(container, item);
       type_iterator itr_end = type_generic_container::end(container);
       QSqlQuery queryInsert(params.database());

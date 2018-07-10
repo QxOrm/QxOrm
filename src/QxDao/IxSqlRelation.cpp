@@ -30,6 +30,7 @@
 
 #include <QxDao/IxSqlRelation.h>
 #include <QxDao/IxSqlQueryBuilder.h>
+#include <QxDao/QxSqlDatabase.h>
 
 #include <QxDataMember/IxDataMember.h>
 #include <QxDataMember/IxDataMemberX.h>
@@ -51,29 +52,59 @@ long IxSqlRelation::getDataCount() const
 long IxSqlRelation::getRelationCount() const
 { return (m_lstSqlRelationPtr ? m_lstSqlRelationPtr->count() : 0); }
 
-IxDataMember * IxSqlRelation::getDataByKey(const QString & sKey) const
-{ return ((m_lstDataMemberPtr && m_lstDataMemberPtr->exist(sKey)) ? m_lstDataMemberPtr->getByKey(sKey) : ((m_lstSqlRelationPtr && m_lstSqlRelationPtr->exist(sKey)) ? m_lstSqlRelationPtr->getByKey(sKey)->getDataMember() : NULL)); }
-
-IxDataMember * IxSqlRelation::nextData(long & lIndex) const
-{ if ((! m_lstDataMemberPtr) || (lIndex < 0) || (lIndex >= m_lstDataMemberPtr->count())) { return NULL; }; ++lIndex; return m_lstDataMemberPtr->getByIndex(lIndex - 1); }
-
-IxSqlRelation * IxSqlRelation::nextRelation(long & lIndex) const
-{ if ((! m_lstSqlRelationPtr) || (lIndex < 0) || (lIndex >= m_lstSqlRelationPtr->count())) { return NULL; }; ++lIndex; return m_lstSqlRelationPtr->getByIndex(lIndex - 1); }
-
 QString IxSqlRelation::table() const
 { return (m_pDataMemberX ? m_pDataMemberX->getName() : ""); }
 
-QString IxSqlRelation::tableAlias(QxSqlRelationParams & params) const
-{ return (m_pDataMemberX ? (m_pDataMemberX->getName() + "_" + QString::number(params.index())) : ""); }
+bool IxSqlRelation::traceSqlQuery() const
+{ return qx::QxSqlDatabase::getSingleton()->getTraceSqlQuery(); }
 
-QString IxSqlRelation::getSqlJoin() const
+IxDataMember * IxSqlRelation::getDataByKey(const QString & sKey) const
+{
+   if (m_lstDataMemberPtr && m_lstDataMemberPtr->exist(sKey)) { return m_lstDataMemberPtr->getByKey(sKey); }
+   else if (m_lstSqlRelationPtr && m_lstSqlRelationPtr->exist(sKey)) { return m_lstSqlRelationPtr->getByKey(sKey)->getDataMember(); }
+   return NULL;
+}
+
+IxDataMember * IxSqlRelation::nextData(long & lIndex) const
+{
+   if ((! m_lstDataMemberPtr) || (lIndex < 0) || (lIndex >= m_lstDataMemberPtr->count())) { return NULL; }
+   ++lIndex;
+   return m_lstDataMemberPtr->getByIndex(lIndex - 1);
+}
+
+IxSqlRelation * IxSqlRelation::nextRelation(long & lIndex) const
+{
+   if ((! m_lstSqlRelationPtr) || (lIndex < 0) || (lIndex >= m_lstSqlRelationPtr->count())) { return NULL; }
+   ++lIndex;
+   return m_lstSqlRelationPtr->getByIndex(lIndex - 1);
+}
+
+QString IxSqlRelation::tableAlias(QxSqlRelationParams & params) const
+{
+   QString sTableAlias = (m_pDataMemberX ? (m_pDataMemberX->getName() + "_" + QString::number(params.index())) : QString(""));
+   sTableAlias.replace(".", "_");
+   return sTableAlias;
+}
+
+QString IxSqlRelation::tableAliasOwner(QxSqlRelationParams & params) const
+{
+   if (! m_pClassOwner) { qAssert(false); return ""; }
+   QString sTableAliasOwner = (m_pClassOwner->getName() + "_" + QString::number(params.indexOwner()));
+   if (params.indexOwner() <= 0) { sTableAliasOwner = params.builder().table(); }
+   sTableAliasOwner.replace(".", "_");
+   return sTableAliasOwner;
+}
+
+QString IxSqlRelation::getSqlJoin(qx::dao::sql_join::join_type e /* = qx::dao::sql_join::no_join */) const
 {
    QString sJoin;
-   switch (m_eJoinType)
+   if (e == qx::dao::sql_join::no_join) { e = m_eJoinType; }
+
+   switch (e)
    {
-      case left_outer_join:   sJoin = " LEFT OUTER JOIN ";                    break;
-      case inner_join:        sJoin = " INNER JOIN ";                         break;
-      default:                qAssert(false); sJoin = " LEFT OUTER JOIN ";    break;
+      case qx::dao::sql_join::left_outer_join:  sJoin = " LEFT OUTER JOIN ";     break;
+      case qx::dao::sql_join::inner_join:       sJoin = " INNER JOIN ";          break;
+      default:                                  sJoin = " LEFT OUTER JOIN ";     break;
    }
 
    return sJoin;
@@ -82,10 +113,12 @@ QString IxSqlRelation::getSqlJoin() const
 #ifndef NDEBUG
 bool IxSqlRelation::verifyOffset(QxSqlRelationParams & params, bool bId) const
 {
+   if (! qx::QxSqlDatabase::getSingleton()->getVerifyOffsetRelation()) { return true; }
    IxDataMember * p = (bId ? this->getDataId() : this->getDataMember());
-   QString table = (bId ? this->tableAlias(params) : params.builder().table());
+   QString table = (bId ? this->tableAlias(params) : this->tableAliasOwner(params));
    if (! p || table.isEmpty()) { return true; }
-   int index = params.query().record().indexOf(p->getSqlAlias(table));
+   QString sSuffixAlias = ((! bId && (params.indexOwner() > 0)) ? QString("_" + QString::number(params.indexOwner())) : QString());
+   int index = params.query().record().indexOf(p->getSqlAlias(table) + sSuffixAlias);
    qAssert(index == params.offset());
 
    return (index == params.offset());

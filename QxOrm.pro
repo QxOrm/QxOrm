@@ -34,7 +34,7 @@ CONFIG += dll
 DEFINES += _QX_BUILDING_QX_ORM
 PRECOMPILED_HEADER = ./include/QxPrecompiled.h
 
-unix { VERSION = 1.2.3 }
+unix { VERSION = 1.2.4 }
 
 contains(DEFINES, _QX_STATIC_BUILD) {
 CONFIG -= dll
@@ -53,10 +53,13 @@ TARGET = QxOrm
 
 unix {
 DESTDIR = ./lib/
-target.path = /usr/local/lib/
-headers.path = /usr/local/include/
+isEmpty(PREFIX) { PREFIX = /usr/local }
+target.path = $$PREFIX/lib/
+headers.path = $$PREFIX/include/
 headers.files = ./include/*
-INSTALLS = target headers
+headers_inl.path = $$PREFIX/inl/
+headers_inl.files = ./inl/*
+INSTALLS = target headers headers_inl
 } # unix
 
 #################
@@ -145,6 +148,9 @@ HEADERS += ./include/QxDao/QxTimeNeutral.h
 HEADERS += ./include/QxDao/QxDateTimeNeutral.h
 HEADERS += ./include/QxDao/IxDao_Helper.h
 HEADERS += ./include/QxDao/IxPersistable.h
+HEADERS += ./include/QxDao/QxSqlJoin.h
+HEADERS += ./include/QxDao/QxSqlRelationLinked.h
+HEADERS += ./include/QxDao/QxDaoAsync.h
 
 HEADERS += ./include/QxDao/QxSqlElement/IxSqlElement.h
 HEADERS += ./include/QxDao/QxSqlElement/QxSqlCompare.h
@@ -374,6 +380,8 @@ SOURCES += ./src/QxDao/QxSqlQuery.cpp
 SOURCES += ./src/QxDao/QxSession.cpp
 SOURCES += ./src/QxDao/IxDao_Helper.cpp
 SOURCES += ./src/QxDao/IxPersistable.cpp
+SOURCES += ./src/QxDao/QxSqlRelationLinked.cpp
+SOURCES += ./src/QxDao/QxDaoAsync.cpp
 
 SOURCES += ./src/QxDao/QxSqlElement/IxSqlElement.cpp
 SOURCES += ./src/QxDao/QxSqlElement/QxSqlCompare.cpp

@@ -51,7 +51,8 @@ struct QxDao_Update_Optimized_Container
       { return qx::dao::update_by_query(query, (* ptr), pDatabase); }
 
       QStringList lstDiffItem; QSqlError errorItem;
-      QSqlDatabase db = (pDatabase ? (* pDatabase) : qx::QxSqlDatabase::getDatabase());
+      QSqlDatabase db = (pDatabase ? (* pDatabase) : qx::QxSqlDatabase::getDatabase(errorItem));
+      if (errorItem.isValid()) { return errorItem; }
       if (! pDatabase) { db.transaction(); }
 
       typename T::const_iterator it2 = ptr.getOriginal()->begin();

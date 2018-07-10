@@ -40,26 +40,16 @@ void IxSqlQueryBuilder::displaySqlQuery(int time_ms /* = -1 */) const
    else              { qDebug("[QxOrm] sql query (%d ms) : %s", time_ms, qPrintable(m_sSqlQuery)); }
 }
 
-void IxSqlQueryBuilder::initIdX()
+void IxSqlQueryBuilder::initIdX(long lAllRelationCount)
 {
-   if (m_pIdX) { return; }
-   if (! m_bCartesianProduct || ! m_lstSqlRelationPtr) { qAssert(false); return; }
-
+   if (! m_bCartesianProduct) { qAssert(false); return; }
    m_pIdX.reset(new type_lst_ptr_by_id());
-   type_ptr_by_id_ptr pItem;
-   pItem.reset(new type_ptr_by_id());
-   m_pIdX->append(pItem); // index 0 -> owner
-
-   for (long l = 0; l < m_lstSqlRelationPtr->count(); ++l)
-   {
-      pItem.reset(new type_ptr_by_id());
-      m_pIdX->append(pItem); // index 1 2 3 4 etc... -> relation
-   }
+   for (long l = 0; l < (lAllRelationCount + 1); ++l)
+   { type_ptr_by_id_ptr pItem = type_ptr_by_id_ptr(new type_ptr_by_id()); m_pIdX->append(pItem); }
 }
 
 bool IxSqlQueryBuilder::insertIdX(long lIndex, const QVariant & idOwner, const QVariant & idData, void * ptr)
 {
-   this->initIdX();
    QString sIdOwner = idOwner.toString(); QString sIdData = idData.toString();
    if (! m_pIdX || sIdOwner.isEmpty() || sIdData.isEmpty()) { qAssert(false); return false; }
    if ((lIndex < 0) || (lIndex >= m_pIdX->count())) { qAssert(false); return false; }
@@ -74,7 +64,6 @@ bool IxSqlQueryBuilder::insertIdX(long lIndex, const QVariant & idOwner, const Q
 
 void * IxSqlQueryBuilder::existIdX(long lIndex, const QVariant & idOwner, const QVariant & idData)
 {
-   this->initIdX();
    QString sIdOwner = idOwner.toString(); QString sIdData = idData.toString();
    if (! m_pIdX || sIdOwner.isEmpty() || sIdData.isEmpty()) { qAssert(false); return NULL; }
    if ((lIndex < 0) || (lIndex >= m_pIdX->count())) { qAssert(false); return NULL; }

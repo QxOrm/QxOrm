@@ -210,6 +210,9 @@ int main(int argc, char * argv[])
    qx::QxSqlDatabase::getSingleton()->setTraceSqlQuery(true);
    qx::QxSqlDatabase::getSingleton()->setTraceSqlRecord(false);
 
+   // Only for debug purpose : assert if invalid offset detected fetching a relation
+   qx::QxSqlDatabase::getSingleton()->setVerifyOffsetRelation(true);
+
    qx::test::CPerson * pBrother = new qx::test::CPerson();
    pBrother->setFirstName("brother firstname");
    pBrother->setLastName("brother lastname");
@@ -341,6 +344,7 @@ int main(int argc, char * argv[])
    {
       pFoo.reset(new Foo()); pFoo->setName("name10"); pFoo->setDesc("desc10");
       pFoo->setDate(QDate::currentDate()); pFoo->setTime(QTime::currentTime()); pFoo->setDateTime(QDateTime::currentDateTime());
+      boost::optional<QString> optionalString("test boost optional"); pFoo->setOptString(optionalString);
 
       // Test session to manage automatically database transactions (using C++ RAII)
       qx::QxSession session;
@@ -411,6 +415,9 @@ int main(int argc, char * argv[])
    }
 
    //--------------------------------
+
+   qAssert(qx::QxClassX::implementIxPersistable("qx::QxPersistable"));
+   qAssert(! qx::QxClassX::implementIxPersistable("Bar"));
 
    qx::cache::clear();
 

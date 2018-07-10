@@ -103,6 +103,7 @@ public:
    static IxFunctionX * getFctMemberX(const QString & sKey);
    static IxDataMember * getDataMember(const QString & sClassKey, const QString & sDataKey, bool bRecursive = true);
    static IxFunction * getFctMember(const QString & sClassKey, const QString & sFctKey, bool bRecursive = true);
+   static bool implementIxPersistable(const QString & sKey, bool bTraceIfFalse = true);
 
    static QxCollection<QString, IxClass *> * getAllClasses();
    static void registerAllClasses();

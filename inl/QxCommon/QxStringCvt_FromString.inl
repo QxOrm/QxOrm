@@ -131,6 +131,10 @@ template <> struct QxStringCvt_FromString< std::wstring > {
 static inline qx_bool fromString(const QString & s, std::wstring & t, const QString & format, int index)
 { Q_UNUSED(format); Q_UNUSED(index); t = s.toStdWString(); return qx_bool(true); } };
 
+template <typename T> struct QxStringCvt_FromString< boost::optional<T> > {
+static inline qx_bool fromString(const QString & s, boost::optional<T> & t, const QString & format, int index)
+{ if (! t) { t = T(); }; return qx::cvt::from_string(s, (* t), format, index); } };
+
 template <typename T1, typename T2> struct QxStringCvt_FromString< std::pair<T1, T2> > {
 static inline qx_bool fromString(const QString & s, std::pair<T1, T2> & t, const QString & format, int index)
 { Q_UNUSED(format); Q_UNUSED(index); return QX_STR_CVT_DEFAULT_ARCHIVE::from_string(t, s); } };

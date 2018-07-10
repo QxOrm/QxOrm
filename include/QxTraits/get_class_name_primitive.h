@@ -47,6 +47,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/unordered_map.hpp>
 #include <boost/unordered_set.hpp>
+#include <boost/optional.hpp>
 #include <boost/tuple/tuple.hpp>
 
 #include <QtCore/qobject.h>
@@ -140,6 +141,7 @@ QX_REGISTER_CLASS_NAME_TEMPLATE_1(std::set)
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(boost::shared_ptr)
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(boost::scoped_ptr)
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(boost::weak_ptr)
+QX_REGISTER_CLASS_NAME_TEMPLATE_1(boost::optional)
 
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(QVector)
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(QList)

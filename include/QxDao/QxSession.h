@@ -160,6 +160,10 @@ public:
    { return qx::dao::count<T>(query, this->database()); }
 
    template <class T>
+   QSqlError count(long & lCount, const qx::QxSqlQuery & query = qx::QxSqlQuery())
+   { return qx::dao::count<T>(lCount, query, this->database()); }
+
+   template <class T>
    T * fetchById(const QVariant & id, const QStringList & columns = QStringList(), const QStringList & relation = QStringList())
    {
       IxDataMemberX * pDataMemberX = QxClass<T>::getSingleton()->getDataMemberX();
@@ -303,6 +307,21 @@ public:
    QSqlError destroyByQuery(const qx::QxSqlQuery & query)
    {
       QSqlError err = qx::dao::destroy_by_query<T>(query, this->database());
+      if (err.isValid()) { (* this) += err; }
+      return err;
+   }
+
+   template <class T>
+   QSqlError executeQuery(qx::QxSqlQuery & query, T & t)
+   {
+      QSqlError err = qx::dao::execute_query<T>(query, t, this->database());
+      if (err.isValid()) { (* this) += err; }
+      return err;
+   }
+
+   QSqlError callQuery(qx::QxSqlQuery & query)
+   {
+      QSqlError err = qx::dao::call_query(query, this->database());
       if (err.isValid()) { (* this) += err; }
       return err;
    }

@@ -22,6 +22,9 @@ int main(int argc, char * argv[])
    qx::QxSqlDatabase::getSingleton()->setUserName("root");
    qx::QxSqlDatabase::getSingleton()->setPassword("");
 
+   // Only for debug purpose : assert if invalid offset detected fetching a relation
+   qx::QxSqlDatabase::getSingleton()->setVerifyOffsetRelation(true);
+
    // Create all tables in database
    QSqlError daoError = qx::dao::create_table<author>();
    daoError = qx::dao::create_table<comment>();
@@ -143,6 +146,16 @@ int main(int argc, char * argv[])
    qAssert(blog_tmp->m_text == "update blog_text_1");
    qAssert(blog_tmp->m_author && blog_tmp->m_author->m_id == "author_id_2");
 
+   // Fetch blog into a new variable with many relations using "*->*->*->*" (4 levels of relationships)
+   blog_tmp.reset(new blog());
+   blog_tmp->m_id = blog_1->m_id;
+   daoError = qx::dao::fetch_by_id_with_relation("*->*->*->*", blog_tmp);
+
+   qAssert(blog_tmp->m_commentX.count() == 2);
+   qAssert(blog_tmp->m_categoryX.count() == 2);
+   qAssert(blog_tmp->m_text == "update blog_text_1");
+   qAssert(blog_tmp->m_author && blog_tmp->m_author->m_id == "author_id_2");
+
    // Dump 'blog_tmp' result from database (xml serialization)
    qx::dump(blog_tmp);
 
@@ -200,6 +213,26 @@ int main(int argc, char * argv[])
 
    // Dump all registered classes into QxOrm context (introspection engine)
    qx::QxClassX::dumpAllClasses();
+
+   // Call a custom SQL query or a stored procedure
+   qx_query testStoredProc("SELECT * FROM author");
+   daoError = qx::dao::call_query(testStoredProc);
+   qAssert(! daoError.isValid());
+   testStoredProc.dumpSqlResult();
+
+   // Call a custom SQL query or a stored procedure and fetch automatically properties (with a collection of items)
+   qx_query testStoredProcBis("SELECT * FROM author");
+   authorX.clear();
+   daoError = qx::dao::execute_query(testStoredProcBis, authorX);
+   qAssert(! daoError.isValid()); qAssert(authorX.count() > 0);
+   qx::dump(authorX);
+
+   // Call a custom SQL query or a stored procedure and fetch automatically properties
+   qx_query testStoredProcThird("SELECT name, category_id FROM category");
+   category_ptr category_tmp = category_ptr(new category());
+   daoError = qx::dao::execute_query(testStoredProcThird, category_tmp);
+   qAssert(! daoError.isValid()); qAssert(category_tmp->m_id != 0);
+   qx::dump(category_tmp);
 
    return 0;
 }

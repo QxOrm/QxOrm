@@ -40,6 +40,7 @@
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/is_base_of.hpp>
+#include <boost/type_traits/is_abstract.hpp>
 #include <boost/serialization/version.hpp>
 
 #include <QxRegister/IxClass.h>
@@ -57,6 +58,10 @@
 #include <QxValidator/QxValidatorX.h>
 
 namespace qx {
+
+namespace trait {
+template <typename T> struct is_ix_persistable;
+} // namespace trait
 
 /*!
  * \ingroup QxRegister
@@ -130,6 +135,12 @@ public:
    static qx_bool invoke(const QString & sKey, T * pOwner, const QString & params = QString(), boost::any * ret = NULL) { return QxClass<T>::getSingleton()->invokeHelper(sKey, pOwner, params, ret); }
    static qx_bool invoke(const QString & sKey, T * pOwner, const type_any_params & params, boost::any * ret = NULL)     { return QxClass<T>::getSingleton()->invokeHelper(sKey, pOwner, params, ret); }
 
+   virtual bool isAbstract() const
+   { return boost::is_abstract<T>::value; }
+
+   virtual bool implementIxPersistable() const
+   { return implementIxPersistable_Helper<T, 0>::get(); }
+
    virtual const std::type_info & typeInfo() const
    { return typeid(T); }
 
@@ -172,6 +183,20 @@ private:
 
    qx_bool invokeHelper(const QString & sKey, T * pOwner, const type_any_params & params, boost::any * ret)
    { return ((pOwner && m_pFctMemberX && m_pFctMemberX->exist(sKey)) ? m_pFctMemberX->getByKey(sKey)->invoke(pOwner, params, ret) : QxClass<type_base_class>::invoke(sKey, dynamic_cast<type_base_class *>(pOwner), params, ret)); }
+
+private:
+
+   template <typename U, int dummy>
+   struct implementIxPersistable_Helper
+   { static bool get() { return qx::trait::is_ix_persistable<U>::value; } };
+
+   template <int dummy>
+   struct implementIxPersistable_Helper<qx::trait::no_base_class_defined, dummy>
+   { static bool get() { return false; } };
+
+   template <int dummy>
+   struct implementIxPersistable_Helper<QObject, dummy>
+   { static bool get() { return false; } };
 
 };
 

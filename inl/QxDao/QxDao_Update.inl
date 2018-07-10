@@ -35,6 +35,7 @@ struct QxDao_Update_Generic
    {
       qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "update");
       if (! dao.isValid()) { return dao.error(); }
+      if (dao.isReadOnly()) { return dao.errReadOnly(); }
       if (! dao.isValidPrimaryKey(t)) { return dao.errInvalidId(); }
       if (! dao.validateInstance(t)) { return dao.error(); }
 
@@ -67,6 +68,7 @@ struct QxDao_Update_Container
       if (qx::trait::generic_container<T>::size(t) <= 0) { return QSqlError(); }
       qx::dao::detail::QxDao_Helper_Container<T> dao(t, pDatabase, "update");
       if (! dao.isValid()) { return dao.error(); }
+      if (dao.isReadOnly()) { return dao.errReadOnly(); }
       if (! dao.validateInstance(t)) { return dao.error(); }
 
       QString sql = dao.builder().update(columns).getSqlQuery();

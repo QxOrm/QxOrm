@@ -35,6 +35,7 @@ struct QxDao_DeleteById_Generic
    {
       qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "delete by id");
       if (! dao.isValid()) { return dao.error(); }
+      if (dao.isReadOnly()) { return dao.errReadOnly(); }
       if (! dao.isValidPrimaryKey(t)) { return dao.errInvalidId(); }
 
       QString sql; qx::QxSoftDelete oSoftDelete = dao.builder().getSoftDelete();
@@ -65,6 +66,7 @@ struct QxDao_DeleteById_Container
       if (qx::trait::generic_container<T>::size(t) <= 0) { return QSqlError(); }
       qx::dao::detail::QxDao_Helper_Container<T> dao(t, pDatabase, "delete by id");
       if (! dao.isValid()) { return dao.error(); }
+      if (dao.isReadOnly()) { return dao.errReadOnly(); }
 
       QString sql; qx::QxSoftDelete oSoftDelete = dao.builder().getSoftDelete();
       if (bVerifySoftDelete && ! oSoftDelete.isEmpty()) { sql = dao.builder().softDeleteById().getSqlQuery(); }
