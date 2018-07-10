@@ -37,6 +37,12 @@
 # boost Library Configuration #
 ###############################
 
+# In this section, it's necessary to specify boost directories (lib + include) and boost serialization module name (debug + release) :
+#  - QX_BOOST_INCLUDE_PATH : your boost include path
+#  - QX_BOOST_LIB_PATH : your boost lib path
+#  - QX_BOOST_LIB_SERIALIZATION_DEBUG : your boost serialization module name in debug mode
+#  - QX_BOOST_LIB_SERIALIZATION_RELEASE : your boost serialization module name in release mode
+
 QX_BOOST_INCLUDE_PATH = $$quote(D:/Dvlp/_Libs/Boost/1_42/include)
 QX_BOOST_LIB_PATH = $$quote(D:/Dvlp/_Libs/Boost/1_42/lib_shared)
 QX_BOOST_LIB_SERIALIZATION_DEBUG = "boost_serialization-vc90-mt-gd-1_42"

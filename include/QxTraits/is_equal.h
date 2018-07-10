@@ -51,6 +51,7 @@
 #include <QtCore/qregexp.h>
 #include <QtCore/qsize.h>
 #include <QtCore/qurl.h>
+#include <QtCore/quuid.h>
 #include <QtCore/qsharedpointer.h>
 
 #if _QX_ENABLE_QT_GUI_DEPENDENCY
@@ -117,6 +118,7 @@ QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(QSize)
 QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(QTime)
 QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(QUrl)
 QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(QVariant)
+QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(QUuid)
 
 #if _QX_ENABLE_QT_GUI_DEPENDENCY
 QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(QColor)

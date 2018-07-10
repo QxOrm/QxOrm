@@ -77,10 +77,12 @@ private:
    bool m_bTraceSqlQuery;                       //!< Trace each sql query executed
    bool m_bTraceSqlRecord;                      //!< Trace each sql record
    ph_style m_ePlaceHolderStyle;                //!< Place holder style to build sql query
+   bool m_bSessionThrowable;                    //!< An exception of type qx::dao::sql_error is thrown when a SQL error is appended to qx::QxSession object
+   bool m_bSessionAutoTransaction;              //!< A transaction is automatically beginned when a qx::QxSession object is instantiated
 
 private:
 
-   QxSqlDatabase() : QxSingleton<QxSqlDatabase>("qx::QxSqlDatabase"), m_iPort(-1), m_bTraceSqlQuery(true), m_bTraceSqlRecord(false), m_ePlaceHolderStyle(ph_style_2_point_name) { ; }
+   QxSqlDatabase() : QxSingleton<QxSqlDatabase>("qx::QxSqlDatabase"), m_iPort(-1), m_bTraceSqlQuery(true), m_bTraceSqlRecord(false), m_ePlaceHolderStyle(ph_style_2_point_name), m_bSessionThrowable(false), m_bSessionAutoTransaction(true) { ; }
    virtual ~QxSqlDatabase() { ; }
 
 public:
@@ -95,6 +97,8 @@ public:
    bool getTraceSqlQuery() const                { return m_bTraceSqlQuery; }
    bool getTraceSqlRecord() const               { return m_bTraceSqlRecord; }
    ph_style getSqlPlaceHolderStyle() const      { return m_ePlaceHolderStyle; }
+   bool getSessionThrowable() const             { return m_bSessionThrowable; }
+   bool getSessionAutoTransaction() const       { return m_bSessionAutoTransaction; }
 
    void setDriverName(const QString & s)        { m_sDriverName = s; }
    void setConnectOptions(const QString & s)    { m_sConnectOptions = s; }
@@ -106,8 +110,11 @@ public:
    void setTraceSqlQuery(bool b)                { m_bTraceSqlQuery = b; }
    void setTraceSqlRecord(bool b)               { m_bTraceSqlRecord = b; }
    void setSqlPlaceHolderStyle(ph_style e)      { m_ePlaceHolderStyle = e; }
+   void setSessionThrowable(bool b)             { m_bSessionThrowable = b; }
+   void setSessionAutoTransaction(bool b)       { m_bSessionAutoTransaction = b; }
 
-   static QSqlDatabase getDatabase() { return qx::QxSqlDatabase::getSingleton()->getDatabaseByCurrThreadId(); }
+   static QSqlDatabase getDatabase()         { return qx::QxSqlDatabase::getSingleton()->getDatabaseByCurrThreadId(); }
+   static QSqlDatabase getDatabaseCloned()   { return QSqlDatabase::cloneDatabase(qx::QxSqlDatabase::getDatabase(), QUuid::createUuid().toString()); }
 
 private:
 

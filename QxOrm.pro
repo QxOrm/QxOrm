@@ -34,6 +34,8 @@ CONFIG += dll
 DEFINES += _QX_BUILDING_QX_ORM
 PRECOMPILED_HEADER = ./include/QxPrecompiled.h
 
+unix { VERSION = 1.1.8 }
+
 #############################
 # Compiler / Linker Options #
 #############################
@@ -122,6 +124,11 @@ HEADERS += ./include/QxDao/QxDaoStrategy.h
 HEADERS += ./include/QxDao/QxDaoPointer.h
 HEADERS += ./include/QxDao/QxDao_IsDirty.h
 HEADERS += ./include/QxDao/QxSoftDelete.h
+HEADERS += ./include/QxDao/QxSqlError.h
+HEADERS += ./include/QxDao/QxSession.h
+HEADERS += ./include/QxDao/QxDateNeutral.h
+HEADERS += ./include/QxDao/QxTimeNeutral.h
+HEADERS += ./include/QxDao/QxDateTimeNeutral.h
 
 HEADERS += ./include/QxSerialize/QxArchive.h
 HEADERS += ./include/QxSerialize/QxClone.h
@@ -171,6 +178,7 @@ HEADERS += ./include/QxSerialize/Qt/QxSerialize_QSize.h
 HEADERS += ./include/QxSerialize/Qt/QxSerialize_QString.h
 HEADERS += ./include/QxSerialize/Qt/QxSerialize_QTime.h
 HEADERS += ./include/QxSerialize/Qt/QxSerialize_QUrl.h
+HEADERS += ./include/QxSerialize/Qt/QxSerialize_QUuid.h
 HEADERS += ./include/QxSerialize/Qt/QxSerialize_QVariant.h
 HEADERS += ./include/QxSerialize/Qt/QxSerialize_QVector.h
 HEADERS += ./include/QxSerialize/Qt/QxSerialize_QWeakPointer.h
@@ -310,6 +318,7 @@ SOURCES += ./src/QxDao/IxSqlQueryBuilder.cpp
 SOURCES += ./src/QxDao/QxSqlDatabase.cpp
 SOURCES += ./src/QxDao/IxSqlRelation.cpp
 SOURCES += ./src/QxDao/QxSqlQuery.cpp
+SOURCES += ./src/QxDao/QxSession.cpp
 
 SOURCES += ./src/QxSerialize/QxBoostSerializeHelper/IxBoostSerializeRegisterHelper.cpp
 SOURCES += ./src/QxSerialize/QxBoostSerializeHelper/QxBoostSerializeRegisterHelperX.cpp
@@ -336,6 +345,7 @@ SOURCES += ./src/QxSerialize/Qt/QxSerialize_QString.cpp
 SOURCES += ./src/QxSerialize/Qt/QxSerialize_QStringList.cpp
 SOURCES += ./src/QxSerialize/Qt/QxSerialize_QTime.cpp
 SOURCES += ./src/QxSerialize/Qt/QxSerialize_QUrl.cpp
+SOURCES += ./src/QxSerialize/Qt/QxSerialize_QUuid.cpp
 SOURCES += ./src/QxSerialize/Qt/QxSerialize_QVariant.cpp
 
 SOURCES += ./src/QxService/IxParameter.cpp

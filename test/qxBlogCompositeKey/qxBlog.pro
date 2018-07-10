@@ -7,6 +7,8 @@ DESTDIR = ../../../QxOrm/test/_bin/
 LIBS += -L"../../../QxOrm/test/_bin"
 PRECOMPILED_HEADER = ./include/precompiled.h
 
+macx:CONFIG-=app_bundle
+
 CONFIG(debug, debug|release) {
 TARGET = qxBlogCompositeKeyd
 LIBS += -l"QxOrmd"

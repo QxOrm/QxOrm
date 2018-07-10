@@ -71,6 +71,10 @@ QX_DLL_EXPORT_TEMPLATE_T_P1_HPP(struct, qx::cvt::detail::QxStringCvt_ToString, Q
 QX_DLL_EXPORT_TEMPLATE_T_P1_HPP(struct, qx::cvt::detail::QxStringCvt_ToString, QImage)
 QX_DLL_EXPORT_TEMPLATE_T_P1_HPP(struct, qx::cvt::detail::QxStringCvt_ToString, QPicture)
 QX_DLL_EXPORT_TEMPLATE_T_P1_HPP(struct, qx::cvt::detail::QxStringCvt_ToString, QPixmap)
+QX_DLL_EXPORT_TEMPLATE_T_P1_HPP(struct, qx::cvt::detail::QxStringCvt_ToString, QUuid)
+QX_DLL_EXPORT_TEMPLATE_T_P1_HPP(struct, qx::cvt::detail::QxStringCvt_ToString, qx::QxDateNeutral)
+QX_DLL_EXPORT_TEMPLATE_T_P1_HPP(struct, qx::cvt::detail::QxStringCvt_ToString, qx::QxTimeNeutral)
+QX_DLL_EXPORT_TEMPLATE_T_P1_HPP(struct, qx::cvt::detail::QxStringCvt_ToString, qx::QxDateTimeNeutral)
 
 QX_DLL_EXPORT_TEMPLATE_T_P1_HPP(struct, qx::cvt::detail::QxStringCvt_FromString, qx::trait::no_type)
 QX_DLL_EXPORT_TEMPLATE_T_P1_HPP(struct, qx::cvt::detail::QxStringCvt_FromString, QString)
@@ -109,6 +113,10 @@ QX_DLL_EXPORT_TEMPLATE_T_P1_HPP(struct, qx::cvt::detail::QxStringCvt_FromString,
 QX_DLL_EXPORT_TEMPLATE_T_P1_HPP(struct, qx::cvt::detail::QxStringCvt_FromString, QImage)
 QX_DLL_EXPORT_TEMPLATE_T_P1_HPP(struct, qx::cvt::detail::QxStringCvt_FromString, QPicture)
 QX_DLL_EXPORT_TEMPLATE_T_P1_HPP(struct, qx::cvt::detail::QxStringCvt_FromString, QPixmap)
+QX_DLL_EXPORT_TEMPLATE_T_P1_HPP(struct, qx::cvt::detail::QxStringCvt_FromString, QUuid)
+QX_DLL_EXPORT_TEMPLATE_T_P1_HPP(struct, qx::cvt::detail::QxStringCvt_FromString, qx::QxDateNeutral)
+QX_DLL_EXPORT_TEMPLATE_T_P1_HPP(struct, qx::cvt::detail::QxStringCvt_FromString, qx::QxTimeNeutral)
+QX_DLL_EXPORT_TEMPLATE_T_P1_HPP(struct, qx::cvt::detail::QxStringCvt_FromString, qx::QxDateTimeNeutral)
 
 QX_DLL_EXPORT_TEMPLATE_T_P1_HPP(struct, qx::cvt::detail::QxStringCvt_ToVariant, qx::trait::no_type)
 QX_DLL_EXPORT_TEMPLATE_T_P1_HPP(struct, qx::cvt::detail::QxStringCvt_ToVariant, QString)
@@ -147,6 +155,10 @@ QX_DLL_EXPORT_TEMPLATE_T_P1_HPP(struct, qx::cvt::detail::QxStringCvt_ToVariant, 
 QX_DLL_EXPORT_TEMPLATE_T_P1_HPP(struct, qx::cvt::detail::QxStringCvt_ToVariant, QImage)
 QX_DLL_EXPORT_TEMPLATE_T_P1_HPP(struct, qx::cvt::detail::QxStringCvt_ToVariant, QPicture)
 QX_DLL_EXPORT_TEMPLATE_T_P1_HPP(struct, qx::cvt::detail::QxStringCvt_ToVariant, QPixmap)
+QX_DLL_EXPORT_TEMPLATE_T_P1_HPP(struct, qx::cvt::detail::QxStringCvt_ToVariant, QUuid)
+QX_DLL_EXPORT_TEMPLATE_T_P1_HPP(struct, qx::cvt::detail::QxStringCvt_ToVariant, qx::QxDateNeutral)
+QX_DLL_EXPORT_TEMPLATE_T_P1_HPP(struct, qx::cvt::detail::QxStringCvt_ToVariant, qx::QxTimeNeutral)
+QX_DLL_EXPORT_TEMPLATE_T_P1_HPP(struct, qx::cvt::detail::QxStringCvt_ToVariant, qx::QxDateTimeNeutral)
 
 QX_DLL_EXPORT_TEMPLATE_T_P1_HPP(struct, qx::cvt::detail::QxStringCvt_FromVariant, qx::trait::no_type)
 QX_DLL_EXPORT_TEMPLATE_T_P1_HPP(struct, qx::cvt::detail::QxStringCvt_FromVariant, QString)
@@ -185,6 +197,10 @@ QX_DLL_EXPORT_TEMPLATE_T_P1_HPP(struct, qx::cvt::detail::QxStringCvt_FromVariant
 QX_DLL_EXPORT_TEMPLATE_T_P1_HPP(struct, qx::cvt::detail::QxStringCvt_FromVariant, QImage)
 QX_DLL_EXPORT_TEMPLATE_T_P1_HPP(struct, qx::cvt::detail::QxStringCvt_FromVariant, QPicture)
 QX_DLL_EXPORT_TEMPLATE_T_P1_HPP(struct, qx::cvt::detail::QxStringCvt_FromVariant, QPixmap)
+QX_DLL_EXPORT_TEMPLATE_T_P1_HPP(struct, qx::cvt::detail::QxStringCvt_FromVariant, QUuid)
+QX_DLL_EXPORT_TEMPLATE_T_P1_HPP(struct, qx::cvt::detail::QxStringCvt_FromVariant, qx::QxDateNeutral)
+QX_DLL_EXPORT_TEMPLATE_T_P1_HPP(struct, qx::cvt::detail::QxStringCvt_FromVariant, qx::QxTimeNeutral)
+QX_DLL_EXPORT_TEMPLATE_T_P1_HPP(struct, qx::cvt::detail::QxStringCvt_FromVariant, qx::QxDateTimeNeutral)
 
 #endif // _QX_USE_QX_STRING_CVT_EXPORT
 #endif // _QX_STRING_CVT_EXPORT_H_

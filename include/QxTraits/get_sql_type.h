@@ -51,12 +51,15 @@
 #include <QtCore/qscopedpointer.h>
 #endif // (QT_VERSION >= 0x040600)
 
-#include <QxDao/QxDaoPointer.h>
-
 #include <QxTraits/is_qx_registered.h>
 #include <QxTraits/get_primary_key.h>
 #include <QxTraits/remove_attr.h>
 #include <QxTraits/get_class_name_primitive.h>
+
+#include <QxDao/QxDaoPointer.h>
+#include <QxDao/QxDateNeutral.h>
+#include <QxDao/QxTimeNeutral.h>
+#include <QxDao/QxDateTimeNeutral.h>
 
 #include <QxCommon/QxBool.h>
 
@@ -234,6 +237,10 @@ struct get_sql_type< QVariant >
 { static inline const char * get() { return "TEXT"; } };
 
 template <>
+struct get_sql_type< QUuid >
+{ static inline const char * get() { return "TEXT"; } };
+
+template <>
 struct get_sql_type< QDate >
 { static inline const char * get() { return "DATE"; } };
 
@@ -248,6 +255,18 @@ struct get_sql_type< QDateTime >
 template <>
 struct get_sql_type< QByteArray >
 { static inline const char * get() { return "BLOB"; } };
+
+template <>
+struct get_sql_type< qx::QxDateNeutral >
+{ static inline const char * get() { return "TEXT"; } };
+
+template <>
+struct get_sql_type< qx::QxTimeNeutral >
+{ static inline const char * get() { return "TEXT"; } };
+
+template <>
+struct get_sql_type< qx::QxDateTimeNeutral >
+{ static inline const char * get() { return "TEXT"; } };
 
 } // namespace detail
 } // namespace trait

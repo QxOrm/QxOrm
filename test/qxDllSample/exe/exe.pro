@@ -6,6 +6,8 @@ INCLUDEPATH += ../../../../QxOrm/include/
 DESTDIR = ../../../../QxOrm/test/_bin/
 PRECOMPILED_HEADER = ./include/precompiled.h
 
+macx:CONFIG-=app_bundle
+
 CONFIG(debug, debug|release) {
 TARGET = exed
 } else {

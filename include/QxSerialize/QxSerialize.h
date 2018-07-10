@@ -109,6 +109,7 @@
 #include <QxSerialize/Qt/QxSerialize_QStringList.h>
 #include <QxSerialize/Qt/QxSerialize_QTime.h>
 #include <QxSerialize/Qt/QxSerialize_QUrl.h>
+#include <QxSerialize/Qt/QxSerialize_QUuid.h>
 #include <QxSerialize/Qt/QxSerialize_QVariant.h>
 #include <QxSerialize/Qt/QxSerialize_QVector.h>
 #include <QxSerialize/Qt/QxSerialize_QWeakPointer.h>

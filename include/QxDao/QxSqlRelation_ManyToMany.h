@@ -68,7 +68,7 @@ protected:
 
 public:
 
-   QxSqlRelation_ManyToMany(IxDataMember * p, const QString & sExtraTable, const QString & sForeignKeyOwner, const QString & sForeignKeyDataType) : QxSqlRelation<DataType, Owner>(p), m_sExtraTable(sExtraTable), m_sForeignKeyOwner(sForeignKeyOwner), m_sForeignKeyDataType(sForeignKeyDataType) { this->verify(); }
+   QxSqlRelation_ManyToMany(IxDataMember * p, const QString & sExtraTable, const QString & sForeignKeyOwner, const QString & sForeignKeyDataType) : QxSqlRelation<DataType, Owner>(p), m_sExtraTable(sExtraTable), m_sForeignKeyOwner(sForeignKeyOwner), m_sForeignKeyDataType(sForeignKeyDataType) { this->verifyParameters(); }
    virtual ~QxSqlRelation_ManyToMany() { BOOST_STATIC_ASSERT(is_data_container); }
 
    virtual bool getCartesianProduct() const                                   { return true; }
@@ -206,7 +206,7 @@ public:
 
 private:
 
-   inline void verify()
+   inline void verifyParameters()
    { qAssert(! m_sExtraTable.isEmpty() && ! m_sForeignKeyOwner.isEmpty() && ! m_sForeignKeyDataType.isEmpty() && (m_sForeignKeyOwner != m_sForeignKeyDataType)); }
 
    QSqlError deleteFromExtraTable(QxSqlRelationParams & params) const

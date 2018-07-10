@@ -163,14 +163,14 @@ int main(int argc, char * argv[])
    sTestCvt = qx::cvt::to_string(QDateTime::currentDateTime());
    sTestCvt = qx::cvt::to_string(pUser);
    sTestCvt = qx::cvt::to_string(p1, "%08d");
-   sTestCvt = qx::cvt::to_string(QObject());
-   sTestCvt = qx::cvt::to_string(CTestAll());
+   QObject dummy_01; sTestCvt = qx::cvt::to_string(dummy_01);
+   CTestAll dummy_02; sTestCvt = qx::cvt::to_string(dummy_02);
 
    qx_bool bCvtOk = qx::cvt::from_string("34", pUser);
    sTestCvt = qx::cvt::to_string(pUser);
 
    QVariant sTestCvtVar = qx::cvt::to_variant(QTime::currentTime());
-   bCvtOk = qx::cvt::from_variant(QVariant(), p1);
+   QVariant dummy_03; bCvtOk = qx::cvt::from_variant(dummy_03, p1);
 
    QVector< boost::shared_ptr<CUser> > lstCvtTest;
    boost::shared_ptr<CUser> pp1; pp1.reset(new CUser()); lstCvtTest.push_back(pp1);
@@ -299,6 +299,7 @@ int main(int argc, char * argv[])
 
    pBar.reset(new Bar()); pBar->setId(7);
    daoError = qx::dao::fetch_by_id_with_relation("foo_id", pBar);    qAssert(pBar->getFoo() && (pBar->getFoo()->getName() == "name3"));
+   pFoo = pBar->getFoo(); if (pFoo) { pFoo->setDate(QDate::currentDate()); pFoo->setTime(QTime::currentTime()); pFoo->setDateTime(QDateTime::currentDateTime()); }
    qx::dump(pBar);
 
    // Test soft delete behavior
@@ -309,6 +310,19 @@ int main(int argc, char * argv[])
    daoError = qx::dao::delete_all<Bar>();       qAssert(! daoError.isValid());
    long lBarCount = qx::dao::count<Bar>();      qAssert(lBarCount == 0);            Q_UNUSED(lBarCount);
    daoError = qx::dao::destroy_all<Bar>();      qAssert(! daoError.isValid());
+
+   {
+      pFoo.reset(new Foo()); pFoo->setName("name10"); pFoo->setDesc("desc10");
+      pFoo->setDate(QDate::currentDate()); pFoo->setTime(QTime::currentTime()); pFoo->setDateTime(QDateTime::currentDateTime());
+
+      // Test session to manage automatically database transactions (using C++ RAII)
+      qx::QxSession session;
+      session += qx::dao::insert(pFoo, session.database());
+      session += qx::dao::update(pFoo, session.database());
+      session += qx::dao::fetch_by_id(pFoo, session.database());
+      session += qx::dao::delete_by_id(pFoo, session.database());
+      qAssert(session.isValid());
+   }
 
    //--------------------------------
 

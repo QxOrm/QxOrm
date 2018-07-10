@@ -68,6 +68,7 @@
 #include <QtCore/qsharedpointer.h>
 #include <QtCore/qsize.h>
 #include <QtCore/qurl.h>
+#include <QtCore/quuid.h>
 #include <QtCore/QWeakPointer>
 
 #if _QX_ENABLE_QT_GUI_DEPENDENCY
@@ -118,6 +119,7 @@ QX_REGISTER_CLASS_NAME(QSize)
 QX_REGISTER_CLASS_NAME(QTime)
 QX_REGISTER_CLASS_NAME(QUrl)
 QX_REGISTER_CLASS_NAME(QVariant)
+QX_REGISTER_CLASS_NAME(QUuid)
 
 #if _QX_ENABLE_QT_GUI_DEPENDENCY
 QX_REGISTER_CLASS_NAME(QColor)

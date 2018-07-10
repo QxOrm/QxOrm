@@ -1,3 +1,8 @@
+Changes in version 1.1.8:
+- QxOrm library can now be used on Mac (thanks very much to Dominique Billet) : see 'osx_build_all_debug.sh' and 'osx_build_all_release.sh' scripts to build QxOrm library and all samples in './test/' directory
+- Add 'qx::QxSession' class : define a session to manage automatically database transactions (using C++ RAII), see the FAQ for more details
+- Add 'qx::QxDateNeutral', 'qx::QxTimeNeutral' and 'qx::QxDateTimeNeutral' classes : helper classes to store date-time value into database under neutral format => cross database compatibility
+
 Changes in version 1.1.7:
 - Add soft delete behavior : see the FAQ (How to define a soft delete behavior ?) for more details about this new feature
 - Add functions into namespace 'qx::dao' to update an element with a SQL condition : update_by_query, update_optimized_by_query, etc.

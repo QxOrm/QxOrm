@@ -63,7 +63,7 @@
   <col><col><col><col><col>
   <tbody><tr>
   <td align="left" valign="top"><font size="2">QxOrm  &gt;&gt;  Téléchargement</font></td>
-  <td align="right" valign="top"><font size="2">Version courante : QxOrm 1.1.7 (LGPL) - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
+  <td align="right" valign="top"><font size="2">Version courante : QxOrm 1.1.8 (LGPL) - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
   <td width="10px"></td>
   <td width="40px" height="30px"><a href="../qxorm_fr/download.html"><img alt="Version française du site" src="./resource/FR.png" width="40" height="30" border="0"></a></td>
   <td width="40px" height="30px"><a href="../qxorm_en/download.html"><img alt="Web site english version" src="./resource/GB.png" width="40" height="30" border="0"></a></td>
@@ -88,14 +88,14 @@
                         href="http://sourceforge.net/projects/qxorm/files/" target="_blank"><img alt="Download QxOrm" src="./resource/download.jpg" width="40" height="48" border="0"></a>
                       </td>
                       <td align="justify">
-                        <a href="http://sourceforge.net/projects/qxorm/files/" target="_blank"><b>Télécharger QxOrm version 1.1.7 (source + test + documentation)</b></a><br>
+                        <a href="http://sourceforge.net/projects/qxorm/files/" target="_blank"><b>Télécharger QxOrm version 1.1.8 (source + test + documentation)</b></a><br>
                         Cette version est compatible avec <b>Visual Studio 2008 ou 2010</b> (Windows), <b>GCC 4.4.1</b> (Linux) et <b>MinGW</b> (Windows)
                       </td>
                     </tr>
                   </tbody>
                  </table>
                  <br>
-                 <i>Remarque : si le lien ci-dessus ne fonctionne pas, vous pouvez essayer de télécharger QxOrm <a href="../version/QxOrm_1.1.7.zip">en cliquant ici</a>.</i><br>
+                 <i>Remarque : si le lien ci-dessus ne fonctionne pas, vous pouvez essayer de télécharger QxOrm <a href="../version/QxOrm_1.1.8.zip">en cliquant ici</a>.</i><br>
                  <p align="justify"><b>QxOrm</b> est dépendant des excellentes librairies
                  <a href="http://www.boost.org/" target="_blank"><b>boost</b></a> (compatible à partir de la version 1.38) et
                  <a href="http://qt.nokia.com/" target="_blank"><b>Qt</b></a>
@@ -166,6 +166,11 @@
           <tbody>
             <tr>
               <td><i>
+Changes in version 1.1.8:<br>
+- QxOrm library can now be used on Mac (thanks very much to Dominique Billet) : see 'osx_build_all_debug.sh' and 'osx_build_all_release.sh' scripts to build QxOrm library and all samples in './test/' directory<br>
+- Add 'qx::QxSession' class : define a session to manage automatically database transactions (using C++ RAII), see the FAQ for more details<br>
+- Add 'qx::QxDateNeutral', 'qx::QxTimeNeutral' and 'qx::QxDateTimeNeutral' classes : helper classes to store date-time value into database under neutral format =&gt; cross database compatibility<br>
+<br>
 Changes in version 1.1.7:<br>
 - Add soft delete behavior : see the FAQ (How to define a soft delete behavior ?) for more details about this new feature<br>
 - Add functions into namespace 'qx::dao' to update an element with a SQL condition : update_by_query, update_optimized_by_query, etc.<br>

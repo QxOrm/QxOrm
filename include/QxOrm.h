@@ -111,6 +111,11 @@
 #include <QxDao/QxDaoPointer.h>
 #include <QxDao/QxDao_IsDirty.h>
 #include <QxDao/QxSoftDelete.h>
+#include <QxDao/QxSqlError.h>
+#include <QxDao/QxSession.h>
+#include <QxDao/QxDateNeutral.h>
+#include <QxDao/QxTimeNeutral.h>
+#include <QxDao/QxDateTimeNeutral.h>
 
 #include <QxSerialize/QxSerialize.h>
 

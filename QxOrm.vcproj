@@ -243,6 +243,10 @@
 						>
 					</File>
 					<File
+						RelativePath=".\src\QxSerialize\Qt\QxSerialize_QUuid.cpp"
+						>
+					</File>
+					<File
 						RelativePath=".\src\QxSerialize\Qt\QxSerialize_QVariant.cpp"
 						>
 					</File>
@@ -277,6 +281,10 @@
 				</File>
 				<File
 					RelativePath=".\src\QxDao\IxSqlRelation.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\QxDao\QxSession.cpp"
 					>
 				</File>
 				<File
@@ -778,11 +786,27 @@
 					>
 				</File>
 				<File
+					RelativePath=".\include\QxDao\QxDateNeutral.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\QxDao\QxDateTimeNeutral.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\QxDao\QxSession.h"
+					>
+				</File>
+				<File
 					RelativePath=".\include\QxDao\QxSoftDelete.h"
 					>
 				</File>
 				<File
 					RelativePath=".\include\QxDao\QxSqlDatabase.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\QxDao\QxSqlError.h"
 					>
 				</File>
 				<File
@@ -823,6 +847,10 @@
 				</File>
 				<File
 					RelativePath=".\include\QxDao\QxSqlRelationParams.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\QxDao\QxTimeNeutral.h"
 					>
 				</File>
 			</Filter>
@@ -1038,6 +1066,10 @@
 					</File>
 					<File
 						RelativePath=".\include\QxSerialize\Qt\QxSerialize_QUrl.h"
+						>
+					</File>
+					<File
+						RelativePath=".\include\QxSerialize\Qt\QxSerialize_QUuid.h"
 						>
 					</File>
 					<File

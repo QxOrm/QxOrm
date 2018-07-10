@@ -35,6 +35,10 @@ template <> struct QxStringCvt_ToString< QString > {
 static inline QString toString(const QString & t, const QString & format, int index)
 { Q_UNUSED(format); Q_UNUSED(index); return t; } };
 
+template <> struct QxStringCvt_ToString< QUuid > {
+static inline QString toString(const QUuid & t, const QString & format, int index)
+{ Q_UNUSED(format); Q_UNUSED(index); return t.toString(); } };
+
 template <> struct QxStringCvt_ToString< QDate > {
 static inline QString toString(const QDate & t, const QString & format, int index)
 { Q_UNUSED(index); return t.toString(format.isEmpty() ? QX_STR_CVT_QDATE_FORMAT : format); } };
@@ -106,6 +110,18 @@ static inline QString toString(const unsigned long & t, const QString & format, 
 template <> struct QxStringCvt_ToString< unsigned long long > {
 static inline QString toString(const unsigned long long & t, const QString & format, int index)
 { Q_UNUSED(index); return (format.isEmpty() ? QString::number(t) : QString().sprintf(qPrintable(format), t)); } };
+
+template <> struct QxStringCvt_ToString< qx::QxDateNeutral > {
+static inline QString toString(const qx::QxDateNeutral & t, const QString & format, int index)
+{ Q_UNUSED(format); Q_UNUSED(index); return t.toNeutral(); } };
+
+template <> struct QxStringCvt_ToString< qx::QxTimeNeutral > {
+static inline QString toString(const qx::QxTimeNeutral & t, const QString & format, int index)
+{ Q_UNUSED(format); Q_UNUSED(index); return t.toNeutral(); } };
+
+template <> struct QxStringCvt_ToString< qx::QxDateTimeNeutral > {
+static inline QString toString(const qx::QxDateTimeNeutral & t, const QString & format, int index)
+{ Q_UNUSED(format); Q_UNUSED(index); return t.toNeutral(); } };
 
 template <> struct QxStringCvt_ToString< std::string > {
 static inline QString toString(const std::string & t, const QString & format, int index)

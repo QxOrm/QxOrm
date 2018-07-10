@@ -63,7 +63,7 @@
   <col><col><col><col><col>
   <tbody><tr>
   <td align="left" valign="top"><font size="2">QxOrm  &gt;&gt;  Faq</font></td>
-  <td align="right" valign="top"><font size="2">Version courante : QxOrm 1.1.7 (LGPL) - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
+  <td align="right" valign="top"><font size="2">Version courante : QxOrm 1.1.8 (LGPL) - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
   <td width="10px"></td>
   <td width="40px" height="30px"><a href="../qxorm_fr/faq.html"><img alt="Version française du site" src="./resource/FR.png" width="40" height="30" border="0"></a></td>
   <td width="40px" height="30px"><a href="../qxorm_en/faq.html"><img alt="Web site english version" src="./resource/GB.png" width="40" height="30" border="0"></a></td>
@@ -98,6 +98,7 @@
                 </li><li><a href="#faq_140">Comment déclarer une classe abstraite dans le contexte QxOrm ?</a><br>
                 </li><li><a href="#faq_150">Comment déclarer une classe définie dans un espace de nom (<i>namespace</i>) dans le contexte QxOrm ?</a><br>
                 </li><li><a href="#faq_160">Comment utiliser le mécanisme de suppression logique (<i>soft delete</i>) ?</a><br>
+                </li><li><a href="#faq_170">Comment utiliser les sessions (classe <i>qx::QxSession</i>) pour simplifier la gestion des transactions des bases de données (C++ RAII) ?</a><br>
                 </li></ul>
               </td>
               <td width="200" align="center" valign="top"><a href="./resource/qt_ambassador_logo.png" target="_blank"><img alt="qt_ambassador" src="./resource/qt_ambassador_logo_150x150.png" width="150" height="150" border="0"></a><br>
@@ -167,10 +168,11 @@
            <i>make debug</i><br>
            <i>make release</i><br>
            <br>
-           Sous Windows, des fichiers <i>*.vcproj</i> et <i>*.sln</i> sont disponibles pour les éditeurs <b>Visual C++ 2008</b> et <b>Visual C++ 2010</b>.<br>
+           Sous <b>Windows</b>, des fichiers <i>*.vcproj</i> et <i>*.sln</i> sont disponibles pour les éditeurs <b>Visual C++ 2008</b> et <b>Visual C++ 2010</b>.<br>
            Les fichiers <i>*.pro</i> sont lisibles par l'éditeur <b>Qt Creator</b>, et des plugins existent permettant de s'interfacer avec de nombreux éditeurs C++.<br>
            Les fichiers <i>mingw_build_all_debug.bat</i> et <i>mingw_build_all_release.bat</i> présents dans le dossier <i>./tools/</i> permettent de compiler rapidement QxOrm ainsi que tous les tests avec le compilateur <b>MinGW</b> sous Windows.<br>
-           Enfin, les fichiers <i>gcc_build_all_debug.sh</i> et <i>gcc_build_all_release.sh</i> présents dans le dossier <i>./tools/</i> permettent de compiler rapidement QxOrm ainsi que tous les tests avec <b>GCC</b> sous Unix.<br>
+           Les fichiers <i>gcc_build_all_debug.sh</i> et <i>gcc_build_all_release.sh</i> présents dans le dossier <i>./tools/</i> permettent de compiler rapidement QxOrm ainsi que tous les tests avec <b>GCC</b> sous <b>Linux</b>.<br>
+           Enfin, les fichiers <i>osx_build_all_debug.sh</i> et <i>osx_build_all_release.sh</i> présents dans le dossier <i>./tools/</i> permettent de compiler rapidement QxOrm ainsi que tous les tests sous <b>Mac</b> (merci à Dominique Billet pour l'écriture des scripts).<br>
            <br>
            <b>Remarque :</b> suivant l'environnement de développement, il peut être nécessaire de modifier le fichier <u><b>QxOrm.pri</b></u> pour paramétrer la configuration de la bibliothèque <b>boost</b> :<br>
            <br>
@@ -955,6 +957,50 @@ daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<s
            <b>Remarque :</b> pour supprimer physiquement une ligne de la base de données, il faut utiliser les fonctions : <i>qx::dao::destroy_by_id()</i> et <i>qx::dao::destroy_all()</i>.<br>
            <br>
            <b>Autre remarque :</b> il peut être intéressant de définir au niveau du SGBD un index sur la colonne <i>deleted_at</i> (ou peu importe le nom que vous donnez) afin d'accélérer l'exécution des requêtes SQL.<br>
+           </td>
+         </tr>
+       </tbody>
+      </table>
+      <br><br>
+      <a name="faq_170"><u><b>Comment utiliser les sessions (classe <i>qx::QxSession</i>) pour simplifier la gestion des transactions des bases de données (C++ RAII) ?</b></u></a><br><br>
+      <table border="0" style="width: 100%" align="center">
+       <col>
+       <col>
+       <tbody>
+         <tr>
+           <td valign="middle" width="30"></td>
+           <td align="justify">
+            <a href="http://knol.google.com/k/les-transactions-base-de-données" target="_blank"><b>Une transaction</b></a> est une suite d'opérations effectuées comme une seule unité logique de travail.<br>
+            Une fois terminée, la transaction est :<br>
+            * soit validée (<b>commit</b>), alors toutes les modifications sont faites dans la base de données ;<br>
+            * soit annulée (<b>rollback</b>), alors toutes les modifications ne sont pas enregistrée.<br>
+            <br>
+            La classe <b>qx::QxSession</b> de la bibliothèque QxOrm permet de gérer automatiquement les transactions (validation, annulation) en utilisant le mécanisme <a href="http://fr.wikipedia.org/wiki/RAII" target="_blank">C++ RAII</a> :<br>
+            <br>
+            <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="operator">{</span><span class="comment"> // Ouverture d'un scope où une session sera instanciée
+
+  // Création d'une session : une connection valide à la BDD est assignée à la session et une transaction est démarrée
+  </span>qx<span class="operator">::</span>QxSession session<span class="operator">;</span><span class="comment">
+
+  // Exécution d'une série d'opérations avec la BDD (en utilisant l'opérateur += de la classe qx::QxSession et la connection de la session)
+  </span>session<span class="operator"> +=</span> qx<span class="operator">::</span>dao<span class="operator">::</span>insert<span class="operator">(</span>my_object<span class="operator">,</span> session<span class="operator">.</span>database<span class="operator">());</span>
+  session<span class="operator"> +=</span> qx<span class="operator">::</span>dao<span class="operator">::</span>update<span class="operator">(</span>my_object<span class="operator">,</span> session<span class="operator">.</span>database<span class="operator">());</span>
+  session<span class="operator"> +=</span> qx<span class="operator">::</span>dao<span class="operator">::</span>fetch_by_id<span class="operator">(</span>my_object<span class="operator">,</span> session<span class="operator">.</span>database<span class="operator">());</span>
+  session<span class="operator"> +=</span> qx<span class="operator">::</span>dao<span class="operator">::</span>delete_by_id<span class="operator">(</span>my_object<span class="operator">,</span> session<span class="operator">.</span>database<span class="operator">());</span><span class="comment">
+
+  // Si la session n'est pas valide (donc une erreur s'est produite) =&gt; affichage de la 1ère erreur de la session
+  </span><span class="flow">if</span><span class="operator"> (!</span> session<span class="operator">.</span>isValid<span class="operator">()) {</span> qDebug<span class="operator">(</span><span class="string">"[QxOrm] session error : '%s'"</span><span class="operator">,</span> qPrintable<span class="operator">(</span>session<span class="operator">.</span>firstError<span class="operator">().</span>text<span class="operator">())); }
+
+}</span><span class="comment"> // Fermeture du scope : la session est détruite (transaction =&gt; commit ou rollback automatique)</span></pre>
+            </td></tr></tbody></table>
+            <br>
+            <b>Remarque :</b> une session peut déclencher une exception de type <i>qx::dao::sql_error</i> lorsqu'une erreur se produit (par défaut, aucune exception n'est déclenchée). Il est possible de paramétrer ce comportement en utilisant :<br>
+            * soit le constructeur de la classe <i>qx::QxSession</i> (pour une session en particulier) ;<br>
+            * soit le paramètre du singleton <i>qx::QxSqlDatabase::getSingleton()->setSessionThrowable(bool b)</i> (pour toutes les sessions).<br>
+            <br>
+            <b>Autre remarque :</b> il est important de ne pas oublier de passer la connection à la base de données de la session à chaque fonction <i>qx::dao::xxx</i> (en utilisant la méthode <i>session.database()</i>).<br>
+            De plus, il est possible d'initialiser une session avec sa propre connection (provenant d'un pool de connections par exemple) en utilisant le constructeur de la classe <i>qx::QxSession</i>.<br>
            </td>
          </tr>
        </tbody>

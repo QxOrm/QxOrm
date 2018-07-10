@@ -63,6 +63,18 @@ template <> struct QxStringCvt_ToVariant< qx_bool > {
 static inline QVariant toVariant(const qx_bool & t, const QString & format, int index)
 { Q_UNUSED(format); Q_UNUSED(index); return (t ? QVariant(true) : QVariant(false)); } };
 
+template <> struct QxStringCvt_ToVariant< qx::QxDateNeutral > {
+static inline QVariant toVariant(const qx::QxDateNeutral & t, const QString & format, int index)
+{ Q_UNUSED(format); Q_UNUSED(index); return QVariant(t.toNeutral()); } };
+
+template <> struct QxStringCvt_ToVariant< qx::QxTimeNeutral > {
+static inline QVariant toVariant(const qx::QxTimeNeutral & t, const QString & format, int index)
+{ Q_UNUSED(format); Q_UNUSED(index); return QVariant(t.toNeutral()); } };
+
+template <> struct QxStringCvt_ToVariant< qx::QxDateTimeNeutral > {
+static inline QVariant toVariant(const qx::QxDateTimeNeutral & t, const QString & format, int index)
+{ Q_UNUSED(format); Q_UNUSED(index); return QVariant(t.toNeutral()); } };
+
 template <> struct QxStringCvt_ToVariant< std::string > {
 static inline QVariant toVariant(const std::string & t, const QString & format, int index)
 { Q_UNUSED(format); Q_UNUSED(index); return QString::fromStdString(t); } };

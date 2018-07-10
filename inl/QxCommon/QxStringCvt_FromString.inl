@@ -35,6 +35,10 @@ template <> struct QxStringCvt_FromString< QString > {
 static inline qx_bool fromString(const QString & s, QString & t, const QString & format, int index)
 { Q_UNUSED(format); Q_UNUSED(index); t = s; return qx_bool(true); } };
 
+template <> struct QxStringCvt_FromString< QUuid > {
+static inline qx_bool fromString(const QString & s, QUuid & t, const QString & format, int index)
+{ Q_UNUSED(format); Q_UNUSED(index); t = QUuid(s); return qx_bool(true); } };
+
 template <> struct QxStringCvt_FromString< QDate > {
 static inline qx_bool fromString(const QString & s, QDate & t, const QString & format, int index)
 { Q_UNUSED(index); t = QDate::fromString(s, (format.isEmpty() ? QX_STR_CVT_QDATE_FORMAT : format)); return t.isValid(); } };
@@ -106,6 +110,18 @@ static inline qx_bool fromString(const QString & s, unsigned long & t, const QSt
 template <> struct QxStringCvt_FromString< unsigned long long > {
 static inline qx_bool fromString(const QString & s, unsigned long long & t, const QString & format, int index)
 { Q_UNUSED(format); Q_UNUSED(index); bool bOk = false; t = static_cast<unsigned long long>(s.toULongLong(& bOk)); return bOk; } };
+
+template <> struct QxStringCvt_FromString< qx::QxDateNeutral > {
+static inline qx_bool fromString(const QString & s, qx::QxDateNeutral & t, const QString & format, int index)
+{ Q_UNUSED(format); Q_UNUSED(index); t = qx::QxDateNeutral::fromNeutral(s); return qx_bool(true); } };
+
+template <> struct QxStringCvt_FromString< qx::QxTimeNeutral > {
+static inline qx_bool fromString(const QString & s, qx::QxTimeNeutral & t, const QString & format, int index)
+{ Q_UNUSED(format); Q_UNUSED(index); t = qx::QxTimeNeutral::fromNeutral(s); return qx_bool(true); } };
+
+template <> struct QxStringCvt_FromString< qx::QxDateTimeNeutral > {
+static inline qx_bool fromString(const QString & s, qx::QxDateTimeNeutral & t, const QString & format, int index)
+{ Q_UNUSED(format); Q_UNUSED(index); t = qx::QxDateTimeNeutral::fromNeutral(s); return qx_bool(true); } };
 
 template <> struct QxStringCvt_FromString< std::string > {
 static inline qx_bool fromString(const QString & s, std::string & t, const QString & format, int index)

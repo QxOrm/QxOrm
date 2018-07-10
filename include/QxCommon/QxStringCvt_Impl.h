@@ -39,6 +39,10 @@
 #include <QxCommon/QxStringCvt.h>
 #include <QxCommon/QxBool.h>
 
+#include <QxDao/QxDateNeutral.h>
+#include <QxDao/QxTimeNeutral.h>
+#include <QxDao/QxDateTimeNeutral.h>
+
 #include <QxCollection/QxCollection.h>
 
 #include <QxRegister/QxClass.h>
