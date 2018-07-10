@@ -42,8 +42,8 @@ struct QxSqlQueryHelper_FetchAll_WithRelation
       qx::QxSqlRelationParams params(0, 0, (& sql), (& builder), NULL, NULL);
       QString table = builder.table();
       sql = "SELECT ";
-      if (pId) { sql += (table + "." + pId->getName() + " AS " + pId->getSqlAlias(& table) + ", "); }
-      while ((p = builder.nextData(l1))) { sql += (table + "." + p->getName() + " AS " + p->getSqlAlias(& table) + ", "); }
+      if (pId) { sql += (pId->getSqlTablePointNameAsAlias(table) + ", "); }
+      while ((p = builder.nextData(l1))) { sql += (p->getSqlTablePointNameAsAlias(table) + ", "); }
       while ((pRelation = builder.nextRelation(l2)))
       { params.setIndex(l2); if (pRelationX->exist(pRelation->getKey())) { pRelation->eagerSelect(params); } else { pRelation->lazySelect(params); } }
       sql = sql.left(sql.count() - 2); // Remove last ", "
@@ -66,15 +66,16 @@ struct QxSqlQueryHelper_FetchAll_WithRelation
       qx::IxDataMember * p = NULL;
       qx::IxDataMember * pId = builder.getDataId();
       qx::IxSqlRelation * pRelation = NULL;
-      short iOffsetId = (pId ? 1 : 0);
-      QVariant vId = query.value(0); QVariant vIdRelation;
+      short iOffsetId = (pId ? pId->getNameCount() : 0);
+      QVariant vId; QVariant vIdRelation;
+      if (pId) { QString sId; for (int i = 0; i < pId->getNameCount(); i++) { sId += query.value(i).toString() + "|"; }; vId = sId; }
       bool bComplex = builder.getCartesianProduct();
       bool bByPass = (bComplex && builder.existIdX(0, vId, vId));
       qx::QxSqlRelationParams params(0, (builder.getDataCount() + iOffsetId), NULL, (& builder), (& query), (& t));
 
       if (! bByPass)
       {
-         if (pId) { pId->fromVariant((& t), vId); }
+         if (pId) { for (int i = 0; i < pId->getNameCount(); i++) { pId->fromVariant((& t), query.value(i), i); } }
          while ((p = builder.nextData(l1))) { p->fromVariant((& t), query.value(l1 + iOffsetId - 1)); }
          if (bComplex) { builder.insertIdX(0, vId, vId, (& t)); }
       }

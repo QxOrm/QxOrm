@@ -180,6 +180,41 @@ public:
       return (* this);
    }
 
+   virtual IxSqlQueryBuilder & fetchAll(const QStringList & columns)
+   {
+      QString sql;
+      if (columns.count() <= 0) { return fetchAll(); }
+      if (columns.at(0) == "*") { return fetchAll(); }
+      if (! verifyColumns(columns)) { qAssert(false); return (* this); }
+      qx::dao::detail::QxSqlQueryHelper_FetchAll<type_sql>::sql(sql, (* this), columns);
+      setSqlQuery(sql);
+      return (* this);
+   }
+
+   virtual IxSqlQueryBuilder & fetchById(const QStringList & columns)
+   {
+      QString sql;
+      if (columns.count() <= 0) { return fetchById(); }
+      if (columns.at(0) == "*") { return fetchById(); }
+      if (! verifyColumns(columns)) { qAssert(false); return (* this); }
+      if (! getDataId()) { qDebug("[QxOrm] %s", QX_SQL_ERR_NO_ID_REGISTERED); qAssert(false); return (* this); }
+      qx::dao::detail::QxSqlQueryHelper_FetchById<type_sql>::sql(sql, (* this), columns);
+      setSqlQuery(sql);
+      return (* this);
+   }
+
+   virtual IxSqlQueryBuilder & update(const QStringList & columns)
+   {
+      QString sql;
+      if (columns.count() <= 0) { return update(); }
+      if (columns.at(0) == "*") { return update(); }
+      if (! verifyColumns(columns)) { qAssert(false); return (* this); }
+      if (! getDataId()) { qDebug("[QxOrm] %s", QX_SQL_ERR_NO_ID_REGISTERED); qAssert(false); return (* this); }
+      qx::dao::detail::QxSqlQueryHelper_Update<type_sql>::sql(sql, (* this), columns);
+      setSqlQuery(sql);
+      return (* this);
+   }
+
    virtual void init()
    {
       QMutexLocker locker(& QxSqlQueryBuilder<T>::m_oMutex);
@@ -211,6 +246,21 @@ private:
       if (bIsValid) { p->getSqlRelation()->init(); }
       return (bIsValid ? p : NULL);
    }
+
+private:
+
+#ifndef NDEBUG
+   inline bool verifyColumns(const QStringList & columns) const
+   {
+      if (! m_pDataMemberX) { return false; }
+      for (int i = 0; i < columns.count(); i++)
+      { if (! m_pDataMemberX->exist_WithDaoStrategy(columns.at(i))) { return false; } }
+      return true;
+   }
+#else
+   inline bool verifyColumns(const QStringList & columns) const
+   { Q_UNUSED(columns); return true; }
+#endif // NDEBUG
 
 };
 

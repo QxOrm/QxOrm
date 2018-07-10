@@ -89,6 +89,7 @@ protected:
 
    QByteArray m_byteName;           // Optimization to retrieve name under "const char *" format
    const char * m_pName;            // Optimization to retrieve name under "const char *" format
+   QStringList m_lstNames;          // Particular case of "boost::tuple<>" data member (multi-column primary key, composite key)
 
    boost::scoped_ptr<IxSqlRelation> m_pSqlRelation;   // Sql relation to build/resolve sql query
    IxDataMemberX * m_pParent;                         // 'IxDataMemberX' parent
@@ -101,6 +102,8 @@ public:
 
    inline QString getKey() const                   { return m_sKey; }
    inline QString getName() const                  { return (m_sName.isEmpty() ? m_sKey : m_sName); }
+   inline QString getName(int iIndex) const        { return (((iIndex >= 0) && (iIndex < m_lstNames.count())) ? m_lstNames.at(iIndex) : QString("")); }
+   inline int getNameCount() const                 { return m_lstNames.count(); }
    inline QString getNameParent() const            { return m_sNameParent; }
    inline QString getSqlType() const               { return m_sSqlType; }
    inline const char * getNamePtr() const          { return m_pName; }
@@ -147,26 +150,33 @@ public:
    inline void setParent(IxDataMemberX * pParent)              { m_pParent = pParent; }
    inline void setSqlRelation(IxSqlRelation * pSqlRelation)    { m_pSqlRelation.reset(pSqlRelation); }
 
-   QString getSqlAlias(QString * pTable = NULL, bool bClauseWhere = false) const;
+   QString getSqlAlias(const QString & sTable = QString(), bool bClauseWhere = false, int iIndexName = 0) const;
    QString getSqlTypeAndParams() const;
-   QString getSqlPlaceHolder(const QString & sAppend = QString()) const;
+   QString getSqlPlaceHolder(const QString & sAppend = QString(), int iIndexName = 0, const QString & sSep = QString(", ")) const;
    void setSqlPlaceHolder(QSqlQuery & query, void * pOwner, const QString & sAppend = QString()) const;
+   QString getSqlAliasEqualToPlaceHolder(const QString & sTable = QString(), bool bClauseWhere = false, const QString & sAppend = QString(), const QString & sSep = QString(" AND ")) const;
+   QString getSqlNameEqualToPlaceHolder(const QString & sAppend = QString(), const QString & sSep = QString(" AND ")) const;
+   QString getSqlTablePointNameAsAlias(const QString & sTable, const QString & sSep = QString(", ")) const;
+   QString getSqlName(const QString & sSep = QString(", ")) const;
+   QString getSqlNameAndTypeAndParams(const QString & sSep = QString(", ")) const;
 
+   virtual bool isEqual(const void * pOwner1, const void * pOwner2) const = 0;
    virtual boost::any getDataPtr(const void * pOwner) const = 0;
    virtual boost::any getDataPtr(void * pOwner) = 0;
    virtual void * getDataVoidPtr(const void * pOwner) const = 0;
    virtual void * getDataVoidPtr(void * pOwner) = 0;
    virtual qx_bool isValid(const void * pOwner) const = 0;
    virtual qx_bool isValid(void * pOwner) = 0;
-   virtual QString toString(const void * pOwner, const QString & sFormat) const = 0;
-   virtual qx_bool fromString(void * pOwner, const QString & s, const QString & sFormat) = 0;
-   virtual QVariant toVariant(const void * pOwner, const QString & sFormat) const = 0;
-   virtual qx_bool fromVariant(void * pOwner, const QVariant & v, const QString & sFormat) = 0;
 
-   inline QString toString(const void * pOwner) const             { return this->toString(pOwner, m_sFormat); }
-   inline qx_bool fromString(void * pOwner, const QString & s)    { return this->fromString(pOwner, s, m_sFormat); }
-   inline QVariant toVariant(const void * pOwner) const           { return this->toVariant(pOwner, m_sFormat); }
-   inline qx_bool fromVariant(void * pOwner, const QVariant & v)  { return this->fromVariant(pOwner, v, m_sFormat); }
+   virtual QString toString(const void * pOwner, const QString & sFormat, int iIndexName = -1) const = 0;
+   virtual qx_bool fromString(void * pOwner, const QString & s, const QString & sFormat, int iIndexName = -1) = 0;
+   virtual QVariant toVariant(const void * pOwner, const QString & sFormat, int iIndexName = -1) const = 0;
+   virtual qx_bool fromVariant(void * pOwner, const QVariant & v, const QString & sFormat, int iIndexName = -1) = 0;
+
+   inline QString toString(const void * pOwner, int iIndexName = -1) const             { return this->toString(pOwner, m_sFormat, iIndexName); }
+   inline qx_bool fromString(void * pOwner, const QString & s, int iIndexName = -1)    { return this->fromString(pOwner, s, m_sFormat, iIndexName); }
+   inline QVariant toVariant(const void * pOwner, int iIndexName = -1) const           { return this->toVariant(pOwner, m_sFormat, iIndexName); }
+   inline qx_bool fromVariant(void * pOwner, const QVariant & v, int iIndexName = -1)  { return this->fromVariant(pOwner, v, m_sFormat, iIndexName); }
 
 #if _QX_SERIALIZE_POLYMORPHIC
    QX_IX_DATA_MEMBER_PURE_VIRTUAL_ARCHIVE(boost::archive::polymorphic_iarchive, boost::archive::polymorphic_oarchive)
@@ -202,7 +212,14 @@ public:
 
 private:
 
-   inline void updateNamePtr() { m_byteName = (m_sName.isEmpty() ? m_sKey.toAscii() : m_sName.toAscii()); m_pName = m_byteName.constData(); }
+   inline void updateNamePtr()
+   {
+      QString sNamePtr = (m_sName.isEmpty() ? m_sKey : m_sName);
+      sNamePtr.replace("|", "-"); // valid xml tag
+      m_byteName = sNamePtr.toAscii();
+      m_pName = m_byteName.constData();
+      m_lstNames = (m_sName.isEmpty() ? m_sKey.split("|") : m_sName.split("|"));
+   }
 
    template<class Archive>
    void serialize(Archive & ar, const unsigned int version);

@@ -66,6 +66,9 @@ private:
    template <typename U>
    static typename boost::mpl::if_c<qx::trait::is_qx_pod<U>::value, char, int>::type removeSmartPtr(const QWeakPointer<U> &);
 
+   template <typename U>
+   static typename boost::mpl::if_c<qx::trait::is_qx_pod<U>::value, char, int>::type removeSmartPtr(const qx::dao::ptr<U> &);
+
    static int removeSmartPtr(...);
    static T t;
 

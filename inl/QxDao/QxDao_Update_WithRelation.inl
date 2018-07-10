@@ -80,7 +80,11 @@ private:
 
    template <typename U>
    static inline bool updateItem(U & item, qx::dao::detail::QxDao_Helper_Container<T> & dao)
-   { return updateItem_Helper<U, boost::is_pointer<U>::value || qx::trait::is_smart_ptr<U>::value>::update(item, dao); }
+   {
+      bool bUpdateOk = updateItem_Helper<U, boost::is_pointer<U>::value || qx::trait::is_smart_ptr<U>::value>::update(item, dao);
+      if (bUpdateOk) { qx::dao::detail::QxDao_Keep_Original<U>::backup(item); }
+      return bUpdateOk;
+   }
 
    template <typename U, bool bIsPointer /* = true */>
    struct updateItem_Helper
@@ -161,7 +165,10 @@ struct QxDao_Update_WithRelation
       typedef typename boost::mpl::if_c< boost::is_pointer<T>::value, qx::dao::detail::QxDao_Update_WithRelation_Ptr<T>, qx::dao::detail::QxDao_Update_WithRelation_Generic<T> >::type type_dao_1;
       typedef typename boost::mpl::if_c< qx::trait::is_smart_ptr<T>::value, qx::dao::detail::QxDao_Update_WithRelation_Ptr<T>, type_dao_1 >::type type_dao_2;
       typedef typename boost::mpl::if_c< qx::trait::is_container<T>::value, qx::dao::detail::QxDao_Update_WithRelation_Container<T>, type_dao_2 >::type type_dao_3;
-      return type_dao_3::update(relation, t, pDatabase);
+
+      QSqlError error = type_dao_3::update(relation, t, pDatabase);
+      if (! error.isValid()) { qx::dao::detail::QxDao_Keep_Original<T>::backup(t); }
+      return error;
    }
 
 };

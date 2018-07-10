@@ -1,9 +1,11 @@
 #ifndef _QX_BAR_H_
 #define _QX_BAR_H_
 
+#include "../include/BaseClassTrigger.h"
+
 class Foo;
 
-class QX_DLL2_EXPORT Bar
+class QX_DLL2_EXPORT Bar : public BaseClassTrigger
 {
 
    QX_REGISTER_FRIEND_CLASS(Bar)
@@ -14,22 +16,19 @@ public:
 
 protected:
 
-   long     m_lId;
    QString  m_sCode;
    QString  m_sValue;
    Foo_ptr  m_pFoo;
 
 public:
 
-   Bar() : m_lId(0)  { ; }
-   virtual ~Bar()    { ; }
+   Bar() : BaseClassTrigger() { ; }
+   virtual ~Bar()             { ; }
 
-   long getId() const         { return m_lId; }
    QString getCode() const    { return m_sCode; }
    QString getValue() const   { return m_sValue; }
    Foo_ptr getFoo() const     { return m_pFoo; }
 
-   void setId(long l)                  { m_lId = l; }
    void setCode(const QString & s)     { m_sCode = s; }
    void setValue(const QString & s)    { m_sValue = s; }
    void setFoo(Foo_ptr p)              { m_pFoo = p; }
@@ -37,7 +36,7 @@ public:
 
 };
 
-QX_REGISTER_HPP_QX_DLL2(Bar, qx::trait::no_base_class_defined, 0)
+QX_REGISTER_HPP_QX_DLL2(Bar, BaseClassTrigger, 0)
 
 typedef boost::shared_ptr<Bar> Bar_ptr;
 typedef std::vector<Bar_ptr> BarX;

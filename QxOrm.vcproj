@@ -354,11 +354,11 @@
 					>
 				</File>
 				<File
-					RelativePath=".\include\QxCommon\QxStringCvt_Impl.h"
+					RelativePath=".\include\QxCommon\QxStringCvt_Export.h"
 					>
 				</File>
 				<File
-					RelativePath=".\include\QxCommon\QxStringCvt_Export.h"
+					RelativePath=".\include\QxCommon\QxStringCvt_Impl.h"
 					>
 				</File>
 			</Filter>
@@ -550,6 +550,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\include\QxTraits\is_equal.h"
+					>
+				</File>
+				<File
 					RelativePath=".\include\QxTraits\is_ptr_base_of.h"
 					>
 				</File>
@@ -611,6 +615,10 @@
 				</File>
 				<File
 					RelativePath=".\include\QxTraits\is_qx_collection.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\QxTraits\is_qx_dao_ptr.h"
 					>
 				</File>
 				<File
@@ -719,6 +727,18 @@
 				</File>
 				<File
 					RelativePath=".\include\QxDao\QxDao_Impl.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\QxDao\QxDao_IsDirty.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\QxDao\QxDaoPointer.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\QxDao\QxDaoStrategy.h"
 					>
 				</File>
 				<File
@@ -1001,6 +1021,10 @@
 						>
 					</File>
 					<File
+						RelativePath=".\include\QxSerialize\Qx\QxSerialize_QxDaoPointer.h"
+						>
+					</File>
+					<File
 						RelativePath=".\include\QxSerialize\Qx\QxSerialize_QxXmlReader.h"
 						>
 					</File>
@@ -1103,6 +1127,10 @@
 				>
 				<File
 					RelativePath=".\include\QxRegister\IxClass.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\QxRegister\IxTypeInfo.h"
 					>
 				</File>
 				<File
@@ -1238,6 +1266,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\inl\QxDao\QxDao_Update_Optimized.inl"
+					>
+				</File>
+				<File
 					RelativePath=".\inl\QxDao\QxDao_Update_WithRelation.inl"
 					>
 				</File>
@@ -1319,6 +1351,10 @@
 				</File>
 				<File
 					RelativePath=".\inl\QxCommon\QxStringCvt_ToVariant.inl"
+					>
+				</File>
+				<File
+					RelativePath=".\inl\QxCommon\QxStringCvt_WithIndex.inl"
 					>
 				</File>
 			</Filter>

@@ -40,6 +40,8 @@
 #include <QtCore/qscopedpointer.h>
 #endif // (QT_VERSION >= 0x040600)
 
+#include <QxDao/QxDaoPointer.h>
+
 namespace qx {
 namespace trait {
 
@@ -62,6 +64,9 @@ struct remove_smart_ptr< QSharedPointer<T> > { typedef T type; };
 template <typename T>
 struct remove_smart_ptr< QScopedPointer<T> > { typedef T type; };
 #endif // (QT_VERSION >= 0x040600)
+
+template <typename T>
+struct remove_smart_ptr< qx::dao::ptr<T> > { typedef T type; };
 
 } // namespace trait
 } // namespace qx

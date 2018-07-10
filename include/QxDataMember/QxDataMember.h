@@ -33,9 +33,15 @@
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/nvp.hpp>
 
+#include <boost/tuple/tuple.hpp>
+#include <boost/tuple/tuple_comparison.hpp>
+#include <boost/tuple/tuple_io.hpp>
+
 #include <QxDataMember/IxDataMember.h>
 
 #include <QxCommon/QxStringCvt.h>
+
+#include <QxTraits/is_equal.h>
 
 #define QX_DATA_MEMBER_IMPL_VIRTUAL_ARCHIVE(ArchiveInput, ArchiveOutput) \
 virtual void toArchive(const void * pOwner, ArchiveOutput & ar) const   { QxDataMember::toArchive(ar, getNamePtr(), getData(pOwner)); } \
@@ -69,10 +75,19 @@ public:
    virtual qx_bool isValid(const void * pOwner) const          { Q_UNUSED(pOwner); return true; }
    virtual qx_bool isValid(void * pOwner)                      { Q_UNUSED(pOwner); return true; }
 
-   virtual QString toString(const void * pOwner, const QString & sFormat) const              { return qx::cvt::to_string((* getData(pOwner)), sFormat); }
-   virtual qx_bool fromString(void * pOwner, const QString & s, const QString & sFormat)     { return qx::cvt::from_string(s, (* getData(pOwner)), sFormat); }
-   virtual QVariant toVariant(const void * pOwner, const QString & sFormat) const            { return qx::cvt::to_variant((* getData(pOwner)), sFormat); }
-   virtual qx_bool fromVariant(void * pOwner, const QVariant & v, const QString & sFormat)   { return qx::cvt::from_variant(v, (* getData(pOwner)), sFormat); }
+   virtual QString toString(const void * pOwner, const QString & sFormat, int iIndexName = -1) const              { return qx::cvt::to_string((* getData(pOwner)), sFormat, iIndexName); }
+   virtual qx_bool fromString(void * pOwner, const QString & s, const QString & sFormat, int iIndexName = -1)     { return qx::cvt::from_string(s, (* getData(pOwner)), sFormat, iIndexName); }
+   virtual QVariant toVariant(const void * pOwner, const QString & sFormat, int iIndexName = -1) const            { return qx::cvt::to_variant((* getData(pOwner)), sFormat, iIndexName); }
+   virtual qx_bool fromVariant(void * pOwner, const QVariant & v, const QString & sFormat, int iIndexName = -1)   { return qx::cvt::from_variant(v, (* getData(pOwner)), sFormat, iIndexName); }
+
+   virtual bool isEqual(const void * pOwner1, const void * pOwner2) const
+   {
+      if ((pOwner1 == NULL) || (pOwner2 == NULL)) { return false; }
+      if (pOwner1 == pOwner2) { return true; }
+      return qxCompareDataMember<qx::trait::has_operator_equal_equal<DataType>::value, 0>::isEqual((* this), pOwner1, pOwner2);
+   }
+
+public:
 
 #if _QX_SERIALIZE_POLYMORPHIC
    QX_DATA_MEMBER_IMPL_VIRTUAL_ARCHIVE(boost::archive::polymorphic_iarchive, boost::archive::polymorphic_oarchive)
@@ -115,6 +130,22 @@ private:
    template <class Archive>
    static inline void fromArchive(Archive & ar, const char * sName, DataType * pData)
    { ar >> boost::serialization::make_nvp(sName, (* pData)); }
+
+private:
+
+   template <bool bCanCompare /* = false */, int dummy>
+   struct qxCompareDataMember
+   {
+      static inline bool isEqual(const QxDataMember<DataType, Owner> & dataMember, const void * pOwner1, const void * pOwner2)
+      { return (dataMember.toString(pOwner1, "") == dataMember.toString(pOwner2, "")); }
+   };
+
+   template <int dummy>
+   struct qxCompareDataMember<true, dummy>
+   {
+      static inline bool isEqual(const QxDataMember<DataType, Owner> & dataMember, const void * pOwner1, const void * pOwner2)
+      { return ((* dataMember.getData(pOwner1)) == (* dataMember.getData(pOwner2))); }
+   };
 
 };
 

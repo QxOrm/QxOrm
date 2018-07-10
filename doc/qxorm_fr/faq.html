@@ -63,7 +63,7 @@
   <col><col><col><col><col>
   <tbody><tr>
   <td align="left" valign="top"><font size="2">QxOrm  &gt;&gt;  Faq</font></td>
-  <td align="right" valign="top"><font size="2">Version courante : QxOrm 1.1.3 (LGPL)</font></td>
+  <td align="right" valign="top"><font size="2">Version courante : QxOrm 1.1.4 (LGPL)</font></td>
   <td width="10px"></td>
   <td width="40px" height="30px"><a href="../qxorm_fr/faq.html"><img alt="Version française du site" src="./resource/FR.png" width="40" height="30" border="0"></a></td>
   <td width="40px" height="30px"><a href="../qxorm_en/faq.html"><img alt="Web site english version" src="./resource/GB.png" width="40" height="30" border="0"></a></td>
@@ -81,10 +81,14 @@
       </li><li><a href="#faq_60">Pourquoi QxOrm nécessite un en-tête précompilé (precompiled header) pour pouvoir être utilisé ?</a><br>
       </li><li><a href="#faq_70">Est-il possible d'accélérer les temps de compilation de mon projet ?</a><br>
       </li><li><a href="#faq_80">Pourquoi QxOrm fournit un nouveau type de container <i>qx::QxCollection&lt;Key, Value&gt;</i> ?</a><br>
+      </li><li><a href="#faq_81">Pourquoi QxOrm fournit un nouveau type de pointeur intelligent <i>qx::dao::ptr&lt;T&gt;</i> ?</a><br>
       </li><li><a href="#faq_90">Faut-il utiliser <i>QString</i> ou <i>std::string</i> ?</a><br>
       </li><li><a href="#faq_95">Faut-il utiliser les pointeurs intelligents <i>smart-pointer</i> ?</a><br>
       </li><li><a href="#faq_100">La clé primaire est de type <i>long</i> par défaut. Est-il possible d'utiliser une clé de type <i>QString</i> ou autre ?</a><br>
+      </li><li><a href="#faq_101">Comment définir une clé primaire sur plusieurs colonnes (<i>composite key</i>) ?</a><br>
       </li><li><a href="#faq_110">Comment activer/désactiver le module <i>QxMemLeak</i> pour la détection automatique des fuites mémoires ?</a><br>
+      </li><li><a href="#faq_120">Comment gérer la notion d'héritage avec la base de données ?</a><br>
+      </li><li><a href="#faq_130">Comment utiliser les <i>Trigger</i> ?</a><br>
       </li></ul>
       <br>
       <a name="faq_10"><u><b>Qu'est-ce que QxOrm ?</b></u></a><br><br>
@@ -95,7 +99,7 @@
          <tr>
            <td valign="middle" width="30"></td>
            <td align="justify">
-           <b>QxOrm est une librairie C++ de gestion de données développée par Lionel Marty, Ingénieur en développement logiciel depuis 7 ans.</b><br>
+           <b>QxOrm est une librairie C++ de gestion de données développée par Lionel Marty, Ingénieur en développement logiciel depuis 2003.</b><br>
            <b>QxOrm</b> fournit de nombreuses fonctionnalités à partir d'une simple <i>fonction de paramétrage</i> :
            <ul>
              <li><font style="background-color:yellow"><b>persistance</b></font> : communication avec de nombreuses bases de données (avec support des relations <i>1-1</i>, <i>1-n</i>, <i>n-1</i> et <i>n-n</i>)
@@ -364,6 +368,79 @@ lstDrugs<span class="operator">.</span>clear<span class="operator">();</span></p
        </tbody>
       </table>
       <br><br>
+      <a name="faq_81"><u><b>Pourquoi QxOrm fournit un nouveau type de pointeur intelligent <i>qx::dao::ptr&lt;T&gt;</i> ?</b></u></a><br><br>
+      <table border="0" style="width: 100%" align="center">
+       <col>
+       <col>
+       <tbody>
+         <tr>
+           <td valign="middle" width="30"></td>
+           <td align="justify">
+           <b>QxOrm</b> est compatible avec les pointeurs intelligents des librairies <b>boost</b> et <b>Qt</b>.<br>
+           Le pointeur intelligent développé par <b>QxOrm</b> est basé sur <i>QSharedPointer</i> et apporte de nouvelles fonctionnalités s'il est utilisé avec les fonctions '<i>qx::dao::...</i>'.<br>
+           <i>qx::dao::ptr&lt;T&gt;</i> conserve automatiquement les valeurs issues de la base de données.<br>
+           Il est ainsi possible de vérifier à tout moment si une instance d'objet a subi des modifications grâce à la méthode '<i>isDirty()</i>' : cette méthode peut renvoyer la liste de toutes les propriétés ayant été modifiées.<br>
+           <i>qx::dao::ptr&lt;T&gt;</i> peut également être utilisé par la fonction '<i>qx::dao::update_optimized()</i>' pour mettre à jour en base de données uniquement les champs modifiés.<br>
+           <i>qx::dao::ptr&lt;T&gt;</i> peut être utilisé avec un objet simple ou bien avec la plupart des containers : <i>stl</i>, <i>boost</i>, <i>Qt</i> et <i>qx::QxCollection&lt;Key, Value&gt;</i>.<br>
+           <br>
+           <b>Exemple d'utilisation :</b><br>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="comment">   // Test 'isDirty()' method
+</span>   qx<span class="operator">::</span>dao<span class="operator">::</span>ptr<span class="operator">&lt;</span>blog<span class="operator">&gt;</span> blog_isdirty<span class="operator"> =</span> qx<span class="operator">::</span>dao<span class="operator">::</span>ptr<span class="operator">&lt;</span>blog<span class="operator">&gt;(</span><span class="keyword">new</span> blog<span class="operator">());</span>
+   blog_isdirty<span class="operator">-&gt;</span>m_id<span class="operator"> =</span> blog_1<span class="operator">-&gt;</span>m_id<span class="operator">;</span>
+   daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<span class="operator">::</span>fetch_by_id<span class="operator">(</span>blog_isdirty<span class="operator">);</span>
+   qAssert<span class="operator">(!</span> daoError<span class="operator">.</span>isValid<span class="operator">() &amp;&amp; !</span> blog_isdirty<span class="operator">.</span>isDirty<span class="operator">());</span>
+
+   blog_isdirty<span class="operator">-&gt;</span>m_text<span class="operator"> =</span><span class="string"> "blog property 'text' modified =&gt; blog is dirty !!!"</span><span class="operator">;</span>
+   QStringList lstDiff<span class="operator">;</span><span class="type"> bool</span> bDirty<span class="operator"> =</span> blog_isdirty<span class="operator">.</span>isDirty<span class="operator">(</span>lstDiff<span class="operator">);</span>
+   qAssert<span class="operator">(</span>bDirty<span class="operator"> &amp;&amp; (</span>lstDiff<span class="operator">.</span>count<span class="operator">() ==</span><span class="int"> 1</span><span class="operator">) &amp;&amp; (</span>lstDiff<span class="operator">.</span>at<span class="operator">(</span><span class="int">0</span><span class="operator">) ==</span><span class="string"> "blog_text"</span><span class="operator">));</span><span class="flow">
+   if</span><span class="operator"> (</span>bDirty<span class="operator">) {</span> qDebug<span class="operator">(</span><span class="string">"[QxOrm] test dirty 1 : blog is dirty =&gt; '%s'"</span><span class="operator">,</span> qPrintable<span class="operator">(</span>lstDiff<span class="operator">.</span>join<span class="operator">(</span><span class="string">"|"</span><span class="operator">))); }</span><span class="comment">
+
+   // Update only property 'm_text' of 'blog_isdirty'
+</span>   daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<span class="operator">::</span>update_optimized<span class="operator">(</span>blog_isdirty<span class="operator">);</span>
+   qAssert<span class="operator">(!</span> daoError<span class="operator">.</span>isValid<span class="operator">() &amp;&amp; !</span> blog_isdirty<span class="operator">.</span>isDirty<span class="operator">());</span>
+   qx<span class="operator">::</span>dump<span class="operator">(</span>blog_isdirty<span class="operator">);</span><span class="comment">
+
+   // Test 'isDirty()' method with a container
+</span><span class="keyword">   typedef</span> qx<span class="operator">::</span>dao<span class="operator">::</span>ptr<span class="operator">&lt;</span> QList<span class="operator">&lt;</span>author_ptr<span class="operator">&gt; &gt;</span> type_lst_author_test_is_dirty<span class="operator">;</span>
+
+   type_lst_author_test_is_dirty container_isdirty<span class="operator"> =</span> type_lst_author_test_is_dirty<span class="operator">(</span><span class="keyword">new</span> QList<span class="operator">&lt;</span>author_ptr<span class="operator">&gt;());</span>
+   daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<span class="operator">::</span>fetch_all<span class="operator">(</span>container_isdirty<span class="operator">);</span>
+   qAssert<span class="operator">(!</span> daoError<span class="operator">.</span>isValid<span class="operator">() &amp;&amp; !</span> container_isdirty<span class="operator">.</span>isDirty<span class="operator">() &amp;&amp; (</span>container_isdirty<span class="operator">-&gt;</span>count<span class="operator">() ==</span><span class="int"> 3</span><span class="operator">));</span>
+
+   author_ptr author_ptr_dirty<span class="operator"> =</span> container_isdirty<span class="operator">-&gt;</span>at<span class="operator">(</span><span class="int">1</span><span class="operator">);</span>
+   author_ptr_dirty<span class="operator">-&gt;</span>m_name<span class="operator"> =</span><span class="string"> "author name modified at index 1 =&gt; container is dirty !!!"</span><span class="operator">;</span>
+   bDirty<span class="operator"> =</span> container_isdirty<span class="operator">.</span>isDirty<span class="operator">(</span>lstDiff<span class="operator">);</span>
+   qAssert<span class="operator">(</span>bDirty<span class="operator"> &amp;&amp; (</span>lstDiff<span class="operator">.</span>count<span class="operator">() ==</span><span class="int"> 1</span><span class="operator">));</span><span class="flow">
+   if</span><span class="operator"> (</span>bDirty<span class="operator">) {</span> qDebug<span class="operator">(</span><span class="string">"[QxOrm] test dirty 2 : container is dirty =&gt; '%s'"</span><span class="operator">,</span> qPrintable<span class="operator">(</span>lstDiff<span class="operator">.</span>join<span class="operator">(</span><span class="string">"|"</span><span class="operator">))); }</span>
+
+   author_ptr_dirty<span class="operator"> =</span> container_isdirty<span class="operator">-&gt;</span>at<span class="operator">(</span><span class="int">2</span><span class="operator">);</span>
+   author_ptr_dirty<span class="operator">-&gt;</span>m_birthdate<span class="operator"> =</span> QDate<span class="operator">(</span><span class="int">1998</span><span class="operator">,</span><span class="int"> 03</span><span class="operator">,</span><span class="int"> 06</span><span class="operator">);</span>
+   bDirty<span class="operator"> =</span> container_isdirty<span class="operator">.</span>isDirty<span class="operator">(</span>lstDiff<span class="operator">);</span>
+   qAssert<span class="operator">(</span>bDirty<span class="operator"> &amp;&amp; (</span>lstDiff<span class="operator">.</span>count<span class="operator">() ==</span><span class="int"> 2</span><span class="operator">));</span><span class="flow">
+   if</span><span class="operator"> (</span>bDirty<span class="operator">) {</span> qDebug<span class="operator">(</span><span class="string">"[QxOrm] test dirty 3 : container is dirty =&gt; '%s'"</span><span class="operator">,</span> qPrintable<span class="operator">(</span>lstDiff<span class="operator">.</span>join<span class="operator">(</span><span class="string">"|"</span><span class="operator">))); }</span><span class="comment">
+
+   // Update only property 'm_name' at position 1, only property 'm_birthdate' at position 2 and nothing at position 0
+</span>   daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<span class="operator">::</span>update_optimized<span class="operator">(</span>container_isdirty<span class="operator">);</span>
+   qAssert<span class="operator">(!</span> daoError<span class="operator">.</span>isValid<span class="operator">() &amp;&amp; !</span> container_isdirty<span class="operator">.</span>isDirty<span class="operator">());</span>
+   qx<span class="operator">::</span>dump<span class="operator">(</span>container_isdirty<span class="operator">);</span><span class="comment">
+
+   // Fetch only property 'm_dt_creation' of blog
+</span>   QStringList lstColumns<span class="operator"> =</span> QStringList<span class="operator">() &lt;&lt;</span><span class="string"> "date_creation"</span><span class="operator">;</span>
+   list_blog lst_blog_with_only_date_creation<span class="operator">;</span>
+   daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<span class="operator">::</span>fetch_all<span class="operator">(</span>lst_blog_with_only_date_creation<span class="operator">,</span> NULL<span class="operator">,</span> lstColumns<span class="operator">);</span>
+   qAssert<span class="operator">(!</span> daoError<span class="operator">.</span>isValid<span class="operator">() &amp;&amp; (</span>lst_blog_with_only_date_creation<span class="operator">.</span>size<span class="operator">() &gt;</span><span class="int"> 0</span><span class="operator">));</span><span class="flow">
+
+   if</span><span class="operator"> ((</span>lst_blog_with_only_date_creation<span class="operator">.</span>size<span class="operator">() &gt;</span><span class="int"> 0</span><span class="operator">) &amp;&amp; (</span>lst_blog_with_only_date_creation<span class="operator">[</span><span class="int">0</span><span class="operator">] !=</span> NULL<span class="operator">))
+   {</span> qAssert<span class="operator">(</span>lst_blog_with_only_date_creation<span class="operator">[</span><span class="int">0</span><span class="operator">]-&gt;</span>m_text<span class="operator">.</span>isEmpty<span class="operator">()); }</span>
+
+   qx<span class="operator">::</span>dump<span class="operator">(</span>lst_blog_with_only_date_creation<span class="operator">);</span></pre>
+           </td></tr></tbody></table>
+           </td>
+         </tr>
+       </tbody>
+      </table>
+      <br><br>
       <a name="faq_90"><u><b>Faut-il utiliser <i>QString</i> ou <i>std::string</i> ?</b></u></a><br><br>
       <table border="0" style="width: 100%" align="center">
        <col>
@@ -422,6 +499,119 @@ lstDrugs<span class="operator">.</span>clear<span class="operator">();</span></p
        </tbody>
       </table>
       <br><br>
+      <a name="faq_101"><u><b>Comment définir une clé primaire sur plusieurs colonnes (<i>composite key</i>) ?</b></u></a><br><br>
+      <table border="0" style="width: 100%" align="center">
+       <col>
+       <col>
+       <tbody>
+         <tr>
+           <td valign="middle" width="30"></td>
+           <td align="justify">
+           <b>QxOrm</b> supporte la notion de '<i>multi-columns primary key</i>'.<br>
+           L'identifiant de la classe doit être du type suivant :<br>
+           * <i>QPair</i> ou <i>std::pair</i> pour définir 2 colonnes<br>
+           * <i>boost::tuple</i> pour définir de 2 à 9 colonnes<br>
+           <br>
+           Il est nécessaire d'utiliser la macro <b><i>QX_REGISTER_PRIMARY_KEY()</i></b> pour spécialiser le template et ainsi définir le type d'identifiant sur plusieurs colonnes.<br>
+           La liste des noms des colonnes doit être de la forme suivante : '<i>column1|column2|column3|etc...</i>'.<br>
+           <br>
+           <b>Exemple d'utilisation</b> avec la classe '<i>author</i>' du projet '<i>qxBlog_composite_key</i>', cette classe possède un identifiant sur 3 colonnes :<br>
+           <br>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="pre">#ifndef _QX_BLOG_AUTHOR_H_
+#define _QX_BLOG_AUTHOR_H_
+</span><span class="keyword">
+class</span> blog<span class="operator">;</span><span class="keyword">
+
+class</span> QX_BLOG_DLL_EXPORT author<span class="operator">
+{</span>
+
+   QX_REGISTER_FRIEND_CLASS<span class="operator">(</span>author<span class="operator">)</span><span class="keyword">
+
+public</span><span class="operator">:</span><span class="comment">
+
+// -- composite key (multi-column primary key in database)
+</span><span class="keyword">   typedef</span> boost<span class="operator">::</span>tuple<span class="operator">&lt;</span>QString<span class="operator">,</span><span class="type"> long</span><span class="operator">,</span> QString<span class="operator">&gt;</span> type_composite_key<span class="operator">;</span><span class="keyword">
+   static</span> QString str_composite_key<span class="operator">() {</span><span class="flow"> return</span><span class="string"> "author_id_0|author_id_1|author_id_2"</span><span class="operator">; }</span><span class="comment">
+
+// -- typedef
+</span><span class="keyword">   typedef</span> boost<span class="operator">::</span>shared_ptr<span class="operator">&lt;</span>blog<span class="operator">&gt;</span> blog_ptr<span class="operator">;</span><span class="keyword">
+   typedef</span> std<span class="operator">::</span>vector<span class="operator">&lt;</span>blog_ptr<span class="operator">&gt;</span> list_blog<span class="operator">;</span><span class="comment">
+
+// -- enum
+</span><span class="keyword">   enum</span> enum_sex<span class="operator"> {</span> male<span class="operator">,</span> female<span class="operator">,</span> unknown<span class="operator"> };</span><span class="comment">
+
+// -- properties
+</span>   type_composite_key   m_id<span class="operator">;</span>
+   QString              m_name<span class="operator">;</span>
+   QDate                m_birthdate<span class="operator">;</span>
+   enum_sex             m_sex<span class="operator">;</span>
+   list_blog            m_blogX<span class="operator">;</span><span class="comment">
+
+// -- contructor, virtual destructor
+</span>   author<span class="operator">() :</span> m_id<span class="operator">(</span><span class="string">""</span><span class="operator">,</span><span class="int"> 0</span><span class="operator">,</span><span class="string"> ""</span><span class="operator">),</span> m_sex<span class="operator">(</span>unknown<span class="operator">) { ; }</span><span class="keyword">
+   virtual</span><span class="operator"> ~</span>author<span class="operator">() { ; }</span><span class="comment">
+
+// -- methods
+</span><span class="type">   int</span> age<span class="operator">()</span><span class="keyword"> const</span><span class="operator">;</span><span class="comment">
+
+// -- methods "get" to composite key
+</span>   type_composite_key getId<span class="operator">()</span><span class="keyword"> const</span><span class="operator">    {</span><span class="flow"> return</span> m_id<span class="operator">; }</span>
+   QString getId_0<span class="operator">()</span><span class="keyword"> const</span><span class="operator">             {</span><span class="flow"> return</span> boost<span class="operator">::</span>tuples<span class="operator">::</span>get<span class="operator">&lt;</span><span class="int">0</span><span class="operator">&gt;(</span>m_id<span class="operator">); }</span><span class="type">
+   long</span> getId_1<span class="operator">()</span><span class="keyword"> const</span><span class="operator">                {</span><span class="flow"> return</span> boost<span class="operator">::</span>tuples<span class="operator">::</span>get<span class="operator">&lt;</span><span class="int">1</span><span class="operator">&gt;(</span>m_id<span class="operator">); }</span>
+   QString getId_2<span class="operator">()</span><span class="keyword"> const</span><span class="operator">             {</span><span class="flow"> return</span> boost<span class="operator">::</span>tuples<span class="operator">::</span>get<span class="operator">&lt;</span><span class="int">2</span><span class="operator">&gt;(</span>m_id<span class="operator">); }</span><span class="comment">
+
+// -- methods "set" to composite key
+</span><span class="type">   void</span> setId_0<span class="operator">(</span><span class="keyword">const</span> QString<span class="operator"> &amp;</span> s<span class="operator">)     {</span> boost<span class="operator">::</span>tuples<span class="operator">::</span>get<span class="operator">&lt;</span><span class="int">0</span><span class="operator">&gt;(</span>m_id<span class="operator">) =</span> s<span class="operator">; }</span><span class="type">
+   void</span> setId_1<span class="operator">(</span><span class="type">long</span> l<span class="operator">)                {</span> boost<span class="operator">::</span>tuples<span class="operator">::</span>get<span class="operator">&lt;</span><span class="int">1</span><span class="operator">&gt;(</span>m_id<span class="operator">) =</span> l<span class="operator">; }</span><span class="type">
+   void</span> setId_2<span class="operator">(</span><span class="keyword">const</span> QString<span class="operator"> &amp;</span> s<span class="operator">)     {</span> boost<span class="operator">::</span>tuples<span class="operator">::</span>get<span class="operator">&lt;</span><span class="int">2</span><span class="operator">&gt;(</span>m_id<span class="operator">) =</span> s<span class="operator">; }
+
+};</span>
+
+QX_REGISTER_PRIMARY_KEY<span class="operator">(</span>author<span class="operator">,</span> author<span class="operator">::</span>type_composite_key<span class="operator">)</span>
+QX_REGISTER_HPP_QX_BLOG<span class="operator">(</span>author<span class="operator">,</span> qx<span class="operator">::</span>trait<span class="operator">::</span>no_base_class_defined<span class="operator">,</span><span class="int"> 0</span><span class="operator">)</span><span class="keyword">
+
+typedef</span> boost<span class="operator">::</span>shared_ptr<span class="operator">&lt;</span>author<span class="operator">&gt;</span> author_ptr<span class="operator">;</span><span class="keyword">
+typedef</span> qx<span class="operator">::</span>QxCollection<span class="operator">&lt;</span>author<span class="operator">::</span>type_composite_key<span class="operator">,</span> author_ptr<span class="operator">&gt;</span> list_author<span class="operator">;</span><span class="pre">
+
+#endif // _QX_BLOG_AUTHOR_H_
+</span></pre>
+           </td></tr></tbody></table>
+           <br>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="pre">#include "../include/precompiled.h"
+#include "../include/author.h"
+#include "../include/blog.h"
+#include &lt;QxMemLeak.h&gt;
+</span>
+QX_REGISTER_CPP_QX_BLOG<span class="operator">(</span>author<span class="operator">)</span><span class="keyword">
+
+namespace</span> qx<span class="operator"> {</span><span class="keyword">
+template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</span> register_class<span class="operator">(</span>QxClass<span class="operator">&lt;</span>author<span class="operator">&gt; &amp;</span> t<span class="operator">)
+{</span>
+   t<span class="operator">.</span>id<span class="operator">(&amp;</span> author<span class="operator">::</span>m_id<span class="operator">,</span> author<span class="operator">::</span>str_composite_key<span class="operator">());</span>
+
+   t<span class="operator">.</span>data<span class="operator">(&amp;</span> author<span class="operator">::</span>m_name<span class="operator">,</span><span class="string"> "name"</span><span class="operator">);</span>
+   t<span class="operator">.</span>data<span class="operator">(&amp;</span> author<span class="operator">::</span>m_birthdate<span class="operator">,</span><span class="string"> "birthdate"</span><span class="operator">);</span>
+   t<span class="operator">.</span>data<span class="operator">(&amp;</span> author<span class="operator">::</span>m_sex<span class="operator">,</span><span class="string"> "sex"</span><span class="operator">);</span>
+
+   t<span class="operator">.</span>relationOneToMany<span class="operator">(&amp;</span> author<span class="operator">::</span>m_blogX<span class="operator">,</span> blog<span class="operator">::</span>str_composite_key<span class="operator">(),</span> author<span class="operator">::</span>str_composite_key<span class="operator">());</span>
+
+   t<span class="operator">.</span>fct_0<span class="operator">&lt;</span><span class="type">int</span><span class="operator">&gt;(&amp;</span> author<span class="operator">::</span>age<span class="operator">,</span><span class="string"> "age"</span><span class="operator">);
+}}</span><span class="type">
+
+int</span> author<span class="operator">::</span>age<span class="operator">()</span><span class="keyword"> const</span><span class="operator">
+{</span><span class="flow">
+   if</span><span class="operator"> (!</span> m_birthdate<span class="operator">.</span>isValid<span class="operator">()) {</span><span class="flow"> return</span><span class="operator"> -</span><span class="int">1</span><span class="operator">; }</span><span class="flow">
+   return</span><span class="operator"> (</span>QDate<span class="operator">::</span>currentDate<span class="operator">().</span>year<span class="operator">() -</span> m_birthdate<span class="operator">.</span>year<span class="operator">());
+}</span>
+</pre>
+           </td></tr></tbody></table>
+           </td>
+         </tr>
+       </tbody>
+      </table>
+      <br><br>
       <a name="faq_110"><u><b>Comment activer/désactiver le module <i>QxMemLeak</i> pour la détection automatique des fuites mémoires ?</b></u></a><br><br>
       <table border="0" style="width: 100%" align="center">
        <col>
@@ -441,6 +631,155 @@ lstDrugs<span class="operator">.</span>clear<span class="operator">();</span></p
            Pour activer/désactiver le module <i>QxMemLeak</i>, il suffit de modifier la constante 
            <b><i>_QX_USE_MEM_LEAK_DETECTION</i></b> définie dans le fichier <i>QxConfig.h</i>.<br>
            Une recompilation de la librairie QxOrm est nécessaire pour prendre en compte cette modification. 
+           </td>
+         </tr>
+       </tbody>
+      </table>
+      <br><br>
+      <a name="faq_120"><u><b>Comment gérer la notion d'héritage avec la base de données ?</b></u></a><br><br>
+      <table border="0" style="width: 100%" align="center">
+       <col>
+       <col>
+       <tbody>
+         <tr>
+           <td valign="middle" width="30"></td>
+           <td align="justify">
+           On retrouve généralement dans les différents outils de type <i>ORM</i> 3 différentes stratégies pour gérer la notion d'héritage avec la base de données :<br>
+           * <i>Single Table Inheritance</i><br>
+           * <i>Class Table Inheritance</i><br>
+           * <i>Concrete Table Inheritance</i><br>
+           <br>
+           <b>QxOrm</b> utilise par défaut la stratégie <i>Concrete Table Inheritance</i> (les autres stratégies ne sont pas fonctionnelles à l'heure actuelle).<br>
+           De nombreux tutoriaux et forums sont disponibles sur internet pour plus de détails sur cette notion d'héritage.<br>
+           Un exemple d'utilisation avec une classe de base se trouve dans le dossier <i>./test/dll2/</i> avec la classe <i>BaseClassTrigger</i>.
+           </td>
+         </tr>
+       </tbody>
+      </table>
+      <br><br>
+      <a name="faq_130"><u><b>Comment utiliser les <i>Trigger</i> ?</b></u></a><br><br>
+      <table border="0" style="width: 100%" align="center">
+       <col>
+       <col>
+       <tbody>
+         <tr>
+           <td valign="middle" width="30"></td>
+           <td align="justify">
+           Les <i>Trigger</i> de <b>QxOrm</b> permettent d'effectuer divers traitements avant et/ou après une insertion, une mise à jour ou bien une suppression dans la base de données.<br>
+           Un exemple d'utilisation se trouve dans le dossier <i>./test/dll2/</i> avec la classe <i>BaseClassTrigger</i>.<br>
+           Cette classe contient 5 propriétés : <i>m_id</i>, <i>m_dateCreation</i>, <i>m_dateModification</i>, <i>m_userCreation</i> et <i>m_userModification</i>.<br>
+           Ces propriétés se mettront à jour automatiquement pour chaque classe héritant de <i>BaseClassTrigger</i> (cf. les classes <i>Foo</i> et <i>Bar</i> du même projet).<br>
+           Il est nécessaire de spécialiser le template '<i>QxDao_Trigger</i>' pour profiter de cette fonctionnalité.<br>
+           <br>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="pre">#ifndef _QX_BASE_CLASS_TRIGGER_H_
+#define _QX_BASE_CLASS_TRIGGER_H_
+</span><span class="keyword">
+class</span> QX_DLL2_EXPORT BaseClassTrigger<span class="operator">
+{</span>
+
+   QX_REGISTER_FRIEND_CLASS<span class="operator">(</span>BaseClassTrigger<span class="operator">)</span><span class="keyword">
+
+protected</span><span class="operator">:</span><span class="type">
+
+   long</span>        m_id<span class="operator">;</span>
+   QDateTime   m_dateCreation<span class="operator">;</span>
+   QDateTime   m_dateModification<span class="operator">;</span>
+   QString     m_userCreation<span class="operator">;</span>
+   QString     m_userModification<span class="operator">;</span><span class="keyword">
+
+public</span><span class="operator">:</span>
+
+   BaseClassTrigger<span class="operator">() :</span> m_id<span class="operator">(</span><span class="int">0</span><span class="operator">)  { ; }</span><span class="keyword">
+   virtual</span><span class="operator"> ~</span>BaseClassTrigger<span class="operator">()   { ; }</span><span class="type">
+
+   long</span> getId<span class="operator">()</span><span class="keyword"> const</span><span class="operator">                     {</span><span class="flow"> return</span> m_id<span class="operator">; }</span>
+   QDateTime getDateCreation<span class="operator">()</span><span class="keyword"> const</span><span class="operator">      {</span><span class="flow"> return</span> m_dateCreation<span class="operator">; }</span>
+   QDateTime getDateModification<span class="operator">()</span><span class="keyword"> const</span><span class="operator">  {</span><span class="flow"> return</span> m_dateModification<span class="operator">; }</span>
+   QString getUserCreation<span class="operator">()</span><span class="keyword"> const</span><span class="operator">        {</span><span class="flow"> return</span> m_userCreation<span class="operator">; }</span>
+   QString getUserModification<span class="operator">()</span><span class="keyword"> const</span><span class="operator">    {</span><span class="flow"> return</span> m_userModification<span class="operator">; }</span><span class="type">
+
+   void</span> setId<span class="operator">(</span><span class="type">long</span> l<span class="operator">)                              {</span> m_id<span class="operator"> =</span> l<span class="operator">; }</span><span class="type">
+   void</span> setDateCreation<span class="operator">(</span><span class="keyword">const</span> QDateTime<span class="operator"> &amp;</span> dt<span class="operator">)      {</span> m_dateCreation<span class="operator"> =</span> dt<span class="operator">; }</span><span class="type">
+   void</span> setDateModification<span class="operator">(</span><span class="keyword">const</span> QDateTime<span class="operator"> &amp;</span> dt<span class="operator">)  {</span> m_dateModification<span class="operator"> =</span> dt<span class="operator">; }</span><span class="type">
+   void</span> setUserCreation<span class="operator">(</span><span class="keyword">const</span> QString<span class="operator"> &amp;</span> s<span class="operator">)         {</span> m_userCreation<span class="operator"> =</span> s<span class="operator">; }</span><span class="type">
+   void</span> setUserModification<span class="operator">(</span><span class="keyword">const</span> QString<span class="operator"> &amp;</span> s<span class="operator">)     {</span> m_userModification<span class="operator"> =</span> s<span class="operator">; }</span><span class="type">
+
+   void</span> onBeforeInsert<span class="operator">(</span>qx<span class="operator">::</span>dao<span class="operator">::</span>detail<span class="operator">::</span>IxDao_Helper<span class="operator"> *</span> dao<span class="operator">);</span><span class="type">
+   void</span> onBeforeUpdate<span class="operator">(</span>qx<span class="operator">::</span>dao<span class="operator">::</span>detail<span class="operator">::</span>IxDao_Helper<span class="operator"> *</span> dao<span class="operator">);
+
+};</span>
+
+QX_REGISTER_HPP_QX_DLL2<span class="operator">(</span>BaseClassTrigger<span class="operator">,</span> qx<span class="operator">::</span>trait<span class="operator">::</span>no_base_class_defined<span class="operator">,</span><span class="int"> 0</span><span class="operator">)</span><span class="keyword">
+
+namespace</span> qx<span class="operator"> {</span><span class="keyword">
+namespace</span> dao<span class="operator"> {</span><span class="keyword">
+namespace</span> detail<span class="operator"> {</span><span class="keyword">
+
+template</span><span class="operator"> &lt;&gt;</span><span class="keyword">
+struct</span> QxDao_Trigger<span class="operator">&lt;</span>BaseClassTrigger<span class="operator">&gt;
+{</span><span class="keyword">
+
+   static inline</span><span class="type"> void</span> onBeforeInsert<span class="operator">(</span>BaseClassTrigger<span class="operator"> *</span> t<span class="operator">,</span> qx<span class="operator">::</span>dao<span class="operator">::</span>detail<span class="operator">::</span>IxDao_Helper<span class="operator"> *</span> dao<span class="operator">)
+   {</span><span class="flow"> if</span><span class="operator"> (</span>t<span class="operator">) {</span> t<span class="operator">-&gt;</span>onBeforeInsert<span class="operator">(</span>dao<span class="operator">); } }</span><span class="keyword">
+   static inline</span><span class="type"> void</span> onBeforeUpdate<span class="operator">(</span>BaseClassTrigger<span class="operator"> *</span> t<span class="operator">,</span> qx<span class="operator">::</span>dao<span class="operator">::</span>detail<span class="operator">::</span>IxDao_Helper<span class="operator"> *</span> dao<span class="operator">)
+   {</span><span class="flow"> if</span><span class="operator"> (</span>t<span class="operator">) {</span> t<span class="operator">-&gt;</span>onBeforeUpdate<span class="operator">(</span>dao<span class="operator">); } }</span><span class="keyword">
+   static inline</span><span class="type"> void</span> onBeforeDelete<span class="operator">(</span>BaseClassTrigger<span class="operator"> *</span> t<span class="operator">,</span> qx<span class="operator">::</span>dao<span class="operator">::</span>detail<span class="operator">::</span>IxDao_Helper<span class="operator"> *</span> dao<span class="operator">)
+   {</span> Q_UNUSED<span class="operator">(</span>t<span class="operator">);</span> Q_UNUSED<span class="operator">(</span>dao<span class="operator">); }</span><span class="keyword">
+   static inline</span><span class="type"> void</span> onAfterInsert<span class="operator">(</span>BaseClassTrigger<span class="operator"> *</span> t<span class="operator">,</span> qx<span class="operator">::</span>dao<span class="operator">::</span>detail<span class="operator">::</span>IxDao_Helper<span class="operator"> *</span> dao<span class="operator">)
+   {</span> Q_UNUSED<span class="operator">(</span>t<span class="operator">);</span> Q_UNUSED<span class="operator">(</span>dao<span class="operator">); }</span><span class="keyword">
+   static inline</span><span class="type"> void</span> onAfterUpdate<span class="operator">(</span>BaseClassTrigger<span class="operator"> *</span> t<span class="operator">,</span> qx<span class="operator">::</span>dao<span class="operator">::</span>detail<span class="operator">::</span>IxDao_Helper<span class="operator"> *</span> dao<span class="operator">)
+   {</span> Q_UNUSED<span class="operator">(</span>t<span class="operator">);</span> Q_UNUSED<span class="operator">(</span>dao<span class="operator">); }</span><span class="keyword">
+   static inline</span><span class="type"> void</span> onAfterDelete<span class="operator">(</span>BaseClassTrigger<span class="operator"> *</span> t<span class="operator">,</span> qx<span class="operator">::</span>dao<span class="operator">::</span>detail<span class="operator">::</span>IxDao_Helper<span class="operator"> *</span> dao<span class="operator">)
+   {</span> Q_UNUSED<span class="operator">(</span>t<span class="operator">);</span> Q_UNUSED<span class="operator">(</span>dao<span class="operator">); }
+
+};
+
+}</span><span class="comment"> // namespace detail
+</span><span class="operator">}</span><span class="comment"> // namespace dao
+</span><span class="operator">}</span><span class="comment"> // namespace qx
+</span><span class="pre">
+#endif // _QX_BASE_CLASS_TRIGGER_H_
+</span></pre>
+           </td></tr></tbody></table>
+           <br>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="pre">#include "../include/precompiled.h"
+#include "../include/BaseClassTrigger.h"
+#include &lt;QxMemLeak.h&gt;
+</span>
+QX_REGISTER_CPP_QX_DLL2<span class="operator">(</span>BaseClassTrigger<span class="operator">)</span><span class="keyword">
+
+namespace</span> qx<span class="operator"> {</span><span class="keyword">
+template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</span> register_class<span class="operator">(</span>QxClass<span class="operator">&lt;</span>BaseClassTrigger<span class="operator">&gt; &amp;</span> t<span class="operator">)
+{</span>
+   IxDataMember<span class="operator"> *</span> pData<span class="operator"> =</span> NULL<span class="operator">;</span>
+
+   pData<span class="operator"> =</span> t<span class="operator">.</span>id<span class="operator">(&amp;</span> BaseClassTrigger<span class="operator">::</span>m_id<span class="operator">,</span><span class="string"> "id"</span><span class="operator">);</span>
+
+   pData<span class="operator"> =</span> t<span class="operator">.</span>data<span class="operator">(&amp;</span> BaseClassTrigger<span class="operator">::</span>m_dateCreation<span class="operator">,</span><span class="string"> "date_creation"</span><span class="operator">);</span>
+   pData<span class="operator"> =</span> t<span class="operator">.</span>data<span class="operator">(&amp;</span> BaseClassTrigger<span class="operator">::</span>m_dateModification<span class="operator">,</span><span class="string"> "date_modification"</span><span class="operator">);</span>
+   pData<span class="operator"> =</span> t<span class="operator">.</span>data<span class="operator">(&amp;</span> BaseClassTrigger<span class="operator">::</span>m_userCreation<span class="operator">,</span><span class="string"> "user_creation"</span><span class="operator">);</span>
+   pData<span class="operator"> =</span> t<span class="operator">.</span>data<span class="operator">(&amp;</span> BaseClassTrigger<span class="operator">::</span>m_userModification<span class="operator">,</span><span class="string"> "user_modification"</span><span class="operator">);
+}}</span><span class="type">
+
+void</span> BaseClassTrigger<span class="operator">::</span>onBeforeInsert<span class="operator">(</span>qx<span class="operator">::</span>dao<span class="operator">::</span>detail<span class="operator">::</span>IxDao_Helper<span class="operator"> *</span> dao<span class="operator">)
+{</span>
+   Q_UNUSED<span class="operator">(</span>dao<span class="operator">);</span>
+   m_dateCreation<span class="operator"> =</span> QDateTime<span class="operator">::</span>currentDateTime<span class="operator">();</span>
+   m_dateModification<span class="operator"> =</span> QDateTime<span class="operator">::</span>currentDateTime<span class="operator">();</span>
+   m_userCreation<span class="operator"> =</span><span class="string"> "current_user_1"</span><span class="operator">;</span>
+   m_userModification<span class="operator"> =</span><span class="string"> "current_user_1"</span><span class="operator">;
+}</span><span class="type">
+
+void</span> BaseClassTrigger<span class="operator">::</span>onBeforeUpdate<span class="operator">(</span>qx<span class="operator">::</span>dao<span class="operator">::</span>detail<span class="operator">::</span>IxDao_Helper<span class="operator"> *</span> dao<span class="operator">)
+{</span>
+   Q_UNUSED<span class="operator">(</span>dao<span class="operator">);</span>
+   m_dateModification<span class="operator"> =</span> QDateTime<span class="operator">::</span>currentDateTime<span class="operator">();</span>
+   m_userModification<span class="operator"> =</span><span class="string"> "current_user_2"</span><span class="operator">;
+}</span>
+</pre>
+           </td></tr></tbody></table>
            </td>
          </tr>
        </tbody>

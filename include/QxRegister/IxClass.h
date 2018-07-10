@@ -41,44 +41,44 @@ class QX_DLL_EXPORT IxClass
 
 protected:
 
-   IxDataMemberX * m_pDataMemberX;  // List of data member
-   IxFunctionX_ptr m_pFctMemberX;   // List of function member
+   IxDataMemberX * m_pDataMemberX;                    // List of data member
+   IxFunctionX_ptr m_pFctMemberX;                     // List of function member
 
-   QString m_sKey;                  // 'IxClass' key <=> class name
-   QString m_sKeyBaseClass;         // 'IxClass' base class key <=> base class name
-   QString m_sName;                 // 'IxClass' name <=> database table name (if empty => class name)
-   QString m_sDescription;          // 'IxClass' description
-   long m_lVersion;                 // 'IxClass' version
-   long m_lDaoStrategy;             // Dao class strategy to access data member
-   bool m_bFinalClass;              // Class cannot have base class : 'qx::trait::no_base_class_defined' and 'QObject'
+   QString m_sKey;                                    // 'IxClass' key <=> class name
+   QString m_sKeyBaseClass;                           // 'IxClass' base class key <=> base class name
+   QString m_sName;                                   // 'IxClass' name <=> database table name (if empty => class name)
+   QString m_sDescription;                            // 'IxClass' description
+   long m_lVersion;                                   // 'IxClass' version
+   bool m_bFinalClass;                                // Class cannot have base class : 'qx::trait::no_base_class_defined' and 'QObject'
+   qx::dao::strategy::inheritance m_eDaoStrategy;     // Dao class strategy to access data member
 
-   QByteArray m_byteName;           // Optimization to retrieve name under "const char *" format
-   const char * m_pName;            // Optimization to retrieve name under "const char *" format
+   QByteArray m_byteName;                             // Optimization to retrieve name under "const char *" format
+   const char * m_pName;                              // Optimization to retrieve name under "const char *" format
 
 protected:
 
-   IxClass() : m_pDataMemberX(NULL), m_lVersion(-1), m_lDaoStrategy(QX_TABLE_PER_CLASS), m_bFinalClass(false), m_pName(NULL) { ; }
+   IxClass() : m_pDataMemberX(NULL), m_lVersion(-1), m_bFinalClass(false), m_eDaoStrategy(qx::dao::strategy::concrete_table_inheritance), m_pName(NULL) { ; }
    virtual ~IxClass() = 0;
 
    void updateClassX();
 
 public:
 
-   inline QString getKey() const                   { return m_sKey; }
-   inline QString getKeyBaseClass() const          { return m_sKeyBaseClass; }
-   inline QString getName() const                  { return m_sName; }
-   inline const char * getNamePtr() const          { return m_pName; }
-   inline QString getDescription() const           { return m_sDescription; }
-   inline long getVersion() const                  { return m_lVersion; }
-   inline long getDaoStrategy() const              { return m_lDaoStrategy; }
-   inline bool getFinalClass() const               { return m_bFinalClass; }
-   inline IxDataMemberX * getDataMemberX() const   { return m_pDataMemberX; }
-   inline IxFunctionX * getFctMemberX() const      { return m_pFctMemberX.get(); }
-   inline IxDataMember * getId() const             { return (m_pDataMemberX ? m_pDataMemberX->getId() : NULL); }
+   inline QString getKey() const                                  { return m_sKey; }
+   inline QString getKeyBaseClass() const                         { return m_sKeyBaseClass; }
+   inline QString getName() const                                 { return m_sName; }
+   inline const char * getNamePtr() const                         { return m_pName; }
+   inline QString getDescription() const                          { return m_sDescription; }
+   inline long getVersion() const                                 { return m_lVersion; }
+   inline qx::dao::strategy::inheritance getDaoStrategy() const   { return m_eDaoStrategy; }
+   inline bool getFinalClass() const                              { return m_bFinalClass; }
+   inline IxDataMemberX * getDataMemberX() const                  { return m_pDataMemberX; }
+   inline IxFunctionX * getFctMemberX() const                     { return m_pFctMemberX.get(); }
+   inline IxDataMember * getId() const                            { return (m_pDataMemberX ? m_pDataMemberX->getId() : NULL); }
 
-   inline void setName(const QString & sName)         { m_sName = sName; updateNamePtr(); }
-   inline void setDescription(const QString & sDesc)  { m_sDescription = sDesc; }
-   inline void setDaoStrategy(long lDaoStrategy)      { m_lDaoStrategy = lDaoStrategy; }
+   inline void setName(const QString & sName)                                 { m_sName = sName; updateNamePtr(); }
+   inline void setDescription(const QString & sDesc)                          { m_sDescription = sDesc; }
+   inline void setDaoStrategy(qx::dao::strategy::inheritance eDaoStrategy)    { m_eDaoStrategy = eDaoStrategy; }
 
 private:
 

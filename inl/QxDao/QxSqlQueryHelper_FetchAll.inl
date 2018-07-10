@@ -41,8 +41,8 @@ struct QxSqlQueryHelper_FetchAll
       qx::QxSqlRelationParams params(0, 0, (& sql), (& builder), NULL, NULL);
       QString table = builder.table();
       sql = "SELECT ";
-      if (pId) { sql += (table + "." + pId->getName() + " AS " + pId->getSqlAlias(& table) + ", "); }
-      while ((p = builder.nextData(l1))) { sql += (table + "." + p->getName() + " AS " + p->getSqlAlias(& table) + ", "); }
+      if (pId) { sql += (pId->getSqlTablePointNameAsAlias(table) + ", "); }
+      while ((p = builder.nextData(l1))) { sql += (p->getSqlTablePointNameAsAlias(table) + ", "); }
       while ((pRelation = builder.nextRelation(l2))) { params.setIndex(l2); pRelation->lazySelect(params); }
       sql = sql.left(sql.count() - 2); // Remove last ", "
       sql += " FROM " + table + ", ";
@@ -61,11 +61,43 @@ struct QxSqlQueryHelper_FetchAll
       qx::IxDataMember * p = NULL;
       qx::IxDataMember * pId = builder.getDataId();
       qx::IxSqlRelation * pRelation = NULL;
-      short iOffset = (pId ? 1 : 0);
-      if (pId) { pId->fromVariant((& t), query.value(0)); }
+      short iOffset = (pId ? pId->getNameCount() : 0);
+      if (pId) { for (int i = 0; i < pId->getNameCount(); i++) { pId->fromVariant((& t), query.value(i), i); } }
       while ((p = builder.nextData(l1))) { p->fromVariant((& t), query.value(l1 + iOffset - 1)); }
       qx::QxSqlRelationParams params(0, (builder.getDataCount() + iOffset), NULL, (& builder), (& query), (& t));
       while ((pRelation = builder.nextRelation(l2))) { params.setIndex(l2); pRelation->lazyFetch_ResolveOutput(params); }
+   }
+
+   static void sql(QString & sql, qx::IxSqlQueryBuilder & builder, const QStringList & columns)
+   {
+      if ((columns.count() <= 0) || (columns.at(0) == "*")) { QxSqlQueryHelper_FetchAll<T>::sql(sql, builder); return; }
+      BOOST_STATIC_ASSERT(qx::trait::is_qx_registered<T>::value);
+      qx::IxDataMember * p = NULL;
+      qx::IxDataMember * pId = builder.getDataId();
+      qx::IxDataMemberX * pDataMemberX = builder.getDataMemberX(); qAssert(pDataMemberX);
+      QString table = builder.table();
+      sql = "SELECT ";
+      if (pId) { sql += (pId->getSqlTablePointNameAsAlias(table) + ", "); }
+      for (int i = 0; i < columns.count(); i++)
+      { p = pDataMemberX->get_WithDaoStrategy(columns.at(i)); if (p && (p != pId)) { sql += (p->getSqlTablePointNameAsAlias(table) + ", "); } }
+      sql = sql.left(sql.count() - 2); // Remove last ", "
+      sql += " FROM " + table;
+   }
+
+   static void resolveInput(T & t, QSqlQuery & query, qx::IxSqlQueryBuilder & builder, const QStringList & columns)
+   { if ((columns.count() <= 0) || (columns.at(0) == "*")) { QxSqlQueryHelper_FetchAll<T>::resolveInput(t, query, builder); return; } }
+
+   static void resolveOutput(T & t, QSqlQuery & query, qx::IxSqlQueryBuilder & builder, const QStringList & columns)
+   {
+      if ((columns.count() <= 0) || (columns.at(0) == "*")) { QxSqlQueryHelper_FetchAll<T>::resolveOutput(t, query, builder); return; }
+      BOOST_STATIC_ASSERT(qx::trait::is_qx_registered<T>::value);
+      qx::IxDataMember * p = NULL;
+      qx::IxDataMember * pId = builder.getDataId();
+      qx::IxDataMemberX * pDataMemberX = builder.getDataMemberX(); qAssert(pDataMemberX);
+      short iOffset = (pId ? pId->getNameCount() : 0);
+      if (pId) { for (int i = 0; i < pId->getNameCount(); i++) { pId->fromVariant((& t), query.value(i), i); } }
+      for (int i = 0; i < columns.count(); i++)
+      { p = pDataMemberX->get_WithDaoStrategy(columns.at(i)); if (p && (p != pId)) { p->fromVariant((& t), query.value(i + iOffset)); } }
    }
 
 };

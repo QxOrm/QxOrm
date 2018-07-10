@@ -41,14 +41,14 @@ struct QxSqlQueryHelper_Insert
       qx::QxSqlRelationParams params(0, 0, (& sql), (& builder), NULL, NULL);
       QString table = builder.table();
       sql = "INSERT INTO " + table + " (";
-      if (pId && ! pId->getAutoIncrement()) { sql += pId->getName() + ", "; }
-      while ((p = builder.nextData(l1))) { sql += p->getName() + ", "; }
+      if (pId && ! pId->getAutoIncrement()) { sql += pId->getSqlName(", ") + ", "; }
+      while ((p = builder.nextData(l1))) { sql += p->getSqlName(", ") + ", "; }
       while ((pRelation = builder.nextRelation(l2))) { params.setIndex(l2); pRelation->lazyInsert(params); }
       sql = sql.left(sql.count() - 2); // Remove last ", "
       sql += ") VALUES (";
       l1 = 0; l2 = 0; p = NULL; pRelation = NULL;
-      if (pId && ! pId->getAutoIncrement()) { sql += pId->getSqlPlaceHolder() + ", "; }
-      while ((p = builder.nextData(l1))) { sql += p->getSqlPlaceHolder() + ", "; }
+      if (pId && ! pId->getAutoIncrement()) { sql += pId->getSqlPlaceHolder("", -1, ", ") + ", "; }
+      while ((p = builder.nextData(l1))) { sql += p->getSqlPlaceHolder("", -1, ", ") + ", "; }
       while ((pRelation = builder.nextRelation(l2))) { params.setIndex(l2); pRelation->lazyInsert_Values(params); }
       sql = sql.left(sql.count() - 2); // Remove last ", "
       sql += ")";

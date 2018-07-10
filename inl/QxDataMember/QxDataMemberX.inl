@@ -63,6 +63,7 @@ IxDataMember * QxDataMemberX<T>::id(typename QxDataMemberX<T>::type_primary_key 
 template <class T>
 IxDataMember * QxDataMemberX<T>::id(typename QxDataMemberX<T>::type_primary_key T::* pDataMemberId, const QString & sKey, long lVersion)
 {
+   if (getId_WithDaoStrategy()) { qDebug("[QxOrm] qx::QxDataMemberX<T> id (primary key) already defined '%s'", qPrintable(getId_WithDaoStrategy()->getName())); }
    if (exist_WithDaoStrategy(sKey) || getId_WithDaoStrategy()) { qAssert(false); return getId_WithDaoStrategy(); }
 
    qAssert(lVersion <= getVersion());

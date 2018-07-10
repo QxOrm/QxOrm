@@ -77,7 +77,11 @@ private:
 
    template <typename U>
    static inline bool insertItem(U & item, qx::dao::detail::QxDao_Helper_Container<T> & dao)
-   { return insertItem_Helper<U, boost::is_pointer<U>::value || qx::trait::is_smart_ptr<U>::value>::insert(item, dao); }
+   {
+      bool bInsertOk = insertItem_Helper<U, boost::is_pointer<U>::value || qx::trait::is_smart_ptr<U>::value>::insert(item, dao);
+      if (bInsertOk) { qx::dao::detail::QxDao_Keep_Original<U>::backup(item); }
+      return bInsertOk;
+   }
 
    template <typename U, bool bIsPointer /* = true */>
    struct insertItem_Helper
@@ -149,7 +153,10 @@ struct QxDao_Insert
       typedef typename boost::mpl::if_c< boost::is_pointer<T>::value, qx::dao::detail::QxDao_Insert_Ptr<T>, qx::dao::detail::QxDao_Insert_Generic<T> >::type type_dao_1;
       typedef typename boost::mpl::if_c< qx::trait::is_smart_ptr<T>::value, qx::dao::detail::QxDao_Insert_Ptr<T>, type_dao_1 >::type type_dao_2;
       typedef typename boost::mpl::if_c< qx::trait::is_container<T>::value, qx::dao::detail::QxDao_Insert_Container<T>, type_dao_2 >::type type_dao_3;
-      return type_dao_3::insert(t, pDatabase);
+
+      QSqlError error = type_dao_3::insert(t, pDatabase);
+      if (! error.isValid()) { qx::dao::detail::QxDao_Keep_Original<T>::backup(t); }
+      return error;
    }
 
 };

@@ -12,8 +12,6 @@ template <> void register_class(QxClass<Foo> & t)
    IxDataMember * pData = NULL;
    IxSqlRelation * pRelation = NULL;
 
-   pData = t.id(& Foo::m_lId, "id");
-
    pData = t.data(& Foo::m_sName, "name");
    pData = t.data(& Foo::m_sDesc, "desc");
 

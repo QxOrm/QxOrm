@@ -34,6 +34,7 @@ void QxClass<T>::init()
    m_lVersion = boost::serialization::version<T>::value;
    m_sKey = qx::trait::get_class_name<T>::get();
    m_sKeyBaseClass = qx::trait::get_class_name<typename QxClass<T>::type_base_class>::get();
+   m_eDaoStrategy = QxClass<typename QxClass<T>::type_base_class>::getSingleton()->getDaoStrategy();
    this->setName(qx::trait::get_class_name<T>::get_xml_tag());
    this->updateClassX();
    beforeRegisterClass();

@@ -90,6 +90,7 @@ HEADERS += ./include/QxRegister/QxClass.h
 HEADERS += ./include/QxRegister/QxClassX.h
 HEADERS += ./include/QxRegister/QxClassName.h
 HEADERS += ./include/QxRegister/QxRegister.h
+HEADERS += ./include/QxRegister/IxTypeInfo.h
 
 HEADERS += ./include/QxCollection/IxCollection.h
 HEADERS += ./include/QxCollection/QxCollection.h
@@ -116,6 +117,9 @@ HEADERS += ./include/QxDao/QxSqlRelation_OneToOne.h
 HEADERS += ./include/QxDao/QxSqlRelation_RawData.h
 HEADERS += ./include/QxDao/QxDao.h
 HEADERS += ./include/QxDao/QxDao_Impl.h
+HEADERS += ./include/QxDao/QxDaoStrategy.h
+HEADERS += ./include/QxDao/QxDaoPointer.h
+HEADERS += ./include/QxDao/QxDao_IsDirty.h
 
 HEADERS += ./include/QxSerialize/QxArchive.h
 HEADERS += ./include/QxSerialize/QxClone.h
@@ -175,6 +179,7 @@ HEADERS += ./include/QxSerialize/Qt/QxSerialize_QStringList.h
 HEADERS += ./include/QxSerialize/Qx/QxSerialize_QxCollection.h
 HEADERS += ./include/QxSerialize/Qx/QxSerialize_QxXmlReader.h
 HEADERS += ./include/QxSerialize/Qx/QxSerialize_QxXmlWriter.h
+HEADERS += ./include/QxSerialize/Qx/QxSerialize_QxDaoPointer.h
 
 HEADERS += ./include/QxSerialize/QxBoostSerializeHelper/IxBoostSerializeRegisterHelper.h
 HEADERS += ./include/QxSerialize/QxBoostSerializeHelper/QxBoostInitGuid.h
@@ -229,6 +234,8 @@ HEADERS += ./include/QxTraits/construct_ptr.h
 HEADERS += ./include/QxTraits/get_sql_type.h
 HEADERS += ./include/QxTraits/generic_container.h
 HEADERS += ./include/QxTraits/is_valid_primary_key.h
+HEADERS += ./include/QxTraits/is_qx_dao_ptr.h
+HEADERS += ./include/QxTraits/is_equal.h
 HEADERS += ./include/QxTraits/qx_traits.h
 
 HEADERS += ./include/QxFunction/IxFunction.h

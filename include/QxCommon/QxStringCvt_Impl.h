@@ -70,11 +70,11 @@
 #define QX_STR_CVT_BY_USING_ARCHIVE_IMPL(className) \
 namespace qx { namespace cvt { namespace detail { \
 template <> struct QxStringCvt_ToString< className > { \
-static inline QString toString(const className & t, const QString & format) \
-{ Q_UNUSED(format); return QX_STR_CVT_DEFAULT_ARCHIVE::to_string(t); } }; \
+static inline QString toString(const className & t, const QString & format, int index) \
+{ Q_UNUSED(format); Q_UNUSED(index); return QX_STR_CVT_DEFAULT_ARCHIVE::to_string(t); } }; \
 template <> struct QxStringCvt_FromString< className > { \
-static inline qx_bool fromString(const QString & s, className & t, const QString & format) \
-{ Q_UNUSED(format); return QX_STR_CVT_DEFAULT_ARCHIVE::from_string(t, s); } }; \
+static inline qx_bool fromString(const QString & s, className & t, const QString & format, int index) \
+{ Q_UNUSED(format); Q_UNUSED(index); return QX_STR_CVT_DEFAULT_ARCHIVE::from_string(t, s); } }; \
 } } } // namespace qx::cvt::detail
 
 namespace qx {
@@ -85,42 +85,42 @@ template <typename T>
 struct QxStringCvtGeneric
 {
 
-   static inline QString toString(const T & t, const QString & format)
+   static inline QString toString(const T & t, const QString & format, int index)
    {
-      Q_UNUSED(format); std::string s;
+      Q_UNUSED(format); Q_UNUSED(index); std::string s;
       try { s = boost::lexical_cast<std::string>(t); }
       catch (...) { qDebug("[QxOrm] %s", "'QxStringCvtGeneric::toString()' unknown error calling 'boost::lexical_cast<std::string>()'"); s = ""; }
       return QString::fromStdString(s);
    }
 
-   static inline qx_bool fromString(const QString & s, T & t, const QString & format)
+   static inline qx_bool fromString(const QString & s, T & t, const QString & format, int index)
    {
-      Q_UNUSED(format);
+      Q_UNUSED(format); Q_UNUSED(index);
       try { t = boost::lexical_cast<T>(s.toStdString()); }
       catch (...) { qDebug("[QxOrm] %s", "'QxStringCvtGeneric::fromString()' unknown error calling 'boost::lexical_cast<T>()'"); return qx_bool(false); }
       return qx_bool(true);
    }
 
-   static inline QVariant toVariant(const T & t, const QString & format)
-   { return qx::cvt::detail::QxStringCvtGeneric<T>::cvtQVariant<qx::trait::is_qt_variant_compatible<T>::value, 0>::toVariant(t, format); }
+   static inline QVariant toVariant(const T & t, const QString & format, int index)
+   { return qx::cvt::detail::QxStringCvtGeneric<T>::cvtQVariant<qx::trait::is_qt_variant_compatible<T>::value, 0>::toVariant(t, format, index); }
 
-   static inline qx_bool fromVariant(const QVariant & v, T & t, const QString & format)
-   { return qx::cvt::detail::QxStringCvtGeneric<T>::cvtQVariant<qx::trait::is_qt_variant_compatible<T>::value, 0>::fromVariant(v, t, format); }
+   static inline qx_bool fromVariant(const QVariant & v, T & t, const QString & format, int index)
+   { return qx::cvt::detail::QxStringCvtGeneric<T>::cvtQVariant<qx::trait::is_qt_variant_compatible<T>::value, 0>::fromVariant(v, t, format, index); }
 
 private:
 
    template <bool isQVariantCompatible /* = false */, int dummy>
    struct cvtQVariant
    {
-      static inline QVariant toVariant(const T & t, const QString & format)                  { return qx::cvt::to_string(t, format); };
-      static inline qx_bool fromVariant(const QVariant & v, T & t, const QString & format)   { return qx::cvt::from_string(v.toString(), t, format); };
+      static inline QVariant toVariant(const T & t, const QString & format, int index)                { return qx::cvt::to_string(t, format, index); };
+      static inline qx_bool fromVariant(const QVariant & v, T & t, const QString & format, int index) { return qx::cvt::from_string(v.toString(), t, format, index); };
    };
 
    template <int dummy>
    struct cvtQVariant<true, dummy>
    {
-      static inline QVariant toVariant(const T & t, const QString & format)                  { Q_UNUSED(format); return QVariant(t); };
-      static inline qx_bool fromVariant(const QVariant & v, T & t, const QString & format)   { Q_UNUSED(format); t = v.value<T>(); return qx_bool(true); };
+      static inline QVariant toVariant(const T & t, const QString & format, int index)                { Q_UNUSED(format); Q_UNUSED(index); return QVariant(t); };
+      static inline qx_bool fromVariant(const QVariant & v, T & t, const QString & format, int index) { Q_UNUSED(format); Q_UNUSED(index); t = v.value<T>(); return qx_bool(true); };
    };
 
 };
@@ -129,17 +129,17 @@ template <typename T>
 struct QxStringCvtPtr
 {
 
-   static inline QString toString(const T & t, const QString & format)
-   { return (t ? qx::cvt::to_string((* t), format) : ""); }
+   static inline QString toString(const T & t, const QString & format, int index)
+   { return (t ? qx::cvt::to_string((* t), format, index) : ""); }
 
-   static inline qx_bool fromString(const QString & s, T & t, const QString & format)
-   { if (! t) { qx::trait::construct_ptr<T>::get(t); }; return (t ? qx::cvt::from_string(s, (* t), format) : qx_bool(false)); }
+   static inline qx_bool fromString(const QString & s, T & t, const QString & format, int index)
+   { if (! t) { qx::trait::construct_ptr<T>::get(t); }; return (t ? qx::cvt::from_string(s, (* t), format, index) : qx_bool(false)); }
 
-   static inline QVariant toVariant(const T & t, const QString & format)
-   { return (t ? qx::cvt::to_variant((* t), format) : QVariant()); }
+   static inline QVariant toVariant(const T & t, const QString & format, int index)
+   { return (t ? qx::cvt::to_variant((* t), format, index) : QVariant()); }
 
-   static inline qx_bool fromVariant(const QVariant & v, T & t, const QString & format)
-   { if (! t && ! v.isNull()) { qx::trait::construct_ptr<T>::get(t); }; return (t ? qx::cvt::from_variant(v, (* t), format) : qx_bool(false)); }
+   static inline qx_bool fromVariant(const QVariant & v, T & t, const QString & format, int index)
+   { if (! t && ! v.isNull()) { qx::trait::construct_ptr<T>::get(t); }; return (t ? qx::cvt::from_variant(v, (* t), format, index) : qx_bool(false)); }
 
 };
 
@@ -147,17 +147,17 @@ template <typename T>
 struct QxStringCvtRegistered
 {
 
-   static inline QString toString(const T & t, const QString & format)
-   { return (getId() ? getId()->toString((& t), format) : ""); }
+   static inline QString toString(const T & t, const QString & format, int index)
+   { return (getId() ? getId()->toString((& t), format, index) : ""); }
 
-   static inline qx_bool fromString(const QString & s, T & t, const QString & format)
-   { return (getId() ? getId()->fromString((& t), s, format) : qx_bool(false)); }
+   static inline qx_bool fromString(const QString & s, T & t, const QString & format, int index)
+   { return (getId() ? getId()->fromString((& t), s, format, index) : qx_bool(false)); }
 
-   static inline QVariant toVariant(const T & t, const QString & format)
-   { return (getId() ? getId()->toVariant((& t), format) : QVariant()); }
+   static inline QVariant toVariant(const T & t, const QString & format, int index)
+   { return (getId() ? getId()->toVariant((& t), format, index) : QVariant()); }
 
-   static inline qx_bool fromVariant(const QVariant & v, T & t, const QString & format)
-   { return (getId() ? getId()->fromVariant((& t), v, format) : qx_bool(false)); }
+   static inline qx_bool fromVariant(const QVariant & v, T & t, const QString & format, int index)
+   { return (getId() ? getId()->fromVariant((& t), v, format, index) : qx_bool(false)); }
 
 private:
 
@@ -170,17 +170,17 @@ template <typename T>
 struct QxStringCvtContainer
 {
 
-   static inline QString toString(const T & t, const QString & format)
-   { Q_UNUSED(format); return QX_STR_CVT_DEFAULT_ARCHIVE::to_string(t); }
+   static inline QString toString(const T & t, const QString & format, int index)
+   { Q_UNUSED(format); Q_UNUSED(index); return QX_STR_CVT_DEFAULT_ARCHIVE::to_string(t); }
 
-   static inline qx_bool fromString(const QString & s, T & t, const QString & format)
-   { Q_UNUSED(format); return QX_STR_CVT_DEFAULT_ARCHIVE::from_string(t, s); }
+   static inline qx_bool fromString(const QString & s, T & t, const QString & format, int index)
+   { Q_UNUSED(format); Q_UNUSED(index); return QX_STR_CVT_DEFAULT_ARCHIVE::from_string(t, s); }
 
-   static inline QVariant toVariant(const T & t, const QString & format)
-   { Q_UNUSED(format); return QX_STR_CVT_DEFAULT_ARCHIVE::to_string(t); }
+   static inline QVariant toVariant(const T & t, const QString & format, int index)
+   { Q_UNUSED(format); Q_UNUSED(index); return QX_STR_CVT_DEFAULT_ARCHIVE::to_string(t); }
 
-   static inline qx_bool fromVariant(const QVariant & v, T & t, const QString & format)
-   { Q_UNUSED(format); return QX_STR_CVT_DEFAULT_ARCHIVE::from_string(t, v.toString()); }
+   static inline qx_bool fromVariant(const QVariant & v, T & t, const QString & format, int index)
+   { Q_UNUSED(format); Q_UNUSED(index); return QX_STR_CVT_DEFAULT_ARCHIVE::from_string(t, v.toString()); }
 
 };
 
@@ -188,17 +188,17 @@ template <typename T>
 struct QxStringCvtEnum
 {
 
-   static inline QString toString(const T & t, const QString & format)
-   { Q_UNUSED(format); return QString::number(static_cast<long>(t)); }
+   static inline QString toString(const T & t, const QString & format, int index)
+   { Q_UNUSED(format); Q_UNUSED(index); return QString::number(static_cast<long>(t)); }
 
-   static inline qx_bool fromString(const QString & s, T & t, const QString & format)
-   { Q_UNUSED(format); bool bOk = false; t = static_cast<T>(static_cast<long>(s.toLongLong(& bOk))); return bOk; }
+   static inline qx_bool fromString(const QString & s, T & t, const QString & format, int index)
+   { Q_UNUSED(format); Q_UNUSED(index); bool bOk = false; t = static_cast<T>(static_cast<long>(s.toLongLong(& bOk))); return bOk; }
 
-   static inline QVariant toVariant(const T & t, const QString & format)
-   { Q_UNUSED(format); return QVariant(static_cast<qlonglong>(t)); }
+   static inline QVariant toVariant(const T & t, const QString & format, int index)
+   { Q_UNUSED(format); Q_UNUSED(index); return QVariant(static_cast<qlonglong>(t)); }
 
-   static inline qx_bool fromVariant(const QVariant & v, T & t, const QString & format)
-   { Q_UNUSED(format); bool bOk = false; t = static_cast<T>(static_cast<long>(v.toLongLong(& bOk))); return bOk; }
+   static inline qx_bool fromVariant(const QVariant & v, T & t, const QString & format, int index)
+   { Q_UNUSED(format); Q_UNUSED(index); bool bOk = false; t = static_cast<T>(static_cast<long>(v.toLongLong(& bOk))); return bOk; }
 
 };
 
@@ -222,28 +222,29 @@ public:
 
 template <typename T>
 struct QxStringCvt_ToString {
-static inline QString toString(const T & t, const QString & format)
-{ return qx::cvt::detail::QxStringCvtHelper<T>::type::toString(t, format); } };
+static inline QString toString(const T & t, const QString & format, int index)
+{ return qx::cvt::detail::QxStringCvtHelper<T>::type::toString(t, format, index); } };
 
 template <typename T>
 struct QxStringCvt_FromString {
-static inline qx_bool fromString(const QString & s, T & t, const QString & format)
-{ return qx::cvt::detail::QxStringCvtHelper<T>::type::fromString(s, t, format); } };
+static inline qx_bool fromString(const QString & s, T & t, const QString & format, int index)
+{ return qx::cvt::detail::QxStringCvtHelper<T>::type::fromString(s, t, format, index); } };
 
 template <typename T>
 struct QxStringCvt_ToVariant {
-static inline QVariant toVariant(const T & t, const QString & format)
-{ return qx::cvt::detail::QxStringCvtHelper<T>::type::toVariant(t, format); } };
+static inline QVariant toVariant(const T & t, const QString & format, int index)
+{ return qx::cvt::detail::QxStringCvtHelper<T>::type::toVariant(t, format, index); } };
 
 template <typename T>
 struct QxStringCvt_FromVariant {
-static inline qx_bool fromVariant(const QVariant & v, T & t, const QString & format)
-{ return qx::cvt::detail::QxStringCvtHelper<T>::type::fromVariant(v, t, format); } };
+static inline qx_bool fromVariant(const QVariant & v, T & t, const QString & format, int index)
+{ return qx::cvt::detail::QxStringCvtHelper<T>::type::fromVariant(v, t, format, index); } };
 
 } // namespace detail
 } // namespace cvt
 } // namespace qx
 
+#include "../../inl/QxCommon/QxStringCvt_WithIndex.inl"
 #include "../../inl/QxCommon/QxStringCvt_ToString.inl"
 #include "../../inl/QxCommon/QxStringCvt_FromString.inl"
 #include "../../inl/QxCommon/QxStringCvt_ToVariant.inl"

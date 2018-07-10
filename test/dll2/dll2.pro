@@ -29,14 +29,17 @@ HEADERS += ./include/CUser.h
 HEADERS += ./include/CTestAll.h
 HEADERS += ./include/Bar.h
 HEADERS += ./include/Foo.h
+HEADERS += ./include/BaseClassTrigger.h
 
 SOURCES += ./qx/CUser.qx.cpp
 SOURCES += ./qx/CTestAll.qx.cpp
 SOURCES += ./qx/Bar.qx.cpp
 SOURCES += ./qx/Foo.qx.cpp
+SOURCES += ./qx/BaseClassTrigger.qx.cpp
 
 SOURCES += ./src/CUser.cpp
 SOURCES += ./src/CTestAll.cpp
 SOURCES += ./src/Bar.cpp
 SOURCES += ./src/Foo.cpp
+SOURCES += ./src/BaseClassTrigger.cpp
 SOURCES += ./src/main.cpp

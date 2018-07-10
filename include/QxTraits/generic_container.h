@@ -145,7 +145,7 @@ struct generic_container_base_without_reserve
 
    static inline long size(const Container & t)                   { return static_cast<long>(t.size()); }
    static inline void clear(Container & t)                        { t.clear(); }
-   static inline void reserve(Container & t, long l)              { ; }
+   static inline void reserve(Container & t, long l)              { Q_UNUSED(t); Q_UNUSED(l); }
    static inline type_item createItem()                           { return type_item(type_item::newKey(), type_item::newValue()); }
    static inline void insertItem(Container & t, type_item & item) { t.push_back(item.value()); }
    static inline type_iterator end(Container & t)                 { return t.end(); }
@@ -166,7 +166,7 @@ struct generic_container_base_set
 
    static inline long size(const Container & t)                   { return static_cast<long>(t.size()); }
    static inline void clear(Container & t)                        { t.clear(); }
-   static inline void reserve(Container & t, long l)              { ; }
+   static inline void reserve(Container & t, long l)              { Q_UNUSED(t); Q_UNUSED(l); }
    static inline type_item createItem()                           { return type_item(type_item::newKey(), type_item::newValue()); }
    static inline void insertItem(Container & t, type_item & item) { t.insert(item.value()); }
    static inline type_iterator end(Container & t)                 { return t.end(); }

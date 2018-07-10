@@ -37,7 +37,7 @@ struct QxSqlQueryHelper_FetchById
       qx::IxDataMember * pId = builder.getDataId(); qAssert(pId);
       QString table = builder.table();
       sql = builder.fetchAll().getSqlQuery();
-      sql += " WHERE " + pId->getSqlAlias(& table, true) + " = " + pId->getSqlPlaceHolder();
+      sql += " WHERE " + pId->getSqlAliasEqualToPlaceHolder(table, true);
    }
 
    static void resolveInput(T & t, QSqlQuery & query, qx::IxSqlQueryBuilder & builder)
@@ -49,6 +49,27 @@ struct QxSqlQueryHelper_FetchById
 
    static void resolveOutput(T & t, QSqlQuery & query, qx::IxSqlQueryBuilder & builder)
    { QxSqlQueryHelper_FetchAll<T>::resolveOutput(t, query, builder); }
+
+   static void sql(QString & sql, qx::IxSqlQueryBuilder & builder, const QStringList & columns)
+   {
+      if ((columns.count() <= 0) || (columns.at(0) == "*")) { QxSqlQueryHelper_FetchById<T>::sql(sql, builder); return; }
+      BOOST_STATIC_ASSERT(qx::trait::is_qx_registered<T>::value);
+      qx::IxDataMember * pId = builder.getDataId(); qAssert(pId);
+      QString table = builder.table();
+      sql = builder.fetchAll(columns).getSqlQuery();
+      sql += " WHERE " + pId->getSqlAliasEqualToPlaceHolder(table, true);
+   }
+
+   static void resolveInput(T & t, QSqlQuery & query, qx::IxSqlQueryBuilder & builder, const QStringList & columns)
+   {
+      if ((columns.count() <= 0) || (columns.at(0) == "*")) { QxSqlQueryHelper_FetchById<T>::resolveInput(t, query, builder); return; }
+      BOOST_STATIC_ASSERT(qx::trait::is_qx_registered<T>::value);
+      qx::IxDataMember * pId = builder.getDataId(); qAssert(pId);
+      pId->setSqlPlaceHolder(query, (& t));
+   }
+
+   static void resolveOutput(T & t, QSqlQuery & query, qx::IxSqlQueryBuilder & builder, const QStringList & columns)
+   { QxSqlQueryHelper_FetchAll<T>::resolveOutput(t, query, builder, columns); }
 
 };
 

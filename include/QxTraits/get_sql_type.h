@@ -43,6 +43,8 @@
 #include <QtCore/qscopedpointer.h>
 #endif // (QT_VERSION >= 0x040600)
 
+#include <QxDao/QxDaoPointer.h>
+
 #include <QxTraits/is_qx_registered.h>
 #include <QxTraits/get_primary_key.h>
 #include <QxTraits/remove_attr.h>
@@ -104,6 +106,10 @@ template <typename T>
 struct get_sql_type< QScopedPointer<T> >
 { static inline const char * get() { return qx::trait::get_sql_type<T>::get(); } };
 #endif // (QT_VERSION >= 0x040600)
+
+template <typename T>
+struct get_sql_type< qx::dao::ptr<T> >
+{ static inline const char * get() { return qx::trait::get_sql_type<T>::get(); } };
 
 namespace detail {
 

@@ -41,8 +41,8 @@ struct QxSqlQueryHelper_CreateTable
       qx::QxSqlRelationParams params(0, 0, (& sql), (& builder), NULL, NULL);
       QString table = builder.table();
       sql = "CREATE TABLE " + table + " (";
-      if (pId) { sql += pId->getName() + " " + pId->getSqlTypeAndParams() + ", "; qAssert(! pId->getSqlType().isEmpty()); }
-      while ((p = builder.nextData(l1))) { sql += p->getName() + " " + p->getSqlTypeAndParams() + ", "; qAssert(! p->getSqlType().isEmpty()); }
+      if (pId) { sql += pId->getSqlNameAndTypeAndParams(", ") + ", "; qAssert(! pId->getSqlType().isEmpty()); }
+      while ((p = builder.nextData(l1))) { sql += p->getSqlNameAndTypeAndParams(", ") + ", "; qAssert(! p->getSqlType().isEmpty()); }
       while ((pRelation = builder.nextRelation(l2))) { params.setIndex(l2); pRelation->createTable(params); }
       sql = sql.left(sql.count() - 2); // Remove last ", "
       sql += ")";

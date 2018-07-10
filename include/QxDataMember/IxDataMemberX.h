@@ -32,10 +32,9 @@
 
 #include <QxDataMember/IxDataMember.h>
 
-#include <QxCollection/QxCollection.h>
+#include <QxDao/QxDaoStrategy.h>
 
-#define QX_TABLE_PER_CLASS       1
-#define QX_TABLE_PER_HIERARCHY   2
+#include <QxCollection/QxCollection.h>
 
 namespace qx {
 
@@ -63,7 +62,7 @@ public:
    const char * getNamePtr() const;
    QString getDescription() const;
    long getVersion() const;
-   long getDaoStrategy() const;
+   qx::dao::strategy::inheritance getDaoStrategy() const;
 
    inline long count() const                             { return m_lstDataMember.count(); }
    inline long size() const                              { return this->count(); }

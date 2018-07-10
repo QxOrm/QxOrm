@@ -76,6 +76,8 @@
 #include <QtCore/qscopedpointer.h>
 #endif // (QT_VERSION >= 0x040600)
 
+#include <QxDao/QxDaoPointer.h>
+
 #include <QxTraits/get_class_name.h>
 
 QX_REGISTER_CLASS_NAME(bool)
@@ -130,6 +132,8 @@ QX_REGISTER_CLASS_NAME_TEMPLATE_1(QList)
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(QLinkedList)
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(QSharedPointer)
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(QWeakPointer)
+
+QX_REGISTER_CLASS_NAME_TEMPLATE_1(qx::dao::ptr)
 
 QX_REGISTER_CLASS_NAME_TEMPLATE_2(std::pair)
 QX_REGISTER_CLASS_NAME_TEMPLATE_2(std::map)

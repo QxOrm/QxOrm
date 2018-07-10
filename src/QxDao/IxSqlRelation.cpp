@@ -83,7 +83,7 @@ bool IxSqlRelation::verifyOffset(QxSqlRelationParams & params, bool bId) const
    IxDataMember * p = (bId ? this->getDataId() : this->getDataMember());
    QString table = (bId ? this->tableAlias(params) : params.builder().table());
    if (! p || table.isEmpty()) { return true; }
-   int index = params.query().record().indexOf(p->getSqlAlias(& table));
+   int index = params.query().record().indexOf(p->getSqlAlias(table));
    qAssert(index == params.offset());
 
    return (index == params.offset());

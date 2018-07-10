@@ -90,7 +90,7 @@ public:
       m_pDataMemberId = (m_pDataMemberX ? m_pDataMemberX->getId_WithDaoStrategy() : NULL);
       m_lstDataMemberPtr = (& QxSqlRelation<DataType, Owner>::m_lstDataMember);
       m_lstSqlRelationPtr = (& QxSqlRelation<DataType, Owner>::m_lstSqlRelation);
-      qAssert(m_pDataMemberX && m_pDataMemberId);
+      qAssert(m_pDataMember && m_pDataMemberX && m_pDataMemberId);
       if (getDataCount() > 0 || getRelationCount() > 0) { m_bInitInEvent = false; return; }
       IxDataMember * p = NULL; long lCount = m_pDataMemberX->count_WithDaoStrategy();
       for (long l = 0; l < lCount; ++l) { if ((p = isValid_DataMember(l))) { m_lstDataMember.insert(p->getKey(), p); } }

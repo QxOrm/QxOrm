@@ -63,7 +63,7 @@
   <col><col><col><col><col>
   <tbody><tr>
   <td align="left" valign="top"><font size="2">QxOrm  &gt;&gt;  Tutoriel</font></td>
-  <td align="right" valign="top"><font size="2">Version courante : QxOrm 1.1.3 (LGPL)</font></td>
+  <td align="right" valign="top"><font size="2">Version courante : QxOrm 1.1.4 (LGPL)</font></td>
   <td width="10px"></td>
   <td width="40px" height="30px"><a href="../qxorm_fr/tutorial.html"><img alt="Version française du site" src="./resource/FR.png" width="40" height="30" border="0"></a></td>
   <td width="40px" height="30px"><a href="../qxorm_en/tutorial.html"><img alt="Web site english version" src="./resource/GB.png" width="40" height="30" border="0"></a></td>
@@ -83,14 +83,16 @@
           <li><a href="#tuto_3">3- Contenu du fichier <i>qxBlog.pro</i></a></li>
           <li><a href="#tuto_4">4- Contenu du fichier <i>export.h</i></a></li>
           <li><a href="#tuto_5">5- Contenu du fichier <i>precompiled.h</i></a></li>
-          <li><a href="#tuto_6">6- Contenu des fichiers <i>author.h</i> et <i>author.cpp</i></a></li>
-          <li><a href="#tuto_7">7- Contenu des fichiers <i>comment.h</i> et <i>comment.cpp</i></a></li>
-          <li><a href="#tuto_8">8- Contenu des fichiers <i>category.h</i> et <i>category.cpp</i></a></li>
-          <li><a href="#tuto_9">9- Contenu des fichiers <i>blog.h</i> et <i>blog.cpp</i></a></li>
+          <li><a href="#tuto_6">6- Contenu des fichiers <i>author.h</i> et <i>author.cpp</i> (relation <i>one-to-many</i>)</a></li>
+          <li><a href="#tuto_7">7- Contenu des fichiers <i>comment.h</i> et <i>comment.cpp</i> (relation <i>many-to-one</i>)</a></li>
+          <li><a href="#tuto_8">8- Contenu des fichiers <i>category.h</i> et <i>category.cpp</i> (relation <i>many-to-many</i>)</a></li>
+          <li><a href="#tuto_9">9- Contenu des fichiers <i>blog.h</i> et <i>blog.cpp</i> (relations <i>one-to-many</i>, <i>many-to-one</i> et <i>many-to-many</i>)</a></li>
           <li><a href="#tuto_10">10- Contenu du fichier <i>main.cpp</i></a></li>
           <li><a href="#tuto_11">11- Annexe - exemple de relation <i>one-to-one</i> avec la classe <i>person</i></a></li>
         </ul>
-        <br>
+        <i>Remarque :</i> il existe un projet similaire dans le dossier '<i>./test/qxBlog_composite_key/</i>' pour montrer comment définir des identifiants sur plusieurs colonnes (<i>composite key</i>).<br>
+        Pour plus d'informations sur cette notion de '<i>multi-columns primary key</i>' : <a href="../qxorm_fr/faq.html#faq_101">suivre ce lien de la FAQ</a>.<br>
+        <br><br>
         <a name="tuto_1"><u><font color="#100D5A">1- Projet <b>qxBlog</b> -
         gestion d'un blog en C++ avec les tables suivantes :</font></u></a> 
         <ul>
@@ -227,7 +229,7 @@
         </td></tr></tbody></table>
         <br><br>
         <a name="tuto_6"><u><font color="#100D5A">6- Contenu des fichiers <i>author.h</i> et
-        <i>author.cpp</i> :</font></u></a><br>
+        <i>author.cpp</i> (relation <i>one-to-many</i>) :</font></u></a><br>
         <br>
         1 <i>author</i> est une personne qui peut rédiger plusieurs <i>blog</i>
         : nous allons ainsi montrer comment utiliser la relation de type
@@ -320,7 +322,7 @@ int</span> author<span class="operator">::</span>age<span class="operator">()</s
         </td></tr></tbody></table>
         <br><br>
         <a name="tuto_7"><u><font color="#100D5A">7- Contenu des fichiers <i>comment.h</i> et
-        <i>comment.cpp</i> :</font></u></a><br>
+        <i>comment.cpp</i> (relation <i>many-to-one</i>) :</font></u></a><br>
         <br>
         1 <i>comment</i> est associé à 1 <i>blog</i> et 1 <i>blog</i> peut
         contenir plusieurs <i>comment</i> : nous allons ainsi montrer comment
@@ -390,7 +392,7 @@ template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</
         <br>
         <br>
         <a name="tuto_8"><u><font color="#100D5A">8- Contenu des fichiers <i>category.h</i> et
-        <i>category.cpp</i> :</font></u></a><br>
+        <i>category.cpp</i> (relation <i>many-to-many</i>) :</font></u></a><br>
         <br>
         1 <i>category</i> référence plusieurs <i>blog</i> et 1 <i>blog</i> peut
         appartenir à plusieurs <i>category</i> : nous allons ainsi montrer
@@ -464,7 +466,7 @@ template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</
         <br>
         <br>
         <a name="tuto_9"><u><font color="#100D5A">9- Contenu des fichiers <i>blog.h</i> et
-        <i>blog.cpp</i> :</font></u></a><br>
+        <i>blog.cpp</i> (relations <i>one-to-many</i>, <i>many-to-one</i> et <i>many-to-many</i>) :</font></u></a><br>
         <br>
         1 <i>blog</i> est écrit par 1 <i>author</i>, peut avoir plusieurs
         <i>comment</i> et peut être associé à plusieurs <i>category</i>. Cette

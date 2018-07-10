@@ -37,7 +37,7 @@ struct QxSqlQueryHelper_DeleteById
       qx::IxDataMember * pId = builder.getDataId(); qAssert(pId);
       QString table = builder.table();
       sql = "DELETE FROM " + table + " WHERE ";
-      sql += pId->getName() + " = " + pId->getSqlPlaceHolder();
+      sql += pId->getSqlNameEqualToPlaceHolder("", " AND ");
    }
 
    static void resolveInput(T & t, QSqlQuery & query, qx::IxSqlQueryBuilder & builder)

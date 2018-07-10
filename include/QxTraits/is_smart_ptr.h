@@ -42,6 +42,7 @@
 #include <QxTraits/is_qt_scoped_ptr.h>
 #include <QxTraits/is_qt_shared_ptr.h>
 #include <QxTraits/is_qt_weak_ptr.h>
+#include <QxTraits/is_qx_dao_ptr.h>
 
 namespace qx {
 namespace trait {
@@ -52,7 +53,8 @@ class is_smart_ptr
 
 private:
 
-   typedef typename boost::mpl::or_< qx::trait::is_boost_intrusive_ptr<T>, 
+   typedef typename boost::mpl::or_< qx::trait::is_qx_dao_ptr<T>, 
+                                     qx::trait::is_boost_intrusive_ptr<T>, 
                                      qx::trait::is_boost_scoped_ptr<T>, 
                                      qx::trait::is_boost_shared_ptr<T>, 
                                      qx::trait::is_boost_weak_ptr<T> >::type cond_is_boost_smart_ptr;

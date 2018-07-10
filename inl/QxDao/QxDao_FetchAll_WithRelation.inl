@@ -95,7 +95,8 @@ struct QxDao_FetchAll_WithRelation_Container
 
       while (dao.nextRecord())
       {
-         vId = dao.query().value(0);
+         qx::IxDataMember * pId = dao.getDataId(); qAssert(pId);
+         if (pId) { QString sId; for (int i = 0; i < pId->getNameCount(); i++) { sId += dao.query().value(i).toString() + "|"; }; vId = sId; }
          void * pItemTmp = (bComplex ? dao.builder().existIdX(0, vId, vId) : NULL);
          if (! pItemTmp) { insertNewItem(t, dao); continue; }
          type_value_qx * pItem = static_cast<type_value_qx *>(pItemTmp);
@@ -112,9 +113,11 @@ private:
    {
       type_item item = type_generic_container::createItem();
       type_value_qx & item_val = item.value_qx();
-      QVariant v = dao.query().value(0); qx::cvt::from_variant(v, item.key());
+      qx::IxDataMember * pId = dao.getDataId(); qAssert(pId);
+      if (pId) { for (int i = 0; i < pId->getNameCount(); i++) { QVariant v = dao.query().value(i); qx::cvt::from_variant(v, item.key(), "", i); } }
       type_query_helper::resolveOutput(dao.getSqlRelationX(), item_val, dao.query(), dao.builder());
       type_generic_container::insertItem(t, item);
+      qx::dao::detail::QxDao_Keep_Original<type_item>::backup(item);
    }
 
 };
@@ -140,7 +143,10 @@ struct QxDao_FetchAll_WithRelation
       typedef typename boost::mpl::if_c< boost::is_pointer<T>::value, qx::dao::detail::QxDao_FetchAll_WithRelation_Ptr<T>, qx::dao::detail::QxDao_FetchAll_WithRelation_Generic<T> >::type type_dao_1;
       typedef typename boost::mpl::if_c< qx::trait::is_smart_ptr<T>::value, qx::dao::detail::QxDao_FetchAll_WithRelation_Ptr<T>, type_dao_1 >::type type_dao_2;
       typedef typename boost::mpl::if_c< qx::trait::is_container<T>::value, qx::dao::detail::QxDao_FetchAll_WithRelation_Container<T>, type_dao_2 >::type type_dao_3;
-      return type_dao_3::fetchAll(relation, query, t, pDatabase);
+
+      QSqlError error = type_dao_3::fetchAll(relation, query, t, pDatabase);
+      if (! error.isValid()) { qx::dao::detail::QxDao_Keep_Original<T>::backup(t); }
+      return error;
    }
 
 };

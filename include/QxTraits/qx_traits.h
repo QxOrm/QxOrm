@@ -77,5 +77,7 @@
 #include <QxTraits/get_sql_type.h>
 #include <QxTraits/generic_container.h>
 #include <QxTraits/is_valid_primary_key.h>
+#include <QxTraits/is_qx_dao_ptr.h>
+#include <QxTraits/is_equal.h>
 
 #endif // _QX_TRAITS_H_

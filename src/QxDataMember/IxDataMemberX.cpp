@@ -45,7 +45,7 @@ QString IxDataMemberX::getDescription() const
 long IxDataMemberX::getVersion() const
 { return (m_pClass ? m_pClass->getVersion() : -1); }
 
-long IxDataMemberX::getDaoStrategy() const
-{ return (m_pClass ? m_pClass->getDaoStrategy() : 0); }
+qx::dao::strategy::inheritance IxDataMemberX::getDaoStrategy() const
+{ return (m_pClass ? m_pClass->getDaoStrategy() : qx::dao::strategy::concrete_table_inheritance); }
 
 } // namespace qx

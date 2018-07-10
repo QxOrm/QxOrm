@@ -69,6 +69,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\BaseClassTrigger.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\src\CTestAll.cpp"
 				>
 			</File>
@@ -92,6 +96,10 @@
 			>
 			<File
 				RelativePath=".\include\Bar.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\BaseClassTrigger.h"
 				>
 			</File>
 			<File
@@ -120,6 +128,10 @@
 			>
 			<File
 				RelativePath=".\qx\Bar.qx.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\qx\BaseClassTrigger.qx.cpp"
 				>
 			</File>
 			<File

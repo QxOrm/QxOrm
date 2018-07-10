@@ -79,15 +79,20 @@ public:
    { return qx::dao::save(this->getContainer(params), (& params.database())); }
 
    virtual QVariant getIdFromQuery(bool bEager, QxSqlRelationParams & params) const
-   { return (bEager ? params.query().value(params.offset()) : QVariant()); }
+   {
+      QString sId; IxDataMember * pId = this->getDataId(); if (! bEager || ! pId) { return QVariant(); }
+      for (int i = 0; i < pId->getNameCount(); i++) { sId += params.query().value(params.offset() + i).toString() + "|"; }
+      return QVariant(sId);
+   }
 
    virtual void updateOffset(bool bEager, QxSqlRelationParams & params) const
    {
       if (! bEager) { return; }
       IxDataMember * pForeign = this->getDataByKey(m_sForeignKey);
       bool bAddOffsetForeign = (pForeign && ! this->getLstDataMember()->exist(m_sForeignKey));
-      long lNewOffset = (params.offset() + this->getDataCount() + (this->getDataId() ? 1 : 0));
-      lNewOffset = (lNewOffset + (bAddOffsetForeign ? 1 : 0));
+      long lOffsetId = (this->getDataId() ? this->getDataId()->getNameCount() : 0);
+      long lNewOffset = (params.offset() + this->getDataCount() + lOffsetId);
+      lNewOffset = (lNewOffset + (bAddOffsetForeign ? pForeign->getNameCount() : 0));
       params.setOffset(lNewOffset);
    }
 
@@ -98,9 +103,9 @@ public:
       IxDataMember * pForeign = this->getDataByKey(m_sForeignKey); qAssert(pForeign);
       IxDataMember * p = NULL; IxDataMember * pId = this->getDataId(); qAssert(pId);
       QString tableAlias = this->tableAlias(params);
-      if (pId) { sql += (tableAlias + "." + pId->getName() + " AS " + pId->getSqlAlias(& tableAlias) + ", "); }
-      if (pForeign) { sql += (tableAlias + "." + pForeign->getName() + " AS " + pForeign->getSqlAlias(& tableAlias) + ", "); }
-      while ((p = this->nextData(l1))) { if (p != pForeign) { sql += (tableAlias + "." + p->getName() + " AS " + p->getSqlAlias(& tableAlias) + ", "); } }
+      if (pId) { sql += (pId->getSqlTablePointNameAsAlias(tableAlias) + ", "); }
+      if (pForeign) { sql += (pForeign->getSqlTablePointNameAsAlias(tableAlias) + ", "); }
+      while ((p = this->nextData(l1))) { if (p != pForeign) { sql += (p->getSqlTablePointNameAsAlias(tableAlias) + ", "); } }
    }
 
    virtual void eagerJoin(QxSqlRelationParams & params) const
@@ -109,28 +114,36 @@ public:
       IxDataMember * pId = params.builder().getDataId(); qAssert(pId);
       IxDataMember * pForeign = this->getDataByKey(m_sForeignKey); qAssert(pForeign);
       QString table = this->table(); QString tableAlias = this->tableAlias(params); QString tableRef = params.builder().table();
-      if (pId && pForeign) { sql += this->getSqlJoin() + table + " " + tableAlias + " ON " + pForeign->getSqlAlias(& tableAlias, true) + " = " + pId->getSqlAlias(& tableRef, true); }
+      if (! pId || ! pForeign) { return; }
+      sql += this->getSqlJoin() + table + " " + tableAlias + " ON ";
+      for (int i = 0; i < pId->getNameCount(); i++)
+      { sql += pForeign->getSqlAlias(tableAlias, true, i) + " = " + pId->getSqlAlias(tableRef, true, i) + " AND "; }
+      sql = sql.left(sql.count() - 5); // Remove last " AND "
    }
 
    virtual void eagerFetch_ResolveOutput(QxSqlRelationParams & params) const
    {
       if (! this->verifyOffset(params, true)) { return; }
       QSqlQuery & query = params.query();
-      IxDataMember * pForeign = this->getDataByKey(m_sForeignKey); qAssert(pForeign);
-      IxDataMember * p = NULL; IxDataMember * pId = this->getDataId(); qAssert(pId);
-      long lIndex = 0; long lOffsetId = (pId ? 1 : 0); long lOffsetForeign = (pForeign ? 1 : 0);
+      IxDataMember * p = NULL; IxDataMember * pId = this->getDataId(); qAssert(pId); if (! pId) { return; }
+      IxDataMember * pForeign = this->getDataByKey(m_sForeignKey); qAssert(pForeign); if (! pForeign) { return; }
+      long lIndex = 0; long lOffsetId = (pId ? pId->getNameCount() : 0); long lOffsetForeign = (pForeign ? pForeign->getNameCount() : 0);
       long lOffsetOld = params.offset(); this->updateOffset(true, params);
       long lOffsetRelation = (lOffsetOld + lOffsetId + lOffsetForeign);
-      QVariant vId = query.value(lOffsetOld);
-      QVariant vForeign = query.value(lOffsetOld + lOffsetId);
-      bool bValidId = qx::trait::is_valid_primary_key(vId);
-      bool bValidForeign = qx::trait::is_valid_primary_key(vForeign);
+      bool bValidId(false), bValidForeign(false);
+      for (int i = 0; i < pId->getNameCount(); i++)
+      { QVariant vId = query.value(lOffsetOld + i); bValidId = (bValidId || qx::trait::is_valid_primary_key(vId)); }
+      for (int i = 0; i < pForeign->getNameCount(); i++)
+      { QVariant vForeign = query.value(lOffsetOld + lOffsetId + i); bValidForeign = (bValidForeign || qx::trait::is_valid_primary_key(vForeign)); }
       if (! bValidId || ! bValidForeign) { return; }
       type_item item = this->createItem();
       type_data & item_val = item.value_qx();
-      qx::cvt::from_variant(vId, item.key());
-      if (pId) { pId->fromVariant((& item_val), vId); }
-      if (pForeign) { pForeign->fromVariant((& item_val), vForeign); }
+      for (int i = 0; i < pId->getNameCount(); i++)
+      { QVariant v = query.value(lOffsetOld + i); qx::cvt::from_variant(v, item.key(), "", i); }
+      for (int i = 0; i < pId->getNameCount(); i++)
+      { QVariant v = query.value(lOffsetOld + i); pId->fromVariant((& item_val), v, "", i); }
+      for (int i = 0; i < pForeign->getNameCount(); i++)
+      { QVariant v = query.value(lOffsetOld + lOffsetId + i); pForeign->fromVariant((& item_val), v, "", i); }
       while ((p = this->nextData(lIndex)))
       { if (p != pForeign) { p->fromVariant((& item_val), query.value(lOffsetRelation++)); } }
       type_generic_container::insertItem(this->getContainer(params), item);

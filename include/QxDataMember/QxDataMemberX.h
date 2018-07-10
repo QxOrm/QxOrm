@@ -103,36 +103,56 @@ private:
 
    long count_WithDaoStrategy_Helper() const
    {
-      if (getDaoStrategy() == QX_TABLE_PER_CLASS) { return count(); }
-      else { return (count() + getBaseClass_Helper()->count_WithDaoStrategy()); }
+      if (getDaoStrategy() == qx::dao::strategy::single_table_inheritance)
+      { return ((getBaseClass_Helper()->getDaoStrategy() != getDaoStrategy()) ? count() : getBaseClass_Helper()->count_WithDaoStrategy()); }
+      else if (getDaoStrategy() == qx::dao::strategy::class_table_inheritance)
+      { return (count() + ((! m_pDataMemberId && getId_WithDaoStrategy()) ? 1 : 0)); }
+      else if (getDaoStrategy() == qx::dao::strategy::concrete_table_inheritance)
+      { return (count() + getBaseClass_Helper()->count_WithDaoStrategy()); }
       qAssert(false); return 0;
    }
 
    bool exist_WithDaoStrategy_Helper(const QString & sKey) const
    {
-      if (getDaoStrategy() == QX_TABLE_PER_CLASS) { return exist(sKey); }
-      else { return (exist(sKey) || getBaseClass_Helper()->exist_WithDaoStrategy(sKey)); }
+      if (getDaoStrategy() == qx::dao::strategy::single_table_inheritance)
+      { return ((getBaseClass_Helper()->getDaoStrategy() != getDaoStrategy()) ? exist(sKey) : getBaseClass_Helper()->exist_WithDaoStrategy(sKey)); }
+      else if (getDaoStrategy() == qx::dao::strategy::class_table_inheritance)
+      { return (exist(sKey) || (getId_WithDaoStrategy() ? (getId_WithDaoStrategy()->getKey() == sKey) : false)); }
+      else if (getDaoStrategy() == qx::dao::strategy::concrete_table_inheritance)
+      { return (exist(sKey) || getBaseClass_Helper()->exist_WithDaoStrategy(sKey)); }
       qAssert(false); return false;
    }
 
    IxDataMember * get_WithDaoStrategy_Helper(long lIndex) const
    {
-      if (getDaoStrategy() == QX_TABLE_PER_CLASS) { return get(lIndex); }
-      else { return (((lIndex >= 0) && (lIndex < count())) ? get(lIndex) : getBaseClass_Helper()->get_WithDaoStrategy(lIndex - count())); }
+      if (getDaoStrategy() == qx::dao::strategy::single_table_inheritance)
+      { return ((getBaseClass_Helper()->getDaoStrategy() != getDaoStrategy()) ? get(lIndex) : getBaseClass_Helper()->get_WithDaoStrategy(lIndex)); }
+      else if (getDaoStrategy() == qx::dao::strategy::class_table_inheritance)
+      { return ((! m_pDataMemberId && (lIndex == count())) ? getId_WithDaoStrategy() : get(lIndex)); }
+      else if (getDaoStrategy() == qx::dao::strategy::concrete_table_inheritance)
+      { return (((lIndex >= 0) && (lIndex < count())) ? get(lIndex) : getBaseClass_Helper()->get_WithDaoStrategy(lIndex - count())); }
       qAssert(false); return NULL;
    }
 
    IxDataMember * get_WithDaoStrategy_Helper(const QString & sKey) const
    {
-      if (getDaoStrategy() == QX_TABLE_PER_CLASS) { return get(sKey); }
-      else { return (exist(sKey) ? get(sKey) : getBaseClass_Helper()->get_WithDaoStrategy(sKey)); }
+      if (getDaoStrategy() == qx::dao::strategy::single_table_inheritance)
+      { return ((getBaseClass_Helper()->getDaoStrategy() != getDaoStrategy()) ? get(sKey) : getBaseClass_Helper()->get_WithDaoStrategy(sKey)); }
+      else if (getDaoStrategy() == qx::dao::strategy::class_table_inheritance)
+      { return ((getId_WithDaoStrategy() && (getId_WithDaoStrategy()->getKey() == sKey)) ? getId_WithDaoStrategy() : get(sKey)); }
+      else if (getDaoStrategy() == qx::dao::strategy::concrete_table_inheritance)
+      { return (exist(sKey) ? get(sKey) : getBaseClass_Helper()->get_WithDaoStrategy(sKey)); }
       qAssert(false); return NULL;
    }
 
    IxDataMember * getId_WithDaoStrategy_Helper() const
    {
-      if (getDaoStrategy() == QX_TABLE_PER_CLASS) { return m_pDataMemberId; }
-      else { return (m_pDataMemberId ? m_pDataMemberId : getBaseClass_Helper()->getId_WithDaoStrategy()); }
+      if (getDaoStrategy() == qx::dao::strategy::single_table_inheritance)
+      { return ((getBaseClass_Helper()->getDaoStrategy() != getDaoStrategy()) ? m_pDataMemberId : getBaseClass_Helper()->getId_WithDaoStrategy()); }
+      else if (getDaoStrategy() == qx::dao::strategy::class_table_inheritance)
+      { return (m_pDataMemberId ? m_pDataMemberId : getBaseClass_Helper()->getId_WithDaoStrategy()); }
+      else if (getDaoStrategy() == qx::dao::strategy::concrete_table_inheritance)
+      { return (m_pDataMemberId ? m_pDataMemberId : getBaseClass_Helper()->getId_WithDaoStrategy()); }
       qAssert(false); return NULL;
    }
 

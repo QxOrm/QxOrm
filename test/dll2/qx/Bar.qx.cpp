@@ -13,8 +13,6 @@ template <> void register_class(QxClass<Bar> & t)
    IxDataMember * pData = NULL;
    IxSqlRelation * pRelation = NULL;
 
-   pData = t.id(& Bar::m_lId, "id");
-
    pData = t.data(& Bar::m_sCode, "code");
    pData = t.data(& Bar::m_sValue, "value");
 

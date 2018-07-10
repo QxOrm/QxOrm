@@ -97,6 +97,10 @@ public:
    virtual IxSqlQueryBuilder & deleteById() = 0;
    virtual IxSqlQueryBuilder & createTable() = 0;
 
+   virtual IxSqlQueryBuilder & fetchAll(const QStringList & columns) = 0;
+   virtual IxSqlQueryBuilder & fetchById(const QStringList & columns) = 0;
+   virtual IxSqlQueryBuilder & update(const QStringList & columns) = 0;
+
    virtual IxSqlQueryBuilder & fetchAll_WithRelation(IxSqlRelationX * pRelationX) = 0;
    virtual IxSqlQueryBuilder & fetchById_WithRelation(IxSqlRelationX * pRelationX) = 0;
 

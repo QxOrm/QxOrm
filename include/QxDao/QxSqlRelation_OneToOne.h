@@ -70,10 +70,14 @@ public:
    { return qx::dao::save(this->getData(params), (& params.database())); }
 
    virtual QVariant getIdFromQuery(bool bEager, QxSqlRelationParams & params) const
-   { return (bEager ? params.query().value(params.offset()) : QVariant()); }
+   {
+      QString sId; IxDataMember * pId = this->getDataId(); if (! bEager || ! pId) { return QVariant(); }
+      for (int i = 0; i < pId->getNameCount(); i++) { sId += params.query().value(params.offset() + i).toString() + "|"; }
+      return QVariant(sId);
+   }
 
    virtual void updateOffset(bool bEager, QxSqlRelationParams & params) const
-   { if (bEager) { params.setOffset(params.offset() + this->getDataCount() + (this->getDataId() ? 1 : 0)); } }
+   { if (bEager) { params.setOffset(params.offset() + this->getDataCount() + (this->getDataId() ? this->getDataId()->getNameCount() : 0)); } }
 
    virtual void eagerSelect(QxSqlRelationParams & params) const
    {
@@ -84,8 +88,8 @@ public:
       //IxSqlRelation * pRelation = NULL;
       //QxSqlQueryBuilder<DataType> builderBis;
       //QxSqlRelationParams paramsBis(0, 0, (& sql), (& builderBis), NULL, NULL);
-      if (pId) { sql += (tableAlias + "." + pId->getName() + " AS " + pId->getSqlAlias(& tableAlias) + ", "); }
-      while ((p = this->nextData(l1))) { sql += (tableAlias + "." + p->getName() + " AS " + p->getSqlAlias(& tableAlias) + ", "); }
+      if (pId) { sql += (pId->getSqlTablePointNameAsAlias(tableAlias) + ", "); }
+      while ((p = this->nextData(l1))) { sql += (p->getSqlTablePointNameAsAlias(tableAlias) + ", "); }
       //while ((pRelation = this->nextRelation(l2))) { params.setIndex(m_lOffsetRelation + l2); pRelation->lazySelect(paramsBis); }
    }
 
@@ -95,20 +99,26 @@ public:
       IxDataMember * pId = this->getDataId(); qAssert(pId);
       IxDataMember * pIdRef = params.builder().getDataId(); qAssert(pIdRef);
       QString table = this->table(); QString tableAlias = this->tableAlias(params); QString tableRef = params.builder().table();
-      if (pId && pIdRef) { sql += this->getSqlJoin() + table + " " + tableAlias + " ON " + pId->getSqlAlias(& tableAlias, true) + " = " + pIdRef->getSqlAlias(& tableRef, true); }
+      if (! pId || ! pIdRef) { return; }
+      sql += this->getSqlJoin() + table + " " + tableAlias + " ON ";
+      for (int i = 0; i < pId->getNameCount(); i++)
+      { sql += pId->getSqlAlias(tableAlias, true, i) + " = " + pIdRef->getSqlAlias(tableRef, true, i) + " AND "; }
+      sql = sql.left(sql.count() - 5); // Remove last " AND "
    }
 
    virtual void eagerFetch_ResolveOutput(QxSqlRelationParams & params) const
    {
       if (! this->verifyOffset(params, true)) { return; }
       QSqlQuery & query = params.query();
-      IxDataMember * p = NULL; IxDataMember * pId = this->getDataId(); qAssert(pId);
-      long lIndex = 0; long lOffsetId = (pId ? 1 : 0);
+      IxDataMember * p = NULL; IxDataMember * pId = this->getDataId(); qAssert(pId); if (! pId) { return; }
+      long lIndex = 0; long lOffsetId = (pId ? pId->getNameCount() : 0); bool bValidId(false);
       long lOffsetOld = params.offset(); params.setOffset(lOffsetOld + this->getDataCount() + lOffsetId);
-      QVariant vId = query.value(lOffsetOld);
-      if (! qx::trait::is_valid_primary_key(vId)) { return; }
+      for (int i = 0; i < pId->getNameCount(); i++)
+      { QVariant v = query.value(lOffsetOld + i); bValidId = (bValidId || qx::trait::is_valid_primary_key(v)); }
+      if (! bValidId) { return; }
       type_data & currData = this->getData(params);
-      if (pId) { pId->fromVariant((& currData), vId); }
+      for (int i = 0; i < pId->getNameCount(); i++)
+      { QVariant v = query.value(lOffsetOld + i); pId->fromVariant((& currData), v, i); }
       while ((p = this->nextData(lIndex)))
       { p->fromVariant((& currData), query.value(lIndex + lOffsetOld + lOffsetId - 1)); }
    }

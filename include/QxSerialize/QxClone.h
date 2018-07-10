@@ -47,7 +47,7 @@
 namespace qx {
 
 template <class T>
-boost::shared_ptr<T> clone(const T & obj)
+T * clone_to_nude_ptr(const T & obj)
 {
    QX_CLONE_STRING_STREAM ioss(std::ios_base::binary | std::ios_base::in | std::ios_base::out);
    QX_CLONE_BINARY_OUTPUT_ARCHIVE oar(ioss, boost::archive::no_header);
@@ -58,9 +58,9 @@ boost::shared_ptr<T> clone(const T & obj)
    catch (const boost::archive::archive_exception & e) { qDebug(QX_STR_CLONE_SERIALIZATION_ERROR, e.what()); }
    catch (const std::exception & e) { qDebug(QX_STR_CLONE_SERIALIZATION_ERROR, e.what()); }
    catch (...) { qDebug(QX_STR_CLONE_SERIALIZATION_ERROR, "unknown error"); }
-   if (! bSerializeOk) { qAssert(false); return boost::shared_ptr<T>(); }
+   if (! bSerializeOk) { qAssert(false); return NULL; }
 
-   boost::shared_ptr<T> pClone; pClone.reset(new T());
+   T * pClone = new T();
    QX_CLONE_BINARY_INPUT_ARCHIVE iar(ioss, boost::archive::no_header);
    QxBoostSerializeRegisterHelperX::helper(iar);
    bool bDeserializeOk = false;
@@ -71,8 +71,16 @@ boost::shared_ptr<T> clone(const T & obj)
    catch (...) { qDebug(QX_STR_CLONE_DESERIALIZATION_ERROR, "unknown error"); }
    qAssert(bDeserializeOk);
 
-   return (bDeserializeOk ? pClone : boost::shared_ptr<T>());
+   return (bDeserializeOk ? pClone : NULL);
 }
+
+template <class T>
+boost::shared_ptr<T> clone(const T & obj)
+{ T * ptr = qx::clone_to_nude_ptr<T>(obj); return boost::shared_ptr<T>(ptr); }
+
+template <class T>
+QSharedPointer<T> clone_to_qt_shared_ptr(const T & obj)
+{ T * ptr = qx::clone_to_nude_ptr<T>(obj); return QSharedPointer<T>(ptr); }
 
 } // namespace qx
 

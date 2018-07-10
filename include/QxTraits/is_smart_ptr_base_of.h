@@ -44,11 +44,12 @@
 #define qx_smart_ptr_base_of_test_5() (sizeof(qx::trait::is_smart_ptr_base_of<B, D>::removeSmartPtr((* b_qt_shared_data_ptr), d)) == sizeof(char))
 #define qx_smart_ptr_base_of_test_6() (sizeof(qx::trait::is_smart_ptr_base_of<B, D>::removeSmartPtr((* b_qt_shared_ptr), d)) == sizeof(char))
 #define qx_smart_ptr_base_of_test_7() (sizeof(qx::trait::is_smart_ptr_base_of<B, D>::removeSmartPtr((* b_qt_weak_ptr), d)) == sizeof(char))
+#define qx_smart_ptr_base_of_test_8() (sizeof(qx::trait::is_smart_ptr_base_of<B, D>::removeSmartPtr((* b_qx_dao_ptr), d)) == sizeof(char))
 
 #define qx_smart_ptr_base_of_all_test() \
 qx_smart_ptr_base_of_test_1() || qx_smart_ptr_base_of_test_2() || qx_smart_ptr_base_of_test_3() || \
 qx_smart_ptr_base_of_test_4() || qx_smart_ptr_base_of_test_5() || qx_smart_ptr_base_of_test_6() || \
-qx_smart_ptr_base_of_test_7()
+qx_smart_ptr_base_of_test_7() || qx_smart_ptr_base_of_test_8()
 
 namespace qx {
 namespace trait {
@@ -80,6 +81,9 @@ private:
    template <typename V, typename W>
    static typename boost::mpl::if_c<boost::is_base_of<V, W>::value, char, int>::type removeSmartPtr(const QWeakPointer<V> &, const QWeakPointer<W> &);
 
+   template <typename V, typename W>
+   static typename boost::mpl::if_c<boost::is_base_of<V, W>::value, char, int>::type removeSmartPtr(const qx::dao::ptr<V> &, const qx::dao::ptr<W> &);
+
    static int removeSmartPtr(...);
    static B b;
    static D d;
@@ -91,6 +95,7 @@ private:
    static QSharedDataPointer<B> * b_qt_shared_data_ptr;
    static QSharedPointer<B> * b_qt_shared_ptr;
    static QWeakPointer<B> * b_qt_weak_ptr;
+   static qx::dao::ptr<B> * b_qx_dao_ptr;
 
    enum { value_0 = (qx::trait::is_smart_ptr<D>::value) };
    enum { value_1 = (qx::trait::is_smart_ptr<B>::value) };

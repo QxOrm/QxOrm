@@ -55,6 +55,7 @@ protected:
    bool           m_bTraceQuery;          // Trace sql query
    bool           m_bTraceRecord;         // Trace sql record
    bool           m_bCartesianProduct;    // Recordset can return cartesian product => same id in multiple records
+   QStringList    m_lstColumns;           // List of columns to execute sql query (if empty => all columns)
 
    qx::IxSqlQueryBuilder_ptr  m_pQueryBuilder;  // Sql query builder
    qx::IxDataMemberX *        m_pDataMemberX;   // Collection of data member
@@ -90,6 +91,8 @@ public:
    inline QString sql() const                                  { return (m_pQueryBuilder ? m_pQueryBuilder->getSqlQuery() : ""); }
    inline type_lst_relation * getSqlRelationX() const          { return m_pSqlRelationX.get(); }
    inline bool getCartesianProduct() const                     { return m_bCartesianProduct; }
+   inline QStringList getSqlColumns() const                    { return m_lstColumns; }
+   inline void setSqlColumns(const QStringList & lst)          { m_lstColumns = lst; }
 
    QSqlError errFailed()            { qDebug(QX_DAO_ERR_EXECUTE_SQL_QUERY, qPrintable(sql())); m_error = m_query.lastError(); return m_error; }
    QSqlError errEmpty()             { qDebug(QX_DAO_ERR_BUILD_SQL_QUERY, qPrintable(sql())); m_error = m_query.lastError(); return m_error; }
@@ -222,6 +225,14 @@ protected:
    virtual void updateQueryBuilder() { m_pQueryBuilder.reset(new qx::QxSqlQueryBuilder<T>()); }
 
 };
+
+template <class T>
+struct QxDao_Keep_Original
+{ static inline void backup(T & t) { Q_UNUSED(t); } };
+
+template <typename T>
+struct QxDao_Keep_Original< qx::dao::ptr<T> >
+{ static inline void backup(qx::dao::ptr<T> & t) { if (t) { t.resetOriginal(qx::clone_to_qt_shared_ptr(* t)); } } };
 
 } // namespace qx
 } // namespace dao

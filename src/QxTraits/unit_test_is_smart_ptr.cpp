@@ -32,6 +32,13 @@
 #include <QxTraits/is_smart_ptr_to_pod.h>
 #include <QxTraits/is_ptr_base_of.h>
 #include <QxTraits/is_ptr_to_pod.h>
+#include <QxTraits/is_qx_registered.h>
+
+#include <QxCommon/QxStringCvt.h>
+#include <QxCommon/QxStringCvt_Impl.h>
+
+#include <QxDao/QxDao.h>
+#include <QxDao/QxDao_Impl.h>
 
 #include <QxMemLeak/mem_leak.h>
 
@@ -91,6 +98,8 @@ void unit_test_is_smart_ptr()
    BOOST_STATIC_ASSERT(qx::trait::is_smart_ptr< QSharedDataPointer<double> >::value);
    BOOST_STATIC_ASSERT(qx::trait::is_smart_ptr< QWeakPointer<QString> >::value);
    BOOST_STATIC_ASSERT(qx::trait::is_smart_ptr< QSharedPointer<QObject> >::value);
+   BOOST_STATIC_ASSERT(qx::trait::is_smart_ptr< qx::dao::ptr<QString> >::value);
+   BOOST_STATIC_ASSERT(qx::trait::is_smart_ptr< qx::dao::ptr<int> >::value);
 
    typedef qx::trait::is_smart_ptr_base_of< QObject, boost::scoped_ptr<QObject> > type_is_smart_ptr_base_of_object_boost_scoped_ptr;
 

@@ -40,18 +40,24 @@ template <typename T> struct QxStringCvt_ToString;
 template <typename T> struct QxStringCvt_FromString;
 template <typename T> struct QxStringCvt_ToVariant;
 template <typename T> struct QxStringCvt_FromVariant;
+template <typename T> struct QxStringCvt_WithIndex;
 
 } // namespace detail
 
-template <typename T> inline QString to_string(const T & t, const QString & format)                   { return qx::cvt::detail::QxStringCvt_ToString<T>::toString(t, format); }
-template <typename T> inline qx_bool from_string(const QString & s, T & t, const QString & format)    { return qx::cvt::detail::QxStringCvt_FromString<T>::fromString(s, t, format); }
-template <typename T> inline QVariant to_variant(const T & t, const QString & format)                 { return qx::cvt::detail::QxStringCvt_ToVariant<T>::toVariant(t, format); }
-template <typename T> inline qx_bool from_variant(const QVariant & v, T & t, const QString & format)  { return qx::cvt::detail::QxStringCvt_FromVariant<T>::fromVariant(v, t, format); }
+template <typename T> inline QString to_string(const T & t, const QString & format)                   { return qx::cvt::detail::QxStringCvt_ToString<T>::toString(t, format, -1); }
+template <typename T> inline qx_bool from_string(const QString & s, T & t, const QString & format)    { return qx::cvt::detail::QxStringCvt_FromString<T>::fromString(s, t, format, -1); }
+template <typename T> inline QVariant to_variant(const T & t, const QString & format)                 { return qx::cvt::detail::QxStringCvt_ToVariant<T>::toVariant(t, format, -1); }
+template <typename T> inline qx_bool from_variant(const QVariant & v, T & t, const QString & format)  { return qx::cvt::detail::QxStringCvt_FromVariant<T>::fromVariant(v, t, format, -1); }
 
-template <typename T> inline QString to_string(const T & t)                   { return qx::cvt::detail::QxStringCvt_ToString<T>::toString(t, ""); }
-template <typename T> inline qx_bool from_string(const QString & s, T & t)    { return qx::cvt::detail::QxStringCvt_FromString<T>::fromString(s, t, ""); }
-template <typename T> inline QVariant to_variant(const T & t)                 { return qx::cvt::detail::QxStringCvt_ToVariant<T>::toVariant(t, ""); }
-template <typename T> inline qx_bool from_variant(const QVariant & v, T & t)  { return qx::cvt::detail::QxStringCvt_FromVariant<T>::fromVariant(v, t, ""); }
+template <typename T> inline QString to_string(const T & t)                   { return qx::cvt::detail::QxStringCvt_ToString<T>::toString(t, "", -1); }
+template <typename T> inline qx_bool from_string(const QString & s, T & t)    { return qx::cvt::detail::QxStringCvt_FromString<T>::fromString(s, t, "", -1); }
+template <typename T> inline QVariant to_variant(const T & t)                 { return qx::cvt::detail::QxStringCvt_ToVariant<T>::toVariant(t, "", -1); }
+template <typename T> inline qx_bool from_variant(const QVariant & v, T & t)  { return qx::cvt::detail::QxStringCvt_FromVariant<T>::fromVariant(v, t, "", -1); }
+
+template <typename T> inline QString to_string(const T & t, const QString & format, int index)                   { return qx::cvt::detail::QxStringCvt_WithIndex<T>::toString(t, format, index); }
+template <typename T> inline qx_bool from_string(const QString & s, T & t, const QString & format, int index)    { return qx::cvt::detail::QxStringCvt_WithIndex<T>::fromString(t, s, format, index); }
+template <typename T> inline QVariant to_variant(const T & t, const QString & format, int index)                 { return qx::cvt::detail::QxStringCvt_WithIndex<T>::toVariant(t, format, index); }
+template <typename T> inline qx_bool from_variant(const QVariant & v, T & t, const QString & format, int index)  { return qx::cvt::detail::QxStringCvt_WithIndex<T>::fromVariant(t, v, format, index); }
 
 } // namespace cvt
 } // namespace qx

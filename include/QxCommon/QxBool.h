@@ -99,10 +99,12 @@ private:
 
 } // namespace qx
 
+/*
 inline bool operator==(const bool b1, const qx::QxBool & b2) { return (b1 == b2.getValue()); }
 inline bool operator!=(const bool b1, const qx::QxBool & b2) { return (b1 != b2.getValue()); }
 inline bool operator&&(const bool b1, const qx::QxBool & b2) { return (b1 && b2.getValue()); }
 inline bool operator||(const bool b1, const qx::QxBool & b2) { return (b1 || b2.getValue()); }
+*/
 
 typedef qx::QxBool qx_bool;
 QX_REGISTER_CLASS_NAME(qx_bool)

@@ -98,7 +98,11 @@ private:
 
    template <typename U>
    static inline bool fetchItem(U & item, type_dao_helper & dao)
-   { return fetchItem_Helper<U, boost::is_pointer<U>::value || qx::trait::is_smart_ptr<U>::value>::fetch(item, dao); }
+   {
+      bool bFetchOk = fetchItem_Helper<U, boost::is_pointer<U>::value || qx::trait::is_smart_ptr<U>::value>::fetch(item, dao);
+      if (bFetchOk) { qx::dao::detail::QxDao_Keep_Original<U>::backup(item); }
+      return bFetchOk;
+   }
 
    template <typename U, bool bIsPointer /* = true */>
    struct fetchItem_Helper
@@ -189,7 +193,10 @@ struct QxDao_FetchById_WithRelation
       typedef typename boost::mpl::if_c< boost::is_pointer<T>::value, qx::dao::detail::QxDao_FetchById_WithRelation_Ptr<T>, qx::dao::detail::QxDao_FetchById_WithRelation_Generic<T> >::type type_dao_1;
       typedef typename boost::mpl::if_c< qx::trait::is_smart_ptr<T>::value, qx::dao::detail::QxDao_FetchById_WithRelation_Ptr<T>, type_dao_1 >::type type_dao_2;
       typedef typename boost::mpl::if_c< qx::trait::is_container<T>::value, qx::dao::detail::QxDao_FetchById_WithRelation_Container<T>, type_dao_2 >::type type_dao_3;
-      return type_dao_3::fetchById(relation, t, pDatabase);
+
+      QSqlError error = type_dao_3::fetchById(relation, t, pDatabase);
+      if (! error.isValid()) { qx::dao::detail::QxDao_Keep_Original<T>::backup(t); }
+      return error;
    }
 
 };

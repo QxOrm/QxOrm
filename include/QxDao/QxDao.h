@@ -37,6 +37,9 @@
 #include <QtSql/qsqlerror.h>
 #include <QtSql/qsqldriver.h>
 
+#include <QxCommon/QxBool.h>
+
+#include <QxDao/QxDaoPointer.h>
 #include <QxDao/QxSqlQuery.h>
 
 namespace qx {
@@ -52,6 +55,7 @@ template <class T> struct QxDao_FetchAll_WithRelation;
 template <class T> struct QxDao_Insert;
 template <class T> struct QxDao_Insert_WithRelation;
 template <class T> struct QxDao_Update;
+template <class T> struct QxDao_Update_Optimized;
 template <class T> struct QxDao_Update_WithRelation;
 template <class T> struct QxDao_Save;
 template <class T> struct QxDao_Save_WithRelation;
@@ -64,11 +68,11 @@ template <class T> struct QxDao_Trigger;
 
 template <class T> inline long count(QSqlDatabase * pDatabase)                                                    { return qx::dao::detail::QxDao_Count<T>::count("", pDatabase); }
 template <class T> inline long count(const qx::QxSqlQuery & query, QSqlDatabase * pDatabase)                      { return qx::dao::detail::QxDao_Count<T>::count(query, pDatabase); }
-template <class T> inline QSqlError fetch_by_id(T & t, QSqlDatabase * pDatabase)                                  { return qx::dao::detail::QxDao_FetchById<T>::fetchById(t, pDatabase); }
-template <class T> inline QSqlError fetch_all(T & t, QSqlDatabase * pDatabase)                                    { return qx::dao::detail::QxDao_FetchAll<T>::fetchAll("", t, pDatabase); }
-template <class T> inline QSqlError fetch_by_query(const qx::QxSqlQuery & query, T & t, QSqlDatabase * pDatabase) { return qx::dao::detail::QxDao_FetchAll<T>::fetchAll(query, t, pDatabase); }
+template <class T> inline QSqlError fetch_by_id(T & t, QSqlDatabase * pDatabase)                                  { return qx::dao::detail::QxDao_FetchById<T>::fetchById(t, pDatabase, QStringList()); }
+template <class T> inline QSqlError fetch_all(T & t, QSqlDatabase * pDatabase)                                    { return qx::dao::detail::QxDao_FetchAll<T>::fetchAll("", t, pDatabase, QStringList()); }
+template <class T> inline QSqlError fetch_by_query(const qx::QxSqlQuery & query, T & t, QSqlDatabase * pDatabase) { return qx::dao::detail::QxDao_FetchAll<T>::fetchAll(query, t, pDatabase, QStringList()); }
 template <class T> inline QSqlError insert(T & t, QSqlDatabase * pDatabase)                                       { return qx::dao::detail::QxDao_Insert<T>::insert(t, pDatabase); }
-template <class T> inline QSqlError update(T & t, QSqlDatabase * pDatabase)                                       { return qx::dao::detail::QxDao_Update<T>::update(t, pDatabase); }
+template <class T> inline QSqlError update(T & t, QSqlDatabase * pDatabase)                                       { return qx::dao::detail::QxDao_Update<T>::update(t, pDatabase, QStringList()); }
 template <class T> inline QSqlError save(T & t, QSqlDatabase * pDatabase)                                         { return qx::dao::detail::QxDao_Save<T>::save(t, pDatabase); }
 template <class T> inline QSqlError delete_by_id(T & t, QSqlDatabase * pDatabase)                                 { return qx::dao::detail::QxDao_DeleteById<T>::deleteById(t, pDatabase); }
 template <class T> inline QSqlError delete_all(QSqlDatabase * pDatabase)                                          { return qx::dao::detail::QxDao_DeleteAll<T>::deleteAll("", pDatabase); }
@@ -98,17 +102,24 @@ template <class T> inline QSqlError save_with_all_relation(T & t, QSqlDatabase *
 
 template <class T> inline long count()                                                    { return qx::dao::detail::QxDao_Count<T>::count("", NULL); }
 template <class T> inline long count(const qx::QxSqlQuery & query)                        { return qx::dao::detail::QxDao_Count<T>::count(query, NULL); }
-template <class T> inline QSqlError fetch_by_id(T & t)                                    { return qx::dao::detail::QxDao_FetchById<T>::fetchById(t, NULL); }
-template <class T> inline QSqlError fetch_all(T & t)                                      { return qx::dao::detail::QxDao_FetchAll<T>::fetchAll("", t, NULL); }
-template <class T> inline QSqlError fetch_by_query(const qx::QxSqlQuery & query, T & t)   { return qx::dao::detail::QxDao_FetchAll<T>::fetchAll(query, t, NULL); }
+template <class T> inline QSqlError fetch_by_id(T & t)                                    { return qx::dao::detail::QxDao_FetchById<T>::fetchById(t, NULL, QStringList()); }
+template <class T> inline QSqlError fetch_all(T & t)                                      { return qx::dao::detail::QxDao_FetchAll<T>::fetchAll("", t, NULL, QStringList()); }
+template <class T> inline QSqlError fetch_by_query(const qx::QxSqlQuery & query, T & t)   { return qx::dao::detail::QxDao_FetchAll<T>::fetchAll(query, t, NULL, QStringList()); }
 template <class T> inline QSqlError insert(T & t)                                         { return qx::dao::detail::QxDao_Insert<T>::insert(t, NULL); }
-template <class T> inline QSqlError update(T & t)                                         { return qx::dao::detail::QxDao_Update<T>::update(t, NULL); }
+template <class T> inline QSqlError update(T & t)                                         { return qx::dao::detail::QxDao_Update<T>::update(t, NULL, QStringList()); }
 template <class T> inline QSqlError save(T & t)                                           { return qx::dao::detail::QxDao_Save<T>::save(t, NULL); }
 template <class T> inline QSqlError delete_by_id(T & t)                                   { return qx::dao::detail::QxDao_DeleteById<T>::deleteById(t, NULL); }
 template <class T> inline QSqlError delete_all()                                          { return qx::dao::detail::QxDao_DeleteAll<T>::deleteAll("", NULL); }
 template <class T> inline QSqlError delete_by_query(const qx::QxSqlQuery & query)         { return qx::dao::detail::QxDao_DeleteAll<T>::deleteAll(query, NULL); }
 template <class T> inline QSqlError create_table()                                        { return qx::dao::detail::QxDao_CreateTable<T>::createTable(NULL); }
 template <class T> inline qx_bool exist(T & t)                                            { return qx::dao::detail::QxDao_Exist<T>::exist(t, NULL); }
+
+template <class T> inline QSqlError fetch_by_id(T & t, QSqlDatabase * pDatabase, const QStringList & columns)                                   { return qx::dao::detail::QxDao_FetchById<T>::fetchById(t, pDatabase, columns); }
+template <class T> inline QSqlError fetch_all(T & t, QSqlDatabase * pDatabase, const QStringList & columns)                                     { return qx::dao::detail::QxDao_FetchAll<T>::fetchAll("", t, pDatabase, columns); }
+template <class T> inline QSqlError fetch_by_query(const qx::QxSqlQuery & query, T & t, QSqlDatabase * pDatabase, const QStringList & columns)  { return qx::dao::detail::QxDao_FetchAll<T>::fetchAll(query, t, pDatabase, columns); }
+template <class T> inline QSqlError update(T & t, QSqlDatabase * pDatabase, const QStringList & columns)                                        { return qx::dao::detail::QxDao_Update<T>::update(t, pDatabase, columns); }
+template <class T> inline QSqlError update_optimized(qx::dao::ptr<T> & ptr)                                                                     { return qx::dao::detail::QxDao_Update_Optimized<T>::update_optimized(ptr, NULL); }
+template <class T> inline QSqlError update_optimized(qx::dao::ptr<T> & ptr, QSqlDatabase * pDatabase)                                           { return qx::dao::detail::QxDao_Update_Optimized<T>::update_optimized(ptr, pDatabase); }
 
 template <class T> inline QSqlError fetch_by_id_with_relation(const QString & relation, T & t)                                      { return qx::dao::detail::QxDao_FetchById_WithRelation<T>::fetchById(relation, t, NULL); }
 template <class T> inline QSqlError fetch_by_id_with_relation(const QStringList & relation, T & t)                                  { return qx::dao::detail::QxDao_FetchById_WithRelation<T>::fetchById(relation, t, NULL); }

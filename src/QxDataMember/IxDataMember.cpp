@@ -67,16 +67,16 @@ void IxDataMember::serialize(Archive & ar, const unsigned int version)
    ar & boost::serialization::make_nvp("isPrimaryKey", m_bIsPrimaryKey);
 }
 
-QString IxDataMember::getSqlAlias(QString * pTable /* = NULL */, bool bClauseWhere /* = false */) const
+QString IxDataMember::getSqlAlias(const QString & sTable /* = QString() */, bool bClauseWhere /* = false */, int iIndexName /* = 0 */) const
 {
    // Standard SQL disallows references to column aliases in a WHERE clause
    // cf. <http://dev.mysql.com/doc/refman/5.0/en/problems-with-alias.html>
-   if (bClauseWhere && pTable) { return ((* pTable) + "." + getName()); }
+   if (bClauseWhere && ! sTable.isEmpty()) { return (sTable + "." + getName(iIndexName)); }
 
    if (! m_sSqlAlias.isEmpty()) { return m_sSqlAlias; }
-   if (pTable) { return ((* pTable) + "_" + getName() + "_0"); }
+   if (! sTable.isEmpty()) { return (sTable + "_" + getName(iIndexName) + "_0"); }
 
-   return (m_sNameParent + "_" + getName() + "_0");
+   return (m_sNameParent + "_" + getName(iIndexName) + "_0");
 }
 
 QString IxDataMember::getSqlTypeAndParams() const
@@ -84,20 +84,31 @@ QString IxDataMember::getSqlTypeAndParams() const
    QString sResult = m_sSqlType;
    sResult += (m_bNotNull ? " NOT NULL" : "");
    sResult += (m_bIsPrimaryKey ? " PRIMARY KEY" : "");
-   sResult += (m_bAutoIncrement ? " AUTOINCREMENT" : "");
+
+   if (QxSqlDatabase::getSingleton()->getDriverName() == "QMYSQL") { sResult += (m_bAutoIncrement ? " AUTO_INCREMENT" : ""); }
+   else { sResult += (m_bAutoIncrement ? " AUTOINCREMENT" : ""); }
 
    return sResult;
 }
 
-QString IxDataMember::getSqlPlaceHolder(const QString & sAppend /* = QString() */) const
+QString IxDataMember::getSqlPlaceHolder(const QString & sAppend /* = QString() */, int iIndexName /* = 0 */, const QString & sSep /* = QString(", ") */) const
 {
    QString sResult;
+   if (iIndexName == -1)
+   {
+      for (int i = 0; i < m_lstNames.count(); i++)
+      { sResult += getSqlPlaceHolder(sAppend, i, sSep); sResult += sSep; }
+      sResult = sResult.left(sResult.count() - sSep.count()); // Remove last separator
+
+      return sResult;
+   }
+
    switch (QxSqlDatabase::getSingleton()->getSqlPlaceHolderStyle())
    {
-      case QxSqlDatabase::ph_style_question_mark:  sResult = "?";                         break;
-      case QxSqlDatabase::ph_style_2_point_name:   sResult = ":" + getName() + sAppend;   break;
-      case QxSqlDatabase::ph_style_at_name:        sResult = "@" + getName() + sAppend;   break;
-      default:                                     sResult = ":" + getName() + sAppend;   break;
+      case QxSqlDatabase::ph_style_question_mark:  sResult = "?";                                     break;
+      case QxSqlDatabase::ph_style_2_point_name:   sResult = ":" + getName(iIndexName) + sAppend;     break;
+      case QxSqlDatabase::ph_style_at_name:        sResult = "@" + getName(iIndexName) + sAppend;     break;
+      default:                                     sResult = ":" + getName(iIndexName) + sAppend;     break;
    }
 
    return sResult;
@@ -105,13 +116,66 @@ QString IxDataMember::getSqlPlaceHolder(const QString & sAppend /* = QString() *
 
 void IxDataMember::setSqlPlaceHolder(QSqlQuery & query, void * pOwner, const QString & sAppend /* = QString() */) const
 {
-   switch (QxSqlDatabase::getSingleton()->getSqlPlaceHolderStyle())
+   for (int i = 0; i < m_lstNames.count(); i++)
    {
-      case QxSqlDatabase::ph_style_question_mark:  query.addBindValue(toVariant(pOwner));                            break;
-      case QxSqlDatabase::ph_style_2_point_name:   query.bindValue(getSqlPlaceHolder(sAppend), toVariant(pOwner));   break;
-      case QxSqlDatabase::ph_style_at_name:        query.bindValue(getSqlPlaceHolder(sAppend), toVariant(pOwner));   break;
-      default:                                     query.bindValue(getSqlPlaceHolder(sAppend), toVariant(pOwner));   break;
+      switch (QxSqlDatabase::getSingleton()->getSqlPlaceHolderStyle())
+      {
+         case QxSqlDatabase::ph_style_question_mark:  query.addBindValue(toVariant(pOwner, i));                               break;
+         case QxSqlDatabase::ph_style_2_point_name:   query.bindValue(getSqlPlaceHolder(sAppend, i), toVariant(pOwner, i));   break;
+         case QxSqlDatabase::ph_style_at_name:        query.bindValue(getSqlPlaceHolder(sAppend, i), toVariant(pOwner, i));   break;
+         default:                                     query.bindValue(getSqlPlaceHolder(sAppend, i), toVariant(pOwner, i));   break;
+      }
    }
+}
+
+QString IxDataMember::getSqlAliasEqualToPlaceHolder(const QString & sTable /* = QString() */, bool bClauseWhere /* = false */, const QString & sAppend /* = QString() */, const QString & sSep /* = QString(" AND ") */) const
+{
+   QString sResult;
+   for (int i = 0; i < m_lstNames.count(); i++)
+   { sResult += getSqlAlias(sTable, bClauseWhere, i) + " = " + getSqlPlaceHolder(sAppend, i); sResult += sSep; }
+   sResult = sResult.left(sResult.count() - sSep.count()); // Remove last separator
+
+   return sResult;
+}
+
+QString IxDataMember::getSqlNameEqualToPlaceHolder(const QString & sAppend /* = QString() */, const QString & sSep /* = QString(" AND ") */) const
+{
+   QString sResult;
+   for (int i = 0; i < m_lstNames.count(); i++)
+   { sResult += getName(i) + " = " + getSqlPlaceHolder(sAppend, i); sResult += sSep; }
+   sResult = sResult.left(sResult.count() - sSep.count()); // Remove last separator
+
+   return sResult;
+}
+
+QString IxDataMember::getSqlTablePointNameAsAlias(const QString & sTable, const QString & sSep /* = QString(", ") */) const
+{
+   QString sResult;
+   for (int i = 0; i < m_lstNames.count(); i++)
+   { sResult += sTable + "." + getName(i) + " AS " + getSqlAlias(sTable, false, i); sResult += sSep; }
+   sResult = sResult.left(sResult.count() - sSep.count()); // Remove last separator
+
+   return sResult;
+}
+
+QString IxDataMember::getSqlName(const QString & sSep /* = QString(", ") */) const
+{
+   QString sResult;
+   for (int i = 0; i < m_lstNames.count(); i++)
+   { sResult += getName(i); sResult += sSep; }
+   sResult = sResult.left(sResult.count() - sSep.count()); // Remove last separator
+
+   return sResult;
+}
+
+QString IxDataMember::getSqlNameAndTypeAndParams(const QString & sSep /* = QString(", ") */) const
+{
+   QString sResult;
+   for (int i = 0; i < m_lstNames.count(); i++)
+   { sResult += getName(i) + " " + getSqlTypeAndParams(); sResult += sSep; }
+   sResult = sResult.left(sResult.count() - sSep.count()); // Remove last separator
+
+   return sResult;
 }
 
 } // namespace qx

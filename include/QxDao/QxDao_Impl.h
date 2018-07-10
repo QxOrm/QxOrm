@@ -36,6 +36,8 @@
 #include <boost/type_traits/is_pointer.hpp>
 
 #include <QxDao/QxDao.h>
+#include <QxDao/QxDaoPointer.h>
+#include <QxDao/QxDao_IsDirty.h>
 #include <QxDao/QxSqlDatabase.h>
 #include <QxDao/QxSqlQueryBuilder.h>
 #include <QxDao/QxSqlQueryHelper.h>
@@ -62,6 +64,7 @@
 #include "../../inl/QxDao/QxDao_Insert.inl"
 #include "../../inl/QxDao/QxDao_Insert_WithRelation.inl"
 #include "../../inl/QxDao/QxDao_Update.inl"
+#include "../../inl/QxDao/QxDao_Update_Optimized.inl"
 #include "../../inl/QxDao/QxDao_Update_WithRelation.inl"
 #include "../../inl/QxDao/QxDao_Save.inl"
 #include "../../inl/QxDao/QxDao_Save_WithRelation.inl"

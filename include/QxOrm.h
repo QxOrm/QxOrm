@@ -91,6 +91,9 @@
 #include <QxDao/QxSqlRelation_RawData.h>
 #include <QxDao/QxDao.h>
 #include <QxDao/QxDao_Impl.h>
+#include <QxDao/QxDaoStrategy.h>
+#include <QxDao/QxDaoPointer.h>
+#include <QxDao/QxDao_IsDirty.h>
 
 #include <QxSerialize/QxSerialize.h>
 
@@ -103,5 +106,6 @@
 #include <QxRegister/QxClassX.h>
 #include <QxRegister/QxClassName.h>
 #include <QxRegister/QxRegister.h>
+#include <QxRegister/IxTypeInfo.h>
 
 #endif // _QX_ORM_H_

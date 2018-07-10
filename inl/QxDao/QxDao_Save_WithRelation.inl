@@ -72,7 +72,11 @@ private:
 
    template <typename U>
    static inline bool saveItem(const QStringList & relation, U & item, qx::dao::detail::QxDao_Helper_Container<T> & dao)
-   { return saveItem_Helper<U, boost::is_pointer<U>::value || qx::trait::is_smart_ptr<U>::value>::save(relation, item, dao); }
+   {
+      bool bSaveOk = saveItem_Helper<U, boost::is_pointer<U>::value || qx::trait::is_smart_ptr<U>::value>::save(relation, item, dao);
+      if (bSaveOk) { qx::dao::detail::QxDao_Keep_Original<U>::backup(item); }
+      return bSaveOk;
+   }
 
    template <typename U, bool bIsPointer /* = true */>
    struct saveItem_Helper
@@ -146,7 +150,10 @@ struct QxDao_Save_WithRelation
       typedef typename boost::mpl::if_c< boost::is_pointer<T>::value, qx::dao::detail::QxDao_Save_WithRelation_Ptr<T>, qx::dao::detail::QxDao_Save_WithRelation_Generic<T> >::type type_dao_1;
       typedef typename boost::mpl::if_c< qx::trait::is_smart_ptr<T>::value, qx::dao::detail::QxDao_Save_WithRelation_Ptr<T>, type_dao_1 >::type type_dao_2;
       typedef typename boost::mpl::if_c< qx::trait::is_container<T>::value, qx::dao::detail::QxDao_Save_WithRelation_Container<T>, type_dao_2 >::type type_dao_3;
-      return type_dao_3::save(relation, t, pDatabase);
+
+      QSqlError error = type_dao_3::save(relation, t, pDatabase);
+      if (! error.isValid()) { qx::dao::detail::QxDao_Keep_Original<T>::backup(t); }
+      return error;
    }
 
 };

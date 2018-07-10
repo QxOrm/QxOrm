@@ -37,9 +37,9 @@ struct QxSqlQueryHelper_Exist
       qx::IxDataMember * pId = builder.getDataId(); qAssert(pId);
       QString table = builder.table();
       sql = "SELECT ";
-      if (pId) { sql += (table + "." + pId->getName() + " AS " + pId->getSqlAlias(& table)); }
+      if (pId) { sql += pId->getSqlTablePointNameAsAlias(table); }
       sql += " FROM " + table;
-      sql += " WHERE " + pId->getSqlAlias(& table, true) + " = " + pId->getSqlPlaceHolder();
+      sql += " WHERE " + pId->getSqlAliasEqualToPlaceHolder(table, true);
    }
 
    static void resolveInput(T & t, QSqlQuery & query, qx::IxSqlQueryBuilder & builder)

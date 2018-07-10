@@ -111,6 +111,7 @@
 #include <QxSerialize/Qx/QxSerialize_QxCollection.h>
 #include <QxSerialize/Qx/QxSerialize_QxXmlReader.h>
 #include <QxSerialize/Qx/QxSerialize_QxXmlWriter.h>
+#include <QxSerialize/Qx/QxSerialize_QxDaoPointer.h>
 
 #include <QxSerialize/QxBoostSerializeHelper/IxBoostSerializeRegisterHelper.h>
 #include <QxSerialize/QxBoostSerializeHelper/QxBoostInitGuid.h>

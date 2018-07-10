@@ -42,6 +42,8 @@
 #include <QtCore/qscopedpointer.h>
 #endif // (QT_VERSION >= 0x040600)
 
+#include <QxDao/QxDaoPointer.h>
+
 namespace qx {
 namespace trait {
 
@@ -91,6 +93,10 @@ template <typename T>
 struct construct_ptr< QScopedPointer<T> >
 { static inline void get(QScopedPointer<T> & t) { t = QScopedPointer<T>(new T()); } };
 #endif // (QT_VERSION >= 0x040600)
+
+template <typename T>
+struct construct_ptr< qx::dao::ptr<T> >
+{ static inline void get(qx::dao::ptr<T> & t) { t = qx::dao::ptr<T>(new T()); } };
 
 } // namespace trait
 } // namespace qx
