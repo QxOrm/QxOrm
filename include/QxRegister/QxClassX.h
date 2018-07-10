@@ -37,6 +37,7 @@
  * \brief List of all classes registered into QxOrm context
  */
 
+#include <boost/function.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/or.hpp>
 #include <boost/mpl/logical.hpp>
@@ -68,11 +69,15 @@ class QX_DLL_EXPORT QxClassX : public QxSingleton<QxClassX>
 public:
 
    typedef IxFunction::type_any_params type_any_params;
+   typedef boost::function<QString (const QVariant &, int, const unsigned int)> type_fct_save_qvariant_usertype;
+   typedef boost::function<QVariant (const QString &, int, const unsigned int)> type_fct_load_qvariant_usertype;
 
 protected:
 
-   QxCollection<QString, IxClass *> m_lstClass;
-   QHash<QString, QString> m_lstSqlTypeByClassName;
+   QxCollection<QString, IxClass *> m_lstClass;                   //!< Collection of classes registered into QxOrm context
+   QHash<QString, QString> m_lstSqlTypeByClassName;               //!< List of SQL types by class name
+   type_fct_save_qvariant_usertype m_fctSaveQVariantUserType;     //!< Serialization of QVariant UserType => function to save a QVariant UserType (cf. QxSerialize_QVariant.cpp file)
+   type_fct_load_qvariant_usertype m_fctLoadQVariantUserType;     //!< Serialization of QVariant UserType => function to load a QVariant UserType (cf. QxSerialize_QVariant.cpp file)
 
 private:
 
@@ -103,6 +108,11 @@ public:
 
    static QHash<QString, QString> * getAllSqlTypeByClassName()       { return (& QxClassX::getSingleton()->m_lstSqlTypeByClassName); }
    static QString getSqlTypeByClassName(const QString & sClassName)  { return (QxClassX::getAllSqlTypeByClassName()->value(sClassName)); }
+
+   static type_fct_save_qvariant_usertype getFctSaveQVariantUserType()           { return QxClassX::getSingleton()->m_fctSaveQVariantUserType; }
+   static type_fct_load_qvariant_usertype getFctLoadQVariantUserType()           { return QxClassX::getSingleton()->m_fctLoadQVariantUserType; }
+   static void setFctSaveQVariantUserType(type_fct_save_qvariant_usertype fct)   { QxClassX::getSingleton()->m_fctSaveQVariantUserType = fct; }
+   static void setFctLoadQVariantUserType(type_fct_load_qvariant_usertype fct)   { QxClassX::getSingleton()->m_fctLoadQVariantUserType = fct; }
 
    template <class U>
    static inline qx_bool invoke(const QString & sClassKey, const QString & sFctKey, U & pOwner, const QString & params = QString(), boost::any * ret = NULL)

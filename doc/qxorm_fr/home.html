@@ -62,13 +62,14 @@
 </table>
 <hr style="width: 80%" align="center" size="1" color="#100D5A">
 <table border="0" style="width: 80%" align="center">
-  <col><col><col><col><col>
+  <col><col><col><col><col><col>
   <tbody><tr>
   <td align="left" valign="top"><font size="2">QxOrm  &gt;&gt;  Accueil</font></td>
-  <td align="right" valign="top"><font size="2">Version courante : QxOrm 1.1.9 (LGPL) - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
+  <td align="right" valign="top"><font size="2">Version courante : QxOrm 1.2.1 (LGPL) - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
   <td width="10px"></td>
   <td width="40px" height="30px"><a href="../qxorm_fr/home.html"><img alt="Version française du site" src="./resource/FR.png" width="40" height="30" border="0"></a></td>
   <td width="40px" height="30px"><a href="../qxorm_en/home.html"><img alt="Web site english version" src="./resource/GB.png" width="40" height="30" border="0"></a></td>
+  <td width="40px" height="30px"><a href="http://sites.google.com/site/qxormpostgres/" target="_blank"><img alt="" src="./resource/ES.png" width="40" height="30" border="0"></a></td>
   </tr></tbody>
 </table>
 <table border="1" frame="vsides" rules="cols" style="width: 80%" align="center" cellpadding="6" bgcolor="#F2F2F4">
@@ -196,7 +197,7 @@
         <p></p>
         <p><b>QxOrm</b> est divisé en sous-modules, voici un descriptif rapide :</p>
         <ul>
-          <li><p><b>QxDao</b> : basé sur le moteur <a href="http://doc.trolltech.com/4.6/sql-programming.html" target="_blank"><i>QtSql</i></a> de Qt, ce module
+          <li><p><b><a href="../doxygen/html/group___qx_dao.html" target="_blank">QxDao</a></b> : basé sur le moteur <a href="http://doc.trolltech.com/4.6/sql-programming.html" target="_blank"><i>QtSql</i></a> de Qt, ce module
             permet de communiquer (sélection, modification, suppression,
             transaction, etc...) avec de nombreuses bases de données en mappant
             chaque champ d'une table avec les propriétés d'une classe C++. Les
@@ -207,17 +208,17 @@
             <b>stl</b>, <b>boost</b> et <b>Qt</b> : <i>std::vector, std::list,
             boost::unordered_map, QList, QHash, etc...</i>).</p>
           </li>
-          <li><p><b>QxRegister, QxDataMember et QxFunction</b> : même si
+          <li><p><b><a href="../doxygen/html/group___qx_register.html" target="_blank">QxRegister</a>, <a href="../doxygen/html/group___qx_data_member.html" target="_blank">QxDataMember</a> et <a href="../doxygen/html/group___qx_function.html" target="_blank">QxFunction</a></b> : même si
             ce n'est pas le but 1er de QxOrm, il est nécessaire d'émuler le
             mécanisme de <i>reflection</i> (ou <i>introspection</i>) présent nativement dans d'autres langages
             (Java, C#, etc...) pour utiliser toutes les fonctionnalités de
             QxOrm.</p>
           </li>
-          <li><p><b>QxService</b> : basé sur le moteur <a href="http://doc.qt.nokia.com/4.7/qtnetwork.html" target="_blank"><i>QtNetwork</i></a> de Qt, ce module
+          <li><p><b><a href="../doxygen/html/group___qx_service.html" target="_blank">QxService</a></b> : basé sur le moteur <a href="http://doc.qt.nokia.com/4.7/qtnetwork.html" target="_blank"><i>QtNetwork</i></a> de Qt, ce module
             permet de créer de manière simple et performante <b>un serveur d'applications en C++</b> (notion de <i>services</i> avec <i>demande</i> du client et <i>réponse</i> du serveur). <b>QxService</b> utilise la <i>serialization</i> et l'<i>introspection</i> des données
             et fonctions pour pouvoir faire transiter sur le réseau n'importe quelle classe ou structure. Pour plus d'informations sur ce module, <b>un tutoriel</b> est disponible <a href="./tutorial_2.html">en cliquant ici</a>.
           </p></li>
-          <li><p><b>QxCollection&lt;Key, Value&gt;</b> : basé sur
+          <li><p><b><a href="../doxygen/html/group___qx_collection.html" target="_blank">QxCollection&lt;Key, Value&gt;</a></b> : basé sur
             <a href="http://www.boost.org/doc/libs/1_42_0/libs/multi_index/doc/index.html" target="_blank"><i>boost::multi_index_container</i></a>, cette collection permet de cumuler
             les avantages d'un <i>std::vector&lt;T&gt;</i> (conserve l'ordre
             d'insertion + accès rapide par index) et d'un
@@ -226,7 +227,7 @@
             est particulièrement adapté pour contenir les éléments issus d'une
             base de données.</p>
           </li>
-          <li><p><b>QxSerialize</b> : ce module s'appuie sur l'excellente
+          <li><p><b><a href="../doxygen/html/group___qx_serialize.html" target="_blank">QxSerialize</a></b> : ce module s'appuie sur l'excellente
             bibliothèque <a href="http://www.boost.org/doc/libs/1_42_0/libs/serialization/doc/index.html" target="_blank"><i>boost::serialization</i></a>. Toute classe définie par QxOrm
             peut être sérializée dans un flux binaire et XML. Ce module permet
             également de cloner toutes les instances d'objet. Les principaux
@@ -235,22 +236,22 @@
             <i>QxSerialize</i>. Ce module assure une compatibilité ascendante avec
             prise en compte d'un n° de version par classe.</p>
           </li>
-          <li><p><b>QxFactory</b> : toute instance d'objet définie par QxOrm
+          <li><p><b><a href="../doxygen/html/group___qx_factory.html" target="_blank">QxFactory</a></b> : toute instance d'objet définie par QxOrm
             peut être créée en fonction du nom de la classe.</p>
           </li>
-          <li><p><b>QxTraits</b> : ce module contient une liste de classes de
+          <li><p><b><a href="../doxygen/html/group___qx_traits.html" target="_blank">QxTraits</a></b> : ce module contient une liste de classes de
             traits non définies dans boost et qui sont utiles pour
             l'utilisation de QxOrm. Ces classes de traits se veulent génériques
             et peuvent donc être utilisées dans d'autres contextes que celui de
             la bibliothèque QxOrm.</p>
           </li>
-          <li><p><b>QxCache</b> : le 'cache' de QxOrm peut contenir tous types
+          <li><p><b><a href="../doxygen/html/group___qx_cache.html" target="_blank">QxCache</a></b> : le 'cache' de QxOrm peut contenir tous types
             d'objets. Il peut permettre par exemple de mémoriser des données
             issues d'une base de données pour éviter des requêtes trop
             fréquentes. Ce cache est générique et peut être utilisé dans d'autres contextes que
             celui de QxOrm.</p>
           </li>
-          <li><p><b>QxMemLeak</b> : permet une détection rapide des fuites
+          <li><p><b><a href="../doxygen/html/group___qx_mem_leak.html" target="_blank">QxMemLeak</a></b> : permet une détection rapide des fuites
             mémoire en mode <i>Debug</i> une fois l'exécution du programme terminée
             (avec indication du fichier et de la ligne =&gt; style MFC de
             Microsoft). Ce module a été développé par <a href="http://wyw.dcweb.cn/leakage.htm" target="_blank">Wu Yongwei</a> et a subi

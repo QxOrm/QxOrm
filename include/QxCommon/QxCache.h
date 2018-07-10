@@ -38,6 +38,9 @@
  */
 
 #include <boost/any.hpp>
+#include <boost/tuple/tuple.hpp>
+#include <boost/tuple/tuple_comparison.hpp>
+#include <boost/tuple/tuple_io.hpp>
 
 #include <QxCommon/QxBool.h>
 
@@ -56,7 +59,7 @@ class QX_DLL_EXPORT QxCache : public qx::QxSingleton<QxCache>
 
 protected:
 
-   typedef std::pair<long, boost::any> type_qx_cache;
+   typedef boost::tuple<long, QDateTime, boost::any> type_qx_cache;
    typedef qx::QxCollection<QString, type_qx_cache> type_qx_lst_cache;
 
    type_qx_lst_cache m_cache;    //!< List of objects in cache under boost::any format
@@ -66,22 +69,24 @@ protected:
 
 public:
 
-   QxCache() : qx::QxSingleton<QxCache>("qx::cache::detail::QxCache"), m_lMaxCost(999999999), m_lCurrCost(0) { ; }
-   virtual ~QxCache() { ; }
+   QxCache();
+   virtual ~QxCache();
 
-   inline long getCurrCost() const  { return m_lCurrCost; }
-   inline long getMaxCost() const   { return m_lMaxCost; }
-   inline void setMaxCost(long l)   { QMutexLocker locker(& m_oMutexCache); m_lMaxCost = ((l < 0) ? 0 : l); updateCost(); }
+   long getCurrCost() const;
+   long getMaxCost() const;
+   void setMaxCost(long l);
 
-   inline long count() const                          { return m_cache.count(); }
-   inline long size() const                           { return this->count(); }
-   inline bool isEmpty() const                        { return (this->count() == 0); }
-   inline bool exist(const QString & sKey) const      { return m_cache.exist(sKey); }
-   inline bool contains(const QString & sKey) const   { return this->exist(sKey); }
-   inline boost::any at(const QString & sKey)         { QMutexLocker locker(& m_oMutexCache); return (this->exist(sKey) ? m_cache.getByKey(sKey).second : boost::any()); }
-   inline void clear()                                { QMutexLocker locker(& m_oMutexCache); m_cache.clear(); m_lCurrCost = 0; }
+   long count() const;
+   long size() const;
+   bool isEmpty() const;
+   bool exist(const QString & sKey) const;
+   bool contains(const QString & sKey) const;
+   boost::any at(const QString & sKey);
+   long insertionCost(const QString & sKey);
+   QDateTime insertionDateTime(const QString & sKey);
+   void clear();
 
-   bool insert(const QString & sKey, const boost::any & pObj, long lCost = 1);
+   bool insert(const QString & sKey, const boost::any & anyObj, long lCost = 1, const QDateTime & dt = QDateTime());
    bool remove(const QString & sKey);
 
 private:
@@ -91,62 +96,80 @@ private:
 };
 
 } // namespace detail
+} // namespace cache
+} // namespace qx
+
+QX_DLL_EXPORT_QX_SINGLETON_HPP(qx::cache::detail::QxCache)
+
+namespace qx {
+namespace cache {
 
 /*!
  * \ingroup QxCache
  * \brief Set the maximum allowed total cost of the cache to l. If the current total cost is greater than l, some objects are deleted immediately
  */
-inline void max_cost(long l) { qx::cache::detail::QxCache::getSingleton()->setMaxCost(l); }
+inline void max_cost(long l)
+{ qx::cache::detail::QxCache::getSingleton()->setMaxCost(l); }
 
 /*!
  * \ingroup QxCache
  * \brief Return the maximum allowed total cost of the cache
  */
-inline long max_cost() { return qx::cache::detail::QxCache::getSingleton()->getMaxCost(); }
+inline long max_cost()
+{ return qx::cache::detail::QxCache::getSingleton()->getMaxCost(); }
 
 /*!
  * \ingroup QxCache
  * \brief Return the current cost used by the cache
  */
-inline long current_cost() { return qx::cache::detail::QxCache::getSingleton()->getCurrCost(); }
+inline long current_cost()
+{ return qx::cache::detail::QxCache::getSingleton()->getCurrCost(); }
 
 /*!
  * \ingroup QxCache
  * \brief Return the number of objects in the cache
  */
-inline long count() { return qx::cache::detail::QxCache::getSingleton()->count(); }
+inline long count()
+{ return qx::cache::detail::QxCache::getSingleton()->count(); }
 
 /*!
  * \ingroup QxCache
  * \brief Return true if the cache contains no object; otherwise return false
  */
-inline bool is_empty() { return qx::cache::detail::QxCache::getSingleton()->isEmpty(); }
+inline bool is_empty()
+{ return qx::cache::detail::QxCache::getSingleton()->isEmpty(); }
 
 /*!
  * \ingroup QxCache
  * \brief Delete all the objects in the cache
  */
-inline void clear() { qx::cache::detail::QxCache::getSingleton()->clear(); }
+inline void clear()
+{ qx::cache::detail::QxCache::getSingleton()->clear(); }
 
 /*!
  * \ingroup QxCache
  * \brief Return true if the cache contains an object associated with key sKey; otherwise return false
  */
-inline bool exist(const QString & sKey) { return qx::cache::detail::QxCache::getSingleton()->exist(sKey); }
+inline bool exist(const QString & sKey)
+{ return qx::cache::detail::QxCache::getSingleton()->exist(sKey); }
 
 /*!
  * \ingroup QxCache
  * \brief Delete the object associated with key sKey. Return true if the object was found in the cache; otherwise return false
  */
-inline bool remove(const QString & sKey) { return qx::cache::detail::QxCache::getSingleton()->remove(sKey); }
+inline bool remove(const QString & sKey)
+{ return qx::cache::detail::QxCache::getSingleton()->remove(sKey); }
 
 /*!
  * \ingroup QxCache
- * \brief Insert object t into the cache with key sKey and associated cost lCost. Any object with the same key already in the cache will be removed
+ * \brief Insert object t into the cache with key sKey, associated cost lCost and insertion date-time dt. Any object with the same key already in the cache will be removed
  */
 template <typename T>
-inline bool set(const QString & sKey, const T & t, long lCost = 1)
-{ boost::any obj(t); return qx::cache::detail::QxCache::getSingleton()->insert(sKey, obj, lCost); }
+inline bool set(const QString & sKey, T & t, long lCost = 1, const QDateTime & dt = QDateTime())
+{
+   boost::any obj(t);
+   return qx::cache::detail::QxCache::getSingleton()->insert(sKey, obj, lCost, dt);
+}
 
 /*!
  * \ingroup QxCache
@@ -163,15 +186,28 @@ inline T get(const QString & sKey)
 
 /*!
  * \ingroup QxCache
+ * \brief Return true if object t can be fetched with associated key sKey and insertion date-time dt; otherwise return false with an error description
+ */
+template <typename T>
+inline qx_bool get(const QString & sKey, T & t, QDateTime & dt)
+{
+   dt = QDateTime();
+   if (! qx::cache::exist(sKey)) { return qx_bool(false, 0, "[QxOrm] qx::cache : key doesn't exist in cache"); }
+   boost::any obj = qx::cache::detail::QxCache::getSingleton()->at(sKey);
+   dt = qx::cache::detail::QxCache::getSingleton()->insertionDateTime(sKey);
+   try { t = boost::any_cast<T>(obj); return qx_bool(true); }
+   catch (const boost::bad_any_cast & err) { Q_UNUSED(err); return qx_bool(false, 0, "[QxOrm] qx::cache : bad any cast exception"); }
+}
+
+/*!
+ * \ingroup QxCache
  * \brief Return true if object t can be fetched with associated key sKey; otherwise return false with an error description
  */
 template <typename T>
 inline qx_bool get(const QString & sKey, T & t)
 {
-   if (! qx::cache::exist(sKey)) { return qx_bool(false, 0, "[QxOrm] Key doesn't exist in cache"); }
-   boost::any obj = qx::cache::detail::QxCache::getSingleton()->at(sKey);
-   try { t = boost::any_cast<T>(obj); return qx_bool(true); }
-   catch (const boost::bad_any_cast & err) { Q_UNUSED(err); return qx_bool(false, 0, "[QxOrm] Bad any cast exception"); }
+   QDateTime dt;
+   return qx::cache::get<T>(sKey, t, dt);
 }
 
 } // namespace cache

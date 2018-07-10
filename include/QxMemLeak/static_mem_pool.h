@@ -185,9 +185,9 @@ public:
     {
         assert(__ptr != NULL);
         lock __guard;
-        _Block_list* __block = reinterpret_cast<_Block_list*>(__ptr);
-        __block->_M_next = _S_memory_block_p;
-        _S_memory_block_p = __block;
+        _Block_list* __block_ = reinterpret_cast<_Block_list*>(__ptr);
+        __block_->_M_next = _S_memory_block_p;
+        _S_memory_block_p = __block_;
     }
     virtual void recycle();
 
@@ -203,12 +203,12 @@ private:
 #ifndef QT_NO_DEBUG
         // Empty the pool to avoid false memory leakage alarms.  This is
         // generally not necessary for release binaries.
-        _Block_list* __block = _S_memory_block_p;
-        while (__block)
+        _Block_list* __block_ = _S_memory_block_p;
+        while (__block_)
         {
-            _Block_list* __next = __block->_M_next;
-            dealloc_sys(__block);
-            __block = __next;
+            _Block_list* __next_ = __block_->_M_next;
+            dealloc_sys(__block_);
+            __block_ = __next_;
         }
         _S_memory_block_p = NULL;
 #endif // QT_NO_DEBUG
@@ -253,15 +253,15 @@ void static_mem_pool<_Sz, _Gid>::recycle()
     // before the pool-specific lock.  However, no race conditions are
     // found so far.
     lock __guard;
-    _Block_list* __block = _S_memory_block_p;
-    while (__block)
+    _Block_list* __block_ = _S_memory_block_p;
+    while (__block_)
     {
-        if (_Block_list* __temp = __block->_M_next)
+        if (_Block_list* __temp_ = __block_->_M_next)
         {
-            _Block_list* __next = __temp->_M_next;
-            __block->_M_next = __next;
-            dealloc_sys(__temp);
-            __block = __next;
+            _Block_list* __next_ = __temp_->_M_next;
+            __block_->_M_next = __next_;
+            dealloc_sys(__temp_);
+            __block_ = __next_;
         }
         else
         {

@@ -27,6 +27,8 @@
 
 #include <QxDao/QxSqlDatabase.h>
 
+#include <QxDao/QxSqlGenerator/QxSqlGenerator.h>
+
 #include <QxMemLeak/mem_leak.h>
 
 QX_DLL_EXPORT_QX_SINGLETON_CPP(qx::QxSqlDatabase)
@@ -84,6 +86,20 @@ QString QxSqlDatabase::formatLastError(const QSqlDatabase & db) const
    else { sLastError += "<no error description>"; }
 
    return sLastError;
+}
+
+qx::dao::detail::IxSqlGenerator * QxSqlDatabase::getSqlGenerator()
+{
+   if (m_pSqlGenerator) { return m_pSqlGenerator.get(); }
+   QMutexLocker locker(& m_oDbMutex);
+
+   if (m_sDriverName == "QMYSQL")         { m_pSqlGenerator.reset(new qx::dao::detail::QxSqlGenerator_MySQL()); }
+   else if (m_sDriverName == "QPSQL")     { m_pSqlGenerator.reset(new qx::dao::detail::QxSqlGenerator_PostgreSQL()); }
+   else if (m_sDriverName == "QSQLITE")   { m_pSqlGenerator.reset(new qx::dao::detail::QxSqlGenerator_SQLite()); }
+   else if (m_sDriverName == "QOCI")      { m_pSqlGenerator.reset(new qx::dao::detail::QxSqlGenerator_Oracle()); }
+
+   if (! m_pSqlGenerator) { m_pSqlGenerator.reset(new qx::dao::detail::QxSqlGenerator_Standard()); }
+   return m_pSqlGenerator.get();
 }
 
 } // namespace qx

@@ -54,7 +54,7 @@ namespace qx {
 namespace dao {
 
 namespace detail {
-struct IxDao_Helper;
+class IxDao_Helper;
 template <class T> struct QxDao_Count;
 template <class T> struct QxDao_FetchById;
 template <class T> struct QxDao_FetchById_WithRelation;

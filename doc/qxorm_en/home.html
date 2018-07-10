@@ -62,13 +62,14 @@
 </table>
 <hr style="width: 80%" align="center" size="1" color="#100D5A">
 <table border="0" style="width: 80%" align="center">
-  <col><col><col><col><col>
+  <col><col><col><col><col><col>
   <tbody><tr>
   <td align="left" valign="top"><font size="2">QxOrm  &gt;&gt;  Home</font></td>
-  <td align="right" valign="top"><font size="2">Current version : QxOrm 1.1.9 (LGPL) - <a href="../doxygen/index.html" target="_blank">QxOrm library online documentation</a></font></td>
+  <td align="right" valign="top"><font size="2">Current version : QxOrm 1.2.1 (LGPL) - <a href="../doxygen/index.html" target="_blank">QxOrm library online documentation</a></font></td>
   <td width="10px"></td>
   <td width="40px" height="30px"><a href="../qxorm_fr/home.html"><img alt="Version française du site" src="./resource/FR.png" width="40" height="30" border="0"></a></td>
   <td width="40px" height="30px"><a href="../qxorm_en/home.html"><img alt="Web site english version" src="./resource/GB.png" width="40" height="30" border="0"></a></td>
+  <td width="40px" height="30px"><a href="http://sites.google.com/site/qxormpostgres/" target="_blank"><img alt="" src="./resource/ES.png" width="40" height="30" border="0"></a></td>
   </tr></tbody>
 </table>
 <table border="1" frame="vsides" rules="cols" style="width: 80%" align="center" cellpadding="6" bgcolor="#F2F2F4">
@@ -139,21 +140,21 @@
         <p></p>
         <p><b>QxOrm</b> contains the following modules :</p> 
         <ul>
-          <li><p><b>QxDao</b> : based on <a href="http://doc.trolltech.com/4.6/sql-programming.html" target="_blank"><i>QtSql</i></a> engine of <b>Qt</b>, this module allows to communicate (select, update, delete, transaction...) with many databases by mapping each field of a table with properties of a C++ class. The relationships <i>1-1</i>, <i>1-n</i>, <i>n-1</i> and <i>n-n</i> are very easy to setup in C++ code. This module supports object-oriented programming : inheritance, polymorphism, modularity. It supports also a lot of containers (<b>stl</b>, <b>boost</b> and <b>Qt</b> : <i>std::vector, std::list, boost::unordered_map, QList, QHash...</i>).</p> 
+          <li><p><b><a href="../doxygen/html/group___qx_dao.html" target="_blank">QxDao</a></b> : based on <a href="http://doc.trolltech.com/4.6/sql-programming.html" target="_blank"><i>QtSql</i></a> engine of <b>Qt</b>, this module allows to communicate (select, update, delete, transaction...) with many databases by mapping each field of a table with properties of a C++ class. The relationships <i>1-1</i>, <i>1-n</i>, <i>n-1</i> and <i>n-n</i> are very easy to setup in C++ code. This module supports object-oriented programming : inheritance, polymorphism, modularity. It supports also a lot of containers (<b>stl</b>, <b>boost</b> and <b>Qt</b> : <i>std::vector, std::list, boost::unordered_map, QList, QHash...</i>).</p> 
           </li>
-          <li><p><b>QxRegister, QxDataMember, QxFactory and QxFunction</b> : <b>QxOrm</b> emulates <i>reflection</i> (or <i>introspection</i>) mechanism (like other languages : Java, C#...).</p> 
+          <li><p><b><a href="../doxygen/html/group___qx_register.html" target="_blank">QxRegister</a>, <a href="../doxygen/html/group___qx_data_member.html" target="_blank">QxDataMember</a>, <a href="../doxygen/html/group___qx_factory.html" target="_blank">QxFactory</a> and <a href="../doxygen/html/group___qx_function.html" target="_blank">QxFunction</a></b> : <b>QxOrm</b> emulates <i>reflection</i> (or <i>introspection</i>) mechanism (like other languages : Java, C#...).</p> 
           </li>
-          <li><p><b>QxService</b> : based on <a href="http://doc.qt.nokia.com/4.7/qtnetwork.html" target="_blank"><i>QtNetwork</i></a> engine of Qt library, this module provides an easy and powerful way to create <b>C++ application server</b> (<i>services</i> concept with <i>request</i> from client and <i>reply</i> from server). <b>QxService</b> uses <i>serialization</i> and <i>introspection</i> from QxOrm library to transfer over network any class or structure. For more details on <b>QxService</b> module, <b>a tutorial</b> is available <a href="./tutorial_2.html">here</a>.</p>
+          <li><p><b><a href="../doxygen/html/group___qx_service.html" target="_blank">QxService</a></b> : based on <a href="http://doc.qt.nokia.com/4.7/qtnetwork.html" target="_blank"><i>QtNetwork</i></a> engine of Qt library, this module provides an easy and powerful way to create <b>C++ application server</b> (<i>services</i> concept with <i>request</i> from client and <i>reply</i> from server). <b>QxService</b> uses <i>serialization</i> and <i>introspection</i> from QxOrm library to transfer over network any class or structure. For more details on <b>QxService</b> module, <b>a tutorial</b> is available <a href="./tutorial_2.html">here</a>.</p>
           </li>
-          <li><p><b>QxCollection&lt;Key, Value&gt;</b> : based on <a href="http://www.boost.org/doc/libs/1_42_0/libs/multi_index/doc/index.html" target="_blank"><i>boost::multi_index_container</i></a>, this collection has advantages of <i>std::vector&lt;T&gt;</i> (insertion order + quick access by index) and <i>boost::unordered_map&lt;Key, Value&gt;</i> or <i>QHash&lt;Key, Value&gt;</i> (quick access by a key : <i>hash-map</i>). <b>QxCollection&lt;Key, Value&gt;</b> is adapted to contain the elements resulting from a database.</p> 
+          <li><p><b><a href="../doxygen/html/group___qx_collection.html" target="_blank">QxCollection&lt;Key, Value&gt;</a></b> : based on <a href="http://www.boost.org/doc/libs/1_42_0/libs/multi_index/doc/index.html" target="_blank"><i>boost::multi_index_container</i></a>, this collection has advantages of <i>std::vector&lt;T&gt;</i> (insertion order + quick access by index) and <i>boost::unordered_map&lt;Key, Value&gt;</i> or <i>QHash&lt;Key, Value&gt;</i> (quick access by a key : <i>hash-map</i>). <b>QxCollection&lt;Key, Value&gt;</b> is adapted to contain the elements resulting from a database.</p> 
           </li>
-          <li><p><b>QxSerialize</b> : this module is based on the excellent library <a href="http://www.boost.org/doc/libs/1_42_0/libs/serialization/doc/index.html" target="_blank"><i>boost::serialization</i></a>. Any class defined by QxOrm can be serialize into binary and XML format. This module also allows to clone all instances of objects. Most of Qt objects (<i>QObject, QString, QDate, QTime, QDateTime, QList, QHash...</i>) are compatible with <i>QxSerialize</i> module.</p> 
+          <li><p><b><a href="../doxygen/html/group___qx_serialize.html" target="_blank">QxSerialize</a></b> : this module is based on the excellent library <a href="http://www.boost.org/doc/libs/1_42_0/libs/serialization/doc/index.html" target="_blank"><i>boost::serialization</i></a>. Any class defined by QxOrm can be serialize into binary and XML format. This module also allows to clone all instances of objects. Most of Qt objects (<i>QObject, QString, QDate, QTime, QDateTime, QList, QHash...</i>) are compatible with <i>QxSerialize</i> module.</p> 
           </li>
-          <li><p><b>QxTraits</b> : boost library provides a lot of generic traits. QxOrm uses them but needs new functionalities that are not present in boost.</p> 
+          <li><p><b><a href="../doxygen/html/group___qx_traits.html" target="_blank">QxTraits</a></b> : boost library provides a lot of generic traits. QxOrm uses them but needs new functionalities that are not present in boost.</p> 
           </li>
-          <li><p><b>QxCache</b> : QxOrm's cache can contain all types of objects. It can make it possible for example to memorize data resulting from a database to avoid too frequent requests. This cache is generic and can be used in other contexts than QxOrm.</p> 
+          <li><p><b><a href="../doxygen/html/group___qx_cache.html" target="_blank">QxCache</a></b> : QxOrm's cache can contain all types of objects. It can make it possible for example to memorize data resulting from a database to avoid too frequent requests. This cache is generic and can be used in other contexts than QxOrm.</p> 
           </li>
-          <li><p><b>QxMemLeak</b> : fast detection of memory leaks in <i>Debug</i> mode (with indication of the file and the line =&gt; style MFC from Microsoft). This module is developed by <a href="http://wyw.dcweb.cn/leakage.htm" target="_blank">Wu Yongwei</a>. If another tool is already used in your projects (<i>Valgrind</i> for example), this functionality should not be activated. By default, <i>QxMemLeak</i> module is disabled.</p> 
+          <li><p><b><a href="../doxygen/html/group___qx_mem_leak.html" target="_blank">QxMemLeak</a></b> : fast detection of memory leaks in <i>Debug</i> mode (with indication of the file and the line =&gt; style MFC from Microsoft). This module is developed by <a href="http://wyw.dcweb.cn/leakage.htm" target="_blank">Wu Yongwei</a>. If another tool is already used in your projects (<i>Valgrind</i> for example), this functionality should not be activated. By default, <i>QxMemLeak</i> module is disabled.</p> 
           </li>
         </ul>
         <p></p>

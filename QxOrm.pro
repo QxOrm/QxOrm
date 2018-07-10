@@ -34,7 +34,7 @@ CONFIG += dll
 DEFINES += _QX_BUILDING_QX_ORM
 PRECOMPILED_HEADER = ./include/QxPrecompiled.h
 
-unix { VERSION = 1.1.9 }
+unix { VERSION = 1.2.1 }
 
 #############################
 # Compiler / Linker Options #
@@ -133,6 +133,32 @@ HEADERS += ./include/QxDao/QxSession.h
 HEADERS += ./include/QxDao/QxDateNeutral.h
 HEADERS += ./include/QxDao/QxTimeNeutral.h
 HEADERS += ./include/QxDao/QxDateTimeNeutral.h
+HEADERS += ./include/QxDao/IxDao_Helper.h
+
+HEADERS += ./include/QxDao/QxSqlElement/IxSqlElement.h
+HEADERS += ./include/QxDao/QxSqlElement/QxSqlCompare.h
+HEADERS += ./include/QxDao/QxSqlElement/QxSqlElement.h
+HEADERS += ./include/QxDao/QxSqlElement/QxSqlElementTemp.h
+HEADERS += ./include/QxDao/QxSqlElement/QxSqlExpression.h
+HEADERS += ./include/QxDao/QxSqlElement/QxSqlFreeText.h
+HEADERS += ./include/QxDao/QxSqlElement/QxSqlIn.h
+HEADERS += ./include/QxDao/QxSqlElement/QxSqlIsBetween.h
+HEADERS += ./include/QxDao/QxSqlElement/QxSqlIsNull.h
+HEADERS += ./include/QxDao/QxSqlElement/QxSqlLimit.h
+HEADERS += ./include/QxDao/QxSqlElement/QxSqlSort.h
+
+HEADERS += ./include/QxDao/QxSqlGenerator/IxSqlGenerator.h
+HEADERS += ./include/QxDao/QxSqlGenerator/QxSqlGenerator.h
+HEADERS += ./include/QxDao/QxSqlGenerator/QxSqlGenerator_MySQL.h
+HEADERS += ./include/QxDao/QxSqlGenerator/QxSqlGenerator_Oracle.h
+HEADERS += ./include/QxDao/QxSqlGenerator/QxSqlGenerator_PostgreSQL.h
+HEADERS += ./include/QxDao/QxSqlGenerator/QxSqlGenerator_SQLite.h
+HEADERS += ./include/QxDao/QxSqlGenerator/QxSqlGenerator_MSSQLServer.h
+HEADERS += ./include/QxDao/QxSqlGenerator/QxSqlGenerator_Standard.h
+
+HEADERS += ./include/QxDao/QxRepository/IxRepository.h
+HEADERS += ./include/QxDao/QxRepository/QxRepository.h
+HEADERS += ./include/QxDao/QxRepository/QxRepositoryX.h
 
 HEADERS += ./include/QxSerialize/QxArchive.h
 HEADERS += ./include/QxSerialize/QxClone.h
@@ -326,6 +352,29 @@ SOURCES += ./src/QxDao/QxSqlDatabase.cpp
 SOURCES += ./src/QxDao/IxSqlRelation.cpp
 SOURCES += ./src/QxDao/QxSqlQuery.cpp
 SOURCES += ./src/QxDao/QxSession.cpp
+SOURCES += ./src/QxDao/IxDao_Helper.cpp
+
+SOURCES += ./src/QxDao/QxSqlElement/IxSqlElement.cpp
+SOURCES += ./src/QxDao/QxSqlElement/QxSqlCompare.cpp
+SOURCES += ./src/QxDao/QxSqlElement/QxSqlElementTemp.cpp
+SOURCES += ./src/QxDao/QxSqlElement/QxSqlExpression.cpp
+SOURCES += ./src/QxDao/QxSqlElement/QxSqlFreeText.cpp
+SOURCES += ./src/QxDao/QxSqlElement/QxSqlIn.cpp
+SOURCES += ./src/QxDao/QxSqlElement/QxSqlIsBetween.cpp
+SOURCES += ./src/QxDao/QxSqlElement/QxSqlIsNull.cpp
+SOURCES += ./src/QxDao/QxSqlElement/QxSqlLimit.cpp
+SOURCES += ./src/QxDao/QxSqlElement/QxSqlSort.cpp
+
+SOURCES += ./src/QxDao/QxSqlGenerator/IxSqlGenerator.cpp
+SOURCES += ./src/QxDao/QxSqlGenerator/QxSqlGenerator_MySQL.cpp
+SOURCES += ./src/QxDao/QxSqlGenerator/QxSqlGenerator_Oracle.cpp
+SOURCES += ./src/QxDao/QxSqlGenerator/QxSqlGenerator_PostgreSQL.cpp
+SOURCES += ./src/QxDao/QxSqlGenerator/QxSqlGenerator_SQLite.cpp
+SOURCES += ./src/QxDao/QxSqlGenerator/QxSqlGenerator_MSSQLServer.cpp
+SOURCES += ./src/QxDao/QxSqlGenerator/QxSqlGenerator_Standard.cpp
+
+SOURCES += ./src/QxDao/QxRepository/IxRepository.cpp
+SOURCES += ./src/QxDao/QxRepository/QxRepositoryX.cpp
 
 SOURCES += ./src/QxSerialize/QxBoostSerializeHelper/IxBoostSerializeRegisterHelper.cpp
 SOURCES += ./src/QxSerialize/QxBoostSerializeHelper/QxBoostSerializeRegisterHelperX.cpp

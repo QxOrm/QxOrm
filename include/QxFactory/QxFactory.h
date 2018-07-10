@@ -49,10 +49,21 @@
 
 #define QX_STR_CANNOT_INSTANTIATE_ABSTRACT_CLASS "[QxOrm] qx::QxFactory<T> ---> cannot instantiate abstract class '%s'"
 
+#if _QX_AUTO_REGISTER_REPOSITORY
+#define QX_AUTO_REGISTER_REPOSITORY(className, sKey) qx::register_repository< className >(sKey);
+#else // _QX_AUTO_REGISTER_REPOSITORY
+#define QX_AUTO_REGISTER_REPOSITORY(className, sKey) /* Nothing */
+#endif // _QX_AUTO_REGISTER_REPOSITORY
+
 namespace qx {
 
 template <class T>
 class QxClass;
+
+#if _QX_AUTO_REGISTER_REPOSITORY
+template <class T>
+inline void register_repository(const QString & sKey);
+#endif // _QX_AUTO_REGISTER_REPOSITORY
 
 /*!
  * \ingroup QxFactory
@@ -64,7 +75,7 @@ class QxFactory : public IxFactory
 
 public:
 
-   QxFactory(const QString & sKey) : IxFactory(sKey) { ; }
+   QxFactory(const QString & sKey) : IxFactory(sKey) { QX_AUTO_REGISTER_REPOSITORY(T, sKey); }
    virtual ~QxFactory() { ; }
 
    virtual boost::any createObject() const

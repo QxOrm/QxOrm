@@ -62,13 +62,14 @@
 </table>
 <hr style="width: 80%" align="center" size="1" color="#100D5A">
 <table border="0" style="width: 80%" align="center">
-  <col><col><col><col><col>
+  <col><col><col><col><col><col>
   <tbody><tr>
   <td align="left" valign="top"><font size="2">QxOrm  &gt;&gt;  Faq</font></td>
-  <td align="right" valign="top"><font size="2">Version courante : QxOrm 1.1.9 (LGPL) - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
+  <td align="right" valign="top"><font size="2">Version courante : QxOrm 1.2.1 (LGPL) - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
   <td width="10px"></td>
   <td width="40px" height="30px"><a href="../qxorm_fr/faq.html"><img alt="Version française du site" src="./resource/FR.png" width="40" height="30" border="0"></a></td>
   <td width="40px" height="30px"><a href="../qxorm_en/faq.html"><img alt="Web site english version" src="./resource/GB.png" width="40" height="30" border="0"></a></td>
+  <td width="40px" height="30px"><a href="http://sites.google.com/site/qxormpostgres/" target="_blank"><img alt="" src="./resource/ES.png" width="40" height="30" border="0"></a></td>
   </tr></tbody>
 </table>
 <table border="1" frame="vsides" rules="cols" style="width: 80%" align="center" cellpadding="6" bgcolor="#F2F2F4">
@@ -104,6 +105,10 @@
                 </li><li><a href="#faq_180">Comment persister un type dont on ne possède pas le code source (classe provenant d'une bibliothèque tierce par exemple) ?</a><br>
                 </li><li><a href="#faq_190">Comment utiliser le moteur d'introspection (ou réflexion) de la bibliothèque QxOrm ?</a><br>
                 </li><li><a href="#faq_200">Comment déclarer automatiquement les méta-propriétés de Qt (définies par la macro <i>Q_PROPERTY</i>) dans le contexte QxOrm ?</a><br>
+                </li><li><a href="#faq_210">Comment construire une requête pour interroger la base de données sans écrire de SQL avec la classe <i>qx::QxSqlQuery</i> ?</a><br>
+                </li><li><a href="#faq_220">Comment utiliser le cache (fonctions du namespace <i>qx::cache</i>) pour stocker tous types de données ?</a><br>
+                </li><li><a href="#faq_230">Comment générer le schéma SQL (création et mise à jour des tables) en fonction des classes persistantes C++ définies dans le contexte QxOrm ?</a><br>
+                </li><li><a href="#faq_240">Comment associer un type SQL à une classe C++ ?</a><br>
                 </li></ul>
               </td>
               <td width="200" align="center" valign="top"><a href="./resource/qt_ambassador_logo.png" target="_blank"><img alt="qt_ambassador" src="./resource/qt_ambassador_logo_150x150.png" width="150" height="150" border="0"></a><br>
@@ -370,7 +375,7 @@
            <td align="justify">
            Il existe de nombreux <i>container</i> dans les bibliothèques <b>stl</b>, <b>boost</b> et <b>Qt</b>.<br>
            Il est donc légitime de se poser cette question : à quoi sert <i>qx::QxCollection&lt;Key, Value&gt;</i> ?<br>
-           <i>qx::QxCollection&lt;Key, Value&gt;</i> est un nouveau <i>container</i> (basé sur l'excellente bibliothèque <a href="http://www.boost.org/doc/libs/1_42_0/libs/multi_index/doc/index.html" target="_blank"><i>boost::multi_index_container</i></a>) qui possède les fonctionnalités suivantes :
+           <i><a href="../doxygen/html/classqx_1_1_qx_collection.html" target="_blank">qx::QxCollection&lt;Key, Value&gt;</a></i> est un nouveau <i>container</i> (basé sur l'excellente bibliothèque <a href="http://www.boost.org/doc/libs/1_42_0/libs/multi_index/doc/index.html" target="_blank"><i>boost::multi_index_container</i></a>) qui possède les fonctionnalités suivantes :
            <ul><li>conserve l'ordre d'insertion des éléments dans la liste ;
            </li><li>accès rapide à un élément par son index : équivaut à <i>std::vector&lt;T&gt;</i> ou <i>QList&lt;T&gt;</i> par exemple ;
            </li><li>accès rapide à un élément par une clé (<i>hash-map</i>) : équivaut à <i>QHash&lt;Key, Value&gt;</i> ou <i>boost::unordered_map&lt;Key, Value&gt;</i> par exemple ;
@@ -466,7 +471,7 @@ lstDrugs<span class="operator">.</span>clear<span class="operator">();</span></p
            <td align="justify">
            <b>QxOrm</b> est compatible avec les pointeurs intelligents des bibliothèques <b>boost</b> et <b>Qt</b>.<br>
            Le pointeur intelligent développé par <b>QxOrm</b> est basé sur <i>QSharedPointer</i> et apporte de nouvelles fonctionnalités s'il est utilisé avec les fonctions '<i>qx::dao::...</i>'.<br>
-           <i>qx::dao::ptr&lt;T&gt;</i> conserve automatiquement les valeurs issues de la base de données.<br>
+           <i><a href="../doxygen/html/classqx_1_1dao_1_1ptr.html" target="_blank">qx::dao::ptr&lt;T&gt;</a></i> conserve automatiquement les valeurs issues de la base de données.<br>
            Il est ainsi possible de vérifier à tout moment si une instance d'objet a subi des modifications grâce à la méthode '<i>isDirty()</i>' : cette méthode peut renvoyer la liste de toutes les propriétés ayant été modifiées.<br>
            <i>qx::dao::ptr&lt;T&gt;</i> peut également être utilisé par la fonction '<i>qx::dao::update_optimized()</i>' pour mettre à jour en base de données uniquement les champs modifiés.<br>
            <i>qx::dao::ptr&lt;T&gt;</i> peut être utilisé avec un objet simple ou bien avec la plupart des containers : <i>stl</i>, <i>boost</i>, <i>Qt</i> et <i>qx::QxCollection&lt;Key, Value&gt;</i>.<br>
@@ -980,12 +985,12 @@ daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<s
          <tr>
            <td valign="middle" width="30"></td>
            <td align="justify">
-            <a href="http://knol.google.com/k/les-transactions-base-de-données" target="_blank"><b>Une transaction</b></a> est une suite d'opérations effectuées comme une seule unité logique de travail.<br>
+            Une <a href="http://knol.google.com/k/les-transactions-base-de-données" target="_blank"><b>transaction</b></a> est une suite d'opérations effectuées comme une seule unité logique de travail.<br>
             Une fois terminée, la transaction est :<br>
             * soit validée (<b>commit</b>), alors toutes les modifications sont faites dans la base de données ;<br>
             * soit annulée (<b>rollback</b>), alors toutes les modifications ne sont pas enregistrée.<br>
             <br>
-            La classe <b>qx::QxSession</b> de la bibliothèque QxOrm permet de gérer automatiquement les transactions (validation, annulation) en utilisant le mécanisme <a href="http://fr.wikipedia.org/wiki/RAII" target="_blank">C++ RAII</a> :<br>
+            La classe <b><a href="../doxygen/html/classqx_1_1_qx_session.html" target="_blank">qx::QxSession</a></b> de la bibliothèque QxOrm permet de gérer automatiquement les transactions (validation, annulation) en utilisant le mécanisme <a href="http://fr.wikipedia.org/wiki/RAII" target="_blank">C++ RAII</a> :<br>
             <br>
             <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
 <pre><span class="operator">{</span><span class="comment"> // Ouverture d'un scope où une session sera instanciée
@@ -1011,6 +1016,28 @@ daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<s
             <br>
             <b>Autre remarque :</b> il est important de ne pas oublier de passer la connection à la base de données de la session à chaque fonction <i>qx::dao::xxx</i> (en utilisant la méthode <i>session.database()</i>).<br>
             De plus, il est possible d'initialiser une session avec sa propre connection (provenant d'un pool de connections par exemple) en utilisant le constructeur de la classe <i>qx::QxSession</i>.<br>
+            <br>
+            La classe <i>qx::QxSession</i> propose également des méthodes de persistance (CRUD), ce qui peut simplifier l'écriture du code C++ suivant les habitudes de programmation.<br>
+            Voici le même exemple en utilisant les méthodes de la classe <i>qx::QxSession</i> à la place des fonctions du <i>namespace</i> <i>qx::dao</i> :<br>
+            <br>
+            <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="operator">{</span><span class="comment"> // Ouverture d'un scope où une session sera instanciée
+
+  // Création d'une session : une connection valide à la BDD est assignée à la session et une transaction est démarrée
+</span>  qx<span class="operator">::</span>QxSession session<span class="operator">;</span><span class="comment">
+
+  // Exécution d'une série d'opérations avec la BDD
+</span>  session<span class="operator">.</span>insert<span class="operator">(</span>my_object<span class="operator">);</span>
+  session<span class="operator">.</span>update<span class="operator">(</span>my_object<span class="operator">);</span>
+  session<span class="operator">.</span>fetchById<span class="operator">(</span>my_object<span class="operator">);</span>
+  session<span class="operator">.</span>deleteById<span class="operator">(</span>my_object<span class="operator">);</span><span class="comment">
+
+  // Si la session n'est pas valide (donc une erreur s'est produite) =&gt; affichage de la 1ère erreur de la session
+</span><span class="flow">  if</span><span class="operator"> (!</span> session<span class="operator">.</span>isValid<span class="operator">()) {</span> qDebug<span class="operator">(</span><span class="string">"[QxOrm] session error : '%s'"</span><span class="operator">,</span> qPrintable<span class="operator">(</span>session<span class="operator">.</span>firstError<span class="operator">().</span>text<span class="operator">())); }
+
+}</span><span class="comment"> // Fermeture du scope : la session est détruite (transaction =&gt; commit ou rollback automatique)</span></pre>
+            </td></tr></tbody></table>
+            <br>
            </td>
          </tr>
        </tbody>
@@ -1346,7 +1373,7 @@ template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</
            <b>1-</b> par la méthode classique : <i>t.data(& MyQObject::my_property, "my_property", 0);</i><br>
            <b>2-</b> ou bien sans mentionner le pointeur vers la donnée membre de la classe : <i>t.data("my_property", 0);</i><br>
            <br>
-           Peu importe la méthode d'enregistrement des propriétés dans le contexte QxOrm, elles seront accessibles par la même interface <i><a href="http://www.qxorm.com/doxygen/html/classqx_1_1_ix_data_member.html" target="_blank">qx::IxDataMember</a></i> et proposent donc les mêmes fonctionnalités.
+           Peu importe la méthode d'enregistrement des propriétés dans le contexte QxOrm, elles seront accessibles par la même interface <i><a href="../doxygen/html/classqx_1_1_ix_data_member.html" target="_blank">qx::IxDataMember</a></i> et proposent donc les mêmes fonctionnalités.
            Il est possible d'utiliser les deux méthodes dans une même fonction de mapping <i>void qx::register_class&lt;T&gt;()</i>.
            Chaque méthode d'enregistrement présente des avantages et inconvénients.<br>
            <br>
@@ -1364,6 +1391,491 @@ template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</
              <li>ne supporte pas la notion de relation entre tables de la base de données (<i>one-to-one</i>, <i>one-to-many</i>, <i>many-to-one</i> et <i>many-to-many</i>) ;</li>
              <li>pas d'accès au pointeur sur la donnée membre de la classe (conversion nécessaire au type <i>QVariant</i> pour accéder et modifier une valeur).</li>
            </ul>
+           </td>
+         </tr>
+       </tbody>
+      </table>
+      <br><br>
+      <a name="faq_210"><u><b>Comment construire une requête pour interroger la base de données sans écrire de SQL avec la classe <i>qx::QxSqlQuery</i> ?</b></u></a><br><br>
+      <table border="0" style="width: 100%" align="center">
+       <col>
+       <col>
+       <tbody>
+         <tr>
+           <td valign="middle" width="30"></td>
+           <td align="justify">
+           La classe <i><a href="../doxygen/html/classqx_1_1_qx_sql_query.html" target="_blank">qx::QxSqlQuery</a></i> (ou bien son alias <i>qx_query</i>) permet d'interroger la base de données (trier, filtrer, etc.) de deux manières différentes :
+           <ul>
+             <li>en écrivant directement la requête SQL ;</li>
+             <li>en utilisant des méthodes C++ avec une syntaxe proche du SQL (similaire à ce que propose <a href="http://subsonicproject.com/docs/Simple_Query_Tool" target="_blank">l'excellente bibliothèque SubSonic pour .Net</a>).</li>
+           </ul>
+           Le principal avantage de la première méthode (écriture manuelle des requêtes SQL) est de pouvoir utiliser certaines optimisations spécifiques à chaque base de données.<br>
+           La deuxième méthode (utilisation du code C++ pour générer la requête SQL) permet de mapper automatiquement les paramètres SQL sans utiliser la fonction <i>qx::QxSqlQuery::bind()</i>.<br>
+           <br>
+           Voici un exemple d'utilisation de la classe <i>qx::QxSqlQuery</i> avec écriture manuelle d'une requête SQL :<br>
+           <br>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="comment">// Construit une requête pour récupérer uniquement les 'author' de type 'female'
+</span>qx<span class="operator">::</span>QxSqlQuery query<span class="operator">(</span><span class="string">"WHERE author.sex = :sex"</span><span class="operator">);</span>
+query<span class="operator">.</span>bind<span class="operator">(</span><span class="string">":sex"</span><span class="operator">,</span> author<span class="operator">::</span>female<span class="operator">);</span>
+
+QList<span class="operator">&lt;</span>author<span class="operator">&gt;</span> list_of_female<span class="operator">;</span>
+QSqlError daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<span class="operator">::</span>fetch_by_query<span class="operator">(</span>query<span class="operator">,</span> list_of_female<span class="operator">);</span><span class="flow">
+for</span><span class="operator"> (</span><span class="type">long</span> l<span class="operator"> =</span><span class="int"> 0</span><span class="operator">;</span> l<span class="operator"> &lt;</span> list_of_female<span class="operator">.</span>count<span class="operator">();</span> l<span class="operator">++)
+{</span><span class="comment"> /* traitement avec la collection issue de la base de données */</span><span class="operator"> }</span></pre>
+           </td></tr></tbody></table>
+           <br>
+           La bibliothèque QxOrm supporte trois syntaxes pour l'écriture des paramètres SQL.<br>
+           Le type de syntaxe peut être modifié de façon globale à un projet en utilisant la méthode suivante : <i>qx::QxSqlDatabase::getSingleton()->setSqlPlaceHolderStyle()</i>.<br>
+           Les trois paramètres possibles pour cette méthode sont :
+           <ul>
+             <li><i>ph_style_2_point_name</i> : "WHERE author.sex = :sex" (syntaxe par défaut) ;</li>
+             <li><i>ph_style_at_name</i> : "WHERE author.sex = @sex" ;</li>
+             <li><i>ph_style_question_mark</i> : "WHERE author.sex = ?".</li>
+           </ul>
+           Voici le même exemple en utilisant les méthodes C++ de la classe <i>qx::QxSqlQuery</i> (ou bien son alias <i>qx_query</i>) pour générer la requête automatiquement :<br>
+           <br>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="comment">// Construit une requête pour récupérer uniquement les 'author' de type 'female'
+</span>qx_query query<span class="operator">;</span>
+query<span class="operator">.</span>where<span class="operator">(</span><span class="string">"author.sex"</span><span class="operator">).</span>isEqualTo<span class="operator">(</span>author<span class="operator">::</span>female<span class="operator">);</span>
+
+QList<span class="operator">&lt;</span>author<span class="operator">&gt;</span> list_of_female<span class="operator">;</span>
+QSqlError daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<span class="operator">::</span>fetch_by_query<span class="operator">(</span>query<span class="operator">,</span> list_of_female<span class="operator">);</span><span class="flow">
+for</span><span class="operator"> (</span><span class="type">long</span> l<span class="operator"> =</span><span class="int"> 0</span><span class="operator">;</span> l<span class="operator"> &lt;</span> list_of_female<span class="operator">.</span>count<span class="operator">();</span> l<span class="operator">++)
+{</span><span class="comment"> /* traitement avec la collection issue de la base de données */</span><span class="operator"> }</span></pre>
+           </td></tr></tbody></table>
+           <br>
+           Cette utilisation de la classe <i>qx::QxSqlQuery</i> présente l'avantage de ne pas avoir à mapper les paramètres de la requête, tout en restant très proche de l'écriture manuelle d'une requête SQL.<br>
+           Les paramètres seront automatiquement injectés en utilisant la syntaxe définie de manière globale par la méthode : <i>qx::QxSqlDatabase::getSingleton()->getSqlPlaceHolderStyle()</i>.<br>
+           <br>
+           Voici un exemple présentant différentes méthodes disponibles avec la classe <i>qx::QxSqlQuery</i> (ou bien son alias <i>qx_query</i>) :<br>
+           <br>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre>qx_query query<span class="operator">;</span>
+query<span class="operator">.</span>where<span class="operator">(</span><span class="string">"sex"</span><span class="operator">).</span>isEqualTo<span class="operator">(</span>author<span class="operator">::</span>female<span class="operator">)
+     .</span>and_<span class="operator">(</span><span class="string">"age"</span><span class="operator">).</span>isGreaterThan<span class="operator">(</span><span class="int">38</span><span class="operator">)
+     .</span>or_<span class="operator">(</span><span class="string">"last_name"</span><span class="operator">).</span>isNotEqualTo<span class="operator">(</span><span class="string">"Dupont"</span><span class="operator">)
+     .</span>or_<span class="operator">(</span><span class="string">"first_name"</span><span class="operator">).</span>like<span class="operator">(</span><span class="string">"Alfred"</span><span class="operator">)
+     .</span>and_OpenParenthesis<span class="operator">(</span><span class="string">"id"</span><span class="operator">).</span>isLessThanOrEqualTo<span class="operator">(</span><span class="int">999</span><span class="operator">)
+     .</span>and_<span class="operator">(</span><span class="string">"birth_date"</span><span class="operator">).</span>isBetween<span class="operator">(</span>date1<span class="operator">,</span> date2<span class="operator">)
+     .</span>closeParenthesis<span class="operator">()
+     .</span>or_<span class="operator">(</span><span class="string">"id"</span><span class="operator">).</span>in<span class="operator">(</span><span class="int">50</span><span class="operator">,</span><span class="int"> 999</span><span class="operator">,</span><span class="int"> 11</span><span class="operator">,</span><span class="int"> 23</span><span class="operator">,</span><span class="int"> 78945</span><span class="operator">)
+     .</span>and_<span class="operator">(</span><span class="string">"is_deleted"</span><span class="operator">).</span>isNotNull<span class="operator">()
+     .</span>orderAsc<span class="operator">(</span><span class="string">"last_name"</span><span class="operator">,</span><span class="string"> "first_name"</span><span class="operator">,</span><span class="string"> "sex"</span><span class="operator">)
+     .</span>limit<span class="operator">(</span><span class="int">50</span><span class="operator">,</span><span class="int"> 150</span><span class="operator">);</span></pre>
+           </td></tr></tbody></table>
+           <br>
+           Ce qui produira le code SQL suivant pour les bases de données <i>MySQL</i>, <i>PostgreSQL</i> et <i>SQLite</i> (pour <i>Oracle</i> et <i>SQLServer</i>, le traitement de la méthode <i>limit()</i> est différent) :<br>
+           <br>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre>WHERE sex<span class="operator"> = :</span>sex_1_0 
+AND age<span class="operator"> &gt; :</span>age_3_0 
+OR last_name<span class="operator"> &lt;&gt; :</span>last_name_5_0 
+OR first_name LIKE<span class="operator"> :</span>first_name_7_0 
+AND<span class="operator"> (</span> id<span class="operator"> &lt;= :</span>id_10_0 AND birth_date BETWEEN<span class="operator"> :</span>birth_date_12_0_1 AND<span class="operator"> :</span>birth_date_12_0_2<span class="operator"> )</span> 
+OR id IN<span class="operator"> (:</span>id_15_0_0<span class="operator">, :</span>id_15_0_1<span class="operator">, :</span>id_15_0_2<span class="operator">, :</span>id_15_0_3<span class="operator">, :</span>id_15_0_4<span class="operator">)</span> 
+AND is_deleted IS NOT NULL 
+ORDER BY last_name ASC<span class="operator">,</span> first_name ASC<span class="operator">,</span> sex ASC 
+LIMIT<span class="operator"> :</span>limit_rows_count_19_0 OFFSET<span class="operator"> :</span>offset_start_row_19_0</pre>
+           </td></tr></tbody></table>
+           <br>
+           Voici la liste des fonctions et méthodes disponibles pour utiliser la classe <i>qx::QxSqlQuery</i> (ou bien son alias <i>qx_query</i>) :<br>
+           <br>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="comment">// avec les fonctions du namespace qx::dao
+</span>qx<span class="operator">::</span>dao<span class="operator">::</span>count<span class="operator">&lt;</span>T<span class="operator">&gt;()</span>
+qx<span class="operator">::</span>dao<span class="operator">::</span>fetch_by_query<span class="operator">&lt;</span>T<span class="operator">&gt;()</span>
+qx<span class="operator">::</span>dao<span class="operator">::</span>update_by_query<span class="operator">&lt;</span>T<span class="operator">&gt;()</span>
+qx<span class="operator">::</span>dao<span class="operator">::</span>delete_by_query<span class="operator">&lt;</span>T<span class="operator">&gt;()</span>
+qx<span class="operator">::</span>dao<span class="operator">::</span>destroy_by_query<span class="operator">&lt;</span>T<span class="operator">&gt;()</span>
+qx<span class="operator">::</span>dao<span class="operator">::</span>fetch_by_query_with_relation<span class="operator">&lt;</span>T<span class="operator">&gt;()</span>
+qx<span class="operator">::</span>dao<span class="operator">::</span>fetch_by_query_with_all_relation<span class="operator">&lt;</span>T<span class="operator">&gt;()</span>
+qx<span class="operator">::</span>dao<span class="operator">::</span>update_by_query_with_relation<span class="operator">&lt;</span>T<span class="operator">&gt;()</span>
+qx<span class="operator">::</span>dao<span class="operator">::</span>update_by_query_with_all_relation<span class="operator">&lt;</span>T<span class="operator">&gt;()</span>
+qx<span class="operator">::</span>dao<span class="operator">::</span>update_optimized_by_query<span class="operator">&lt;</span>T<span class="operator">&gt;()</span><span class="comment">
+
+// avec la classe qx::QxSession
+</span>qx<span class="operator">::</span>QxSession<span class="operator">::</span>count<span class="operator">&lt;</span>T<span class="operator">&gt;()</span>
+qx<span class="operator">::</span>QxSession<span class="operator">::</span>fetchByQuery<span class="operator">&lt;</span>T<span class="operator">&gt;()</span>
+qx<span class="operator">::</span>QxSession<span class="operator">::</span>update<span class="operator">&lt;</span>T<span class="operator">&gt;()</span>
+qx<span class="operator">::</span>QxSession<span class="operator">::</span>deleteByQuery<span class="operator">&lt;</span>T<span class="operator">&gt;()</span>
+qx<span class="operator">::</span>QxSession<span class="operator">::</span>destroyByQuery<span class="operator">&lt;</span>T<span class="operator">&gt;()</span><span class="comment">
+
+// avec la classe qx::QxRepository&lt;T&gt;
+</span>qx<span class="operator">::</span>QxRepository<span class="operator">&lt;</span>T<span class="operator">&gt;::</span>count<span class="operator">()</span>
+qx<span class="operator">::</span>QxRepository<span class="operator">&lt;</span>T<span class="operator">&gt;::</span>fetchByQuery<span class="operator">()</span>
+qx<span class="operator">::</span>QxRepository<span class="operator">&lt;</span>T<span class="operator">&gt;::</span>update<span class="operator">()</span>
+qx<span class="operator">::</span>QxRepository<span class="operator">&lt;</span>T<span class="operator">&gt;::</span>deleteByQuery<span class="operator">()</span>
+qx<span class="operator">::</span>QxRepository<span class="operator">&lt;</span>T<span class="operator">&gt;::</span>destroyByQuery<span class="operator">()</span></pre>
+           </td></tr></tbody></table>
+           <br>
+           <b>Remarque :</b> certaines de ces fonctions ont également deux autres paramètres optionnels :
+           <ul>
+             <li><i>const QStringList & columns</i> : pour indiquer la liste des colonnes à récupérer (par défaut, toutes les colonnes sont récupérées) ;</li>
+             <li><i>const QStringList & relation</i> : pour indiquer les jointures (<i>one-to-one</i>, <i>one-to-many</i>, <i>many-to-one</i> et <i>many-to-many</i> définies dans la fonction de mapping <i>void qx::register_class&lt;T&gt;()</i>) entre les tables de la base de données (par défaut, aucune relation).</li>
+           </ul>
+           </td>
+         </tr>
+       </tbody>
+      </table>
+      <br><br>
+      <a name="faq_220"><u><b>Comment utiliser le cache (fonctions du namespace <i>qx::cache</i>) pour stocker tous types de données ?</b></u></a><br><br>
+      <table border="0" style="width: 100%" align="center">
+       <col>
+       <col>
+       <tbody>
+         <tr>
+           <td valign="middle" width="30"></td>
+           <td align="justify">
+           Le cache proposé par la bibliothèque QxOrm (<a href="../doxygen/html/group___qx_cache.html" target="_blank">module <i>QxCache</i></a>) est <i>thread-safe</i> et permet de stocker facilement n'importe quel type de données.<br>
+           Les fonctions pour accéder au cache se trouvent dans le <a href="../doxygen/html/namespaceqx_1_1cache.html" target="_blank"><i>namespace</i> <i>qx::cache</i></a>.<br>
+           Le cache permet une optimisation du programme : il est possible par exemple de stocker des éléments issus d'une requête effectuée en base de données.<br>
+           <br>
+           Chaque élément stocké dans le cache est associé à une clé de type <i>QString</i> : cette clé permet de retrouver rapidement un élément du cache.<br>
+           Si un nouvel élément est stocké dans le cache avec une clé qui existe déjà, alors l'ancien élément associé à cette clé est effacé automatiquement du cache.<br>
+           <br>
+           Le cache de la bibliothèque QxOrm ne gère pas la durée de vie des objets : il n'y a aucun <i>delete</i> effectué par le cache.<br>
+           C'est pourquoi il est fortement recommandé (mais ce n'est pas une obligation) de privilégier le stockage de pointeurs intelligents : par exemple, <a href="http://www.boost.org/doc/libs/1_47_0/libs/smart_ptr/shared_ptr.htm" target="_blank"><i>boost::shared_ptr&lt;T&gt;</i></a> pour la bibliothèque <i>boost</i> ou bien <a href="http://doc.qt.nokia.com/latest/qsharedpointer.html" target="_blank"><i>QSharedPointer&lt;T&gt;</i></a> pour la bibliothèque <i>Qt</i>.<br>
+           <br>
+           Le cache peut avoir un coût relatif maximum pour éviter une utilisation de la mémoire trop importante : chaque élément inséré dans le cache peut indiquer un coût représentant une estimation de sa taille mémoire (par exemple, le nombre d'éléments d'une collection).<br>
+           Lorsque le coût maximum du cache est atteint, les premiers éléments insérés dans le cache sont supprimés (en respectant l'ordre d'insertion dans le cache) jusqu'à ce que la limite du cache ne soit plus dépassée.<br>
+           <br>
+           Il est possible d'associer à chaque élément du cache une date-heure d'insertion.<br>
+           Si aucune date-heure n'est renseignée, alors la date-heure courante est prise en compte.<br>
+           Ce mécanisme permet de vérifier si un élément stocké dans le cache nécessite une mise à jour ou non.<br>
+           <br>
+           Voici un exemple d'utilisation du cache de la bibliothèque QxOrm (fonctions du <a href="../doxygen/html/namespaceqx_1_1cache.html" target="_blank"><i>namespace</i> <i>qx::cache</i></a>) :<br>
+           <br>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="comment">// Défini le coût maximum du cache à 500
+</span>qx<span class="operator">::</span>cache<span class="operator">::</span>max_cost<span class="operator">(</span><span class="int">500</span><span class="operator">);</span><span class="comment">
+
+// Récupère une liste de 'author' de la base de données
+</span>boost<span class="operator">::</span>shared_ptr<span class="operator">&lt;</span> QList<span class="operator">&lt;</span>author<span class="operator">&gt; &gt;</span> list_author<span class="operator">;</span>
+QSqlError daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<span class="operator">::</span>fetch_all<span class="operator">(</span>list_author<span class="operator">);</span><span class="comment">
+
+// Insère la liste de 'author' dans le cache
+</span>qx<span class="operator">::</span>cache<span class="operator">::</span>set<span class="operator">(</span><span class="string">"list_author"</span><span class="operator">,</span> list_author<span class="operator">);</span><span class="comment">
+
+// Récupère une liste de 'blog' de la base de données
+</span>QSharedPointer<span class="operator">&lt;</span> std<span class="operator">::</span>vector<span class="operator">&lt;</span>blog<span class="operator">&gt; &gt;</span> list_blog<span class="operator">;</span>
+daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<span class="operator">::</span>fetch_all<span class="operator">(</span>list_blog<span class="operator">);</span><span class="comment">
+
+// Insère la liste de 'blog' dans le cache (coût = nombre de 'blog')
+</span>qx<span class="operator">::</span>cache<span class="operator">::</span>set<span class="operator">(</span><span class="string">"list_blog"</span><span class="operator">,</span> list_blog<span class="operator">,</span> list_blog<span class="operator">.</span>count<span class="operator">());</span><span class="comment">
+
+// Pointeur vers un objet de type 'comment'
+</span>comment_ptr my_comment<span class="operator">;</span>
+my_comment<span class="operator">.</span>reset<span class="operator">(</span><span class="keyword">new</span> comment<span class="operator">(</span><span class="int">50</span><span class="operator">));</span>
+daoError<span class="operator"> =</span> qx<span class="operator">::</span>dao<span class="operator">::</span>fetch_by_id<span class="operator">(</span>my_comment<span class="operator">);</span><span class="comment">
+
+// Insère le 'comment' dans le cache en précisant une date-heure d'insertion
+</span>qx<span class="operator">::</span>cache<span class="operator">::</span>set<span class="operator">(</span><span class="string">"comment"</span><span class="operator">,</span> my_comment<span class="operator">,</span><span class="int"> 1</span><span class="operator">,</span> my_comment<span class="operator">-&gt;</span>dateModif<span class="operator">());</span><span class="comment">
+
+// Récupère la liste de 'blog' stockée dans le cache
+</span>list_blog<span class="operator"> =</span> qx<span class="operator">::</span>cache<span class="operator">::</span>get<span class="operator">&lt;</span> QSharedPointer<span class="operator">&lt;</span> std<span class="operator">::</span>vector<span class="operator">&lt;</span>blog<span class="operator">&gt; &gt; &gt;(</span><span class="string">"list_blog"</span><span class="operator">);</span><span class="comment">
+
+// Récupère la liste de 'blog' sans préciser le type
+</span>qx_bool bGetOk<span class="operator"> =</span> qx<span class="operator">::</span>cache<span class="operator">::</span>get<span class="operator">(</span><span class="string">"list_blog"</span><span class="operator">,</span> list_blog<span class="operator">);</span><span class="comment">
+
+// Supprime du cache la liste de 'author'
+</span><span class="type">bool</span> bRemoveOk<span class="operator"> =</span> qx<span class="operator">::</span>cache<span class="operator">::</span>remove<span class="operator">(</span><span class="string">"list_author"</span><span class="operator">);</span><span class="comment">
+
+// Compte le nombre d'éléments du cache
+</span><span class="type">long</span> lCount<span class="operator"> =</span> qx<span class="operator">::</span>cache<span class="operator">::</span>count<span class="operator">();</span><span class="comment">
+
+// Récupère le coût actuel des éléments stockés dans le cache
+</span><span class="type">long</span> lCurrentCost<span class="operator"> =</span> qx<span class="operator">::</span>cache<span class="operator">::</span>current_cost<span class="operator">();</span><span class="comment">
+
+// Vérifie qu'un élément associé à la clé "comment" existe dans le cache
+</span><span class="type">bool</span> bExist<span class="operator"> =</span> qx<span class="operator">::</span>cache<span class="operator">::</span>exist<span class="operator">(</span><span class="string">"comment"</span><span class="operator">);</span><span class="comment">
+
+// Récupère le 'comment' stocké dans le cache avec sa date-heure d'insertion
+</span>QDateTime dt<span class="operator">;</span>
+bGetOk<span class="operator"> =</span> qx<span class="operator">::</span>cache<span class="operator">::</span>get<span class="operator">(</span><span class="string">"comment"</span><span class="operator">,</span> my_comment<span class="operator">,</span> dt<span class="operator">);</span><span class="comment">
+
+// Vide le cache
+</span>qx<span class="operator">::</span>cache<span class="operator">::</span>clear<span class="operator">();</span></pre>
+           </td></tr></tbody></table>
+           <br>
+           </td>
+         </tr>
+       </tbody>
+      </table>
+      <br><br>
+      <a name="faq_230"><u><b>Comment générer le schéma SQL (création et mise à jour des tables) en fonction des classes persistantes C++ définies dans le contexte QxOrm ?</b></u></a><br><br>
+      <table border="0" style="width: 100%" align="center">
+       <col>
+       <col>
+       <tbody>
+         <tr>
+           <td valign="middle" width="30"></td>
+           <td align="justify">
+           La bibliothèque QxOrm ne fournit pas de mécanisme pour gérer automatiquement la création et mise à jour des tables dans la base de données.<br>
+           En effet, la fonction <i>qx::dao::create_table&lt;T&gt;</i> doit être utilisée uniquement pour créer des prototypes.<br>
+           Il est fortement recommandé d'utiliser un outil spécifique à chaque SGBD pour créer et maintenir les tables de la base de données (par exemple <i>Navicat</i> pour <i>MySql</i>, <i>pgAdmin</i> pour <i>PostgreSQL</i>, <i>SQLite Manager</i> pour <i>SQLite</i>, etc.).<br>
+           De plus, un outil spécifique à chaque SGBD permet d'appliquer certaines optimisations (ajout d'index par exemple).<br>
+           <br>
+           Cependant, il peut être intéressant pour certaines applications de ne pas avoir à gérer manuellement les tables de la base de données.<br>
+           Dans ce cas, il est possible de créer une fonction C++ pour parcourir la liste des classes persistantes enregistrées dans le contexte QxOrm (en utilisant le moteur d'introspection de la bibliothèque) et ainsi créer un script SQL de génération et mise à jour des tables de la base de données.<br>
+           <br>
+           La bibliothèque QxOrm fournit une fonction C++ créée uniquement à titre d'exemple : elle peut donc servir de base de travail pour créer sa propre fonction de génération de script SQL.<br>
+           Cette fonction se trouve dans le fichier <i><a href="./resource/qxclassx_dump_sql_schema.html" target="_blank">./src/QxRegister/QxClassX.cpp</a></i> et se nomme <i><a href="./resource/qxclassx_dump_sql_schema.html" target="_blank">QString qx::QxClassX::dumpSqlSchema()</a></i>.<br>
+           Elle génère un script SQL et le renvoie sous forme de <i>QString</i> : il est possible d'adapter cette fonction pour générer un fichier contenant le script SQL ou bien appliquer chaque instruction SQL directement au SGBD.<br>
+           <br>
+           Voici un exemple d'implémentation proposé par <a href="http://www.developpez.net/forums/u449556/dodobibi/" target="_blank">dodobibi</a> pour gérer une base <i>PostgreSQL</i> : cet exemple gère les évolutions futures de son application (ajout de colonnes dans une table existante, ajout d'index sur une colonne existante, etc.).<br>
+           Au lancement de l'application, le numéro de version est indiqué de la façon suivante :<br>
+           <br>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre>QApplication app<span class="operator">(</span>argc<span class="operator">,</span> argv<span class="operator">);</span>
+app<span class="operator">.</span>setProperty<span class="operator">(</span><span class="string">"DomainVersion"</span><span class="operator">,</span><span class="int"> 1</span><span class="operator">);</span><span class="comment"> // Version incrementée à chaque compilation et diffusion de l'application</span></pre>
+           </td></tr></tbody></table>
+           <br>
+           Une table de la base de données permet de stocker le numéro de version courant.<br>
+           Une classe persistante C++ est mappée sur cette table de la façon suivante :<br>
+           <br>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="pre">#ifndef _DATABASE_VERSION_H_
+#define _DATABASE_VERSION_H_
+</span><span class="keyword"> 
+class</span> MY_DLL_EXPORT DatabaseVersion<span class="operator">
+{</span><span class="keyword">
+public</span><span class="operator">:</span>
+  QString name<span class="operator">;</span><span class="type">
+  long</span> version<span class="operator">;
+};</span>
+
+QX_REGISTER_HPP_MY_APP<span class="operator">(</span>DatabaseVersion<span class="operator">,</span> qx<span class="operator">::</span>trait<span class="operator">::</span>no_base_class_defined<span class="operator">,</span><span class="int"> 0</span><span class="operator">)</span><span class="pre">
+
+#endif // _DATABASE_VERSION_H_</span></pre>
+           </td></tr></tbody></table>
+           <br>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="pre">#include "../include/precompiled.h"
+#include "../include/DatabaseVersion.h"
+#include &lt;QxMemLeak.h&gt;
+</span> 
+QX_REGISTER_CPP_MY_APP<span class="operator">(</span>DatabaseVersion<span class="operator">)</span><span class="keyword">
+
+namespace</span> qx<span class="operator"> {</span><span class="keyword">
+template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</span> register_class<span class="operator">(</span>QxClass<span class="operator">&lt;</span>DatabaseVersion<span class="operator">&gt; &amp;</span> t<span class="operator">)
+{</span>
+  t<span class="operator">.</span>id<span class="operator">(&amp;</span> DatabaseVersion<span class="operator">::</span>name<span class="operator">,</span><span class="string"> "name"</span><span class="operator">);</span>
+  t<span class="operator">.</span>data<span class="operator">(&amp;</span> DatabaseVersion<span class="operator">::</span>version<span class="operator">,</span><span class="string"> "version"</span><span class="operator">);
+}}</span></pre>
+           </td></tr></tbody></table>
+           <br>
+           Avec la classe <i>DatabaseVersion</i>, il est possible de vérifier si la version de la base de données est à jour.<br>
+           C'est le rôle de la fonction <i>isDatabaseVersionOld()</i> :<br>
+           <br>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="type">bool</span> isDatabaseVersionOld<span class="operator">()
+{</span>
+  DatabaseVersion dbVersion<span class="operator">;</span>
+  dbVersion<span class="operator">.</span>name<span class="operator"> =</span><span class="string"> "MyAppName"</span><span class="operator">;</span>
+  QSqlError err<span class="operator"> =</span> qx<span class="operator">::</span>dao<span class="operator">::</span>fetch_by_id<span class="operator">(</span>dbVersion<span class="operator">);</span><span class="flow">
+  if</span><span class="operator"> (</span>err<span class="operator">.</span>isValid<span class="operator">()) {</span> qAssert<span class="operator">(</span><span class="bool">false</span><span class="operator">);</span><span class="flow"> return</span><span class="bool"> false</span><span class="operator">; }</span><span class="flow">
+  return</span><span class="operator"> (</span>dbVersion<span class="operator">.</span>version<span class="operator"> &lt;</span> qApp<span class="operator">-&gt;</span>property<span class="operator">(</span><span class="string">"DomainVersion"</span><span class="operator">).</span>toInt<span class="operator">());
+}</span></pre>
+           </td></tr></tbody></table>
+           <br>
+           Si au lancement de l'application, la fonction <i>isDatabaseVersionOld()</i> renvoie <i>true</i>, alors la mise à jour de la base de données est effectuée de la façon suivante :<br>
+           <br>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="type">void</span> updateDatabaseVersion<span class="operator">()
+{</span><span class="flow">
+  try</span><span class="operator">
+  {</span><span class="type">
+    int</span> domainVersion<span class="operator"> =</span> qApp<span class="operator">-&gt;</span>property<span class="operator">(</span><span class="string">"DomainVersion"</span><span class="operator">).</span>toInt<span class="operator">();</span><span class="comment">
+
+    // On se connecte avec un utilisateur de la base de données qui a les droits de modifications du schéma
+</span>    QSqlDatabase db<span class="operator"> =</span> qx<span class="operator">::</span>QxSqlDatabase<span class="operator">::</span>getSingleton<span class="operator">()-&gt;</span>getDatabaseCloned<span class="operator">();</span>
+    db<span class="operator">.</span>setUserName<span class="operator">(</span><span class="string">"MyAdminLogin"</span><span class="operator">);</span>
+    db<span class="operator">.</span>setPassword<span class="operator">(</span><span class="string">"MyAdminPassword"</span><span class="operator">);</span><span class="comment">
+
+    // On s'assure que la session démarre une transaction et lève une exception à la moindre erreur
+</span>    qx<span class="operator">::</span>QxSession session<span class="operator">(</span>db<span class="operator">,</span><span class="bool"> true</span><span class="operator">,</span><span class="bool"> true</span><span class="operator">);</span><span class="comment">
+
+    // On "fetch" la version de la base de données avec un verrou pour éviter les modifications concurrentes !
+    // Si plusieurs utilisateurs lancent l'application en même temps et qu'une mise à jour
+    // est nécessaire, le premier fera la mise à jour, et les autres seront en attente
+</span>    DatabaseVersion dbVersion<span class="operator">;</span>
+    session<span class="operator">.</span>fetchByQuery<span class="operator">(</span>qx_query<span class="operator">(</span><span class="string">"WHERE id='MyAppName' FOR UPDATE"</span><span class="operator">),</span> dbVersion<span class="operator">);</span><span class="comment">
+
+    // Pour les autres utilisateurs, une fois le verrou levé, on vérifie si la mise à jour est toujours nécessaire
+</span><span class="flow">    if</span><span class="operator"> (</span>dbVersion<span class="operator">.</span>version<span class="operator"> &gt;=</span> domainVersion<span class="operator">) {</span><span class="flow"> return</span><span class="operator">; }</span><span class="comment">
+
+    // On exécute chaque instruction SQL avec la variable "query"
+</span>    QSqlQuery query<span class="operator">(</span>db<span class="operator">);</span><span class="comment">
+
+    // On récupère toutes les classes persistantes C++ enregistrées dans le contexte QxOrm
+</span>    qx<span class="operator">::</span>QxCollection<span class="operator">&lt;</span>QString<span class="operator">,</span> qx<span class="operator">::</span>IxClass<span class="operator"> *&gt; *</span> pAllClasses<span class="operator"> =</span> qx<span class="operator">::</span>QxClassX<span class="operator">::</span>getAllClasses<span class="operator">();</span><span class="flow">
+    if</span><span class="operator"> (!</span> pAllClasses<span class="operator">) {</span> qAssert<span class="operator">(</span><span class="bool">false</span><span class="operator">);</span><span class="flow"> return</span><span class="operator">; }</span><span class="comment">
+
+    // on récupère la liste des tables existantes dans la base (fonction de Qt)
+</span>    QStringList tables<span class="operator"> =</span> db<span class="operator">.</span>tables<span class="operator">();</span><span class="flow">
+
+    for</span><span class="operator"> (</span><span class="type">long</span> k<span class="operator"> =</span><span class="int"> 0</span><span class="operator">;</span> k<span class="operator"> &lt;</span> pAllClasses<span class="operator">-&gt;</span>count<span class="operator">();</span> k<span class="operator">++)
+    {</span>
+      qx<span class="operator">::</span>IxClass<span class="operator"> *</span> pClass<span class="operator"> =</span> pAllClasses<span class="operator">-&gt;</span>getByIndex<span class="operator">(</span>k<span class="operator">);</span><span class="flow">
+      if</span><span class="operator"> (!</span> pClass<span class="operator">) {</span><span class="flow"> continue</span><span class="operator">; }</span><span class="comment">
+
+      // Filtre les classes non persistantes
+</span><span class="flow">      if</span><span class="operator"> (</span>pClass<span class="operator">-&gt;</span>isKindOf<span class="operator">(</span><span class="string">"qx::service::IxParameter"</span><span class="operator">) ||</span> pClass<span class="operator">-&gt;</span>isKindOf<span class="operator">(</span><span class="string">"qx::service::IxService"</span><span class="operator">)) {</span><span class="flow"> continue</span><span class="operator">; }</span><span class="comment">
+
+      // Filtre les classes à jour : si la version de pClass est &lt;= à la version enregistrée dans la base, la mise à jour n'est pas nécessaire
+</span><span class="flow">      if</span><span class="operator"> (</span>pClass<span class="operator">-&gt;</span>getVersion<span class="operator">() &lt;=</span> dbVersion<span class="operator">.</span>version<span class="operator">) {</span><span class="flow"> continue</span><span class="operator">; }</span><span class="comment">
+
+      // On crée la table si elle n'existe pas, et on définit son propriétaire
+</span><span class="flow">      if</span><span class="operator"> (!</span> tables<span class="operator">.</span>contains<span class="operator">(</span>pClass<span class="operator">-&gt;</span>getName<span class="operator">()))
+      {</span>
+        query<span class="operator">.</span>exec<span class="operator">(</span><span class="string">"CREATE TABLE "</span><span class="operator"> +</span> pClass<span class="operator">-&gt;</span>getName<span class="operator">() +</span><span class="string"> " ( ) WITH (OIDS = FALSE);"
+                   "ALTER TABLE "</span><span class="operator"> +</span> pClass<span class="operator">-&gt;</span>getName<span class="operator">() +</span><span class="string"> " OWNER TO \"MyAdminLogin\";"</span><span class="operator">);</span>
+        session<span class="operator"> +=</span> query<span class="operator">.</span>lastError<span class="operator">();
+      }</span><span class="comment">
+
+      // On ajoute les colonnes à la table si elles n'existent pas
+</span>      qx<span class="operator">::</span>IxDataMemberX<span class="operator"> *</span> pDataMemberX<span class="operator"> =</span> pClass<span class="operator">-&gt;</span>getDataMemberX<span class="operator">();</span><span class="flow">
+      for</span><span class="operator"> (</span><span class="type">long</span> l<span class="operator"> =</span><span class="int"> 0</span><span class="operator">; (</span>pDataMemberX<span class="operator"> &amp;&amp; (</span>l<span class="operator"> &lt;</span> pDataMemberX<span class="operator">-&gt;</span>count_WithDaoStrategy<span class="operator">()));</span> l<span class="operator">++)
+      {</span>
+        qx<span class="operator">::</span>IxDataMember<span class="operator"> *</span> p<span class="operator"> =</span> pDataMemberX<span class="operator">-&gt;</span>get_WithDaoStrategy<span class="operator">(</span>l<span class="operator">);</span><span class="flow">
+        if</span><span class="operator"> (!</span> p<span class="operator"> || (</span>p<span class="operator">-&gt;</span>getVersion<span class="operator">() &lt;=</span> dbVersion<span class="operator">.</span>version<span class="operator">)) {</span><span class="flow"> continue</span><span class="operator">; }</span>
+
+        query<span class="operator">.</span>exec<span class="operator">(</span><span class="string">"ALTER TABLE "</span><span class="operator"> +</span> pClass<span class="operator">-&gt;</span>getName<span class="operator">() +</span><span class="string"> " ADD COLUMN "</span><span class="operator"> +</span> p<span class="operator">-&gt;</span>getName<span class="operator">() +</span><span class="string"> " "</span><span class="operator"> +</span> p<span class="operator">-&gt;</span>getSqlType<span class="operator">() +</span><span class="string"> ";"</span><span class="operator">);</span>
+        session<span class="operator"> +=</span> query<span class="operator">.</span>lastError<span class="operator">();</span><span class="flow">
+
+        if</span><span class="operator"> (</span>p<span class="operator">-&gt;</span>getIsPrimaryKey<span class="operator">())</span><span class="comment"> // PRIMARY KEY
+</span><span class="operator">        {</span>
+          query<span class="operator">.</span>exec<span class="operator">(</span><span class="string">"ALTER TABLE "</span><span class="operator"> +</span> pClass<span class="operator">-&gt;</span>getName<span class="operator">() +</span><span class="string"> " ADD PRIMARY KEY ("</span><span class="operator"> +</span> p<span class="operator">-&gt;</span>getName<span class="operator">() +</span><span class="string"> ");"</span><span class="operator">);</span>
+          session<span class="operator"> +=</span> query<span class="operator">.</span>lastError<span class="operator">();
+        }</span><span class="flow">
+
+        if</span><span class="operator"> (</span>p<span class="operator">-&gt;</span>getAllPropertyBagKeys<span class="operator">().</span>contains<span class="operator">(</span><span class="string">"INDEX"</span><span class="operator">))</span><span class="comment"> // INDEX
+</span><span class="operator">        {</span>
+          query<span class="operator">.</span>exec<span class="operator">(</span><span class="string">"CREATE INDEX "</span><span class="operator"> +</span> pClass<span class="operator">-&gt;</span>getName<span class="operator">() +</span><span class="string"> "_"</span><span class="operator"> +</span> p<span class="operator">-&gt;</span>getName<span class="operator">() +</span><span class="string"> "_idx"</span><span class="operator"> +</span><span class="string"> 
+                     " ON "</span><span class="operator"> +</span> pClass<span class="operator">-&gt;</span>getName<span class="operator">() +</span><span class="string"> " USING "</span><span class="operator"> +</span> p<span class="operator">-&gt;</span>getPropertyBag<span class="operator">(</span><span class="string">"INDEX"</span><span class="operator">).</span>toString<span class="operator">() +</span><span class="string"> " ("</span><span class="operator"> +</span> p<span class="operator">-&gt;</span>getName<span class="operator">() +</span><span class="string"> ");"</span><span class="operator">);</span>
+          session<span class="operator"> +=</span> query<span class="operator">.</span>lastError<span class="operator">();
+        }</span><span class="flow">
+
+        if</span><span class="operator"> (</span>p<span class="operator">-&gt;</span>getNotNull<span class="operator">())</span><span class="comment"> // NOT NULL
+</span><span class="operator">        {</span>
+          query<span class="operator">.</span>exec<span class="operator">(</span><span class="string">"ALTER TABLE "</span><span class="operator"> +</span> pClass<span class="operator">-&gt;</span>getName<span class="operator">() +</span><span class="string"> " ALTER COLUMN "</span><span class="operator"> +</span> p<span class="operator">-&gt;</span>getName<span class="operator">() +</span><span class="string"> " SET NOT NULL;"</span><span class="operator">);</span>
+          session<span class="operator"> +=</span> query<span class="operator">.</span>lastError<span class="operator">();
+        }</span><span class="flow">
+
+        if</span><span class="operator"> (</span>p<span class="operator">-&gt;</span>getAutoIncrement<span class="operator">())</span><span class="comment"> // AUTO INCREMENT
+</span><span class="operator">        {</span>
+          query<span class="operator">.</span>exec<span class="operator">(</span><span class="string">"CREATE SEQUENCE "</span><span class="operator"> +</span> pClass<span class="operator">-&gt;</span>getName<span class="operator">() +</span><span class="string"> "_"</span><span class="operator"> +</span> p<span class="operator">-&gt;</span>getName<span class="operator">() +</span><span class="string"> "_seq"</span><span class="operator"> +</span><span class="string"> "; "
+                     "ALTER TABLE "</span><span class="operator"> +</span> pClass<span class="operator">-&gt;</span>getName<span class="operator">() +</span><span class="string"> "_"</span><span class="operator"> +</span> p<span class="operator">-&gt;</span>getName<span class="operator">() +</span><span class="string"> "_seq"</span><span class="operator"> +</span><span class="string"> " OWNER TO \"MyAdminLogin\"; "
+                     "ALTER TABLE "</span><span class="operator"> +</span> pClass<span class="operator">-&gt;</span>getName<span class="operator">() +</span><span class="string"> " ALTER COLUMN "</span><span class="operator"> +</span> p<span class="operator">-&gt;</span>getName<span class="operator">() +</span><span class="string"> " "</span><span class="operator"> +</span><span class="string">
+                     "SET DEFAULT nextval('"</span><span class="operator"> +</span> pClass<span class="operator">-&gt;</span>getName<span class="operator">() +</span><span class="string"> "_"</span><span class="operator"> +</span> p<span class="operator">-&gt;</span>getName<span class="operator">() +</span><span class="string"> "_seq"</span><span class="operator"> +</span><span class="string"> "'::regclass);"</span><span class="operator">);</span>
+          session<span class="operator"> +=</span> query<span class="operator">.</span>lastError<span class="operator">();
+        }</span><span class="flow">
+
+        if</span><span class="operator"> (</span>p<span class="operator">-&gt;</span>getDescription<span class="operator">() !=</span><span class="string"> ""</span><span class="operator">)</span><span class="comment"> // DESCRIPTION
+</span><span class="operator">        {</span><span class="comment">
+          // $$ceci est un texte ne nécessitant pas de caractères d'échappement dans postgres grace aux doubles dolars$$
+</span>          query<span class="operator">.</span>exec<span class="operator">(</span><span class="string">"COMMENT ON COLUMN "</span><span class="operator"> +</span> pClass<span class="operator">-&gt;</span>getName<span class="operator">() +</span><span class="string"> "."</span><span class="operator"> +</span> p<span class="operator">-&gt;</span>getName<span class="operator">() +</span><span class="string"> " IS $$"</span><span class="operator"> +</span> p<span class="operator">-&gt;</span>getDescription<span class="operator">() +</span><span class="string"> "$$ ;"</span><span class="operator">);</span>
+          session<span class="operator"> +=</span> query<span class="operator">.</span>lastError<span class="operator">();
+        }
+      }
+    }</span><span class="comment">
+
+    // On enregistre la version courante de la base de données
+</span>    dbVersion<span class="operator">.</span>version<span class="operator"> =</span> domainVersion<span class="operator">;</span>
+    session<span class="operator">.</span>save<span class="operator">(</span>dbVersion<span class="operator">);</span><span class="comment">
+
+    // Fin du block "try" : la session est détruite =&gt; commit ou rollback automatique
+    // De plus, un commit ou rollback sur la transaction lève automatiquement le verrou posé précédemment
+</span><span class="operator">  }</span><span class="flow">
+  catch</span><span class="operator"> (</span><span class="keyword">const</span> qx<span class="operator">::</span>dao<span class="operator">::</span>sql_error<span class="operator"> &amp;</span> err<span class="operator">)
+  {</span>
+    QSqlError sqlError<span class="operator"> =</span> err<span class="operator">.</span>get<span class="operator">();</span>
+    qDebug<span class="operator">() &lt;&lt;</span> sqlError<span class="operator">.</span>databaseText<span class="operator">();</span>
+    qDebug<span class="operator">() &lt;&lt;</span> sqlError<span class="operator">.</span>driverText<span class="operator">();</span>
+    qDebug<span class="operator">() &lt;&lt;</span> sqlError<span class="operator">.</span>number<span class="operator">();</span>
+    qDebug<span class="operator">() &lt;&lt;</span> sqlError<span class="operator">.</span>type<span class="operator">();
+  }
+}</span></pre>
+           </td></tr></tbody></table>
+           <br>
+           <b>Remarque :</b> le code précédent (tout comme la fonction <a href="./resource/qxclassx_dump_sql_schema.html" target="_blank"><i>qx::QxClassX::dumpSqlSchema()</i></a>) peut être modifié pour s'adapter aux besoins spécifiques d'une application.<br>
+           Par exemple, il pourrait être intéressant de créer par défaut une seconde table (en plus de la table <i>DatabaseVersion</i>) pour enregistrer la liste des classes persistantes enregistrées dans le contexte QxOrm : ainsi, au lieu d'utiliser la fonction proposée par Qt "<i>db.tables()</i>", il serait possible de récupérer toutes les tables mappées sur des classes persistantes avec des informations supplémentaires (numéro de version pour chaque table, nombre de colonnes enregistrées dans le contexte QxOrm, description de chaque table, etc.).
+           <br>
+           </td>
+         </tr>
+       </tbody>
+      </table>
+      <br><br>
+      <a name="faq_240"><u><b>Comment associer un type SQL à une classe C++ ?</b></u></a><br><br>
+      <table border="0" style="width: 100%" align="center">
+       <col>
+       <col>
+       <tbody>
+         <tr>
+           <td valign="middle" width="30"></td>
+           <td align="justify">
+           Chaque base de données propose des types SQL différents pour stocker l'information.<br>
+           La bibliothèque QxOrm propose une association par défaut pour les classes C++ les plus fréquemment utilisées dans un programme.<br>
+           Voici cette association par défaut :<br>
+           <br>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="string">"bool"</span><span class="operator"> &lt;-&gt;</span><span class="string"> "SMALLINT"
+"qx_bool"</span><span class="operator"> &lt;-&gt;</span><span class="string"> "SMALLINT"
+"short"</span><span class="operator"> &lt;-&gt;</span><span class="string"> "SMALLINT"
+"int"</span><span class="operator"> &lt;-&gt;</span><span class="string"> "INTEGER"
+"long"</span><span class="operator"> &lt;-&gt;</span><span class="string"> "INTEGER"
+"long long"</span><span class="operator"> &lt;-&gt;</span><span class="string"> "INTEGER"
+"float"</span><span class="operator"> &lt;-&gt;</span><span class="string"> "FLOAT"
+"double"</span><span class="operator"> &lt;-&gt;</span><span class="string"> "FLOAT"
+"long double"</span><span class="operator"> &lt;-&gt;</span><span class="string"> "FLOAT"
+"unsigned short"</span><span class="operator"> &lt;-&gt;</span><span class="string"> "SMALLINT"
+"unsigned int"</span><span class="operator"> &lt;-&gt;</span><span class="string"> "INTEGER"
+"unsigned long"</span><span class="operator"> &lt;-&gt;</span><span class="string"> "INTEGER"
+"unsigned long long"</span><span class="operator"> &lt;-&gt;</span><span class="string"> "INTEGER"
+"std::string"</span><span class="operator"> &lt;-&gt;</span><span class="string"> "TEXT"
+"std::wstring"</span><span class="operator"> &lt;-&gt;</span><span class="string"> "TEXT"
+"QString"</span><span class="operator"> &lt;-&gt;</span><span class="string"> "TEXT"
+"QVariant"</span><span class="operator"> &lt;-&gt;</span><span class="string"> "TEXT"
+"QUuid"</span><span class="operator"> &lt;-&gt;</span><span class="string"> "TEXT"
+"QDate"</span><span class="operator"> &lt;-&gt;</span><span class="string"> "DATE"
+"QTime"</span><span class="operator"> &lt;-&gt;</span><span class="string"> "TIME"
+"QDateTime"</span><span class="operator"> &lt;-&gt;</span><span class="string"> "TIMESTAMP"
+"QByteArray"</span><span class="operator"> &lt;-&gt;</span><span class="string"> "BLOB"
+"qx::QxDateNeutral"</span><span class="operator"> &lt;-&gt;</span><span class="string"> "TEXT"
+"qx::QxTimeNeutral"</span><span class="operator"> &lt;-&gt;</span><span class="string"> "TEXT"
+"qx::QxDateTimeNeutral"</span><span class="operator"> &lt;-&gt;</span><span class="string"> "TEXT"</span></pre>
+           </td></tr></tbody></table>
+           <br>
+           Si le type SQL proposé par défaut par la bibliothèque QxOrm ne correspond pas à la base de données utilisée, il peut facilement être modifié (de manière globale à toute l'application) en utilisant la collection suivante :<br>
+           <br>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre>QHash<span class="operator">&lt;</span>QString<span class="operator">,</span> QString<span class="operator">&gt; *</span> lstSqlType<span class="operator"> =</span> qx<span class="operator">::</span>QxClassX<span class="operator">::</span>getAllSqlTypeByClassName<span class="operator">();</span>
+lstSqlType<span class="operator">-&gt;</span>insert<span class="operator">(</span><span class="string">"QString"</span><span class="operator">,</span><span class="string"> "VARCHAR(255)"</span><span class="operator">);</span>
+lstSqlType<span class="operator">-&gt;</span>insert<span class="operator">(</span><span class="string">"std::string"</span><span class="operator">,</span><span class="string"> "VARCHAR(255)"</span><span class="operator">);</span><span class="comment">
+// etc.</span></pre>
+           </td></tr></tbody></table>
+           <br>
+           Pour modifier le type SQL de manière spécifique pour une colonne d'une table de la base de données, il faut définir le type SQL dans la fonction de mapping de QxOrm :<br>
+           <br>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="keyword">namespace</span> qx<span class="operator"> {</span><span class="keyword">
+template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</span> register_class<span class="operator">(</span>QxClass<span class="operator">&lt;</span>MyClass<span class="operator">&gt; &amp;</span> t<span class="operator">)
+{</span><span class="comment">
+  //...
+</span>  IxDataMember<span class="operator"> *</span> p<span class="operator"> =</span>  t<span class="operator">.</span>data<span class="operator">(&amp;</span> MyClass<span class="operator">::</span>m_MyProperty<span class="operator">,</span><span class="string"> "my_property"</span><span class="operator">);</span>
+  p<span class="operator">-&gt;</span>setSqlType<span class="operator">(</span><span class="string">"VARCHAR(255)"</span><span class="operator">);</span><span class="comment">
+  //...
+</span><span class="operator">}}</span></pre>
+           </td></tr></tbody></table>
+           <br>
+           Pour les classes non supportées par défaut par la bibliothèque QxOrm (voir cette <i>Question-Réponse</i> de la FAQ : <i><a href="./faq.html#faq_180">Comment persister un type dont on ne possède pas le code source (classe provenant d'une bibliothèque tierce par exemple) ?</a></i>), il est possible d'associer un type SQL par défaut en utilisant la macro suivante (en dehors de tout <i>namespace</i>) :<br>
+           <br>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre>QX_REGISTER_TRAIT_GET_SQL_TYPE<span class="operator">(</span>MyClass<span class="operator">,</span><span class="string"> "my_sql_type"</span><span class="operator">)</span></pre>
+           </td></tr></tbody></table>
+           <br>
            </td>
          </tr>
        </tbody>

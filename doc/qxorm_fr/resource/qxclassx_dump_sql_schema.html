@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="generator" content="C++2HTML by Jasper Bedaux">
+<style type="text/css">
+   .comment { color: #008000; font-style: italic; }
+   .pre { color: #000099; }
+   .string { color: #DF0101; }
+   .char { color: #009900; }
+   .float { color: #996600; }
+   .int { color: #999900; }
+   .bool { color: #000000; font-weight: bold; }
+   .type { color: #FF6633; }
+   .flow { color: #FF0000; }
+   .keyword { color: #990000; }
+   .operator { color: #663300; font-weight: bold; }
+   .operator { color: #663300; font-weight: bold; }
+</style>
+</head>
+<body>
+<pre>QString QxClassX<span class="operator">::</span>dumpSqlSchema<span class="operator">()
+{</span>
+   qDebug<span class="operator">(</span><span class="string">"[QxOrm] qx::QxClassX::dumpSqlSchema() : %s"</span><span class="operator">,</span><span class="string"> "be careful with this function, it's just an example and tested only with SQLite database, so it's strongly recommended to write your own function to create your SQL schema"</span><span class="operator">);</span>
+   QxCollection<span class="operator">&lt;</span>QString<span class="operator">,</span> IxClass<span class="operator"> *&gt; *</span> pAllClasses<span class="operator"> =</span> QxClassX<span class="operator">::</span>getAllClasses<span class="operator">();</span><span class="flow">
+   if</span><span class="operator"> (!</span> pAllClasses<span class="operator">) {</span> qAssert<span class="operator">(</span><span class="bool">false</span><span class="operator">);</span><span class="flow"> return</span><span class="string"> ""</span><span class="operator">; }</span>
+   QString sql<span class="operator">;</span><span class="type"> long</span> lSqlCount<span class="operator"> =</span><span class="int"> 0</span><span class="operator">;</span><span class="flow">
+
+   for</span><span class="operator"> (</span><span class="type">long</span> k<span class="operator"> =</span><span class="int"> 0</span><span class="operator">;</span> k<span class="operator"> &lt;</span> pAllClasses<span class="operator">-&gt;</span>count<span class="operator">();</span> k<span class="operator">++)
+   {</span>
+      IxClass<span class="operator"> *</span> pClass<span class="operator"> =</span> pAllClasses<span class="operator">-&gt;</span>getByIndex<span class="operator">(</span>k<span class="operator">);</span><span class="flow">
+      if</span><span class="operator"> (!</span> pClass<span class="operator">) {</span><span class="flow"> continue</span><span class="operator">; }</span><span class="comment">
+
+      // If the class is a parameter or a service from 'QxService' module, it's not a persistent class
+</span><span class="flow">      if</span><span class="operator"> (</span>pClass<span class="operator">-&gt;</span>isKindOf<span class="operator">(</span><span class="string">"qx::service::IxParameter"</span><span class="operator">) ||</span> pClass<span class="operator">-&gt;</span>isKindOf<span class="operator">(</span><span class="string">"qx::service::IxService"</span><span class="operator">)) {</span><span class="flow"> continue</span><span class="operator">; }</span><span class="comment">
+
+      // ----
+      // Here, you can filter other classes using property bag (meta-data), for example :
+      //    QString sProp = pClass-&gt;getPropertyBag("NOT_A_DATABASE_OBJECT").toString();
+      //    if (sProp == "1") { continue; }
+      // ----
+
+      // Get the version of the class : if (version = 0) then 'CREATE TABLE', else if (version &gt; 0) then 'ALTER TABLE'
+</span><span class="type">      long</span> lVersion<span class="operator"> =</span> pClass<span class="operator">-&gt;</span>getVersion<span class="operator">();</span><span class="type">
+      bool</span> bCreateTable<span class="operator"> = (</span>lVersion<span class="operator"> &lt;=</span><span class="int"> 0</span><span class="operator">);</span>
+      sql<span class="operator"> += (</span>bCreateTable<span class="operator"> ?</span><span class="string"> "CREATE TABLE "</span><span class="operator"> :</span><span class="string"> "ALTER TABLE "</span><span class="operator">);</span>
+      sql<span class="operator"> +=</span> pClass<span class="operator">-&gt;</span>getName<span class="operator">() +</span><span class="string"> " "</span><span class="operator">;</span>
+      sql<span class="operator"> += (</span>bCreateTable<span class="operator"> ?</span><span class="string"> "("</span><span class="operator"> :</span><span class="string"> "ADD ("</span><span class="operator">);</span><span class="comment">
+
+      // Get the primary key (id) of table, all columns into table, and other parameters associated to table
+</span>      IxDataMember<span class="operator"> *</span> pId<span class="operator"> =</span> pClass<span class="operator">-&gt;</span>getId<span class="operator">();</span>
+      IxDataMemberX<span class="operator"> *</span> pDataMemberX<span class="operator"> =</span> pClass<span class="operator">-&gt;</span>getDataMemberX<span class="operator">();</span>
+      QxSoftDelete oSoftDelete<span class="operator"> =</span> pClass<span class="operator">-&gt;</span>getSoftDelete<span class="operator">();</span><span class="comment">
+
+      // Insert primary key (id) to SQL schema
+</span><span class="flow">      if</span><span class="operator"> (</span>pId<span class="operator"> &amp;&amp; (</span>bCreateTable<span class="operator"> || (</span>pId<span class="operator">-&gt;</span>getVersion<span class="operator">() &gt;=</span> lVersion<span class="operator">)))
+      {</span> sql<span class="operator"> +=</span> pId<span class="operator">-&gt;</span>getSqlNameAndTypeAndParams<span class="operator">(</span><span class="string">", "</span><span class="operator">) +</span><span class="string"> ", "</span><span class="operator">;</span> qAssert<span class="operator">(!</span> pId<span class="operator">-&gt;</span>getSqlType<span class="operator">().</span>isEmpty<span class="operator">()); }</span><span class="comment">
+
+      // Insert all columns to SQL schema
+</span><span class="flow">      for</span><span class="operator"> (</span><span class="type">long</span> l<span class="operator"> =</span><span class="int"> 0</span><span class="operator">; (</span>pDataMemberX<span class="operator"> &amp;&amp; (</span>l<span class="operator"> &lt;</span> pDataMemberX<span class="operator">-&gt;</span>count_WithDaoStrategy<span class="operator">()));</span> l<span class="operator">++)
+      {</span>
+         IxDataMember<span class="operator"> *</span> p<span class="operator"> =</span> pDataMemberX<span class="operator">-&gt;</span>get_WithDaoStrategy<span class="operator">(</span>l<span class="operator">);</span><span class="flow">
+         if</span><span class="operator"> (</span>isValid_DataMember<span class="operator">(</span>p<span class="operator">) &amp;&amp; (</span>p<span class="operator"> !=</span> pId<span class="operator">) &amp;&amp; (</span>bCreateTable<span class="operator"> || (</span>p<span class="operator">-&gt;</span>getVersion<span class="operator">() &gt;=</span> lVersion<span class="operator">)))
+         {</span> sql<span class="operator"> +=</span> p<span class="operator">-&gt;</span>getSqlNameAndTypeAndParams<span class="operator">(</span><span class="string">", "</span><span class="operator">) +</span><span class="string"> ", "</span><span class="operator">;</span> qAssert<span class="operator">(!</span> p<span class="operator">-&gt;</span>getSqlType<span class="operator">().</span>isEmpty<span class="operator">()); }</span><span class="comment">
+
+         // ----
+         // Here, you can use property bag (meta-data) to add some SQL features, for example :
+         //    QString sProp = p-&gt;getPropertyBag("INDEX").toString();
+         //    if (sProp == "1") { sql += "CREATE INDEX" + etc...; }
+         // ----
+</span><span class="operator">      }</span><span class="comment">
+
+      // Insert soft delete behaviour to SQL schema
+</span><span class="flow">      if</span><span class="operator"> (</span>bCreateTable<span class="operator"> &amp;&amp; !</span> oSoftDelete<span class="operator">.</span>isEmpty<span class="operator">())
+      {</span> sql<span class="operator"> +=</span> oSoftDelete<span class="operator">.</span>buildSqlQueryToCreateTable<span class="operator">() +</span><span class="string"> ", "</span><span class="operator">; }</span><span class="comment">
+
+      // Insert all relations to SQL schema
+</span><span class="flow">      for</span><span class="operator"> (</span><span class="type">long</span> l<span class="operator"> =</span><span class="int"> 0</span><span class="operator">; (</span>pDataMemberX<span class="operator"> &amp;&amp; (</span>l<span class="operator"> &lt;</span> pDataMemberX<span class="operator">-&gt;</span>count_WithDaoStrategy<span class="operator">()));</span> l<span class="operator">++)
+      {</span>
+         IxDataMember<span class="operator"> *</span> p<span class="operator"> =</span> pDataMemberX<span class="operator">-&gt;</span>get_WithDaoStrategy<span class="operator">(</span>l<span class="operator">);</span>
+         QxSqlRelationParams params<span class="operator">(</span><span class="int">0</span><span class="operator">,</span><span class="int"> 0</span><span class="operator">, (&amp;</span> sql<span class="operator">),</span> NULL<span class="operator">,</span> NULL<span class="operator">,</span> NULL<span class="operator">);</span><span class="flow">
+         if</span><span class="operator"> (</span>isValid_SqlRelation<span class="operator">(</span>p<span class="operator">) &amp;&amp; (</span>p<span class="operator"> !=</span> pId<span class="operator">) &amp;&amp; (</span>bCreateTable<span class="operator"> || (</span>p<span class="operator">-&gt;</span>getVersion<span class="operator">() &gt;=</span> lVersion<span class="operator">)))
+         {</span> p<span class="operator">-&gt;</span>getSqlRelation<span class="operator">()-&gt;</span>createTable<span class="operator">(</span>params<span class="operator">); }
+      }</span><span class="comment">
+
+      // Terminate SQL schema for current class
+</span>      sql<span class="operator"> =</span> sql<span class="operator">.</span>left<span class="operator">(</span>sql<span class="operator">.</span>count<span class="operator">() -</span><span class="int"> 2</span><span class="operator">);</span><span class="comment"> // Remove last ", "
+</span>      sql<span class="operator"> +=</span><span class="string"> ")\n"</span><span class="operator">;</span>
+      lSqlCount<span class="operator">++;</span><span class="comment">
+
+      // Create extra-table from relations (for example, many-to-many relation needs an extra-table)
+</span><span class="flow">      for</span><span class="operator"> (</span><span class="type">long</span> l<span class="operator"> =</span><span class="int"> 0</span><span class="operator">; (</span>pDataMemberX<span class="operator"> &amp;&amp; (</span>l<span class="operator"> &lt;</span> pDataMemberX<span class="operator">-&gt;</span>count_WithDaoStrategy<span class="operator">()));</span> l<span class="operator">++)
+      {</span>
+         IxDataMember<span class="operator"> *</span> p<span class="operator"> =</span> pDataMemberX<span class="operator">-&gt;</span>get_WithDaoStrategy<span class="operator">(</span>l<span class="operator">);</span>
+         QxSqlRelationParams params<span class="operator">(</span><span class="int">0</span><span class="operator">,</span><span class="int"> 0</span><span class="operator">, (&amp;</span> sql<span class="operator">),</span> NULL<span class="operator">,</span> NULL<span class="operator">,</span> NULL<span class="operator">);</span><span class="flow">
+         if</span><span class="operator"> (</span>isValid_SqlRelation<span class="operator">(</span>p<span class="operator">) &amp;&amp; (</span>p<span class="operator"> !=</span> pId<span class="operator">) &amp;&amp; (</span>bCreateTable<span class="operator"> || (</span>p<span class="operator">-&gt;</span>getVersion<span class="operator">() &gt;=</span> lVersion<span class="operator">)))
+         {</span><span class="comment"> /* TODO... p-&gt;getSqlRelation()-&gt;createExtraTable(params); */</span><span class="operator"> }
+      }
+   }</span>
+
+   qDebug<span class="operator">(</span><span class="string">"[QxOrm] start dump SQL schema (%ld)"</span><span class="operator">,</span> lSqlCount<span class="operator">);</span>
+   qDebug<span class="operator">(</span><span class="string">"%s"</span><span class="operator">,</span> qPrintable<span class="operator">(</span>sql<span class="operator">));</span>
+   qDebug<span class="operator">(</span><span class="string">"[QxOrm] %s"</span><span class="operator">,</span><span class="string"> "end dump SQL schema"</span><span class="operator">);</span><span class="flow">
+
+   return</span> sql<span class="operator">;
+}</span></pre>
+</body></html>

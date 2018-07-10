@@ -27,6 +27,8 @@
 
 #include <QxSerialize/Qt/QxSerialize_QVariant.h>
 
+#include <QxRegister/QxClassX.h>
+
 #include <QxMemLeak.h>
 
 namespace boost {
@@ -39,10 +41,11 @@ inline void qx_save(Archive & ar, const QVariant & t, const unsigned int file_ve
    int iType = static_cast<int>(t.type());
    ar << boost::serialization::make_nvp("type", iType);
 
+   qx::QxClassX::type_fct_save_qvariant_usertype fct;
    QString sInvalid; bool b(false); int i(0); uint ui(0); long l(0); unsigned long ul(0);
    double d(0.0); QString s; QDate qdate; QDateTime qdatetime; QTime qtime; QByteArray qbytearray;
    QPoint qpoint; QRect qrect; QSize qsize; QRegExp qregexp; QUrl qurl;
-   QString sDefault("unknown variant serialize type");
+   QString sUserType("unknown variant serialize type");
    const char * sTag = "value";
 
 #if _QX_ENABLE_QT_GUI_DEPENDENCY
@@ -78,7 +81,10 @@ inline void qx_save(Archive & ar, const QVariant & t, const unsigned int file_ve
 #endif // _QX_ENABLE_QT_GUI_DEPENDENCY
 
       case QVariant::Invalid:       ar << boost::serialization::make_nvp(sTag, sInvalid); break;
-      default:                      ar << boost::serialization::make_nvp(sTag, sDefault); break;
+
+      default:                      fct = qx::QxClassX::getFctSaveQVariantUserType();
+                                    if (! fct.empty()) { sUserType = fct(t, iType, file_version); }
+                                    ar << boost::serialization::make_nvp(sTag, sUserType); break;
    }
 }
 
@@ -89,7 +95,8 @@ inline void qx_load(Archive & ar, QVariant & t, const unsigned int file_version)
    int iType = 0;
    ar >> boost::serialization::make_nvp("type", iType);
 
-   QString sDefault; QString sInvalid; bool b(false); int i(0); uint ui(0); long l(0); unsigned long ul(0);
+   qx::QxClassX::type_fct_load_qvariant_usertype fct;
+   QString sUserType; QString sInvalid; bool b(false); int i(0); uint ui(0); long l(0); unsigned long ul(0);
    double d(0.0); QString s; QDate qdate; QDateTime qdatetime; QTime qtime; QByteArray qbytearray;
    QPoint qpoint; QRect qrect; QSize qsize; QRegExp qregexp; QUrl qurl;
    const char * sTag = "value";
@@ -127,7 +134,11 @@ inline void qx_load(Archive & ar, QVariant & t, const unsigned int file_version)
 #endif // _QX_ENABLE_QT_GUI_DEPENDENCY
 
       case QVariant::Invalid:       ar >> boost::serialization::make_nvp(sTag, sInvalid);    t = QVariant(); break;
-      default:                      ar >> boost::serialization::make_nvp(sTag, sDefault);    t = QVariant(); break;
+
+      default:                      ar >> boost::serialization::make_nvp(sTag, sUserType);
+                                    fct = qx::QxClassX::getFctLoadQVariantUserType();
+                                    if (! fct.empty()) { t = fct(sUserType, iType, file_version); }
+                                    else { t = QVariant(); } break;
    }
 }
 

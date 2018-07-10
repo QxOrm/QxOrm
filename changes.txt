@@ -1,3 +1,11 @@
+Changes in version 1.2.1:
+- Improve 'qx::QxSqlQuery' class : new engine to build queries without writing SQL, for more details, see the FAQ 'How to build a query without writing SQL with the class qx::QxSqlQuery ?'
+- Improve 'qx::QxSession' class : provide persistent methods (CRUD) without using 'qx::dao::xxx' functions, for more details, see the FAQ 'How to use a session (qx::QxSession class) to manage automatically database transactions (using C++ RAII) ?'
+- Implement 'repository' pattern to provide a common interface for persistent methods (CRUD) with 3 new classes : 'qx::IxRepository', 'qx::QxRepository<T>' and 'qx::QxRepositoryX'
+- Possibility to serialize a QVariant 'UserType' with serialization engine of QxOrm library
+- Improve thread-safe 'qx::cache' : add insertion date-time into the cache to verify that an element must be updated or not, for more details, see the FAQ 'How to use the cache (functions into namespace qx::cache) of QxOrm library ?'
+- FAQ updated on QxOrm website with now 28 questions and answers
+
 Changes in version 1.1.9:
 - Possibility to register automatically Qt meta-properties (using Q_PROPERTY macro) to QxOrm context without writing mapping function per class (void qx::register_class<T>())
 - Strong integration with Qt introspection/moc engine : for more details about this new feature, goto the FAQ 'How to register automatically Qt meta-properties to QxOrm context ?'

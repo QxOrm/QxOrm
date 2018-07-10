@@ -26,7 +26,7 @@
 #define QX_DAO_HELPER_CONTAINER(className) \
 namespace qx { namespace dao { namespace detail { \
 template <class T> \
-struct QxDao_Helper_Container< className<T> > : public IxDao_Helper \
+class QxDao_Helper_Container< className<T> > : public IxDao_Helper \
 { \
 public: \
    QxDao_Helper_Container(className<T> & t, QSqlDatabase * pDatabase, const QString & sContext) : IxDao_Helper() { Q_UNUSED(t); init(pDatabase, sContext); } \
@@ -38,7 +38,7 @@ protected: \
 #define QX_DAO_HELPER_CONTAINER_KEY_VALUE(className) \
 namespace qx { namespace dao { namespace detail { \
 template <class Key, class Value> \
-struct QxDao_Helper_Container< className<Key, Value> > : public IxDao_Helper \
+class QxDao_Helper_Container< className<Key, Value> > : public IxDao_Helper \
 { \
 public: \
    QxDao_Helper_Container(className<Key, Value> & t, QSqlDatabase * pDatabase, const QString & sContext) : IxDao_Helper() { Q_UNUSED(t); init(pDatabase, sContext); } \
@@ -54,9 +54,9 @@ namespace detail {
 template <class T>
 struct QxDao_Helper_Container { ; };
 
-} // namespace qx
-} // namespace dao
 } // namespace detail
+} // namespace dao
+} // namespace qx
 
 QX_DAO_HELPER_CONTAINER(std::vector)
 QX_DAO_HELPER_CONTAINER(std::list)

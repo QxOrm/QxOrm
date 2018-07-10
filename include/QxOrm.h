@@ -120,6 +120,14 @@
 #include <QxDao/QxTimeNeutral.h>
 #include <QxDao/QxDateTimeNeutral.h>
 
+#include <QxDao/QxSqlElement/QxSqlElement.h>
+
+#include <QxDao/QxSqlGenerator/QxSqlGenerator.h>
+
+#include <QxDao/QxRepository/IxRepository.h>
+#include <QxDao/QxRepository/QxRepository.h>
+#include <QxDao/QxRepository/QxRepositoryX.h>
+
 #include <QxSerialize/QxSerialize.h>
 
 #include <QxCommon/QxStringCvt.h>

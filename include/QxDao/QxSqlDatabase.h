@@ -48,6 +48,8 @@
 
 #include <QxSingleton/QxSingleton.h>
 
+#include <QxDao/QxSqlGenerator/IxSqlGenerator.h>
+
 namespace qx {
 
 /*!
@@ -65,20 +67,21 @@ public:
 
 private:
 
-   QHash<Qt::HANDLE, QString> m_lstDbByThread;  //!< Collection of databases connexions by thread id
-   QMutex m_oDbMutex;                           //!< Mutex => 'QxSqlDatabase' is thread-safe
-   QString m_sDriverName;                       //!< Driver name to connect to database
-   QString m_sConnectOptions;                   //!< Connect options to database
-   QString m_sDatabaseName;                     //!< Database name
-   QString m_sUserName;                         //!< Connection's user name
-   QString m_sPassword;                         //!< Connection's password
-   QString m_sHostName;                         //!< Connection's host name
-   int m_iPort;                                 //!< Connection's port number
-   bool m_bTraceSqlQuery;                       //!< Trace each sql query executed
-   bool m_bTraceSqlRecord;                      //!< Trace each sql record
-   ph_style m_ePlaceHolderStyle;                //!< Place holder style to build sql query
-   bool m_bSessionThrowable;                    //!< An exception of type qx::dao::sql_error is thrown when a SQL error is appended to qx::QxSession object
-   bool m_bSessionAutoTransaction;              //!< A transaction is automatically beginned when a qx::QxSession object is instantiated
+   QHash<Qt::HANDLE, QString> m_lstDbByThread;              //!< Collection of databases connexions by thread id
+   QMutex m_oDbMutex;                                       //!< Mutex => 'QxSqlDatabase' is thread-safe
+   QString m_sDriverName;                                   //!< Driver name to connect to database
+   QString m_sConnectOptions;                               //!< Connect options to database
+   QString m_sDatabaseName;                                 //!< Database name
+   QString m_sUserName;                                     //!< Connection's user name
+   QString m_sPassword;                                     //!< Connection's password
+   QString m_sHostName;                                     //!< Connection's host name
+   int m_iPort;                                             //!< Connection's port number
+   bool m_bTraceSqlQuery;                                   //!< Trace each sql query executed
+   bool m_bTraceSqlRecord;                                  //!< Trace each sql record
+   ph_style m_ePlaceHolderStyle;                            //!< Place holder style to build sql query
+   bool m_bSessionThrowable;                                //!< An exception of type qx::dao::sql_error is thrown when a SQL error is appended to qx::QxSession object
+   bool m_bSessionAutoTransaction;                          //!< A transaction is automatically beginned when a qx::QxSession object is instantiated
+   qx::dao::detail::IxSqlGenerator_ptr m_pSqlGenerator;     //!< SQL generator to build SQL query specific for each database
 
 private:
 
@@ -100,21 +103,24 @@ public:
    bool getSessionThrowable() const             { return m_bSessionThrowable; }
    bool getSessionAutoTransaction() const       { return m_bSessionAutoTransaction; }
 
-   void setDriverName(const QString & s)        { m_sDriverName = s; }
-   void setConnectOptions(const QString & s)    { m_sConnectOptions = s; }
-   void setDatabaseName(const QString & s)      { m_sDatabaseName = s; }
-   void setUserName(const QString & s)          { m_sUserName = s; }
-   void setPassword(const QString & s)          { m_sPassword = s; }
-   void setHostName(const QString & s)          { m_sHostName = s; }
-   void setPort(int i)                          { m_iPort = i; }
-   void setTraceSqlQuery(bool b)                { m_bTraceSqlQuery = b; }
-   void setTraceSqlRecord(bool b)               { m_bTraceSqlRecord = b; }
-   void setSqlPlaceHolderStyle(ph_style e)      { m_ePlaceHolderStyle = e; }
-   void setSessionThrowable(bool b)             { m_bSessionThrowable = b; }
-   void setSessionAutoTransaction(bool b)       { m_bSessionAutoTransaction = b; }
+   void setDriverName(const QString & s)                          { m_sDriverName = s; }
+   void setConnectOptions(const QString & s)                      { m_sConnectOptions = s; }
+   void setDatabaseName(const QString & s)                        { m_sDatabaseName = s; }
+   void setUserName(const QString & s)                            { m_sUserName = s; }
+   void setPassword(const QString & s)                            { m_sPassword = s; }
+   void setHostName(const QString & s)                            { m_sHostName = s; }
+   void setPort(int i)                                            { m_iPort = i; }
+   void setTraceSqlQuery(bool b)                                  { m_bTraceSqlQuery = b; }
+   void setTraceSqlRecord(bool b)                                 { m_bTraceSqlRecord = b; }
+   void setSqlPlaceHolderStyle(ph_style e)                        { m_ePlaceHolderStyle = e; }
+   void setSessionThrowable(bool b)                               { m_bSessionThrowable = b; }
+   void setSessionAutoTransaction(bool b)                         { m_bSessionAutoTransaction = b; }
+   void setSqlGenerator(qx::dao::detail::IxSqlGenerator_ptr p)    { m_pSqlGenerator = p; }
 
    static QSqlDatabase getDatabase()         { return qx::QxSqlDatabase::getSingleton()->getDatabaseByCurrThreadId(); }
    static QSqlDatabase getDatabaseCloned()   { return QSqlDatabase::cloneDatabase(qx::QxSqlDatabase::getDatabase(), QUuid::createUuid().toString()); }
+
+   qx::dao::detail::IxSqlGenerator * getSqlGenerator();
 
 private:
 

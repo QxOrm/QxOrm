@@ -280,6 +280,10 @@
 				Name="QxDao"
 				>
 				<File
+					RelativePath=".\src\QxDao\IxDao_Helper.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\src\QxDao\IxSqlQueryBuilder.cpp"
 					>
 				</File>
@@ -299,6 +303,94 @@
 					RelativePath=".\src\QxDao\QxSqlQuery.cpp"
 					>
 				</File>
+				<Filter
+					Name="QxSqlElement"
+					>
+					<File
+						RelativePath=".\src\QxDao\QxSqlElement\IxSqlElement.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\QxDao\QxSqlElement\QxSqlCompare.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\QxDao\QxSqlElement\QxSqlElementTemp.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\QxDao\QxSqlElement\QxSqlExpression.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\QxDao\QxSqlElement\QxSqlFreeText.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\QxDao\QxSqlElement\QxSqlIn.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\QxDao\QxSqlElement\QxSqlIsBetween.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\QxDao\QxSqlElement\QxSqlIsNull.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\QxDao\QxSqlElement\QxSqlLimit.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\QxDao\QxSqlElement\QxSqlSort.cpp"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="QxSqlGenerator"
+					>
+					<File
+						RelativePath=".\src\QxDao\QxSqlGenerator\IxSqlGenerator.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\QxDao\QxSqlGenerator\QxSqlGenerator_MSSQLServer.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\QxDao\QxSqlGenerator\QxSqlGenerator_MySQL.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\QxDao\QxSqlGenerator\QxSqlGenerator_Oracle.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\QxDao\QxSqlGenerator\QxSqlGenerator_PostgreSQL.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\QxDao\QxSqlGenerator\QxSqlGenerator_SQLite.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\QxDao\QxSqlGenerator\QxSqlGenerator_Standard.cpp"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="QxRepository"
+					>
+					<File
+						RelativePath=".\src\QxDao\QxRepository\IxRepository.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\QxDao\QxRepository\QxRepositoryX.cpp"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="QxCommon"
@@ -786,6 +878,10 @@
 				Name="QxDao"
 				>
 				<File
+					RelativePath=".\include\QxDao\IxDao_Helper.h"
+					>
+				</File>
+				<File
 					RelativePath=".\include\QxDao\IxSqlQueryBuilder.h"
 					>
 				</File>
@@ -881,6 +977,106 @@
 					RelativePath=".\include\QxDao\QxTimeNeutral.h"
 					>
 				</File>
+				<Filter
+					Name="QxSqlElement"
+					>
+					<File
+						RelativePath=".\include\QxDao\QxSqlElement\IxSqlElement.h"
+						>
+					</File>
+					<File
+						RelativePath=".\include\QxDao\QxSqlElement\QxSqlCompare.h"
+						>
+					</File>
+					<File
+						RelativePath=".\include\QxDao\QxSqlElement\QxSqlElement.h"
+						>
+					</File>
+					<File
+						RelativePath=".\include\QxDao\QxSqlElement\QxSqlElementTemp.h"
+						>
+					</File>
+					<File
+						RelativePath=".\include\QxDao\QxSqlElement\QxSqlExpression.h"
+						>
+					</File>
+					<File
+						RelativePath=".\include\QxDao\QxSqlElement\QxSqlFreeText.h"
+						>
+					</File>
+					<File
+						RelativePath=".\include\QxDao\QxSqlElement\QxSqlIn.h"
+						>
+					</File>
+					<File
+						RelativePath=".\include\QxDao\QxSqlElement\QxSqlIsBetween.h"
+						>
+					</File>
+					<File
+						RelativePath=".\include\QxDao\QxSqlElement\QxSqlIsNull.h"
+						>
+					</File>
+					<File
+						RelativePath=".\include\QxDao\QxSqlElement\QxSqlLimit.h"
+						>
+					</File>
+					<File
+						RelativePath=".\include\QxDao\QxSqlElement\QxSqlSort.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="QxSqlGenerator"
+					>
+					<File
+						RelativePath=".\include\QxDao\QxSqlGenerator\IxSqlGenerator.h"
+						>
+					</File>
+					<File
+						RelativePath=".\include\QxDao\QxSqlGenerator\QxSqlGenerator.h"
+						>
+					</File>
+					<File
+						RelativePath=".\include\QxDao\QxSqlGenerator\QxSqlGenerator_MSSQLServer.h"
+						>
+					</File>
+					<File
+						RelativePath=".\include\QxDao\QxSqlGenerator\QxSqlGenerator_MySQL.h"
+						>
+					</File>
+					<File
+						RelativePath=".\include\QxDao\QxSqlGenerator\QxSqlGenerator_Oracle.h"
+						>
+					</File>
+					<File
+						RelativePath=".\include\QxDao\QxSqlGenerator\QxSqlGenerator_PostgreSQL.h"
+						>
+					</File>
+					<File
+						RelativePath=".\include\QxDao\QxSqlGenerator\QxSqlGenerator_SQLite.h"
+						>
+					</File>
+					<File
+						RelativePath=".\include\QxDao\QxSqlGenerator\QxSqlGenerator_Standard.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="QxRepository"
+					>
+					<File
+						RelativePath=".\include\QxDao\QxRepository\IxRepository.h"
+						>
+					</File>
+					<File
+						RelativePath=".\include\QxDao\QxRepository\QxRepository.h"
+						>
+					</File>
+					<File
+						RelativePath=".\include\QxDao\QxRepository\QxRepositoryX.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="QxSerialize"

@@ -103,8 +103,13 @@ QString IxDataMember::getSqlTypeAndParams(int iIndexName /* = -1 */) const
    sResult += (m_bNotNull ? " NOT NULL" : "");
    sResult += ((m_bIsPrimaryKey && (getNameCount() <= 1)) ? " PRIMARY KEY" : "");
 
-   if (QxSqlDatabase::getSingleton()->getDriverName() == "QMYSQL") { sResult += (m_bAutoIncrement ? " AUTO_INCREMENT" : ""); }
-   else { sResult += (m_bAutoIncrement ? " AUTOINCREMENT" : ""); }
+   if (m_bAutoIncrement)
+   {
+      qx::dao::detail::IxSqlGenerator * pSqlGenerator = QxSqlDatabase::getSingleton()->getSqlGenerator();
+      if (! pSqlGenerator) { qAssert(false); sResult += " AUTOINCREMENT"; }
+      else { sResult += " " + pSqlGenerator->getAutoIncrement(); }
+   }
+
    return sResult;
 }
 

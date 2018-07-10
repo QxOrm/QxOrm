@@ -50,6 +50,7 @@ namespace qx {
 
 inline boost::any create(const QString & sKey);
 template <typename T> inline T * create_nude_ptr(const QString & sKey);
+inline void * create_void_ptr(const QString & sKey);
 
 class QxClassX;
 
@@ -65,6 +66,7 @@ class QX_DLL_EXPORT QxFactoryX : public QxSingleton<QxFactoryX>
    friend class QxSingleton<QxFactoryX>;
    friend inline boost::any create(const QString & sKey);
    template <typename T> friend inline T * create_nude_ptr(const QString & sKey);
+   friend inline void * create_void_ptr(const QString & sKey);
 
 protected:
 
@@ -103,6 +105,13 @@ inline boost::any create(const QString & sKey)
 template <typename T>
 inline T * create_nude_ptr(const QString & sKey)
 { return dynamic_cast<T *>(static_cast<T *>(qx::QxFactoryX::createInstanceNudePtr(sKey))); }
+
+/*!
+ * \ingroup QxFactory
+ * \brief Return a void * pointer (be careful with memory leak) associated by key sKey, or return NULL if sKey is not registered into factory engine
+ */
+inline void * create_void_ptr(const QString & sKey)
+{ return qx::QxFactoryX::createInstanceNudePtr(sKey); }
 
 } // namespace qx
 

@@ -37,7 +37,7 @@
  * \brief List of parameters to compile and build QxOrm library
  */
 
-#define QX_VERSION   0x010109 // QxOrm version 1.1.9
+#define QX_VERSION   0x010201 // QxOrm version 1.2.1
 
 #define _QX_SERIALIZE_POLYMORPHIC            0
 
@@ -51,6 +51,7 @@
 #define _QX_SERIALIZE_WIDE_TEXT              (! _QX_SERIALIZE_POLYMORPHIC && 0)
 #define _QX_SERIALIZE_WIDE_XML               (! _QX_SERIALIZE_POLYMORPHIC && 0)
 
+#define _QX_AUTO_REGISTER_REPOSITORY                                    0
 #define _QX_USE_MEM_LEAK_DETECTION                                      0
 #define _QX_USE_EXPORT_DLL_BOOST_SERIALIZATION_SINGLETON                1
 #define _QX_USE_BOOST_SERIALIZE_REGISTER_HELPER                         0

@@ -172,14 +172,14 @@ bool fixed_mem_pool<_Tp>::initialize(size_t __size)
     _S_first_avail_ptr = _S_mem_pool_ptr;
     if (_S_mem_pool_ptr == NULL)
         return false;
-    char* __block = (char*)_S_mem_pool_ptr;
+    char* __block_ = (char*)_S_mem_pool_ptr;
     while (--__size != 0)
     {
-        char* __next = __block + __block_size;
-        *(void**)__block = __next;
-        __block = __next;
+        char* __next_ = __block_ + __block_size;
+        *(void**)__block_ = __next_;
+        __block_ = __next_;
     }
-    *(void**)__block = NULL;
+    *(void**)__block_ = NULL;
     return true;
 }
 

@@ -85,7 +85,7 @@ int main(int argc, char * argv[])
    qAssert(qx::cache::count() == 2);
    ptrTmp = qx::cache::get< boost::shared_ptr<QObject> >("object");
    qx_bool bCacheOk = qx::cache::get("user", userClone);
-   qAssert(! bCacheOk);
+   qAssert(! bCacheOk && (ptrTmp.get() != NULL));
 
 #if _QX_SERIALIZE_POLYMORPHIC
    qx::serialization::polymorphic_binary::to_file(user, "user.bin");
@@ -350,6 +350,40 @@ int main(int argc, char * argv[])
    qx::IxDataMember * pQtMetaProperty = qx::QxClassX::getDataMember("TestQtProperty", "desc"); Q_UNUSED(pQtMetaProperty);
    qAssert(pQtMetaProperty && pQtMetaProperty->getValue<QString>(& testQtMetaProperty) == sQtPropertyDesc);
    qx::dump(testQtMetaProperty);
+
+   //--------------------------------
+
+   QDateTime queryDT1, queryDT2;
+   qx_query queryToTest;
+   queryToTest.where("sex").isEqualTo("female")
+              .and_("age").isGreaterThan(38)
+              .or_("last_name").isNotEqualTo("Dupont")
+              .or_("first_name").like("Alfred")
+              .and_OpenParenthesis("id").isLessThanOrEqualTo(999)
+              .and_("birth_date").isBetween(queryDT1, queryDT2)
+              .closeParenthesis()
+              .or_("id").in(50, 999, 11, 23, 78945)
+              .and_("is_deleted").isNotNull()
+              .orderAsc("last_name", "first_name", "sex")
+              .limit(50, 150);
+
+   QString sQueryToTest = queryToTest.query();
+   qDebug("[QxOrm] test SQL query using C++ syntax : '%s'", qPrintable(sQueryToTest));
+
+   //--------------------------------
+
+   qx::QxRepository<Foo> repositoryFoo;
+   pFooX.reset(new FooX());
+   daoError = repositoryFoo.fetchAll(pFooX);
+   qAssert(! daoError.isValid());
+   Foo_ptr pFooTmp;
+   pFooTmp.reset(repositoryFoo.fetchById(3));
+   if (pFooTmp)
+   {
+      pFooTmp->setDesc("desc_modified");
+      daoError = repositoryFoo.save(pFooTmp);
+      qAssert(! daoError.isValid());
+   }
 
    //--------------------------------
 

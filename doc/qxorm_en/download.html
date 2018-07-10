@@ -62,13 +62,14 @@
 </table>
 <hr style="width: 80%" align="center" size="1" color="#100D5A">
 <table border="0" style="width: 80%" align="center">
-  <col><col><col><col><col>
+  <col><col><col><col><col><col>
   <tbody><tr>
   <td align="left" valign="top"><font size="2">QxOrm  &gt;&gt;  Download</font></td>
-  <td align="right" valign="top"><font size="2">Current version : QxOrm 1.1.9 (LGPL) - <a href="../doxygen/index.html" target="_blank">QxOrm library online documentation</a></font></td>
+  <td align="right" valign="top"><font size="2">Current version : QxOrm 1.2.1 (LGPL) - <a href="../doxygen/index.html" target="_blank">QxOrm library online documentation</a></font></td>
   <td width="10px"></td>
   <td width="40px" height="30px"><a href="../qxorm_fr/download.html"><img alt="Version française du site" src="./resource/FR.png" width="40" height="30" border="0"></a></td>
   <td width="40px" height="30px"><a href="../qxorm_en/download.html"><img alt="Web site english version" src="./resource/GB.png" width="40" height="30" border="0"></a></td>
+  <td width="40px" height="30px"><a href="http://sites.google.com/site/qxormpostgres/" target="_blank"><img alt="" src="./resource/ES.png" width="40" height="30" border="0"></a></td>
   </tr></tbody>
 </table>
 <table border="1" frame="vsides" rules="cols" style="width: 80%" align="center" cellpadding="6" bgcolor="#F2F2F4">
@@ -89,14 +90,14 @@
                        <td valign="middle" width="80" align="center"><a href="http://sourceforge.net/projects/qxorm/files/" target="_blank"><img alt="Download QxOrm" src="./resource/download.jpg" width="40" height="48" border="0"></a> </td>
                        <td align="justify">
                          <a href="http://sourceforge.net/projects/qxorm/files/" target="_blank">
-                         <b>Download QxOrm 1.1.9 (source + test + documentation)</b></a><br>
+                         <b>Download QxOrm 1.2.1 (source + test + documentation)</b></a><br>
                          This version has been tested with <b>Visual Studio 2008 and 2010</b> on Windows, <b>GCC 4.4.1</b> on Linux and Mac OS X, and <b>MinGW</b> on Windows
                        </td>
                      </tr>
                    </tbody>
                   </table>
                  <br>
-                 <i>Note : you can also download last version of QxOrm <a href="../version/QxOrm_1.1.9.zip">here</a>.</i><br>
+                 <i>Note : you can also download last version of QxOrm <a href="../version/QxOrm_1.2.1.zip">here</a>.</i><br>
                  <p align="justify">
                  Before you install and compile <b>QxOrm</b>, you need the following libraries : <a href="http://www.boost.org/" target="_blank"><b>boost</b></a> (from version 1.38) and <a href="http://qt.nokia.com/" target="_blank"><b>Qt</b></a> (from version 4.5.0) :</p>
               </td>
@@ -140,6 +141,14 @@
           <tbody>
             <tr>
               <td><i>
+Changes in version 1.2.1:<br>
+- Improve 'qx::QxSqlQuery' class : new engine to build queries without writing SQL, for more details, see the FAQ 'How to build a query without writing SQL with the class qx::QxSqlQuery ?'<br>
+- Improve 'qx::QxSession' class : provide persistent methods (CRUD) without using 'qx::dao::xxx' functions, for more details, see the FAQ 'How to use a session (qx::QxSession class) to manage automatically database transactions (using C++ RAII) ?'<br>
+- Implement 'repository' pattern to provide a common interface for persistent methods (CRUD) with 3 new classes : 'qx::IxRepository', 'qx::QxRepository&lt;T&gt;' and 'qx::QxRepositoryX'<br>
+- Possibility to serialize a QVariant 'UserType' with serialization engine of QxOrm library<br>
+- Improve thread-safe 'qx::cache' : add insertion date-time into the cache to verify that an element must be updated or not, for more details, see the FAQ 'How to use the cache (functions into namespace qx::cache) of QxOrm library ?'<br>
+- FAQ updated on QxOrm website with now 28 questions and answers<br>
+<br>
 Changes in version 1.1.9:<br>
 - Possibility to register automatically Qt meta-properties (using Q_PROPERTY macro) to QxOrm context without writing mapping function per class (void qx::register_class&lt;T&gt;())<br>
 - Strong integration with Qt introspection/moc engine : for more details about this new feature, goto the FAQ 'How to register automatically Qt meta-properties to QxOrm context ?'<br>
