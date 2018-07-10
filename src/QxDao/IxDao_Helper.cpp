@@ -33,6 +33,8 @@
 
 #include <QxDao/IxDao_Helper.h>
 
+#include <QxRegister/IxClass.h>
+
 #include <QxMemLeak/mem_leak.h>
 
 #define QX_DAO_ERR_INTERNAL                  "[QxOrm] 'qx::dao' internal error"
@@ -265,6 +267,7 @@ void IxDao_Helper::init(QSqlDatabase * pDatabase, const QString & sContext)
    if (! m_pQueryBuilder) { updateError(QX_DAO_ERR_NO_QUERY_BUILDER); return; }
 
    m_pQueryBuilder->init();
+   m_pQueryBuilder->setDaoHelper(this);
    m_query = QSqlQuery(m_database);
    m_query.setForwardOnly(true);
    m_pDataMemberX = (m_pQueryBuilder ? m_pQueryBuilder->getDataMemberX() : NULL);

@@ -37,8 +37,8 @@
  *
  */
 
-#ifndef NDEBUG
 #ifndef QT_NO_DEBUG
+#ifndef _QX_MODE_RELEASE
 #if _QX_USE_MEM_LEAK_DETECTION
 
 #ifndef _FAST_MUTEX_H
@@ -95,7 +95,7 @@
 #   undef _PTHREADS
 # endif
 
-#ifndef NDEBUG
+#ifndef _QX_MODE_RELEASE
 #ifndef QT_NO_DEBUG
 #   include <stdio.h>
 #   include <stdlib.h>
@@ -110,7 +110,7 @@
 #   define _FAST_MUTEX_ASSERT(_Expr, _Msg) \
         ((void)0)
 #endif // QT_NO_DEBUG
-#endif // NDEBUG
+#endif // _QX_MODE_RELEASE
 
 # ifdef _PTHREADS
 #   include <pthread.h>
@@ -131,18 +131,18 @@
 #       if _FAST_MUTEX_CHECK_INITIALIZATION
         bool _M_initialized;
 #       endif
-#ifndef NDEBUG
+#ifndef _QX_MODE_RELEASE
 #ifndef QT_NO_DEBUG
         bool _M_locked;
 #endif // QT_NO_DEBUG
-#endif // NDEBUG
+#endif // _QX_MODE_RELEASE
     public:
         fast_mutex()
-#ifndef NDEBUG
+#ifndef _QX_MODE_RELEASE
 #ifndef QT_NO_DEBUG
             : _M_locked(false)
 #endif // QT_NO_DEBUG
-#endif // NDEBUG
+#endif // _QX_MODE_RELEASE
         {
             ::pthread_mutex_init(&_M_mtx_impl, NULL);
 #       if _FAST_MUTEX_CHECK_INITIALIZATION
@@ -164,7 +164,7 @@
                 return;
 #       endif
             ::pthread_mutex_lock(&_M_mtx_impl);
-#ifndef NDEBUG
+#ifndef _QX_MODE_RELEASE
 #ifndef QT_NO_DEBUG
             // The following assertion should _always_ be true for a
             // real `fast' pthread_mutex.  However, this assertion can
@@ -174,7 +174,7 @@
             _FAST_MUTEX_ASSERT(!_M_locked, "lock(): already locked");
             _M_locked = true;
 #endif // QT_NO_DEBUG
-#endif // NDEBUG
+#endif // _QX_MODE_RELEASE
         }
         void unlock()
         {
@@ -182,12 +182,12 @@
             if (!_M_initialized)
                 return;
 #       endif
-#ifndef NDEBUG
+#ifndef _QX_MODE_RELEASE
 #ifndef QT_NO_DEBUG
             _FAST_MUTEX_ASSERT(_M_locked, "unlock(): not locked");
             _M_locked = false;
 #endif // QT_NO_DEBUG
-#endif // NDEBUG
+#endif // _QX_MODE_RELEASE
             ::pthread_mutex_unlock(&_M_mtx_impl);
         }
     private:
@@ -217,18 +217,18 @@
 #       if _FAST_MUTEX_CHECK_INITIALIZATION
         bool _M_initialized;
 #       endif
-#ifndef NDEBUG
+#ifndef _QX_MODE_RELEASE
 #ifndef QT_NO_DEBUG
         bool _M_locked;
 #endif // QT_NO_DEBUG
-#endif // NDEBUG
+#endif // _QX_MODE_RELEASE
     public:
         fast_mutex()
-#ifndef NDEBUG
+#ifndef _QX_MODE_RELEASE
 #ifndef QT_NO_DEBUG
             : _M_locked(false)
 #endif // QT_NO_DEBUG
-#endif // NDEBUG
+#endif // _QX_MODE_RELEASE
         {
             ::InitializeCriticalSection(&_M_mtx_impl);
 #       if _FAST_MUTEX_CHECK_INITIALIZATION
@@ -250,12 +250,12 @@
                 return;
 #       endif
             ::EnterCriticalSection(&_M_mtx_impl);
-#ifndef NDEBUG
+#ifndef _QX_MODE_RELEASE
 #ifndef QT_NO_DEBUG
             _FAST_MUTEX_ASSERT(!_M_locked, "lock(): already locked");
             _M_locked = true;
 #endif // QT_NO_DEBUG
-#endif // NDEBUG
+#endif // _QX_MODE_RELEASE
         }
         void unlock()
         {
@@ -263,12 +263,12 @@
             if (!_M_initialized)
                 return;
 #       endif
-#ifndef NDEBUG
+#ifndef _QX_MODE_RELEASE
 #ifndef QT_NO_DEBUG
             _FAST_MUTEX_ASSERT(_M_locked, "unlock(): not locked");
             _M_locked = false;
 #endif // QT_NO_DEBUG
-#endif // NDEBUG
+#endif // _QX_MODE_RELEASE
             ::LeaveCriticalSection(&_M_mtx_impl);
         }
     private:
@@ -293,18 +293,18 @@
     namespace memory {
     class fast_mutex
     {
-#ifndef NDEBUG
+#ifndef _QX_MODE_RELEASE
 #ifndef QT_NO_DEBUG
         bool _M_locked;
 #endif // QT_NO_DEBUG
-#endif // NDEBUG
+#endif // _QX_MODE_RELEASE
     public:
         fast_mutex()
-#ifndef NDEBUG
+#ifndef _QX_MODE_RELEASE
 #ifndef QT_NO_DEBUG
             : _M_locked(false)
 #endif // QT_NO_DEBUG
-#endif // NDEBUG
+#endif // _QX_MODE_RELEASE
         {
         }
         ~fast_mutex()
@@ -313,21 +313,21 @@
         }
         void lock()
         {
-#ifndef NDEBUG
+#ifndef _QX_MODE_RELEASE
 #ifndef QT_NO_DEBUG
             _FAST_MUTEX_ASSERT(!_M_locked, "lock(): already locked");
             _M_locked = true;
 #endif // QT_NO_DEBUG
-#endif // NDEBUG
+#endif // _QX_MODE_RELEASE
         }
         void unlock()
         {
-#ifndef NDEBUG
+#ifndef _QX_MODE_RELEASE
 #ifndef QT_NO_DEBUG
             _FAST_MUTEX_ASSERT(_M_locked, "unlock(): not locked");
             _M_locked = false;
 #endif // QT_NO_DEBUG
-#endif // NDEBUG
+#endif // _QX_MODE_RELEASE
         }
     private:
         fast_mutex(const fast_mutex&);
@@ -363,5 +363,5 @@ private:
 
 #endif // _FAST_MUTEX_H
 #endif // _QX_USE_MEM_LEAK_DETECTION
+#endif // _QX_MODE_RELEASE
 #endif // QT_NO_DEBUG
-#endif // NDEBUG

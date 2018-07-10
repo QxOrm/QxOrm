@@ -231,6 +231,10 @@
 						>
 					</File>
 					<File
+						RelativePath=".\src\QxSerialize\Qt\QxSerialize_QSqlError.cpp"
+						>
+					</File>
+					<File
 						RelativePath=".\src\QxSerialize\Qt\QxSerialize_QString.cpp"
 						>
 					</File>
@@ -313,6 +317,10 @@
 				</File>
 				<File
 					RelativePath=".\src\QxDao\QxSqlRelationLinked.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\QxDao\QxSqlRelationParams.cpp"
 					>
 				</File>
 				<Filter
@@ -1334,6 +1342,10 @@
 					</File>
 					<File
 						RelativePath=".\include\QxSerialize\Qt\QxSerialize_QSize.h"
+						>
+					</File>
+					<File
+						RelativePath=".\include\QxSerialize\Qt\QxSerialize_QSqlError.h"
 						>
 					</File>
 					<File

@@ -97,6 +97,7 @@
 #include <QxSerialize/Qt/QxSerialize_QFont.h>
 #include <QxSerialize/Qt/QxSerialize_QHash.h>
 #include <QxSerialize/Qt/QxSerialize_QImage.h>
+#include <QxSerialize/Qt/QxSerialize_QFlags.h>
 #include <QxSerialize/Qt/QxSerialize_QLinkedList.h>
 #include <QxSerialize/Qt/QxSerialize_QList.h>
 #include <QxSerialize/Qt/QxSerialize_QMap.h>
@@ -122,6 +123,7 @@
 #include <QxSerialize/Qt/QxSerialize_QWeakPointer.h>
 #include <QxSerialize/Qt/QxSerialize_QMultiHash.h>
 #include <QxSerialize/Qt/QxSerialize_QMultiMap.h>
+#include <QxSerialize/Qt/QxSerialize_QSqlError.h>
 
 #include <QxSerialize/Qx/QxSerialize_QxCollection.h>
 #include <QxSerialize/Qx/QxSerialize_QxXmlReader.h>

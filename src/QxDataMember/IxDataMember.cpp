@@ -76,6 +76,7 @@ void IxDataMember::serialize(Archive & ar, const unsigned int version)
    ar & boost::serialization::make_nvp("autoIncrement", m_bAutoIncrement);
    ar & boost::serialization::make_nvp("notNull", m_bNotNull);
    ar & boost::serialization::make_nvp("isPrimaryKey", m_bIsPrimaryKey);
+   ar & boost::serialization::make_nvp("isIndex", m_bIndex);
 }
 
 void IxDataMember::setMinValue(long lMinValue, const QString & sMessage /* = QString() */)

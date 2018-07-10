@@ -290,7 +290,7 @@ private:
 
 private:
 
-#ifndef NDEBUG
+#ifndef _QX_MODE_RELEASE
    inline bool verifyColumns(const QStringList & columns) const
    {
       if (! m_pDataMemberX) { return false; }
@@ -298,10 +298,10 @@ private:
       { if (! m_pDataMemberX->exist_WithDaoStrategy(columns.at(i))) { return false; } }
       return true;
    }
-#else
+#else // _QX_MODE_RELEASE
    inline bool verifyColumns(const QStringList & columns) const
    { Q_UNUSED(columns); return true; }
-#endif // NDEBUG
+#endif // _QX_MODE_RELEASE
 
 };
 

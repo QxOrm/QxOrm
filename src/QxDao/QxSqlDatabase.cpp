@@ -143,4 +143,27 @@ qx::dao::detail::IxSqlGenerator * QxSqlDatabase::getSqlGenerator()
    return m_pSqlGenerator.get();
 }
 
+void QxSqlDatabase::closeAllDatabases()
+{
+   qx::QxSqlDatabase * pSingleton = qx::QxSqlDatabase::getSingleton();
+   if (! pSingleton) { qAssert(false); return; }
+   Q_FOREACH(QString sDbKey, pSingleton->m_lstDbByThread)
+   { QSqlDatabase::database(sDbKey).close(); }
+}
+
+void QxSqlDatabase::clearAllDatabases()
+{
+   qx::QxSqlDatabase::closeAllDatabases();
+   qx::QxSqlDatabase * pSingleton = qx::QxSqlDatabase::getSingleton();
+   if (! pSingleton) { qAssert(false); return; }
+   pSingleton->m_lstDbByThread.clear();
+   pSingleton->m_sDriverName = "";
+   pSingleton->m_sConnectOptions = "";
+   pSingleton->m_sDatabaseName = "";
+   pSingleton->m_sUserName = "";
+   pSingleton->m_sPassword = "";
+   pSingleton->m_sHostName = "";
+   pSingleton->m_iPort = -1;
+}
+
 } // namespace qx

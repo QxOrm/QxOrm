@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
-  <title>QxOrm - C++ Object Relational Mapping library (ORM)</title>
+  <title>QxOrm : Qt C++ Object Relational Mapping Library (ORM) - QxEntityEditor : Qt C++ Entities Graphic Editor (data model)</title>
   <meta name="generator" content="Amaya, see http://www.w3.org/Amaya/">
   <link rel='stylesheet' type='text/css' href='./resource/qxorm_style.css'>
 </head>
@@ -11,7 +11,7 @@
   <col><col><col>
   <tbody>
     <tr>
-      <td><a href="./home.html"><img alt="QxOrm" src="./resource/logo_qxorm.png" width="256" height="61" align="left" border="0"></a></td>
+      <td><a href="./home.html"><img alt="QxOrm" src="./resource/logo_qxorm_and_qxee.png"align="left" border="0"></a></td>
       <td align="right" style="vertical-align:bottom">
         <img alt="Windows" src="./resource/logo_windows.gif" width="35" height="35">
         <img alt="Linux" src="./resource/logo_linux.gif" width="35" height="35">
@@ -26,24 +26,12 @@
   <col><col><col><col><col><col>
   <tbody>
     <tr>
-      <td align="center"><a href="./home.html"><img alt="Home"
-        src="./resource/link_home.jpg" width="120" height="35"
-        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
-      <td align="center"><a href="./download.html"><img alt="Download"
-        src="./resource/link_download.jpg" width="120" height="35"
-        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
-      <td align="center"><a href="./quick_sample.html"><img alt="Quick sample"
-        src="./resource/link_quick_sample.jpg" width="120" height="35"
-        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
-      <td align="center"><a href="./tutorial.html"><img alt="Tutorial"
-        src="./resource/link_tutorial.jpg" width="120" height="35"
-        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
-      <td align="center"><a href="./faq.html"><img alt="Faq"
-        src="./resource/link_faq.jpg" width="120" height="35"
-        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
-      <td align="center"><a href="./link.html"><img alt="Link"
-        src="./resource/link_link.jpg" width="120" height="35"
-        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
+      <td align="center"><a href="./home.html" class="btn_nav">Home</a></td>
+      <td align="center"><a href="./download.html" class="btn_nav">Download</a></td>
+      <td align="center"><a href="./quick_sample.html" class="btn_nav">Quick sample</a></td>
+      <td align="center"><a href="./tutorial.html" class="btn_nav">Tutorial (3)</a></td>
+      <td align="center"><a href="./faq.html" class="btn_nav">Faq (35)</a></td>
+      <td align="center"><a href="./link.html" class="btn_nav">Forum</a></td>
     </tr>
   </tbody>
 </table>
@@ -52,7 +40,18 @@
   <col><col><col><col><col><col>
   <tbody><tr>
   <td align="left" valign="top"><font size="2">QxOrm  &gt;&gt;  Download details</font></td>
-  <td align="right" valign="top"><font size="2">Current version : QxOrm 1.2.5 - <a href="../doxygen/index.html" target="_blank">QxOrm library online documentation</a></font></td>
+  <td align="right" valign="top">
+    <table cellspacing="0" cellpadding="1"><col><col><tbody>
+      <tr>
+         <td align="right" valign="top"><font size="2">Current version :&nbsp;</font></td>
+         <td align="left" valign="top"><font size="2">QxOrm 1.2.6 - <a href="../doxygen/index.html" target="_blank">QxOrm library online documentation</a></font></td>
+      <tr>
+      <tr>
+         <td align="right" valign="top"><font size="2"></font></td>
+         <td align="left" valign="top"><font size="2">QxEntityEditor 1.1.3</font></td>
+      <tr>
+    </tbody></table>
+  </td>
   <td width="10px"></td>
   <td width="40px" height="30px"><a href="../qxorm_fr/download_details.php"><img alt="Version française du site" src="./resource/FR.png" width="40" height="30" border="0"></a></td>
   <td width="40px" height="30px"><a href="../qxorm_en/download_details.php"><img alt="Web site english version" src="./resource/GB.png" width="40" height="30" border="0"></a></td>
@@ -70,13 +69,9 @@
              <tr>
                <td>QxOrm library is available with full source code and can be used free of charge under the terms of the <a href="./resource/license.gpl3.txt" target="_blank">GNU General Public License (GPL) version 3</a>.
                <br><br>
-               By linking with the QxOrm library (directly or indirectly, statically or dynamically, at compile time or runtime), your application is subject to the terms of the <b>GPLv3 license</b> 
-               which requires that you release the source code of your application if and when you distribute it. Distributing an application includes giving it to customers, contractors, 
-               parent companies, subsidiaries, or any legal entity other than your own. On the other hand, if you only use your application within your organization, 
-               then you do not need to make your source code public.
+               <a href="http://en.wikipedia.org/wiki/GNU_General_Public_License" target="_blank">From Wikipedia</a> : <i>The GNU General Public License (GNU GPL or GPL) is the most widely used free software license, which guarantees end users (individuals, organizations, companies) the freedoms to use, study, share (copy), and modify the software. Software that ensures that these rights are retained is called free software. The GPL grants the recipients of a computer program the rights of the Free Software Definition and uses copyleft to ensure the freedoms are preserved whenever the work is distributed, even when the work is changed or added to. The GPL is a copyleft license, which means that derived works can only be distributed under the same license terms.</i>
                <br><br>
-               If you do not wish to be bound by the terms of the GPLv3 license, you may purchase the <b>QxOrm Proprietary License</b> (<b>QXPL</b>).<br>
-               Additional benefits of the QxOrm Proprietary License include :
+               If the GPLv3 license is too restrictive for your project, you can purchase the <b>QxOrm Proprietary License</b> (<b>QXPL</b>). Additional benefits of the QxOrm Proprietary License include :
                <ul>
                   <li>Application source code stays private ;</li>
                   <li>High compatibility with different commercial and open-source licenses ;</li>
@@ -99,7 +94,8 @@
             <li>From 21 to 30 C++ classes registered into QxOrm context per application : <i>250&euro;</i> ;</li>
             <li>From 31 to unlimited C++ classes registered into QxOrm context per application : <i>300&euro;</i>.</li>
          </ul>
-         <br>
+         If you have any questions, or if you want to purchase the <b>QXPL</b> license, please contact us using this e-mail : <a href="mailto:contact@qxorm.com">contact@qxorm.com</a>.<br/>
+         <br/><br/>
          <script type="text/javascript">
 function checkForm(f) { f.submit(); return true; }
          </script>
@@ -108,7 +104,7 @@ function checkForm(f) { f.submit(); return true; }
             <input type="text" id="created_by" name="created_by" size="50" maxlength="200" /><br/>
             Help us to improve QxOrm library adding a comment (optional) :<br/>
             <textarea id="message_text" name="message_text" rows="3" cols="50"></textarea><br/>
-            <input type="submit" value="            Download QxOrm 1.2.5            " />
+            <input type="submit" value="            Download QxOrm 1.2.6            " />
          </form>
          <br>
       </td>
@@ -124,7 +120,7 @@ function checkForm(f) { f.submit(); return true; }
         <img alt="QxOrm" src="./resource/logo_qxorm_small.png" width="168" height="40">
       </td>
       <td align="center" valign="middle">
-        <font size="2">© 2013 Lionel Marty</font>
+        <font size="2">© 2014 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
       </td>
       <td align="right" valign="middle">
         <form action="https://www.paypal.com/cgi-bin/webscr" method="post">

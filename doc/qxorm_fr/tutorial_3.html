@@ -1,0 +1,312 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+  <title>QxOrm : Qt C++ Object Relational Mapping Library (ORM) - QxEntityEditor : Qt C++ Entities Graphic Editor (data model)</title>
+  <meta name="generator" content="Amaya, see http://www.w3.org/Amaya/">
+  <link rel='stylesheet' type='text/css' href='./resource/qxorm_style.css'>
+</head>
+<body>
+<table border="0" style="width: 80%" align="center">
+  <col><col><col>
+  <tbody>
+    <tr>
+      <td><a href="./home.html"><img alt="QxOrm" src="./resource/logo_qxorm_and_qxee.png"align="left" border="0"></a></td>
+      <td align="right" style="vertical-align:bottom">
+        <img alt="Windows" src="./resource/logo_windows.gif" width="35" height="35">
+        <img alt="Linux" src="./resource/logo_linux.gif" width="35" height="35">
+        <img alt="Macintosh" src="./resource/logo_mac.gif" width="35" height="35">
+      </td>
+      <td width="70"><img alt="C++" src="./resource/logo_cpp.gif" width="50" height="50" align="right"></td>
+    </tr>
+  </tbody>
+</table>
+<hr style="width: 80%" align="center" size="1" color="#100D5A">
+<table border="0" style="width: 80%" align="center">
+  <col><col><col><col><col><col>
+  <tbody>
+    <tr>
+      <td align="center"><a href="./home.html" class="btn_nav">Accueil</a></td>
+      <td align="center"><a href="./download.html" class="btn_nav">Téléchargement</a></td>
+      <td align="center"><a href="./quick_sample.html" class="btn_nav">Exemple rapide</a></td>
+      <td align="center"><a href="./tutorial.html" class="btn_nav">Tutoriel (3)</a></td>
+      <td align="center"><a href="./faq.html" class="btn_nav">Faq (35)</a></td>
+      <td align="center"><a href="./link.html" class="btn_nav">Forum</a></td>
+    </tr>
+  </tbody>
+</table>
+<hr style="width: 80%" align="center" size="1" color="#100D5A">
+<table border="0" style="width: 80%" align="center">
+  <col><col><col><col><col><col>
+  <tbody>
+     <tr>
+        <td align="left" valign="top"><font size="2">QxOrm  &gt;&gt;  Tutoriel  &gt;&gt;  Installer un environnement de développement avec QxOrm sous Windows</font></td>
+        <td align="right" valign="top">
+          <table cellspacing="0" cellpadding="1"><col><col><tbody>
+            <tr>
+               <td align="right" valign="top"><font size="2">Version courante :&nbsp;</font></td>
+               <td align="left" valign="top"><font size="2">QxOrm 1.2.6 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
+            <tr>
+            <tr>
+               <td align="right" valign="top"><font size="2"></font></td>
+               <td align="left" valign="top"><font size="2">QxEntityEditor 1.1.3</font></td>
+            <tr>
+          </tbody></table>
+        </td>
+        <td width="10px"></td>
+        <td width="40px" height="30px"><a href="../qxorm_fr/tutorial_3.html"><img alt="Version française du site" src="./resource/FR.png" width="40" height="30" border="0"></a></td>
+        <td width="40px" height="30px"><a href="../qxorm_en/tutorial_3.html"><img alt="Web site english version" src="./resource/GB.png" width="40" height="30" border="0"></a></td>
+        <td width="40px" height="30px"><a href="http://sites.google.com/site/qxormpostgres/" target="_blank"><img alt="" src="./resource/ES.png" width="40" height="30" border="0"></a></td>
+     </tr>
+  </tbody>
+</table>
+<table border="1" frame="vsides" rules="cols" style="width: 80%" align="center" cellpadding="6" bgcolor="#F2F2F4">
+  <col>
+  <tbody>
+    <tr>
+      <td align="justify">
+        <table border="0">
+          <col><col><col><col>
+          <tbody>
+            <tr>
+              <td><i>Sélection du tutoriel à afficher : </i></td>
+              <td><a href="./tutorial.html" class="btn_tuto">Tuto n°1 : qxBlog</a></td>
+              <td><a href="./tutorial_2.html" class="btn_tuto">Tuto n°2 : qxClientServer</a></td>
+              <td><a href="./tutorial_3.html" class="btn_tuto_selected">Tuto n°3 : install QxOrm</a></td>
+            </tr>
+          </tbody>
+        </table>
+        <hr style="width: 100%" align="center" size="1" color="#100D5A">
+        <br>
+        <table border="0" style="width: 100%" align="center">
+          <col><col>
+          <tbody>
+            <tr>
+              <td>Ce tutoriel présente les différentes étapes pour installer un environnement de développement avec Qt, boost et la bibliothèque QxOrm sous Windows, chaque bibliothèque étant compilée en mode 32 bits (la procédure sera similaire pour développer en mode 64 bits).<br/>
+                  A la fin de ce tutoriel, vous pourrez utiliser au choix les EDI <b>Microsoft Visual C++ 2012</b> et <b>QtCreator</b>.<br/>
+                  <br/>
+                  <b>Prérequis :</b> Microsoft Visual C++ 2012 est déjà installé sur le poste (peu importe la version : « <i>Express</i> », « <i>Professional</i> », etc.).<br/>
+                  <br/>
+                  <b>Remarque :</b> chaque version de la bibliothèque QxOrm est testée sous Windows avec MSVC++ 2008, MSVC++ 2010, MSVC++ 2012 (en mode 32 bits et 64 bits) et MinGW GCC 4.5. Bien que ce tutoriel s'applique pour l'EDI MSVC++ 2012, les différentes étapes de la procédure d'installation seront équivalentes pour les autres compilateurs/éditeurs.<br/>
+                  <br/>
+                  <b>Autre remarque :</b> bien que ce tutoriel s'applique pour les utilisateurs Windows, chaque version de QxOrm est testée et validée sous Linux (<i>GCC</i>) et sous Mac OS X (<i>Clang</i>).<br/>
+                  <br/>
+                  Ce tutoriel est constitué des étapes suivantes :
+                  <ul>
+                     <li><a href="#tuto_10">1- Télécharger et installer Qt (Qt4 ou Qt5)</a></li>
+                     <li><a href="#tuto_20">2- Ajouter le dossier « bin » de Qt dans le « PATH » de Windows</a></li>
+                     <li><a href="#tuto_30">3- Installer la bibliothèque boost</a></li>
+                     <li><a href="#tuto_40">4- Ajouter le dossier « lib_shared » du package boost dans le « PATH » de Windows</a></li>
+                     <li><a href="#tuto_50">5- Télécharger et installer la bibliothèque QxOrm</a></li>
+                     <li><a href="#tuto_60">6- Paramétrer le fichier « QxOrm.pri »</a></li>
+                     <li><a href="#tuto_70">7- Ajouter QxOrm dans le « PATH » de Windows</a></li>
+                     <li><a href="#tuto_80">8- Tester l'installation avec le projet de test « qxBlog »</a></li>
+                     <li><a href="#tuto_90">9- Tester tous les projets de test du package QxOrm avec MSVC++ 2012</a></li>
+                     <li><a href="#tuto_100">10- Tester QxOrm avec l'EDI QtCreator</a></li>
+                  </ul>
+              </td>
+              <td width="200" align="center" valign="top"><a href="./resource/qt_ambassador_logo.png" target="_blank"><img alt="qt_ambassador" src="./resource/qt_ambassador_logo_150x150.png" width="150" height="150" border="0"></a><br>
+                 <b><font size="2">QxOrm library has been accepted into the <a href="http://qt.digia.com/qtambassador/" target="_blank">Qt Ambassador Program</a></font></b>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <br/>
+        <b><a name="tuto_10"><u><font color="#100D5A">1- Télécharger et installer Qt (Qt4 ou Qt5)</font></u></a></b>
+        <br/><br/>
+        Télécharger Qt à l'adresse suivante : <a href="http://qt-project.org/downloads" target="_blank">http://qt-project.org/downloads</a><br/>
+        Par exemple :<br/>
+        <br/>
+        <img alt="" src="./resource/tuto_install_qxorm_1.png" style="border:0px solid #100D5A; border-color:#100D5A;">
+        <br/><br/>
+        Ensuite, exécutez le fichier téléchargé et suivez les instructions du programme d'installation de Qt.<br/>
+        <br/>
+        <br/>
+        <b><a name="tuto_20"><u><font color="#100D5A">2- Ajouter le dossier « bin » de Qt dans le « PATH » de Windows</font></u></a></b>
+        <br/><br/>
+        Une fois Qt installé, il est recommandé d'ajouter le dossier « bin » du répertoire d'installation de Qt dans la variable d'environnement « PATH » de Windows.<br/>
+        <br/>
+        Allez dans les « Paramètres système avancés » de Windows, puis cliquez sur le bouton « Variables d'environnements » :<br/>
+        <br/>
+        <img alt="" src="./resource/tuto_install_qxorm_2.png" style="border:0px solid #100D5A; border-color:#100D5A;">
+        <br/><br/>
+        Ajouter une variable système nommée « QT_DIR » :
+        <ul>
+          <li>Nom de la variable : « QT_DIR » ;</li>
+          <li>Valeur de la variable : chemin d'accès vers le répertoire d'installation de Qt :
+            <ul>
+               <li>Pour Qt4 : « QT_DIR » doit pointer vers la racine du dossier d'installation de Qt ;</li>
+               <li>Pour Qt5 : le dossier d'installation est différent par rapport à Qt4, dans notre cas il faut descendre jusqu'au niveau : « <i>.\5.1.1\msvc2012\</i> ».</li>
+            </ul>
+          </li>
+        </ul>
+        Par exemple :<br/>
+        <br/>
+        <img alt="" src="./resource/tuto_install_qxorm_3.png" style="border:0px solid #100D5A; border-color:#100D5A;">
+        <br/><br/>
+        Modifier la variable système « PATH » pour ajouter la valeur suivante : « <b>;%QT_DIR%\bin\;</b> »<br/>
+        <br/>
+        <img alt="" src="./resource/tuto_install_qxorm_4.png" style="border:0px solid #100D5A; border-color:#100D5A;">
+        <br/><br/>
+        A présent, Qt est disponible sur votre environnement de développement. Il est possible de tester l'installation en ouvrant une fenêtre DOS (menu « Démarrer », « Exécuter » puis « cmd »), puis en lançant la commande : « <i>qmake -version</i> » :<br/>
+        <br/>
+        <img alt="" src="./resource/tuto_install_qxorm_5.png" style="border:0px solid #100D5A; border-color:#100D5A;">
+        <br/><br/>
+        <b>Remarque :</b> pourquoi avoir ajouté Qt dans le PATH de Windows ? Tous les exécutables nécessaires pour le fonctionnement de Qt (<i>qmake</i>, <i>moc</i>, <i>ui</i>, <i>rcc</i>, etc.) sont accessibles dans le système sans avoir à paramétrer autre chose. De plus, il sera très facile de basculer d'une version de Qt à une autre : il suffit tout simplement de modifier la valeur de « QT_DIR » pour indiquer un autre répertoire d'installation de Qt.<br/>
+        <br/>
+        <br/>
+        <b><a name="tuto_30"><u><font color="#100D5A">3- Installer la bibliothèque boost</font></u></a></b>
+        <br/><br/>
+        Le plus simple et le plus rapide est de télécharger le package boost fourni sur le site QxOrm.<br/>
+        Le package boost le plus récent est disponible à cette adresse : <a href="http://www.qxorm.com/lib/boost_1_54.zip" target="_blank">http://www.qxorm.com/lib/boost_1_54.zip</a><br/>
+        <br/>
+        <img alt="" src="./resource/tuto_install_qxorm_6.png" style="border:0px solid #100D5A; border-color:#100D5A;">
+        <br/><br/>
+        Ce package contient tous les fichiers en-têtes (<i>*.hpp</i>) de boost (dans le dossier « include »), et le module « boost::serialization » compilé pour les environnements suivants (dans le dossier « lib_shared » en mode 32 bits et « lib_shared_64b » en mode 64 bits) :
+        <ul>
+           <li>MSVC++ 2008 (fichiers avec un nom contenant <i>vc90</i>) ;</li>
+           <li>MSVC++ 2010 (fichiers avec un nom contenant <i>vc100</i>) ;</li>
+           <li>MSVC++ 2012 (fichiers avec un nom contenant <i>vc110</i>) ;</li>
+           <li>MinGW GCC 4.5 (fichiers avec un nom contenant <i>mgw45</i>).</li>
+        </ul>
+        A la racine du package boost, le fichier « version_1_54.txt » indique les lignes de commande utilisées pour compiler le module « boost::serialization ».<br/>
+        <br/>
+        <br/>
+        <b><a name="tuto_40"><u><font color="#100D5A">4- Ajouter le dossier « lib_shared » du package boost dans le « PATH » de Windows</font></u></a></b>
+        <br/><br/>
+        Allez dans les « Paramètres système avancés » de Windows, puis cliquez sur le bouton « Variables d'environnements » :<br/>
+        <br/>
+        <img alt="" src="./resource/tuto_install_qxorm_2.png" style="border:0px solid #100D5A; border-color:#100D5A;">
+        <br/><br/>
+        Ajouter une variable système nommée « BOOST_DIR » :
+        <ul>
+          <li>Nom de la variable : « BOOST_DIR » ;</li>
+          <li>Valeur de la variable : chemin d'accès vers le répertoire d'installation du package boost.</li>
+        </ul>
+        Par exemple :<br/>
+        <br/>
+        <img alt="" src="./resource/tuto_install_qxorm_7.png" style="border:0px solid #100D5A; border-color:#100D5A;">
+        <br/><br/>
+        Modifier la variable système « PATH » pour ajouter la valeur suivante : « <b>;%BOOST_DIR%\lib_shared\;</b> »<br/>
+        <br/>
+        <img alt="" src="./resource/tuto_install_qxorm_8.png" style="border:0px solid #100D5A; border-color:#100D5A;">
+        <br/><br/>
+        <b>Remarque :</b> il est également possible d'ajouter le répertoire « lib_shared_64b » dans le PATH de Windows si l'on souhaite développer en mode 64 bits : « <b>;%BOOST_DIR%\lib_shared_64b\;</b> ».<br/>
+        <br/>
+        <br/>
+        <b><a name="tuto_50"><u><font color="#100D5A">5- Télécharger et installer la bibliothèque QxOrm</font></u></a></b>
+        <br/><br/>
+        La dernière version de la bibliothèque QxOrm est disponible à cette adresse : <a href="http://www.qxorm.com/qxorm_fr/download.html" target="_blank">http://www.qxorm.com/qxorm_fr/download.html</a><br/>
+        Une fois téléchargée, veuillez décompresser le fichier dans le dossier de votre choix.<br/>
+        <br/>
+        <br/>
+        <b><a name="tuto_60"><u><font color="#100D5A">6- Paramétrer le fichier « QxOrm.pri »</font></u></a></b>
+        <br/><br/>
+        Il est nécessaire d'indiquer à la bibliothèque QxOrm comment accéder à boost en modifiant le fichier « QxOrm.pri » (attention, seul le fichier « QxOrm.pri » peut être modifié, les autres fichiers du package QxOrm ne doivent pas être modifiés).<br/>
+        <br/>
+        Ouvrez le fichier « QxOrm.pri » avec un éditeur de texte (<i>notepad</i> ou <i>notepad++</i> par exemple), puis modifier les valeurs des paramètres :
+        <ul>
+           <li>« QX_BOOST_INCLUDE_PATH » ;</li>
+           <li>« QX_BOOST_LIB_PATH » ;</li>
+           <li>« QX_BOOST_LIB_SERIALIZATION_DEBUG » ;</li>
+           <li>« QX_BOOST_LIB_SERIALIZATION_RELEASE » ;</li>
+           <li>« QX_BOOST_LIB_WIDE_SERIALIZATION_DEBUG » ;</li>
+           <li>« QX_BOOST_LIB_WIDE_SERIALIZATION_RELEASE ».</li>
+        </ul>
+        Par exemple :<br/>
+        <br/>
+        <table border="1" style="width: 100%" bgcolor="#FFFFFF"><col><tbody><tr><td><i>
+isEmpty(QX_BOOST_INCLUDE_PATH) { QX_BOOST_INCLUDE_PATH = $$quote(<font style="background-color:yellow">D:/Dvlp/_Libs/Boost/1_54/include</font>) }<br/>
+isEmpty(QX_BOOST_LIB_PATH) { QX_BOOST_LIB_PATH = $$quote(<font style="background-color:yellow">D:/Dvlp/_Libs/Boost/1_54/lib_shared</font>) }<br/>
+isEmpty(QX_BOOST_LIB_SERIALIZATION_DEBUG) { QX_BOOST_LIB_SERIALIZATION_DEBUG = "<font style="background-color:yellow">boost_serialization-vc110-mt-gd-1_54</font>" }<br/>
+isEmpty(QX_BOOST_LIB_SERIALIZATION_RELEASE) { QX_BOOST_LIB_SERIALIZATION_RELEASE = "<font style="background-color:yellow">boost_serialization-vc110-mt-1_54</font>" }<br/>
+# isEmpty(QX_BOOST_LIB_WIDE_SERIALIZATION_DEBUG) { QX_BOOST_LIB_WIDE_SERIALIZATION_DEBUG = "<font style="background-color:yellow">boost_wserialization-vc110-mt-gd-1_54</font>" }<br/>
+# isEmpty(QX_BOOST_LIB_WIDE_SERIALIZATION_RELEASE) { QX_BOOST_LIB_WIDE_SERIALIZATION_RELEASE = "<font style="background-color:yellow">boost_wserialization-vc110-mt-1_54</font>" }<br/>
+        </i></td></tr></tbody></table>
+        <br/>
+        <b>Remarque :</b> Le fichier « QxOrm.pri » est un fichier de configuration de la bibliothèque QxOrm. Ce fichier devra être inclus dans tous les fichiers projets dépendants de QxOrm en ajoutant la ligne suivante dans le fichier <i>*.pro</i> du projet : <b>include(<i>my_path_to_QxOrm_library</i>/QxOrm.pri)</b><br/>
+        <br/>
+        <br/>
+        <b><a name="tuto_70"><u><font color="#100D5A">7- Ajouter QxOrm dans le « PATH » de Windows</font></u></a></b>
+        <br/><br/>
+        Tout comme pour les variables « QT_DIR » et « BOOST_DIR », nous allons ajouter une variable d'environnement nommée « QXORM_DIR ».<br/>
+        Allez dans les « Paramètres système avancés » de Windows, puis cliquez sur le bouton « Variables d'environnements » :<br/>
+        <br/>
+        <img alt="" src="./resource/tuto_install_qxorm_2.png" style="border:0px solid #100D5A; border-color:#100D5A;">
+        <br/><br/>
+        Ajouter une variable système nommée « QXORM_DIR » :
+        <ul>
+          <li>Nom de la variable : « QXORM_DIR » ;</li>
+          <li>Valeur de la variable : chemin d'accès vers le répertoire d'installation du package QxOrm.</li>
+        </ul>
+        Par exemple :<br/>
+        <br/>
+        <img alt="" src="./resource/tuto_install_qxorm_9.png" style="border:0px solid #100D5A; border-color:#100D5A;">
+        <br/><br/>
+        Modifier la variable système « PATH » pour ajouter la valeur suivante : « <b>;%QXORM_DIR%\lib\;</b> »<br/>
+        <br/>
+        <img alt="" src="./resource/tuto_install_qxorm_10.png" style="border:0px solid #100D5A; border-color:#100D5A;">
+        <br/><br/>
+        <br/>
+        <br/>
+        <b><a name="tuto_80"><u><font color="#100D5A">8- Tester l'installation avec le projet de test « qxBlog »</font></u></a></b>
+        <br/><br/>
+        Pour tester rapidement l'installation, il est possible d'ouvrir le projet de test « qxBlog » du package QxOrm : ouvrir le fichier « <i>./test/qxBlog/qxBlog.sln</i> » avec l'éditeur MSVC++ 2012, puis compiler et exécuter le projet.<br/>
+        <br/>
+        Si l'exécution du projet se passe sans erreur et sans assert, alors votre environnement de développement est prêt : Qt, boost et QxOrm sont correctement installés !<br/>
+        <br/>
+        <br/>
+        <b><a name="tuto_90"><u><font color="#100D5A">9- Tester tous les projets de test du package QxOrm avec MSVC++ 2012</font></u></a></b>
+        <br/><br/>
+        Il est possible de tester tous les projets de test du package QxOrm, chaque projet ayant un fichier « <i>*.sln</i> » et peut donc être utilisé par MSVC++ : chaque projet de test doit se compiler et s'exécuter sans aucune erreur.<br/>
+        <br/>
+        <b>Remarque :</b> Qt fournit un Add-in pour les EDI Microsoft Visual C++, il est donc possible de les installer pour faciliter l'intégration de Qt (gestion automatique des fichiers projets <i>*.pro</i> par exemple).<br/>
+        Pour télécharger cet Add-in, rendez-vous sur la page de téléchargement de Qt : <a href="http://qt-project.org/downloads" target="_blank">http://qt-project.org/downloads</a><br/>
+        <br/>
+        <img alt="" src="./resource/tuto_install_qxorm_11.png" style="border:0px solid #100D5A; border-color:#100D5A;">
+        <br/><br/>
+        <br/>
+        <br/>
+        <b><a name="tuto_100"><u><font color="#100D5A">10- Tester QxOrm avec l'EDI QtCreator</font></u></a></b>
+        <br/><br/>
+        Pour ceux qui préfèrent utiliser QtCreator à la place de MSVC++ : lancer QtCreator présent dans le dossier d'installation de Qt « <i>.\Tools\QtCreator\bin\qtcreator.exe</i> ».<br/>
+        Ouvrir le menu « Outils >> Options », puis aller dans la section « Compiler & Exécuter », onglet « Kits », pour vérifier que c'est bien le compilateur de MSVC++ 2012 qui sera utilisé à la compilation dans QtCreator :<br/>
+        <br/>
+        <img alt="" src="./resource/tuto_install_qxorm_12.png" style="border:0px solid #100D5A; border-color:#100D5A;">
+        <br/><br/>
+        Si par défaut, vous n'avez pas de débogueur paramétré comme sur la copie d'écran ci-dessus, veuillez installer « Debugging Tools for Windows SDK » disponible sur le site de Microsoft (<a href="http://msdn.microsoft.com/en-us/windows/hardware/hh852363.aspx" target="_blank">http://msdn.microsoft.com/en-us/windows/hardware/hh852363.aspx</a>). Ensuite, relancez QtCreator et vous devriez avoir à présent :<br/>
+        <br/>
+        <img alt="" src="./resource/tuto_install_qxorm_13.png" style="border:0px solid #100D5A; border-color:#100D5A;">
+        <br/><br/>
+        <b>Remarque :</b> vous trouverez plus d'informations sur le paramétrage du débogeur dans QtCreator sur le site de Qt : <a href="http://qt-project.org/wiki/Qt_Creator_Windows_Debugging" target="_blank">http://qt-project.org/wiki/Qt_Creator_Windows_Debugging</a><br/>
+        <br/>
+        A présent, vous pouvez utiliser QtCreator ou MSVC++ 2012, au choix !<br/>
+        <br/>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br><hr style="width: 80%" align="center" size="1" color="#100D5A">
+<table border="0" style="width: 80%" align="center">
+  <col><col><col>
+  <tbody>
+    <tr>
+      <td align="left" valign="middle">
+        <img alt="QxOrm" src="./resource/logo_qxorm_small.png" width="168" height="40">
+      </td>
+      <td align="center" valign="middle">
+        <font size="2">© 2014 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
+      </td>
+      <td align="right" valign="middle">
+        <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+           <input type="hidden" name="cmd" value="_s-xclick">
+           <input type="hidden" name="hosted_button_id" value="2K4Z58ZYAYJ6S">
+           <input type="image" src="./resource/paypal_support_qxorm_library.gif" border="0" name="submit" alt="Support QxOrm library - PayPal">
+           <img alt="" border="0" src="https://www.paypalobjects.com/fr_FR/i/scr/pixel.gif" width="1" height="1">
+        </form>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</body>
+</html>

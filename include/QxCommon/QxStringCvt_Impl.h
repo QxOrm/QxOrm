@@ -48,12 +48,16 @@
 #include <QxDao/QxDateNeutral.h>
 #include <QxDao/QxTimeNeutral.h>
 #include <QxDao/QxDateTimeNeutral.h>
+#include <QxDao/QxSqlQuery.h>
 
 #include <QxCollection/QxCollection.h>
 
 #include <QxRegister/QxClass.h>
 
 #include <QxSerialize/QxArchive.h>
+
+#include <QxValidator/QxInvalidValue.h>
+#include <QxValidator/QxInvalidValueX.h>
 
 #include <QxTraits/is_smart_ptr.h>
 #include <QxTraits/is_container.h>

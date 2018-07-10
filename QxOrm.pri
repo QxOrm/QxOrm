@@ -62,12 +62,12 @@ isEmpty(QX_BOOST_LIB_SERIALIZATION_RELEASE) { QX_BOOST_LIB_SERIALIZATION_RELEASE
 # isEmpty(QX_BOOST_LIB_WIDE_SERIALIZATION_DEBUG) { QX_BOOST_LIB_WIDE_SERIALIZATION_DEBUG = "boost_wserialization-mt-d" }
 # isEmpty(QX_BOOST_LIB_WIDE_SERIALIZATION_RELEASE) { QX_BOOST_LIB_WIDE_SERIALIZATION_RELEASE = "boost_wserialization-mt" }
 } else {
-isEmpty(QX_BOOST_INCLUDE_PATH) { QX_BOOST_INCLUDE_PATH = $$quote(D:/Dvlp/_Libs/Boost/1_42/include) }
-isEmpty(QX_BOOST_LIB_PATH) { QX_BOOST_LIB_PATH = $$quote(D:/Dvlp/_Libs/Boost/1_42/lib_shared) }
-isEmpty(QX_BOOST_LIB_SERIALIZATION_DEBUG) { QX_BOOST_LIB_SERIALIZATION_DEBUG = "boost_serialization-vc90-mt-gd-1_42" }
-isEmpty(QX_BOOST_LIB_SERIALIZATION_RELEASE) { QX_BOOST_LIB_SERIALIZATION_RELEASE = "boost_serialization-vc90-mt-1_42" }
-# isEmpty(QX_BOOST_LIB_WIDE_SERIALIZATION_DEBUG) { QX_BOOST_LIB_WIDE_SERIALIZATION_DEBUG = "boost_wserialization-vc90-mt-gd-1_42" }
-# isEmpty(QX_BOOST_LIB_WIDE_SERIALIZATION_RELEASE) { QX_BOOST_LIB_WIDE_SERIALIZATION_RELEASE = "boost_wserialization-vc90-mt-1_42" }
+isEmpty(QX_BOOST_INCLUDE_PATH) { QX_BOOST_INCLUDE_PATH = $$quote(D:/Dvlp/_Libs/Boost/1_54/include) }
+isEmpty(QX_BOOST_LIB_PATH) { QX_BOOST_LIB_PATH = $$quote(D:/Dvlp/_Libs/Boost/1_54/lib_shared) }
+isEmpty(QX_BOOST_LIB_SERIALIZATION_DEBUG) { QX_BOOST_LIB_SERIALIZATION_DEBUG = "boost_serialization-vc110-mt-gd-1_54" }
+isEmpty(QX_BOOST_LIB_SERIALIZATION_RELEASE) { QX_BOOST_LIB_SERIALIZATION_RELEASE = "boost_serialization-vc110-mt-1_54" }
+# isEmpty(QX_BOOST_LIB_WIDE_SERIALIZATION_DEBUG) { QX_BOOST_LIB_WIDE_SERIALIZATION_DEBUG = "boost_wserialization-vc110-mt-gd-1_54" }
+# isEmpty(QX_BOOST_LIB_WIDE_SERIALIZATION_RELEASE) { QX_BOOST_LIB_WIDE_SERIALIZATION_RELEASE = "boost_wserialization-vc110-mt-1_54" }
 } # unix
 
 ##############################
@@ -117,6 +117,12 @@ RCC_DIR = ./qt/rcc/src
 UI_DIR = ./qt/ui
 UI_HEADERS_DIR = ./qt/ui/include
 UI_SOURCES_DIR = ./qt/ui/src
+
+CONFIG(debug, debug|release) {
+DEFINES += _QX_MODE_DEBUG
+} else {
+DEFINES += _QX_MODE_RELEASE
+} # CONFIG(debug, debug|release)
 
 #############################
 # Compiler / Linker Options #

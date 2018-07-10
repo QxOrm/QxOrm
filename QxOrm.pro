@@ -40,7 +40,7 @@ CONFIG += dll
 DEFINES += _QX_BUILDING_QX_ORM
 PRECOMPILED_HEADER = ./include/QxPrecompiled.h
 
-unix { VERSION = 1.2.5 }
+unix { VERSION = 1.2.6 }
 
 contains(DEFINES, _QX_STATIC_BUILD) {
 CONFIG -= dll
@@ -215,6 +215,7 @@ HEADERS += ./include/QxSerialize/Qt/QxSerialize_QDateTime.h
 HEADERS += ./include/QxSerialize/Qt/QxSerialize_QFont.h
 HEADERS += ./include/QxSerialize/Qt/QxSerialize_QHash.h
 HEADERS += ./include/QxSerialize/Qt/QxSerialize_QImage.h
+HEADERS += ./include/QxSerialize/Qt/QxSerialize_QFlags.h
 HEADERS += ./include/QxSerialize/Qt/QxSerialize_QLinkedList.h
 HEADERS += ./include/QxSerialize/Qt/QxSerialize_QList.h
 HEADERS += ./include/QxSerialize/Qt/QxSerialize_QMap.h
@@ -240,6 +241,7 @@ HEADERS += ./include/QxSerialize/Qt/QxSerialize_QWeakPointer.h
 HEADERS += ./include/QxSerialize/Qt/QxSerialize_QMultiHash.h
 HEADERS += ./include/QxSerialize/Qt/QxSerialize_QMultiMap.h
 HEADERS += ./include/QxSerialize/Qt/QxSerialize_QStringList.h
+HEADERS += ./include/QxSerialize/Qt/QxSerialize_QSqlError.h
 
 HEADERS += ./include/QxSerialize/Qx/QxSerialize_QxCollection.h
 HEADERS += ./include/QxSerialize/Qx/QxSerialize_QxXmlReader.h
@@ -390,6 +392,7 @@ SOURCES += ./src/QxDao/IxDao_Helper.cpp
 SOURCES += ./src/QxDao/IxPersistable.cpp
 SOURCES += ./src/QxDao/QxSqlRelationLinked.cpp
 SOURCES += ./src/QxDao/QxDaoAsync.cpp
+SOURCES += ./src/QxDao/QxSqlRelationParams.cpp
 
 SOURCES += ./src/QxDao/QxSqlElement/IxSqlElement.cpp
 SOURCES += ./src/QxDao/QxSqlElement/QxSqlCompare.cpp
@@ -440,6 +443,7 @@ SOURCES += ./src/QxSerialize/Qt/QxSerialize_QTime.cpp
 SOURCES += ./src/QxSerialize/Qt/QxSerialize_QUrl.cpp
 SOURCES += ./src/QxSerialize/Qt/QxSerialize_QUuid.cpp
 SOURCES += ./src/QxSerialize/Qt/QxSerialize_QVariant.cpp
+SOURCES += ./src/QxSerialize/Qt/QxSerialize_QSqlError.cpp
 
 SOURCES += ./src/QxService/IxParameter.cpp
 SOURCES += ./src/QxService/IxService.cpp

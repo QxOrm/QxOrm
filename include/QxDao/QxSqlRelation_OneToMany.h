@@ -65,13 +65,9 @@ private:
 
    enum { is_data_container = QxSqlRelation<DataType, Owner>::is_data_container };
 
-protected:
-
-   QString m_sForeignKey;  //!< SQL query foreign key
-
 public:
 
-   QxSqlRelation_OneToMany(IxDataMember * p, const QString & sForeignKey) : QxSqlRelation<DataType, Owner>(p), m_sForeignKey(sForeignKey) { this->m_eRelationType = qx::IxSqlRelation::one_to_many; qAssert(! m_sForeignKey.isEmpty()); }
+   QxSqlRelation_OneToMany(IxDataMember * p, const QString & sForeignKey) : QxSqlRelation<DataType, Owner>(p) { this->m_eRelationType = qx::IxSqlRelation::one_to_many; this->m_sForeignKey = sForeignKey; qAssert(! this->m_sForeignKey.isEmpty()); }
    virtual ~QxSqlRelation_OneToMany() { BOOST_STATIC_ASSERT(is_data_container); }
 
    virtual QString getDescription() const                                     { return "relation one-to-many"; }
@@ -103,70 +99,30 @@ public:
    }
 
    virtual QVariant getIdFromQuery(bool bEager, QxSqlRelationParams & params) const
-   {
-      QString sId; IxDataMember * pId = this->getDataId(); if (! bEager || ! pId) { return QVariant(); }
-      for (int i = 0; i < pId->getNameCount(); i++) { sId += params.query().value(params.offset() + i).toString() + "|"; }
-      return QVariant(sId);
-   }
+   { return this->getIdFromQuery_OneToMany(bEager, params); }
 
    virtual void updateOffset(bool bEager, QxSqlRelationParams & params) const
-   {
-      if (! bEager) { return; }
-      IxDataMember * pForeign = this->getDataByKey(m_sForeignKey);
-      bool bAddOffsetForeign = (pForeign && ! this->getLstDataMember()->exist(m_sForeignKey));
-      long lOffsetId = (this->getDataId() ? this->getDataId()->getNameCount() : 0);
-      long lNewOffset = (params.offset() + this->getDataCount() + lOffsetId);
-      lNewOffset = (lNewOffset + (bAddOffsetForeign ? pForeign->getNameCount() : 0));
-      lNewOffset = (lNewOffset + (this->m_oSoftDelete.isEmpty() ? 0 : 1));
-      params.setOffset(lNewOffset);
-   }
+   { this->updateOffset_OneToMany(bEager, params); }
 
    virtual void eagerSelect(QxSqlRelationParams & params) const
-   {
-      long l1(0);
-      QString & sql = params.sql();
-      IxDataMember * pForeign = this->getDataByKey(m_sForeignKey); qAssert(pForeign);
-      IxDataMember * p = NULL; IxDataMember * pId = this->getDataId(); qAssert(pId);
-      QString tableAlias = this->tableAlias(params);
-      if (pId) { sql += (pId->getSqlTablePointNameAsAlias(tableAlias) + ", "); }
-      if (pForeign) { sql += (pForeign->getSqlTablePointNameAsAlias(tableAlias) + ", "); }
-      while ((p = this->nextData(l1))) { if (p != pForeign) { sql += (p->getSqlTablePointNameAsAlias(tableAlias) + ", "); } }
-      if (! this->m_oSoftDelete.isEmpty()) { sql += (this->m_oSoftDelete.buildSqlTablePointName(tableAlias) + ", "); }
-   }
+   { this->eagerSelect_OneToMany(params); }
 
    virtual void eagerJoin(QxSqlRelationParams & params) const
-   {
-      QString & sql = params.sql();
-      IxDataMember * pId = this->getDataIdOwner(); qAssert(pId);
-      IxDataMember * pForeign = this->getDataByKey(m_sForeignKey); qAssert(pForeign);
-      QString table = this->table(); QString tableAlias = this->tableAlias(params);
-      QString tableRef = this->tableAliasOwner(params);
-      if (! pId || ! pForeign) { return; }
-      sql += this->getSqlJoin(params.joinType()) + table + " " + tableAlias + " ON ";
-      params.builder().addSqlQueryAlias(table, tableAlias);
-      for (int i = 0; i < pId->getNameCount(); i++)
-      { sql += pForeign->getSqlAlias(tableAlias, true, i) + " = " + pId->getSqlAlias(tableRef, true, i) + " AND "; }
-      sql = sql.left(sql.count() - 5); // Remove last " AND "
-   }
+   { this->eagerJoin_OneToMany(params); }
 
    virtual void eagerWhereSoftDelete(QxSqlRelationParams & params) const
-   {
-      if (this->m_oSoftDelete.isEmpty()) { return; }
-      QString & sql = params.sql();
-      QString tableAlias = this->tableAlias(params);
-      sql += qx::IxSqlQueryBuilder::addSqlCondition(sql);
-      sql += this->m_oSoftDelete.buildSqlQueryToFetch(tableAlias);
-   }
+   { this->eagerWhereSoftDelete_OneToMany(params); }
 
    virtual void * eagerFetch_ResolveOutput(QxSqlRelationParams & params) const
    {
       if (! this->verifyOffset(params, true)) { return NULL; }
       QSqlQuery & query = params.query();
       IxDataMember * p = NULL; IxDataMember * pId = this->getDataId(); qAssert(pId); if (! pId) { return NULL; }
-      IxDataMember * pForeign = this->getDataByKey(m_sForeignKey); qAssert(pForeign); if (! pForeign) { return NULL; }
+      IxDataMember * pForeign = this->getDataByKey(this->m_sForeignKey); qAssert(pForeign); if (! pForeign) { return NULL; }
       long lIndex = 0; long lOffsetId = (pId ? pId->getNameCount() : 0); long lOffsetForeign = (pForeign ? pForeign->getNameCount() : 0);
       long lOffsetOld = params.offset(); this->updateOffset(true, params);
       long lOffsetRelation = (lOffsetOld + lOffsetId + lOffsetForeign);
+      long lRelation = 0; IxSqlRelation * pRelation = NULL;
       bool bValidId(false), bValidForeign(false);
       for (int i = 0; i < pId->getNameCount(); i++)
       { QVariant vId = query.value(lOffsetOld + i); bValidId = (bValidId || qx::trait::is_valid_primary_key(vId)); }
@@ -175,6 +131,7 @@ public:
       if (! bValidId || ! bValidForeign) { return NULL; }
       type_item item = this->createItem();
       type_data & item_val = item.value_qx();
+      if (! this->callTriggerBeforeFetch(item_val, params)) { return NULL; }
       for (int i = 0; i < pId->getNameCount(); i++)
       { QVariant v = query.value(lOffsetOld + i); qx::cvt::from_variant(v, item.key(), "", i); }
       for (int i = 0; i < pId->getNameCount(); i++)
@@ -183,6 +140,19 @@ public:
       { QVariant v = query.value(lOffsetOld + lOffsetId + i); pForeign->fromVariant((& item_val), v, "", i); }
       while ((p = this->nextData(lIndex)))
       { if (p != pForeign) { p->fromVariant((& item_val), query.value(lOffsetRelation++)); } }
+
+      if (params.relationX())
+      {
+         long lIndexOwnerOld = params.indexOwner(); params.setIndexOwner(params.index());
+         void * pOwnerOld = params.owner(); params.setOwner(& item_val);
+         lOffsetOld = params.offset(); params.setOffset(lOffsetRelation++);
+         while ((pRelation = this->nextRelation(lRelation)))
+         { if (this->addLazyRelation(params, pRelation)) { pRelation->lazyFetch_ResolveOutput(params); } }
+         params.setOwner(pOwnerOld); params.setOffset(lOffsetOld);
+         params.setIndexOwner(lIndexOwnerOld);
+      }
+
+      if (! this->callTriggerAfterFetch(item_val, params)) { return NULL; }
       type_generic_container::insertItem(this->getContainer(params), item);
       return (& item_val);
    }

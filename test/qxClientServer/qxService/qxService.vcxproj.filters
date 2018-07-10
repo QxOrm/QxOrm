@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="src\business_object">
+      <UniqueIdentifier>{851756e5-f56a-4f07-bba5-2fe341697cf0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\dao">
+      <UniqueIdentifier>{6875c2ab-df1c-4060-9061-cea144346323}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\service">
+      <UniqueIdentifier>{e75b10ea-b1dd-4bed-8ace-bf122eb59a7c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="include\business_object">
+      <UniqueIdentifier>{410db21c-06f0-4095-a762-1eefc104e15e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\dao">
+      <UniqueIdentifier>{42d6bfb3-45b2-4063-8161-c6fe238d767e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\service">
+      <UniqueIdentifier>{3b894245-d3e9-42a8-9ad2-15f09f773027}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\business_object\user.cpp">
+      <Filter>src\business_object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\business_object\user_search.cpp">
+      <Filter>src\business_object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dao\user_manager.cpp">
+      <Filter>src\dao</Filter>
+    </ClCompile>
+    <ClCompile Include="src\service\server_infos.cpp">
+      <Filter>src\service</Filter>
+    </ClCompile>
+    <ClCompile Include="src\service\user_service.cpp">
+      <Filter>src\service</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\export.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\precompiled.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\business_object\user.h">
+      <Filter>include\business_object</Filter>
+    </ClInclude>
+    <ClInclude Include="include\business_object\user_search.h">
+      <Filter>include\business_object</Filter>
+    </ClInclude>
+    <ClInclude Include="include\dao\user_manager.h">
+      <Filter>include\dao</Filter>
+    </ClInclude>
+    <ClInclude Include="include\service\server_infos.h">
+      <Filter>include\service</Filter>
+    </ClInclude>
+    <ClInclude Include="include\service\user_service.h">
+      <Filter>include\service</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="qxService.pri" />
+    <None Include="qxServiceClient.pro" />
+    <None Include="qxServiceServer.pro" />
+  </ItemGroup>
+</Project>

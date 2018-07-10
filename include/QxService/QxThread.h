@@ -89,6 +89,8 @@ public:
    void stop();
    void execute(QX_TYPE_SOCKET_DESC socketDescriptor);
 
+   static void sleepCurrentThread(unsigned long msecs) { QThread::msleep(msecs); }
+
 protected:
 
    virtual void run();

@@ -51,11 +51,11 @@ struct QxDao_Insert_Generic
 
       IxSqlGenerator * pSqlGenerator = dao.getSqlGenerator();
       if (pSqlGenerator) { pSqlGenerator->onBeforeInsert((& dao), (& t)); }
-      qx::dao::on_before_insert<T>((& t), (& dao));
+      qx::dao::on_before_insert<T>((& t), (& dao)); if (! dao.isValid()) { return dao.error(); }
       qx::dao::detail::QxSqlQueryHelper_Insert<T>::resolveInput(t, dao.query(), dao.builder());
       if (! dao.query().exec()) { return dao.errFailed(); }
       dao.updateLastInsertId(t);
-      qx::dao::on_after_insert<T>((& t), (& dao));
+      qx::dao::on_after_insert<T>((& t), (& dao)); if (! dao.isValid()) { return dao.error(); }
       if (pSqlGenerator) { pSqlGenerator->onAfterInsert((& dao), (& t)); }
 
       return dao.error();
@@ -138,11 +138,11 @@ private:
       {
          IxSqlGenerator * pSqlGenerator = dao.getSqlGenerator();
          if (pSqlGenerator) { pSqlGenerator->onBeforeInsert((& dao), (& item)); }
-         qx::dao::on_before_insert<U>((& item), (& dao));
+         qx::dao::on_before_insert<U>((& item), (& dao)); if (! dao.isValid()) { return false; }
          qx::dao::detail::QxSqlQueryHelper_Insert<U>::resolveInput(item, dao.query(), dao.builder());
          if (! dao.query().exec()) { dao.errFailed(); return false; }
          dao.updateLastInsertId(item);
-         qx::dao::on_after_insert<U>((& item), (& dao));
+         qx::dao::on_after_insert<U>((& item), (& dao)); if (! dao.isValid()) { return false; }
          if (pSqlGenerator) { pSqlGenerator->onAfterInsert((& dao), (& item)); }
 
          return dao.isValid();

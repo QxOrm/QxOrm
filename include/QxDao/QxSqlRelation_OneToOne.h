@@ -94,55 +94,19 @@ public:
    }
 
    virtual QVariant getIdFromQuery(bool bEager, QxSqlRelationParams & params) const
-   {
-      QString sId; IxDataMember * pId = this->getDataId(); if (! bEager || ! pId) { return QVariant(); }
-      for (int i = 0; i < pId->getNameCount(); i++) { sId += params.query().value(params.offset() + i).toString() + "|"; }
-      return QVariant(sId);
-   }
+   { return this->getIdFromQuery_OneToOne(bEager, params); }
 
    virtual void updateOffset(bool bEager, QxSqlRelationParams & params) const
-   {
-      if (! bEager) { return; }
-      long lOffsetNew = params.offset() + this->getDataCount();
-      lOffsetNew += (this->getDataId() ? this->getDataId()->getNameCount() : 0);
-      lOffsetNew += (this->m_oSoftDelete.isEmpty() ? 0 : 1);
-      params.setOffset(lOffsetNew);
-   }
+   { this->updateOffset_OneToOne(bEager, params); }
 
    virtual void eagerSelect(QxSqlRelationParams & params) const
-   {
-      long l1(0);
-      QString & sql = params.sql();
-      QString tableAlias = this->tableAlias(params);
-      IxDataMember * p = NULL; IxDataMember * pId = this->getDataId(); qAssert(pId);
-      if (pId) { sql += (pId->getSqlTablePointNameAsAlias(tableAlias) + ", "); }
-      while ((p = this->nextData(l1))) { sql += (p->getSqlTablePointNameAsAlias(tableAlias) + ", "); }
-      if (! this->m_oSoftDelete.isEmpty()) { sql += (this->m_oSoftDelete.buildSqlTablePointName(tableAlias) + ", "); }
-   }
+   { this->eagerSelect_OneToOne(params); }
 
    virtual void eagerJoin(QxSqlRelationParams & params) const
-   {
-      QString & sql = params.sql();
-      IxDataMember * pId = this->getDataId(); qAssert(pId);
-      IxDataMember * pIdRef = this->getDataIdOwner(); qAssert(pIdRef);
-      QString table = this->table(); QString tableAlias = this->tableAlias(params);
-      QString tableRef = this->tableAliasOwner(params);
-      if (! pId || ! pIdRef) { return; }
-      sql += this->getSqlJoin(params.joinType()) + table + " " + tableAlias + " ON ";
-      params.builder().addSqlQueryAlias(table, tableAlias);
-      for (int i = 0; i < pId->getNameCount(); i++)
-      { sql += pId->getSqlAlias(tableAlias, true, i) + " = " + pIdRef->getSqlAlias(tableRef, true, i) + " AND "; }
-      sql = sql.left(sql.count() - 5); // Remove last " AND "
-   }
+   { this->eagerJoin_OneToOne(params); }
 
    virtual void eagerWhereSoftDelete(QxSqlRelationParams & params) const
-   {
-      if (this->m_oSoftDelete.isEmpty()) { return; }
-      QString & sql = params.sql();
-      QString tableAlias = this->tableAlias(params);
-      sql += qx::IxSqlQueryBuilder::addSqlCondition(sql);
-      sql += this->m_oSoftDelete.buildSqlQueryToFetch(tableAlias);
-   }
+   { this->eagerWhereSoftDelete_OneToOne(params); }
 
    virtual void * eagerFetch_ResolveOutput(QxSqlRelationParams & params) const
    {
@@ -151,14 +115,30 @@ public:
       IxDataMember * p = NULL; IxDataMember * pId = this->getDataId(); qAssert(pId); if (! pId) { return NULL; }
       long lIndex = 0; long lOffsetId = (pId ? pId->getNameCount() : 0); bool bValidId(false);
       long lOffsetOld = params.offset(); this->updateOffset(true, params);
+      long lRelation = 0; IxSqlRelation * pRelation = NULL;
       for (int i = 0; i < pId->getNameCount(); i++)
       { QVariant v = query.value(lOffsetOld + i); bValidId = (bValidId || qx::trait::is_valid_primary_key(v)); }
       if (! bValidId) { return NULL; }
       type_data & currData = this->getData(params);
+      if (! this->callTriggerBeforeFetch(currData, params)) { return NULL; }
       for (int i = 0; i < pId->getNameCount(); i++)
       { QVariant v = query.value(lOffsetOld + i); pId->fromVariant((& currData), v, i); }
       while ((p = this->nextData(lIndex)))
       { p->fromVariant((& currData), query.value(lIndex + lOffsetOld + lOffsetId - 1)); }
+
+      if (params.relationX())
+      {
+         long lOffsetCurrent = (lIndex + lOffsetOld + lOffsetId);
+         long lIndexOwnerOld = params.indexOwner(); params.setIndexOwner(params.index());
+         void * pOwnerOld = params.owner(); params.setOwner(& currData);
+         lOffsetOld = params.offset(); params.setOffset(lOffsetCurrent);
+         while ((pRelation = this->nextRelation(lRelation)))
+         { if (this->addLazyRelation(params, pRelation)) { pRelation->lazyFetch_ResolveOutput(params); } }
+         params.setOwner(pOwnerOld); params.setOffset(lOffsetOld);
+         params.setIndexOwner(lIndexOwnerOld);
+      }
+
+      if (! this->callTriggerAfterFetch(currData, params)) { return NULL; }
       return (& currData);
    }
 

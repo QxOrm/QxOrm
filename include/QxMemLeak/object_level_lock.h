@@ -40,8 +40,8 @@
  *
  */
 
-#ifndef NDEBUG
 #ifndef QT_NO_DEBUG
+#ifndef _QX_MODE_RELEASE
 #if _QX_USE_MEM_LEAK_DETECTION
 
 #ifndef _OBJECT_LEVEL_LOCK_H
@@ -68,22 +68,22 @@ namespace memory {
         /** Type that provides locking/unlocking semantics. */
         class lock
         {
-#ifndef NDEBUG
+#ifndef _QX_MODE_RELEASE
 #ifndef QT_NO_DEBUG
             const object_level_lock& _M_host;
 #endif // QT_NO_DEBUG
-#endif // NDEBUG
+#endif // _QX_MODE_RELEASE
             lock(const lock&);
             lock& operator=(const lock&);
         public:
             explicit lock(const object_level_lock& __host)
-#ifndef NDEBUG
+#ifndef _QX_MODE_RELEASE
 #ifndef QT_NO_DEBUG
                 : _M_host(__host)
 #endif // QT_NO_DEBUG
-#endif // NDEBUG
+#endif // _QX_MODE_RELEASE
             {}
-#ifndef NDEBUG
+#ifndef _QX_MODE_RELEASE
 #ifndef QT_NO_DEBUG
             // The purpose of this method is allow one to write code
             // like "assert(guard.get_locked_object() == this)" to
@@ -94,7 +94,7 @@ namespace memory {
                 return &_M_host;
             }
 #endif // QT_NO_DEBUG
-#endif // NDEBUG
+#endif // _QX_MODE_RELEASE
         };
 
         typedef _Host volatile_type;
@@ -129,7 +129,7 @@ namespace memory {
             {
                 _M_host._M_mtx.unlock();
             }
-#ifndef NDEBUG
+#ifndef _QX_MODE_RELEASE
 #ifndef QT_NO_DEBUG
             // The purpose of this method is allow one to write code
             // like "assert(guard.get_locked_object() == this)" to
@@ -140,7 +140,7 @@ namespace memory {
                 return &_M_host;
             }
 #endif // QT_NO_DEBUG
-#endif // NDEBUG
+#endif // _QX_MODE_RELEASE
         };
 
         typedef volatile _Host volatile_type;
@@ -152,5 +152,5 @@ namespace memory {
 
 #endif // _OBJECT_LEVEL_LOCK_H
 #endif // _QX_USE_MEM_LEAK_DETECTION
+#endif // _QX_MODE_RELEASE
 #endif // QT_NO_DEBUG
-#endif // NDEBUG

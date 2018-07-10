@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
-  <title>QxOrm - C++ Object Relational Mapping library (ORM)</title>
+  <title>QxOrm : Qt C++ Object Relational Mapping Library (ORM) - QxEntityEditor : Qt C++ Entities Graphic Editor (data model)</title>
   <meta name="generator" content="Amaya, see http://www.w3.org/Amaya/">
   <link rel='stylesheet' type='text/css' href='./resource/qxorm_style.css'>
 </head>
@@ -11,7 +11,7 @@
   <col><col><col>
   <tbody>
     <tr>
-      <td><a href="./home.html"><img alt="QxOrm" src="./resource/logo_qxorm.png" width="256" height="61" align="left" border="0"></a></td>
+      <td><a href="./home.html"><img alt="QxOrm" src="./resource/logo_qxorm_and_qxee.png"align="left" border="0"></a></td>
       <td align="right" style="vertical-align:bottom">
         <img alt="Windows" src="./resource/logo_windows.gif" width="35" height="35">
         <img alt="Linux" src="./resource/logo_linux.gif" width="35" height="35">
@@ -26,24 +26,12 @@
   <col><col><col><col><col><col>
   <tbody>
     <tr>
-      <td align="center"><a href="./home.html"><img alt="Home"
-        src="./resource/link_home.jpg" width="120" height="35"
-        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
-      <td align="center"><a href="./download.html"><img alt="Download"
-        src="./resource/link_download.jpg" width="120" height="35"
-        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
-      <td align="center"><a href="./quick_sample.html"><img alt="Quick sample"
-        src="./resource/link_quick_sample.jpg" width="120" height="35"
-        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
-      <td align="center"><a href="./tutorial.html"><img alt="Tutorial"
-        src="./resource/link_tutorial.jpg" width="120" height="35"
-        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
-      <td align="center"><a href="./faq.html"><img alt="Faq"
-        src="./resource/link_faq.jpg" width="120" height="35"
-        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
-      <td align="center"><a href="./link.html"><img alt="Link"
-        src="./resource/link_link.jpg" width="120" height="35"
-        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
+      <td align="center"><a href="./home.html" class="btn_nav">Accueil</a></td>
+      <td align="center"><a href="./download.html" class="btn_nav">Téléchargement</a></td>
+      <td align="center"><a href="./quick_sample.html" class="btn_nav">Exemple rapide</a></td>
+      <td align="center"><a href="./tutorial.html" class="btn_nav">Tutoriel (3)</a></td>
+      <td align="center"><a href="./faq.html" class="btn_nav">Faq (35)</a></td>
+      <td align="center"><a href="./link.html" class="btn_nav">Forum</a></td>
     </tr>
   </tbody>
 </table>
@@ -52,7 +40,18 @@
   <col><col><col><col><col><col>
   <tbody><tr>
   <td align="left" valign="top"><font size="2">QxOrm  &gt;&gt;  Téléchargement</font></td>
-  <td align="right" valign="top"><font size="2">Version courante : QxOrm 1.2.5 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
+  <td align="right" valign="top">
+    <table cellspacing="0" cellpadding="1"><col><col><tbody>
+      <tr>
+         <td align="right" valign="top"><font size="2">Version courante :&nbsp;</font></td>
+         <td align="left" valign="top"><font size="2">QxOrm 1.2.6 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
+      <tr>
+      <tr>
+         <td align="right" valign="top"><font size="2"></font></td>
+         <td align="left" valign="top"><font size="2">QxEntityEditor 1.1.3</font></td>
+      <tr>
+    </tbody></table>
+  </td>
   <td width="10px"></td>
   <td width="40px" height="30px"><a href="../qxorm_fr/download.html"><img alt="Version française du site" src="./resource/FR.png" width="40" height="30" border="0"></a></td>
   <td width="40px" height="30px"><a href="../qxorm_en/download.html"><img alt="Web site english version" src="./resource/GB.png" width="40" height="30" border="0"></a></td>
@@ -73,7 +72,6 @@
                     <li><a href="./resource/license.gpl3.txt" target="_blank">licence GNU/GPLv3</a> : open-source et gratuite (idéale pour développer un projet open-source ou pour une évaluation de la bibliothèque QxOrm) ;</li>
                     <li><a href="./download_details.php">licence propriétaire</a> permettant de distribuer une application basée sur la bibliothèque QxOrm sans les restrictions de la licence <i>GNU/GPLv3</i>.</li>
                  </ul>
-                 <br>
                  <table border="0" style="width: 100%" align="center">
                   <col>
                   <col>
@@ -83,18 +81,14 @@
                         href="./download_details.php"><img alt="Download QxOrm" src="./resource/download.jpg" width="40" height="48" border="0"></a>
                       </td>
                       <td align="justify">
-                        <a href="./download_details.php"><b>Télécharger QxOrm version 1.2.5 (source + test + documentation)</b></a><br>
+                        <a href="./download_details.php"><b>Télécharger QxOrm version 1.2.6 (source + test + documentation)</b></a><br>
                         Cette version est compatible avec <b>Visual Studio 2008 ou 2010</b> (Windows), <b>GCC 4.4.1</b> (Linux et Mac OS X), <b>MinGW</b> (Windows) et <b>Clang</b> (Mac OS X).
                       </td>
                     </tr>
                   </tbody>
                  </table>
                  <br>
-                 <p align="justify"><b>QxOrm</b> est dépendant des excellentes bibliothèques
-                 <a href="http://www.boost.org/" target="_blank"><b>boost</b></a> (compatible à partir de la version 1.38) et
-                 <a href="http://qt.digia.com/" target="_blank"><b>Qt</b></a>
-                 (compatible à partir de la version 4.5.0).<br>
-                 Vous devez donc télécharger et installer ces 2 bibliothèques avant de pouvoir utiliser QxOrm.</p>
+                 <hr style="width: 90%" align="center" size="1" color="#100D5A">
               </td>
               <td width="200" align="center" valign="top"><a href="./resource/qt_ambassador_logo.png" target="_blank"><img alt="qt_ambassador" src="./resource/qt_ambassador_logo_150x150.png" width="150" height="150" border="0"></a><br>
                  <b><font size="2">QxOrm library has been accepted into the <a href="http://qt.digia.com/qtambassador/" target="_blank">Qt Ambassador Program</a></font></b>
@@ -102,6 +96,58 @@
             </tr>
           </tbody>
         </table>
+        <p align="justify"><b>QxEntityEditor</b> est un éditeur graphique pour la bibliothèque <b>QxOrm</b> : <b>QxEntityEditor</b> permet de gérer graphiquement le modèle d'entités.<br>
+        <b>QxEntityEditor</b> est multi-plateforme (disponible pour Windows, Linux et Mac OS X) et génère du code natif pour tous les environnements : bureau (Windows, Linux, Mac OS X), embarqué et mobile (Android, iOS, Raspberry Pi, etc.).</p>
+        <p align="justify">
+          <table border="0" style="width: 100%" align="center">
+            <col><col><col><col><col><col><col><col>
+            <tbody>
+              <tr>
+                <td valign="middle" width="80" align="center"><a href="../version/QxEntityEditor/1.1.3/QxEntityEditor_1.1.3_setup_win32.exe"><img alt="QxEntityEditor" src="./resource/logo_windows.gif" width="32" height="32" border="0"></a></td>
+                <td align="justify"><a href="../version/QxEntityEditor/1.1.3/QxEntityEditor_1.1.3_setup_win32.exe"><b>QxEntityEditor 1.1.3 - Windows 32 bits</b></a></td>
+                <td width="40"></td>
+                <td valign="middle" width="80" align="center"><a href="../version/QxEntityEditor/1.1.3/QxEntityEditor_1.1.3_setup_win64.exe"><img alt="QxEntityEditor" src="./resource/logo_windows.gif" width="32" height="32" border="0"></a></td>
+                <td align="justify"><a href="../version/QxEntityEditor/1.1.3/QxEntityEditor_1.1.3_setup_win64.exe"><b>QxEntityEditor 1.1.3 - Windows 64 bits</b></a></td>
+                <td width="40"></td>
+                <td valign="middle" width="80" align="center"><a href="../version/QxEntityEditor/1.1.3/QxEntityEditor_1.1.3_setup_winxp.exe"><img alt="QxEntityEditor" src="./resource/logo_windows.gif" width="32" height="32" border="0"></a></td>
+                <td align="justify"><a href="../version/QxEntityEditor/1.1.3/QxEntityEditor_1.1.3_setup_winxp.exe"><b>QxEntityEditor 1.1.3 - Windows XP</b></a></td>
+              </tr>
+              <tr>
+                <td valign="middle" width="80" align="center"><a href="../version/QxEntityEditor/1.1.3/QxEntityEditor_1.1.3_win_32b.zip"><img alt="QxEntityEditor" src="./resource/logo_windows.gif" width="32" height="32" border="0"></a></td>
+                <td align="justify"><a href="../version/QxEntityEditor/1.1.3/QxEntityEditor_1.1.3_win_32b.zip"><b>QxEntityEditor 1.1.3 - Windows 32 bits (portable)</b></a></td>
+                <td width="40"></td>
+                <td valign="middle" width="80" align="center"><a href="../version/QxEntityEditor/1.1.3/QxEntityEditor_1.1.3_win_64b.zip"><img alt="QxEntityEditor" src="./resource/logo_windows.gif" width="32" height="32" border="0"></a></td>
+                <td align="justify"><a href="../version/QxEntityEditor/1.1.3/QxEntityEditor_1.1.3_win_64b.zip"><b>QxEntityEditor 1.1.3 - Windows 64 bits (portable)</b></a></td>
+                <td width="40"></td>
+                <td valign="middle" width="80" align="center"><a href="../version/QxEntityEditor/1.1.3/QxEntityEditor_1.1.3_win_xp.zip"><img alt="QxEntityEditor" src="./resource/logo_windows.gif" width="32" height="32" border="0"></a></td>
+                <td align="justify"><a href="../version/QxEntityEditor/1.1.3/QxEntityEditor_1.1.3_win_xp.zip"><b>QxEntityEditor 1.1.3 - Windows XP (portable)</b></a></td>
+              </tr>
+              <tr>
+                <td valign="middle" width="80" align="center"><a href="../version/QxEntityEditor/1.1.3/QxEntityEditor_1.1.3_linux_32b.tar.gz"><img alt="QxEntityEditor" src="./resource/logo_linux.gif" width="32" height="32" border="0"></a></td>
+                <td align="justify"><a href="../version/QxEntityEditor/1.1.3/QxEntityEditor_1.1.3_linux_32b.tar.gz"><b>QxEntityEditor 1.1.3 - Linux 32 bits</b></a></td>
+                <td width="40"></td>
+                <td valign="middle" width="80" align="center"><a href="../version/QxEntityEditor/1.1.3/QxEntityEditor_1.1.3_linux_64b.tar.gz"><img alt="QxEntityEditor" src="./resource/logo_linux.gif" width="32" height="32" border="0"></a></td>
+                <td align="justify"><a href="../version/QxEntityEditor/1.1.3/QxEntityEditor_1.1.3_linux_64b.tar.gz"><b>QxEntityEditor 1.1.3 - Linux 64 bits</b></a></td>
+              </tr>
+              <tr>
+                <td valign="middle" width="80" align="center"><a href="../version/QxEntityEditor/1.1.3/QxEntityEditor_1.1.3_macosx.zip"><img alt="QxEntityEditor" src="./resource/logo_mac.gif" width="32" height="32" border="0"></a></td>
+                <td align="justify"><a href="../version/QxEntityEditor/1.1.3/QxEntityEditor_1.1.3_macosx.zip"><b>QxEntityEditor 1.1.3 - Mac OS X</b></a></td>
+              </tr>
+            </tbody>
+          </table>
+        </p>
+        <p align="justify"><b>Remarque : </b>par défaut, l'application <b>QxEntityEditor</b> est limitée à 5 entités par projet.
+        Pour obtenir une clé de licence et ainsi créer un nombre illimité d'entités par projet, vous pouvez nous contacter à l'adresse suivante : <a href="mailto:contact@qxorm.com">contact@qxorm.com</a>.<br>
+        <br>
+        Prix d'une licence <b>QxEntityEditor</b> : <i>300&euro;</i> (par développeur, à renouveler chaque année).</p>
+        <a href="../qxentityeditor/resource/qxee_sample.png"><img alt="QxEntityEditor" src="../qxentityeditor/resource/qxee_sample_small.png" border="0"></a>
+        <br><br>
+        <hr style="width: 90%" align="center" size="1" color="#100D5A">
+        <p align="justify"><b>QxOrm</b> est dépendant des excellentes bibliothèques
+        <a href="http://www.boost.org/" target="_blank"><b>boost</b></a> (compatible à partir de la version 1.38) et
+        <a href="http://qt.digia.com/" target="_blank"><b>Qt</b></a>
+        (compatible à partir de la version 4.5.0).<br>
+        Vous devez donc télécharger et installer ces 2 bibliothèques avant de pouvoir utiliser QxOrm.</p>
         <table border="0" style="width: 100%" align="center">
           <col>
           <col>
@@ -160,6 +206,15 @@
           <tbody>
             <tr>
               <td><i>
+Changes in version 1.2.6:<br>
+- First version full compatible with QxEntityEditor application : the graphic editor for QxOrm library !<br>
+- For more details about QxEntityEditor, go to QxOrm website : http://www.qxorm.com/<br>
+- Thanks to the recent release of Qt 5.2, QxOrm library can now be used on Android and iOS<br>
+- Improve relationships and triggers engine<br>
+- Triggers onBeforeFetch() and onAfterFetch() called when fetching relationships<br>
+- Fix release mode detection during compilation : should improve performance on some environments<br>
+- Add serialization for QSqlError, qx::QxSqlQuery, qx::QxInvalidValue and qx::QxInvalidValueX classes<br>
+<br>
 Changes in version 1.2.5:<br>
 - New license : go to download page of QxOrm website for more details<br>
 - Support Qt5<br>
@@ -281,7 +336,7 @@ Changes in version 1.1.0:<br>
         <img alt="QxOrm" src="./resource/logo_qxorm_small.png" width="168" height="40">
       </td>
       <td align="center" valign="middle">
-        <font size="2">© 2013 Lionel Marty</font>
+        <font size="2">© 2014 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
       </td>
       <td align="right" valign="middle">
         <form action="https://www.paypal.com/cgi-bin/webscr" method="post">

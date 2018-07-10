@@ -213,4 +213,10 @@
 #define QX_VSPRINTF vsprintf
 #endif // _MSC_VER
 
+#ifdef _QX_MODE_RELEASE
+#ifndef NDEBUG
+#define NDEBUG
+#endif // NDEBUG
+#endif // _QX_MODE_RELEASE
+
 #endif // _QX_MACRO_H_

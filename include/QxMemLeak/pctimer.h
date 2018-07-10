@@ -37,8 +37,8 @@
  *
  */
 
-#ifndef NDEBUG
 #ifndef QT_NO_DEBUG
+#ifndef _QX_MODE_RELEASE
 #if _QX_USE_MEM_LEAK_DETECTION
 #ifndef _PCTIMER_H
 
@@ -108,5 +108,5 @@ __inline pctimer_t pctimer(void)
 
 #endif /* _PCTIMER_H */
 #endif // _QX_USE_MEM_LEAK_DETECTION
+#endif // _QX_MODE_RELEASE
 #endif // QT_NO_DEBUG
-#endif // NDEBUG

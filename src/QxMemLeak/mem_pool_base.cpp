@@ -38,8 +38,8 @@
 
 #include <QxCommon/QxConfig.h>
 
-#ifndef NDEBUG
 #ifndef QT_NO_DEBUG
+#ifndef _QX_MODE_RELEASE
 #if _QX_USE_MEM_LEAK_DETECTION
 
 #if defined(_MEM_POOL_USE_MALLOC)
@@ -80,5 +80,5 @@ void mem_pool_base::dealloc_sys(void* __ptr)
 } // namespace qx
 
 #endif // _QX_USE_MEM_LEAK_DETECTION
+#endif // _QX_MODE_RELEASE
 #endif // QT_NO_DEBUG
-#endif // NDEBUG

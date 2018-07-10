@@ -181,6 +181,10 @@ template <typename T> struct QxStringCvt_FromString< QLinkedList<T> > {
 static inline qx_bool fromString(const QString & s, QLinkedList<T> & t, const QString & format, int index)
 { Q_UNUSED(format); Q_UNUSED(index); return QX_STR_CVT_DEFAULT_ARCHIVE::from_string(t, s); } };
 
+template <typename T> struct QxStringCvt_FromString< QFlags<T> > {
+static inline qx_bool fromString(const QString & s, QFlags<T> & t, const QString & format, int index)
+{ Q_UNUSED(format); Q_UNUSED(index); t = QFlags<T>(QFlag(s.toInt())); return true; } };
+
 template <typename Key, typename Value> struct QxStringCvt_FromString< std::map<Key, Value> > {
 static inline qx_bool fromString(const QString & s, std::map<Key, Value> & t, const QString & format, int index)
 { Q_UNUSED(format); Q_UNUSED(index); return QX_STR_CVT_DEFAULT_ARCHIVE::from_string(t, s); } };

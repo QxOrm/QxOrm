@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="qx">
+      <UniqueIdentifier>{d9b076e1-33e0-4452-8b06-fa157beb79ec}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Bar.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BaseClassTrigger.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CTestAll.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CUser.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Foo.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="qx\Bar.qx.cpp">
+      <Filter>qx</Filter>
+    </ClCompile>
+    <ClCompile Include="qx\BaseClassTrigger.qx.cpp">
+      <Filter>qx</Filter>
+    </ClCompile>
+    <ClCompile Include="qx\CTestAll.qx.cpp">
+      <Filter>qx</Filter>
+    </ClCompile>
+    <ClCompile Include="qx\CUser.qx.cpp">
+      <Filter>qx</Filter>
+    </ClCompile>
+    <ClCompile Include="qx\Foo.qx.cpp">
+      <Filter>qx</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\Bar.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BaseClassTrigger.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CTestAll.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CUser.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\export.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Foo.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\precompiled.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="dll2.pro" />
+  </ItemGroup>
+</Project>

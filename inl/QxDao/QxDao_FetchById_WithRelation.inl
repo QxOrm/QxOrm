@@ -55,8 +55,10 @@ struct QxDao_FetchById_WithRelation_Generic
       if (! dao.query().exec()) { return dao.errFailed(); }
 
       qx::dao::on_before_fetch<T>((& t), (& dao));
+      if (! dao.isValid()) { return dao.error(); }
       if (dao.getCartesianProduct()) { fetchById_Complex(t, dao); }
       else { fetchById_Simple(t, dao); }
+      if (! dao.isValid()) { return dao.error(); }
       qx::dao::on_after_fetch<T>((& t), (& dao));
 
       return dao.error();
@@ -73,7 +75,7 @@ private:
    static inline void fetchById_Complex(T & t, type_dao_helper & dao)
    {
       while (dao.nextRecord())
-      { type_query_helper::resolveOutput(dao.getSqlRelationLinked(), t, dao.query(), dao.builder()); }
+      { type_query_helper::resolveOutput(dao.getSqlRelationLinked(), t, dao.query(), dao.builder()); if (! dao.isValid()) { return; } }
    }
 
 };
@@ -158,9 +160,10 @@ private:
          if (! dao.isValidPrimaryKey(item)) { dao.errInvalidId(); return false; }
          type_query_helper::resolveInput(dao.getSqlRelationLinked(), item, dao.query(), dao.builder());
          if (! dao.query().exec()) { dao.errFailed(); return false; }
-         qx::dao::on_before_fetch<U>((& item), (& dao));
+         qx::dao::on_before_fetch<U>((& item), (& dao)); if (! dao.isValid()) { return false; }
          if (dao.getCartesianProduct()) { fetch_Complex(item, dao); }
          else { fetch_Simple(item, dao); }
+         if (! dao.isValid()) { return false; }
          qx::dao::on_after_fetch<U>((& item), (& dao));
 
          return dao.isValid();
@@ -175,7 +178,7 @@ private:
       static inline void fetch_Complex(U & item, type_dao_helper & dao)
       {
          while (dao.nextRecord())
-         { type_query_helper::resolveOutput(dao.getSqlRelationLinked(), item, dao.query(), dao.builder()); }
+         { type_query_helper::resolveOutput(dao.getSqlRelationLinked(), item, dao.query(), dao.builder()); if (! dao.isValid()) { return; } }
       }
 
    };

@@ -38,8 +38,8 @@
 
 #include <QxCommon/QxConfig.h>
 
-#ifndef NDEBUG
 #ifndef QT_NO_DEBUG
+#ifndef _QX_MODE_RELEASE
 #if _QX_USE_MEM_LEAK_DETECTION
 
 #include <algorithm>
@@ -107,5 +107,5 @@ void static_mem_pool_set::add(mem_pool_base* __memory_pool_p)
 } // namespace qx
 
 #endif // _QX_USE_MEM_LEAK_DETECTION
+#endif // _QX_MODE_RELEASE
 #endif // QT_NO_DEBUG
-#endif // NDEBUG

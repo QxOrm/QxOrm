@@ -38,8 +38,8 @@
  *
  */
 
-#ifndef NDEBUG
 #ifndef QT_NO_DEBUG
+#ifndef _QX_MODE_RELEASE
 #if _QX_USE_MEM_LEAK_DETECTION
 
 #ifndef _CONT_PTR_UTILS_H
@@ -147,5 +147,5 @@ private:
 
 #endif // _CONT_PTR_UTILS_H
 #endif // _QX_USE_MEM_LEAK_DETECTION
+#endif // _QX_MODE_RELEASE
 #endif // QT_NO_DEBUG
-#endif // NDEBUG

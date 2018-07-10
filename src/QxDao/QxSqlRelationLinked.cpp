@@ -51,9 +51,8 @@ QxSqlRelationLinked::~QxSqlRelationLinked() { ; }
 qx_bool QxSqlRelationLinked::buildHierarchy(IxSqlRelationX * pRelationX, const QStringList & sRelationX)
 {
    if (! pRelationX) { qAssert(false); return qx_bool(false); }
+   if (m_bRoot) { m_relationLinkedX.clear(); m_relationX.clear(); }
    m_allRelationX = pRelationX;
-   m_relationLinkedX.clear();
-   m_relationX.clear();
 
    Q_FOREACH(QString sRelation, sRelationX)
    {
@@ -128,6 +127,7 @@ void QxSqlRelationLinked::hierarchySelect(QxSqlRelationParams & params)
    _foreach_if(IxSqlRelation * p, (* m_allRelationX), (p != NULL))
    {
       params.setIndex(params.index() + 1);
+      params.setRelationX(& m_relationLinkedX);
       params.setJoinType(qx::dao::sql_join::no_join);
       if (! m_relationX.exist(p->getKey()))
       { if (m_bRoot) { p->lazySelect(params); } continue; }
@@ -149,6 +149,7 @@ void QxSqlRelationLinked::hierarchyFrom(QxSqlRelationParams & params)
    _foreach_if(IxSqlRelation * p, (* m_allRelationX), (p != NULL))
    {
       params.setIndex(params.index() + 1);
+      params.setRelationX(& m_relationLinkedX);
       params.setJoinType(qx::dao::sql_join::no_join);
       if (! m_relationX.exist(p->getKey()))
       { if (m_bRoot) { p->lazyFrom(params); } continue; }
@@ -170,6 +171,7 @@ void QxSqlRelationLinked::hierarchyJoin(QxSqlRelationParams & params)
    _foreach_if(IxSqlRelation * p, (* m_allRelationX), (p != NULL))
    {
       params.setIndex(params.index() + 1);
+      params.setRelationX(& m_relationLinkedX);
       params.setJoinType(qx::dao::sql_join::no_join);
       if (! m_relationX.exist(p->getKey()))
       { if (m_bRoot) { p->lazyJoin(params); } continue; }
@@ -191,6 +193,7 @@ void QxSqlRelationLinked::hierarchyWhereSoftDelete(QxSqlRelationParams & params)
    _foreach_if(IxSqlRelation * p, (* m_allRelationX), (p != NULL))
    {
       params.setIndex(params.index() + 1);
+      params.setRelationX(& m_relationLinkedX);
       params.setJoinType(qx::dao::sql_join::no_join);
       if (! m_relationX.exist(p->getKey()))
       { if (m_bRoot) { p->lazyWhereSoftDelete(params); } continue; }
@@ -213,7 +216,9 @@ void QxSqlRelationLinked::hierarchyResolveOutput(QxSqlRelationParams & params)
    bool bByPass(false), bComplex(params.builder().getCartesianProduct());
    _foreach_if(IxSqlRelation * p, (* m_allRelationX), (p != NULL))
    {
+      if (! isValidDaoHelper(params)) { return; }
       params.setIndex(params.index() + 1);
+      params.setRelationX(& m_relationLinkedX);
       params.setJoinType(qx::dao::sql_join::no_join);
       bool bEager = m_relationX.exist(p->getKey());
       if (bEager) { params.setJoinType(m_relationX.getByKey(p->getKey()).get<0>()); }
@@ -227,6 +232,7 @@ void QxSqlRelationLinked::hierarchyResolveOutput(QxSqlRelationParams & params)
          if (bEager) { pFetched = p->eagerFetch_ResolveOutput(params); }
          else if (m_bRoot) { p->lazyFetch_ResolveOutput(params); }
          if (bValidId && pFetched) { params.builder().insertIdX(params.index(), params.id(), vIdRelation, pFetched); }
+         if (! isValidDaoHelper(params)) { return; }
       }
       if (bEager)
       {
@@ -234,6 +240,7 @@ void QxSqlRelationLinked::hierarchyResolveOutput(QxSqlRelationParams & params)
          if (! pRelationLinked) { continue; }
          if (! pFetched)
          {
+            params.setRelationX(NULL);
             params.setIndex(params.index() + pRelationLinked->getAllRelationCount());
             pRelationLinked->updateOffset(params);
             continue;
@@ -292,10 +299,27 @@ long QxSqlRelationLinked::getRelationCount() const
 void QxSqlRelationLinked::updateOffset(QxSqlRelationParams & params)
 {
    if (m_allRelationX == NULL) { qAssert(false); return; }
-   Q_FOREACH(QxSqlRelationLinked_ptr pRelationLinked, m_relationLinkedX)
-   { pRelationLinked->updateOffset(params); }
    _foreach_if(IxSqlRelation * p, (* m_allRelationX), (p != NULL))
-   { p->updateOffset(m_relationX.exist(p->getKey()), params); }
+   {
+      params.setRelationX(& m_relationLinkedX);
+      bool bEager = m_relationX.exist(p->getKey());
+      if (bEager) { p->updateOffset(true, params); }
+      else if (m_bRoot) { p->updateOffset(false, params); }
+      QxSqlRelationLinked_ptr pRelationLinked = m_relationLinkedX.value(p->getKey());
+      if (! pRelationLinked) { continue; }
+      pRelationLinked->updateOffset(params);
+   }
+}
+
+bool QxSqlRelationLinked::existRelation(const QString & sKey) const
+{
+   return m_relationX.exist(sKey);
+}
+
+bool QxSqlRelationLinked::isValidDaoHelper(QxSqlRelationParams & params) const
+{
+   if (! params.builder().getDaoHelper()) { return true; }
+   return params.builder().getDaoHelper()->isValid();
 }
 
 } // namespace qx

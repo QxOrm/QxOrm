@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
-  <title>QxOrm - C++ Object Relational Mapping library (ORM)</title>
+  <title>QxOrm : Qt C++ Object Relational Mapping Library (ORM) - QxEntityEditor : Qt C++ Entities Graphic Editor (data model)</title>
   <meta name="generator" content="Amaya, see http://www.w3.org/Amaya/">
   <link rel='stylesheet' type='text/css' href='./resource/qxorm_style.css'>
 </head>
@@ -11,7 +11,7 @@
   <col><col><col>
   <tbody>
     <tr>
-      <td><a href="./home.html"><img alt="QxOrm" src="./resource/logo_qxorm.png" width="256" height="61" align="left" border="0"></a></td>
+      <td><a href="./home.html"><img alt="QxOrm" src="./resource/logo_qxorm_and_qxee.png"align="left" border="0"></a></td>
       <td align="right" style="vertical-align:bottom">
         <img alt="Windows" src="./resource/logo_windows.gif" width="35" height="35">
         <img alt="Linux" src="./resource/logo_linux.gif" width="35" height="35">
@@ -26,24 +26,12 @@
   <col><col><col><col><col><col>
   <tbody>
     <tr>
-      <td align="center"><a href="./home.html"><img alt="Home"
-        src="./resource/link_home.jpg" width="120" height="35"
-        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
-      <td align="center"><a href="./download.html"><img alt="Download"
-        src="./resource/link_download.jpg" width="120" height="35"
-        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
-      <td align="center"><a href="./quick_sample.html"><img alt="Quick sample"
-        src="./resource/link_quick_sample.jpg" width="120" height="35"
-        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
-      <td align="center"><a href="./tutorial.html"><img alt="Tutorial"
-        src="./resource/link_tutorial.jpg" width="120" height="35"
-        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
-      <td align="center"><a href="./faq.html"><img alt="Faq"
-        src="./resource/link_faq.jpg" width="120" height="35"
-        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
-      <td align="center"><a href="./link.html"><img alt="Link"
-        src="./resource/link_link.jpg" width="120" height="35"
-        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
+      <td align="center"><a href="./home.html" class="btn_nav">Accueil</a></td>
+      <td align="center"><a href="./download.html" class="btn_nav">Téléchargement</a></td>
+      <td align="center"><a href="./quick_sample.html" class="btn_nav">Exemple rapide</a></td>
+      <td align="center"><a href="./tutorial.html" class="btn_nav">Tutoriel (3)</a></td>
+      <td align="center"><a href="./faq.html" class="btn_nav">Faq (35)</a></td>
+      <td align="center"><a href="./link.html" class="btn_nav">Forum</a></td>
     </tr>
   </tbody>
 </table>
@@ -52,7 +40,18 @@
   <col><col><col><col><col><col>
   <tbody><tr>
   <td align="left" valign="top"><font size="2">QxOrm  &gt;&gt;  Informations sur le téléchargement</font></td>
-  <td align="right" valign="top"><font size="2">Version courante : QxOrm 1.2.5 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
+  <td align="right" valign="top">
+    <table cellspacing="0" cellpadding="1"><col><col><tbody>
+      <tr>
+         <td align="right" valign="top"><font size="2">Version courante :&nbsp;</font></td>
+         <td align="left" valign="top"><font size="2">QxOrm 1.2.6 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
+      <tr>
+      <tr>
+         <td align="right" valign="top"><font size="2"></font></td>
+         <td align="left" valign="top"><font size="2">QxEntityEditor 1.1.3</font></td>
+      <tr>
+    </tbody></table>
+  </td>
   <td width="10px"></td>
   <td width="40px" height="30px"><a href="../qxorm_fr/download_details.php"><img alt="Version française du site" src="./resource/FR.png" width="40" height="30" border="0"></a></td>
   <td width="40px" height="30px"><a href="../qxorm_en/download_details.php"><img alt="Web site english version" src="./resource/GB.png" width="40" height="30" border="0"></a></td>
@@ -99,7 +98,8 @@
             <li>De 21 à 30 classes C++ enregistrées dans le contexte QxOrm par application : <i>250&euro;</i> ;</li>
             <li>De 31 à un nombre illimité de classes C++ enregistrées dans le contexte QxOrm par application : <i>300&euro;</i>.</li>
          </ul>
-         <br>
+         Pour toutes questions ou précisions sur les licences, ou bien pour acquérir la licence <b>QXPL</b>, vous pouvez nous contacter à l'adresse suivante : <a href="mailto:contact@qxorm.com">contact@qxorm.com</a>.<br/>
+         <br/><br/>
          <script type="text/javascript">
 function checkForm(f) { f.submit(); return true; }
          </script>
@@ -108,7 +108,7 @@ function checkForm(f) { f.submit(); return true; }
             <input type="text" id="created_by" name="created_by" size="50" maxlength="200" /><br/>
             Aidez nous à améliorer la bibliothèque QxOrm en ajoutant vos remarques et suggestions (optionnel) :<br/>
             <textarea id="message_text" name="message_text" rows="3" cols="50"></textarea><br/>
-            <input type="submit" value="            Télécharger QxOrm 1.2.5            " />
+            <input type="submit" value="            Télécharger QxOrm 1.2.6            " />
          </form>
          <br>
       </td>
@@ -124,7 +124,7 @@ function checkForm(f) { f.submit(); return true; }
         <img alt="QxOrm" src="./resource/logo_qxorm_small.png" width="168" height="40">
       </td>
       <td align="center" valign="middle">
-        <font size="2">© 2013 Lionel Marty</font>
+        <font size="2">© 2014 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
       </td>
       <td align="right" valign="middle">
         <form action="https://www.paypal.com/cgi-bin/webscr" method="post">

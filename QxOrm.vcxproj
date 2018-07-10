@@ -1,0 +1,494 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{49FC4CBF-3BE2-413B-A424-4E34870EC14A}</ProjectGuid>
+    <Keyword>MakeFileProj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>11.0.50727.1</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <NMakeBuildCommandLine>./tools/_build_debug.bat</NMakeBuildCommandLine>
+    <NMakeReBuildCommandLine>./tools/_build_debug.bat</NMakeReBuildCommandLine>
+    <NMakeCleanCommandLine>./tools/_clean_debug.bat</NMakeCleanCommandLine>
+    <NMakeOutput />
+    <NMakePreprocessorDefinitions>WIN32;_DEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <NMakeBuildCommandLine>./tools/_build_debug.bat</NMakeBuildCommandLine>
+    <NMakeReBuildCommandLine>./tools/_build_debug.bat</NMakeReBuildCommandLine>
+    <NMakeCleanCommandLine>./tools/_clean_debug.bat</NMakeCleanCommandLine>
+    <NMakeOutput />
+    <NMakePreprocessorDefinitions>WIN32;_DEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <NMakeBuildCommandLine>./tools/_build_release.bat</NMakeBuildCommandLine>
+    <NMakeReBuildCommandLine>./tools/_build_release.bat</NMakeReBuildCommandLine>
+    <NMakeCleanCommandLine>./tools/_clean_release.bat</NMakeCleanCommandLine>
+    <NMakeOutput />
+    <NMakePreprocessorDefinitions>WIN32;NDEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <NMakeBuildCommandLine>./tools/_build_release.bat</NMakeBuildCommandLine>
+    <NMakeReBuildCommandLine>./tools/_build_release.bat</NMakeReBuildCommandLine>
+    <NMakeCleanCommandLine>./tools/_clean_release.bat</NMakeCleanCommandLine>
+    <NMakeOutput />
+    <NMakePreprocessorDefinitions>WIN32;NDEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\QxSerialize\Qt\QxSerialize_QSqlError.cpp" />
+    <ClCompile Include="src\QxSingleton\IxSingleton.cpp" />
+    <ClCompile Include="src\QxSingleton\QxSingletonX.cpp" />
+    <ClCompile Include="src\QxMemLeak\bool_array.cpp" />
+    <ClCompile Include="src\QxMemLeak\debug_new.cpp" />
+    <ClCompile Include="src\QxMemLeak\mem_pool_base.cpp" />
+    <ClCompile Include="src\QxMemLeak\static_mem_pool.cpp" />
+    <ClCompile Include="src\QxFactory\IxFactory.cpp" />
+    <ClCompile Include="src\QxFactory\QxFactoryX.cpp" />
+    <ClCompile Include="src\QxDataMember\IxDataMember.cpp" />
+    <ClCompile Include="src\QxDataMember\IxDataMemberX.cpp" />
+    <ClCompile Include="src\QxDataMember\QxDataMember_QObject.cpp" />
+    <ClCompile Include="src\QxTraits\unit_test_is_container.cpp" />
+    <ClCompile Include="src\QxTraits\unit_test_is_smart_ptr.cpp" />
+    <ClCompile Include="src\QxCollection\QxCollection.cpp" />
+    <ClCompile Include="src\QxXml\QxXmlReader.cpp" />
+    <ClCompile Include="src\QxXml\QxXmlWriter.cpp" />
+    <ClCompile Include="src\QxSerialize\Qt\QxSerialize_QBrush.cpp" />
+    <ClCompile Include="src\QxSerialize\Qt\QxSerialize_QByteArray.cpp" />
+    <ClCompile Include="src\QxSerialize\Qt\QxSerialize_QColor.cpp" />
+    <ClCompile Include="src\QxSerialize\Qt\QxSerialize_QDate.cpp" />
+    <ClCompile Include="src\QxSerialize\Qt\QxSerialize_QDateTime.cpp" />
+    <ClCompile Include="src\QxSerialize\Qt\QxSerialize_QFont.cpp" />
+    <ClCompile Include="src\QxSerialize\Qt\QxSerialize_QImage.cpp" />
+    <ClCompile Include="src\QxSerialize\Qt\QxSerialize_QMatrix.cpp" />
+    <ClCompile Include="src\QxSerialize\Qt\QxSerialize_QObject.cpp" />
+    <ClCompile Include="src\QxSerialize\Qt\QxSerialize_QPicture.cpp" />
+    <ClCompile Include="src\QxSerialize\Qt\QxSerialize_QPixmap.cpp" />
+    <ClCompile Include="src\QxSerialize\Qt\QxSerialize_QPoint.cpp" />
+    <ClCompile Include="src\QxSerialize\Qt\QxSerialize_QRect.cpp" />
+    <ClCompile Include="src\QxSerialize\Qt\QxSerialize_QRegExp.cpp" />
+    <ClCompile Include="src\QxSerialize\Qt\QxSerialize_QRegion.cpp" />
+    <ClCompile Include="src\QxSerialize\Qt\QxSerialize_QSize.cpp" />
+    <ClCompile Include="src\QxSerialize\Qt\QxSerialize_QString.cpp" />
+    <ClCompile Include="src\QxSerialize\Qt\QxSerialize_QStringList.cpp" />
+    <ClCompile Include="src\QxSerialize\Qt\QxSerialize_QTime.cpp" />
+    <ClCompile Include="src\QxSerialize\Qt\QxSerialize_QUrl.cpp" />
+    <ClCompile Include="src\QxSerialize\Qt\QxSerialize_QUuid.cpp" />
+    <ClCompile Include="src\QxSerialize\Qt\QxSerialize_QVariant.cpp" />
+    <ClCompile Include="src\QxSerialize\QxBoostSerializeHelper\IxBoostSerializeRegisterHelper.cpp" />
+    <ClCompile Include="src\QxSerialize\QxBoostSerializeHelper\QxBoostSerializeRegisterHelperX.cpp" />
+    <ClCompile Include="src\QxSerialize\boost\QxExportDllBoostArchive.cpp" />
+    <ClCompile Include="src\QxDao\IxDao_Helper.cpp" />
+    <ClCompile Include="src\QxDao\IxPersistable.cpp" />
+    <ClCompile Include="src\QxDao\IxSqlQueryBuilder.cpp" />
+    <ClCompile Include="src\QxDao\IxSqlRelation.cpp" />
+    <ClCompile Include="src\QxDao\QxDaoAsync.cpp" />
+    <ClCompile Include="src\QxDao\QxSession.cpp" />
+    <ClCompile Include="src\QxDao\QxSqlDatabase.cpp" />
+    <ClCompile Include="src\QxDao\QxSqlQuery.cpp" />
+    <ClCompile Include="src\QxDao\QxSqlRelationLinked.cpp" />
+    <ClCompile Include="src\QxDao\QxSqlRelationParams.cpp" />
+    <ClCompile Include="src\QxDao\QxSqlElement\IxSqlElement.cpp" />
+    <ClCompile Include="src\QxDao\QxSqlElement\QxSqlCompare.cpp" />
+    <ClCompile Include="src\QxDao\QxSqlElement\QxSqlElementTemp.cpp" />
+    <ClCompile Include="src\QxDao\QxSqlElement\QxSqlExpression.cpp" />
+    <ClCompile Include="src\QxDao\QxSqlElement\QxSqlFreeText.cpp" />
+    <ClCompile Include="src\QxDao\QxSqlElement\QxSqlIn.cpp" />
+    <ClCompile Include="src\QxDao\QxSqlElement\QxSqlIsBetween.cpp" />
+    <ClCompile Include="src\QxDao\QxSqlElement\QxSqlIsNull.cpp" />
+    <ClCompile Include="src\QxDao\QxSqlElement\QxSqlLimit.cpp" />
+    <ClCompile Include="src\QxDao\QxSqlElement\QxSqlSort.cpp" />
+    <ClCompile Include="src\QxDao\QxSqlGenerator\IxSqlGenerator.cpp" />
+    <ClCompile Include="src\QxDao\QxSqlGenerator\QxSqlGenerator_MSSQLServer.cpp" />
+    <ClCompile Include="src\QxDao\QxSqlGenerator\QxSqlGenerator_MySQL.cpp" />
+    <ClCompile Include="src\QxDao\QxSqlGenerator\QxSqlGenerator_Oracle.cpp" />
+    <ClCompile Include="src\QxDao\QxSqlGenerator\QxSqlGenerator_PostgreSQL.cpp" />
+    <ClCompile Include="src\QxDao\QxSqlGenerator\QxSqlGenerator_SQLite.cpp" />
+    <ClCompile Include="src\QxDao\QxSqlGenerator\QxSqlGenerator_Standard.cpp" />
+    <ClCompile Include="src\QxDao\QxRepository\IxRepository.cpp" />
+    <ClCompile Include="src\QxDao\QxRepository\QxRepositoryX.cpp" />
+    <ClCompile Include="src\QxCommon\QxCache.cpp" />
+    <ClCompile Include="src\QxCommon\QxSimpleCrypt.cpp" />
+    <ClCompile Include="src\QxCommon\QxStringCvt_Export.cpp" />
+    <ClCompile Include="src\QxRegister\IxClass.cpp" />
+    <ClCompile Include="src\QxRegister\QxClassX.cpp" />
+    <ClCompile Include="src\QxService\IxParameter.cpp" />
+    <ClCompile Include="src\QxService\IxService.cpp" />
+    <ClCompile Include="src\QxService\QxConnect.cpp" />
+    <ClCompile Include="src\QxService\QxServer.cpp" />
+    <ClCompile Include="src\QxService\QxThread.cpp" />
+    <ClCompile Include="src\QxService\QxThreadPool.cpp" />
+    <ClCompile Include="src\QxService\QxTools.cpp" />
+    <ClCompile Include="src\QxService\QxTransaction.cpp" />
+    <ClCompile Include="src\QxValidator\IxValidator.cpp" />
+    <ClCompile Include="src\QxValidator\IxValidatorX.cpp" />
+    <ClCompile Include="src\QxValidator\QxInvalidValue.cpp" />
+    <ClCompile Include="src\QxValidator\QxInvalidValueX.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\QxMemLeak.h" />
+    <ClInclude Include="include\QxOrm.h" />
+    <ClInclude Include="include\QxPrecompiled.h" />
+    <ClInclude Include="include\QxCommon\QxAnyCastDynamic.h" />
+    <ClInclude Include="include\QxCommon\QxBool.h" />
+    <ClInclude Include="include\QxCommon\QxCache.h" />
+    <ClInclude Include="include\QxCommon\QxConfig.h" />
+    <ClInclude Include="include\QxCommon\QxException.h" />
+    <ClInclude Include="include\QxCommon\QxExceptionCode.h" />
+    <ClInclude Include="include\QxCommon\QxHashValue.h" />
+    <ClInclude Include="include\QxCommon\QxMacro.h" />
+    <ClInclude Include="include\QxCommon\QxPropertyBag.h" />
+    <ClInclude Include="include\QxCommon\QxSimpleCrypt.h" />
+    <ClInclude Include="include\QxCommon\QxStringCvt.h" />
+    <ClInclude Include="include\QxCommon\QxStringCvt_Export.h" />
+    <ClInclude Include="include\QxCommon\QxStringCvt_Impl.h" />
+    <ClInclude Include="include\QxDataMember\IxDataMember.h" />
+    <ClInclude Include="include\QxDataMember\IxDataMemberX.h" />
+    <ClInclude Include="include\QxDataMember\QxDataMember.h" />
+    <ClInclude Include="include\QxDataMember\QxDataMember_QObject.h" />
+    <ClInclude Include="include\QxDataMember\QxDataMemberX.h" />
+    <ClInclude Include="include\QxFactory\IxFactory.h" />
+    <ClInclude Include="include\QxFactory\QxFactory.h" />
+    <ClInclude Include="include\QxFactory\QxFactoryX.h" />
+    <ClInclude Include="include\QxMemLeak\bool_array.h" />
+    <ClInclude Include="include\QxMemLeak\class_level_lock.h" />
+    <ClInclude Include="include\QxMemLeak\cont_ptr_utils.h" />
+    <ClInclude Include="include\QxMemLeak\debug_new.h" />
+    <ClInclude Include="include\QxMemLeak\fast_mutex.h" />
+    <ClInclude Include="include\QxMemLeak\fixed_mem_pool.h" />
+    <ClInclude Include="include\QxMemLeak\mem_leak.h" />
+    <ClInclude Include="include\QxMemLeak\mem_pool_base.h" />
+    <ClInclude Include="include\QxMemLeak\object_level_lock.h" />
+    <ClInclude Include="include\QxMemLeak\pctimer.h" />
+    <ClInclude Include="include\QxMemLeak\set_assign.h" />
+    <ClInclude Include="include\QxMemLeak\static_assert.h" />
+    <ClInclude Include="include\QxMemLeak\static_mem_pool.h" />
+    <ClInclude Include="include\QxSerialize\Qt\QxSerialize_QFlags.h" />
+    <ClInclude Include="include\QxSerialize\Qt\QxSerialize_QSqlError.h" />
+    <ClInclude Include="include\QxSingleton\IxSingleton.h" />
+    <ClInclude Include="include\QxSingleton\QxSingleton.h" />
+    <ClInclude Include="include\QxSingleton\QxSingletonX.h" />
+    <ClInclude Include="include\QxTraits\archive_printable.h" />
+    <ClInclude Include="include\QxTraits\archive_wide_traits.h" />
+    <ClInclude Include="include\QxTraits\construct_ptr.h" />
+    <ClInclude Include="include\QxTraits\generic_container.h" />
+    <ClInclude Include="include\QxTraits\get_base_class.h" />
+    <ClInclude Include="include\QxTraits\get_class_name.h" />
+    <ClInclude Include="include\QxTraits\get_class_name_primitive.h" />
+    <ClInclude Include="include\QxTraits\get_primary_key.h" />
+    <ClInclude Include="include\QxTraits\get_sql_type.h" />
+    <ClInclude Include="include\QxTraits\is_boost_intrusive_ptr.h" />
+    <ClInclude Include="include\QxTraits\is_boost_scoped_ptr.h" />
+    <ClInclude Include="include\QxTraits\is_boost_shared_ptr.h" />
+    <ClInclude Include="include\QxTraits\is_boost_unordered_map.h" />
+    <ClInclude Include="include\QxTraits\is_boost_unordered_set.h" />
+    <ClInclude Include="include\QxTraits\is_boost_weak_ptr.h" />
+    <ClInclude Include="include\QxTraits\is_container.h" />
+    <ClInclude Include="include\QxTraits\is_container_base_of.h" />
+    <ClInclude Include="include\QxTraits\is_container_key_value.h" />
+    <ClInclude Include="include\QxTraits\is_container_to_pod.h" />
+    <ClInclude Include="include\QxTraits\is_equal.h" />
+    <ClInclude Include="include\QxTraits\is_ptr_base_of.h" />
+    <ClInclude Include="include\QxTraits\is_ptr_to_pod.h" />
+    <ClInclude Include="include\QxTraits\is_qt_hash.h" />
+    <ClInclude Include="include\QxTraits\is_qt_linked_list.h" />
+    <ClInclude Include="include\QxTraits\is_qt_list.h" />
+    <ClInclude Include="include\QxTraits\is_qt_map.h" />
+    <ClInclude Include="include\QxTraits\is_qt_multi_hash.h" />
+    <ClInclude Include="include\QxTraits\is_qt_multi_map.h" />
+    <ClInclude Include="include\QxTraits\is_qt_scoped_ptr.h" />
+    <ClInclude Include="include\QxTraits\is_qt_set.h" />
+    <ClInclude Include="include\QxTraits\is_qt_shared_data_ptr.h" />
+    <ClInclude Include="include\QxTraits\is_qt_shared_ptr.h" />
+    <ClInclude Include="include\QxTraits\is_qt_variant_compatible.h" />
+    <ClInclude Include="include\QxTraits\is_qt_vector.h" />
+    <ClInclude Include="include\QxTraits\is_qt_weak_ptr.h" />
+    <ClInclude Include="include\QxTraits\is_qx_collection.h" />
+    <ClInclude Include="include\QxTraits\is_qx_dao_ptr.h" />
+    <ClInclude Include="include\QxTraits\is_qx_pod.h" />
+    <ClInclude Include="include\QxTraits\is_qx_registered.h" />
+    <ClInclude Include="include\QxTraits\is_smart_ptr.h" />
+    <ClInclude Include="include\QxTraits\is_smart_ptr_base_of.h" />
+    <ClInclude Include="include\QxTraits\is_smart_ptr_to_pod.h" />
+    <ClInclude Include="include\QxTraits\is_std_list.h" />
+    <ClInclude Include="include\QxTraits\is_std_map.h" />
+    <ClInclude Include="include\QxTraits\is_std_set.h" />
+    <ClInclude Include="include\QxTraits\is_std_vector.h" />
+    <ClInclude Include="include\QxTraits\is_valid_primary_key.h" />
+    <ClInclude Include="include\QxTraits\qt_meta_object.h" />
+    <ClInclude Include="include\QxTraits\qx_traits.h" />
+    <ClInclude Include="include\QxTraits\remove_attr.h" />
+    <ClInclude Include="include\QxTraits\remove_smart_ptr.h" />
+    <ClInclude Include="include\QxCollection\IxCollection.h" />
+    <ClInclude Include="include\QxCollection\QxCollection.h" />
+    <ClInclude Include="include\QxCollection\QxCollectionIterator.h" />
+    <ClInclude Include="include\QxCollection\QxForeach.h" />
+    <ClInclude Include="include\QxXml\QxXml.h" />
+    <ClInclude Include="include\QxXml\QxXmlReader.h" />
+    <ClInclude Include="include\QxXml\QxXmlWriter.h" />
+    <ClInclude Include="include\QxDao\IxDao_Helper.h" />
+    <ClInclude Include="include\QxDao\IxPersistable.h" />
+    <ClInclude Include="include\QxDao\IxSqlQueryBuilder.h" />
+    <ClInclude Include="include\QxDao\IxSqlRelation.h" />
+    <ClInclude Include="include\QxDao\QxDao.h" />
+    <ClInclude Include="include\QxDao\QxDao_Impl.h" />
+    <ClInclude Include="include\QxDao\QxDao_IsDirty.h" />
+    <ClInclude Include="include\QxDao\QxDaoAsync.h" />
+    <ClInclude Include="include\QxDao\QxDaoPointer.h" />
+    <ClInclude Include="include\QxDao\QxDaoStrategy.h" />
+    <ClInclude Include="include\QxDao\QxDateNeutral.h" />
+    <ClInclude Include="include\QxDao\QxDateTimeNeutral.h" />
+    <ClInclude Include="include\QxDao\QxSession.h" />
+    <ClInclude Include="include\QxDao\QxSoftDelete.h" />
+    <ClInclude Include="include\QxDao\QxSqlDatabase.h" />
+    <ClInclude Include="include\QxDao\QxSqlError.h" />
+    <ClInclude Include="include\QxDao\QxSqlJoin.h" />
+    <ClInclude Include="include\QxDao\QxSqlQuery.h" />
+    <ClInclude Include="include\QxDao\QxSqlQueryBuilder.h" />
+    <ClInclude Include="include\QxDao\QxSqlQueryHelper.h" />
+    <ClInclude Include="include\QxDao\QxSqlRelation.h" />
+    <ClInclude Include="include\QxDao\QxSqlRelation_ManyToMany.h" />
+    <ClInclude Include="include\QxDao\QxSqlRelation_ManyToOne.h" />
+    <ClInclude Include="include\QxDao\QxSqlRelation_OneToMany.h" />
+    <ClInclude Include="include\QxDao\QxSqlRelation_OneToOne.h" />
+    <ClInclude Include="include\QxDao\QxSqlRelation_RawData.h" />
+    <ClInclude Include="include\QxDao\QxSqlRelationLinked.h" />
+    <ClInclude Include="include\QxDao\QxSqlRelationParams.h" />
+    <ClInclude Include="include\QxDao\QxTimeNeutral.h" />
+    <ClInclude Include="include\QxDao\QxSqlElement\IxSqlElement.h" />
+    <ClInclude Include="include\QxDao\QxSqlElement\QxSqlCompare.h" />
+    <ClInclude Include="include\QxDao\QxSqlElement\QxSqlElement.h" />
+    <ClInclude Include="include\QxDao\QxSqlElement\QxSqlElementTemp.h" />
+    <ClInclude Include="include\QxDao\QxSqlElement\QxSqlExpression.h" />
+    <ClInclude Include="include\QxDao\QxSqlElement\QxSqlFreeText.h" />
+    <ClInclude Include="include\QxDao\QxSqlElement\QxSqlIn.h" />
+    <ClInclude Include="include\QxDao\QxSqlElement\QxSqlIsBetween.h" />
+    <ClInclude Include="include\QxDao\QxSqlElement\QxSqlIsNull.h" />
+    <ClInclude Include="include\QxDao\QxSqlElement\QxSqlLimit.h" />
+    <ClInclude Include="include\QxDao\QxSqlElement\QxSqlSort.h" />
+    <ClInclude Include="include\QxDao\QxSqlGenerator\IxSqlGenerator.h" />
+    <ClInclude Include="include\QxDao\QxSqlGenerator\QxSqlGenerator.h" />
+    <ClInclude Include="include\QxDao\QxSqlGenerator\QxSqlGenerator_MSSQLServer.h" />
+    <ClInclude Include="include\QxDao\QxSqlGenerator\QxSqlGenerator_MySQL.h" />
+    <ClInclude Include="include\QxDao\QxSqlGenerator\QxSqlGenerator_Oracle.h" />
+    <ClInclude Include="include\QxDao\QxSqlGenerator\QxSqlGenerator_PostgreSQL.h" />
+    <ClInclude Include="include\QxDao\QxSqlGenerator\QxSqlGenerator_SQLite.h" />
+    <ClInclude Include="include\QxDao\QxSqlGenerator\QxSqlGenerator_Standard.h" />
+    <ClInclude Include="include\QxDao\QxRepository\IxRepository.h" />
+    <ClInclude Include="include\QxDao\QxRepository\QxRepository.h" />
+    <ClInclude Include="include\QxDao\QxRepository\QxRepositoryX.h" />
+    <ClInclude Include="include\QxSerialize\QxArchive.h" />
+    <ClInclude Include="include\QxSerialize\QxClone.h" />
+    <ClInclude Include="include\QxSerialize\QxDump.h" />
+    <ClInclude Include="include\QxSerialize\QxSerialize.h" />
+    <ClInclude Include="include\QxSerialize\QxSerializeFastCompil.h" />
+    <ClInclude Include="include\QxSerialize\QxSerializeInvoker.h" />
+    <ClInclude Include="include\QxSerialize\QxSerializeMacro.h" />
+    <ClInclude Include="include\QxSerialize\boost\QxExportDllBoostArchive.h" />
+    <ClInclude Include="include\QxSerialize\boost\QxExportDllMacroCpp.h" />
+    <ClInclude Include="include\QxSerialize\boost\QxExportDllMacroHpp.h" />
+    <ClInclude Include="include\QxSerialize\boost\QxImportDllBoostArchive.h" />
+    <ClInclude Include="include\QxSerialize\boost\QxSerialize_shared_ptr.h" />
+    <ClInclude Include="include\QxSerialize\boost\QxSerialize_tuple.h" />
+    <ClInclude Include="include\QxSerialize\boost\QxSerialize_unordered_map.h" />
+    <ClInclude Include="include\QxSerialize\boost\QxSerialize_unordered_set.h" />
+    <ClInclude Include="include\QxSerialize\boost\QxSerializeInclude.h" />
+    <ClInclude Include="include\QxSerialize\boost\portable_binary\portable_archive_exception.hpp" />
+    <ClInclude Include="include\QxSerialize\boost\portable_binary\portable_iarchive.hpp" />
+    <ClInclude Include="include\QxSerialize\boost\portable_binary\portable_oarchive.hpp" />
+    <ClInclude Include="include\QxSerialize\boost\class_export\qx_boost_class_export.h" />
+    <ClInclude Include="include\QxSerialize\Qt\QxSerialize_QBrush.h" />
+    <ClInclude Include="include\QxSerialize\Qt\QxSerialize_QByteArray.h" />
+    <ClInclude Include="include\QxSerialize\Qt\QxSerialize_QColor.h" />
+    <ClInclude Include="include\QxSerialize\Qt\QxSerialize_QDate.h" />
+    <ClInclude Include="include\QxSerialize\Qt\QxSerialize_QDateTime.h" />
+    <ClInclude Include="include\QxSerialize\Qt\QxSerialize_QFont.h" />
+    <ClInclude Include="include\QxSerialize\Qt\QxSerialize_QHash.h" />
+    <ClInclude Include="include\QxSerialize\Qt\QxSerialize_QImage.h" />
+    <ClInclude Include="include\QxSerialize\Qt\QxSerialize_QLinkedList.h" />
+    <ClInclude Include="include\QxSerialize\Qt\QxSerialize_QList.h" />
+    <ClInclude Include="include\QxSerialize\Qt\QxSerialize_QMap.h" />
+    <ClInclude Include="include\QxSerialize\Qt\QxSerialize_QMatrix.h" />
+    <ClInclude Include="include\QxSerialize\Qt\QxSerialize_QMultiHash.h" />
+    <ClInclude Include="include\QxSerialize\Qt\QxSerialize_QMultiMap.h" />
+    <ClInclude Include="include\QxSerialize\Qt\QxSerialize_QObject.h" />
+    <ClInclude Include="include\QxSerialize\Qt\QxSerialize_QPair.h" />
+    <ClInclude Include="include\QxSerialize\Qt\QxSerialize_QPicture.h" />
+    <ClInclude Include="include\QxSerialize\Qt\QxSerialize_QPixmap.h" />
+    <ClInclude Include="include\QxSerialize\Qt\QxSerialize_QPoint.h" />
+    <ClInclude Include="include\QxSerialize\Qt\QxSerialize_QRect.h" />
+    <ClInclude Include="include\QxSerialize\Qt\QxSerialize_QRegExp.h" />
+    <ClInclude Include="include\QxSerialize\Qt\QxSerialize_QRegion.h" />
+    <ClInclude Include="include\QxSerialize\Qt\QxSerialize_QScopedPointer.h" />
+    <ClInclude Include="include\QxSerialize\Qt\QxSerialize_QSharedPointer.h" />
+    <ClInclude Include="include\QxSerialize\Qt\QxSerialize_QSize.h" />
+    <ClInclude Include="include\QxSerialize\Qt\QxSerialize_QString.h" />
+    <ClInclude Include="include\QxSerialize\Qt\QxSerialize_QStringList.h" />
+    <ClInclude Include="include\QxSerialize\Qt\QxSerialize_QTime.h" />
+    <ClInclude Include="include\QxSerialize\Qt\QxSerialize_QUrl.h" />
+    <ClInclude Include="include\QxSerialize\Qt\QxSerialize_QUuid.h" />
+    <ClInclude Include="include\QxSerialize\Qt\QxSerialize_QVariant.h" />
+    <ClInclude Include="include\QxSerialize\Qt\QxSerialize_QVector.h" />
+    <ClInclude Include="include\QxSerialize\Qt\QxSerialize_QWeakPointer.h" />
+    <ClInclude Include="include\QxSerialize\Qx\QxSerialize_QxCollection.h" />
+    <ClInclude Include="include\QxSerialize\Qx\QxSerialize_QxDaoPointer.h" />
+    <ClInclude Include="include\QxSerialize\Qx\QxSerialize_QxXmlReader.h" />
+    <ClInclude Include="include\QxSerialize\Qx\QxSerialize_QxXmlWriter.h" />
+    <ClInclude Include="include\QxSerialize\QxBoostSerializeHelper\IxBoostSerializeRegisterHelper.h" />
+    <ClInclude Include="include\QxSerialize\QxBoostSerializeHelper\QxBoostInitGuid.h" />
+    <ClInclude Include="include\QxSerialize\QxBoostSerializeHelper\QxBoostSerializeHelper.h" />
+    <ClInclude Include="include\QxSerialize\QxBoostSerializeHelper\QxBoostSerializeRegisterHelper.h" />
+    <ClInclude Include="include\QxSerialize\QxBoostSerializeHelper\QxBoostSerializeRegisterHelperX.h" />
+    <ClInclude Include="include\QxFunction\IxFunction.h" />
+    <ClInclude Include="include\QxFunction\QxFunction_0.h" />
+    <ClInclude Include="include\QxFunction\QxFunction_1.h" />
+    <ClInclude Include="include\QxFunction\QxFunction_2.h" />
+    <ClInclude Include="include\QxFunction\QxFunction_3.h" />
+    <ClInclude Include="include\QxFunction\QxFunction_4.h" />
+    <ClInclude Include="include\QxFunction\QxFunction_5.h" />
+    <ClInclude Include="include\QxFunction\QxFunction_6.h" />
+    <ClInclude Include="include\QxFunction\QxFunction_7.h" />
+    <ClInclude Include="include\QxFunction\QxFunction_8.h" />
+    <ClInclude Include="include\QxFunction\QxFunction_9.h" />
+    <ClInclude Include="include\QxFunction\QxFunctionError.h" />
+    <ClInclude Include="include\QxFunction\QxFunctionInclude.h" />
+    <ClInclude Include="include\QxFunction\QxFunctionMacro.h" />
+    <ClInclude Include="include\QxFunction\QxParameters.h" />
+    <ClInclude Include="include\QxRegister\IxClass.h" />
+    <ClInclude Include="include\QxRegister\IxTypeInfo.h" />
+    <ClInclude Include="include\QxRegister\QxClass.h" />
+    <ClInclude Include="include\QxRegister\QxClassName.h" />
+    <ClInclude Include="include\QxRegister\QxClassX.h" />
+    <ClInclude Include="include\QxRegister\QxRegister.h" />
+    <ClInclude Include="include\QxRegister\QxRegisterInternalHelper.h" />
+    <ClInclude Include="include\QxRegister\QxRegisterQtProperty.h" />
+    <ClInclude Include="include\QxService\IxParameter.h" />
+    <ClInclude Include="include\QxService\IxService.h" />
+    <ClInclude Include="include\QxService\QxClientAsync.h" />
+    <ClInclude Include="include\QxService\QxConnect.h" />
+    <ClInclude Include="include\QxService\QxServer.h" />
+    <ClInclude Include="include\QxService\QxService.h" />
+    <ClInclude Include="include\QxService\QxThread.h" />
+    <ClInclude Include="include\QxService\QxThreadPool.h" />
+    <ClInclude Include="include\QxService\QxTools.h" />
+    <ClInclude Include="include\QxService\QxTransaction.h" />
+    <ClInclude Include="include\QxValidator\IxValidator.h" />
+    <ClInclude Include="include\QxValidator\IxValidatorX.h" />
+    <ClInclude Include="include\QxValidator\QxInvalidValue.h" />
+    <ClInclude Include="include\QxValidator\QxInvalidValueX.h" />
+    <ClInclude Include="include\QxValidator\QxValidator.h" />
+    <ClInclude Include="include\QxValidator\QxValidatorError.h" />
+    <ClInclude Include="include\QxValidator\QxValidatorFct.h" />
+    <ClInclude Include="include\QxValidator\QxValidatorX.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="inl\QxDataMember\QxDataMember.inl" />
+    <None Include="inl\QxDataMember\QxDataMemberX.inl" />
+    <None Include="inl\QxFactory\QxFactory.inl" />
+    <None Include="inl\QxSingleton\QxSingleton.inl" />
+    <None Include="inl\QxCollection\QxCollection.inl" />
+    <None Include="inl\QxCollection\QxCollectionIterator.inl" />
+    <None Include="inl\QxDao\QxDao_Count.inl" />
+    <None Include="inl\QxDao\QxDao_CreateTable.inl" />
+    <None Include="inl\QxDao\QxDao_DeleteAll.inl" />
+    <None Include="inl\QxDao\QxDao_DeleteById.inl" />
+    <None Include="inl\QxDao\QxDao_ExecuteQuery.inl" />
+    <None Include="inl\QxDao\QxDao_Exist.inl" />
+    <None Include="inl\QxDao\QxDao_FetchAll.inl" />
+    <None Include="inl\QxDao\QxDao_FetchAll_WithRelation.inl" />
+    <None Include="inl\QxDao\QxDao_FetchById.inl" />
+    <None Include="inl\QxDao\QxDao_FetchById_WithRelation.inl" />
+    <None Include="inl\QxDao\QxDao_Helper.inl" />
+    <None Include="inl\QxDao\QxDao_Helper_Container.inl" />
+    <None Include="inl\QxDao\QxDao_Insert.inl" />
+    <None Include="inl\QxDao\QxDao_Insert_WithRelation.inl" />
+    <None Include="inl\QxDao\QxDao_Save.inl" />
+    <None Include="inl\QxDao\QxDao_Save_WithRelation.inl" />
+    <None Include="inl\QxDao\QxDao_Trigger.inl" />
+    <None Include="inl\QxDao\QxDao_Update.inl" />
+    <None Include="inl\QxDao\QxDao_Update_Optimized.inl" />
+    <None Include="inl\QxDao\QxDao_Update_WithRelation.inl" />
+    <None Include="inl\QxDao\QxSqlQueryHelper_CreateTable.inl" />
+    <None Include="inl\QxDao\QxSqlQueryHelper_DeleteById.inl" />
+    <None Include="inl\QxDao\QxSqlQueryHelper_Exist.inl" />
+    <None Include="inl\QxDao\QxSqlQueryHelper_FetchAll.inl" />
+    <None Include="inl\QxDao\QxSqlQueryHelper_FetchAll_WithRelation.inl" />
+    <None Include="inl\QxDao\QxSqlQueryHelper_FetchById.inl" />
+    <None Include="inl\QxDao\QxSqlQueryHelper_FetchById_WithRelation.inl" />
+    <None Include="inl\QxDao\QxSqlQueryHelper_Insert.inl" />
+    <None Include="inl\QxDao\QxSqlQueryHelper_Update.inl" />
+    <None Include="inl\QxXml\QxXml.inl" />
+    <None Include="inl\QxSerialize\QxArchive.inl" />
+    <None Include="inl\QxSerialize\QxSerializeInvoker.inl" />
+    <None Include="inl\QxCommon\QxStringCvt_FromString.inl" />
+    <None Include="inl\QxCommon\QxStringCvt_FromVariant.inl" />
+    <None Include="inl\QxCommon\QxStringCvt_Qt.inl" />
+    <None Include="inl\QxCommon\QxStringCvt_ToString.inl" />
+    <None Include="inl\QxCommon\QxStringCvt_ToVariant.inl" />
+    <None Include="inl\QxCommon\QxStringCvt_WithIndex.inl" />
+    <None Include="inl\QxRegister\QxClass.inl" />
+    <None Include="QxOrm.pri" />
+    <None Include="QxOrm.pro" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

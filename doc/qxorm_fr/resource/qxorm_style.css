@@ -20,3 +20,176 @@ body
 .keyword { color: #990000; }
 .operator { color: #663300; font-weight: bold; }
 .operator { color: #663300; font-weight: bold; }
+
+hr
+{
+   border: 0;
+   height: 1px;
+   background: #333;
+   background-image: -webkit-gradient(linear, left, right, from(#ccc), color-stop(1, #333), to(#ccc));
+   background-image: -webkit-linear-gradient(left, #ccc, #333, #ccc);
+   background-image: -moz-linear-gradient(left, #ccc, #333, #ccc);
+   background-image: -ms-linear-gradient(left, #ccc, #333, #ccc);
+   background-image: -o-linear-gradient(left, #ccc, #333, #ccc);
+   background-image: linear-gradient(left, #ccc, #333, #ccc);
+}
+
+.btn_nav
+{
+   background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #8f96c9), color-stop(1, #3e3d7a));
+   background: -webkit-linear-gradient(center top, #8f96c9 5%, #3e3d7a 100%);
+   background: -moz-linear-gradient(center top, #8f96c9 5%, #3e3d7a 100%);
+   background: -ms-linear-gradient(top, #8f96c9 5%, #3e3d7a 100%);
+   background: -o-linear-gradient(center top, #8f96c9 5%, #3e3d7a 100%);
+   background: linear-gradient(center top, #8f96c9 5%, #3e3d7a 100%);
+   background-color: #8f96c9;
+   -webkit-border-top-left-radius: 20px;
+   -moz-border-radius-topleft: 20px;
+   border-top-left-radius: 20px;
+   -webkit-border-top-right-radius: 0px;
+   -moz-border-radius-topright: 0px;
+   border-top-right-radius: 0px;
+   -webkit-border-bottom-right-radius: 20px;
+   -moz-border-radius-bottomright: 20px;
+   border-bottom-right-radius: 20px;
+   -webkit-border-bottom-left-radius: 0px;
+   -moz-border-radius-bottomleft: 0px;
+   border-bottom-left-radius: 0px;
+   text-indent: 0px;
+   border: 1px solid #3d4385;
+   display: inline-block;
+   color: #ffffff;
+   font-family: Arial;
+   font-size: 14px;
+   font-weight: bold;
+   font-style: normal;
+   height: 35px;
+   line-height: 35px;
+   width: 150px;
+   text-decoration: none;
+   text-align: center;
+}
+
+.btn_nav:hover
+{
+   background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #3e3d7a), color-stop(1, #8f96c9));
+   background: -webkit-linear-gradient(center top, #3e3d7a 5%, #8f96c9 100%);
+   background: -moz-linear-gradient(center top, #3e3d7a 5%, #8f96c9 100%);
+   background: -ms-linear-gradient(top, #3e3d7a 5%, #8f96c9 100%);
+   background: -o-linear-gradient(center top, #3e3d7a 5%, #8f96c9 100%);
+   background: linear-gradient(center top, #3e3d7a 5%, #8f96c9 100%);
+   background-color: #3e3d7a;
+}
+
+.btn_nav:active
+{
+   position: relative;
+   top: 1px;
+}
+
+.btn_tuto
+{
+   background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #c4c5d9), color-stop(1, #efeef4));
+   background: -webkit-linear-gradient(center top, #c4c5d9 5%, #efeef4 100%);
+   background: -moz-linear-gradient(center top, #c4c5d9 5%, #efeef4 100%);
+   background: -ms-linear-gradient(top, #c4c5d9 5%, #efeef4 100%);
+   background: -o-linear-gradient(center top, #c4c5d9 5%, #efeef4 100%);
+   background: linear-gradient(center top, #c4c5d9 5%, #efeef4 100%);
+   background-color: #c4c5d9;
+   -webkit-border-top-left-radius: 20px;
+   -moz-border-radius-topleft: 20px;
+   border-top-left-radius: 20px;
+   -webkit-border-top-right-radius: 0px;
+   -moz-border-radius-topright: 0px;
+   border-top-right-radius: 0px;
+   -webkit-border-bottom-right-radius: 20px;
+   -moz-border-radius-bottomright: 20px;
+   border-bottom-right-radius: 20px;
+   -webkit-border-bottom-left-radius: 0px;
+   -moz-border-radius-bottomleft: 0px;
+   border-bottom-left-radius: 0px;
+   text-indent: 0px;
+   border: 0px solid #242448;
+   display: inline-block;
+   color: #242448;
+   font-family: Arial;
+   font-size: 14px;
+   font-weight: bold;
+   font-style: normal;
+   height: 35px;
+   line-height: 35px;
+   width: 210px;
+   text-decoration: none;
+   text-align: center;
+}
+
+.btn_tuto:hover
+{
+   background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #efeef4), color-stop(1, #c4c5d9));
+   background: -webkit-linear-gradient(center top, #efeef4 5%, #c4c5d9 100%);
+   background: -moz-linear-gradient(center top, #efeef4 5%, #c4c5d9 100%);
+   background: -ms-linear-gradient(top, #efeef4 5%, #c4c5d9 100%);
+   background: -o-linear-gradient(center top, #efeef4 5%, #c4c5d9 100%);
+   background: linear-gradient(center top, #efeef4 5%, #c4c5d9 100%);
+   background-color: #efeef4;
+   border: 1px solid #242448;
+}
+
+.btn_tuto:active
+{
+   position: relative;
+   top: 1px;
+}
+
+.btn_tuto_selected
+{
+   background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #c4c5d9), color-stop(1, #efeef4));
+   background: -webkit-linear-gradient(center top, #c4c5d9 5%, #efeef4 100%);
+   background: -moz-linear-gradient(center top, #c4c5d9 5%, #efeef4 100%);
+   background: -ms-linear-gradient(top, #c4c5d9 5%, #efeef4 100%);
+   background: -o-linear-gradient(center top, #c4c5d9 5%, #efeef4 100%);
+   background: linear-gradient(center top, #c4c5d9 5%, #efeef4 100%);
+   background-color: #c4c5d9;
+   -webkit-border-top-left-radius: 20px;
+   -moz-border-radius-topleft: 20px;
+   border-top-left-radius: 20px;
+   -webkit-border-top-right-radius: 0px;
+   -moz-border-radius-topright: 0px;
+   border-top-right-radius: 0px;
+   -webkit-border-bottom-right-radius: 20px;
+   -moz-border-radius-bottomright: 20px;
+   border-bottom-right-radius: 20px;
+   -webkit-border-bottom-left-radius: 0px;
+   -moz-border-radius-bottomleft: 0px;
+   border-bottom-left-radius: 0px;
+   text-indent: 0px;
+   border: 2px solid #242448;
+   display: inline-block;
+   color: #242448;
+   font-family: Arial;
+   font-size: 14px;
+   font-weight: bold;
+   font-style: normal;
+   height: 35px;
+   line-height: 35px;
+   width: 210px;
+   text-decoration: none;
+   text-align: center;
+}
+
+.btn_tuto_selected:hover
+{
+   background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #efeef4), color-stop(1, #c4c5d9));
+   background: -webkit-linear-gradient(center top, #efeef4 5%, #c4c5d9 100%);
+   background: -moz-linear-gradient(center top, #efeef4 5%, #c4c5d9 100%);
+   background: -ms-linear-gradient(top, #efeef4 5%, #c4c5d9 100%);
+   background: -o-linear-gradient(center top, #efeef4 5%, #c4c5d9 100%);
+   background: linear-gradient(center top, #efeef4 5%, #c4c5d9 100%);
+   background-color: #efeef4;
+}
+
+.btn_tuto_selected:active
+{
+   position: relative;
+   top: 1px;
+}

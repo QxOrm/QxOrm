@@ -56,6 +56,7 @@
 #include <boost/optional.hpp>
 #include <boost/tuple/tuple.hpp>
 
+#include <QtCore/qglobal.h>
 #include <QtCore/qobject.h>
 #include <QtCore/qstring.h>
 #include <QtCore/qstringlist.h>
@@ -77,6 +78,8 @@
 #include <QtCore/qurl.h>
 #include <QtCore/quuid.h>
 #include <QtCore/QWeakPointer>
+
+#include <QtSql/qsqlerror.h>
 
 #if _QX_ENABLE_QT_GUI_DEPENDENCY
 #include <QtGui/qcolor.h>
@@ -127,6 +130,7 @@ QX_REGISTER_CLASS_NAME(QTime)
 QX_REGISTER_CLASS_NAME(QUrl)
 QX_REGISTER_CLASS_NAME(QVariant)
 QX_REGISTER_CLASS_NAME(QUuid)
+QX_REGISTER_CLASS_NAME(QSqlError)
 
 #if _QX_ENABLE_QT_GUI_DEPENDENCY
 QX_REGISTER_CLASS_NAME(QColor)
@@ -154,6 +158,7 @@ QX_REGISTER_CLASS_NAME_TEMPLATE_1(QList)
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(QLinkedList)
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(QSharedPointer)
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(QWeakPointer)
+QX_REGISTER_CLASS_NAME_TEMPLATE_1(QFlags)
 
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(qx::dao::ptr)
 

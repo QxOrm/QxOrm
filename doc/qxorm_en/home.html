@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
-  <title>QxOrm - C++ Object Relational Mapping library (ORM)</title>
+  <title>QxOrm : Qt C++ Object Relational Mapping Library (ORM) - QxEntityEditor : Qt C++ Entities Graphic Editor (data model)</title>
   <meta name="generator" content="Amaya, see http://www.w3.org/Amaya/">
   <link rel='stylesheet' type='text/css' href='./resource/qxorm_style.css'>
 </head>
@@ -11,7 +11,7 @@
   <col><col><col>
   <tbody>
     <tr>
-      <td><a href="./home.html"><img alt="QxOrm" src="./resource/logo_qxorm.png" width="256" height="61" align="left" border="0"></a></td>
+      <td><a href="./home.html"><img alt="QxOrm" src="./resource/logo_qxorm_and_qxee.png"align="left" border="0"></a></td>
       <td align="right" style="vertical-align:bottom">
         <img alt="Windows" src="./resource/logo_windows.gif" width="35" height="35">
         <img alt="Linux" src="./resource/logo_linux.gif" width="35" height="35">
@@ -26,24 +26,12 @@
   <col><col><col><col><col><col>
   <tbody>
     <tr>
-      <td align="center"><a href="./home.html"><img alt="Home"
-        src="./resource/link_home.jpg" width="120" height="35"
-        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
-      <td align="center"><a href="./download.html"><img alt="Download"
-        src="./resource/link_download.jpg" width="120" height="35"
-        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
-      <td align="center"><a href="./quick_sample.html"><img alt="Quick sample"
-        src="./resource/link_quick_sample.jpg" width="120" height="35"
-        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
-      <td align="center"><a href="./tutorial.html"><img alt="Tutorial"
-        src="./resource/link_tutorial.jpg" width="120" height="35"
-        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
-      <td align="center"><a href="./faq.html"><img alt="Faq"
-        src="./resource/link_faq.jpg" width="120" height="35"
-        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
-      <td align="center"><a href="./link.html"><img alt="Link"
-        src="./resource/link_link.jpg" width="120" height="35"
-        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
+      <td align="center"><a href="./home.html" class="btn_nav">Home</a></td>
+      <td align="center"><a href="./download.html" class="btn_nav">Download</a></td>
+      <td align="center"><a href="./quick_sample.html" class="btn_nav">Quick sample</a></td>
+      <td align="center"><a href="./tutorial.html" class="btn_nav">Tutorial (3)</a></td>
+      <td align="center"><a href="./faq.html" class="btn_nav">Faq (35)</a></td>
+      <td align="center"><a href="./link.html" class="btn_nav">Forum</a></td>
     </tr>
   </tbody>
 </table>
@@ -52,7 +40,18 @@
   <col><col><col><col><col><col>
   <tbody><tr>
   <td align="left" valign="top"><font size="2">QxOrm  &gt;&gt;  Home</font></td>
-  <td align="right" valign="top"><font size="2">Current version : QxOrm 1.2.5 - <a href="../doxygen/index.html" target="_blank">QxOrm library online documentation</a></font></td>
+  <td align="right" valign="top">
+    <table cellspacing="0" cellpadding="1"><col><col><tbody>
+      <tr>
+         <td align="right" valign="top"><font size="2">Current version :&nbsp;</font></td>
+         <td align="left" valign="top"><font size="2">QxOrm 1.2.6 - <a href="../doxygen/index.html" target="_blank">QxOrm library online documentation</a></font></td>
+      <tr>
+      <tr>
+         <td align="right" valign="top"><font size="2"></font></td>
+         <td align="left" valign="top"><font size="2">QxEntityEditor 1.1.3</font></td>
+      <tr>
+    </tbody></table>
+  </td>
   <td width="10px"></td>
   <td width="40px" height="30px"><a href="../qxorm_fr/home.html"><img alt="Version française du site" src="./resource/FR.png" width="40" height="30" border="0"></a></td>
   <td width="40px" height="30px"><a href="../qxorm_en/home.html"><img alt="Web site english version" src="./resource/GB.png" width="40" height="30" border="0"></a></td>
@@ -68,27 +67,17 @@
           <col><col>
           <tbody>
             <tr>
-              <td><b>QxOrm is a C++ library designed to provide <i>Object Relational Mapping (ORM)</i> feature to C++ users.</b><br>
+              <td><b>QxOrm library is an <i>Object Relational Mapping (ORM)</i> library for Qt/C++ developers.</b><br>
                  With a simple <b>C++ setting function by class</b> (like <i>Hibernate</i> XML mapping file), you will have access to the following features :<br>
                  <ul>
-                   <li><b><font style="background-color:yellow">persistence</font></b> : communication with a lot of databases (with <i>1-1</i>, <i>1-n</i>, <i>n-1</i> and <i>n-n</i> relationships)
+                   <li><b><font style="background-color:yellow">persistence</font></b> : communication with a lot of databases (with <i>1-1</i>, <i>1-n</i>, <i>n-1</i> and <i>n-n</i> relationships) ;
                    </li>
-                   <li><b><font style="background-color:yellow">serialization</font></b> : binary and XML format
+                   <li><b><font style="background-color:yellow">serialization</font></b> : binary and XML format ;
                    </li>
-                   <li><b><font style="background-color:yellow">reflection</font></b> (or <b><font style="background-color:yellow">introspection</font></b>) : access to classes definitions, retrieve properties and call classes methods
+                   <li><b><font style="background-color:yellow">reflection</font></b> (or <b><font style="background-color:yellow">introspection</font></b>) : access to classes definitions, retrieve properties and call classes methods.
                    </li>
                  </ul>
-                 <b>QxOrm</b> aims to simplify C++ development and provides a lot of functionalities.<br>
-                 Here is a list of advantages of QxOrm :
-                 <ul>
-                   <li><b>non intrusive</b> : the <i>C++ setting function</i> doesn't modified class definition, QxOrm can be used in existing projects</li>
-                   <li><b>no code generation</b></li>
-                   <li><b>no XML mapping file</b></li>
-                   <li><b>classes doesn't need to inherit from a 'super object'</b></li>
-                   <li><b>template meta-programming</b> : no macro hack</li>
-                   <li>works with <b>Visual C++ 2008 or 2010</b> on Windows, <b>GCC 4.4.1</b> on Linux and Mac OS X, and <b>MinGW</b> on Windows (other platforms will be tested soon : smartphones, etc...)</li>
-                   <li>only one file <i>&lt;QxOrm.h&gt;</i> to include in precompiled-header (need <b>precompiled-header</b> file to reduce compilation times)</li>
-                 </ul>
+                 <hr style="width: 90%" align="center" size="1" color="#100D5A">
               </td>
               <td width="200" align="center" valign="top"><a href="./resource/qt_ambassador_logo.png" target="_blank"><img alt="qt_ambassador" src="./resource/qt_ambassador_logo_150x150.png" width="150" height="150" border="0"></a><br>
                  <b><font size="2">QxOrm library has been accepted into the <a href="http://qt.digia.com/qtambassador/" target="_blank">Qt Ambassador Program</a></font></b>
@@ -96,6 +85,30 @@
             </tr>
           </tbody>
         </table>
+        <b>QxEntityEditor</b> is a graphic editor for <b>QxOrm</b> library : <b>QxEntityEditor</b> provides a graphic way to manage the data model.<br>
+        <b>QxEntityEditor</b> is multi-platform (available for Windows, Linux and Mac OS X) and generate native code for all environments : desktop (Windows, Linux, Mac OS X), embedded and mobile (Android, iOS, Raspberry Pi, etc.).<br>
+        <b>QxEntityEditor</b> is based on plugins and provides many ways to import/export your data model :
+        <ul>
+          <li>generate C++ persistent classes automatically (registered into QxOrm context) ;</li>
+          <li>generate DDL SQL script automatically (database schema) for SQLite, MySQL, PostgreSQL, Oracle and MS SQL Server ;</li>
+          <li>manage schema evolution for each project version (<i>ALTER TABLE</i>, <i>ADD COLUMN</i>, <i>DROP INDEX</i>, etc.) ;</li>
+          <li>transfer your data model over network and create quickly client/server applications, using <a href="../doxygen/html/group___qx_service.html" target="_blank">QxService</a> module.</li>
+        </ul>
+        <a href="../qxentityeditor/resource/qxee_sample.png"><img alt="QxEntityEditor" src="../qxentityeditor/resource/qxee_sample_small.png" border="0"></a>
+        <br><br>
+        <hr style="width: 90%" align="center" size="1" color="#100D5A">
+        <br>
+        <b>QxOrm</b> library aims to simplify C++ development and provides a lot of functionalities.<br>
+        Here is a list of advantages of QxOrm :
+        <ul>
+          <li><b>non intrusive</b> : the <i>C++ setting function</i> doesn't modified class definition, QxOrm can be used in existing projects ;</li>
+          <li><b>no code generation</b> ;</li>
+          <li><b>no XML mapping file</b> ;</li>
+          <li><b>classes doesn't need to inherit from a 'super object'</b> ;</li>
+          <li><b>template meta-programming</b> : no macro hack ;</li>
+          <li>works with <b>Visual C++ 2008 or 2010</b> on Windows, <b>GCC 4.4.1</b> on Linux and Mac OS X, and <b>MinGW</b> on Windows (other platforms will be tested soon : smartphones, etc...) ;</li>
+          <li>only one file <i>&lt;QxOrm.h&gt;</i> to include in precompiled-header (need <b>precompiled-header</b> file to reduce compilation times).</li>
+        </ul>
         Before you install and compile <b>QxOrm</b>, you need the following libraries : <a href="http://www.boost.org/" target="_blank"><b>boost</b></a> (from version 1.38) and <a href="http://qt.digia.com/" target="_blank"><b>Qt</b></a> (from version 4.5.0) :
         <p></p>
         <table border="0" style="width: 100%" align="center">
@@ -147,9 +160,9 @@
           </li>
         </ul>
         <p></p>
-        <p>You can download the last version of <b>QxOrm</b> <a href="./download.html">by clicking here</a>.
-        <br> A quick sample showing the basic functionalities of <b>QxOrm</b> is available <a href="./quick_sample.html">by clicking here</a>.
-        <br> A forum is available <a href="http://www.qxorm.com/forum/phpbb/" target="_blank">by clicking here</a>.<br> 
+        <p>You can download the last version of <b>QxOrm</b> and <b>QxEntityEditor</b> <a href="./download.html">by clicking here</a>.
+        <br>A quick sample showing the basic functionalities of <b>QxOrm</b> is available <a href="./quick_sample.html">by clicking here</a>.
+        <br>A forum is available <a href="http://www.qxorm.com/forum/phpbb/" target="_blank">by clicking here</a>.<br> 
         <br>
         For information and in order to be able to make a comparison, here a list of other C++ ORM libraries :</p> 
         <ul>
@@ -198,7 +211,7 @@
         <img alt="QxOrm" src="./resource/logo_qxorm_small.png" width="168" height="40">
       </td>
       <td align="center" valign="middle">
-        <font size="2">© 2013 Lionel Marty</font>
+        <font size="2">© 2014 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
       </td>
       <td align="right" valign="middle">
         <form action="https://www.paypal.com/cgi-bin/webscr" method="post">

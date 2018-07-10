@@ -89,6 +89,10 @@ protected:
    qx::dao::sql_join::join_type     m_eJoinType;            //!< Join type to build sql query
    relation_type                    m_eRelationType;        //!< Relation type : one-to-one, one-to-many, etc.
    QxSoftDelete                     m_oSoftDelete;          //!< Soft delete (or logical delete) behavior
+   QString                          m_sForeignKey;          //!< SQL query foreign key (1-n)
+   QString                          m_sExtraTable;          //!< Extra-table that holds the relationship (n-n)
+   QString                          m_sForeignKeyOwner;     //!< SQL query foreign key for owner (n-n)
+   QString                          m_sForeignKeyDataType;  //!< SQL query foreign key for data type (n-n)
 
    QxCollection<QString, IxDataMember *> * m_lstDataMemberPtr;    //!< Optimization : handle to collection of 'IxDataMember'
    IxSqlRelationX * m_lstSqlRelationPtr;                          //!< Optimization : handle to collection of 'IxSqlRelation'
@@ -153,11 +157,49 @@ public:
    virtual QSqlError onBeforeSave(QxSqlRelationParams & params) const = 0;
    virtual QSqlError onAfterSave(QxSqlRelationParams & params) const = 0;
 
-#ifndef NDEBUG
+#ifndef _QX_MODE_RELEASE
    bool verifyOffset(QxSqlRelationParams & params, bool bId) const;
-#else
+#else // _QX_MODE_RELEASE
    inline bool verifyOffset(QxSqlRelationParams & params, bool bId) const { Q_UNUSED(params); Q_UNUSED(bId); return true; }
-#endif // NDEBUG
+#endif // _QX_MODE_RELEASE
+
+protected:
+
+   QVariant getIdFromQuery_ManyToMany(bool bEager, QxSqlRelationParams & params) const;
+   QVariant getIdFromQuery_ManyToOne(bool bEager, QxSqlRelationParams & params) const;
+   QVariant getIdFromQuery_OneToMany(bool bEager, QxSqlRelationParams & params) const;
+   QVariant getIdFromQuery_OneToOne(bool bEager, QxSqlRelationParams & params) const;
+
+   void updateOffset_ManyToMany(bool bEager, QxSqlRelationParams & params) const;
+   void updateOffset_ManyToOne(bool bEager, QxSqlRelationParams & params) const;
+   void updateOffset_OneToMany(bool bEager, QxSqlRelationParams & params) const;
+   void updateOffset_OneToOne(bool bEager, QxSqlRelationParams & params) const;
+
+   void eagerSelect_ManyToMany(QxSqlRelationParams & params) const;
+   void eagerSelect_ManyToOne(QxSqlRelationParams & params) const;
+   void eagerSelect_OneToMany(QxSqlRelationParams & params) const;
+   void eagerSelect_OneToOne(QxSqlRelationParams & params) const;
+
+   void eagerJoin_ManyToMany(QxSqlRelationParams & params) const;
+   void eagerJoin_ManyToOne(QxSqlRelationParams & params) const;
+   void eagerJoin_OneToMany(QxSqlRelationParams & params) const;
+   void eagerJoin_OneToOne(QxSqlRelationParams & params) const;
+
+   void eagerWhereSoftDelete_ManyToMany(QxSqlRelationParams & params) const;
+   void eagerWhereSoftDelete_ManyToOne(QxSqlRelationParams & params) const;
+   void eagerWhereSoftDelete_OneToMany(QxSqlRelationParams & params) const;
+   void eagerWhereSoftDelete_OneToOne(QxSqlRelationParams & params) const;
+
+   void lazySelect_ManyToOne(QxSqlRelationParams & params) const;
+   void lazyInsert_ManyToOne(QxSqlRelationParams & params) const;
+   void lazyInsert_Values_ManyToOne(QxSqlRelationParams & params) const;
+   void lazyUpdate_ManyToOne(QxSqlRelationParams & params) const;
+
+   void createTable_ManyToOne(QxSqlRelationParams & params) const;
+   QSqlError deleteFromExtraTable_ManyToMany(QxSqlRelationParams & params) const;
+   QString createExtraTable_ManyToMany() const;
+
+   bool addLazyRelation(QxSqlRelationParams & params, IxSqlRelation * pRelation) const;
 
 };
 

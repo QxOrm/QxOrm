@@ -42,14 +42,14 @@
 
 namespace qx {
 
-#ifndef NDEBUG
+#ifndef _QX_MODE_RELEASE
 void QxSqlQuery::verifyQuery() const
 {
    if (m_sQuery.isEmpty() || (m_lstSqlElement.count() <= 0)) { return; }
    qDebug("[QxOrm] qx::QxSqlQuery::verifyQuery() : '%s'", "invalid SQL query, you cannot mix classic SQL and C++ syntax");
    qAssert(false);
 }
-#endif // NDEBUG
+#endif // _QX_MODE_RELEASE
 
 QString QxSqlQuery::query()
 {

@@ -48,16 +48,25 @@
 
 #include <QxDao/QxSqlJoin.h>
 
+#include <QxCollection/QxCollection.h>
+
 namespace qx {
 
+class QxSqlRelationLinked;
 class IxSqlQueryBuilder;
+class IxSqlRelation;
 
 /*!
  * \ingroup QxDao
  * \brief qx::QxSqlRelationParams : define list of parameters to transfer to relationships to manage SQL queries builded by QxOrm library
  */
-class QxSqlRelationParams
+class QX_DLL_EXPORT QxSqlRelationParams
 {
+
+public:
+
+   typedef boost::shared_ptr<QxSqlRelationLinked> type_relation_linked_ptr;
+   typedef QHash<QString, type_relation_linked_ptr> type_lst_relation_linked;
 
 protected:
 
@@ -71,13 +80,15 @@ protected:
    QSqlDatabase *                m_database;       //!< Current SQL database connexion
    void *                        m_pOwner;         //!< Owner to current object to resolve input/output
    qx::dao::sql_join::join_type  m_eJoinType;      //!< Current join type to build SQL query : LEFT OUTER JOIN, INNER JOIN, etc...
+   type_lst_relation_linked *    m_pRelationX;     //!< Current list of relations used by qx::QxSqlRelationLinked class
+   QString                       m_sTableAlias;    //!< Current SQL table alias : useful for relationships defined in base class
 
 public:
 
-   QxSqlRelationParams() : m_lIndex(0), m_lIndexOwner(0), m_lOffset(0), m_sql(NULL), m_builder(NULL), m_query(NULL), m_database(NULL), m_pOwner(NULL), m_eJoinType(qx::dao::sql_join::no_join) { ; }
-   QxSqlRelationParams(long lIndex, long lOffset, QString * sql, IxSqlQueryBuilder * builder, QSqlQuery * query, void * pOwner) : m_lIndex(lIndex), m_lIndexOwner(0), m_lOffset(lOffset), m_sql(sql), m_builder(builder), m_query(query), m_database(NULL), m_pOwner(pOwner), m_eJoinType(qx::dao::sql_join::no_join) { ; }
-   QxSqlRelationParams(long lIndex, long lOffset, QString * sql, IxSqlQueryBuilder * builder, QSqlQuery * query, void * pOwner, const QVariant & vId) : m_vId(vId), m_lIndex(lIndex), m_lIndexOwner(0), m_lOffset(lOffset), m_sql(sql), m_builder(builder), m_query(query), m_database(NULL), m_pOwner(pOwner), m_eJoinType(qx::dao::sql_join::no_join) { ; }
-   virtual ~QxSqlRelationParams() { ; }
+   QxSqlRelationParams();
+   QxSqlRelationParams(long lIndex, long lOffset, QString * sql, IxSqlQueryBuilder * builder, QSqlQuery * query, void * pOwner);
+   QxSqlRelationParams(long lIndex, long lOffset, QString * sql, IxSqlQueryBuilder * builder, QSqlQuery * query, void * pOwner, const QVariant & vId);
+   virtual ~QxSqlRelationParams();
 
    inline QVariant id() const                            { return m_vId; }
    inline long index() const                             { return m_lIndex; }
@@ -93,6 +104,8 @@ public:
    inline const IxSqlQueryBuilder & builder() const      { qAssert(m_builder); return (* m_builder); }
    inline void * owner() const                           { return m_pOwner; }
    inline qx::dao::sql_join::join_type joinType() const  { return m_eJoinType; }
+   inline type_lst_relation_linked * relationX() const   { return m_pRelationX; }
+   inline QString getTableAlias() const                  { return m_sTableAlias; }
 
    inline void setId(const QVariant & vId)                  { m_vId = vId; }
    inline void setIndex(long lIndex)                        { m_lIndex = lIndex; }
@@ -104,6 +117,8 @@ public:
    inline void setDatabase(QSqlDatabase * database)         { m_database = database; }
    inline void setOwner(void * pOwner)                      { m_pOwner = pOwner; }
    inline void setJoinType(qx::dao::sql_join::join_type e)  { m_eJoinType = e; }
+   inline void setRelationX(type_lst_relation_linked * p)   { m_pRelationX = p; }
+   inline void setTableAlias(const QString & s)             { m_sTableAlias = s; }
 
 };
 

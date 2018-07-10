@@ -37,8 +37,8 @@
  *
  */
 
-#ifndef NDEBUG
 #ifndef QT_NO_DEBUG
+#ifndef _QX_MODE_RELEASE
 #if _QX_USE_MEM_LEAK_DETECTION
 
 #ifndef _STATIC_MEM_POOL_H
@@ -199,7 +199,7 @@ private:
     }
     ~static_mem_pool()
     {
-#ifndef NDEBUG
+#ifndef _QX_MODE_RELEASE
 #ifndef QT_NO_DEBUG
         // Empty the pool to avoid false memory leakage alarms.  This is
         // generally not necessary for release binaries.
@@ -212,7 +212,7 @@ private:
         }
         _S_memory_block_p = NULL;
 #endif // QT_NO_DEBUG
-#endif // NDEBUG
+#endif // _QX_MODE_RELEASE
         _S_instance_p = NULL;
         _S_destroyed = true;
         _STATIC_MEM_POOL_TRACE(false, "static_mem_pool<" << _Sz << ','
@@ -391,5 +391,5 @@ public: \
 
 #endif // _STATIC_MEM_POOL_H
 #endif // _QX_USE_MEM_LEAK_DETECTION
+#endif // _QX_MODE_RELEASE
 #endif // QT_NO_DEBUG
-#endif // NDEBUG

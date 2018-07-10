@@ -43,6 +43,17 @@
  * \brief Invalid value when a property fails to pass a constraint
  */
 
+#include <boost/serialization/serialization.hpp>
+#include <boost/serialization/nvp.hpp>
+
+#include <QxSerialize/boost/QxSerialize_shared_ptr.h>
+
+#include <QxSerialize/Qt/QxSerialize_QString.h>
+#include <QxSerialize/Qt/QxSerialize_QVariant.h>
+#include <QxSerialize/Qt/QxSerialize_QHash.h>
+
+#include <QxTraits/get_class_name.h>
+
 #include <QxCommon/QxPropertyBag.h>
 
 namespace qx {
@@ -58,6 +69,8 @@ class IxValidator;
  */
 class QX_DLL_EXPORT QxInvalidValue : public QxPropertyBag
 {
+
+   friend class boost::serialization::access;
 
 protected:
 
@@ -82,8 +95,22 @@ public:
    void setPath(const QString & s)              { m_sPath = s; }
    void setValidator(const IxValidator * p);
 
+private:
+
+   template <class Archive>
+   void serialize(Archive & ar, const unsigned int file_version)
+   {
+      Q_UNUSED(file_version);
+      ar & boost::serialization::make_nvp("message", m_sMessage);
+      ar & boost::serialization::make_nvp("property_name", m_sPropertyName);
+      ar & boost::serialization::make_nvp("path", m_sPath);
+      ar & boost::serialization::make_nvp("list_property_bag", this->m_lstPropertyBag);
+   }
+
 };
 
 } // namespace qx
+
+QX_REGISTER_CLASS_NAME(qx::QxInvalidValue)
 
 #endif // _QX_VALIDATOR_INVALID_VALUE_H_

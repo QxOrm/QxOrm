@@ -37,8 +37,8 @@
  *
  */
 
-#ifndef NDEBUG
 #ifndef QT_NO_DEBUG
+#ifndef _QX_MODE_RELEASE
 #if _QX_USE_MEM_LEAK_DETECTION
 
 #ifndef _DEBUG_NEW_H
@@ -216,5 +216,5 @@ static __debug_new_counter __debug_new_count;
 
 #endif // _DEBUG_NEW_H
 #endif // _QX_USE_MEM_LEAK_DETECTION
+#endif // _QX_MODE_RELEASE
 #endif // QT_NO_DEBUG
-#endif // NDEBUG

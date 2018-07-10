@@ -47,13 +47,13 @@
 #include <QtSql/qsqlquery.h>
 #include <QtSql/qsqlerror.h>
 #include <QtSql/qsqldriver.h>
+#include <QtSql/qsqlrecord.h>
 
 #include <QxTraits/get_primary_key.h>
 #include <QxTraits/is_valid_primary_key.h>
 
 #include <QxDao/QxSqlDatabase.h>
-#include <QxDao/QxSqlQueryBuilder.h>
-#include <QxDao/QxSqlQueryHelper.h>
+#include <QxDao/IxSqlQueryBuilder.h>
 #include <QxDao/QxSqlQuery.h>
 #include <QxDao/IxSqlRelation.h>
 #include <QxDao/QxSqlRelationLinked.h>

@@ -43,7 +43,15 @@
  * \brief List of invalid values
  */
 
+#include <boost/serialization/serialization.hpp>
+#include <boost/serialization/nvp.hpp>
+
+#include <QxSerialize/Qt/QxSerialize_QString.h>
+#include <QxSerialize/Qt/QxSerialize_QList.h>
+
 #include <QxValidator/QxInvalidValue.h>
+
+#include <QxTraits/get_class_name.h>
 
 namespace qx {
 
@@ -56,6 +64,8 @@ namespace qx {
  */
 class QX_DLL_EXPORT QxInvalidValueX
 {
+
+   friend class boost::serialization::access;
 
 protected:
 
@@ -83,8 +93,20 @@ public:
    inline operator bool() const
    { return (m_lstInvalidValues.count() == 0); }
 
+private:
+
+   template <class Archive>
+   void serialize(Archive & ar, const unsigned int file_version)
+   {
+      Q_UNUSED(file_version);
+      ar & boost::serialization::make_nvp("list_invalid_values", m_lstInvalidValues);
+      ar & boost::serialization::make_nvp("current_path", m_sCurrentPath);
+   }
+
 };
 
 } // namespace qx
+
+QX_REGISTER_CLASS_NAME(qx::QxInvalidValueX)
 
 #endif // _QX_VALIDATOR_INVALID_VALUE_X_H_

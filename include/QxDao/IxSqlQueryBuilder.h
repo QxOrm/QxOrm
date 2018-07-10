@@ -50,6 +50,16 @@
 #include <QxDao/QxSqlRelationLinked.h>
 
 namespace qx {
+namespace dao {
+namespace detail {
+
+class IxDao_Helper;
+
+} // namespace detail
+} // namespace dao
+} // namespace qx
+
+namespace qx {
 
 /*!
  * \ingroup QxDao
@@ -78,15 +88,18 @@ protected:
    type_lst_ptr_by_id_ptr m_pIdX;                                 //!< Collection of id (and pointer associated) to avoid multiple fetch on same id (cartesian product)
    QxSoftDelete m_oSoftDelete;                                    //!< Soft delete (or logical delete) behavior
    QHash<QString, QString> m_lstSqlQueryAlias;                    //!< List of sql alias to replace into sql query
+   qx::dao::detail::IxDao_Helper * m_pDaoHelper;                  //!< Pointer to the dao helper class associated to the builder
 
 public:
 
-   IxSqlQueryBuilder() : m_lstDataMemberPtr(NULL), m_lstSqlRelationPtr(NULL), m_pDataMemberId(NULL), m_bCartesianProduct(false) { ; }
-   IxSqlQueryBuilder(const QString & sql) : m_lstDataMemberPtr(NULL), m_lstSqlRelationPtr(NULL), m_pDataMemberId(NULL), m_sSqlQuery(sql), m_bCartesianProduct(false) { ; }
+   IxSqlQueryBuilder() : m_lstDataMemberPtr(NULL), m_lstSqlRelationPtr(NULL), m_pDataMemberId(NULL), m_bCartesianProduct(false), m_pDaoHelper(NULL) { ; }
+   IxSqlQueryBuilder(const QString & sql) : m_lstDataMemberPtr(NULL), m_lstSqlRelationPtr(NULL), m_pDataMemberId(NULL), m_sSqlQuery(sql), m_bCartesianProduct(false), m_pDaoHelper(NULL) { ; }
    virtual ~IxSqlQueryBuilder() = 0;
 
    inline QxCollection<QString, IxDataMember *> * getLstDataMember() const    { return m_lstDataMemberPtr; }
    inline IxSqlRelationX * getLstRelation() const                             { return m_lstSqlRelationPtr; }
+   inline qx::dao::detail::IxDao_Helper * getDaoHelper() const                { return m_pDaoHelper; }
+   inline void setDaoHelper(qx::dao::detail::IxDao_Helper * p)                { m_pDaoHelper = p; }
 
    inline void setSqlQuery(const QString & sql)          { m_sSqlQuery = sql; }
    inline void setHashRelation(const QString & s)        { m_sHashRelation = s; }
@@ -136,5 +149,7 @@ public:
 typedef boost::shared_ptr<IxSqlQueryBuilder> IxSqlQueryBuilder_ptr;
 
 } // namespace qx
+
+#include <QxDao/IxDao_Helper.h>
 
 #endif // _IX_SQL_QUERY_BUILDER_H_

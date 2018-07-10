@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
-  <title>QxOrm - C++ Object Relational Mapping library (ORM)</title>
+  <title>QxOrm : Qt C++ Object Relational Mapping Library (ORM) - QxEntityEditor : Qt C++ Entities Graphic Editor (data model)</title>
   <meta name="generator" content="Amaya, see http://www.w3.org/Amaya/">
   <link rel='stylesheet' type='text/css' href='./resource/qxorm_style.css'>
 </head>
@@ -11,7 +11,7 @@
   <col><col><col>
   <tbody>
     <tr>
-      <td><a href="./home.html"><img alt="QxOrm" src="./resource/logo_qxorm.png" width="256" height="61" align="left" border="0"></a></td>
+      <td><a href="./home.html"><img alt="QxOrm" src="./resource/logo_qxorm_and_qxee.png"align="left" border="0"></a></td>
       <td align="right" style="vertical-align:bottom">
         <img alt="Windows" src="./resource/logo_windows.gif" width="35" height="35">
         <img alt="Linux" src="./resource/logo_linux.gif" width="35" height="35">
@@ -26,24 +26,12 @@
   <col><col><col><col><col><col>
   <tbody>
     <tr>
-      <td align="center"><a href="./home.html"><img alt="Home"
-        src="./resource/link_home.jpg" width="120" height="35"
-        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
-      <td align="center"><a href="./download.html"><img alt="Download"
-        src="./resource/link_download.jpg" width="120" height="35"
-        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
-      <td align="center"><a href="./quick_sample.html"><img alt="Quick sample"
-        src="./resource/link_quick_sample.jpg" width="120" height="35"
-        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
-      <td align="center"><a href="./tutorial.html"><img alt="Tutorial"
-        src="./resource/link_tutorial.jpg" width="120" height="35"
-        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
-      <td align="center"><a href="./faq.html"><img alt="Faq"
-        src="./resource/link_faq.jpg" width="120" height="35"
-        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
-      <td align="center"><a href="./link.html"><img alt="Link"
-        src="./resource/link_link.jpg" width="120" height="35"
-        style="border:1px solid #100D5A; border-color:#100D5A;"></a></td>
+      <td align="center"><a href="./home.html" class="btn_nav">Home</a></td>
+      <td align="center"><a href="./download.html" class="btn_nav">Download</a></td>
+      <td align="center"><a href="./quick_sample.html" class="btn_nav">Quick sample</a></td>
+      <td align="center"><a href="./tutorial.html" class="btn_nav">Tutorial (3)</a></td>
+      <td align="center"><a href="./faq.html" class="btn_nav">Faq (35)</a></td>
+      <td align="center"><a href="./link.html" class="btn_nav">Forum</a></td>
     </tr>
   </tbody>
 </table>
@@ -52,7 +40,18 @@
   <col><col><col><col><col><col>
   <tbody><tr>
   <td align="left" valign="top"><font size="2">QxOrm  &gt;&gt;  Faq</font></td>
-  <td align="right" valign="top"><font size="2">Current version : QxOrm 1.2.5 - <a href="../doxygen/index.html" target="_blank">QxOrm library online documentation</a></font></td>
+  <td align="right" valign="top">
+    <table cellspacing="0" cellpadding="1"><col><col><tbody>
+      <tr>
+         <td align="right" valign="top"><font size="2">Current version :&nbsp;</font></td>
+         <td align="left" valign="top"><font size="2">QxOrm 1.2.6 - <a href="../doxygen/index.html" target="_blank">QxOrm library online documentation</a></font></td>
+      <tr>
+      <tr>
+         <td align="right" valign="top"><font size="2"></font></td>
+         <td align="left" valign="top"><font size="2">QxEntityEditor 1.1.3</font></td>
+      <tr>
+    </tbody></table>
+  </td>
   <td width="10px"></td>
   <td width="40px" height="30px"><a href="../qxorm_fr/faq.html"><img alt="Version française du site" src="./resource/FR.png" width="40" height="30" border="0"></a></td>
   <td width="40px" height="30px"><a href="../qxorm_en/faq.html"><img alt="Web site english version" src="./resource/GB.png" width="40" height="30" border="0"></a></td>
@@ -69,8 +68,9 @@
           <tbody>
             <tr>
               <td><ul><li><a href="#faq_10">What is QxOrm ?</a><br>
+               </li><li><a href="#faq_15">What is QxEntityEditor ?</a><br>
                </li><li><a href="#faq_20">How to contact QxOrm to report a bug or ask a question ?</a><br>
-               </li><li><a href="#faq_30">How to build QxOrm library ?</a><br>
+               </li><li><a href="#faq_30">How to install and build QxOrm library ?</a><br>
                </li><li><a href="#faq_40">What are the databases supported by QxOrm ?</a><br>
                </li><li><a href="#faq_50">Why QxOrm is dependent on two libraries : boost and Qt ?</a><br>
                </li><li><a href="#faq_60">Why does QxOrm require a precompiled header to be used ?</a><br>
@@ -136,6 +136,32 @@
        </tbody>
       </table>
       <br>
+      <a name="faq_15"><u><b>What is QxEntityEditor ?</b></u></a><br><br>
+      <table border="0" style="width: 100%" align="center">
+       <col>
+       <col>
+       <tbody>
+         <tr>
+           <td valign="middle" width="30"></td>
+           <td align="justify">
+              <b>QxEntityEditor</b> is a graphic editor for <b>QxOrm</b> library : <b>QxEntityEditor</b> provides a graphic way to manage the data model.<br>
+              <b>QxEntityEditor</b> is multi-platform (available for Windows, Linux and Mac OS X) and generate native code for all environments : desktop (Windows, Linux, Mac OS X), embedded and mobile (Android, iOS, Raspberry Pi, etc.).<br>
+              <b>QxEntityEditor</b> is based on plugins and provides many ways to import/export your data model :
+              <ul>
+                <li>generate C++ persistent classes automatically (registered into QxOrm context) ;</li>
+                <li>generate DDL SQL script automatically (database schema) for SQLite, MySQL, PostgreSQL, Oracle and MS SQL Server ;</li>
+                <li>manage schema evolution for each project version (<i>ALTER TABLE</i>, <i>ADD COLUMN</i>, <i>DROP INDEX</i>, etc.) ;</li>
+                <li>transfer your data model over network and create quickly client/server applications, using <a href="../doxygen/html/group___qx_service.html" target="_blank">QxService</a> module.</li>
+              </ul>
+              <a href="../qxentityeditor/resource/qxee_sample.png"><img alt="QxEntityEditor" src="../qxentityeditor/resource/qxee_sample_small.png" border="0"></a>
+              <br><br>
+              <b>QxEntityEditor</b> is developed by Lionel Marty, a software development engineer since 2003.<br>
+              <br><br>
+           </td>
+         </tr>
+       </tbody>
+      </table>
+      <br>
       <a name="faq_20"><u><b>How to contact QxOrm to report a bug or ask a question ?</b></u></a><br><br>
       <table border="0" style="width: 100%" align="center">
        <col>
@@ -151,7 +177,7 @@
        </tbody>
       </table>
       <br><br>
-      <a name="faq_30"><u><b>How to build QxOrm library ?</b></u></a><br><br>
+      <a name="faq_30"><u><b>How to install and build QxOrm library ?</b></u></a><br><br>
       <table border="0" style="width: 100%" align="center">
        <col>
        <col>
@@ -159,6 +185,8 @@
          <tr>
            <td valign="middle" width="30"></td>
            <td align="justify">
+           <a href="./tutorial_3.html">A tutorial to install a development environment with QxOrm library on Windows is available.</a><br/>
+           <br/>
            <b>QxOrm</b> uses <b>qmake</b> process from <b>Qt</b> library to create <i>makefile</i> and build the project.<br>
            <b>qmake</b> is portable and multi-platform, so it works perfectly on Windows, Linux (Unix) and Mac.<br>
            To build <b>QxOrm</b> library, just execute following commands :<br>
@@ -2483,7 +2511,7 @@ void</span> MyWidget<span class="operator">::</span>onQueryFinished<span class="
         <img alt="QxOrm" src="./resource/logo_qxorm_small.png" width="168" height="40">
       </td>
       <td align="center" valign="middle">
-        <font size="2">© 2013 Lionel Marty</font>
+        <font size="2">© 2014 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
       </td>
       <td align="right" valign="middle">
         <form action="https://www.paypal.com/cgi-bin/webscr" method="post">

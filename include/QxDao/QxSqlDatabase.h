@@ -145,6 +145,8 @@ public:
    static QSqlDatabase getDatabase();
    static QSqlDatabase getDatabase(QSqlError & dbError);
    static QSqlDatabase getDatabaseCloned();
+   static void closeAllDatabases();
+   static void clearAllDatabases();
 
    qx::dao::detail::IxSqlGenerator * getSqlGenerator();
 

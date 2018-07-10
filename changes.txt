@@ -1,3 +1,12 @@
+Changes in version 1.2.6:
+- First version full compatible with QxEntityEditor application : the graphic editor for QxOrm library !
+- For more details about QxEntityEditor, go to QxOrm website : http://www.qxorm.com/
+- Thanks to the recent release of Qt 5.2, QxOrm library can now be used on Android and iOS
+- Improve relationships and triggers engine
+- Triggers onBeforeFetch() and onAfterFetch() called when fetching relationships
+- Fix release mode detection during compilation : should improve performance on some environments
+- Add serialization for QSqlError, qx::QxSqlQuery, qx::QxInvalidValue and qx::QxInvalidValueX classes
+
 Changes in version 1.2.5:
 - New license : go to download page of QxOrm website for more details
 - Support Qt5

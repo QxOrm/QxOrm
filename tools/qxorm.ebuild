@@ -1,5 +1,5 @@
 # Copyright 1999-2010 Gentoo Foundation
-# Distributed under the terms of the GNU General Public License v2
+# Distributed under the terms of the GNU General Public License v3
 # $Header: /var/cvsroot/gentoo-x86/dev-cpp/qxorm/qxorm-1.1.5-r1.ebuild,v 1.1.5-r1 2011/04/04 $
 
 EAPI="2"
@@ -11,7 +11,7 @@ HOMEPAGE="http://www.qxorm.com/"
 SRC_URI="http://www.qxorm.com/version/QxOrm_${PV}.zip"
 S=${WORKDIR}/QxOrm
 
-LICENSE="GPL-2"
+LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 x86"
 

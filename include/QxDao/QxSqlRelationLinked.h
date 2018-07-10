@@ -118,10 +118,12 @@ public:
    bool getCartesianProduct() const;
    long getAllRelationCount() const;
    long getRelationCount() const;
+   bool existRelation(const QString & sKey) const;
 
 protected:
 
    qx_bool insertRelationToHierarchy(const QStringList & sRelationX, const QString & sKey, qx::dao::sql_join::join_type eJoinType);
+   bool isValidDaoHelper(QxSqlRelationParams & params) const;
 
 };
 

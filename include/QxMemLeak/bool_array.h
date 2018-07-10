@@ -37,8 +37,8 @@
  *
  */
 
-#ifndef NDEBUG
 #ifndef QT_NO_DEBUG
+#ifndef _QX_MODE_RELEASE
 #if _QX_USE_MEM_LEAK_DETECTION
 
 #ifndef _BOOL_ARRAY_H
@@ -240,5 +240,5 @@ inline void bool_array::set(unsigned long __idx)
 
 #endif // _BOOL_ARRAY_H
 #endif // _QX_USE_MEM_LEAK_DETECTION
+#endif // _QX_MODE_RELEASE
 #endif // QT_NO_DEBUG
-#endif // NDEBUG

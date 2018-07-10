@@ -31,8 +31,8 @@
 
 /*** http://wyw.dcweb.cn/leakage.htm ***/
 
-#ifndef NDEBUG
 #ifndef QT_NO_DEBUG
+#ifndef _QX_MODE_RELEASE
 #if _QX_USE_MEM_LEAK_DETECTION
 
 #define _DEBUG_NEW_REDEFINE_NEW 0
@@ -66,8 +66,8 @@ QX_MEM_LEAK_STATIC_OR_INLINE void operator delete[](void * pointer, const std::n
 #define new DEBUG_NEW
 
 #endif // _QX_USE_MEM_LEAK_DETECTION
+#endif // _QX_MODE_RELEASE
 #endif // QT_NO_DEBUG
-#endif // NDEBUG
 
 #if (! _QX_USE_MEM_LEAK_DETECTION)
 #ifndef DEBUG_NEW
@@ -75,8 +75,8 @@ QX_MEM_LEAK_STATIC_OR_INLINE void operator delete[](void * pointer, const std::n
 #endif // DEBUG_NEW
 #endif // (! _QX_USE_MEM_LEAK_DETECTION)
 
-#ifdef NDEBUG
+#ifdef _QX_MODE_RELEASE
 #ifndef DEBUG_NEW
 #define DEBUG_NEW new
 #endif // DEBUG_NEW
-#endif // NDEBUG
+#endif // _QX_MODE_RELEASE

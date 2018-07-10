@@ -158,6 +158,20 @@ protected:
    inline bool isNullData(QxSqlRelationParams & params) const
    { return isNullData_Helper<is_data_pointer, 0>::get(getDataTypePtr(params)); }
 
+   bool callTriggerBeforeFetch(type_data & t, QxSqlRelationParams & params) const
+   {
+      if (! params.builder().getDaoHelper()) { return true; }
+      qx::dao::on_before_fetch<type_data>((& t), params.builder().getDaoHelper());
+      return params.builder().getDaoHelper()->isValid();
+   }
+
+   bool callTriggerAfterFetch(type_data & t, QxSqlRelationParams & params) const
+   {
+      if (! params.builder().getDaoHelper()) { return true; }
+      qx::dao::on_after_fetch<type_data>((& t), params.builder().getDaoHelper());
+      return params.builder().getDaoHelper()->isValid();
+   }
+
 private:
 
    template <bool bIsPointer /* = false */, bool bIsContainer /* = false */, int dummy>

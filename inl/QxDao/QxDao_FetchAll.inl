@@ -49,9 +49,9 @@ struct QxDao_FetchAll_Generic
 
       if (dao.nextRecord())
       {
-         qx::dao::on_before_fetch<T>((& t), (& dao));
+         qx::dao::on_before_fetch<T>((& t), (& dao)); if (! dao.isValid()) { return dao.error(); }
          qx::dao::detail::QxSqlQueryHelper_FetchAll<T>::resolveOutput(t, dao.query(), dao.builder(), columns);
-         qx::dao::on_after_fetch<T>((& t), (& dao));
+         qx::dao::on_after_fetch<T>((& t), (& dao)); if (! dao.isValid()) { return dao.error(); }
       }
 
       return dao.error();
@@ -77,7 +77,7 @@ struct QxDao_FetchAll_Container
 
       bool bSize = (dao.hasFeature(QSqlDriver::QuerySize) && (dao.query().size() > 0));
       if (bSize) { qx::trait::generic_container<T>::reserve(t, dao.query().size()); }
-      while (dao.nextRecord()) { insertNewItem(t, dao); }
+      while (dao.nextRecord()) { insertNewItem(t, dao); if (! dao.isValid()) { return dao.error(); } }
       if (bSize) { qAssert(qx::trait::generic_container<T>::size(t) == static_cast<long>(dao.query().size())); }
 
       return dao.error();
@@ -94,9 +94,9 @@ private:
       qx::IxDataMember * pId = dao.getDataId(); qAssert(pId);
       QStringList columns = dao.getSqlColumns();
       if (pId) { for (int i = 0; i < pId->getNameCount(); i++) { QVariant v = dao.query().value(i); qx::cvt::from_variant(v, item.key(), "", i); } }
-      qx::dao::on_before_fetch<type_value_qx>((& item_val), (& dao));
+      qx::dao::on_before_fetch<type_value_qx>((& item_val), (& dao)); if (! dao.isValid()) { return; }
       qx::dao::detail::QxSqlQueryHelper_FetchAll<type_value_qx>::resolveOutput(item_val, dao.query(), dao.builder(), columns);
-      qx::dao::on_after_fetch<type_value_qx>((& item_val), (& dao));
+      qx::dao::on_after_fetch<type_value_qx>((& item_val), (& dao)); if (! dao.isValid()) { return; }
       qx::dao::detail::QxDao_Keep_Original<type_item>::backup(item);
       qx::trait::generic_container<T>::insertItem(t, item);
    }

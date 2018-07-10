@@ -181,6 +181,10 @@ template <typename T> struct QxStringCvt_ToString< QLinkedList<T> > {
 static inline QString toString(const QLinkedList<T> & t, const QString & format, int index)
 { Q_UNUSED(format); Q_UNUSED(index); return QX_STR_CVT_DEFAULT_ARCHIVE::to_string(t); } };
 
+template <typename T> struct QxStringCvt_ToString< QFlags<T> > {
+static inline QString toString(const QFlags<T> & t, const QString & format, int index)
+{ Q_UNUSED(format); Q_UNUSED(index); return QString::number(static_cast<int>(t)); } };
+
 template <typename Key, typename Value> struct QxStringCvt_ToString< std::map<Key, Value> > {
 static inline QString toString(const std::map<Key, Value> & t, const QString & format, int index)
 { Q_UNUSED(format); Q_UNUSED(index); return QX_STR_CVT_DEFAULT_ARCHIVE::to_string(t); } };
