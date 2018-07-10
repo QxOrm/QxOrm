@@ -38,7 +38,7 @@
 #include <QxTraits/archive_wide_traits.h>
 #include <QxTraits/archive_printable.h>
 
-#include <QxMemLeak.h>
+#include <QxOrm_Impl.h>
 
 namespace boost {
 namespace serialization {

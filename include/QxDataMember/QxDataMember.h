@@ -54,8 +54,6 @@
 
 #include <QxDataMember/IxDataMember.h>
 
-#include <QxConvert/QxConvert.h>
-
 #include <QxTraits/is_equal.h>
 
 #define QX_DATA_MEMBER_IMPL_VIRTUAL_ARCHIVE(ArchiveInput, ArchiveOutput) \
@@ -87,8 +85,8 @@ public:
    inline DataType * getData(void * pOwner) const              { return (pOwner ? (& ((static_cast<Owner *>(pOwner))->*m_pData)) : NULL); }
    inline const DataType * getData(const void * pOwner) const  { return (pOwner ? (& ((static_cast<const Owner *>(pOwner))->*m_pData)) : NULL); }
 
-   virtual QVariant toVariant(const void * pOwner, const QString & sFormat, int iIndexName = -1) const            { return qx::cvt::to_variant((* getData(pOwner)), sFormat, iIndexName); }
-   virtual qx_bool fromVariant(void * pOwner, const QVariant & v, const QString & sFormat, int iIndexName = -1)   { return qx::cvt::from_variant(v, (* getData(pOwner)), sFormat, iIndexName); }
+   virtual QVariant toVariant(const void * pOwner, const QString & sFormat, int iIndexName = -1, qx::cvt::context::ctx_type ctx = qx::cvt::context::e_no_context) const          { return qx::cvt::to_variant((* getData(pOwner)), sFormat, iIndexName, ctx); }
+   virtual qx_bool fromVariant(void * pOwner, const QVariant & v, const QString & sFormat, int iIndexName = -1, qx::cvt::context::ctx_type ctx = qx::cvt::context::e_no_context) { return qx::cvt::from_variant(v, (* getData(pOwner)), sFormat, iIndexName, ctx); }
 
 #ifndef _QX_NO_JSON
    virtual QJsonValue toJson(const void * pOwner, const QString & sFormat) const             { return qx::cvt::to_json((* getData(pOwner)), sFormat); }

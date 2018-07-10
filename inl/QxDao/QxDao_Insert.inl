@@ -39,15 +39,15 @@ struct QxDao_Insert_Generic
 
    static QSqlError insert(T & t, QSqlDatabase * pDatabase)
    {
-      qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "insert");
+      qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "insert", new qx::QxSqlQueryBuilder_Insert<T>());
       if (! dao.isValid()) { return dao.error(); }
       if (dao.isReadOnly()) { return dao.errReadOnly(); }
       if (! dao.validateInstance(t)) { return dao.error(); }
 
-      QString sql = dao.builder().insert().getSqlQuery();
+      QString sql = dao.builder().buildSql().getSqlQuery();
       if (sql.isEmpty()) { return dao.errEmpty(); }
       if (! pDatabase) { dao.transaction(); }
-      dao.query().prepare(sql);
+      if (! dao.query().prepare(sql)) { return dao.errFailed(true); }
 
       IxSqlGenerator * pSqlGenerator = dao.getSqlGenerator();
       if (pSqlGenerator) { pSqlGenerator->onBeforeInsert((& dao), (& t)); }
@@ -69,16 +69,18 @@ struct QxDao_Insert_Container
 
    static QSqlError insert(T & t, QSqlDatabase * pDatabase)
    {
+      typedef typename qx::trait::generic_container<T>::type_value_qx type_item;
+
       if (qx::trait::generic_container<T>::size(t) <= 0) { return QSqlError(); }
-      qx::dao::detail::QxDao_Helper_Container<T> dao(t, pDatabase, "insert");
+      qx::dao::detail::QxDao_Helper_Container<T> dao(t, pDatabase, "insert", new qx::QxSqlQueryBuilder_Insert<type_item>());
       if (! dao.isValid()) { return dao.error(); }
       if (dao.isReadOnly()) { return dao.errReadOnly(); }
       if (! dao.validateInstance(t)) { return dao.error(); }
 
-      QString sql = dao.builder().insert().getSqlQuery();
+      QString sql = dao.builder().buildSql().getSqlQuery();
       if (sql.isEmpty()) { return dao.errEmpty(); }
       if (! pDatabase) { dao.transaction(); }
-      dao.query().prepare(sql);
+      if (! dao.query().prepare(sql)) { return dao.errFailed(true); }
 
       for (typename T::iterator it = t.begin(); it != t.end(); ++it)
       { if (! insertItem((* it), dao)) { return dao.error(); } }

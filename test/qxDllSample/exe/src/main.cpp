@@ -16,7 +16,7 @@
 #include "../../dll2/include/Bar.h"
 #include "../../dll2/include/Foo.h"
 
-#include <QxMemLeak.h>
+#include <QxOrm_Impl.h>
 
 void test_fct() { qDebug("[QxOrm] %s", "'test_fct()' called by 'qx::IxFunction()'"); }
 struct test_class_fct { int class_fct() { qDebug("[QxOrm] %s", "'test_class_fct::class_fct()' called by 'qx::IxFunction()'"); return 123; }; };
@@ -361,8 +361,17 @@ int main(int argc, char * argv[])
    pBar.reset(new Bar()); pBar->setCode("code6"); pBar->setValue("value6"); pBar->setFoo(6); daoError = qx::dao::save(pBar); qAssert(pBar->getId() == 6);
    pBar.reset(new Bar()); pBar->setCode("code7"); pBar->setValue("value7"); pBar->setFoo(3); daoError = qx::dao::save(pBar); qAssert(pBar->getId() == 7);
 
+   // Test inserting a complex QVariant in database
+   pFoo.reset(new Foo()); pFoo->setId(3); daoError = pFoo->qxFetchById(); qAssert(! daoError.isValid());
+   QMap<QString, QVariant> testComplexVariant; testComplexVariant.insert("key_1", QVariant(QString("val_1")));
+   QList<QVariant> testComplexVariantItem; testComplexVariantItem.append(QVariant(QString("val_2_inside_QVariantList")));
+   testComplexVariantItem.append(QVariant(QString("val_3_inside_QVariantList")));
+   testComplexVariant.insert("key_2", QVariant(testComplexVariantItem));
+   pFoo->setDesc(testComplexVariant);
+   daoError = pFoo->qxUpdate(); qAssert(! daoError.isValid());
+
    pFoo.reset(new Foo()); pFoo->setId(3);
-   daoError = qx::dao::fetch_by_id_with_relation("lstBar", pFoo);    qAssert(pFoo->getBarX() && (pFoo->getBarX()->size() == 4));
+   daoError = qx::dao::fetch_by_id_with_relation("lstBar", pFoo);    qAssert(pFoo->getBarX() && (pFoo->getBarX()->size() == 4));       qx::dump((* pFoo), true);
    pFoo.reset(new Foo()); pFoo->setId(4);
    daoError = qx::dao::fetch_by_id_with_relation("lstBar", pFoo);    qAssert(! pFoo->getBarX() || (pFoo->getBarX()->size() == 0));
    pFoo.reset(new Foo()); pFoo->setId(2);

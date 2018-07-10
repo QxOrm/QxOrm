@@ -66,11 +66,11 @@
     <table cellspacing="0" cellpadding="1"><col><col><tbody>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow">Version courante :&nbsp;</font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.2 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.3 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
       </tr>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow"></font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.1.9</font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.2.1</font></td>
       </tr>
     </tbody></table>
   </td>
@@ -116,16 +116,16 @@
         </table>
         <b>QxEntityEditor</b> est un éditeur graphique pour la bibliothèque <b>QxOrm</b> : <b>QxEntityEditor</b> permet de gérer graphiquement le modèle d'entités.<br>
         <b>QxEntityEditor</b> est multi-plateforme (disponible pour Windows, Linux et Mac OS X) et génère du code natif pour tous les environnements : bureau (Windows, Linux, Mac OS X), embarqué et mobile (Android, iOS, Windows Phone, Raspberry Pi, etc.).<br>
-        <a href="./tutorial_4.html">Une vidéo de présentation de l'application <b>QxEntityEditor</b> est disponible</a>.<br>
+        <a href="./manual_qxee.html">Un manuel utilisateur (documentation) dédié à l'application <b>QxEntityEditor</b> est disponible</a>.<br>
         <br>
         <b>QxEntityEditor</b> est basé sur un système de plugins et propose diverses fonctionnalités pour importer/exporter le modèle de données :
         <ul>
-          <li>génération automatique du code C++ (classes persistantes enregistrées dans le contexte QxOrm) ;</li>
-          <li>génération automatique des scripts SQL DDL (schéma de base de données) pour les bases SQLite, MySQL, PostgreSQL, Oracle et MS SQL Server ;</li>
+          <li><a href="./manual_qxee.html#cpp_export_settings">génération automatique du code C++</a> (classes persistantes enregistrées dans le contexte QxOrm) ;</li>
+          <li><a href="./manual_qxee.html#ddl_export_settings">génération automatique des scripts SQL DDL</a> (schéma de base de données) pour les bases SQLite, MySQL, PostgreSQL, Oracle et MS SQL Server ;</li>
           <li>supporte l'évolution du schéma de base de données pour chaque version d'un projet (<i>ALTER TABLE</i>, <i>ADD COLUMN</i>, <i>DROP INDEX</i>, etc.) ;</li>
-          <li>génération automatique des classes C++ de services pour transférer le modèle de données sur le réseau, en utilisant le module <a href="../doxygen/html/group___qx_service.html" target="_blank">QxService</a>, pour créer rapidement des applications client/serveur ;</li>
-          <li>importation automatique des structures de bases de données existantes (par connexion ODBC) pour les bases SQLite, MySQL, PostgreSQL, Oracle et MS SQL Server ;</li>
-          <li>parce que chaque projet est différent, QxEntityEditor propose plusieurs outils pour personnaliser les fichiers générés (notamment un moteur javascript et un débogueur intégré).</li>
+          <li><a href="./manual_qxee.html#cpp_services_export_settings">génération automatique des classes C++ de services</a> pour transférer le modèle de données sur le réseau, en utilisant le module <a href="../doxygen/html/group___qx_service.html" target="_blank">QxService</a>, pour créer rapidement des applications client/serveur ;</li>
+          <li><a href="./manual_qxee.html#wnd_mysql_import">importation automatique des structures de bases de données</a> existantes (par connexion ODBC ou pilote natif) pour les bases SQLite, MySQL, PostgreSQL, Oracle et MS SQL Server ;</li>
+          <li>parce que chaque projet est différent, QxEntityEditor propose plusieurs outils pour personnaliser les fichiers générés (notamment <a href="./manual_qxee.html#js_engine">un moteur javascript et un débogueur intégré</a>).</li>
         </ul>
         <a href="../qxentityeditor/resource/qxee_sample.png" target="_blank"><img alt="QxEntityEditor" src="../qxentityeditor/resource/qxee_sample_small.png" border="0" class="img_with_shadow"></a>
         <br><br>
@@ -302,7 +302,7 @@
         Un exemple rapide d'utilisation de <b>QxOrm</b> montrant les fonctionnalités de base de la bibliothèque 
         est disponible <a href="./quick_sample.html">en cliquant ici</a>.<br>
         Un forum (en anglais) dédié à <b>QxOrm</b> et <b>QxEntityEditor</b> est disponible <a href="http://www.qxorm.com/forum/phpbb/" target="_blank">en cliquant ici</a>.<br>
-        Vous pouvez également retrouver la communauté française de <b>QxOrm</b> et <b>QxEntityEditor</b> sur <a href="http://www.developpez.net/forums/f1563/c-cpp/bibliotheques/qt/outils/bibliotheques/qxorm/" target="_blank">le forum de Developpez.com</a>.<br>
+        Vous pouvez également retrouver la communauté française de <b>QxOrm</b> et <b>QxEntityEditor</b> sur <a href="http://www.developpez.net/forums/f1563/c-cpp/bibliotheques/qt/bases-donnees/qxorm/" target="_blank">le forum de Developpez.com</a>.<br>
         Une documentation en ligne du code source de la bibliothèque <b>QxOrm</b> est disponible <a href="../doxygen/index.html" target="_blank">en cliquant ici</a>.<br>
       </td>
     </tr>
@@ -317,7 +317,7 @@
         <img alt="QxOrm" src="./resource/logo_qxorm_small.png" width="168" height="40">
       </td>
       <td align="center" valign="middle">
-        <font size="2">© 2016 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
+        <font size="2">© 2017 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
       </td>
       <td align="right" valign="middle">
         <form action="https://www.paypal.com/cgi-bin/webscr" method="post">

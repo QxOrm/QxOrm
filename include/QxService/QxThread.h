@@ -76,7 +76,9 @@ class QxThreadPool;
  * <a href="http://www.qxorm.com/qxorm_en/tutorial_2.html" target="_blank">Click here to access to a tutorial to explain how to work with QxService module.</a>
  */
 class QX_DLL_EXPORT QxThread : public QThread
-{ Q_OBJECT
+{
+
+   Q_OBJECT
 
 protected:
 

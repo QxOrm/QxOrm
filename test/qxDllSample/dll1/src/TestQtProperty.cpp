@@ -2,7 +2,7 @@
 
 #include "../include/TestQtProperty.h"
 
-#include <QxMemLeak.h>
+#include <QxOrm_Impl.h>
 
 QX_REGISTER_CPP_QX_DLL1(TestQtProperty)
 QX_REGISTER_ALL_QT_PROPERTIES(TestQtProperty, "id")

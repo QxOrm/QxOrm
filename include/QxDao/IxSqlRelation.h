@@ -55,7 +55,7 @@
 m_pClass(NULL), m_pClassOwner(NULL), m_pDataMember(p), m_pDataMemberX(NULL), \
 m_pDataMemberId(NULL), m_pDataMemberIdOwner(NULL), m_lOffsetRelation(100), \
 m_eJoinType(qx::dao::sql_join::left_outer_join), m_eRelationType(no_relation), \
-m_lstDataMemberPtr(NULL), m_lstSqlRelationPtr(NULL)
+m_bInitInEvent(false), m_bInitDone(false), m_iIsSameDataOwner(0)
 
 namespace qx {
 
@@ -77,6 +77,9 @@ public:
 
    enum relation_type { no_relation, one_to_one, one_to_many, many_to_one, many_to_many };
 
+   typedef QxCollection<QString, IxDataMember *> type_lst_data_member;
+   typedef qx_shared_ptr<type_lst_data_member> type_lst_data_member_ptr;
+
 protected:
 
    IxClass *                        m_pClass;               //!< 'IxClass' associated wth sql relation
@@ -93,9 +96,12 @@ protected:
    QString                          m_sExtraTable;          //!< Extra-table that holds the relationship (n-n)
    QString                          m_sForeignKeyOwner;     //!< SQL query foreign key for owner (n-n)
    QString                          m_sForeignKeyDataType;  //!< SQL query foreign key for data type (n-n)
+   bool                             m_bInitInEvent;         //!< Class initialisation in progress
+   bool                             m_bInitDone;            //!< Class initialisation finished
+   int                              m_iIsSameDataOwner;     //!< Check if relationship source entity and target entity are equal
 
-   QxCollection<QString, IxDataMember *> * m_lstDataMemberPtr;    //!< Optimization : handle to collection of 'IxDataMember'
-   IxSqlRelationX * m_lstSqlRelationPtr;                          //!< Optimization : handle to collection of 'IxSqlRelation'
+   type_lst_data_member_ptr m_lstDataMemberPtr;             //!< Optimization : handle to collection of 'IxDataMember'
+   qx_shared_ptr<IxSqlRelationX> m_lstSqlRelationPtr;       //!< Optimization : handle to collection of 'IxSqlRelation'
 
    static bool m_bTraceRelationInit;   //!< Can be useful to debug an issue with relationship initialization
 
@@ -104,8 +110,8 @@ public:
    IxSqlRelation(IxDataMember * p) : qx::QxPropertyBag(), QX_CONSTRUCT_IX_RELATION() { ; }
    virtual ~IxSqlRelation() = 0;
 
-   inline QxCollection<QString, IxDataMember *> * getLstDataMember() const { return m_lstDataMemberPtr; }
-   inline IxSqlRelationX * getLstRelation() const                          { return m_lstSqlRelationPtr; }
+   inline QxCollection<QString, IxDataMember *> * getLstDataMember() const { return m_lstDataMemberPtr.get(); }
+   inline IxSqlRelationX * getLstRelation() const                          { return m_lstSqlRelationPtr.get(); }
 
    inline void setSqlJoinType(qx::dao::sql_join::join_type e)     { m_eJoinType = e; }
    inline qx::dao::sql_join::join_type getSqlJoinType() const     { return m_eJoinType; }
@@ -129,7 +135,7 @@ public:
    QString getSqlJoin(qx::dao::sql_join::join_type e = qx::dao::sql_join::no_join) const;
    bool traceSqlQuery() const;
 
-   virtual void init() = 0;
+   virtual void init();
    virtual QString getDescription() const = 0;
    virtual QString getExtraTable() const = 0;
    virtual QString createExtraTable() const = 0;
@@ -200,6 +206,11 @@ protected:
    QString createExtraTable_ManyToMany() const;
 
    bool addLazyRelation(QxSqlRelationParams & params, IxSqlRelation * pRelation) const;
+
+private:
+
+   IxDataMember * isValid_DataMember(long lIndex) const;
+   IxDataMember * isValid_SqlRelation(long lIndex) const;
 
 };
 

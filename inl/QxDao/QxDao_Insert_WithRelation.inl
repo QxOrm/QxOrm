@@ -39,7 +39,7 @@ struct QxDao_Insert_WithRelation_Generic
 
    static QSqlError insert(const QStringList & relation, T & t, QSqlDatabase * pDatabase)
    {
-      qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "insert with relation");
+      qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "insert with relation", new qx::QxSqlQueryBuilder_Insert<T>());
       if (! dao.isValid()) { return dao.error(); }
       if (dao.isReadOnly()) { return dao.errReadOnly(); }
       if (! dao.updateSqlRelationX(relation)) { return dao.errInvalidRelation(); }
@@ -70,8 +70,10 @@ struct QxDao_Insert_WithRelation_Container
 
    static QSqlError insert(const QStringList & relation, T & t, QSqlDatabase * pDatabase)
    {
+      typedef typename qx::trait::generic_container<T>::type_value_qx type_item;
+
       if (qx::trait::generic_container<T>::size(t) <= 0) { return QSqlError(); }
-      qx::dao::detail::QxDao_Helper_Container<T> dao(t, pDatabase, "insert with relation");
+      qx::dao::detail::QxDao_Helper_Container<T> dao(t, pDatabase, "insert with relation", new qx::QxSqlQueryBuilder_Insert<type_item>());
       if (! dao.isValid()) { return dao.error(); }
       if (dao.isReadOnly()) { return dao.errReadOnly(); }
       if (! dao.updateSqlRelationX(relation)) { return dao.errInvalidRelation(); }

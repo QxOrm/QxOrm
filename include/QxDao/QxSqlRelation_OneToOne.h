@@ -120,13 +120,14 @@ public:
       for (int i = 0; i < pId->getNameCount(); i++)
       { QVariant v = query.value(lOffsetOld + i); bValidId = (bValidId || qx::trait::is_valid_primary_key(v)); }
       if (! bValidId) { return NULL; }
+
       type_data & currData = this->getData(params);
       if (! this->callTriggerBeforeFetch(currData, params)) { return NULL; }
       for (int i = 0; i < pId->getNameCount(); i++)
-      { QVariant v = query.value(lOffsetOld + i); pId->fromVariant((& currData), v, i); }
+      { QVariant v = query.value(lOffsetOld + i); pId->fromVariant((& currData), v, i, qx::cvt::context::e_database); }
       long lOffsetRelation = (lOffsetOld + lOffsetId); long lCurrIndex = 0;
       while ((p = this->nextData(lIndex)))
-      { if (params.checkColumns(p->getKey())) { p->fromVariant((& currData), query.value(lCurrIndex + lOffsetRelation)); lCurrIndex++; } }
+      { if (params.checkColumns(p->getKey())) { p->fromVariant((& currData), query.value(lCurrIndex + lOffsetRelation), -1, qx::cvt::context::e_database); lCurrIndex++; } }
 
       if (params.relationX())
       {

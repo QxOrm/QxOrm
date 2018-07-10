@@ -42,11 +42,12 @@ struct QxDao_FetchAll_WithRelation_Generic
 
    static QSqlError fetchAll(const QStringList & relation, const qx::QxSqlQuery & query, T & t, QSqlDatabase * pDatabase)
    {
-      type_dao_helper dao(t, pDatabase, "fetch all with relation");
+      type_dao_helper dao(t, pDatabase, "fetch all with relation", new qx::QxSqlQueryBuilder_FetchAll_WithRelation<T>());
       if (! dao.isValid()) { return dao.error(); }
       if (! dao.updateSqlRelationX(relation)) { return dao.errInvalidRelation(); }
 
-      QString sql = dao.builder().fetchAll_WithRelation(dao.getSqlRelationLinked()).getSqlQuery();
+      QStringList columns;
+      QString sql = dao.builder().buildSql(columns, dao.getSqlRelationLinked()).getSqlQuery();
       if (sql.isEmpty()) { return dao.errEmpty(); }
       if (! query.isEmpty()) { dao.addQuery(query, true); sql = dao.builder().getSqlQuery(); }
       if (! dao.exec()) { return dao.errFailed(); }
@@ -92,12 +93,12 @@ struct QxDao_FetchAll_WithRelation_Container
    static QSqlError fetchAll(const QStringList & relation, const qx::QxSqlQuery & query, T & t, QSqlDatabase * pDatabase)
    {
       type_generic_container::clear(t);
-      type_dao_helper dao(t, pDatabase, "fetch all with relation");
+      type_dao_helper dao(t, pDatabase, "fetch all with relation", new qx::QxSqlQueryBuilder_FetchAll_WithRelation<type_value_qx>());
       if (! dao.isValid()) { return dao.error(); }
       if (! dao.updateSqlRelationX(relation)) { return dao.errInvalidRelation(); }
 
-      bool bComplex = dao.getCartesianProduct(); QVariant vId;
-      QString sql = dao.builder().fetchAll_WithRelation(dao.getSqlRelationLinked()).getSqlQuery();
+      bool bComplex = dao.getCartesianProduct(); QVariant vId; QStringList columns;
+      QString sql = dao.builder().buildSql(columns, dao.getSqlRelationLinked()).getSqlQuery();
       if (sql.isEmpty()) { return dao.errEmpty(); }
       if (! query.isEmpty()) { dao.addQuery(query, true); sql = dao.builder().getSqlQuery(); }
       if (! dao.exec()) { return dao.errFailed(); }
@@ -128,7 +129,7 @@ private:
       {
          type_item item = type_generic_container::createItem();
          qx::IxDataMember * pId = dao.getDataId(); qAssert(pId);
-         if (pId) { for (int i = 0; i < pId->getNameCount(); i++) { QVariant v = dao.query().value(i); qx::cvt::from_variant(v, item.key(), "", i); } }
+         if (pId) { for (int i = 0; i < pId->getNameCount(); i++) { QVariant v = dao.query().value(i); qx::cvt::from_variant(v, item.key(), "", i, qx::cvt::context::e_database); } }
          type_value * pValue = type_generic_container::insertItem(t, item);
          type_value_qx & item_val = (pValue ? (* static_cast<type_value_qx *>(pValue)) : item.value_qx());
          qx::dao::on_before_fetch<type_value_qx>((& item_val), (& dao)); if (! dao.isValid()) { return; }
@@ -146,7 +147,7 @@ private:
          type_item item = type_generic_container::createItem();
          type_value_qx & item_val = item.value_qx();
          qx::IxDataMember * pId = dao.getDataId(); qAssert(pId);
-         if (pId) { for (int i = 0; i < pId->getNameCount(); i++) { QVariant v = dao.query().value(i); qx::cvt::from_variant(v, item.key(), "", i); } }
+         if (pId) { for (int i = 0; i < pId->getNameCount(); i++) { QVariant v = dao.query().value(i); qx::cvt::from_variant(v, item.key(), "", i, qx::cvt::context::e_database); } }
          qx::dao::on_before_fetch<type_value_qx>((& item_val), (& dao)); if (! dao.isValid()) { return; }
          type_query_helper::resolveOutput(dao.getSqlRelationLinked(), item_val, dao.query(), dao.builder()); if (! dao.isValid()) { return; }
          qx::dao::on_after_fetch<type_value_qx>((& item_val), (& dao)); if (! dao.isValid()) { return; }

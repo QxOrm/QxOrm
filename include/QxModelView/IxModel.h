@@ -190,10 +190,13 @@ public:
    QHash<QString, QString> getListOfHeaders() const; //!< Obsolete : use headerData() instead
    IxDataMember * getDataMember(int column) const;
    Q_INVOKABLE QString getDataMemberKey(int column) const;
+   Q_INVOKABLE int getRowCount() const;
    Q_INVOKABLE QVariant getModelValue(int row, const QString & column) const;
    Q_INVOKABLE int getColumnIndex(const QString & sColumnName) const;
    Q_INVOKABLE int getAutoUpdateDatabase_() const;
    e_auto_update_database getAutoUpdateDatabase() const;
+   Q_INVOKABLE void dumpModel(bool bJsonFormat = true) const;
+   Q_INVOKABLE QObject * cloneModel();
 
    void setDatabase(const QSqlDatabase & db);
    Q_INVOKABLE void setListOfColumns(const QStringList & lst);
@@ -202,6 +205,12 @@ public:
    void setParentModel(IxModel * pParent);
    Q_INVOKABLE void setAutoUpdateDatabase_(int i);
    void setAutoUpdateDatabase(e_auto_update_database e);
+
+   Q_INVOKABLE QString toJson(int row = -1) const;                   //!< On QML side, use JSON.parse() to create a javascript object after calling this qx::IxModel::toJson() method
+   Q_INVOKABLE bool fromJson(const QString & json, int row = -1);    //!< On QML side, use JSON.stringify() on a javascript object before calling this qx::IxModel::fromJson() method
+
+   Q_INVOKABLE QVariant getRelationshipValues(int row, const QString & relation, bool bLoadFromDatabase = false, const QString & sAppendRelations = QString()); //!< Depending on relationship type (1-1, 1-n, n-1, n-n) : can return a QVariantMap type or a QVariantList type
+   Q_INVOKABLE bool setRelationshipValues(int row, const QString & relation, const QVariant & values); //!< Depending on relationship type (1-1, 1-n, n-1, n-n) : values parameter can be a QVariantMap type or a QVariantList type
 
    virtual long qxCount(const qx::QxSqlQuery & query = qx::QxSqlQuery(), QSqlDatabase * pDatabase = NULL) = 0;
    virtual QSqlError qxCount(long & lCount, const qx::QxSqlQuery & query = qx::QxSqlQuery(), QSqlDatabase * pDatabase = NULL) = 0;
@@ -288,6 +297,8 @@ public:
 
 protected:
 
+   virtual QObject * cloneModelImpl() = 0;
+   virtual void dumpModelImpl(bool bJsonFormat) const = 0;
    virtual void syncNestedModel(int row, const QStringList & relation);
    virtual void syncAllNestedModel(const QStringList & relation);
    void syncNestedModelRecursive(IxModel * pNestedModel, const QStringList & relation);
@@ -297,6 +308,16 @@ protected:
    IxModel * getChild(long row, const QString & relation);
    void insertChild(long row, const QString & relation, IxModel * pChild);
    void removeListOfChild(long row);
+
+#ifndef _QX_NO_JSON
+
+   virtual QString toJson_Helper(int row) const = 0;
+   virtual bool fromJson_Helper(const QString & json, int row) = 0;
+
+   virtual QVariant getRelationshipValues_Helper(int row, const QString & relation, bool bLoadFromDatabase, const QString & sAppendRelations) = 0;
+   virtual bool setRelationshipValues_Helper(int row, const QString & relation, const QVariant & values) = 0;
+
+#endif // _QX_NO_JSON
 
 };
 

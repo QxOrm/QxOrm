@@ -141,7 +141,7 @@ public:
    bool getAddAutoIncrementIdToUpdateQuery() const;
    bool isReadOnly() const;
 
-   QSqlError errFailed();
+   QSqlError errFailed(bool bPrepare = false);
    QSqlError errEmpty();
    QSqlError errNoData();
    QSqlError errInvalidId();
@@ -150,23 +150,23 @@ public:
 
    bool transaction();
    bool nextRecord();
-   void updateError(const QSqlError & error);
    void quiet();
    bool exec();
 
+   QSqlError updateError(const QSqlError & error);
    bool updateSqlRelationX(const QStringList & relation);
    void dumpRecord() const;
    void addQuery(const qx::QxSqlQuery & query, bool bResolve);
 
    template <class U>
    inline bool isValidPrimaryKey(const U & u)
-   { return (m_pDataId && qx::trait::is_valid_primary_key(m_pDataId->toVariant(& u))); }
+   { return (m_pDataId && qx::trait::is_valid_primary_key(m_pDataId->toVariant((& u), -1, qx::cvt::context::e_database))); }
 
    template <class U>
    inline void updateLastInsertId(U & u)
    {
       if (m_pDataId && m_pDataId->getAutoIncrement() && this->hasFeature(QSqlDriver::LastInsertId))
-      { m_pDataId->fromVariant((& u), m_query.lastInsertId()); }
+      { m_pDataId->fromVariant((& u), m_query.lastInsertId(), -1, qx::cvt::context::e_database); }
    }
 
    template <class U>
@@ -179,8 +179,7 @@ public:
 
 protected:
 
-   virtual void updateQueryBuilder();
-
+   void dumpBoundValues() const;
    QSqlError updateError(const QString & sError);
    void init(QSqlDatabase * pDatabase, const QString & sContext);
    void terminate();

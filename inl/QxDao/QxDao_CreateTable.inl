@@ -40,7 +40,7 @@ struct QxDao_CreateTable
    static QSqlError createTable(QSqlDatabase * pDatabase)
    {
       T t; Q_UNUSED(t);
-      qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "create table");
+      qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "create table", new qx::QxSqlQueryBuilder_CreateTable<T>());
       if (! dao.isValid()) { return dao.error(); }
 
       if (dao.database().driverName() != "QSQLITE")
@@ -52,7 +52,7 @@ struct QxDao_CreateTable
          qDebug("[QxOrm] %s", qPrintable(sWarningMsg));
       }
 
-      QString sql = dao.builder().createTable().getSqlQuery();
+      QString sql = dao.builder().buildSql().getSqlQuery();
       if (sql.isEmpty()) { return dao.errEmpty(); }
       if (! dao.query().exec(sql)) { return dao.errFailed(); }
 

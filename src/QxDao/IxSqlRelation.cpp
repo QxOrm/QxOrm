@@ -60,6 +60,74 @@ bool IxSqlRelation::m_bTraceRelationInit = false;
 
 IxSqlRelation::~IxSqlRelation() { ; }
 
+void IxSqlRelation::init()
+{
+   if (m_bInitInEvent || m_bInitDone) { return; }
+   m_bInitInEvent = true;
+
+   m_pDataMemberX = (m_pClass ? m_pClass->getDataMemberX() : NULL);
+   m_pDataMemberId = (m_pDataMemberX ? m_pDataMemberX->getId_WithDaoStrategy() : NULL);
+   m_pDataMemberIdOwner = ((m_pClassOwner && m_pClassOwner->getDataMemberX()) ? m_pClassOwner->getDataMemberX()->getId_WithDaoStrategy() : NULL);
+   if (m_pClass) { m_oSoftDelete = m_pClass->getSoftDelete(); }
+
+#ifdef _QX_MODE_DEBUG
+   QString sCheckMsg = "Check relationship '" + this->getKey() + "' from '" + (m_pClassOwner ? m_pClassOwner->getKey() : QString()) + "' to '" + (m_pClass ? m_pClass->getKey() : QString()) + "'";
+   if (! m_pClass) { QString sAssertMsg = sCheckMsg + " : m_pClass is equal to NULL"; qAssertMsg(false, "[QxOrm] qx::IxSqlRelation::init()", qPrintable(sAssertMsg)); }
+   if (! m_pClassOwner) { QString sAssertMsg = sCheckMsg + " : m_pClassOwner is equal to NULL"; qAssertMsg(false, "[QxOrm] qx::IxSqlRelation::init()", qPrintable(sAssertMsg)); }
+   if (! m_pDataMember) { QString sAssertMsg = sCheckMsg + " : m_pDataMember is equal to NULL"; qAssertMsg(false, "[QxOrm] qx::IxSqlRelation::init()", qPrintable(sAssertMsg)); }
+   if (! m_pDataMemberX) { QString sAssertMsg = sCheckMsg + " : m_pDataMemberX is equal to NULL"; qAssertMsg(false, "[QxOrm] qx::IxSqlRelation::init()", qPrintable(sAssertMsg)); }
+   if (! m_pDataMemberId) { QString sAssertMsg = sCheckMsg + " : m_pDataMemberId is equal to NULL"; qAssertMsg(false, "[QxOrm] qx::IxSqlRelation::init()", qPrintable(sAssertMsg)); }
+#endif // _QX_MODE_DEBUG
+
+   if (IxSqlRelation::m_bTraceRelationInit)
+   { QString sTraceMsg = "[QxOrm] Init relationship '" + this->getKey() + "' from '" + (m_pClassOwner ? m_pClassOwner->getKey() : QString()) + "' to '" + (m_pClass ? m_pClass->getKey() : QString()) + "'"; qDebug() << sTraceMsg; }
+
+   m_lstSqlRelationPtr.reset(new IxSqlRelationX());
+   m_lstDataMemberPtr.reset(new QxCollection<QString, IxDataMember *>());
+   IxDataMember * p = NULL; long lCount = m_pDataMemberX->count_WithDaoStrategy();
+
+   for (long l = 0; l < lCount; ++l)
+   {
+      p = isValid_DataMember(l); if (! p) { continue; }
+#ifdef _QX_MODE_DEBUG
+      if (m_lstDataMemberPtr->exist(p->getKey()))
+      { QString sDebugMsg = "[QxOrm] Relationship '" + this->getKey() + "' from '" + (m_pClassOwner ? m_pClassOwner->getKey() : QString()) + "' to '" + (m_pClass ? m_pClass->getKey() : QString()) + "' : data member '" + p->getKey() + "' already exists in the collection"; qDebug() << sDebugMsg; }
+#endif // _QX_MODE_DEBUG
+      m_lstDataMemberPtr->insert(p->getKey(), p);
+   }
+
+   for (long l = 0; l < lCount; ++l)
+   {
+      p = isValid_SqlRelation(l); if (! p) { continue; }
+#ifdef _QX_MODE_DEBUG
+      if (m_lstSqlRelationPtr->exist(p->getKey()))
+      { QString sDebugMsg = "[QxOrm] Relationship '" + this->getKey() + "' from '" + (m_pClassOwner ? m_pClassOwner->getKey() : QString()) + "' to '" + (m_pClass ? m_pClass->getKey() : QString()) + "' : relation '" + p->getKey() + "' already exists in the collection"; qDebug() << sDebugMsg; }
+#endif // _QX_MODE_DEBUG
+      m_lstSqlRelationPtr->insert(p->getKey(), p->getSqlRelation());
+   }
+
+   if (m_eRelationType == qx::IxSqlRelation::many_to_one)
+   {
+      // Check if relationship (foreign key) is also a part of primary key
+      int iRelationNameCount = (m_pDataMember ? m_pDataMember->getNameCount() : 0);
+      int iIdOwnerNameCount = (m_pDataMemberIdOwner ? m_pDataMemberIdOwner->getNameCount() : 0);
+      for (int i = 0; i < iRelationNameCount; i++)
+      {
+         for (int j = 0; j < iIdOwnerNameCount; j++)
+         {
+            if (m_pDataMember->getName(i) == m_pDataMemberIdOwner->getName(j))
+            {
+               m_pDataMemberIdOwner->setRelationPartOfPrimaryKey(j, this, i);
+               m_pDataMember->setPartOfPrimaryKey(i, m_pDataMemberIdOwner, j);
+            }
+         }
+      }
+   }
+
+   m_bInitInEvent = false;
+   m_bInitDone = true;
+}
+
 void IxSqlRelation::setTraceRelationInit(bool bTrace) { m_bTraceRelationInit = bTrace; }
 
 QString IxSqlRelation::getKey() const
@@ -132,7 +200,7 @@ QString IxSqlRelation::getSqlJoin(qx::dao::sql_join::join_type e /* = qx::dao::s
 
 bool IxSqlRelation::verifyOffset(QxSqlRelationParams & params, bool bId) const
 {
-#ifndef _QX_MODE_RELEASE
+#ifdef _QX_MODE_DEBUG
    if (! qx::QxSqlDatabase::getSingleton()->getVerifyOffsetRelation()) { return true; }
    IxDataMember * p = (bId ? this->getDataId() : this->getDataMember());
    QString table = (bId ? this->tableAlias(params) : this->tableAliasOwner(params));
@@ -142,9 +210,9 @@ bool IxSqlRelation::verifyOffset(QxSqlRelationParams & params, bool bId) const
    int index = params.query().record().indexOf(sRecordToFind);
    qAssert(index == params.offset());
    return (index == params.offset());
-#else // _QX_MODE_RELEASE
+#else // _QX_MODE_DEBUG
    Q_UNUSED(params); Q_UNUSED(bId); return true;
-#endif // _QX_MODE_RELEASE
+#endif // _QX_MODE_DEBUG
 }
 
 QVariant IxSqlRelation::getIdFromQuery_ManyToMany(bool bEager, QxSqlRelationParams & params) const
@@ -586,7 +654,7 @@ QSqlError IxSqlRelation::deleteFromExtraTable_ManyToMany(QxSqlRelationParams & p
    if (this->traceSqlQuery()) { qDebug("[QxOrm] sql query (extra-table) : %s", qPrintable(sql)); }
 
    QSqlQuery queryDelete(params.database());
-   queryDelete.prepare(sql);
+   if (! queryDelete.prepare(sql)) { return queryDelete.lastError(); }
    pIdOwner->setSqlPlaceHolder(queryDelete, params.owner());
    if (! queryDelete.exec()) { return queryDelete.lastError(); }
    return QSqlError();
@@ -597,6 +665,24 @@ bool IxSqlRelation::addLazyRelation(QxSqlRelationParams & params, IxSqlRelation 
    if (! params.relationX() || ! pRelation) { return false; }
    qx::QxSqlRelationLinked_ptr pRelationLinked = params.relationX()->value(this->getKey());
    return (! pRelationLinked || ! pRelationLinked->existRelation(pRelation->getKey()));
+}
+
+IxDataMember * IxSqlRelation::isValid_DataMember(long lIndex) const
+{
+   if (! m_pDataMemberX) { return NULL; }
+   IxDataMember * p = m_pDataMemberX->get_WithDaoStrategy(lIndex);
+   bool bValid = (p && p->getDao() && ! p->hasSqlRelation());
+   bValid = (bValid && (p != m_pDataMemberId));
+   return (bValid ? p : NULL);
+}
+
+IxDataMember * IxSqlRelation::isValid_SqlRelation(long lIndex) const
+{
+   if (! m_pDataMemberX) { return NULL; }
+   IxDataMember * p = m_pDataMemberX->get_WithDaoStrategy(lIndex);
+   bool bIsValid = (p && p->getDao() && p->hasSqlRelation());
+   if (bIsValid && (! m_iIsSameDataOwner) && (p != m_pDataMember)) { p->getSqlRelation()->init(); }
+   return (bIsValid ? p : NULL);
 }
 
 } // namespace qx

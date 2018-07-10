@@ -39,14 +39,14 @@ struct QxDao_FetchById_Generic
 
    static QSqlError fetchById(T & t, QSqlDatabase * pDatabase, const QStringList & columns)
    {
-      qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "fetch by id");
+      qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "fetch by id", new qx::QxSqlQueryBuilder_FetchById<T>());
       if (! dao.isValid()) { return dao.error(); }
       if (! dao.isValidPrimaryKey(t)) { return dao.errInvalidId(); }
 
-      QString sql = dao.builder().fetchById(columns).getSqlQuery();
+      QString sql = dao.builder().buildSql(columns).getSqlQuery();
       if (! dao.getDataId() || sql.isEmpty()) { return dao.errEmpty(); }
+      if (! dao.query().prepare(sql)) { return dao.errFailed(true); }
 
-      dao.query().prepare(sql);
       qx::dao::on_before_fetch<T>((& t), (& dao));
       if (! dao.isValid()) { return dao.error(); }
       qx::dao::detail::QxSqlQueryHelper_FetchById<T>::resolveInput(t, dao.query(), dao.builder(), columns);
@@ -66,14 +66,16 @@ struct QxDao_FetchById_Container
 
    static QSqlError fetchById(T & t, QSqlDatabase * pDatabase, const QStringList & columns)
    {
+      typedef typename qx::trait::generic_container<T>::type_value_qx type_item;
+
       if (qx::trait::generic_container<T>::size(t) <= 0) { return QSqlError(); }
-      qx::dao::detail::QxDao_Helper_Container<T> dao(t, pDatabase, "fetch by id");
+      qx::dao::detail::QxDao_Helper_Container<T> dao(t, pDatabase, "fetch by id", new qx::QxSqlQueryBuilder_FetchById<type_item>());
       if (! dao.isValid()) { return dao.error(); }
 
-      QString sql = dao.builder().fetchById(columns).getSqlQuery();
+      QString sql = dao.builder().buildSql(columns).getSqlQuery();
       if (! dao.getDataId() || sql.isEmpty()) { return dao.errEmpty(); }
+      if (! dao.query().prepare(sql)) { return dao.errFailed(true); }
       dao.setSqlColumns(columns);
-      dao.query().prepare(sql);
 
       for (typename T::iterator it = t.begin(); it != t.end(); ++it)
       { if (! fetchItem((* it), dao)) { return dao.error(); } }

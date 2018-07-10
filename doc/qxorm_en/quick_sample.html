@@ -66,11 +66,11 @@
     <table cellspacing="0" cellpadding="1"><col><col><tbody>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow">Current version :&nbsp;</font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.2 - <a href="../doxygen/index.html" target="_blank">QxOrm library online class documentation</a></font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.3 - <a href="../doxygen/index.html" target="_blank">QxOrm library online class documentation</a></font></td>
       </tr>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow"></font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.1.9</font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.2.1</font></td>
       </tr>
     </tbody></table>
   </td>
@@ -166,7 +166,7 @@ QX_REGISTER_HPP_MY_TEST_EXE<span class="operator">(</span>drug<span class="opera
         <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="drug.cpp">
 <pre><span class="pre">#include <span class="string">"precompiled.h"</span>   <span class="comment">// Precompiled-header with '#include &lt;QxOrm.h&gt;' and '#include "export.h"'</span>
 #include <span class="string">"drug.h"</span>          <span class="comment">// Class definition 'drug'</span>
-#include <span class="string">&lt;QxMemLeak.h&gt;</span>     <span class="comment">// Automatic memory leak detection</span>
+#include <span class="string">&lt;QxOrm_Impl.h&gt;</span>     <span class="comment">// Automatic memory leak detection and boost serialization export macro</span>
 </span>
 QX_REGISTER_CPP_MY_TEST_EXE<span class="operator">(</span>drug<span class="operator">)</span><span class="comment">   // This macro is necessary to register 'drug' class in QxOrm context
 </span><span class="keyword">
@@ -188,7 +188,7 @@ template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</
         <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="main.cpp">
 <pre><span class="pre">#include <span class="string">"precompiled.h"</span>
 #include <span class="string">"drug.h"</span>
-#include <span class="string">&lt;QxMemLeak.h&gt;</span>
+#include <span class="string">&lt;QxOrm_Impl.h&gt;</span>
 </span><span class="type">
 int</span><span class="keyword"> main</span><span class="operator">(</span><span class="type">int</span> argc<span class="operator">,</span><span class="type"> char</span><span class="operator"> *</span> argv<span class="operator">[])
 {</span>
@@ -312,7 +312,7 @@ int</span><span class="keyword"> main</span><span class="operator">(</span><span
         <img alt="QxOrm" src="./resource/logo_qxorm_small.png" width="168" height="40">
       </td>
       <td align="center" valign="middle">
-        <font size="2">© 2016 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
+        <font size="2">© 2017 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
       </td>
       <td align="right" valign="middle">
         <form action="https://www.paypal.com/cgi-bin/webscr" method="post">

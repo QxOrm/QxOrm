@@ -17,11 +17,14 @@
 #include "../include/comment.h"
 #include "../include/category.h"
 
-#include <QxMemLeak.h>
+#include "../include/model_view_from_qxee/blog.model_view.gen.h"
+
+#include <QxOrm_Impl.h>
 
 void init_data();
 void test_qt_widget();
 void test_qml_view();
+void test_qml_view_with_relationship();
 
 int main(int argc, char * argv[])
 {
@@ -29,6 +32,7 @@ int main(int argc, char * argv[])
    init_data();
    test_qt_widget();
    test_qml_view();
+   test_qml_view_with_relationship();
    return 0;
 }
 
@@ -294,4 +298,20 @@ void test_qml_view()
    qmlView.setSource(QUrl(sQmlFile));
    qmlView.show();
    qApp->exec();
+}
+
+void test_qml_view_with_relationship()
+{
+#if (QT_VERSION >= 0x050000)
+   qx::IxModel * pModel = new model_view::blog_model();
+   pModel->qxFetchAll(QStringList() << "*");
+
+   QQuickView qmlView;
+   QString sQmlFile = "qrc:/documents/main_relationship.qml";
+
+   qmlView.rootContext()->setContextProperty("myModel", pModel);
+   qmlView.setSource(QUrl(sQmlFile));
+   qmlView.show();
+   qApp->exec();
+#endif // (QT_VERSION >= 0x050000)
 }

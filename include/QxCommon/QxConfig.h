@@ -43,8 +43,8 @@
  * \brief List of parameters to compile and build QxOrm library
  */
 
-#define QX_VERSION         0x010402
-#define QX_VERSION_STR     "1.4.2"
+#define QX_VERSION         0x010403
+#define QX_VERSION_STR     "1.4.3"
 
 #ifndef _QX_MODE_DEBUG
 #ifndef _QX_MODE_RELEASE

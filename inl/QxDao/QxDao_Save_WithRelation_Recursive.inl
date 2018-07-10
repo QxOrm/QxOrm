@@ -40,7 +40,7 @@ struct QxDao_Save_WithRelation_Recursive_Generic
    static QSqlError save(T & t, qx::dao::save_mode::e_save_mode eSaveMode, QSqlDatabase * pDatabase, qx::QxSqlRelationParams * pRelationParams)
    {
       QStringList relation("*");
-      qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "save with relation recursive");
+      qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "save with relation recursive", new qx::QxSqlQueryBuilder_Update<T>());
       if (! dao.isValid()) { return dao.error(); }
       if (dao.isReadOnly()) { return dao.errReadOnly(); }
       if (! dao.updateSqlRelationX(relation)) { return dao.errInvalidRelation(); }
@@ -85,9 +85,11 @@ struct QxDao_Save_WithRelation_Recursive_Container
 
    static QSqlError save(T & t, qx::dao::save_mode::e_save_mode eSaveMode, QSqlDatabase * pDatabase, qx::QxSqlRelationParams * pRelationParams)
    {
+      typedef typename qx::trait::generic_container<T>::type_value_qx type_item;
+
       QStringList relation("*");
       if (qx::trait::generic_container<T>::size(t) <= 0) { return QSqlError(); }
-      qx::dao::detail::QxDao_Helper_Container<T> dao(t, pDatabase, "save with relation recursive");
+      qx::dao::detail::QxDao_Helper_Container<T> dao(t, pDatabase, "save with relation recursive", new qx::QxSqlQueryBuilder_Update<type_item>());
       if (! dao.isValid()) { return dao.error(); }
       if (dao.isReadOnly()) { return dao.errReadOnly(); }
       if (! dao.updateSqlRelationX(relation)) { return dao.errInvalidRelation(); }

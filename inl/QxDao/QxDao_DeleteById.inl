@@ -39,16 +39,19 @@ struct QxDao_DeleteById_Generic
 
    static QSqlError deleteById(T & t, QSqlDatabase * pDatabase, bool bVerifySoftDelete)
    {
-      qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "delete by id");
+      qx::IxSqlQueryBuilder * pBuilder = new qx::QxSqlQueryBuilder_DeleteById<T>(); pBuilder->init();
+      qx::QxSoftDelete oSoftDelete = pBuilder->getSoftDelete();
+      if (bVerifySoftDelete && ! oSoftDelete.isEmpty())
+      { delete pBuilder; pBuilder = new qx::QxSqlQueryBuilder_SoftDeleteById<T>(); }
+
+      qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "delete by id", pBuilder);
       if (! dao.isValid()) { return dao.error(); }
       if (dao.isReadOnly()) { return dao.errReadOnly(); }
       if (! dao.isValidPrimaryKey(t)) { return dao.errInvalidId(); }
 
-      QString sql; qx::QxSoftDelete oSoftDelete = dao.builder().getSoftDelete();
-      if (bVerifySoftDelete && ! oSoftDelete.isEmpty()) { sql = dao.builder().softDeleteById().getSqlQuery(); }
-      else { sql = dao.builder().deleteById().getSqlQuery(); }
+      QString sql = dao.builder().buildSql().getSqlQuery();
       if (! dao.getDataId() || sql.isEmpty()) { return dao.errEmpty(); }
-      dao.query().prepare(sql);
+      if (! dao.query().prepare(sql)) { return dao.errFailed(true); }
 
       IxSqlGenerator * pSqlGenerator = dao.getSqlGenerator();
       if (pSqlGenerator) { pSqlGenerator->onBeforeDelete((& dao), (& t)); }
@@ -69,16 +72,21 @@ struct QxDao_DeleteById_Container
 
    static QSqlError deleteById(T & t, QSqlDatabase * pDatabase, bool bVerifySoftDelete)
    {
+      typedef typename qx::trait::generic_container<T>::type_value_qx type_item;
+
+      qx::IxSqlQueryBuilder * pBuilder = new qx::QxSqlQueryBuilder_DeleteById<type_item>(); pBuilder->init();
+      qx::QxSoftDelete oSoftDelete = pBuilder->getSoftDelete();
+      if (bVerifySoftDelete && ! oSoftDelete.isEmpty())
+      { delete pBuilder; pBuilder = new qx::QxSqlQueryBuilder_SoftDeleteById<type_item>(); }
+
       if (qx::trait::generic_container<T>::size(t) <= 0) { return QSqlError(); }
-      qx::dao::detail::QxDao_Helper_Container<T> dao(t, pDatabase, "delete by id");
+      qx::dao::detail::QxDao_Helper_Container<T> dao(t, pDatabase, "delete by id", pBuilder);
       if (! dao.isValid()) { return dao.error(); }
       if (dao.isReadOnly()) { return dao.errReadOnly(); }
 
-      QString sql; qx::QxSoftDelete oSoftDelete = dao.builder().getSoftDelete();
-      if (bVerifySoftDelete && ! oSoftDelete.isEmpty()) { sql = dao.builder().softDeleteById().getSqlQuery(); }
-      else { sql = dao.builder().deleteById().getSqlQuery(); }
+      QString sql = dao.builder().buildSql().getSqlQuery();
       if (sql.isEmpty()) { return dao.errEmpty(); }
-      dao.query().prepare(sql);
+      if (! dao.query().prepare(sql)) { return dao.errFailed(true); }
 
       for (typename T::iterator it = t.begin(); it != t.end(); ++it)
       { if (! deleteItem((* it), dao)) { return dao.error(); } }

@@ -7,7 +7,7 @@
 #include "../include/comment.h"
 #include "../include/category.h"
 
-#include <QxMemLeak.h>
+#include <QxOrm_Impl.h>
 
 int main(int argc, char * argv[])
 {
@@ -174,6 +174,20 @@ int main(int argc, char * argv[])
    qAssert(lstBlogComplexRelation[0]->m_commentX[0]->m_dt_create.isNull()); // Not fetched
    qAssert(lstBlogComplexRelation[0]->m_commentX[0]->m_text != ""); // Fetched
    qAssert(lstBlogComplexRelation[0]->m_commentX[0]->m_blog);
+
+   // Fetch relations defining columns to remove before fetching with syntax -{ col_1, col_2, etc... }
+   list_blog lstBlogComplexRelation2;
+   daoError = qx::dao::fetch_all_with_relation(QStringList() << "-{ blog_text }" << "author_id -{ name, birthdate }" << "list_comment -{ comment_text } -> blog_id -> *", lstBlogComplexRelation2);
+   qx::dump(lstBlogComplexRelation2);
+   qAssert(lstBlogComplexRelation2.size() > 0);
+   qAssert(lstBlogComplexRelation2[0]->m_text == ""); // Not fetched
+   qAssert(! lstBlogComplexRelation2[0]->m_dt_creation.isNull()); // Fetched
+   qAssert(lstBlogComplexRelation2[0]->m_author->m_sex != author::unknown); // Fetched
+   qAssert(lstBlogComplexRelation2[0]->m_author->m_name == ""); // Not fetched
+   qAssert(lstBlogComplexRelation2[0]->m_commentX.size() > 0);
+   qAssert(! lstBlogComplexRelation2[0]->m_commentX[0]->m_dt_create.isNull()); // Fetched
+   qAssert(lstBlogComplexRelation2[0]->m_commentX[0]->m_text == ""); // Not fetched
+   qAssert(lstBlogComplexRelation2[0]->m_commentX[0]->m_blog);
 
    // Check qx::dao::save_with_relation_recursive() function
    daoError = qx::dao::save_with_relation_recursive(blog_tmp);

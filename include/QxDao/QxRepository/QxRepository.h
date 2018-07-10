@@ -109,7 +109,7 @@ public:
       IxDataMember * pDataMemberId = (pDataMemberX ? pDataMemberX->getId_WithDaoStrategy() : NULL);
       if (! pDataMemberId) { qAssert(false); return NULL; }
       T * t = new T(); QSqlError err;
-      pDataMemberId->fromVariant(t, id);
+      pDataMemberId->fromVariant(t, id, -1, qx::cvt::context::e_database);
       if (relation.count() == 0) { err = qx::dao::fetch_by_id((* t), this->database(), columns); }
       else { err = qx::dao::fetch_by_id_with_relation(relation, (* t), this->database()); }
       if (err.isValid() && m_pSession) { delete t; t = NULL; (* m_pSession) += err; }
@@ -183,7 +183,7 @@ public:
       IxDataMember * pDataMemberId = (pDataMemberX ? pDataMemberX->getId_WithDaoStrategy() : NULL);
       if (! pDataMemberId) { qAssert(false); return QSqlError(); }
       qx_shared_ptr<T> t; t.reset(new T());
-      pDataMemberId->fromVariant(t.get(), id);
+      pDataMemberId->fromVariant(t.get(), id, -1, qx::cvt::context::e_database);
       QSqlError err = qx::dao::delete_by_id((* t), this->database());
       if (err.isValid() && m_pSession) { (* m_pSession) += err; }
       return err;
@@ -217,7 +217,7 @@ public:
       IxDataMember * pDataMemberId = (pDataMemberX ? pDataMemberX->getId_WithDaoStrategy() : NULL);
       if (! pDataMemberId) { qAssert(false); return QSqlError(); }
       qx_shared_ptr<T> t; t.reset(new T());
-      pDataMemberId->fromVariant(t.get(), id);
+      pDataMemberId->fromVariant(t.get(), id, -1, qx::cvt::context::e_database);
       QSqlError err = qx::dao::destroy_by_id((* t), this->database());
       if (err.isValid() && m_pSession) { (* m_pSession) += err; }
       return err;
@@ -419,7 +419,7 @@ public:
       IxDataMember * pDataMemberId = (pDataMemberX ? pDataMemberX->getId_WithDaoStrategy() : NULL);
       if (! pDataMemberId) { qAssert(false); return NULL; }
       T * t = new T(); QSqlError err;
-      pDataMemberId->fromVariant(t, id);
+      pDataMemberId->fromVariant(t, id, -1, qx::cvt::context::e_database);
       if (relation.count() == 0) { err = qx::dao::fetch_by_id((* t), NULL, columns); }
       else { err = qx::dao::fetch_by_id_with_relation(relation, (* t), NULL); }
       if (err.isValid()) { delete t; t = NULL; }

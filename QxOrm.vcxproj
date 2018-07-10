@@ -231,6 +231,7 @@
     <ClInclude Include="include\QxModelView\QxModelService.h" />
     <ClInclude Include="include\QxModelView\QxNestedModel.h" />
     <ClInclude Include="include\QxOrm.h" />
+    <ClInclude Include="include\QxOrm_Impl.h" />
     <ClInclude Include="include\QxPrecompiled.h" />
     <ClInclude Include="include\QxCommon\QxAnyCastDynamic.h" />
     <ClInclude Include="include\QxCommon\QxBool.h" />

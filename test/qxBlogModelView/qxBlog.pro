@@ -34,10 +34,20 @@ HEADERS += ./include/blog.h
 HEADERS += ./include/category.h
 HEADERS += ./include/comment.h
 
+HEADERS += ./include/model_view_from_qxee/author.model_view.gen.h
+HEADERS += ./include/model_view_from_qxee/blog.model_view.gen.h
+HEADERS += ./include/model_view_from_qxee/category.model_view.gen.h
+HEADERS += ./include/model_view_from_qxee/comment.model_view.gen.h
+
 SOURCES += ./src/author.cpp
 SOURCES += ./src/blog.cpp
 SOURCES += ./src/category.cpp
 SOURCES += ./src/comment.cpp
 SOURCES += ./src/main.cpp
+
+SOURCES += ./src/model_view_from_qxee/author.model_view.gen.cpp
+SOURCES += ./src/model_view_from_qxee/blog.model_view.gen.cpp
+SOURCES += ./src/model_view_from_qxee/category.model_view.gen.cpp
+SOURCES += ./src/model_view_from_qxee/comment.model_view.gen.cpp
 
 RESOURCES += ./qt/rcc/qxBlogModelView.qrc

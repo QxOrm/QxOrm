@@ -13,7 +13,7 @@
 #include "../../qxService/include/service/server_infos.h"
 #include "../../qxService/include/service/user_service.h"
 
-#include <QxMemLeak.h>
+#include <QxOrm_Impl.h>
 
 #define QX_CLIENT_BIRTHDATE_QDATETIME_FORMAT "dd/MM/yyyy"
 

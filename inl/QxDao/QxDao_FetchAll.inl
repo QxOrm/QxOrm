@@ -39,10 +39,10 @@ struct QxDao_FetchAll_Generic
 
    static QSqlError fetchAll(const qx::QxSqlQuery & query, T & t, QSqlDatabase * pDatabase, const QStringList & columns)
    {
-      qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "fetch all");
+      qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "fetch all", new qx::QxSqlQueryBuilder_FetchAll<T>());
       if (! dao.isValid()) { return dao.error(); }
 
-      QString sql = dao.builder().fetchAll(columns).getSqlQuery();
+      QString sql = dao.builder().buildSql(columns).getSqlQuery();
       if (sql.isEmpty()) { return dao.errEmpty(); }
       if (! query.isEmpty()) { dao.addQuery(query, true); sql = dao.builder().getSqlQuery(); }
       if (! dao.exec()) { return dao.errFailed(); }
@@ -65,11 +65,13 @@ struct QxDao_FetchAll_Container
 
    static QSqlError fetchAll(const qx::QxSqlQuery & query, T & t, QSqlDatabase * pDatabase, const QStringList & columns)
    {
+      typedef typename qx::trait::generic_container<T>::type_value_qx type_item;
+
       qx::trait::generic_container<T>::clear(t);
-      qx::dao::detail::QxDao_Helper_Container<T> dao(t, pDatabase, "fetch all");
+      qx::dao::detail::QxDao_Helper_Container<T> dao(t, pDatabase, "fetch all", new qx::QxSqlQueryBuilder_FetchAll<type_item>());
       if (! dao.isValid()) { return dao.error(); }
 
-      QString sql = dao.builder().fetchAll(columns).getSqlQuery();
+      QString sql = dao.builder().buildSql(columns).getSqlQuery();
       if (sql.isEmpty()) { return dao.errEmpty(); }
       if (! query.isEmpty()) { dao.addQuery(query, true); sql = dao.builder().getSqlQuery(); }
       if (! dao.exec()) { return dao.errFailed(); }
@@ -93,7 +95,7 @@ private:
       type_value_qx & item_val = item.value_qx();
       qx::IxDataMember * pId = dao.getDataId();
       QStringList columns = dao.getSqlColumns();
-      if (pId) { for (int i = 0; i < pId->getNameCount(); i++) { QVariant v = dao.query().value(i); qx::cvt::from_variant(v, item.key(), "", i); } }
+      if (pId) { for (int i = 0; i < pId->getNameCount(); i++) { QVariant v = dao.query().value(i); qx::cvt::from_variant(v, item.key(), "", i, qx::cvt::context::e_database); } }
       qx::dao::on_before_fetch<type_value_qx>((& item_val), (& dao)); if (! dao.isValid()) { return; }
       qx::dao::detail::QxSqlQueryHelper_FetchAll<type_value_qx>::resolveOutput(item_val, dao.query(), dao.builder(), columns);
       qx::dao::on_after_fetch<type_value_qx>((& item_val), (& dao)); if (! dao.isValid()) { return; }

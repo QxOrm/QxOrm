@@ -43,6 +43,8 @@
 #include <boost/serialization/nvp.hpp>
 
 #include <QtCore/qsharedpointer.h>
+#include <QtCore/QWeakPointer>
+#include <QtCore/qhash.h>
 
 namespace boost {
 namespace serialization {
@@ -59,9 +61,22 @@ template <class Archive, typename T>
 inline void load(Archive & ar, QSharedPointer<T> & t, const unsigned int file_version)
 {
    Q_UNUSED(file_version);
-   T * ptr = NULL;
-   ar >> boost::serialization::make_nvp("qt_shared_ptr", ptr);
+   static QHash<void *, QWeakPointer<T> > listOfWeakPointers;
+   T * ptr = NULL; ar >> boost::serialization::make_nvp("qt_shared_ptr", ptr);
+   if (! ptr) { t = QSharedPointer<T>(); return; }
+
+   void * pVoid = static_cast<void *>(ptr);
+   QSharedPointer<T> pShared = (listOfWeakPointers.contains(pVoid) ? listOfWeakPointers.value(pVoid).toStrongRef() : QSharedPointer<T>());
+   if (pShared) { t = pShared; return; }
    t = QSharedPointer<T>(ptr);
+   QWeakPointer<T> pWeak = t;
+   listOfWeakPointers.insert(pVoid, pWeak);
+
+   static int iLoadCount = 0;
+   iLoadCount++; if (iLoadCount <= 1000) { return; }
+   QMutableHashIterator<void *, QWeakPointer<T> > itr(listOfWeakPointers);
+   while (itr.hasNext()) { itr.next(); if (itr.value().isNull()) { itr.remove(); } }
+   iLoadCount = 0;
 }
 
 template <class Archive, typename T>

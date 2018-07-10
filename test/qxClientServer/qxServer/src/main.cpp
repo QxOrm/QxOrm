@@ -9,7 +9,7 @@
 #include "../include/precompiled.h"
 #include "../include/main_dlg.h"
 
-#include <QxMemLeak.h>
+#include <QxOrm_Impl.h>
 
 int main(int argc, char * argv[])
 {

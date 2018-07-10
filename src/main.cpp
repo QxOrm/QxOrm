@@ -40,6 +40,9 @@ extern "C"
 int WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /* lpReservedt */)
 {
    Q_UNUSED(hInstance);
+   Q_UNUSED(dwReason);
+
+#ifndef _QX_NO_TRACE_DLL_ATTACH_DETACH
    switch (dwReason)
    {
       case DLL_PROCESS_ATTACH:   ::OutputDebugStringA("QxOrm.DllMain() ---> DLL_PROCESS_ATTACH\n");  break;
@@ -47,6 +50,7 @@ int WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /* lpReservedt */
       case DLL_THREAD_ATTACH:    ::OutputDebugStringA("QxOrm.DllMain() ---> DLL_THREAD_ATTACH\n");   break;
       case DLL_THREAD_DETACH:    ::OutputDebugStringA("QxOrm.DllMain() ---> DLL_THREAD_DETACH\n");   break;
    }
+#endif // _QX_NO_TRACE_DLL_ATTACH_DETACH
 
    return 1;
 }

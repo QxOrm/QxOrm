@@ -17,7 +17,9 @@
 #include "../../qxService/include/business_object/user_search.h"
 
 class main_dlg : public QWidget, private Ui::dlgClient
-{ Q_OBJECT
+{
+
+   Q_OBJECT
 
 private:
 

@@ -1633,6 +1633,9 @@
     <ClInclude Include="include\QxSerialize\QxSerializeQJson.h">
       <Filter>include\QxSerialize</Filter>
     </ClInclude>
+    <ClInclude Include="include\QxOrm_Impl.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="inl\QxDataMember\QxDataMember.inl">

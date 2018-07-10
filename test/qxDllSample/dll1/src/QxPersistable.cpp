@@ -33,7 +33,7 @@
 
 #include "../include/QxPersistable.h"
 
-#include <QxMemLeak.h>
+#include <QxOrm_Impl.h>
 
 QX_REGISTER_COMPLEX_CLASS_NAME_CPP_QX_DLL1(qx::QxPersistable, qx_QxPersistable)
 

@@ -39,7 +39,7 @@
 
 #include <QxConvert/QxConvert_Impl.h>
 
-#include <QxMemLeak.h>
+#include <QxOrm_Impl.h>
 
 #if (BOOST_VERSION > 103800)
 #define QX_BOOST_EXPORT_ARCHIVE_SERIALIZER_MAP_SINGLETON_CPP(Archive) \

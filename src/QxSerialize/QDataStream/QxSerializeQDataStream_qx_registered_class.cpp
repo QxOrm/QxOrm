@@ -102,7 +102,7 @@ void QxSerializeRegistered_Helper::saveHelper(QDataStream & stream, IxClass * pC
       IxDataMember * pDataMember = pDataMemberX->get(l);
       if (! pDataMember || ! pDataMember->getSerialize()) { continue; }
       if (pDataMember->getVersion() > static_cast<long>(iVersion)) { qAssert(false); continue; }
-      QVariant vValue = pDataMember->toVariant(pOwner, QX_FORMAT_FROM_SERIALIZE_REGISTERED);
+      QVariant vValue = pDataMember->toVariant(pOwner, -1, qx::cvt::context::e_serialize_registered);
       stream << vValue;
    }
 }
@@ -118,7 +118,7 @@ void QxSerializeRegistered_Helper::loadHelper(QDataStream & stream, IxClass * pC
       if (! pDataMember || ! pDataMember->getSerialize()) { continue; }
       if (pDataMember->getVersion() > static_cast<long>(iVersion)) { continue; }
       QVariant vValue; stream >> vValue;
-      pDataMember->fromVariant(pOwner, vValue, QX_FORMAT_FROM_SERIALIZE_REGISTERED);
+      pDataMember->fromVariant(pOwner, vValue, -1, qx::cvt::context::e_serialize_registered);
    }
 }
 

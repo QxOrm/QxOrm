@@ -36,7 +36,7 @@
 #include <QxSerialize/Qt/QxSerialize_QUuid.h>
 #include <QxSerialize/Qt/QxSerialize_QString.h>
 
-#include <QxMemLeak.h>
+#include <QxOrm_Impl.h>
 
 namespace boost {
 namespace serialization {

@@ -43,6 +43,7 @@
 #define QX_DAO_ERR_OPEN_CONNECTION           "[QxOrm] unable to open connection to database"
 #define QX_DAO_ERR_BUILD_SQL_QUERY           "[QxOrm] error building sql query : %s"
 #define QX_DAO_ERR_EXECUTE_SQL_QUERY         "[QxOrm] execute sql query failed : %s"
+#define QX_DAO_ERR_PREPARE_SQL_QUERY         "[QxOrm] prepare sql query failed : %s"
 #define QX_DAO_ERR_NO_DATA                   "[QxOrm] sql query returns no data"
 #define QX_DAO_ERR_NO_QUERY_BUILDER          "[QxOrm] unable to construct sql query builder"
 #define QX_DAO_ERR_NO_ELEMENT_IN_CONTAINER   "[QxOrm] no element in container"
@@ -64,8 +65,6 @@ namespace detail {
 IxDao_Helper::IxDao_Helper() : QX_CONSTRUCT_IX_DAO_HELPER() { ; }
 
 IxDao_Helper::~IxDao_Helper() { terminate(); }
-
-void IxDao_Helper::updateQueryBuilder() { ; }
 
 bool IxDao_Helper::isValid() const { return (! m_error.isValid() && m_pQueryBuilder); }
 
@@ -107,8 +106,6 @@ void IxDao_Helper::setSqlColumns(const QStringList & lst) { m_lstColumns = lst; 
 
 IxSqlGenerator * IxDao_Helper::getSqlGenerator() const { return m_pSqlGenerator; }
 
-void IxDao_Helper::updateError(const QSqlError & error) { m_error = error; }
-
 void IxDao_Helper::quiet() { m_bQuiet = true; }
 
 bool IxDao_Helper::exec() { return (m_qxQuery.isEmpty() ? this->query().exec(this->builder().getSqlQuery()) : this->query().exec()); }
@@ -125,7 +122,7 @@ void IxDao_Helper::addInvalidValues(const qx::QxInvalidValueX & lst)
       QString sInvalidValues = QX_DAO_ERR_INVALID_VALUES_DETECTED;
       sInvalidValues += QString("\n") + m_lstInvalidValues.text();
       updateError(sInvalidValues);
-      if (m_bValidatorThrowable) { qDebug("[QxOrm] invalid values detected, throw 'qx::validator_error' exception : '%s'", qPrintable(m_lstInvalidValues.text())); }
+      if (m_bValidatorThrowable) { QString tmp = m_lstInvalidValues.text(); qDebug("[QxOrm] invalid values detected, throw 'qx::validator_error' exception : '%s'", qPrintable(tmp)); }
       if (m_bValidatorThrowable) { throw qx::validator_error(m_lstInvalidValues); }
    }
 }
@@ -142,45 +139,28 @@ const qx::IxSqlQueryBuilder & IxDao_Helper::builder() const
    return (* m_pQueryBuilder);
 }
 
-QSqlError IxDao_Helper::errFailed()
+QSqlError IxDao_Helper::errFailed(bool bPrepare /* = false */)
 {
    QString sql = this->sql();
-   qDebug(QX_DAO_ERR_EXECUTE_SQL_QUERY, qPrintable(sql));
-   m_error = m_query.lastError();
-   return m_error;
+   if (bPrepare) { qDebug(QX_DAO_ERR_PREPARE_SQL_QUERY, qPrintable(sql)); }
+   else { qDebug(QX_DAO_ERR_EXECUTE_SQL_QUERY, qPrintable(sql)); }
+   return updateError(m_query.lastError());
 }
 
 QSqlError IxDao_Helper::errEmpty()
 {
    QString sql = this->sql();
    qDebug(QX_DAO_ERR_BUILD_SQL_QUERY, qPrintable(sql));
-   m_error = m_query.lastError();
-   return m_error;
+   return updateError(m_query.lastError());
 }
 
-QSqlError IxDao_Helper::errNoData()
-{
-   updateError(QX_DAO_ERR_NO_DATA);
-   return m_error;
-}
+QSqlError IxDao_Helper::errNoData() { return updateError(QX_DAO_ERR_NO_DATA); }
 
-QSqlError IxDao_Helper::errInvalidId()
-{
-   updateError(QX_DAO_ERR_INVALID_PRIMARY_KEY);
-   return m_error;
-}
+QSqlError IxDao_Helper::errInvalidId() { return updateError(QX_DAO_ERR_INVALID_PRIMARY_KEY); }
 
-QSqlError IxDao_Helper::errInvalidRelation()
-{
-   updateError(QX_DAO_ERR_INVALID_SQL_RELATION);
-   return m_error;
-}
+QSqlError IxDao_Helper::errInvalidRelation() { return updateError(QX_DAO_ERR_INVALID_SQL_RELATION); }
 
-QSqlError IxDao_Helper::errReadOnly()
-{
-   updateError(QX_DAO_ERR_READ_ONLY);
-   return m_error;
-}
+QSqlError IxDao_Helper::errReadOnly() { return updateError(QX_DAO_ERR_READ_ONLY); }
 
 bool IxDao_Helper::transaction()
 {
@@ -238,14 +218,35 @@ void IxDao_Helper::addQuery(const qx::QxSqlQuery & query, bool bResolve)
    { sql = "SELECT DISTINCT " + sql.right(sql.size() - 7); }
    m_qxQuery.postProcess(sql);
    this->builder().setSqlQuery(sql);
-   if (bResolve) { this->query().prepare(sql); m_qxQuery.resolve(this->query()); }
+
+   if (bResolve)
+   {
+      if (! this->query().prepare(sql)) { this->errFailed(true); }
+      m_qxQuery.resolve(this->query());
+   }
 }
 
 QSqlError IxDao_Helper::updateError(const QString & sError)
 {
    QString sDriverText = (QX_DAO_ERR_INTERNAL + QString(" <") + m_context + QString(">"));
    sDriverText += (sql().isEmpty() ? QString("") : (QString(" : ") + sql()));
-   m_error = QSqlError(sDriverText, sError, QSqlError::UnknownError);
+   QSqlError err = QSqlError(sDriverText, sError, QSqlError::UnknownError);
+   return updateError(err);
+}
+
+QSqlError IxDao_Helper::updateError(const QSqlError & error)
+{
+   if (! m_error.isValid())
+   {
+      m_error = error;
+      return m_error;
+   }
+
+   if ((error.databaseText() != m_error.databaseText()) && (! error.databaseText().isEmpty())) { m_error.setDatabaseText(m_error.databaseText() + "\n" + error.databaseText()); }
+   if ((error.driverText() != m_error.driverText()) && (! error.driverText().isEmpty())) { m_error.setDriverText(m_error.driverText() + "\n" + error.driverText()); }
+   if (((m_error.type() == QSqlError::NoError) || (m_error.type() == QSqlError::UnknownError)) && (error.type() != QSqlError::NoError)) { m_error.setType(error.type()); }
+   if (m_error.number() == -1) { m_error.setNumber(error.number()); }
+
    return m_error;
 }
 
@@ -262,8 +263,6 @@ void IxDao_Helper::init(QSqlDatabase * pDatabase, const QString & sContext)
    if (dbError.isValid()) { updateError(dbError); return; }
    if (! m_database.isValid()) { updateError(QX_DAO_ERR_NO_CONNECTION); return; }
    if (! m_database.isOpen() && ! m_database.open()) { updateError(QX_DAO_ERR_OPEN_CONNECTION); return; }
-
-   updateQueryBuilder();
    if (! m_pQueryBuilder) { updateError(QX_DAO_ERR_NO_QUERY_BUILDER); return; }
 
    m_pQueryBuilder->init();
@@ -286,7 +285,7 @@ void IxDao_Helper::terminate()
    else if (! isValid())
    {
       if (m_bTransaction) { m_database.rollback(); }
-      if (! m_bQuiet) { qDebug("%s", qPrintable(m_error.driverText())); qDebug("%s", qPrintable(m_error.databaseText())); }
+      if (! m_bQuiet) { int ierr = m_error.number(); QString tmp = m_error.driverText(); qDebug("Database error number '%d' : %s", ierr, qPrintable(tmp)); tmp = m_error.databaseText(); qDebug("%s", qPrintable(tmp)); }
    }
    else if (m_pQueryBuilder)
    {
@@ -300,6 +299,17 @@ void IxDao_Helper::terminate()
    }
 
    m_bTransaction = false;
+   dumpBoundValues();
+}
+
+void IxDao_Helper::dumpBoundValues() const
+{
+   qx::QxSqlDatabase * pDatabase = qx::QxSqlDatabase::getSingleton(); if (! pDatabase) { return; }
+   bool bBoundValues = pDatabase->getTraceSqlBoundValues();
+   bool bBoundValuesOnError = pDatabase->getTraceSqlBoundValuesOnError();
+
+   if ((! isValid() && bBoundValuesOnError) || (bBoundValues))
+   { qx::QxSqlQuery::dumpBoundValues(m_query); }
 }
 
 } // namespace detail

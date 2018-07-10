@@ -2,7 +2,7 @@
 
 #include "../include/CPerson.h"
 
-#include <QxMemLeak.h>
+#include <QxOrm_Impl.h>
 
 namespace qx {
 namespace test {

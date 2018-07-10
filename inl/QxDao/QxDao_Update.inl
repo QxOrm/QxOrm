@@ -39,17 +39,17 @@ struct QxDao_Update_Generic
 
    static QSqlError update(const qx::QxSqlQuery & query, T & t, QSqlDatabase * pDatabase, const QStringList & columns)
    {
-      qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "update");
+      qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "update", new qx::QxSqlQueryBuilder_Update<T>());
       if (! dao.isValid()) { return dao.error(); }
       if (dao.isReadOnly()) { return dao.errReadOnly(); }
       if (! dao.isValidPrimaryKey(t)) { return dao.errInvalidId(); }
       if (! dao.validateInstance(t)) { return dao.error(); }
 
-      QString sql = dao.builder().update(columns).getSqlQuery();
+      QString sql = dao.builder().buildSql(columns).getSqlQuery();
       if (! dao.getDataId() || sql.isEmpty()) { return dao.errEmpty(); }
       if (! query.isEmpty()) { dao.addQuery(query, false); sql = dao.builder().getSqlQuery(); }
       if (! pDatabase) { dao.transaction(); }
-      dao.query().prepare(sql);
+      if (! dao.query().prepare(sql)) { return dao.errFailed(true); }
 
       IxSqlGenerator * pSqlGenerator = dao.getSqlGenerator();
       if (pSqlGenerator) { pSqlGenerator->onBeforeUpdate((& dao), (& t)); }
@@ -71,18 +71,20 @@ struct QxDao_Update_Container
 
    static QSqlError update(const qx::QxSqlQuery & query, T & t, QSqlDatabase * pDatabase, const QStringList & columns)
    {
+      typedef typename qx::trait::generic_container<T>::type_value_qx type_item;
+
       if (qx::trait::generic_container<T>::size(t) <= 0) { return QSqlError(); }
-      qx::dao::detail::QxDao_Helper_Container<T> dao(t, pDatabase, "update");
+      qx::dao::detail::QxDao_Helper_Container<T> dao(t, pDatabase, "update", new qx::QxSqlQueryBuilder_Update<type_item>());
       if (! dao.isValid()) { return dao.error(); }
       if (dao.isReadOnly()) { return dao.errReadOnly(); }
       if (! dao.validateInstance(t)) { return dao.error(); }
 
-      QString sql = dao.builder().update(columns).getSqlQuery();
+      QString sql = dao.builder().buildSql(columns).getSqlQuery();
       if (! dao.getDataId() || sql.isEmpty()) { return dao.errEmpty(); }
       if (! query.isEmpty()) { dao.addQuery(query, false); sql = dao.builder().getSqlQuery(); }
       if (! pDatabase) { dao.transaction(); }
+      if (! dao.query().prepare(sql)) { return dao.errFailed(true); }
       dao.setSqlColumns(columns);
-      dao.query().prepare(sql);
 
       for (typename T::iterator it = t.begin(); it != t.end(); ++it)
       { if (! updateItem((* it), dao)) { return dao.error(); } }

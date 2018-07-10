@@ -40,13 +40,7 @@ struct QxSqlQueryHelper_DeleteById
    static void sql(QString & sql, qx::IxSqlQueryBuilder & builder, bool bSoftDelete)
    {
       BOOST_STATIC_ASSERT(qx::trait::is_qx_registered<T>::value);
-      qx::IxDataMember * pId = builder.getDataId(); qAssert(pId);
-      qx::QxSoftDelete oSoftDelete = builder.getSoftDelete();
-      QString table = builder.table();
-      if (bSoftDelete && ! oSoftDelete.isEmpty()) { sql = "UPDATE " + table + " SET " + oSoftDelete.buildSqlQueryToUpdate(); }
-      else { sql = "DELETE FROM " + qx::IxDataMember::getSqlFromTable(table); }
-      sql += qx::IxSqlQueryBuilder::addSqlCondition(sql);
-      sql += pId->getSqlNameEqualToPlaceHolder("", " AND ");
+      qx::IxSqlQueryBuilder::sql_DeleteById(sql, builder, bSoftDelete);
    }
 
    static void resolveInput(T & t, QSqlQuery & query, qx::IxSqlQueryBuilder & builder)

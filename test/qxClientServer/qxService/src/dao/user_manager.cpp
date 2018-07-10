@@ -4,7 +4,7 @@
 
 #include "../../include/dao/user_manager.h"
 
-#include <QxMemLeak.h>
+#include <QxOrm_Impl.h>
 
 void user_manager::init_database()
 {

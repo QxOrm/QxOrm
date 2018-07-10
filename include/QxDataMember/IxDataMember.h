@@ -61,6 +61,8 @@
 
 #include <QxDao/IxSqlRelation.h>
 
+#include <QxConvert/QxConvert.h>
+
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif // _MSC_VER
@@ -85,6 +87,13 @@ class IxDataMemberX;
  */
 class QX_DLL_EXPORT IxDataMember : public qx::QxPropertyBag
 {
+
+public:
+
+   typedef QMap<int, QPair<IxSqlRelation *, int> > type_fk_part_of_pk;
+   typedef boost::scoped_ptr<type_fk_part_of_pk> type_fk_part_of_pk_ptr;   //!< Type used by primary key to manage the case where a foreign key (relationship) is also a part of primary key (which can contain several columns)
+   typedef QMap<int, QPair<IxDataMember *, int> > type_part_of_pk;
+   typedef boost::scoped_ptr<type_part_of_pk> type_part_of_pk_ptr;         //!< Type used by relationship to manage the case where a foreign key (relationship) is also a part of primary key (which can contain several columns)
 
 protected:
 
@@ -119,6 +128,9 @@ protected:
 
    boost::scoped_ptr<IxSqlRelation> m_pSqlRelation;   //!< Sql relation to build/resolve sql query
    IxDataMemberX * m_pParent;                         //!< 'IxDataMemberX' parent
+
+   type_fk_part_of_pk_ptr m_pListRelationPartOfPrimaryKey;     //!< Used by primary key to manage the case where a foreign key (relationship) is also a part of primary key (which can contain several columns)
+   type_part_of_pk_ptr m_pListPartOfPrimaryKey;                //!< Used by relationship to manage the case where a foreign key (relationship) is also a part of primary key (which can contain several columns)
 
 public:
 
@@ -181,26 +193,31 @@ public:
    void setMaxLength(int iMaxLength, const QString & sMessage = QString());
    void setNotNull(bool bNotNull, const QString & sMessage = QString());
 
+   bool isThereRelationPartOfPrimaryKey(int iIndexNamePK, IxSqlRelation * & pRelation, int & iIndexNameFK) const;
+   bool isPartOfPrimaryKey(int iIndexNameFK, IxDataMember * & pPrimaryKey, int & iIndexNamePK) const;
+   void setRelationPartOfPrimaryKey(int iIndexNamePK, IxSqlRelation * pRelation, int iIndexNameFK);
+   void setPartOfPrimaryKey(int iIndexNameFK, IxDataMember * pPrimaryKey, int iIndexNamePK);
+
    QString getName(int iIndex, const QString & sOtherName = QString()) const;
    QString getSqlAlias(const QString & sTable = QString(), bool bClauseWhere = false, int iIndexName = 0) const;
    QString getSqlType(int iIndexName = -1) const;
    QString getSqlTypeAndParams(int iIndexName = -1) const;
-   QString getSqlPlaceHolder(const QString & sAppend = QString(), int iIndexName = 0, const QString & sSep = QString(", "), const QString & sOtherName = QString()) const;
-   void setSqlPlaceHolder(QSqlQuery & query, void * pOwner, const QString & sAppend = QString(), const QString & sOtherName = QString()) const;
-   QString getSqlAliasEqualToPlaceHolder(const QString & sTable = QString(), bool bClauseWhere = false, const QString & sAppend = QString(), const QString & sSep = QString(" AND ")) const;
-   QString getSqlNameEqualToPlaceHolder(const QString & sAppend = QString(), const QString & sSep = QString(" AND ")) const;
-   QString getSqlTablePointNameAsAlias(const QString & sTable, const QString & sSep = QString(", "), const QString & sSuffixAlias = QString()) const;
-   QString getSqlName(const QString & sSep = QString(", "), const QString & sOtherName = QString()) const;
-   QString getSqlNameAndTypeAndParams(const QString & sSep = QString(", "), const QString & sOtherName = QString()) const;
+   QString getSqlPlaceHolder(const QString & sAppend = QString(), int iIndexName = 0, const QString & sSep = QString(", "), const QString & sOtherName = QString(), bool bCheckFKPartOfPK = false) const;
+   void setSqlPlaceHolder(QSqlQuery & query, void * pOwner, const QString & sAppend = QString(), const QString & sOtherName = QString(), bool bCheckFKPartOfPK = false) const;
+   QString getSqlAliasEqualToPlaceHolder(const QString & sTable = QString(), bool bClauseWhere = false, const QString & sAppend = QString(), const QString & sSep = QString(" AND "), bool bCheckFKPartOfPK = false) const;
+   QString getSqlNameEqualToPlaceHolder(const QString & sAppend = QString(), const QString & sSep = QString(" AND "), bool bCheckFKPartOfPK = false) const;
+   QString getSqlTablePointNameAsAlias(const QString & sTable, const QString & sSep = QString(", "), const QString & sSuffixAlias = QString(), bool bCheckFKPartOfPK = false) const;
+   QString getSqlName(const QString & sSep = QString(", "), const QString & sOtherName = QString(), bool bCheckFKPartOfPK = false) const;
+   QString getSqlNameAndTypeAndParams(const QString & sSep = QString(", "), const QString & sOtherName = QString(), bool bCheckFKPartOfPK = false) const;
 
    static QString getSqlFromTable(const QString & sTable);
 
    virtual bool isEqual(const void * pOwner1, const void * pOwner2) const = 0;
-   virtual QVariant toVariant(const void * pOwner, const QString & sFormat, int iIndexName = -1) const = 0;
-   virtual qx_bool fromVariant(void * pOwner, const QVariant & v, const QString & sFormat, int iIndexName = -1) = 0;
+   virtual QVariant toVariant(const void * pOwner, const QString & sFormat, int iIndexName = -1, qx::cvt::context::ctx_type ctx = qx::cvt::context::e_no_context) const = 0;
+   virtual qx_bool fromVariant(void * pOwner, const QVariant & v, const QString & sFormat, int iIndexName = -1, qx::cvt::context::ctx_type ctx = qx::cvt::context::e_no_context) = 0;
 
-   inline QVariant toVariant(const void * pOwner, int iIndexName = -1) const           { return this->toVariant(pOwner, m_sFormat, iIndexName); }
-   inline qx_bool fromVariant(void * pOwner, const QVariant & v, int iIndexName = -1)  { return this->fromVariant(pOwner, v, m_sFormat, iIndexName); }
+   inline QVariant toVariant(const void * pOwner, int iIndexName = -1, qx::cvt::context::ctx_type ctx = qx::cvt::context::e_no_context) const            { return this->toVariant(pOwner, m_sFormat, iIndexName, ctx); }
+   inline qx_bool fromVariant(void * pOwner, const QVariant & v, int iIndexName = -1, qx::cvt::context::ctx_type ctx = qx::cvt::context::e_no_context)   { return this->fromVariant(pOwner, v, m_sFormat, iIndexName, ctx); }
 
 #ifndef _QX_NO_JSON
    virtual QJsonValue toJson(const void * pOwner, const QString & sFormat) const = 0;

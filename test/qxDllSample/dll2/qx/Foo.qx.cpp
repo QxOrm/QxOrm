@@ -2,7 +2,7 @@
 
 #include "../include/Foo.h"
 
-#include <QxMemLeak.h>
+#include <QxOrm_Impl.h>
 
 QX_REGISTER_CPP_QX_DLL2(Foo)
 QX_PERSISTABLE_CPP(Foo)

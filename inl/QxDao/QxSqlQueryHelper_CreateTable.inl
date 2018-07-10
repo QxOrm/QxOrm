@@ -40,22 +40,7 @@ struct QxSqlQueryHelper_CreateTable
    static void sql(QString & sql, qx::IxSqlQueryBuilder & builder)
    {
       BOOST_STATIC_ASSERT(qx::trait::is_qx_registered<T>::value);
-      long l1(0), l2(0);
-      qx::IxDataMember * p = NULL;
-      qx::IxDataMember * pId = builder.getDataId();
-      qx::IxSqlRelation * pRelation = NULL;
-      qx::QxSqlRelationParams params(0, 0, (& sql), (& builder), NULL, NULL);
-      qx::QxSoftDelete oSoftDelete = builder.getSoftDelete();
-      QString table = builder.table();
-      sql = "CREATE TABLE " + table + " (";
-      int iSqlCountRef = sql.count();
-      if (pId) { sql += pId->getSqlNameAndTypeAndParams(", ") + ", "; qAssert(! pId->getSqlType().isEmpty()); }
-      while ((p = builder.nextData(l1))) { sql += p->getSqlNameAndTypeAndParams(", ") + ", "; qAssert(! p->getSqlType().isEmpty()); }
-      if (! oSoftDelete.isEmpty()) { sql += oSoftDelete.buildSqlQueryToCreateTable() + ", "; }
-      while ((pRelation = builder.nextRelation(l2))) { params.setIndex(l2); pRelation->createTable(params); }
-      bool bAddBracket = (sql.count() != iSqlCountRef);
-      sql = sql.left(sql.count() - 2); // Remove last ", "
-      if (bAddBracket) { sql += ")"; }
+      qx::IxSqlQueryBuilder::sql_CreateTable(sql, builder);
    }
 
    static void resolveInput(T & t, QSqlQuery & query, qx::IxSqlQueryBuilder & builder)

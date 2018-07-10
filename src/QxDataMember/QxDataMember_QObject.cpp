@@ -80,15 +80,15 @@ qx_bool QxDataMember_QObject::fromString(void * pOwner, const QString & s, const
    return m_metaProperty.write(static_cast<QObject *>(pOwner), QVariant::fromValue(s));
 }
 
-QVariant QxDataMember_QObject::toVariant(const void * pOwner, const QString & sFormat, int iIndexName /* = -1 */) const
+QVariant QxDataMember_QObject::toVariant(const void * pOwner, const QString & sFormat, int iIndexName /* = -1 */, qx::cvt::context::ctx_type ctx /* = qx::cvt::context::e_no_context */) const
 {
-   Q_UNUSED(sFormat); Q_UNUSED(iIndexName);
+   Q_UNUSED(sFormat); Q_UNUSED(iIndexName); Q_UNUSED(ctx);
    return m_metaProperty.read(static_cast<const QObject *>(pOwner));
 }
 
-qx_bool QxDataMember_QObject::fromVariant(void * pOwner, const QVariant & v, const QString & sFormat, int iIndexName /* = -1 */)
+qx_bool QxDataMember_QObject::fromVariant(void * pOwner, const QVariant & v, const QString & sFormat, int iIndexName /* = -1 */, qx::cvt::context::ctx_type ctx /* = qx::cvt::context::e_no_context */)
 {
-   Q_UNUSED(sFormat); Q_UNUSED(iIndexName);
+   Q_UNUSED(sFormat); Q_UNUSED(iIndexName); Q_UNUSED(ctx);
    return m_metaProperty.write(static_cast<QObject *>(pOwner), v);
 }
 

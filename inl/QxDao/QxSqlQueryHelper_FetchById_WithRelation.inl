@@ -41,11 +41,7 @@ struct QxSqlQueryHelper_FetchById_WithRelation
    {
       BOOST_STATIC_ASSERT(qx::trait::is_qx_registered<T>::value);
       if (! pRelationX) { qAssert(false); QxSqlQueryHelper_FetchById<T>::sql(sql, builder); return; }
-      qx::IxDataMember * pId = builder.getDataId(); qAssert(pId);
-      QString table = builder.table();
-      sql = builder.fetchAll_WithRelation(pRelationX).getSqlQuery();
-      sql += qx::IxSqlQueryBuilder::addSqlCondition(sql);
-      sql += pId->getSqlAliasEqualToPlaceHolder(table, true);
+      qx::IxSqlQueryBuilder::sql_FetchById_WithRelation(pRelationX, sql, builder);
    }
 
    static void resolveInput(qx::QxSqlRelationLinked * pRelationX, T & t, QSqlQuery & query, qx::IxSqlQueryBuilder & builder)

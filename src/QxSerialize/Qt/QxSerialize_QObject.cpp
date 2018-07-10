@@ -35,7 +35,7 @@
 
 #include <QxSerialize/Qt/QxSerialize_QObject.h>
 
-#include <QxMemLeak.h>
+#include <QxOrm_Impl.h>
 
 QX_BOOST_EXPORT_SERIALIZATION_FAST_COMPIL_CPP(QObject)
 

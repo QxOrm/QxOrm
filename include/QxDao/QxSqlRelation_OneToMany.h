@@ -133,17 +133,18 @@ public:
       for (int i = 0; i < pForeign->getNameCount(); i++)
       { QVariant vForeign = query.value(lOffsetOld + lOffsetId + i); bValidForeign = (bValidForeign || qx::trait::is_valid_primary_key(vForeign)); }
       if (! bValidId || ! bValidForeign) { return NULL; }
+
       type_item item = this->createItem();
       type_data & item_val = item.value_qx();
       if (! this->callTriggerBeforeFetch(item_val, params)) { return NULL; }
       for (int i = 0; i < pId->getNameCount(); i++)
-      { QVariant v = query.value(lOffsetOld + i); qx::cvt::from_variant(v, item.key(), "", i); }
+      { QVariant v = query.value(lOffsetOld + i); qx::cvt::from_variant(v, item.key(), "", i, qx::cvt::context::e_database); }
       for (int i = 0; i < pId->getNameCount(); i++)
-      { QVariant v = query.value(lOffsetOld + i); pId->fromVariant((& item_val), v, "", i); }
+      { QVariant v = query.value(lOffsetOld + i); pId->fromVariant((& item_val), v, "", i, qx::cvt::context::e_database); }
       for (int i = 0; i < pForeign->getNameCount(); i++)
-      { QVariant v = query.value(lOffsetOld + lOffsetId + i); pForeign->fromVariant((& item_val), v, "", i); }
+      { QVariant v = query.value(lOffsetOld + lOffsetId + i); pForeign->fromVariant((& item_val), v, "", i, qx::cvt::context::e_database); }
       while ((p = this->nextData(lIndex)))
-      { if ((p != pForeign) && (params.checkColumns(p->getKey()))) { p->fromVariant((& item_val), query.value(lOffsetRelation++)); } }
+      { if ((p != pForeign) && (params.checkColumns(p->getKey()))) { p->fromVariant((& item_val), query.value(lOffsetRelation++), -1, qx::cvt::context::e_database); } }
 
       if (params.relationX())
       {
@@ -174,7 +175,7 @@ private:
 
       QList<QVariant> vIdOwner;
       for (int i = 0; i < pIdOwner->getNameCount(); i++)
-      { vIdOwner.append(pIdOwner->toVariant(params.owner(), i)); }
+      { vIdOwner.append(pIdOwner->toVariant(params.owner(), i, qx::cvt::context::e_database)); }
 
       type_item item;
       type_container & container = this->getContainer(params);
@@ -185,7 +186,7 @@ private:
       {
          type_data & item_val = item.value_qx();
          for (int i = 0; i < vIdOwner.count(); i++)
-         { pForeign->fromVariant((& item_val), vIdOwner.at(i), "", i); }
+         { pForeign->fromVariant((& item_val), vIdOwner.at(i), "", i, qx::cvt::context::e_database); }
          itr = type_generic_container::next(container, itr, item);
       }
    }

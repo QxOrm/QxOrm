@@ -42,9 +42,9 @@
 
 namespace qx {
 
-QxSqlRelationLinked::QxSqlRelationLinked() : m_allRelationX(NULL), m_bRoot(true), m_lRootColumnsOffset(0) { ; }
+QxSqlRelationLinked::QxSqlRelationLinked() : m_allRelationX(NULL), m_bRoot(true), m_lRootColumnsOffset(0), m_bRootColumnsModeRemove(false) { ; }
 
-QxSqlRelationLinked::QxSqlRelationLinked(bool bRoot) : m_allRelationX(NULL), m_bRoot(bRoot), m_lRootColumnsOffset(0) { ; }
+QxSqlRelationLinked::QxSqlRelationLinked(bool bRoot) : m_allRelationX(NULL), m_bRoot(bRoot), m_lRootColumnsOffset(0), m_bRootColumnsModeRemove(false) { ; }
 
 QxSqlRelationLinked::~QxSqlRelationLinked() { ; }
 
@@ -102,12 +102,15 @@ qx_bool QxSqlRelationLinked::buildHierarchy(IxSqlRelationX * pRelationX, const Q
 
 qx_bool QxSqlRelationLinked::insertRelationToHierarchy(const QStringList & sRelationX, const QString & sKey, qx::dao::sql_join::join_type eJoinType)
 {
+   bool bModeRemoveColumns = false;
    QStringList columns; QString sKeyTemp = sKey;
    if (sKey.contains("{") && sKey.contains("}"))
    {
       int iPos1 = sKey.indexOf("{"); int iPos2 = sKey.indexOf("}");
       if (iPos1 >= iPos2) { return qx_bool(false, QString("invalid relation : character '}' before than character '{' (") + sKey + ")"); }
+      if (iPos1 > 0) { bModeRemoveColumns = (sKey.at(iPos1 - 1) == QChar('-')); } // syntax to remove columns instead of adding columns : -{ column1, column2, etc... }
       sKeyTemp = sKey.left(iPos1); sKeyTemp = sKeyTemp.trimmed();
+      if (sKeyTemp.endsWith("-")) { sKeyTemp = sKeyTemp.left(sKeyTemp.count() - 1).trimmed(); }
       QString sColumns = sKey.mid((iPos1 + 1), (iPos2 - iPos1 - 1));
       columns = sColumns.split(",");
       for (long l = 0; l < columns.count(); l++) { columns[l] = columns.at(l).trimmed(); }
@@ -115,7 +118,7 @@ qx_bool QxSqlRelationLinked::insertRelationToHierarchy(const QStringList & sRela
    }
 
    if (m_bRoot && sKeyTemp.isEmpty() && (columns.count() > 0))
-   { m_lstRootColumns = columns.toSet(); return qx_bool(true); }
+   { m_lstRootColumns = columns.toSet(); m_bRootColumnsModeRemove = bModeRemoveColumns; return qx_bool(true); }
    else if (m_bRoot && sKeyTemp.isEmpty() && (columns.count() == 0))
    { return qx_bool(true); }
 
@@ -123,6 +126,7 @@ qx_bool QxSqlRelationLinked::insertRelationToHierarchy(const QStringList & sRela
    { qAssert(false); return qx_bool(false, QString("invalid relation key : '") + sKeyTemp + "' (" + sKey + ")"); }
    IxSqlRelation * pRelation = m_allRelationX->getByKey(sKeyTemp);
    if (! pRelation) { qAssert(false); return qx_bool(false, QString("invalid relation pointer : 'NULL pointer'")); }
+   if (bModeRemoveColumns && (columns.count() > 0)) { columns = removeColumns(columns, pRelation); }
 
    QString sDataIdKey = (pRelation->getDataId() ? pRelation->getDataId()->getKey() : QString());
    Q_FOREACH(QString sColumn, columns)
@@ -142,6 +146,24 @@ qx_bool QxSqlRelationLinked::insertRelationToHierarchy(const QStringList & sRela
    }
 
    return pRelationLinked->buildHierarchy(pRelation->getLstRelation(), sRelationX);
+}
+
+QStringList QxSqlRelationLinked::removeColumns(const QStringList & columnsToRemove, IxSqlRelation * pRelation) const
+{
+   if (! pRelation) { return QStringList(); }
+   IxDataMember * pCurrData = NULL; IxSqlRelation * pCurrRelation = NULL;
+   QSet<QString> columnsToRemoveSet = columnsToRemove.toSet();
+   QStringList columns;
+
+   long lCurrIndex = 0;
+   while ((pCurrData = pRelation->nextData(lCurrIndex)))
+   { if (! columnsToRemoveSet.contains(pCurrData->getKey())) { columns.append(pCurrData->getKey()); } }
+
+   lCurrIndex = 0;
+   while ((pCurrRelation = pRelation->nextRelation(lCurrIndex)))
+   { if (! columnsToRemoveSet.contains(pCurrRelation->getKey())) { columns.append(pCurrRelation->getKey()); } }
+
+   return columns;
 }
 
 void QxSqlRelationLinked::hierarchySelect(QxSqlRelationParams & params)

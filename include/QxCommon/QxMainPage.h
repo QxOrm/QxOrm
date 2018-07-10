@@ -81,7 +81,7 @@ QX_REGISTER_HPP_MY_TEST_EXE(drug, qx::trait::no_base_class_defined, 1)
  * \code
 #include "precompiled.h"   // Precompiled-header with '#include <QxOrm.h>' and '#include "export.h"'
 #include "drug.h"          // Class definition 'drug'
-#include <QxMemLeak.h>     // Automatic memory leak detection
+#include <QxOrm_Impl.h>    // Automatic memory leak detection and boost serialization export macro
 
 QX_REGISTER_CPP_MY_TEST_EXE(drug)   // This macro is necessary to register 'drug' class in QxOrm context
 
@@ -99,7 +99,7 @@ template <> void register_class(QxClass<drug> & t)
  * \code
 #include "precompiled.h"
 #include "drug.h"
-#include <QxMemLeak.h>
+#include <QxOrm_Impl.h>
 
 int main(int argc, char * argv[])
 {

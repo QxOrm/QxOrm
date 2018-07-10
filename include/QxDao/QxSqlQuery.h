@@ -301,14 +301,11 @@ public:
    QVector<QString> getSqlResultAllColumns() const;
    void dumpSqlResult();
 
+   static void dumpBoundValues(const QSqlQuery & query);
+
 private:
 
-#ifndef _QX_MODE_RELEASE
-   void verifyQuery() const;
-#else // _QX_MODE_RELEASE
-   inline void verifyQuery() const { ; }
-#endif // _QX_MODE_RELEASE
-
+   void verifyQuery() const BOOST_USED;
    void fetchSqlResult(QSqlQuery & query);
 
 public:
@@ -452,6 +449,17 @@ query.dumpSqlResult();
  */
 QX_DLL_EXPORT QSqlError call_query(qx::QxSqlQuery & query, QSqlDatabase * pDatabase = NULL);
 
+/*!
+ * \ingroup QxDao
+ * \brief qx::dao::call_query_without_prepare function can be used to call a custom SQL query or a stored procedure : same as qx::dao::call_query() function without calling prepare() QSqlQuery class method (can be useful to execute some specific SQL queries)
+ */
+QX_DLL_EXPORT QSqlError call_query_without_prepare(qx::QxSqlQuery & query, QSqlDatabase * pDatabase = NULL);
+
+namespace helper {
+
+QX_DLL_EXPORT QSqlError call_query_helper(qx::QxSqlQuery & query, QSqlDatabase * pDatabase, bool bPrepare);
+
+} // namespace helper
 } // namespace dao
 } // namespace qx
 

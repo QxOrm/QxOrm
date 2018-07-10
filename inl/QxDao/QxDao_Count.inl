@@ -40,10 +40,10 @@ struct QxDao_Count
    static long count(const qx::QxSqlQuery & query, QSqlDatabase * pDatabase)
    {
       T t; Q_UNUSED(t);
-      qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "count");
+      qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "count", new qx::QxSqlQueryBuilder_Count<T>());
       if (! dao.isValid()) { return 0; }
 
-      QString sql = dao.builder().count().getSqlQuery();
+      QString sql = dao.builder().buildSql().getSqlQuery();
       if (sql.isEmpty()) { dao.errEmpty(); return 0; }
       if (! query.isEmpty()) { dao.addQuery(query, true); sql = dao.builder().getSqlQuery(); }
       if (! dao.exec()) { dao.errFailed(); return 0; }
@@ -55,10 +55,10 @@ struct QxDao_Count
    static QSqlError count(long & lCount, const qx::QxSqlQuery & query, QSqlDatabase * pDatabase)
    {
       T t; Q_UNUSED(t); lCount = 0;
-      qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "count");
+      qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "count", new qx::QxSqlQueryBuilder_Count<T>());
       if (! dao.isValid()) { return dao.error(); }
 
-      QString sql = dao.builder().count().getSqlQuery();
+      QString sql = dao.builder().buildSql().getSqlQuery();
       if (sql.isEmpty()) { return dao.errEmpty(); }
       if (! query.isEmpty()) { dao.addQuery(query, true); sql = dao.builder().getSqlQuery(); }
       if (! dao.exec()) { return dao.errFailed(); }

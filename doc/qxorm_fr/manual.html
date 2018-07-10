@@ -66,11 +66,11 @@
     <table cellspacing="0" cellpadding="1"><col><col><tbody>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow">Version courante :&nbsp;</font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.2 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.3 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
       </tr>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow"></font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.1.9</font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.2.1</font></td>
       </tr>
     </tbody></table>
   </td>
@@ -132,10 +132,10 @@
                               <a href="#manual_210">Dépendance à boost (seuls les fichiers d'en-tête *.hpp sont nécessaires)</a>
                            </li>
                            <li class="manual_li_title_2">
-                              <a href="#manual_220">Fichier de configuration QxOrm.pri</a>
+                              <a href="#manual_220">Fichier de configuration QxOrm.pri (ou QxOrm.cmake)</a>
                            </li>
                            <li class="manual_li_title_2">
-                              <a href="#manual_230">Compiler la bibliothèque QxOrm</a>
+                              <a href="#manual_230">Compiler la bibliothèque QxOrm (avec qmake ou CMake)</a>
                            </li>
                            <li class="manual_li_title_2">
                               <a href="#manual_240">Pilotes SQL fournis par Qt (drivers)</a>
@@ -439,7 +439,7 @@
            Si vous trouvez un bug ou si vous avez une question concernant le fonctionnement de la bibliothèque <b>QxOrm</b>, 
            vous pouvez envoyer un mail à : <u><i>support@qxorm.com</i></u>.<br>
            Un forum (en anglais) dédié à <b>QxOrm</b> est disponible <a href="http://www.qxorm.com/forum/phpbb/" target="_blank">en cliquant ici</a>.<br>
-           Vous pouvez également retrouver la communauté française de <b>QxOrm</b> sur <a href="http://www.developpez.net/forums/f1563/c-cpp/bibliotheques/qt/outils/bibliotheques/qxorm/" target="_blank">le forum de Developpez.com</a>.
+           Vous pouvez également retrouver la communauté française de <b>QxOrm</b> sur <a href="http://www.developpez.net/forums/f1563/c-cpp/bibliotheques/qt/bases-donnees/qxorm/" target="_blank">le forum de Developpez.com</a>.
            <br><br>
          </div>
          <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_110">Aperçu rapide de l'application QxEntityEditor</a></p>
@@ -490,8 +490,8 @@
          <ul>
             <li><a href="#manual_200">Téléchargement et installation du framework Qt ;</a></li>
             <li><a href="#manual_210">Téléchargement et installation de la bibliothèque boost (par défaut, seuls les fichiers d'en-tête <i>*.hpp</i> sont nécessaires) ;</a></li>
-            <li><a href="#manual_220">Paramétrage du fichier de configuration <i>QxOrm.pri</i> ;</a></li>
-            <li><a href="#manual_230">Compilation de la bibliothèque QxOrm ;</a></li>
+            <li><a href="#manual_220">Paramétrage du fichier de configuration <i>QxOrm.pri</i> (ou <i>QxOrm.cmake</i>) ;</a></li>
+            <li><a href="#manual_230">Compilation de la bibliothèque QxOrm (avec qmake ou CMake) ;</a></li>
             <li><a href="#manual_240">Vérification des pilotes SQL fournis par Qt (drivers).</a></li>
          </ul>
          <br>
@@ -525,7 +525,7 @@
            </table>
            <br>
            <b>Remarque :</b> par défaut, la bibliothèque QxOrm dépend uniquement des modules <a href="http://doc.qt.io/qt-5/qtcore-index.html" target="_blank">QtCore</a> et <a href="http://doc.qt.io/qt-5/qtsql-index.html" target="_blank">QtSql</a>.
-           Il est possible d'activer des fonctionnalités supplémentaires grâce au <a href="#manual_220">fichier de configuration <i>QxOrm.pri</i></a> : ces nouvelles fonctionnalités peuvent alors ajouter des dépendances à QxOrm.
+           Il est possible d'activer des fonctionnalités supplémentaires grâce au <a href="#manual_220">fichier de configuration <i>QxOrm.pri</i> (ou <i>QxOrm.cmake</i>)</a> : ces nouvelles fonctionnalités peuvent alors ajouter des dépendances à QxOrm.
            <br><br>
          </div>
          <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_210">Dépendance à boost (seuls les fichiers d'en-tête *.hpp sont nécessaires)</a></p>
@@ -557,9 +557,9 @@
            L'installation de boost est donc très simple puisqu'il suffit de dézipper le package boost (pour disposer des fichiers d'en-tête <i>*.hpp</i>).
            <br><br>
          </div>
-         <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_220">Fichier de configuration QxOrm.pri</a></p>
+         <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_220">Fichier de configuration QxOrm.pri (ou QxOrm.cmake)</a></p>
          <div class="manual_div_content">
-            Le fichier de configuration <i>QxOrm.pri</i> est divisé en plusieurs sections (chacune étant commentée) et regroupe les différents paramétrages et options de compilation disponibles.
+            Le fichier de configuration <i>QxOrm.pri</i> (ou <i>QxOrm.cmake</i>) est divisé en plusieurs sections (chacune étant commentée) et regroupe les différents paramétrages et options de compilation disponibles.
             Il est fortement recommandé de lire attentivement le fichier de configuration <i>QxOrm.pri</i> avant de compiler la bibliothèque QxOrm.
             Il est possible de conserver le paramétrage par défaut, seule la variable <b>QX_BOOST_INCLUDE_PATH</b> est nécessaire pour pouvoir compiler la bibliothèque QxOrm : cette variable indique où trouver les fichiers d'en-tête <i>*.hpp</i> de la bibliothèque boost :<br>
             <br>
@@ -581,19 +581,25 @@
                <li><b>_QX_ENABLE_QT_NETWORK :</b> active <a href="#manual_80">le module QxService</a> pour transférer la couche de données persistante sur le réseau (application client/serveur). Cette option ajoute une dépendance à QxOrm (<a href="http://doc.qt.io/qt-5/qtnetwork-index.html" target="_blank">QtNetwork</a>) ;</li>
                <li><b>_QX_NO_PRECOMPILED_HEADER :</b> désactive l'utilisation d'un en-tête précompilé (permet de réduire les temps de compilation d'un projet) : cette option est nécessaire pour <a href="https://gcc.gnu.org/bugzilla/show_bug.cgi?id=56926" target="_blank">contourner un bug des versions récentes de MinGW</a>, pour tous les autres compilateurs il est recommandé de travailler avec un <i>precompiled header</i> ;</li>
                <li><b>_QX_NO_RTTI :</b> permet de compiler QxOrm et les projets dépendants sans <a href="https://en.wikipedia.org/wiki/Run-time_type_information" target="_blank">les informations de type C++ RTTI</a> ;</li>
-               <li><b>_QX_STATIC_BUILD :</b> permet de compiler la bibliothèque QxOrm en mode statique.</li>
+               <li><b>_QX_STATIC_BUILD :</b> permet de compiler la bibliothèque QxOrm en mode statique ;</li>
+               <li><b>_QX_UNITY_BUILD :</b> réduit les temps de compilation de la bibliothèque QxOrm en utilisant le concept <i>unity build</i> : un seul fichier source <i>all.cpp</i> à compiler. Il est recommandé d'activer cette option avec <a href="https://cmake.org/" target="_blank">CMake</a> (car ne supporte pas nativement les en-têtes précompilés).</li>
             </ul>
             <br>
-            <b>Remarque :</b> le fichier de configuration <i>QxOrm.pri</i> devra être inclus dans tous les projets dépendants de la bibliothèque QxOrm en ajoutant la ligne suivante dans le fichier <i>*.pro</i> du projet :<br>
+            <b>Remarque :</b> le fichier de configuration <i>QxOrm.pri</i> (ou <i>QxOrm.cmake</i>) devra être inclus dans tous les projets dépendants de la bibliothèque QxOrm en ajoutant la ligne suivante dans le fichier <i>*.pro</i> du projet :<br>
             <br>
             <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
 <pre>   include(<i>my_path_to_QxOrm_library</i>/QxOrm.pri)   </pre>
             </td></tr></tbody></table>
+            <br>
+            <b>Autre remarque :</b> à la place de <i>qmake</i>, il est possible d'utiliser <a href="https://cmake.org/" target="_blank">l'outil de compilation CMake</a> pour configurer et construire la bibliothèque QxOrm.
+            CMake propose un outil graphique afin de visualiser et paramétrer les différentes options disponibles :
+            <br><br>
+            <img alt="QxOrm and CMake" src="./resource/qxorm_cmake.png" />
             <br><br>
          </div>
-         <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_230">Compiler la bibliothèque QxOrm</a></p>
+         <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_230">Compiler la bibliothèque QxOrm (avec qmake ou CMake)</a></p>
          <div class="manual_div_content">
-           <b>QxOrm</b> utilise le processus <i>qmake</i> de la bibliothèque <b>Qt</b> pour générer les <i>makefile</i> et compiler le projet.<br>
+           <b>QxOrm</b> utilise le processus <i>qmake</i> de la bibliothèque <b>Qt</b> pour générer les <i>makefile</i> et compiler le projet (il est également possible d'utiliser <a href="https://cmake.org/" target="_blank">l'outil de compilation CMake</a>, un fichier <i>CMakeLists.txt</i> étant fourni avec la bibliothèque QxOrm).<br>
            <i>qmake</i> est multi-plateforme et fonctionne parfaitement sous Windows, Linux (Unix) et Mac OS X.<br>
            Pour compiler <b>QxOrm</b>, il suffit d'exécuter les commandes suivantes :<br>
            <br>
@@ -684,7 +690,7 @@ public</span><span class="operator">:</span><span class="type">
             <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="person.cpp">
 <pre><span class="pre">#include <span class="string">"precompiled.h"</span>   <span class="comment">// Precompiled-header with '#include &lt;QxOrm.h&gt;' and '#include "export.h"'</span>
 #include <span class="string">"person.h"</span>          <span class="comment">// Class definition 'person'</span>
-#include <span class="string">&lt;QxMemLeak.h&gt;</span>     <span class="comment">// Automatic memory leak detection</span>
+#include <span class="string">&lt;QxOrm_Impl.h&gt;</span>     <span class="comment">// Automatic memory leak detection and boost serialization export macro</span>
 </span>
 <font style="background-color:yellow">QX_REGISTER_CPP_MY_TEST_EXE<span class="operator">(</span>person<span class="operator">)</span></font><span class="comment">   // This macro is necessary to register 'person' class in QxOrm context
 </span><span class="keyword">
@@ -818,7 +824,7 @@ typedef</span> qx<span class="operator">::</span>QxCollection<span class="operat
 <pre><span class="pre">#include "../include/precompiled.h"
 #include "../include/author.h"
 #include "../include/blog.h"
-#include &lt;QxMemLeak.h&gt;
+#include &lt;QxOrm_Impl.h&gt;
 </span>
 QX_REGISTER_CPP_QX_BLOG<span class="operator">(</span>author<span class="operator">)</span><span class="keyword">
 
@@ -1483,7 +1489,7 @@ typedef</span> qx<span class="operator">::</span>QxCollection<span class="operat
 #include <span class="string">"../include/author.h"</span>
 #include <span class="string">"../include/blog.h"</span>
 
-#include <span class="string">&lt;QxMemLeak.h&gt;</span>
+#include <span class="string">&lt;QxOrm_Impl.h&gt;</span>
 </span>
 QX_REGISTER_CPP_QX_BLOG<span class="operator">(</span>author<span class="operator">)</span><span class="keyword">
 
@@ -1565,7 +1571,7 @@ typedef</span> QList<span class="operator">&lt;</span>comment_ptr<span class="op
 #include <span class="string">"../include/comment.h"</span>
 #include <span class="string">"../include/blog.h"</span>
 
-#include <span class="string">&lt;QxMemLeak.h&gt;</span>
+#include <span class="string">&lt;QxOrm_Impl.h&gt;</span>
 </span>
 QX_REGISTER_CPP_QX_BLOG<span class="operator">(</span>comment<span class="operator">)</span><span class="keyword">
 
@@ -1645,7 +1651,7 @@ typedef</span> qx<span class="operator">::</span>QxCollection<span class="operat
 #include <span class="string">"../include/category.h"</span>
 #include <span class="string">"../include/blog.h"</span>
 
-#include <span class="string">&lt;QxMemLeak.h&gt;</span>
+#include <span class="string">&lt;QxOrm_Impl.h&gt;</span>
 </span>
 QX_REGISTER_CPP_QX_BLOG<span class="operator">(</span>category<span class="operator">)</span><span class="keyword">
 
@@ -1839,6 +1845,8 @@ WHERE blog.blog_id = :blog_id</span></pre>
    qAssert<span class="operator">(</span>lstBlogComplexRelation<span class="operator">[</span><span class="int">0</span><span class="operator">]-&gt;</span>m_commentX<span class="operator">[</span><span class="int">0</span><span class="operator">]-&gt;</span>m_dt_create<span class="operator">.</span>isNull<span class="operator">());</span><span class="comment"> // Not fetched
 </span>   qAssert<span class="operator">(</span>lstBlogComplexRelation<span class="operator">[</span><span class="int">0</span><span class="operator">]-&gt;</span>m_commentX<span class="operator">[</span><span class="int">0</span><span class="operator">]-&gt;</span>m_text<span class="operator"> !=</span><span class="string"> ""</span><span class="operator">);</span><span class="comment"> // Fetched</span></pre>
                </td></tr></tbody></table>
+               <br>
+               <b>Remarque :</b> une autre syntaxe est disponible afin de renseigner les colonnes à ne pas récupérer : <b>my_relation -{ col_1, col_2, etc... }</b>.
                <br><br>
             </div>
          </div>
@@ -2177,7 +2185,7 @@ template</span><span class="operator"> &lt;&gt;</span>
            <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
 <pre><span class="pre">#include "../include/precompiled.h"
 #include "../include/BaseClassTrigger.h"
-#include &lt;QxMemLeak.h&gt;
+#include &lt;QxOrm_Impl.h&gt;
 </span>
 QX_REGISTER_CPP_QX_DLL2<span class="operator">(</span>BaseClassTrigger<span class="operator">)</span><span class="keyword">
 
@@ -2273,7 +2281,7 @@ QX_REGISTER_HPP_MY_EXE<span class="operator">(</span>person<span class="operator
 #include "../include/person.h"
 #include "../include/global_validator.h"
 
-#include &lt;QxMemLeak.h&gt;
+#include &lt;QxOrm_Impl.h&gt;
 </span>
 QX_REGISTER_CPP_MY_EXE<span class="operator">(</span>person<span class="operator">)</span><span class="keyword">
 
@@ -2567,7 +2575,7 @@ typedef</span> qx<span class="operator">::</span>QxCollection<span class="operat
 #include <span class="string">"../include/author.h"</span>
 #include <span class="string">"../include/blog.h"</span>
 
-#include <span class="string">&lt;QxMemLeak.h&gt;</span>
+#include <span class="string">&lt;QxOrm_Impl.h&gt;</span>
 </span>
 QX_REGISTER_CPP_QX_BLOG<span class="operator">(</span>author<span class="operator">)</span>
 <font style="background-color:yellow"><b>QX_PERSISTABLE_CPP(author)</b></font>
@@ -2683,11 +2691,11 @@ namespace</span> cvt<span class="operator"> {</span><span class="keyword">
 namespace</span> detail<span class="operator"> {</span><span class="keyword">
 
 template</span><span class="operator"> &lt;&gt;</span><span class="keyword"> struct</span> QxConvert_ToVariant<span class="operator">&lt;</span> ExtObject3D<span class="operator"> &gt; {</span><span class="keyword">
-static inline</span> QVariant toVariant<span class="operator">(</span><span class="keyword">const</span> ExtObject3D<span class="operator"> &amp;</span> t<span class="operator">,</span><span class="keyword"> const</span> QString<span class="operator"> &amp;</span> format<span class="operator">,</span><span class="type"> int</span> index<span class="operator">)
+static inline</span> QVariant toVariant<span class="operator">(</span><span class="keyword">const</span> ExtObject3D<span class="operator"> &amp;</span> t<span class="operator">,</span><span class="keyword"> const</span> QString<span class="operator"> &amp;</span> format<span class="operator">,</span><span class="type"> int</span> index, qx::cvt::context::ctx_type ctx<span class="operator">)
 {</span><span class="comment"> /* Ici je convertis ExtObject3D en QVariant */</span><span class="operator"> } };</span><span class="keyword">
 
 template</span><span class="operator"> &lt;&gt;</span><span class="keyword"> struct</span> QxConvert_FromVariant<span class="operator">&lt;</span> ExtObject3D<span class="operator"> &gt; {</span><span class="keyword">
-static inline</span> qx_bool fromVariant<span class="operator">(</span><span class="keyword">const</span> QVariant<span class="operator"> &amp;</span> v<span class="operator">,</span> ExtObject3D<span class="operator"> &amp;</span> t<span class="operator">,</span><span class="keyword"> const</span> QString<span class="operator"> &amp;</span> format<span class="operator">,</span><span class="type"> int</span> index<span class="operator">)
+static inline</span> qx_bool fromVariant<span class="operator">(</span><span class="keyword">const</span> QVariant<span class="operator"> &amp;</span> v<span class="operator">,</span> ExtObject3D<span class="operator"> &amp;</span> t<span class="operator">,</span><span class="keyword"> const</span> QString<span class="operator"> &amp;</span> format<span class="operator">,</span><span class="type"> int</span> index, qx::cvt::context::ctx_type ctx<span class="operator">)
 {</span><span class="comment"> /* Ici je convertis QVariant en ExtObject3D */</span><span class="operator">;</span><span class="flow"> return</span> qx_bool<span class="operator">(</span><span class="bool">true</span><span class="operator">); } };
 
 }</span><span class="comment"> // namespace detail
@@ -2742,7 +2750,7 @@ QX_REGISTER_HPP_MY_APP<span class="operator">(</span>DatabaseVersion<span class=
            <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
 <pre><span class="pre">#include "../include/precompiled.h"
 #include "../include/DatabaseVersion.h"
-#include &lt;QxMemLeak.h&gt;
+#include &lt;QxOrm_Impl.h&gt;
 </span> 
 QX_REGISTER_CPP_MY_APP<span class="operator">(</span>DatabaseVersion<span class="operator">)</span><span class="keyword">
 
@@ -3168,7 +3176,7 @@ QX_REGISTER_HPP_QX_DLL1<span class="operator">(</span>TestQtProperty<span class=
 
 #include "../include/TestQtProperty.h"
 
-#include &lt;QxMemLeak.h&gt;
+#include &lt;QxOrm_Impl.h&gt;
 </span> 
 QX_REGISTER_CPP_QX_DLL1<span class="operator">(</span>TestQtProperty<span class="operator">)</span>
 <font style="background-color:yellow">QX_REGISTER_ALL_QT_PROPERTIES<span class="operator">(</span>TestQtProperty<span class="operator">,</span><span class="string"> "id"</span><span class="operator">)</span></font></pre>
@@ -3422,8 +3430,8 @@ template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</
          </div>
          <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_610">Moteur XML de boost::serialization</a></p>
          <div class="manual_div_content">
-            Le moteur XML de <a href="http://www.boost.org/doc/libs/release/libs/serialization/doc/index.html" target="_blank">boost::serialization</a> n'est pas activé par défaut : pour activer cette fonctionnalité, il est nécessaire de définir les options de compilation <b>_QX_ENABLE_BOOST_SERIALIZATION</b> et <b>_QX_ENABLE_BOOST_SERIALIZATION_XML</b> dans <a href="#manual_220">le fichier de configuration QxOrm.pri</a>.
-            Il est également nécessaire de compiler le binaire <a href="http://www.boost.org/doc/libs/release/libs/serialization/doc/index.html" target="_blank">boost::serialization</a> (ce module de boost n'étant pas <i>header only</i>), et de renseigner le chemin d'accès à ce binaire dans les variables <b>QX_BOOST_LIB_PATH</b>, <b>QX_BOOST_LIB_SERIALIZATION_DEBUG</b> et <b>QX_BOOST_LIB_SERIALIZATION_RELEASE</b> du <a href="#manual_220">fichier de configuration QxOrm.pri</a>.
+            Le moteur XML de <a href="http://www.boost.org/doc/libs/release/libs/serialization/doc/index.html" target="_blank">boost::serialization</a> n'est pas activé par défaut : pour activer cette fonctionnalité, il est nécessaire de définir les options de compilation <b>_QX_ENABLE_BOOST_SERIALIZATION</b> et <b>_QX_ENABLE_BOOST_SERIALIZATION_XML</b> dans <a href="#manual_220">le fichier de configuration QxOrm.pri (ou QxOrm.cmake)</a>.
+            Il est également nécessaire de compiler le binaire <a href="http://www.boost.org/doc/libs/release/libs/serialization/doc/index.html" target="_blank">boost::serialization</a> (ce module de boost n'étant pas <i>header only</i>), et de renseigner le chemin d'accès à ce binaire dans les variables <b>QX_BOOST_LIB_PATH</b>, <b>QX_BOOST_LIB_SERIALIZATION_DEBUG</b> et <b>QX_BOOST_LIB_SERIALIZATION_RELEASE</b> du <a href="#manual_220">fichier de configuration QxOrm.pri (ou QxOrm.cmake)</a>.
             <br><br>
             Toute classe C++ enregistrée dans le contexte QxOrm peut être sérialisée en utilisant <a href="http://www.boost.org/doc/libs/release/libs/serialization/doc/index.html" target="_blank">le moteur XML de boost::serialization</a>.
             Les fonctions pour utiliser ce type de sérialisation sont disponibles dans l'espace de nom : <a href="../doxygen/html/namespaceqx_1_1serialization_1_1xml.html" target="_blank">namespace qx::serialization::xml</a> (mêmes fonctions que dans <a href="#manual_600">l'espace de nom qx::serialization::qt</a>).
@@ -3439,8 +3447,8 @@ template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</
          </div>
          <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_620">Moteur binaire de boost::serialization</a></p>
          <div class="manual_div_content">
-            Le moteur binaire de <a href="http://www.boost.org/doc/libs/release/libs/serialization/doc/index.html" target="_blank">boost::serialization</a> n'est pas activé par défaut : pour activer cette fonctionnalité, il est nécessaire de définir les options de compilation <b>_QX_ENABLE_BOOST_SERIALIZATION</b> et <b>_QX_ENABLE_BOOST_SERIALIZATION_BINARY</b> dans <a href="#manual_220">le fichier de configuration QxOrm.pri</a>.
-            Il est également nécessaire de compiler le binaire <a href="http://www.boost.org/doc/libs/release/libs/serialization/doc/index.html" target="_blank">boost::serialization</a> (ce module de boost n'étant pas <i>header only</i>), et de renseigner le chemin d'accès à ce binaire dans les variables <b>QX_BOOST_LIB_PATH</b>, <b>QX_BOOST_LIB_SERIALIZATION_DEBUG</b> et <b>QX_BOOST_LIB_SERIALIZATION_RELEASE</b> du <a href="#manual_220">fichier de configuration QxOrm.pri</a>.
+            Le moteur binaire de <a href="http://www.boost.org/doc/libs/release/libs/serialization/doc/index.html" target="_blank">boost::serialization</a> n'est pas activé par défaut : pour activer cette fonctionnalité, il est nécessaire de définir les options de compilation <b>_QX_ENABLE_BOOST_SERIALIZATION</b> et <b>_QX_ENABLE_BOOST_SERIALIZATION_BINARY</b> dans <a href="#manual_220">le fichier de configuration QxOrm.pri (ou QxOrm.cmake)</a>.
+            Il est également nécessaire de compiler le binaire <a href="http://www.boost.org/doc/libs/release/libs/serialization/doc/index.html" target="_blank">boost::serialization</a> (ce module de boost n'étant pas <i>header only</i>), et de renseigner le chemin d'accès à ce binaire dans les variables <b>QX_BOOST_LIB_PATH</b>, <b>QX_BOOST_LIB_SERIALIZATION_DEBUG</b> et <b>QX_BOOST_LIB_SERIALIZATION_RELEASE</b> du <a href="#manual_220">fichier de configuration QxOrm.pri (ou QxOrm.cmake)</a>.
             <br><br>
             Toute classe C++ enregistrée dans le contexte QxOrm peut être sérialisée en utilisant <a href="http://www.boost.org/doc/libs/release/libs/serialization/doc/index.html" target="_blank">le moteur binaire de boost::serialization</a>.
             Les fonctions pour utiliser ce type de sérialisation sont disponibles dans l'espace de nom : <a href="../doxygen/html/namespaceqx_1_1serialization_1_1xml.html" target="_blank">namespace qx::serialization::binary</a> (mêmes fonctions que dans <a href="#manual_600">l'espace de nom qx::serialization::qt</a>).
@@ -3457,7 +3465,7 @@ template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</
          <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_630">Autres types de sérialisation proposés par boost</a></p>
          <div class="manual_div_content">
             Le moteur <a href="http://www.boost.org/doc/libs/release/libs/serialization/doc/index.html" target="_blank">boost::serialization</a> propose d'autres types de sérialisation.
-            Ces différents types ne sont pas activés par défaut, pour utiliser ces fonctionnalités (mêmes fonctions que dans <a href="#manual_600">l'espace de nom qx::serialization::qt</a>), il est nécessaire de définir les options de compilation suivantes dans <a href="#manual_220">le fichier de configuration QxOrm.pri</a> :
+            Ces différents types ne sont pas activés par défaut, pour utiliser ces fonctionnalités (mêmes fonctions que dans <a href="#manual_600">l'espace de nom qx::serialization::qt</a>), il est nécessaire de définir les options de compilation suivantes dans <a href="#manual_220">le fichier de configuration QxOrm.pri (ou QxOrm.cmake)</a> :
             <ul>
                <li><b>_QX_ENABLE_BOOST_SERIALIZATION_POLYMORPHIC :</b> active les fonctions des espaces de nom <a href="../doxygen/html/namespaceqx_1_1serialization_1_1polymorphic__binary.html" target="_blank">qx::serialization::polymorphic_binary</a>, <a href="../doxygen/html/namespaceqx_1_1serialization_1_1polymorphic__xml.html" target="_blank">qx::serialization::polymorphic_xml</a> et <a href="../doxygen/html/namespaceqx_1_1serialization_1_1polymorphic__text.html" target="_blank">qx::serialization::polymorphic_text</a> ;</li>
                <li><b>_QX_ENABLE_BOOST_SERIALIZATION_TEXT :</b> active les fonctions de l'espace de nom <a href="../doxygen/html/namespaceqx_1_1serialization_1_1text.html" target="_blank">qx::serialization::text</a> ;</li>
@@ -3491,6 +3499,17 @@ template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</
 
    // Check if (d1 == d_clone)
 </span>   qAssert<span class="operator">((*</span> d1<span class="operator">) == (*</span> d_clone<span class="operator">));</span></pre>
+            </td></tr></tbody></table>
+            <br>
+            <b>Remarque importante :</b> il faut faire attention lorsqu'on clone un pointeur intelligent (<i>boost::shared_ptr</i> ou <i>QSharedPointer</i> par exemple) dont l'élément parent (<i>root</i>) peut être référencé plusieurs fois dans sa hiérarchie (cas d'une structure en arbre par exemple).
+            Dans ce cas, afin de protéger le pointeur parent d'une double suppression (2 pointeurs intelligents qui pointent sur le même pointeur brut), il est conseillé de cloner de cette façon :
+            <br><br>
+            <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="qx::clone smart-pointer">
+<pre><span class="comment">// 'pOther' type is boost::shared_ptr&lt;myClass&gt; (smart-pointer)
+</span>boost<span class="operator">::</span>shared_ptr<span class="operator">&lt;</span>myClass<span class="operator">&gt; *</span> pCloneTemp<span class="operator"> =</span> qx<span class="operator">::</span>clone_to_nude_ptr<span class="operator">(</span>pOther<span class="operator">);</span>
+boost<span class="operator">::</span>shared_ptr<span class="operator">&lt;</span>myClass<span class="operator">&gt;</span> pClone<span class="operator"> = (</span>pCloneTemp<span class="operator"> ? (*</span> pCloneTemp<span class="operator">) :</span> boost<span class="operator">::</span>shared_ptr<span class="operator">&lt;</span>myClass<span class="operator">&gt;());</span><span class="flow">
+if</span><span class="operator"> (</span>pCloneTemp<span class="operator">) {</span><span class="keyword"> delete</span> pCloneTemp<span class="operator">;</span> pCloneTemp<span class="operator"> =</span> NULL<span class="operator">; }</span><span class="comment">
+// Now use 'pClone' ...</span></pre>
             </td></tr></tbody></table>
             <br><br>
          </div>
@@ -3926,7 +3945,7 @@ QString IxClass<span class="operator">::</span>dumpClass<span class="operator">(
          <font style="background-color:yellow"><b><a href="./tutorial_2.html">Un tutoriel est disponible sur le site QxOrm</a></b></font> afin de présenter un exemple d'utilisation du module <a href="../doxygen/html/group___qx_service.html" target="_blank">QxService</a>.
          Le module <a href="../doxygen/html/group___qx_service.html" target="_blank">QxService</a> est basé sur <a href="#manual_70">le moteur d'introspection</a> ainsi que <a href="#manual_60">le moteur de sérialisation</a> de la bibliothèque QxOrm afin de transférer la couche de données persistante sur le réseau et exécuter automatiquement les routines côté serveur.
          <br><br>
-         <b>Remarque :</b> pour activer le module <b>QxService</b>, il faut définir l'option de compilation <font style="background-color:yellow"><b>_QX_ENABLE_QT_NETWORK</b></font> dans <a href="#manual_220">le fichier de configuration <i>QxOrm.pri</i></a>.
+         <b>Remarque :</b> pour activer le module <b>QxService</b>, il faut définir l'option de compilation <font style="background-color:yellow"><b>_QX_ENABLE_QT_NETWORK</b></font> dans <a href="#manual_220">le fichier de configuration <i>QxOrm.pri</i> (ou <i>QxOrm.cmake</i>)</a>.
          Cette option de compilation ajoute une dépendance au binaire <a href="http://doc.qt.io/qt-5/qtnetwork-index.html" target="_blank">QtNetwork</a> fourni avec la bibliothèque Qt.
          <br><br>
          <b>Autre remarque :</b> l'application <b>QxEntityEditor</b> est livrée avec le plugin <i>QxEECppServicesExport</i> : ce plugin génère automatiquement le code source nécessaire pour transférer l'ensemble des entités d'un projet sur le réseau.
@@ -4750,7 +4769,7 @@ Item<span class="operator"> {</span>
         <img alt="QxOrm" src="./resource/logo_qxorm_small.png" width="168" height="40">
       </td>
       <td align="center" valign="middle">
-        <font size="2">© 2016 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
+        <font size="2">© 2017 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
       </td>
       <td align="right" valign="middle">
         <form action="https://www.paypal.com/cgi-bin/webscr" method="post">

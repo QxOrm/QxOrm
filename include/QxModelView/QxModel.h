@@ -53,6 +53,14 @@
 #include <QxTraits/is_qx_registered.h>
 #include <QxTraits/is_valid_primary_key.h>
 
+#include <QxSerialize/QxDump.h>
+#include <QxSerialize/QxClone.h>
+
+#ifndef _QX_NO_JSON
+#include <QxSerialize/QJson/QxSerializeQJson_QxCollection.h>
+#include <QxSerialize/QxSerializeQJson.h>
+#endif // _QX_NO_JSON
+
 namespace qx {
 namespace model_view {
 namespace detail {
@@ -627,6 +635,16 @@ public:
 
 protected:
 
+   virtual void dumpModelImpl(bool bJsonFormat) const { qx::dump(m_model, bJsonFormat); }
+
+   virtual QObject * cloneModelImpl()
+   {
+      qx::QxModel<T> * pClone = new qx::QxModel<T>(this, NULL);
+      qx_shared_ptr<type_collection> pModel = qx::clone(pClone->m_model);
+      if (pModel) { pClone->m_model = (* pModel); }
+      return static_cast<QObject *>(pClone);
+   }
+
    void updateKey(int row)
    {
       if ((row < 0) || (row >= m_model.count())) { return; }
@@ -648,6 +666,90 @@ protected:
       for (long l = 0; l < m_model.count(); l++)
       { this->updateKey(l); }
    }
+
+protected:
+
+#ifndef _QX_NO_JSON
+
+   virtual QString toJson_Helper(int row) const
+   {
+      if (row == -1) { return qx::serialization::json::to_string(m_model); }
+      if ((row < 0) || (row >= m_model.count())) { return QString(); }
+      type_ptr pItem = m_model.getByIndex(row); if (! pItem) { return QString(); }
+      return qx::serialization::json::to_string(* pItem);
+   }
+
+   virtual bool fromJson_Helper(const QString & json, int row)
+   {
+      if (row == -1)
+      {
+         clear();
+         type_collection tmp;
+         if (! qx::serialization::json::from_string(tmp, json)) { return false; }
+         beginInsertRows(QModelIndex(), 0, (tmp.count() - 1));
+         m_model = tmp;
+         endInsertRows();
+         return true;
+      }
+
+      if ((row < 0) || (row >= m_model.count())) { return false; }
+      type_ptr pItem = m_model.getByIndex(row); if (! pItem) { return false; }
+      if (! qx::serialization::json::from_string((* pItem), json)) { return false; }
+
+      QModelIndex idxTopLeft = this->index(row, 0);
+      QModelIndex idxBottomRight = this->index(row, (m_lstDataMember.count() - 1));
+      this->raiseEvent_dataChanged(idxTopLeft, idxBottomRight);
+      this->updateKey(row);
+      return true;
+   }
+
+   virtual QVariant getRelationshipValues_Helper(int row, const QString & relation, bool bLoadFromDatabase, const QString & sAppendRelations)
+   {
+      if ((row < 0) || (row >= m_model.count())) { return QVariant(); }
+      if (! m_pDataMemberId || ! m_pDataMemberX || ! m_pDataMemberX->exist(relation)) { return QVariant(); }
+      IxDataMember * pDataMember = m_pDataMemberX->get_WithDaoStrategy(relation); if (! pDataMember) { return QVariant(); }
+      IxSqlRelation * pRelation = (pDataMember->hasSqlRelation() ? pDataMember->getSqlRelation() : NULL); if (! pRelation) { return QVariant(); }
+      type_ptr pItem = m_model.getByIndex(row); if (! pItem) { return QVariant(); }
+      type_ptr pItemTemp = pItem;
+
+      if (bLoadFromDatabase)
+      {
+         QString sRelation = relation;
+         if (! sAppendRelations.isEmpty() && ! sAppendRelations.startsWith("->") && ! sAppendRelations.startsWith(">>")) { sRelation += "->" + sAppendRelations; }
+         else if (! sAppendRelations.isEmpty()) { sRelation += sAppendRelations; }
+         pItemTemp = type_ptr(new T());
+         QVariant id = m_pDataMemberId->toVariant(pItem.get());
+         m_pDataMemberId->fromVariant(pItemTemp.get(), id);
+         QSqlError daoError = qx::dao::fetch_by_id_with_relation(sRelation, (* pItemTemp));
+         if (daoError.isValid()) { return QVariant(); }
+      }
+
+      QJsonValue json = pDataMember->toJson(pItemTemp.get()); if (json.isNull()) { return QVariant(); }
+      if (json.isArray()) { return json.toArray().toVariantList(); }
+      return json.toObject().toVariantMap();
+   }
+
+   virtual bool setRelationshipValues_Helper(int row, const QString & relation, const QVariant & values)
+   {
+      if ((row < 0) || (row >= m_model.count())) { return false; }
+      if ((values.type() != QVariant::List) && (values.type() != QVariant::Map)) { return false; }
+      if (! m_pDataMemberId || ! m_pDataMemberX || ! m_pDataMemberX->exist(relation)) { return false; }
+      IxDataMember * pDataMember = m_pDataMemberX->get_WithDaoStrategy(relation); if (! pDataMember) { return false; }
+      IxSqlRelation * pRelation = (pDataMember->hasSqlRelation() ? pDataMember->getSqlRelation() : NULL); if (! pRelation) { return false; }
+      type_ptr pItem = m_model.getByIndex(row); if (! pItem) { return false; }
+
+      QJsonValue json;
+      if (values.type() == QVariant::List) { json = QJsonArray::fromVariantList(values.toList()); }
+      else if (values.type() == QVariant::Map) { json = QJsonObject::fromVariantMap(values.toMap()); }
+      if (! pDataMember->fromJson(pItem.get(), json)) { return false; }
+
+      QModelIndex idxTopLeft = this->index(row, 0);
+      QModelIndex idxBottomRight = this->index(row, (m_lstDataMember.count() - 1));
+      this->raiseEvent_dataChanged(idxTopLeft, idxBottomRight);
+      return true;
+   }
+
+#endif // _QX_NO_JSON
 
 };
 

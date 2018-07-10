@@ -2,7 +2,7 @@
 
 #include "../include/CTestAll.h"
 
-#include <QxMemLeak.h>
+#include <QxOrm_Impl.h>
 
 QX_REGISTER_CPP_QX_DLL2(CTestAll)
 

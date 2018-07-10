@@ -96,7 +96,9 @@ typedef qx_shared_ptr<QxDaoAsyncParams> QxDaoAsyncParams_ptr;
  * \brief qx::dao::detail::QxDaoAsyncRunner : class with a slot to execute queries in another thread
  */
 class QX_DLL_EXPORT QxDaoAsyncRunner : public QObject
-{ Q_OBJECT
+{
+
+   Q_OBJECT
 
 public:
 
@@ -133,7 +135,8 @@ public Q_SLOTS:
  * For example, with a <i>MyWidget</i> class :
  * \code
 class MyWidget : public QWidget
-{ Q_OBJECT
+{
+   Q_OBJECT
    //...
    qx::QxDaoAsync m_daoAsync;
    //...
@@ -164,7 +167,9 @@ void MyWidget::onQueryFinished(const QSqlError & daoError, qx::dao::detail::QxDa
  * \endcode
  */
 class QX_DLL_EXPORT QxDaoAsync : public QThread
-{ Q_OBJECT
+{
+
+   Q_OBJECT
 
 protected:
 

@@ -2,7 +2,7 @@
 
 #include "../include/BaseClassTrigger.h"
 
-#include <QxMemLeak.h>
+#include <QxOrm_Impl.h>
 
 void BaseClassTrigger::onBeforeInsert(qx::dao::detail::IxDao_Helper * dao)
 {

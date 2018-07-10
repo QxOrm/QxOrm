@@ -66,7 +66,7 @@ struct QxDao_IsDirty_Generic
    {
       BOOST_STATIC_ASSERT(qx::trait::is_qx_registered<T>::value);
 
-      qx::QxSqlQueryBuilder<T> builder; builder.init();
+      qx::QxSqlQueryBuilder_Count<T> builder; builder.init();
       qx::IxDataMember * pId = builder.getDataId();
       if (pId && (! pId->isEqual((& obj1), (& obj2)))) { lstDiff.append(pId->getKey()); }
 

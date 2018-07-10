@@ -54,14 +54,14 @@
 
 namespace qx {
 
-#ifndef _QX_MODE_RELEASE
 void QxSqlQuery::verifyQuery() const
 {
+#ifdef _QX_MODE_DEBUG
    if (m_sQuery.isEmpty() || (m_lstSqlElement.count() <= 0)) { return; }
    qDebug("[QxOrm] qx::QxSqlQuery::verifyQuery() : '%s'", "invalid SQL query, you cannot mix classic SQL and C++ syntax");
    qAssert(false);
+#endif // _QX_MODE_DEBUG
 }
-#endif // _QX_MODE_RELEASE
 
 QString QxSqlQuery::query()
 {
@@ -170,6 +170,28 @@ void QxSqlQuery::resolveOutput(QSqlQuery & query, bool bFetchSqlResult)
       else { val.get<0>() = query.boundValue(l); }
    }
    if (bFetchSqlResult) { fetchSqlResult(query); }
+}
+
+void QxSqlQuery::dumpBoundValues(const QSqlQuery & query)
+{
+   QString sBoundValues = "";
+   QMap<QString, QVariant> lstBoundValues = query.boundValues();
+   if (lstBoundValues.count() <= 0) { return; }
+
+   if (qx::QxSqlDatabase::getSingleton()->getSqlPlaceHolderStyle() == qx::QxSqlDatabase::ph_style_question_mark)
+   {
+      QList<QVariant> lst = lstBoundValues.values();
+      for (int i = 0; i < lst.size(); ++i)
+      { sBoundValues += "\n  - position '" + QString::number(i) + "' : " + lst.at(i).toString(); }
+   }
+   else
+   {
+      QMapIterator<QString, QVariant> itr(lstBoundValues);
+      while (itr.hasNext()) { itr.next(); sBoundValues += "\n  - " + itr.key() + " : " + itr.value().toString(); }
+   }
+
+   if (! sBoundValues.isEmpty())
+   { qDebug("[QxOrm] dump sql query bound values : %s", qPrintable(sBoundValues)); }
 }
 
 void QxSqlQuery::fetchSqlResult(QSqlQuery & query)
@@ -768,25 +790,42 @@ QxSqlQuery & QxSqlQuery::addSqlIsBetween(const QVariant & val1, const QVariant &
 namespace qx {
 namespace dao {
 
-QSqlError call_query(qx::QxSqlQuery & query, QSqlDatabase * pDatabase /* = NULL */)
+QSqlError call_query(qx::QxSqlQuery & query, QSqlDatabase * pDatabase /* = NULL */) { return qx::dao::helper::call_query_helper(query, pDatabase, true); }
+
+QSqlError call_query_without_prepare(qx::QxSqlQuery & query, QSqlDatabase * pDatabase /* = NULL */) { return qx::dao::helper::call_query_helper(query, pDatabase, false); }
+
+namespace helper {
+
+QSqlError call_query_helper(qx::QxSqlQuery & query, QSqlDatabase * pDatabase, bool bPrepare)
 {
    QSqlError dbError;
    QSqlDatabase d = (pDatabase ? (* pDatabase) : qx::QxSqlDatabase::getDatabase(dbError));
    if (dbError.isValid()) { return dbError; }
+   bool bBoundValues = qx::QxSqlDatabase::getSingleton()->getTraceSqlBoundValues();
+   bool bBoundValuesOnError = qx::QxSqlDatabase::getSingleton()->getTraceSqlBoundValuesOnError();
+   bool bTraceQuery = qx::QxSqlDatabase::getSingleton()->getTraceSqlQuery();
    QTime timeQuery; timeQuery.start();
    QString sql = query.query();
    QSqlQuery q = QSqlQuery(d);
    q.setForwardOnly(true);
-   q.prepare(sql);
-   query.resolve(q);
-   if (! q.exec()) { return q.lastError(); }
-   query.resolveOutput(q, true);
+
+   do {
+      if (bPrepare && ! q.prepare(sql)) { dbError = q.lastError(); break; }
+      query.resolve(q);
+      if (bPrepare) { if (! q.exec()) { dbError = q.lastError(); break; } }
+      else { if (! q.exec(sql)) { dbError = q.lastError(); break; } }
+      query.resolveOutput(q, true);
+   }
+   while (0);
+
    int ms = timeQuery.elapsed();
-   if (qx::QxSqlDatabase::getSingleton()->getTraceSqlQuery())
-   { qDebug("[QxOrm] custom sql query (%d ms) : %s", ms, qPrintable(sql)); }
-   return QSqlError();
+   if (dbError.isValid()) { qDebug("[QxOrm] custom sql query failed (%d ms) : %s", ms, qPrintable(sql)); int ierr = dbError.number(); QString tmp = dbError.driverText(); qDebug("Database error number '%d' : %s", ierr, qPrintable(tmp)); tmp = dbError.databaseText(); qDebug("%s", qPrintable(tmp)); }
+   else if (bTraceQuery) { qDebug("[QxOrm] custom sql query (%d ms) : %s", ms, qPrintable(sql)); }
+   if ((dbError.isValid() && bBoundValuesOnError) || (bBoundValues)) { qx::QxSqlQuery::dumpBoundValues(q); }
+   return dbError;
 }
 
+} // namespace helper
 } // namespace dao
 } // namespace qx
 

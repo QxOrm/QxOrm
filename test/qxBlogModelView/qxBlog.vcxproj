@@ -98,6 +98,10 @@
     <ClCompile Include="src\category.cpp" />
     <ClCompile Include="src\comment.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\model_view_from_qxee\author.model_view.gen.cpp" />
+    <ClCompile Include="src\model_view_from_qxee\blog.model_view.gen.cpp" />
+    <ClCompile Include="src\model_view_from_qxee\category.model_view.gen.cpp" />
+    <ClCompile Include="src\model_view_from_qxee\comment.model_view.gen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\author.h" />
@@ -105,6 +109,10 @@
     <ClInclude Include="include\category.h" />
     <ClInclude Include="include\comment.h" />
     <ClInclude Include="include\export.h" />
+    <ClInclude Include="include\model_view_from_qxee\author.model_view.gen.h" />
+    <ClInclude Include="include\model_view_from_qxee\blog.model_view.gen.h" />
+    <ClInclude Include="include\model_view_from_qxee\category.model_view.gen.h" />
+    <ClInclude Include="include\model_view_from_qxee\comment.model_view.gen.h" />
     <ClInclude Include="include\precompiled.h" />
   </ItemGroup>
   <ItemGroup>

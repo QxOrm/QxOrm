@@ -48,7 +48,7 @@ PRECOMPILED_HEADER = ./include/QxPrecompiled.h
 QT -= gui
 } # !contains(DEFINES, _QX_ENABLE_QT_GUI)
 
-unix { VERSION = 1.4.2 }
+unix { VERSION = 1.4.3 }
 
 contains(DEFINES, _QX_STATIC_BUILD) {
 CONFIG -= dll
@@ -480,11 +480,14 @@ HEADERS += ./include/QxModelView/QxNestedModel.h
 HEADERS += ./include/QxModelView/QxModelService.h
 
 HEADERS += ./include/QxOrm.h
+HEADERS += ./include/QxOrm_Impl.h
 HEADERS += ./include/QxMemLeak.h
 
 #################
 # Sources Files #
 #################
+
+!contains(DEFINES, _QX_UNITY_BUILD) {
 
 SOURCES += ./src/QxMemLeak/bool_array.cpp
 SOURCES += ./src/QxMemLeak/debug_new.cpp
@@ -634,6 +637,12 @@ SOURCES += ./src/QxModelView/IxModel.cpp
 SOURCES += ./src/QxModelView/QxNestedModel.cpp
 
 SOURCES += ./src/main.cpp
+
+} else {
+
+SOURCES += ./src/all.cpp
+
+} # !contains(DEFINES, _QX_UNITY_BUILD)
 
 ###############
 # Other Files #

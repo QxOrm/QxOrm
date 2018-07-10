@@ -2,7 +2,7 @@
 
 #include "../include/CPerson.h"
 
-#include <QxMemLeak.h>
+#include <QxOrm_Impl.h>
 
 void myGlobalValidator_1(const QVariant & value, const qx::IxValidator * validator, qx::QxInvalidValueX & invalidValues);
 void myGlobalValidator_2(const QString & value, const qx::IxValidator * validator, qx::QxInvalidValueX & invalidValues);

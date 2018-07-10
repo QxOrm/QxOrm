@@ -57,6 +57,8 @@ QString IxModel::getLastErrorAsString() const { return (m_lastError.isValid() ? 
 
 QStringList IxModel::getListOfColumns() const { return m_lstColumns; }
 
+int IxModel::getRowCount() const { return this->rowCount(); }
+
 QHash<QString, QString> IxModel::getListOfHeaders() const
 {
    QHash<QString, QString> lst;
@@ -87,6 +89,10 @@ int IxModel::getColumnIndex(const QString & sColumnName) const
 int IxModel::getAutoUpdateDatabase_() const { return static_cast<int>(m_eAutoUpdateDatabase); }
 
 IxModel::e_auto_update_database IxModel::getAutoUpdateDatabase() const { return m_eAutoUpdateDatabase; }
+
+void IxModel::dumpModel(bool bJsonFormat /* = true */) const { this->dumpModelImpl(bJsonFormat); }
+
+QObject * IxModel::cloneModel() { return this->cloneModelImpl(); }
 
 void IxModel::setDatabase(const QSqlDatabase & db) { m_database = db; }
 
@@ -358,5 +364,27 @@ QSqlDatabase * IxModel::database(QSqlDatabase * other)
 {
    return (other ? other : (m_database.isValid() ? (& m_database) : NULL));
 }
+
+#ifndef _QX_NO_JSON
+
+QString IxModel::toJson(int row /* = -1 */) const { return this->toJson_Helper(row); }
+
+bool IxModel::fromJson(const QString & json, int row /* = -1 */) { return this->fromJson_Helper(json, row); }
+
+QVariant IxModel::getRelationshipValues(int row, const QString & relation, bool bLoadFromDatabase /* = false */, const QString & sAppendRelations /* = QString() */) { return this->getRelationshipValues_Helper(row, relation, bLoadFromDatabase, sAppendRelations); }
+
+bool IxModel::setRelationshipValues(int row, const QString & relation, const QVariant & values) { return this->setRelationshipValues_Helper(row, relation, values); }
+
+#else // _QX_NO_JSON
+
+QString IxModel::toJson(int row /* = -1 */) const { qDebug("[QxOrm] qx::IxModel::toJson() : %s", "not implemented when _QX_NO_JSON compilation option is defined"); Q_UNUSED(row); return QString(); }
+
+bool IxModel::fromJson(const QString & json, int row /* = -1 */) { qDebug("[QxOrm] qx::IxModel::fromJson() : %s", "not implemented when _QX_NO_JSON compilation option is defined"); Q_UNUSED(json); Q_UNUSED(row); return false; }
+
+QVariant IxModel::getRelationshipValues(int row, const QString & relation, bool bLoadFromDatabase /* = false */, const QString & sAppendRelations /* = QString() */) { qDebug("[QxOrm] qx::IxModel::getRelationshipValues() : %s", "not implemented when _QX_NO_JSON compilation option is defined"); Q_UNUSED(row); Q_UNUSED(relation); Q_UNUSED(bLoadFromDatabase); Q_UNUSED(sAppendRelations); return QVariant(); }
+
+bool IxModel::setRelationshipValues(int row, const QString & relation, const QVariant & values) { qDebug("[QxOrm] qx::IxModel::setRelationshipValues() : %s", "not implemented when _QX_NO_JSON compilation option is defined"); Q_UNUSED(row); Q_UNUSED(relation); Q_UNUSED(values); return false; }
+
+#endif // _QX_NO_JSON
 
 } // namespace qx

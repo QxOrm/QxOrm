@@ -47,6 +47,7 @@
 #include <QtCore/qjsonvalue.h>
 #include <QtCore/qjsonobject.h>
 #include <QtCore/qjsonarray.h>
+#include <QtCore/qjsondocument.h>
 #endif // _QX_NO_JSON
 
 #include <QxCommon/QxBool.h>
@@ -71,20 +72,12 @@ template <typename T> struct QxConvert_FromJson;
 
 } // namespace detail
 
-template <typename T> inline QString to_string(const T & t, const QString & format)                   { return qx::cvt::detail::QxConvert_ToString<T>::toString(t, format, -1); }
-template <typename T> inline qx_bool from_string(const QString & s, T & t, const QString & format)    { return qx::cvt::detail::QxConvert_FromString<T>::fromString(s, t, format, -1); }
-template <typename T> inline QVariant to_variant(const T & t, const QString & format)                 { return qx::cvt::detail::QxConvert_ToVariant<T>::toVariant(t, format, -1); }
-template <typename T> inline qx_bool from_variant(const QVariant & v, T & t, const QString & format)  { return qx::cvt::detail::QxConvert_FromVariant<T>::fromVariant(v, t, format, -1); }
+struct context { enum ctx_type { e_no_context, e_database, e_serialize_registered }; };
 
-template <typename T> inline QString to_string(const T & t)                   { return qx::cvt::detail::QxConvert_ToString<T>::toString(t, "", -1); }
-template <typename T> inline qx_bool from_string(const QString & s, T & t)    { return qx::cvt::detail::QxConvert_FromString<T>::fromString(s, t, "", -1); }
-template <typename T> inline QVariant to_variant(const T & t)                 { return qx::cvt::detail::QxConvert_ToVariant<T>::toVariant(t, "", -1); }
-template <typename T> inline qx_bool from_variant(const QVariant & v, T & t)  { return qx::cvt::detail::QxConvert_FromVariant<T>::fromVariant(v, t, "", -1); }
-
-template <typename T> inline QString to_string(const T & t, const QString & format, int index)                   { return qx::cvt::detail::QxConvert_WithIndex_ToString<T>::toString(t, format, index); }
-template <typename T> inline qx_bool from_string(const QString & s, T & t, const QString & format, int index)    { return qx::cvt::detail::QxConvert_WithIndex_FromString<T>::fromString(t, s, format, index); }
-template <typename T> inline QVariant to_variant(const T & t, const QString & format, int index)                 { return qx::cvt::detail::QxConvert_WithIndex_ToVariant<T>::toVariant(t, format, index); }
-template <typename T> inline qx_bool from_variant(const QVariant & v, T & t, const QString & format, int index)  { return qx::cvt::detail::QxConvert_WithIndex_FromVariant<T>::fromVariant(t, v, format, index); }
+template <typename T> inline QString to_string(const T & t, const QString & format = QString(), int index = -1, qx::cvt::context::ctx_type ctx = qx::cvt::context::e_no_context)                   { return qx::cvt::detail::QxConvert_WithIndex_ToString<T>::toString(t, format, index, ctx); }
+template <typename T> inline qx_bool from_string(const QString & s, T & t, const QString & format = QString(), int index = -1, qx::cvt::context::ctx_type ctx = qx::cvt::context::e_no_context)    { return qx::cvt::detail::QxConvert_WithIndex_FromString<T>::fromString(t, s, format, index, ctx); }
+template <typename T> inline QVariant to_variant(const T & t, const QString & format = QString(), int index = -1, qx::cvt::context::ctx_type ctx = qx::cvt::context::e_no_context)                 { return qx::cvt::detail::QxConvert_WithIndex_ToVariant<T>::toVariant(t, format, index, ctx); }
+template <typename T> inline qx_bool from_variant(const QVariant & v, T & t, const QString & format = QString(), int index = -1, qx::cvt::context::ctx_type ctx = qx::cvt::context::e_no_context)  { return qx::cvt::detail::QxConvert_WithIndex_FromVariant<T>::fromVariant(t, v, format, index, ctx); }
 
 #ifndef _QX_NO_JSON
 template <typename T> inline QJsonValue to_json(const T & t, const QString & format = QString())                  { return qx::cvt::detail::QxConvert_ToJson<T>::toJson(t, format); }

@@ -2,7 +2,7 @@
 
 #include "../../include/service/server_infos.h"
 
-#include <QxMemLeak.h>
+#include <QxOrm_Impl.h>
 
 QX_REGISTER_CPP_QX_SERVICE(server_infos_input)
 QX_REGISTER_CPP_QX_SERVICE(server_infos_output)

@@ -90,84 +90,17 @@ protected:
    enum { is_data_container = qx::trait::is_container<type_container>::value };
    enum { is_same_data_owner = boost::is_same<type_data, type_owner>::value };
 
-protected:
-
-   QMutex m_oMutex;        //!< Mutex : 'QxSqlRelation' is thread-safe
-   bool m_bInitInEvent;    //!< Class initialisation in progress
-
 public:
 
-   QxSqlRelation(IxDataMember * p) : IxSqlRelation(p), m_bInitInEvent(false) { ; }
+   QxSqlRelation(IxDataMember * p) : IxSqlRelation(p) { this->m_iIsSameDataOwner = static_cast<int>(is_same_data_owner); }
    virtual ~QxSqlRelation() { BOOST_STATIC_ASSERT(is_valid); }
 
    virtual void init()
    {
-      if (m_bInitInEvent) { return; }; m_bInitInEvent = true;
-      QMutexLocker locker(& this->m_oMutex);
+      if (m_bInitInEvent || m_bInitDone) { return; }
       m_pClass = QxClass<type_data>::getSingleton();
       m_pClassOwner = QxClass<type_owner>::getSingleton();
-      m_pDataMemberX = (m_pClass ? m_pClass->getDataMemberX() : NULL);
-      m_pDataMemberId = (m_pDataMemberX ? m_pDataMemberX->getId_WithDaoStrategy() : NULL);
-      m_pDataMemberIdOwner = ((m_pClassOwner && m_pClassOwner->getDataMemberX()) ? m_pClassOwner->getDataMemberX()->getId_WithDaoStrategy() : NULL);
-      if (m_lstDataMemberPtr || m_lstSqlRelationPtr) { m_bInitInEvent = false; return; }
-      if (m_pClass) { m_oSoftDelete = m_pClass->getSoftDelete(); }
-
-#ifdef _QX_MODE_DEBUG
-      QString sCheckMsg = "Check relationship '" + this->getKey() + "' from '" + (m_pClassOwner ? m_pClassOwner->getKey() : QString()) + "' to '" + (m_pClass ? m_pClass->getKey() : QString()) + "'";
-      if (! m_pClass) { QString sAssertMsg = sCheckMsg + " : m_pClass is equal to NULL"; qAssertMsg(false, "[QxOrm] qx::QxSqlRelation::init()", qPrintable(sAssertMsg)); }
-      if (! m_pClassOwner) { QString sAssertMsg = sCheckMsg + " : m_pClassOwner is equal to NULL"; qAssertMsg(false, "[QxOrm] qx::QxSqlRelation::init()", qPrintable(sAssertMsg)); }
-      if (! m_pDataMember) { QString sAssertMsg = sCheckMsg + " : m_pDataMember is equal to NULL"; qAssertMsg(false, "[QxOrm] qx::QxSqlRelation::init()", qPrintable(sAssertMsg)); }
-      if (! m_pDataMemberX) { QString sAssertMsg = sCheckMsg + " : m_pDataMemberX is equal to NULL"; qAssertMsg(false, "[QxOrm] qx::QxSqlRelation::init()", qPrintable(sAssertMsg)); }
-      if (! m_pDataMemberId) { QString sAssertMsg = sCheckMsg + " : m_pDataMemberId is equal to NULL"; qAssertMsg(false, "[QxOrm] qx::QxSqlRelation::init()", qPrintable(sAssertMsg)); }
-#endif // _QX_MODE_DEBUG
-
-      if (IxSqlRelation::m_bTraceRelationInit)
-      { QString sTraceMsg = "[QxOrm] Init relationship '" + this->getKey() + "' from '" + (m_pClassOwner ? m_pClassOwner->getKey() : QString()) + "' to '" + (m_pClass ? m_pClass->getKey() : QString()) + "'"; qDebug() << sTraceMsg; }
-
-      m_lstSqlRelationPtr = new IxSqlRelationX();
-      m_lstDataMemberPtr = new QxCollection<QString, IxDataMember *>();
-      if ((getDataCount() > 0) || (getRelationCount() > 0)) { m_bInitInEvent = false; return; }
-      IxDataMember * p = NULL; long lCount = m_pDataMemberX->count_WithDaoStrategy();
-
-      for (long l = 0; l < lCount; ++l)
-      {
-         p = isValid_DataMember(l); if (! p) { continue; }
-#ifdef _QX_MODE_DEBUG
-         if (m_lstDataMemberPtr->exist(p->getKey()))
-         { QString sDebugMsg = "[QxOrm] Relationship '" + this->getKey() + "' from '" + (m_pClassOwner ? m_pClassOwner->getKey() : QString()) + "' to '" + (m_pClass ? m_pClass->getKey() : QString()) + "' : data member '" + p->getKey() + "' already exists in the collection"; qDebug() << sDebugMsg; }
-#endif // _QX_MODE_DEBUG
-         m_lstDataMemberPtr->insert(p->getKey(), p);
-      }
-
-      for (long l = 0; l < lCount; ++l)
-      {
-         p = isValid_SqlRelation(l); if (! p) { continue; }
-#ifdef _QX_MODE_DEBUG
-         if (m_lstSqlRelationPtr->exist(p->getKey()))
-         { QString sDebugMsg = "[QxOrm] Relationship '" + this->getKey() + "' from '" + (m_pClassOwner ? m_pClassOwner->getKey() : QString()) + "' to '" + (m_pClass ? m_pClass->getKey() : QString()) + "' : relation '" + p->getKey() + "' already exists in the collection"; qDebug() << sDebugMsg; }
-#endif // _QX_MODE_DEBUG
-         m_lstSqlRelationPtr->insert(p->getKey(), p->getSqlRelation());
-      }
-
-      m_bInitInEvent = false;
-   }
-
-private:
-
-   inline IxDataMember * isValid_DataMember(long lIndex) const
-   {
-      IxDataMember * p = m_pDataMemberX->get_WithDaoStrategy(lIndex);
-      bool bValid = (p && p->getDao() && ! p->hasSqlRelation());
-      bValid = (bValid && (p != m_pDataMemberId));
-      return (bValid ? p : NULL);
-   }
-
-   inline IxDataMember * isValid_SqlRelation(long lIndex) const
-   {
-      IxDataMember * p = m_pDataMemberX->get_WithDaoStrategy(lIndex);
-      bool bIsValid = (p && p->getDao() && p->hasSqlRelation());
-      if (bIsValid && (! is_same_data_owner) && (p != m_pDataMember)) { p->getSqlRelation()->init(); }
-      return (bIsValid ? p : NULL);
+      IxSqlRelation::init();
    }
 
 protected:

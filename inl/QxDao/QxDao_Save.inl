@@ -39,7 +39,7 @@ struct QxDao_Save_Generic
 
    static QSqlError save(T & t, QSqlDatabase * pDatabase)
    {
-      qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "save");
+      qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "save", new qx::QxSqlQueryBuilder_Update<T>());
       if (! dao.isValid()) { return dao.error(); }
       if (! pDatabase) { dao.transaction(); }
       dao.quiet();
@@ -60,8 +60,10 @@ struct QxDao_Save_Container
 
    static QSqlError save(T & t, QSqlDatabase * pDatabase)
    {
+      typedef typename qx::trait::generic_container<T>::type_value_qx type_item;
+
       if (qx::trait::generic_container<T>::size(t) <= 0) { return QSqlError(); }
-      qx::dao::detail::QxDao_Helper_Container<T> dao(t, pDatabase, "save");
+      qx::dao::detail::QxDao_Helper_Container<T> dao(t, pDatabase, "save", new qx::QxSqlQueryBuilder_Update<type_item>());
       if (! dao.isValid()) { return dao.error(); }
       if (! pDatabase) { dao.transaction(); }
       dao.quiet();

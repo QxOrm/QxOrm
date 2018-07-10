@@ -37,7 +37,7 @@
 
 #include <QxSerialize/Qt/QxSerialize_QBrush.h>
 
-#include <QxMemLeak.h>
+#include <QxOrm_Impl.h>
 
 namespace boost {
 namespace serialization {

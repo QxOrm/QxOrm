@@ -35,7 +35,7 @@
 
 #include <QxSerialize/Qt/QxSerialize_QSqlError.h>
 
-#include <QxMemLeak.h>
+#include <QxOrm_Impl.h>
 
 namespace boost {
 namespace serialization {

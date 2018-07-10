@@ -2,7 +2,7 @@
 
 #include "../../include/business_object/user_search.h"
 
-#include <QxMemLeak.h>
+#include <QxOrm_Impl.h>
 
 QX_REGISTER_CPP_QX_SERVICE(user_search)
 

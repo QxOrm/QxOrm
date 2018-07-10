@@ -39,7 +39,7 @@ struct QxDao_Update_WithRelation_Generic
 
    static QSqlError update(const QStringList & relation, const qx::QxSqlQuery & query, T & t, QSqlDatabase * pDatabase)
    {
-      qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "update with relation");
+      qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "update with relation", new qx::QxSqlQueryBuilder_Update<T>());
       if (! dao.isValid()) { return dao.error(); }
       if (dao.isReadOnly()) { return dao.errReadOnly(); }
       if (! dao.isValidPrimaryKey(t)) { return dao.errInvalidId(); }
@@ -71,8 +71,10 @@ struct QxDao_Update_WithRelation_Container
 
    static QSqlError update(const QStringList & relation, const qx::QxSqlQuery & query, T & t, QSqlDatabase * pDatabase)
    {
+      typedef typename qx::trait::generic_container<T>::type_value_qx type_item;
+
       if (qx::trait::generic_container<T>::size(t) <= 0) { return QSqlError(); }
-      qx::dao::detail::QxDao_Helper_Container<T> dao(t, pDatabase, "update with relation");
+      qx::dao::detail::QxDao_Helper_Container<T> dao(t, pDatabase, "update with relation", new qx::QxSqlQueryBuilder_Update<type_item>());
       if (! dao.isValid()) { return dao.error(); }
       if (dao.isReadOnly()) { return dao.errReadOnly(); }
       if (! dao.updateSqlRelationX(relation)) { return dao.errInvalidRelation(); }

@@ -376,6 +376,40 @@ public:
       return services.isValid(pItem);
    }
 
+protected:
+
+#ifndef _QX_NO_JSON
+
+   virtual QVariant getRelationshipValues_Helper(int row, const QString & relation, bool bLoadFromDatabase, const QString & sAppendRelations)
+   {
+      if ((row < 0) || (row >= this->m_model.count())) { return QVariant(); }
+      if (! this->m_pDataMemberId || ! this->m_pDataMemberX || ! this->m_pDataMemberX->exist(relation)) { return QVariant(); }
+      IxDataMember * pDataMember = this->m_pDataMemberX->get_WithDaoStrategy(relation); if (! pDataMember) { return QVariant(); }
+      IxSqlRelation * pRelation = (pDataMember->hasSqlRelation() ? pDataMember->getSqlRelation() : NULL); if (! pRelation) { return QVariant(); }
+      type_ptr pItem = this->m_model.getByIndex(row); if (! pItem) { return QVariant(); }
+      type_ptr pItemTemp = pItem;
+
+      if (bLoadFromDatabase)
+      {
+         QString sRelation = relation;
+         if (! sAppendRelations.isEmpty() && ! sAppendRelations.startsWith("->") && ! sAppendRelations.startsWith(">>")) { sRelation += "->" + sAppendRelations; }
+         else if (! sAppendRelations.isEmpty()) { sRelation += sAppendRelations; }
+         pItemTemp = type_ptr(new T());
+         QVariant id = this->m_pDataMemberId->toVariant(pItem.get());
+         this->m_pDataMemberId->fromVariant(pItemTemp.get(), id);
+
+         S services; QStringList columns;
+         QSqlError daoError = services.fetchById(pItemTemp, columns, QStringList() << sRelation);
+         if (daoError.isValid()) { return QVariant(); }
+      }
+
+      QJsonValue json = pDataMember->toJson(pItemTemp.get()); if (json.isNull()) { return QVariant(); }
+      if (json.isArray()) { return json.toArray().toVariantList(); }
+      return json.toObject().toVariantMap();
+   }
+
+#endif // _QX_NO_JSON
+
 };
 
 } // namespace qx

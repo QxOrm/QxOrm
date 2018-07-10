@@ -418,7 +418,7 @@ QSqlError className::qxFetchById(const QVariant & id, const QStringList & column
       qx::IxDataMember * pDataMemberId = (pDataMemberX ? pDataMemberX->getId_WithDaoStrategy() : NULL); \
       if (! pDataMemberId) { qDebug("[QxOrm] problem with 'qxFetchById()' method : '%s'", "data member id not registered"); qAssert(false); } \
       if (! pDataMemberId) { return QSqlError("[QxOrm] problem with 'qxFetchById()' method : 'data member id not registered'", "", QSqlError::UnknownError); } \
-      pDataMemberId->fromVariant(this, id); \
+      pDataMemberId->fromVariant(this, id, -1, qx::cvt::context::e_database); \
    } \
    QSqlError err; \
    if (relation.count() == 0) { err = qx::dao::fetch_by_id((* this), pDatabase, columns); } \
@@ -480,7 +480,7 @@ QSqlError className::qxDeleteById(const QVariant & id, QSqlDatabase * pDatabase)
       qx::IxDataMember * pDataMemberId = (pDataMemberX ? pDataMemberX->getId_WithDaoStrategy() : NULL); \
       if (! pDataMemberId) { qDebug("[QxOrm] problem with 'qxDeleteById()' method : '%s'", "data member id not registered"); qAssert(false); } \
       if (! pDataMemberId) { return QSqlError("[QxOrm] problem with 'qxDeleteById()' method : 'data member id not registered'", "", QSqlError::UnknownError); } \
-      pDataMemberId->fromVariant(this, id); \
+      pDataMemberId->fromVariant(this, id, -1, qx::cvt::context::e_database); \
    } \
    return qx::dao::delete_by_id((* this), pDatabase); \
 } \
@@ -503,7 +503,7 @@ QSqlError className::qxDestroyById(const QVariant & id, QSqlDatabase * pDatabase
       qx::IxDataMember * pDataMemberId = (pDataMemberX ? pDataMemberX->getId_WithDaoStrategy() : NULL); \
       if (! pDataMemberId) { qDebug("[QxOrm] problem with 'qxDestroyById()' method : '%s'", "data member id not registered"); qAssert(false); } \
       if (! pDataMemberId) { return QSqlError("[QxOrm] problem with 'qxDestroyById()' method : 'data member id not registered'", "", QSqlError::UnknownError); } \
-      pDataMemberId->fromVariant(this, id); \
+      pDataMemberId->fromVariant(this, id, -1, qx::cvt::context::e_database); \
    } \
    return qx::dao::destroy_by_id((* this), pDatabase); \
 } \
@@ -539,7 +539,7 @@ qx_bool className::qxExist(const QVariant & id, QSqlDatabase * pDatabase) \
       qx::IxDataMember * pDataMemberId = (pDataMemberX ? pDataMemberX->getId_WithDaoStrategy() : NULL); \
       if (! pDataMemberId) { qDebug("[QxOrm] problem with 'qxExist()' method : '%s'", "data member id not registered"); qAssert(false); } \
       if (! pDataMemberId) { return qx_bool(false); } \
-      pDataMemberId->fromVariant(this, id); \
+      pDataMemberId->fromVariant(this, id, -1, qx::cvt::context::e_database); \
    } \
    return qx::dao::exist((* this), pDatabase); \
 } \

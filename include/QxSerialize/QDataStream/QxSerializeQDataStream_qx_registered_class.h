@@ -50,8 +50,6 @@
 #include <QxRegister/IxClass.h>
 #include <QxRegister/QxClass.h>
 
-#define QX_FORMAT_FROM_SERIALIZE_REGISTERED "[QxOrm] from qx::QxSerializeRegistered<T>"
-
 namespace qx {
 
 struct QX_DLL_EXPORT QxSerializeRegistered_Helper

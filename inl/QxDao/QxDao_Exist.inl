@@ -39,12 +39,12 @@ struct QxDao_Exist_Generic
 
    static qx_bool exist(T & t, QSqlDatabase * pDatabase)
    {
-      qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "exist");
+      qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "exist", new qx::QxSqlQueryBuilder_Exist<T>());
       if (! dao.isValid()) { return qx_bool(false); }
 
-      QString sql = dao.builder().exist().getSqlQuery();
+      QString sql = dao.builder().buildSql().getSqlQuery();
       if (! dao.getDataId() || sql.isEmpty()) { dao.errEmpty(); return qx_bool(false); }
-      dao.query().prepare(sql);
+      if (! dao.query().prepare(sql)) { dao.errFailed(true); return qx_bool(false); }
       qx::dao::detail::QxSqlQueryHelper_Exist<T>::resolveInput(t, dao.query(), dao.builder());
       if (! dao.query().exec()) { dao.errFailed(); return qx_bool(false); }
 
@@ -59,13 +59,15 @@ struct QxDao_Exist_Container
 
    static qx_bool exist(T & t, QSqlDatabase * pDatabase)
    {
+      typedef typename qx::trait::generic_container<T>::type_value_qx type_item;
+
       if (qx::trait::generic_container<T>::size(t) <= 0) { return qx_bool(false); }
-      qx::dao::detail::QxDao_Helper_Container<T> dao(t, pDatabase, "exist");
+      qx::dao::detail::QxDao_Helper_Container<T> dao(t, pDatabase, "exist", new qx::QxSqlQueryBuilder_Exist<type_item>());
       if (! dao.isValid()) { return qx_bool(false); }
 
-      QString sql = dao.builder().exist().getSqlQuery();
+      QString sql = dao.builder().buildSql().getSqlQuery();
       if (sql.isEmpty()) { dao.errEmpty(); return qx_bool(false); }
-      dao.query().prepare(sql);
+      if (! dao.query().prepare(sql)) { dao.errFailed(true); return qx_bool(false); }
 
       for (typename T::iterator it = t.begin(); it != t.end(); ++it)
       { if (! existItem((* it), dao)) { return qx_bool(false); } }

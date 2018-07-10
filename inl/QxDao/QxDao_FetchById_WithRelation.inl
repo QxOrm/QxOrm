@@ -42,15 +42,16 @@ struct QxDao_FetchById_WithRelation_Generic
 
    static QSqlError fetchById(const QStringList & relation, T & t, QSqlDatabase * pDatabase)
    {
-      type_dao_helper dao(t, pDatabase, "fetch by id with relation");
+      type_dao_helper dao(t, pDatabase, "fetch by id with relation", new qx::QxSqlQueryBuilder_FetchById_WithRelation<T>());
       if (! dao.isValid()) { return dao.error(); }
       if (! dao.isValidPrimaryKey(t)) { return dao.errInvalidId(); }
       if (! dao.updateSqlRelationX(relation)) { return dao.errInvalidRelation(); }
 
-      QString sql = dao.builder().fetchById_WithRelation(dao.getSqlRelationLinked()).getSqlQuery();
+      QStringList columns;
+      QString sql = dao.builder().buildSql(columns, dao.getSqlRelationLinked()).getSqlQuery();
       if (! dao.getDataId() || sql.isEmpty()) { return dao.errEmpty(); }
 
-      dao.query().prepare(sql);
+      if (! dao.query().prepare(sql)) { return dao.errFailed(true); }
       type_query_helper::resolveInput(dao.getSqlRelationLinked(), t, dao.query(), dao.builder());
       if (! dao.query().exec()) { return dao.errFailed(); }
 
@@ -87,17 +88,22 @@ struct QxDao_FetchById_WithRelation_Container
 
    typedef qx::dao::detail::QxDao_Helper_Container<T> type_dao_helper;
    typedef qx::dao::detail::QxDao_FetchById_WithRelation_Container<T> type_this;
+   typedef qx::trait::generic_container<T> type_generic_container;
+   typedef typename type_generic_container::type_item type_item;
+   typedef typename type_item::type_value_qx type_value_qx;
+   typedef typename type_item::type_value type_value;
 
    static QSqlError fetchById(const QStringList & relation, T & t, QSqlDatabase * pDatabase)
    {
       if (qx::trait::generic_container<T>::size(t) <= 0) { return QSqlError(); }
-      type_dao_helper dao(t, pDatabase, "fetch by id with relation");
+      type_dao_helper dao(t, pDatabase, "fetch by id with relation", new qx::QxSqlQueryBuilder_FetchById_WithRelation<type_value_qx>());
       if (! dao.isValid()) { return dao.error(); }
       if (! dao.updateSqlRelationX(relation)) { return dao.errInvalidRelation(); }
 
-      QString sql = dao.builder().fetchById_WithRelation(dao.getSqlRelationLinked()).getSqlQuery();
+      QStringList columns;
+      QString sql = dao.builder().buildSql(columns, dao.getSqlRelationLinked()).getSqlQuery();
       if (! dao.getDataId() || sql.isEmpty()) { return dao.errEmpty(); }
-      dao.query().prepare(sql);
+      if (! dao.query().prepare(sql)) { return dao.errFailed(true); }
 
       for (typename T::iterator it = t.begin(); it != t.end(); ++it)
       { if (! fetchItem((* it), dao)) { return dao.error(); } }

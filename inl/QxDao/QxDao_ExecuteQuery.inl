@@ -39,13 +39,13 @@ struct QxDao_ExecuteQuery_Generic
 
    static QSqlError executeQuery(qx::QxSqlQuery & query, T & t, QSqlDatabase * pDatabase)
    {
-      qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "execute custom sql query or stored procedure");
+      qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "execute custom sql query or stored procedure", new qx::QxSqlQueryBuilder_Count<T>());
       if (! dao.isValid()) { return dao.error(); }
 
       QString sql = query.query();
       if (sql.isEmpty()) { return dao.errEmpty(); }
       dao.builder().setSqlQuery(sql);
-      dao.query().prepare(sql);
+      if (! dao.query().prepare(sql)) { return dao.errFailed(true); }
       query.resolve(dao.query());
       if (! dao.query().exec()) { return dao.errFailed(); }
       query.resolveOutput(dao.query(), false);
@@ -60,7 +60,7 @@ struct QxDao_ExecuteQuery_Generic
       {
          if (! pDataMemberX->exist_WithDaoStrategy(record.fieldName(i))) { continue; }
          qx::IxDataMember * pDataMember = pDataMemberX->get_WithDaoStrategy(record.fieldName(i));
-         if (pDataMember) { pDataMember->fromVariant((& t), record.value(i)); }
+         if (pDataMember) { pDataMember->fromVariant((& t), record.value(i), -1, qx::cvt::context::e_database); }
       }
 
       qx::dao::on_after_fetch<T>((& t), (& dao));
@@ -75,14 +75,17 @@ struct QxDao_ExecuteQuery_Container
 
    static QSqlError executeQuery(qx::QxSqlQuery & query, T & t, QSqlDatabase * pDatabase)
    {
+      typedef typename qx::trait::generic_container<T>::type_value_qx type_item;
+
       qx::trait::generic_container<T>::clear(t);
-      qx::dao::detail::QxDao_Helper_Container<T> dao(t, pDatabase, "execute custom sql query or stored procedure");
+      qx::IxSqlQueryBuilder * pBuilder = new qx::QxSqlQueryBuilder_Count<type_item>();
+      qx::dao::detail::QxDao_Helper_Container<T> dao(t, pDatabase, "execute custom sql query or stored procedure", pBuilder);
       if (! dao.isValid()) { return dao.error(); }
 
       QString sql = query.query();
       if (sql.isEmpty()) { return dao.errEmpty(); }
       dao.builder().setSqlQuery(sql);
-      dao.query().prepare(sql);
+      if (! dao.query().prepare(sql)) { return dao.errFailed(true); }
       query.resolve(dao.query());
       if (! dao.query().exec()) { return dao.errFailed(); }
       query.resolveOutput(dao.query(), false);
@@ -102,6 +105,7 @@ private:
    {
       typedef typename qx::trait::generic_container<T>::type_item type_item;
       typedef typename type_item::type_value_qx type_value_qx;
+
       type_item item = qx::trait::generic_container<T>::createItem();
       type_value_qx & item_val = item.value_qx();
       qx::IxDataMember * pId = dao.getDataId(); QVariant vId;
@@ -125,13 +129,13 @@ private:
       for (int j = 0; j < vColumnToFetch.count(); j++)
       {
          QVariant vValue = dao.query().value(vColumnToFetch[j].first);
-         vColumnToFetch[j].second->fromVariant((& item_val), vValue);
+         vColumnToFetch[j].second->fromVariant((& item_val), vValue, -1, qx::cvt::context::e_database);
          if (pId == vColumnToFetch[j].second) { vId = vValue; }
       }
 
       if (! vId.isValid())
       { vId = QVariant(static_cast<qlonglong>(qx::trait::generic_container<T>::size(t))); }
-      qx::cvt::from_variant(vId, item.key());
+      qx::cvt::from_variant(vId, item.key(), "", -1, qx::cvt::context::e_database);
       qx::dao::on_after_fetch<type_value_qx>((& item_val), (& dao)); if (! dao.isValid()) { return; }
       qx::dao::detail::QxDao_Keep_Original<type_item>::backup(item);
       qx::trait::generic_container<T>::insertItem(t, item);

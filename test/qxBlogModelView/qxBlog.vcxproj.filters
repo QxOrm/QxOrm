@@ -9,6 +9,12 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
+    <Filter Include="include\model_view_from_qxee">
+      <UniqueIdentifier>{64f629d5-41ba-458a-9443-80b0ae5bbd77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\model_view_from_qxee">
+      <UniqueIdentifier>{2ea4952f-7889-4c9b-a38a-2543f22bff3e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\author.cpp">
@@ -25,6 +31,18 @@
     </ClCompile>
     <ClCompile Include="src\main.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\model_view_from_qxee\author.model_view.gen.cpp">
+      <Filter>src\model_view_from_qxee</Filter>
+    </ClCompile>
+    <ClCompile Include="src\model_view_from_qxee\blog.model_view.gen.cpp">
+      <Filter>src\model_view_from_qxee</Filter>
+    </ClCompile>
+    <ClCompile Include="src\model_view_from_qxee\category.model_view.gen.cpp">
+      <Filter>src\model_view_from_qxee</Filter>
+    </ClCompile>
+    <ClCompile Include="src\model_view_from_qxee\comment.model_view.gen.cpp">
+      <Filter>src\model_view_from_qxee</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -45,6 +63,18 @@
     </ClInclude>
     <ClInclude Include="include\precompiled.h">
       <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\model_view_from_qxee\author.model_view.gen.h">
+      <Filter>include\model_view_from_qxee</Filter>
+    </ClInclude>
+    <ClInclude Include="include\model_view_from_qxee\blog.model_view.gen.h">
+      <Filter>include\model_view_from_qxee</Filter>
+    </ClInclude>
+    <ClInclude Include="include\model_view_from_qxee\category.model_view.gen.h">
+      <Filter>include\model_view_from_qxee</Filter>
+    </ClInclude>
+    <ClInclude Include="include\model_view_from_qxee\comment.model_view.gen.h">
+      <Filter>include\model_view_from_qxee</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

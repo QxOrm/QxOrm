@@ -14,7 +14,9 @@
 #include "../qt/ui/include/ui_qxServer.h"
 
 class main_dlg : public QWidget, private Ui::dlgServer
-{ Q_OBJECT
+{
+
+   Q_OBJECT
 
 private:
 

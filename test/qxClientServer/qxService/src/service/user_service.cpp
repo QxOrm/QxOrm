@@ -4,7 +4,7 @@
 
 #include "../../include/dao/user_manager.h"
 
-#include <QxMemLeak.h>
+#include <QxOrm_Impl.h>
 
 QX_REGISTER_CPP_QX_SERVICE(user_service_input)
 QX_REGISTER_CPP_QX_SERVICE(user_service_output)

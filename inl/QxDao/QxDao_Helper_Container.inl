@@ -35,10 +35,8 @@ template <class T> \
 class QxDao_Helper_Container< className<T> > : public IxDao_Helper \
 { \
 public: \
-   QxDao_Helper_Container(className<T> & t, QSqlDatabase * pDatabase, const QString & sContext) : IxDao_Helper() { Q_UNUSED(t); init(pDatabase, sContext); } \
+   QxDao_Helper_Container(className<T> & t, QSqlDatabase * pDatabase, const QString & sContext, qx::IxSqlQueryBuilder * pBuilder) : IxDao_Helper() { Q_UNUSED(t); m_pQueryBuilder.reset(pBuilder); init(pDatabase, sContext); } \
    virtual ~QxDao_Helper_Container() { BOOST_STATIC_ASSERT(qx::trait::is_qx_registered<typename qx::QxSqlQueryBuilder<T>::type_sql>::value); } \
-protected: \
-   virtual void updateQueryBuilder() { m_pQueryBuilder.reset(new qx::QxSqlQueryBuilder<T>()); } \
 }; }}} // namespace qx::dao::detail
 
 #define QX_DAO_HELPER_CONTAINER_KEY_VALUE(className) \
@@ -47,10 +45,8 @@ template <class Key, class Value> \
 class QxDao_Helper_Container< className<Key, Value> > : public IxDao_Helper \
 { \
 public: \
-   QxDao_Helper_Container(className<Key, Value> & t, QSqlDatabase * pDatabase, const QString & sContext) : IxDao_Helper() { Q_UNUSED(t); init(pDatabase, sContext); } \
+   QxDao_Helper_Container(className<Key, Value> & t, QSqlDatabase * pDatabase, const QString & sContext, qx::IxSqlQueryBuilder * pBuilder) : IxDao_Helper() { Q_UNUSED(t); m_pQueryBuilder.reset(pBuilder); init(pDatabase, sContext); } \
    virtual ~QxDao_Helper_Container() { BOOST_STATIC_ASSERT(qx::trait::is_qx_registered<typename qx::QxSqlQueryBuilder<Value>::type_sql>::value); } \
-protected: \
-   virtual void updateQueryBuilder() { m_pQueryBuilder.reset(new qx::QxSqlQueryBuilder<Value>()); } \
 }; }}} // namespace qx::dao::detail
 
 namespace qx {

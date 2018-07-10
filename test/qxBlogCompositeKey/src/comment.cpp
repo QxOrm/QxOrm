@@ -3,7 +3,7 @@
 #include "../include/comment.h"
 #include "../include/blog.h"
 
-#include <QxMemLeak.h>
+#include <QxOrm_Impl.h>
 
 QX_REGISTER_CPP_QX_BLOG(comment)
 

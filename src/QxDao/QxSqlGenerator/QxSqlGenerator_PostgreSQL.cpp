@@ -60,7 +60,8 @@ void QxSqlGenerator_PostgreSQL::onBeforeInsert(IxDao_Helper * pDaoHelper, void *
    if (sql.right(sqlToAdd.size()) == sqlToAdd) { return; }
    sql += sqlToAdd;
    pDaoHelper->builder().setSqlQuery(sql);
-   pDaoHelper->query().prepare(sql);
+   if (! pDaoHelper->query().prepare(sql))
+   { pDaoHelper->errFailed(true); }
 }
 
 void QxSqlGenerator_PostgreSQL::onAfterInsert(IxDao_Helper * pDaoHelper, void * pOwner) const
@@ -72,7 +73,7 @@ void QxSqlGenerator_PostgreSQL::onAfterInsert(IxDao_Helper * pDaoHelper, void * 
    if (pId->getNameCount() > 1) { qAssert(false); return; }
    if (! pDaoHelper->nextRecord()) { qAssert(false); return; }
    QVariant vId = pDaoHelper->query().value(0);
-   pId->fromVariant(pOwner, vId);
+   pId->fromVariant(pOwner, vId, -1, qx::cvt::context::e_database);
 }
 
 void QxSqlGenerator_PostgreSQL::initSqlTypeByClassName() const

@@ -119,16 +119,17 @@ public:
       for (int i = 0; i < pId->getNameCount(); i++)
       { QVariant v = query.value(lOffsetOld + i); bValidId = (bValidId || qx::trait::is_valid_primary_key(v)); }
       if (! bValidId) { return NULL; }
+
       type_item item = this->createItem();
       type_data & item_val = item.value_qx();
       if (! this->callTriggerBeforeFetch(item_val, params)) { return NULL; }
       for (int i = 0; i < pId->getNameCount(); i++)
-      { QVariant v = query.value(lOffsetOld + i); qx::cvt::from_variant(v, item.key(), "", i); }
+      { QVariant v = query.value(lOffsetOld + i); qx::cvt::from_variant(v, item.key(), "", i, qx::cvt::context::e_database); }
       for (int i = 0; i < pId->getNameCount(); i++)
-      { QVariant v = query.value(lOffsetOld + i); pId->fromVariant((& item_val), v, "", i); }
+      { QVariant v = query.value(lOffsetOld + i); pId->fromVariant((& item_val), v, "", i, qx::cvt::context::e_database); }
       long lOffsetRelation = (lOffsetOld + lOffsetId); long lCurrIndex = 0;
       while ((p = this->nextData(lIndex)))
-      { if (params.checkColumns(p->getKey())) { p->fromVariant((& item_val), query.value(lCurrIndex + lOffsetRelation)); lCurrIndex++; } }
+      { if (params.checkColumns(p->getKey())) { p->fromVariant((& item_val), query.value(lCurrIndex + lOffsetRelation), -1, qx::cvt::context::e_database); lCurrIndex++; } }
 
       if (params.relationX())
       {
@@ -194,7 +195,7 @@ private:
       type_iterator itr = type_generic_container::begin(container, item);
       type_iterator itr_end = type_generic_container::end(container);
       QSqlQuery queryInsert(params.database());
-      queryInsert.prepare(sql);
+      if (! queryInsert.prepare(sql)) { return queryInsert.lastError(); }
 
       while (itr != itr_end)
       {

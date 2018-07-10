@@ -40,13 +40,16 @@ struct QxDao_DeleteAll
    static QSqlError deleteAll(const qx::QxSqlQuery & query, QSqlDatabase * pDatabase, bool bVerifySoftDelete)
    {
       T t; Q_UNUSED(t);
-      qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "delete all");
+      qx::IxSqlQueryBuilder * pBuilder = new qx::QxSqlQueryBuilder_DeleteAll<T>(); pBuilder->init();
+      qx::QxSoftDelete oSoftDelete = pBuilder->getSoftDelete();
+      if (bVerifySoftDelete && ! oSoftDelete.isEmpty())
+      { delete pBuilder; pBuilder = new qx::QxSqlQueryBuilder_SoftDeleteAll<T>(); }
+
+      qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "delete all", pBuilder);
       if (! dao.isValid()) { return dao.error(); }
       if (dao.isReadOnly()) { return dao.errReadOnly(); }
 
-      QString sql; qx::QxSoftDelete oSoftDelete = dao.builder().getSoftDelete();
-      if (bVerifySoftDelete && ! oSoftDelete.isEmpty()) { sql = dao.builder().softDeleteAll().getSqlQuery(); }
-      else { sql = dao.builder().deleteAll().getSqlQuery(); }
+      QString sql = dao.builder().buildSql().getSqlQuery();
       if (sql.isEmpty()) { return dao.errEmpty(); }
       if (! pDatabase) { dao.transaction(); }
       if (! query.isEmpty()) { dao.addQuery(query, true); sql = dao.builder().getSqlQuery(); }

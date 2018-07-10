@@ -99,6 +99,7 @@ protected:
    bool m_bRoot;                                //!< Root of the hierarchy
    QSet<QString> m_lstRootColumns;              //!< Root columns to fetch (using syntax { col_1, col_2, etc... } ), if empty then fetch all root columns
    long m_lRootColumnsOffset;                   //!< Root columns offset to resolve SQL query output
+   bool m_bRootColumnsModeRemove;               //!< Special syntax to remove root columns instead of adding root columns : -{ column1, column2, etc... }
 
 public:
 
@@ -122,13 +123,14 @@ public:
    long getRelationCount() const;
    bool existRelation(const QString & sKey) const;
 
-   bool checkRootColumns(const QString & s) const     { return (m_lstRootColumns.isEmpty() || m_lstRootColumns.contains(s)); }
-   long getRootColumnsCount() const                   { return m_lstRootColumns.count(); }
-   long getRootColumnsOffset() const                  { return m_lRootColumnsOffset; }
-   void setRootColumnsOffset(long l)                  { m_lRootColumnsOffset = l; }
+   bool checkRootColumns(const QString & s) const  { return (m_lstRootColumns.isEmpty() || (m_bRootColumnsModeRemove ? (! m_lstRootColumns.contains(s)) : m_lstRootColumns.contains(s))); }
+   long getRootColumnsCount() const                { return m_lstRootColumns.count(); }
+   long getRootColumnsOffset() const               { return m_lRootColumnsOffset; }
+   void setRootColumnsOffset(long l)               { m_lRootColumnsOffset = l; }
 
 protected:
 
+   QStringList removeColumns(const QStringList & columnsToRemove, IxSqlRelation * pRelation) const;
    qx_bool insertRelationToHierarchy(const QStringList & sRelationX, const QString & sKey, qx::dao::sql_join::join_type eJoinType);
    bool isValidDaoHelper(QxSqlRelationParams & params) const;
 

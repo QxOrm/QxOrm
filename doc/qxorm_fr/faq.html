@@ -66,11 +66,11 @@
     <table cellspacing="0" cellpadding="1"><col><col><tbody>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow">Version courante :&nbsp;</font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.2 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.4.3 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
       </tr>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow"></font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.1.9</font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxEntityEditor 1.2.1</font></td>
       </tr>
     </tbody></table>
   </td>
@@ -201,7 +201,7 @@
            Si vous trouvez un bug ou si vous avez une question concernant le fonctionnement de la bibliothèque <b>QxOrm</b>, 
            vous pouvez envoyer un mail à : <u><i>support@qxorm.com</i></u>.<br>
            Un forum (en anglais) dédié à <b>QxOrm</b> est disponible <a href="http://www.qxorm.com/forum/phpbb/" target="_blank">en cliquant ici</a>.<br>
-           Vous pouvez également retrouver la communauté française de <b>QxOrm</b> sur <a href="http://www.developpez.net/forums/f1563/c-cpp/bibliotheques/qt/outils/bibliotheques/qxorm/" target="_blank">le forum de Developpez.com</a>.
+           Vous pouvez également retrouver la communauté française de <b>QxOrm</b> sur <a href="http://www.developpez.net/forums/f1563/c-cpp/bibliotheques/qt/bases-donnees/qxorm/" target="_blank">le forum de Developpez.com</a>.
            </td>
          </tr>
        </tbody>
@@ -754,7 +754,7 @@ typedef</span> qx<span class="operator">::</span>QxCollection<span class="operat
 <pre><span class="pre">#include "../include/precompiled.h"
 #include "../include/author.h"
 #include "../include/blog.h"
-#include &lt;QxMemLeak.h&gt;
+#include &lt;QxOrm_Impl.h&gt;
 </span>
 QX_REGISTER_CPP_QX_BLOG<span class="operator">(</span>author<span class="operator">)</span><span class="keyword">
 
@@ -958,7 +958,7 @@ struct</span> QxDao_Trigger<span class="operator">&lt;</span>BaseClassTrigger<sp
            <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
 <pre><span class="pre">#include "../include/precompiled.h"
 #include "../include/BaseClassTrigger.h"
-#include &lt;QxMemLeak.h&gt;
+#include &lt;QxOrm_Impl.h&gt;
 </span>
 QX_REGISTER_CPP_QX_DLL2<span class="operator">(</span>BaseClassTrigger<span class="operator">)</span><span class="keyword">
 
@@ -1472,7 +1472,7 @@ QX_REGISTER_HPP_QX_DLL1<span class="operator">(</span>TestQtProperty<span class=
 
 #include "../include/TestQtProperty.h"
 
-#include &lt;QxMemLeak.h&gt;
+#include &lt;QxOrm_Impl.h&gt;
 </span> 
 QX_REGISTER_CPP_QX_DLL1<span class="operator">(</span>TestQtProperty<span class="operator">)</span>
 QX_REGISTER_ALL_QT_PROPERTIES<span class="operator">(</span>TestQtProperty<span class="operator">,</span><span class="string"> "id"</span><span class="operator">)</span></pre>
@@ -1777,7 +1777,7 @@ QX_REGISTER_HPP_MY_APP<span class="operator">(</span>DatabaseVersion<span class=
            <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
 <pre><span class="pre">#include "../include/precompiled.h"
 #include "../include/DatabaseVersion.h"
-#include &lt;QxMemLeak.h&gt;
+#include &lt;QxOrm_Impl.h&gt;
 </span> 
 QX_REGISTER_CPP_MY_APP<span class="operator">(</span>DatabaseVersion<span class="operator">)</span><span class="keyword">
 
@@ -2070,7 +2070,7 @@ QX_REGISTER_HPP_MY_EXE<span class="operator">(</span>person<span class="operator
 #include "../include/person.h"
 #include "../include/global_validator.h"
 
-#include &lt;QxMemLeak.h&gt;
+#include &lt;QxOrm_Impl.h&gt;
 </span>
 QX_REGISTER_CPP_MY_EXE<span class="operator">(</span>person<span class="operator">)</span><span class="keyword">
 
@@ -2294,7 +2294,7 @@ typedef</span> qx<span class="operator">::</span>QxCollection<span class="operat
 #include <span class="string">"../include/author.h"</span>
 #include <span class="string">"../include/blog.h"</span>
 
-#include <span class="string">&lt;QxMemLeak.h&gt;</span>
+#include <span class="string">&lt;QxOrm_Impl.h&gt;</span>
 </span>
 QX_REGISTER_CPP_QX_BLOG<span class="operator">(</span>author<span class="operator">)</span>
 <font style="background-color:yellow"><b>QX_PERSISTABLE_CPP(author)</b></font>
@@ -2710,7 +2710,7 @@ Item<span class="operator"> {</span>
         <img alt="QxOrm" src="./resource/logo_qxorm_small.png" width="168" height="40">
       </td>
       <td align="center" valign="middle">
-        <font size="2">© 2016 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
+        <font size="2">© 2017 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
       </td>
       <td align="right" valign="middle">
         <form action="https://www.paypal.com/cgi-bin/webscr" method="post">

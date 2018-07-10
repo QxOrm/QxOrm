@@ -37,7 +37,7 @@
 
 #include <QxSerialize/Qt/QxSerialize_QPicture.h>
 
-#include <QxMemLeak.h>
+#include <QxOrm_Impl.h>
 
 QX_BOOST_EXPORT_SERIALIZATION_FAST_COMPIL_CPP(QPicture)
 

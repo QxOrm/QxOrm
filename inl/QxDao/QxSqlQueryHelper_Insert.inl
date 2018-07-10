@@ -40,37 +40,13 @@ struct QxSqlQueryHelper_Insert
    static void sql(QString & sql, qx::IxSqlQueryBuilder & builder)
    {
       BOOST_STATIC_ASSERT(qx::trait::is_qx_registered<T>::value);
-      long l1(0), l2(0);
-      qx::IxDataMember * p = NULL;
-      qx::IxDataMember * pId = builder.getDataId();
-      qx::IxSqlRelation * pRelation = NULL;
-      qx::QxSqlRelationParams params(0, 0, (& sql), (& builder), NULL, NULL);
-      QString table = builder.table();
-      sql = "INSERT INTO " + table + " (";
-      if (pId && ! pId->getAutoIncrement()) { sql += pId->getSqlName(", ") + ", "; }
-      while ((p = builder.nextData(l1))) { sql += p->getSqlName(", ") + ", "; }
-      while ((pRelation = builder.nextRelation(l2))) { params.setIndex(l2); pRelation->lazyInsert(params); }
-      sql = sql.left(sql.count() - 2); // Remove last ", "
-      sql += ") VALUES (";
-      l1 = 0; l2 = 0; p = NULL; pRelation = NULL;
-      if (pId && ! pId->getAutoIncrement()) { sql += pId->getSqlPlaceHolder("", -1, ", ") + ", "; }
-      while ((p = builder.nextData(l1))) { sql += p->getSqlPlaceHolder("", -1, ", ") + ", "; }
-      while ((pRelation = builder.nextRelation(l2))) { params.setIndex(l2); pRelation->lazyInsert_Values(params); }
-      sql = sql.left(sql.count() - 2); // Remove last ", "
-      sql += ")";
+      qx::IxSqlQueryBuilder::sql_Insert(sql, builder);
    }
 
    static void resolveInput(T & t, QSqlQuery & query, qx::IxSqlQueryBuilder & builder)
    {
       BOOST_STATIC_ASSERT(qx::trait::is_qx_registered<T>::value);
-      long l1(0), l2(0);
-      qx::IxDataMember * p = NULL;
-      qx::IxDataMember * pId = builder.getDataId();
-      qx::IxSqlRelation * pRelation = NULL;
-      qx::QxSqlRelationParams params(0, 0, NULL, (& builder), (& query), (& t));
-      if (pId && ! pId->getAutoIncrement()) { pId->setSqlPlaceHolder(query, (& t)); }
-      while ((p = builder.nextData(l1))) { p->setSqlPlaceHolder(query, (& t)); }
-      while ((pRelation = builder.nextRelation(l2))) { params.setIndex(l2); pRelation->lazyInsert_ResolveInput(params); }
+      qx::IxSqlQueryBuilder::resolveInput_Insert((& t), query, builder);
    }
 
    static void resolveOutput(T & t, QSqlQuery & query, qx::IxSqlQueryBuilder & builder)

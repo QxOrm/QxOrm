@@ -2,7 +2,7 @@
 
 #include "../include/CUser.h"
 
-#include <QxMemLeak.h>
+#include <QxOrm_Impl.h>
 
 void CUser::test()
 {

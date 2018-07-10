@@ -138,6 +138,46 @@ void IxDataMember::setNotNull(bool bNotNull, const QString & sMessage /* = QStri
    if (m_bNotNull) { pAllValidator->add_NotNull(m_sKey, sMessage); }
 }
 
+bool IxDataMember::isThereRelationPartOfPrimaryKey(int iIndexNamePK, IxSqlRelation * & pRelation, int & iIndexNameFK) const
+{
+   pRelation = NULL; iIndexNameFK = -1;
+   if (! m_pListRelationPartOfPrimaryKey) { return false; }
+   if (! m_pListRelationPartOfPrimaryKey->contains(iIndexNamePK)) { return false; }
+   QPair<IxSqlRelation *, int> pair = m_pListRelationPartOfPrimaryKey->value(iIndexNamePK);
+   pRelation = pair.first; iIndexNameFK = pair.second;
+   return true;
+}
+
+bool IxDataMember::isPartOfPrimaryKey(int iIndexNameFK, IxDataMember * & pPrimaryKey, int & iIndexNamePK) const
+{
+   pPrimaryKey = NULL; iIndexNamePK = -1;
+   if (! m_pListPartOfPrimaryKey) { return false; }
+   if (! m_pListPartOfPrimaryKey->contains(iIndexNameFK)) { return false; }
+   QPair<IxDataMember *, int> pair = m_pListPartOfPrimaryKey->value(iIndexNameFK);
+   pPrimaryKey = pair.first; iIndexNamePK = pair.second;
+   return true;
+}
+
+void IxDataMember::setRelationPartOfPrimaryKey(int iIndexNamePK, IxSqlRelation * pRelation, int iIndexNameFK)
+{
+   if (! m_pListRelationPartOfPrimaryKey) { m_pListRelationPartOfPrimaryKey.reset(new type_fk_part_of_pk()); }
+   if (m_pListRelationPartOfPrimaryKey->contains(iIndexNamePK)) { return; }
+   QPair<IxSqlRelation *, int> pair;
+   pair.first = pRelation;
+   pair.second = iIndexNameFK;
+   m_pListRelationPartOfPrimaryKey->insert(iIndexNamePK, pair);
+}
+
+void IxDataMember::setPartOfPrimaryKey(int iIndexNameFK, IxDataMember * pPrimaryKey, int iIndexNamePK)
+{
+   if (! m_pListPartOfPrimaryKey) { m_pListPartOfPrimaryKey.reset(new type_part_of_pk()); }
+   if (m_pListPartOfPrimaryKey->contains(iIndexNameFK)) { return; }
+   QPair<IxDataMember *, int> pair;
+   pair.first = pPrimaryKey;
+   pair.second = iIndexNamePK;
+   m_pListPartOfPrimaryKey->insert(iIndexNameFK, pair);
+}
+
 QString IxDataMember::getName(int iIndex, const QString & sOtherName /* = QString() */) const
 {
    if (! sOtherName.isEmpty())
@@ -196,18 +236,27 @@ QString IxDataMember::getSqlTypeAndParams(int iIndexName /* = -1 */) const
    return sResult;
 }
 
-QString IxDataMember::getSqlPlaceHolder(const QString & sAppend /* = QString() */, int iIndexName /* = 0 */, const QString & sSep /* = QString(", ") */, const QString & sOtherName /* = QString() */) const
+QString IxDataMember::getSqlPlaceHolder(const QString & sAppend /* = QString() */, int iIndexName /* = 0 */, const QString & sSep /* = QString(", ") */, const QString & sOtherName /* = QString() */, bool bCheckFKPartOfPK /* = false */) const
 {
    QString sResult;
+   int iIndexNameFK = 0;
+   IxSqlRelation * pRelation = NULL;
+
    if (iIndexName == -1)
    {
       for (int i = 0; i < m_lstNames.count(); i++)
-      { sResult += getSqlPlaceHolder(sAppend, i, sSep, sOtherName); sResult += sSep; }
-      sResult = sResult.left(sResult.count() - sSep.count()); // Remove last separator
+      {
+         if (bCheckFKPartOfPK && m_bIsPrimaryKey && isThereRelationPartOfPrimaryKey(i, pRelation, iIndexNameFK)) { continue; }
+         sResult += getSqlPlaceHolder(sAppend, i, sSep, sOtherName) + sSep;
+      }
+
+      if (! sResult.isEmpty())
+      { sResult = sResult.left(sResult.count() - sSep.count()); } // Remove last separator
       return sResult;
    }
 
    // Special database keywords using '[', ']' or '"' characters
+   if (bCheckFKPartOfPK && m_bIsPrimaryKey && isThereRelationPartOfPrimaryKey(iIndexName, pRelation, iIndexNameFK)) { return ""; }
    QString sSqlPlaceHolder = getName(iIndexName, sOtherName) + sAppend;
    sSqlPlaceHolder.replace("[", "");
    sSqlPlaceHolder.replace("]", "");
@@ -224,64 +273,108 @@ QString IxDataMember::getSqlPlaceHolder(const QString & sAppend /* = QString() *
    return sResult;
 }
 
-void IxDataMember::setSqlPlaceHolder(QSqlQuery & query, void * pOwner, const QString & sAppend /* = QString() */, const QString & sOtherName /* = QString() */) const
+void IxDataMember::setSqlPlaceHolder(QSqlQuery & query, void * pOwner, const QString & sAppend /* = QString() */, const QString & sOtherName /* = QString() */, bool bCheckFKPartOfPK /* = false */) const
 {
+   int iIndexNameFK = 0;
+   IxSqlRelation * pRelation = NULL;
+
    for (int i = 0; i < m_lstNames.count(); i++)
    {
+      if (bCheckFKPartOfPK && m_bIsPrimaryKey && isThereRelationPartOfPrimaryKey(i, pRelation, iIndexNameFK)) { continue; }
       switch (QxSqlDatabase::getSingleton()->getSqlPlaceHolderStyle())
       {
-         case QxSqlDatabase::ph_style_question_mark:  query.addBindValue(toVariant(pOwner, i));                                                 break;
-         case QxSqlDatabase::ph_style_2_point_name:   query.bindValue(getSqlPlaceHolder(sAppend, i, "", sOtherName), toVariant(pOwner, i));     break;
-         case QxSqlDatabase::ph_style_at_name:        query.bindValue(getSqlPlaceHolder(sAppend, i, "", sOtherName), toVariant(pOwner, i));     break;
-         default:                                     query.bindValue(getSqlPlaceHolder(sAppend, i, "", sOtherName), toVariant(pOwner, i));     break;
+         case QxSqlDatabase::ph_style_question_mark:  query.addBindValue(toVariant(pOwner, i, qx::cvt::context::e_database));                                                 break;
+         case QxSqlDatabase::ph_style_2_point_name:   query.bindValue(getSqlPlaceHolder(sAppend, i, "", sOtherName), toVariant(pOwner, i, qx::cvt::context::e_database));     break;
+         case QxSqlDatabase::ph_style_at_name:        query.bindValue(getSqlPlaceHolder(sAppend, i, "", sOtherName), toVariant(pOwner, i, qx::cvt::context::e_database));     break;
+         default:                                     query.bindValue(getSqlPlaceHolder(sAppend, i, "", sOtherName), toVariant(pOwner, i, qx::cvt::context::e_database));     break;
       }
    }
 }
 
-QString IxDataMember::getSqlAliasEqualToPlaceHolder(const QString & sTable /* = QString() */, bool bClauseWhere /* = false */, const QString & sAppend /* = QString() */, const QString & sSep /* = QString(" AND ") */) const
+QString IxDataMember::getSqlAliasEqualToPlaceHolder(const QString & sTable /* = QString() */, bool bClauseWhere /* = false */, const QString & sAppend /* = QString() */, const QString & sSep /* = QString(" AND ") */, bool bCheckFKPartOfPK /* = false */) const
 {
    QString sResult;
+   int iIndexNameFK = 0;
+   IxSqlRelation * pRelation = NULL;
+
    for (int i = 0; i < m_lstNames.count(); i++)
-   { sResult += getSqlAlias(sTable, bClauseWhere, i) + " = " + getSqlPlaceHolder(sAppend, i); sResult += sSep; }
-   sResult = sResult.left(sResult.count() - sSep.count()); // Remove last separator
+   {
+      if (bCheckFKPartOfPK && m_bIsPrimaryKey && isThereRelationPartOfPrimaryKey(i, pRelation, iIndexNameFK)) { continue; }
+      sResult += getSqlAlias(sTable, bClauseWhere, i) + " = " + getSqlPlaceHolder(sAppend, i) + sSep;
+   }
+
+   if (! sResult.isEmpty())
+   { sResult = sResult.left(sResult.count() - sSep.count()); } // Remove last separator
    return sResult;
 }
 
-QString IxDataMember::getSqlNameEqualToPlaceHolder(const QString & sAppend /* = QString() */, const QString & sSep /* = QString(" AND ") */) const
+QString IxDataMember::getSqlNameEqualToPlaceHolder(const QString & sAppend /* = QString() */, const QString & sSep /* = QString(" AND ") */, bool bCheckFKPartOfPK /* = false */) const
 {
    QString sResult;
+   int iIndexNameFK = 0;
+   IxSqlRelation * pRelation = NULL;
+
    for (int i = 0; i < m_lstNames.count(); i++)
-   { sResult += getName(i) + " = " + getSqlPlaceHolder(sAppend, i); sResult += sSep; }
-   sResult = sResult.left(sResult.count() - sSep.count()); // Remove last separator
+   {
+      if (bCheckFKPartOfPK && m_bIsPrimaryKey && isThereRelationPartOfPrimaryKey(i, pRelation, iIndexNameFK)) { continue; }
+      sResult += getName(i) + " = " + getSqlPlaceHolder(sAppend, i) + sSep;
+   }
+
+   if (! sResult.isEmpty())
+   { sResult = sResult.left(sResult.count() - sSep.count()); } // Remove last separator
    return sResult;
 }
 
-QString IxDataMember::getSqlTablePointNameAsAlias(const QString & sTable, const QString & sSep /* = QString(", ") */, const QString & sSuffixAlias /* = QString() */) const
+QString IxDataMember::getSqlTablePointNameAsAlias(const QString & sTable, const QString & sSep /* = QString(", ") */, const QString & sSuffixAlias /* = QString() */, bool bCheckFKPartOfPK /* = false */) const
 {
    QString sResult;
+   int iIndexNameFK = 0;
+   IxSqlRelation * pRelation = NULL;
    QString sTableAlias = sTable;
    sTableAlias.replace(".", "_");
+
    for (int i = 0; i < m_lstNames.count(); i++)
-   { sResult += sTableAlias + "." + getName(i) + " AS " + getSqlAlias(sTable, false, i) + sSuffixAlias; sResult += sSep; }
-   sResult = sResult.left(sResult.count() - sSep.count()); // Remove last separator
+   {
+      if (bCheckFKPartOfPK && m_bIsPrimaryKey && isThereRelationPartOfPrimaryKey(i, pRelation, iIndexNameFK)) { continue; }
+      sResult += sTableAlias + "." + getName(i) + " AS " + getSqlAlias(sTable, false, i) + sSuffixAlias + sSep;
+   }
+
+   if (! sResult.isEmpty())
+   { sResult = sResult.left(sResult.count() - sSep.count()); } // Remove last separator
    return sResult;
 }
 
-QString IxDataMember::getSqlName(const QString & sSep /* = QString(", ") */, const QString & sOtherName /* = QString() */) const
+QString IxDataMember::getSqlName(const QString & sSep /* = QString(", ") */, const QString & sOtherName /* = QString() */, bool bCheckFKPartOfPK /* = false */) const
 {
    QString sResult;
+   int iIndexNameFK = 0;
+   IxSqlRelation * pRelation = NULL;
+
    for (int i = 0; i < m_lstNames.count(); i++)
-   { sResult += getName(i, sOtherName); sResult += sSep; }
-   sResult = sResult.left(sResult.count() - sSep.count()); // Remove last separator
+   {
+      if (bCheckFKPartOfPK && m_bIsPrimaryKey && isThereRelationPartOfPrimaryKey(i, pRelation, iIndexNameFK)) { continue; }
+      sResult += getName(i, sOtherName) + sSep;
+   }
+
+   if (! sResult.isEmpty())
+   { sResult = sResult.left(sResult.count() - sSep.count()); } // Remove last separator
    return sResult;
 }
 
-QString IxDataMember::getSqlNameAndTypeAndParams(const QString & sSep /* = QString(", ") */, const QString & sOtherName /* = QString() */) const
+QString IxDataMember::getSqlNameAndTypeAndParams(const QString & sSep /* = QString(", ") */, const QString & sOtherName /* = QString() */, bool bCheckFKPartOfPK /* = false */) const
 {
    QString sResult;
+   int iIndexNameFK = 0;
+   IxSqlRelation * pRelation = NULL;
+
    for (int i = 0; i < m_lstNames.count(); i++)
-   { sResult += getName(i, sOtherName) + " " + getSqlTypeAndParams(i); sResult += sSep; }
-   sResult = sResult.left(sResult.count() - sSep.count()); // Remove last separator
+   {
+      if (bCheckFKPartOfPK && m_bIsPrimaryKey && isThereRelationPartOfPrimaryKey(i, pRelation, iIndexNameFK)) { continue; }
+      sResult += getName(i, sOtherName) + " " + getSqlTypeAndParams(i) + sSep;
+   }
+
+   if (! sResult.isEmpty())
+   { sResult = sResult.left(sResult.count() - sSep.count()); } // Remove last separator
    return sResult;
 }
 

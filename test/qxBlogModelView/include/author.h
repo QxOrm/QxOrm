@@ -9,6 +9,7 @@ public:
 // -- typedef
    typedef qx_shared_ptr<blog> blog_ptr;
    typedef std::vector<blog_ptr> list_blog;
+   typedef std::vector<blog_ptr> type_list_of_blog;
 // -- enum
    enum enum_sex { male, female, unknown };
 // -- properties
@@ -22,6 +23,21 @@ public:
    virtual ~author() { ; }
 // -- methods
    int age() const;
+
+   QString getauthor_id() const;
+   QString getname() const;
+   QDate getbirthdate() const;
+   enum_sex getsex() const;
+   type_list_of_blog getlist_of_blog() const;
+   type_list_of_blog & list_of_blog();
+   const type_list_of_blog & list_of_blog() const;
+
+   void setauthor_id(const QString & val);
+   void setname(const QString & val);
+   void setbirthdate(const QDate & val);
+   void setsex(const enum_sex & val);
+   void setlist_of_blog(const type_list_of_blog & val);
+
 };
 
 QX_REGISTER_PRIMARY_KEY(author, QString)
