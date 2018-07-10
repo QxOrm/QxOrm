@@ -1,24 +1,30 @@
 /****************************************************************************
 **
 ** http://www.qxorm.com/
-** http://sourceforge.net/projects/qxorm/
-** Original file by Lionel Marty
+** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
 **
 ** This software is provided 'as-is', without any express or implied
 ** warranty. In no event will the authors be held liable for any
-** damages arising from the use of this software.
+** damages arising from the use of this software
 **
-** GNU Lesser General Public License Usage
-** This file must be used under the terms of the GNU Lesser
-** General Public License version 2.1 as published by the Free Software
-** Foundation and appearing in the file 'license.lgpl.txt' included in the
-** packaging of this file.  Please review the following information to
-** ensure the GNU Lesser General Public License version 2.1 requirements
-** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+** Commercial Usage
+** Licensees holding valid commercial QxOrm licenses may use this file in
+** accordance with the commercial license agreement provided with the
+** Software or, alternatively, in accordance with the terms contained in
+** a written agreement between you and Lionel Marty
 **
-** If you have questions regarding the use of this file, please contact :
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU
+** General Public License version 3.0 as published by the Free Software
+** Foundation and appearing in the file 'license.gpl3.txt' included in the
+** packaging of this file. Please review the following information to
+** ensure the GNU General Public License version 3.0 requirements will be
+** met : http://www.gnu.org/copyleft/gpl.html
+**
+** If you are unsure which license is appropriate for your use, or
+** if you have questions regarding the use of this file, please contact :
 ** contact@qxorm.com
 **
 ****************************************************************************/
@@ -62,6 +68,7 @@ protected:
 
    IxDataMemberX * m_pDataMemberX;                    //!< List of data member
    IxFunctionX_ptr m_pFctMemberX;                     //!< List of function member
+   IxFunctionX_ptr m_pFctStaticX;                     //!< List of function static
 
    QString m_sKey;                                    //!< 'IxClass' key <=> class name
    QString m_sName;                                   //!< 'IxClass' name <=> database table name (if empty => class name)
@@ -69,6 +76,7 @@ protected:
    long m_lVersion;                                   //!< 'IxClass' version
    bool m_bFinalClass;                                //!< Class without base class (for example, qx::trait::no_base_class_defined and QObject)
    bool m_bDaoReadOnly;                               //!< If 'true', cannot INSERT, UPDATE OR DELETE an instance of this class using qx::dao namespace
+   bool m_bRegistered;                                //!< Class registered into QxOrm context
    qx::dao::strategy::inheritance m_eDaoStrategy;     //!< Dao class strategy to access data member
    qx::QxSoftDelete m_oSoftDelete;                    //!< Soft delete (or logical delete) behavior
    IxValidatorX_ptr m_pAllValidator;                  //!< List of validator associated to the class
@@ -78,7 +86,7 @@ protected:
 
 protected:
 
-   IxClass() : qx::QxPropertyBag(), m_pDataMemberX(NULL), m_lVersion(-1), m_bFinalClass(false), m_bDaoReadOnly(false), m_eDaoStrategy(qx::dao::strategy::concrete_table_inheritance), m_pName(NULL) { ; }
+   IxClass() : qx::QxPropertyBag(), m_pDataMemberX(NULL), m_lVersion(-1), m_bFinalClass(false), m_bDaoReadOnly(false), m_bRegistered(false), m_eDaoStrategy(qx::dao::strategy::concrete_table_inheritance), m_pName(NULL) { ; }
    virtual ~IxClass() = 0;
 
    void updateClassX();
@@ -94,8 +102,10 @@ public:
    inline qx::QxSoftDelete getSoftDelete() const                  { return m_oSoftDelete; }
    inline bool isFinalClass() const                               { return m_bFinalClass; }
    inline bool isDaoReadOnly() const                              { return m_bDaoReadOnly; }
+   inline bool isRegistered() const                               { return m_bRegistered; }
    inline IxDataMemberX * getDataMemberX() const                  { return m_pDataMemberX; }
    inline IxFunctionX * getFctMemberX() const                     { return m_pFctMemberX.get(); }
+   inline IxFunctionX * getFctStaticX() const                     { return m_pFctStaticX.get(); }
    inline IxDataMember * getId() const                            { return (m_pDataMemberX ? m_pDataMemberX->getId() : NULL); }
 
    inline void setName(const QString & sName)                                 { m_sName = sName; updateNamePtr(); }
@@ -116,7 +126,7 @@ public:
 
 private:
 
-   inline void updateNamePtr()   { m_byteName = m_sName.toAscii(); m_pName = m_byteName.constData(); }
+   inline void updateNamePtr()   { m_byteName = m_sName.toLatin1(); m_pName = m_byteName.constData(); }
 
 };
 

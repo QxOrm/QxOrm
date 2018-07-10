@@ -51,7 +51,7 @@ namespace qx {
   @short Simple encryption and decryption of strings and byte arrays
 
   This class provides a simple implementation of encryption and decryption
-  of strings and byte arrays : http://developer.qt.nokia.com/wiki/Simple_encryption
+  of strings and byte arrays : http://qt-project.org/wiki/Simple_encryption
 
   @warning The encryption provided by this class is NOT strong encryption. It may
   help to shield things from curious eyes, but it will NOT stand up to someone

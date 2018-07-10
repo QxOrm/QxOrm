@@ -1,24 +1,30 @@
 /****************************************************************************
 **
 ** http://www.qxorm.com/
-** http://sourceforge.net/projects/qxorm/
-** Original file by Lionel Marty
+** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
 **
 ** This software is provided 'as-is', without any express or implied
 ** warranty. In no event will the authors be held liable for any
-** damages arising from the use of this software.
+** damages arising from the use of this software
 **
-** GNU Lesser General Public License Usage
-** This file must be used under the terms of the GNU Lesser
-** General Public License version 2.1 as published by the Free Software
-** Foundation and appearing in the file 'license.lgpl.txt' included in the
-** packaging of this file.  Please review the following information to
-** ensure the GNU Lesser General Public License version 2.1 requirements
-** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+** Commercial Usage
+** Licensees holding valid commercial QxOrm licenses may use this file in
+** accordance with the commercial license agreement provided with the
+** Software or, alternatively, in accordance with the terms contained in
+** a written agreement between you and Lionel Marty
 **
-** If you have questions regarding the use of this file, please contact :
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU
+** General Public License version 3.0 as published by the Free Software
+** Foundation and appearing in the file 'license.gpl3.txt' included in the
+** packaging of this file. Please review the following information to
+** ensure the GNU General Public License version 3.0 requirements will be
+** met : http://www.gnu.org/copyleft/gpl.html
+**
+** If you are unsure which license is appropriate for your use, or
+** if you have questions regarding the use of this file, please contact :
 ** contact@qxorm.com
 **
 ****************************************************************************/
@@ -31,6 +37,9 @@
 #include <QxService/QxThreadPool.h>
 #include <QxService/QxTools.h>
 #include <QxService/QxConnect.h>
+
+#include <QxCommon/QxException.h>
+#include <QxCommon/QxExceptionCode.h>
 
 #include <QxMemLeak/mem_leak.h>
 
@@ -49,7 +58,7 @@ void QxThread::stop()
    m_bIsRunning = false;
 }
 
-void QxThread::execute(int socketDescriptor)
+void QxThread::execute(QX_TYPE_SOCKET_DESC socketDescriptor)
 {
    QMutexLocker locker(& m_mutex);
    if (m_iSocketDescriptor != 0) { return; }
@@ -90,8 +99,9 @@ void QxThread::doProcess(QTcpSocket & socket)
 
    Q_EMIT transactionStarted(m_pTransaction);
    try { m_pTransaction->executeServer(); }
-   catch (const std::exception & e) { m_pTransaction->setMessageReturn(qx_bool(0, e.what())); }
-   catch (...) { m_pTransaction->setMessageReturn(qx_bool(0, "unknown error")); }
+   catch (const qx::exception & x) { qx_bool xb = x.toQxBool(); m_pTransaction->setMessageReturn(xb); }
+   catch (const std::exception & e) { m_pTransaction->setMessageReturn(qx_bool(QX_ERROR_UNKNOWN, e.what())); }
+   catch (...) { m_pTransaction->setMessageReturn(qx_bool(QX_ERROR_UNKNOWN, "unknown error")); }
    if (! m_bIsRunning) { return; }
 
    qx_bool bWriteOk = writeSocket(socket);
@@ -112,7 +122,7 @@ qx_bool QxThread::readSocket(QTcpSocket & socket)
 
 qx_bool QxThread::writeSocket(QTcpSocket & socket)
 {
-   if (! m_pTransaction) { return qx_bool(0, "empty service transaction"); }
+   if (! m_pTransaction) { return qx_bool(QX_ERROR_SERVICE_NOT_SPECIFIED, "empty service transaction"); }
 
    quint32 uiTransactionSize = 0;
    IxParameter_ptr pInputBackup = m_pTransaction->getInputParameter();

@@ -1,24 +1,30 @@
 /****************************************************************************
 **
 ** http://www.qxorm.com/
-** http://sourceforge.net/projects/qxorm/
-** Original file by Lionel Marty
+** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
 **
 ** This software is provided 'as-is', without any express or implied
 ** warranty. In no event will the authors be held liable for any
-** damages arising from the use of this software.
+** damages arising from the use of this software
 **
-** GNU Lesser General Public License Usage
-** This file must be used under the terms of the GNU Lesser
-** General Public License version 2.1 as published by the Free Software
-** Foundation and appearing in the file 'license.lgpl.txt' included in the
-** packaging of this file.  Please review the following information to
-** ensure the GNU Lesser General Public License version 2.1 requirements
-** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+** Commercial Usage
+** Licensees holding valid commercial QxOrm licenses may use this file in
+** accordance with the commercial license agreement provided with the
+** Software or, alternatively, in accordance with the terms contained in
+** a written agreement between you and Lionel Marty
 **
-** If you have questions regarding the use of this file, please contact :
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU
+** General Public License version 3.0 as published by the Free Software
+** Foundation and appearing in the file 'license.gpl3.txt' included in the
+** packaging of this file. Please review the following information to
+** ensure the GNU General Public License version 3.0 requirements will be
+** met : http://www.gnu.org/copyleft/gpl.html
+**
+** If you are unsure which license is appropriate for your use, or
+** if you have questions regarding the use of this file, please contact :
 ** contact@qxorm.com
 **
 ****************************************************************************/
@@ -39,6 +45,9 @@
 
 #include <QxFactory/QxFactoryX.h>
 
+#include <QxCommon/QxException.h>
+#include <QxCommon/QxExceptionCode.h>
+
 #include <QxMemLeak/mem_leak.h>
 
 QX_REGISTER_INTERNAL_HELPER_START_FILE_CPP(qx::service::QxTransaction)
@@ -48,31 +57,35 @@ namespace service {
 
 void QxTransaction::executeServer()
 {
-   if (m_sServiceName.isEmpty()) { m_bMessageReturn = qx_bool(0, "[QxOrm] empty service name => cannot instantiate service and execute process"); return; }
-   if (m_sServiceMethod.isEmpty()) { m_bMessageReturn = qx_bool(0, "[QxOrm] empty service method => cannot execute process"); return; }
+   if (m_sServiceName.isEmpty()) { m_bMessageReturn = qx_bool(QX_ERROR_SERVICE_NOT_SPECIFIED, "[QxOrm] empty service name => cannot instantiate service and execute process"); return; }
+   if (m_sServiceMethod.isEmpty()) { m_bMessageReturn = qx_bool(QX_ERROR_SERVICE_NOT_SPECIFIED, "[QxOrm] empty service method => cannot execute process"); return; }
 
    qx::service::IxService * ptr = qx::create_nude_ptr<qx::service::IxService>(m_sServiceName);
-   if (ptr == NULL) { m_bMessageReturn = qx_bool(0, "[QxOrm] invalid service name => cannot instantiate service and execute process"); return; }
+   if (ptr == NULL) { m_bMessageReturn = qx_bool(QX_ERROR_SERVICE_INVALID, "[QxOrm] invalid service name => cannot instantiate service and execute process"); return; }
    m_pServiceInstance = IxService_ptr(ptr);
    m_pServiceInstance->registerClass();
    m_pServiceInstance->setInputParameter(m_pInputParameter);
+   m_pServiceInstance->setServiceMethodName(m_sServiceMethod);
 
    try
    {
+      m_pServiceInstance->onBeforeProcess();
       qx_bool bInvokeOk = qx::QxClassX::invoke(m_sServiceName, m_sServiceMethod, (* m_pServiceInstance));
-      if (! bInvokeOk) { m_bMessageReturn = qx_bool(0, "[QxOrm] invalid service method => cannot execute process"); return; }
+      if (! bInvokeOk) { m_bMessageReturn = qx_bool(QX_ERROR_SERVICE_INVALID, "[QxOrm] invalid service method => cannot execute process"); return; }
       m_pOutputParameter = m_pServiceInstance->getOutputParameter_BaseClass();
       m_bMessageReturn = m_pServiceInstance->getMessageReturn();
+      m_pServiceInstance->onAfterProcess();
    }
-   catch (const std::exception & e) { QString msg(e.what()); if (msg.isEmpty()) { msg = "[QxOrm] unexpected error occured executing service method"; }; m_bMessageReturn = qx_bool(0, msg); }
-   catch (...) { m_bMessageReturn = qx_bool(0, "[QxOrm] unknown error occured executing service method"); }
+   catch (const qx::exception & x) { m_bMessageReturn = x.toQxBool(); }
+   catch (const std::exception & e) { QString msg(e.what()); if (msg.isEmpty()) { msg = "[QxOrm] unexpected error occured executing service method"; }; m_bMessageReturn = qx_bool(QX_ERROR_UNKNOWN, msg); }
+   catch (...) { m_bMessageReturn = qx_bool(QX_ERROR_UNKNOWN, "[QxOrm] unknown error occured executing service method"); }
    m_pServiceInstance.reset();
 }
 
 void QxTransaction::executeClient(IxService * pService, const QString & sMethod)
 {
    if ((pService == NULL) || sMethod.isEmpty()) { qAssert(false); return; }
-   if (pService->getServiceName().isEmpty()) { pService->setMessageReturn(qx_bool(0, "[QxOrm] empty service name")); return; }
+   if (pService->getServiceName().isEmpty()) { pService->setMessageReturn(qx_bool(QX_ERROR_SERVICE_NOT_SPECIFIED, "[QxOrm] empty service name")); return; }
    pService->registerClass();
 
    QTcpSocket socket;
@@ -80,7 +93,7 @@ void QxTransaction::executeClient(IxService * pService, const QString & sMethod)
    long serverPort = QxConnect::getSingleton()->getPort();
    socket.connectToHost(serverName, serverPort);
    if (! socket.waitForConnected(QxConnect::getSingleton()->getMaxWait()))
-   { pService->setMessageReturn(qx_bool(0, "[QxOrm] unable to connect to server")); return; }
+   { pService->setMessageReturn(qx_bool(QX_ERROR_SERVER_NOT_FOUND, "[QxOrm] unable to connect to server")); return; }
 
    if (m_sTransactionId.isEmpty())
    { setTransactionId(QUuid::createUuid().toString()); }
@@ -95,9 +108,9 @@ void QxTransaction::executeClient(IxService * pService, const QString & sMethod)
    setInputParameter(pService->getInputParameter_BaseClass());
 
    qx_bool bWriteOk = writeSocket(socket);
-   if (! bWriteOk) { pService->setMessageReturn(qx_bool(0, QString("[QxOrm] unable to write request to socket : '") + bWriteOk.getDesc() + QString("'"))); return; }
+   if (! bWriteOk) { pService->setMessageReturn(qx_bool(QX_ERROR_SERVICE_WRITE_ERROR, QString("[QxOrm] unable to write request to socket : '") + bWriteOk.getDesc() + QString("'"))); return; }
    qx_bool bReadOk = readSocket(socket);
-   if (! bReadOk) { pService->setMessageReturn(qx_bool(0, QString("[QxOrm] unable to read reply from socket : '") + bReadOk.getDesc() + QString("'"))); return; }
+   if (! bReadOk) { pService->setMessageReturn(qx_bool(QX_ERROR_SERVICE_READ_ERROR, QString("[QxOrm] unable to read reply from socket : '") + bReadOk.getDesc() + QString("'"))); return; }
 
    pService->setOutputParameter(getOutputParameter());
    pService->setMessageReturn(getMessageReturn());

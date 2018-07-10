@@ -1,3 +1,16 @@
+Changes in version 1.2.5:
+- New license : go to download page of QxOrm website for more details
+- Support Qt5
+- New compiler supported : Clang (tested on Mac OS X)
+- Now each QxOrm version will be tested in 32-bit and 64-bit mode
+- Improve QxOrm introspection engine : possibility to register static class methods
+- Improve QxService module : now it's easy to add an authentication process on server side
+- New class qx::exception to get error code + error description with services methods throwing an exception
+- New settings available in QxOrm.pri config file (whithout changing QxConfig.h file)
+- Possibility to implement specifics database SQL functions overriding qx_query class
+- Fix an issue when fetching multiple levels of relationship and NULL pointers
+- Fix a bug with MS SQL Server database and update queries using auto-increment id
+
 Changes in version 1.2.4:
 - New relationship engine to fetch easily many levels of relationships per query
 - For more details about this new engine, goto the FAQ : 'How to use relationship engine to fetch datas from many tables ?'

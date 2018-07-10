@@ -22,5 +22,10 @@ void CPerson::isValid(qx::QxInvalidValueX & invalidValues)
    { invalidValues.insert("you cannot set 'admin' for the name of a person"); }
 }
 
+int CPerson::testStaticFct(const QString & s)
+{
+   return s.toInt();
+}
+
 } // namespace test
 } // namespace qx

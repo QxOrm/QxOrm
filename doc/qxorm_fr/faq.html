@@ -4,33 +4,20 @@
   <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
   <title>QxOrm - C++ Object Relational Mapping library (ORM)</title>
   <meta name="generator" content="Amaya, see http://www.w3.org/Amaya/">
-  <style type="text/css">
-   .comment { color: #008000; font-style: italic; }
-   .pre { color: #000099; }
-   .string { color: #DF0101; }
-   .char { color: #009900; }
-   .float { color: #996600; }
-   .int { color: #999900; }
-   .bool { color: #000000; font-weight: bold; }
-   .type { color: #FF6633; }
-   .flow { color: #FF0000; }
-   .keyword { color: #990000; }
-   .operator { color: #663300; font-weight: bold; }
-   .operator { color: #663300; font-weight: bold; }
-  </style>
+  <link rel='stylesheet' type='text/css' href='./resource/qxorm_style.css'>
 </head>
 <body>
 <table border="0" style="width: 80%" align="center">
   <col><col><col>
   <tbody>
     <tr>
-      <td><a href="./home.html"><img alt="QxOrm" src="./resource/logo_qxorm.jpg" width="256" height="61" align="left" border="0"></a></td>
+      <td><a href="./home.html"><img alt="QxOrm" src="./resource/logo_qxorm.png" width="256" height="61" align="left" border="0"></a></td>
       <td align="right" style="vertical-align:bottom">
         <img alt="Windows" src="./resource/logo_windows.gif" width="35" height="35">
         <img alt="Linux" src="./resource/logo_linux.gif" width="35" height="35">
         <img alt="Macintosh" src="./resource/logo_mac.gif" width="35" height="35">
       </td>
-      <td width="70"><img alt="C++" src="./resource/logo_cpp.jpg" width="50" height="50" align="right"></td>
+      <td width="70"><img alt="C++" src="./resource/logo_cpp.gif" width="50" height="50" align="right"></td>
     </tr>
   </tbody>
 </table>
@@ -65,7 +52,7 @@
   <col><col><col><col><col><col>
   <tbody><tr>
   <td align="left" valign="top"><font size="2">QxOrm  &gt;&gt;  Faq</font></td>
-  <td align="right" valign="top"><font size="2">Version courante : QxOrm 1.2.4 (LGPL) - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
+  <td align="right" valign="top"><font size="2">Version courante : QxOrm 1.2.5 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a></font></td>
   <td width="10px"></td>
   <td width="40px" height="30px"><a href="../qxorm_fr/faq.html"><img alt="Version française du site" src="./resource/FR.png" width="40" height="30" border="0"></a></td>
   <td width="40px" height="30px"><a href="../qxorm_en/faq.html"><img alt="Web site english version" src="./resource/GB.png" width="40" height="30" border="0"></a></td>
@@ -118,7 +105,7 @@
                 </li></ul>
               </td>
               <td width="200" align="center" valign="top"><a href="./resource/qt_ambassador_logo.png" target="_blank"><img alt="qt_ambassador" src="./resource/qt_ambassador_logo_150x150.png" width="150" height="150" border="0"></a><br>
-                 <b><font size="2">QxOrm library has been accepted into the <a href="http://qt.nokia.com/qt-in-use/ambassadors/qtambassador/" target="_blank">Qt Ambassador Program</a></font></b>
+                 <b><font size="2">QxOrm library has been accepted into the <a href="http://qt.digia.com/qtambassador/" target="_blank">Qt Ambassador Program</a></font></b>
               </td>
             </tr>
           </tbody>
@@ -132,7 +119,7 @@
          <tr>
            <td valign="middle" width="30"></td>
            <td align="justify">
-              <b>QxOrm est une bibliothèque C++ open source de gestion de données (Object Relational Mapping, ORM) sous <a href="./resource/license.lgpl.txt" target="_blank">licence LGPL</a>.</b><br>
+              <b>QxOrm est une bibliothèque C++ open source de gestion de données (Object Relational Mapping, ORM).</b><br>
               <b>QxOrm</b> est développé par Lionel Marty, Ingénieur en développement logiciel depuis 2003.<br>
               <br>
               À partir d'une simple <i>fonction de paramétrage</i> (que l'on peut comparer avec un fichier de mapping XML <i>Hibernate</i>), vous aurez accès aux fonctionnalités suivantes :
@@ -142,8 +129,8 @@
                 </li><li>moteur de <font style="background-color:yellow"><b>réflexion</b></font> (ou <font style="background-color:yellow"><b>introspection</b></font>) pour accéder aux classes, attributs et invoquer des méthodes.
                 </li>
               </ul>
-              <b>QxOrm</b> est dépendant des excellentes bibliothèques <a href="http://www.boost.org/" target="_blank"><b>boost</b></a> (compatible à partir de la version 1.38) et <a href="http://qt.nokia.com/" target="_blank"><b>Qt</b></a> (compatible à partir de la version 4.5.0).<br>
-              La bibliothèque <b>QxOrm</b> a été retenue pour faire partie du programme <a href="http://qt.nokia.com/qt-in-use/ambassadors/qtambassador/" target="_blank"><b>Qt Ambassador</b></a>.
+              <b>QxOrm</b> est dépendant des excellentes bibliothèques <a href="http://www.boost.org/" target="_blank"><b>boost</b></a> (compatible à partir de la version 1.38) et <a href="http://qt.digia.com/" target="_blank"><b>Qt</b></a> (compatible à partir de la version 4.5.0).<br>
+              La bibliothèque <b>QxOrm</b> a été retenue pour faire partie du programme <a href="http://qt.digia.com/qtambassador/" target="_blank"><b>Qt Ambassador</b></a>.
               <br><br>
            </td>
          </tr>
@@ -160,8 +147,7 @@
            <td align="justify">
            Si vous trouvez un bug ou si vous avez une question concernant le fonctionnement de la bibliothèque <b>QxOrm</b>, 
            vous pouvez envoyer un mail à : <u><i>support@qxorm.com</i></u>.<br>
-           <b>QxOrm</b> est également disponible sur le site <a href="http://sourceforge.net/projects/qxorm/files/" target="_blank">SourceForge</a> : plate-forme d'hébergement de projets de développements de logiciels libres.<br>
-           Un forum (en anglais) dédié à <b>QxOrm</b> est disponible <a href="http://sourceforge.net/apps/phpbb/qxorm/" target="_blank">en cliquant ici</a>.<br>
+           Un forum (en anglais) dédié à <b>QxOrm</b> est disponible <a href="http://www.qxorm.com/forum/phpbb/" target="_blank">en cliquant ici</a>.<br>
            Vous pouvez également retrouver la communauté française de <b>QxOrm</b> sur <a href="http://www.developpez.net/forums/f1563/c-cpp/bibliotheques/qt/outils/bibliotheques/qxorm/" target="_blank">le forum de Developpez.com</a>.
            </td>
          </tr>
@@ -270,7 +256,7 @@
              <tbody>
                <tr>
                  <td valign="middle" width="161" align="center"><a
-                   href="http://qt.nokia.com/" target="_blank"><img alt="Qt"
+                   href="http://qt.digia.com/" target="_blank"><img alt="Qt"
                    src="./resource/logo_qt.jpg" width="42" height="50" border="0"></a></td>
                  <td align="justify"><b>Qt</b> : bibliothèque complète : IHM
                    (<i>QtGui</i>), réseau (<i>QtNetwork</i>), XML (<i>QtXml</i>), base de données
@@ -278,15 +264,15 @@
                    La documentation est excellente et le code C++ écrit à partir
                    de cette bibliothèque est à la fois performant et simple de
                    compréhension.<br>
-                   Depuis le rachat par Nokia et sa nouvelle licence LGPL, Qt est
+                   Depuis le rachat par Nokia puis Digia et sa nouvelle licence LGPL, Qt est
                    sans contexte la bibliothèque phare du moment.<br>
                    QxOrm est compatible avec les principaux objets définis par Qt
                    : <i>QObject, QString, QDate, QTime, QDateTime, QList, QHash,
                    QSharedPointer, QScopedPointer, etc.</i><br>
                    Il est conseillé d'installer et d'utiliser la dernière version
                    de Qt disponible à l'adresse suivante : <a
-                   href="http://qt.nokia.com/"
-                   target="_blank">http://qt.nokia.com/</a></td>
+                   href="http://qt.digia.com/"
+                   target="_blank">http://qt.digia.com/</a></td>
                </tr>
              </tbody>
            </table>
@@ -573,7 +559,7 @@ qx<span class="operator">::</span>dump<span class="operator">(</span>lst_blog_wi
            De plus, les <i>smart-pointer</i> font partie de la nouvelle norme C++ : <b>C++1x</b>.<br>
            Il est donc essentiel aujourd'hui de connaître les classes suivantes :
            <ul><li><a href="http://www.boost.org/doc/libs/1_42_0/libs/smart_ptr/smart_ptr.htm" target="_blank"><i>shared_ptr</i>, <i>scoped_ptr</i> et <i>weak_ptr</i></a> pour les pointeurs intelligents de la bibliothèque <b>boost</b> ;
-           </li><li><a href="http://qt.nokia.com/doc/latest/qsharedpointer.html" target="_blank"><i>QSharedPointer</i>, <i>QScopedPointer</i> et <i>QWeakPointer</i></a> pour les pointeurs intelligents de la bibliothèque <b>Qt</b>.
+           </li><li><a href="http://doc-snapshot.qt-project.org/4.8/qsharedpointer.html" target="_blank"><i>QSharedPointer</i>, <i>QScopedPointer</i> et <i>QWeakPointer</i></a> pour les pointeurs intelligents de la bibliothèque <b>Qt</b>.
            </li></ul>
            </td>
          </tr>
@@ -1365,7 +1351,7 @@ QString IxClass<span class="operator">::</span>dumpClass<span class="operator">(
          <tr>
            <td valign="middle" width="30"></td>
            <td align="justify">
-           Toute classe héritant du type <i>QObject</i> peut déclarer ses propriétés avec la macro <i><a href="http://doc.qt.nokia.com/latest/properties.html" target="_blank">Q_PROPERTY</a></i> : les propriétés deviennent alors des méta-propriétés.
+           Toute classe héritant du type <i>QObject</i> peut déclarer ses propriétés avec la macro <i><a href="http://doc-snapshot.qt-project.org/4.8/properties.html" target="_blank">Q_PROPERTY</a></i> : les propriétés deviennent alors des méta-propriétés.
            Ce mécanisme permet au framework Qt de proposer un moteur d'introspection grâce au pré-compilateur <i>moc</i>.
            Les méta-propriétés peuvent alors être utilisées par exemple par le moteur <i>QML</i>, <i>QtScript</i>, etc.<br>
            <br>
@@ -1610,7 +1596,7 @@ qx<span class="operator">::</span>QxRepository<span class="operator">&lt;</span>
            Si un nouvel élément est stocké dans le cache avec une clé qui existe déjà, alors l'ancien élément associé à cette clé est effacé automatiquement du cache.<br>
            <br>
            Le cache de la bibliothèque QxOrm ne gère pas la durée de vie des objets : il n'y a aucun <i>delete</i> effectué par le cache.<br>
-           C'est pourquoi il est fortement recommandé (mais ce n'est pas une obligation) de privilégier le stockage de pointeurs intelligents : par exemple, <a href="http://www.boost.org/doc/libs/1_47_0/libs/smart_ptr/shared_ptr.htm" target="_blank"><i>boost::shared_ptr&lt;T&gt;</i></a> pour la bibliothèque <i>boost</i> ou bien <a href="http://doc.qt.nokia.com/latest/qsharedpointer.html" target="_blank"><i>QSharedPointer&lt;T&gt;</i></a> pour la bibliothèque <i>Qt</i>.<br>
+           C'est pourquoi il est fortement recommandé (mais ce n'est pas une obligation) de privilégier le stockage de pointeurs intelligents : par exemple, <a href="http://www.boost.org/doc/libs/1_47_0/libs/smart_ptr/shared_ptr.htm" target="_blank"><i>boost::shared_ptr&lt;T&gt;</i></a> pour la bibliothèque <i>boost</i> ou bien <a href="http://doc-snapshot.qt-project.org/4.8/qsharedpointer.html" target="_blank"><i>QSharedPointer&lt;T&gt;</i></a> pour la bibliothèque <i>Qt</i>.<br>
            <br>
            Le cache peut avoir un coût relatif maximum pour éviter une utilisation de la mémoire trop importante : chaque élément inséré dans le cache peut indiquer un coût représentant une estimation de sa taille mémoire (par exemple, le nombre d'éléments d'une collection).<br>
            Lorsque le coût maximum du cache est atteint, les premiers éléments insérés dans le cache sont supprimés (en respectant l'ordre d'insertion dans le cache) jusqu'à ce que la limite du cache ne soit plus dépassée.<br>
@@ -2551,12 +2537,23 @@ void</span> MyWidget<span class="operator">::</span>onQueryFinished<span class="
 </table>
 <br><hr style="width: 80%" align="center" size="1" color="#100D5A">
 <table border="0" style="width: 80%" align="center">
-  <col><col>
+  <col><col><col>
   <tbody>
     <tr>
-      <td align="left" valign="middle"><img alt="QxOrm"
-        src="./resource/logo_qxorm_small.jpg" width="168" height="40"></td>
-      <td align="right" valign="middle"><font size="2"></font> </td>
+      <td align="left" valign="middle">
+        <img alt="QxOrm" src="./resource/logo_qxorm_small.png" width="168" height="40">
+      </td>
+      <td align="center" valign="middle">
+        <font size="2">© 2013 Lionel Marty</font>
+      </td>
+      <td align="right" valign="middle">
+        <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+           <input type="hidden" name="cmd" value="_s-xclick">
+           <input type="hidden" name="hosted_button_id" value="2K4Z58ZYAYJ6S">
+           <input type="image" src="./resource/paypal_support_qxorm_library.gif" border="0" name="submit" alt="Support QxOrm library - PayPal">
+           <img alt="" border="0" src="https://www.paypalobjects.com/fr_FR/i/scr/pixel.gif" width="1" height="1">
+        </form>
+      </td>
     </tr>
   </tbody>
 </table>

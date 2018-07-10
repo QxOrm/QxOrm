@@ -4,33 +4,20 @@
   <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
   <title>QxOrm - C++ Object Relational Mapping library (ORM)</title>
   <meta name="generator" content="Amaya, see http://www.w3.org/Amaya/">
-  <style type="text/css">
-   .comment { color: #008000; font-style: italic; }
-   .pre { color: #000099; }
-   .string { color: #DF0101; }
-   .char { color: #009900; }
-   .float { color: #996600; }
-   .int { color: #999900; }
-   .bool { color: #000000; font-weight: bold; }
-   .type { color: #FF6633; }
-   .flow { color: #FF0000; }
-   .keyword { color: #990000; }
-   .operator { color: #663300; font-weight: bold; }
-   .operator { color: #663300; font-weight: bold; }
-  </style>
+  <link rel='stylesheet' type='text/css' href='./resource/qxorm_style.css'>
 </head>
 <body>
 <table border="0" style="width: 80%" align="center">
   <col><col><col>
   <tbody>
     <tr>
-      <td><a href="./home.html"><img alt="QxOrm" src="./resource/logo_qxorm.jpg" width="256" height="61" align="left" border="0"></a></td>
+      <td><a href="./home.html"><img alt="QxOrm" src="./resource/logo_qxorm.png" width="256" height="61" align="left" border="0"></a></td>
       <td align="right" style="vertical-align:bottom">
         <img alt="Windows" src="./resource/logo_windows.gif" width="35" height="35">
         <img alt="Linux" src="./resource/logo_linux.gif" width="35" height="35">
         <img alt="Macintosh" src="./resource/logo_mac.gif" width="35" height="35">
       </td>
-      <td width="70"><img alt="C++" src="./resource/logo_cpp.jpg" width="50" height="50" align="right"></td>
+      <td width="70"><img alt="C++" src="./resource/logo_cpp.gif" width="50" height="50" align="right"></td>
     </tr>
   </tbody>
 </table>
@@ -65,7 +52,7 @@
   <col><col><col><col><col><col>
   <tbody><tr>
   <td align="left" valign="top"><font size="2">QxOrm  &gt;&gt;  Download</font></td>
-  <td align="right" valign="top"><font size="2">Current version : QxOrm 1.2.4 (LGPL) - <a href="../doxygen/index.html" target="_blank">QxOrm library online documentation</a></font></td>
+  <td align="right" valign="top"><font size="2">Current version : QxOrm 1.2.5 - <a href="../doxygen/index.html" target="_blank">QxOrm library online documentation</a></font></td>
   <td width="10px"></td>
   <td width="40px" height="30px"><a href="../qxorm_fr/download.html"><img alt="Version française du site" src="./resource/FR.png" width="40" height="30" border="0"></a></td>
   <td width="40px" height="30px"><a href="../qxorm_en/download.html"><img alt="Web site english version" src="./resource/GB.png" width="40" height="30" border="0"></a></td>
@@ -81,33 +68,36 @@
           <col><col>
           <tbody>
             <tr>
-              <td><b>QxOrm</b> is a C++ library available under <a href="./resource/license.lgpl.txt" target="_blank">LGPL license</a>.<br><br>
+              <td><b>QxOrm</b> is a C++ library available under a dual license :
+                  <ul>
+                     <li><a href="./resource/license.gpl3.txt" target="_blank">GNU/GPLv3 license</a> : open-source and free (to develop an open-source project or to evaluate QxOrm library) ;</li>
+                     <li><a href="./download_details.php">Proprietary license</a> to distribute an application based on QxOrm library without any restrictions of <i>GNU/GPLv3</i> license.</li>
+                  </ul>
+                  <br>
                   <table border="0" style="width: 100%" align="center">
                    <col>
                    <col>
                    <tbody>
                      <tr>
-                       <td valign="middle" width="80" align="center"><a href="http://sourceforge.net/projects/qxorm/files/" target="_blank"><img alt="Download QxOrm" src="./resource/download.jpg" width="40" height="48" border="0"></a> </td>
+                       <td valign="middle" width="80" align="center"><a href="./download_details.php"><img alt="Download QxOrm" src="./resource/download.jpg" width="40" height="48" border="0"></a> </td>
                        <td align="justify">
-                         <a href="http://sourceforge.net/projects/qxorm/files/" target="_blank">
-                         <b>Download QxOrm 1.2.4 (source + test + documentation)</b></a><br>
-                         This version has been tested with <b>Visual Studio 2008 and 2010</b> on Windows, <b>GCC 4.4.1</b> on Linux and Mac OS X, and <b>MinGW</b> on Windows
+                         <a href="./download_details.php">
+                         <b>Download QxOrm 1.2.5 (source + test + documentation)</b></a><br>
+                         This version has been tested with <b>Visual Studio 2008 and 2010</b> on Windows, <b>GCC 4.4.1</b> on Linux and Mac OS X, <b>MinGW</b> on Windows, and <b>Clang</b> on Mac OS X.
                        </td>
                      </tr>
                    </tbody>
                   </table>
-                 <br>
-                 <i>Note : you can also download last version of QxOrm <a href="../version/QxOrm_1.2.4.zip">here</a>.</i><br>
-                 <p align="justify">
-                 Before you install and compile <b>QxOrm</b>, you need the following libraries : <a href="http://www.boost.org/" target="_blank"><b>boost</b></a> (from version 1.38) and <a href="http://qt.nokia.com/" target="_blank"><b>Qt</b></a> (from version 4.5.0) :</p>
+                  <br>
+                  <p align="justify">
+                  Before you install and compile <b>QxOrm</b>, you need the following libraries : <a href="http://www.boost.org/" target="_blank"><b>boost</b></a> (from version 1.38) and <a href="http://qt.digia.com/" target="_blank"><b>Qt</b></a> (from version 4.5.0) :</p>
               </td>
               <td width="200" align="center" valign="top"><a href="./resource/qt_ambassador_logo.png" target="_blank"><img alt="qt_ambassador" src="./resource/qt_ambassador_logo_150x150.png" width="150" height="150" border="0"></a><br>
-                 <b><font size="2">QxOrm library has been accepted into the <a href="http://qt.nokia.com/qt-in-use/ambassadors/qtambassador/" target="_blank">Qt Ambassador Program</a></font></b>
+                 <b><font size="2">QxOrm library has been accepted into the <a href="http://qt.digia.com/qtambassador/" target="_blank">Qt Ambassador Program</a></font></b>
               </td>
             </tr>
           </tbody>
         </table>
-        <p></p>
         <table border="0" style="width: 100%" align="center">
           <col><col>
           <tbody>
@@ -125,12 +115,12 @@
           <col><col>
           <tbody>
             <tr>
-              <td valign="middle" width="161" align="center"><a href="http://qt.nokia.com/" target="_blank"><img alt="Qt" src="./resource/logo_qt.jpg" width="42" height="50" border="0"></a></td>
+              <td valign="middle" width="161" align="center"><a href="http://qt.digia.com/" target="_blank"><img alt="Qt" src="./resource/logo_qt.jpg" width="42" height="50" border="0"></a></td>
               <td align="justify"><b>Qt</b> : cross-platform application development framework : ihm (<i>QtGui</i>), network (<i>QtNetwork</i>), xml (<i>QtXml</i>), database (<i>QtSql</i>)...<br>
               Qt provides excellent support and documentation. Using Qt, you can write simple and powerful C++ code.<br>
-              Qt is produced by Nokia's Qt Development Frameworks division and is available under LGPL license.<br>
+              Qt is produced by Digia's Qt Development Frameworks division and is available under LGPL license.<br>
               QxOrm is compatible with a lot of Qt's objects : <i>QObject, QString, QDate, QTime, QDateTime, QList, QHash, QSharedPointer, QScopedPointer...</i><br>
-              It is recommended to install the latest version of Qt available at the following address : <a href="http://qt.nokia.com/" target="_blank">http://qt.nokia.com/</a></td>
+              It is recommended to install the latest version of Qt available at the following address : <a href="http://qt.digia.com/" target="_blank">http://qt.digia.com/</a></td>
             </tr>
           </tbody>
         </table>
@@ -141,6 +131,19 @@
           <tbody>
             <tr>
               <td><i>
+Changes in version 1.2.5:<br>
+- New license : go to download page of QxOrm website for more details<br>
+- Support Qt5<br>
+- New compiler supported : Clang (tested on Mac OS X)<br>
+- Now each QxOrm version will be tested in 32-bit and 64-bit mode<br>
+- Improve QxOrm introspection engine : possibility to register static class methods<br>
+- Improve QxService module : now it's easy to add an authentication process on server side<br>
+- New class qx::exception to get error code + error description with services methods throwing an exception<br>
+- New settings available in QxOrm.pri config file (whithout changing QxConfig.h file)<br>
+- Possibility to implement specifics database SQL functions overriding qx_query class<br>
+- Fix an issue when fetching multiple levels of relationship and NULL pointers<br>
+- Fix a bug with MS SQL Server database and update queries using auto-increment id<br>
+<br>
 Changes in version 1.2.4:<br>
 - New relationship engine to fetch easily many levels of relationships per query<br>
 - For more details about this new engine, goto the FAQ : 'How to use relationship engine to fetch datas from many tables ?'<br>
@@ -242,12 +245,23 @@ Changes in version 1.1.0:<br>
 </table>
 <br><hr style="width: 80%" align="center" size="1" color="#100D5A">
 <table border="0" style="width: 80%" align="center">
-  <col><col>
+  <col><col><col>
   <tbody>
     <tr>
-      <td align="left" valign="middle"><img alt="QxOrm"
-        src="./resource/logo_qxorm_small.jpg" width="168" height="40"></td>
-      <td align="right" valign="middle"><font size="2"></font> </td>
+      <td align="left" valign="middle">
+        <img alt="QxOrm" src="./resource/logo_qxorm_small.png" width="168" height="40">
+      </td>
+      <td align="center" valign="middle">
+        <font size="2">© 2013 Lionel Marty</font>
+      </td>
+      <td align="right" valign="middle">
+        <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+           <input type="hidden" name="cmd" value="_s-xclick">
+           <input type="hidden" name="hosted_button_id" value="2K4Z58ZYAYJ6S">
+           <input type="image" src="./resource/paypal_support_qxorm_library.gif" border="0" name="submit" alt="Support QxOrm library - PayPal">
+           <img alt="" border="0" src="https://www.paypalobjects.com/fr_FR/i/scr/pixel.gif" width="1" height="1">
+        </form>
+      </td>
     </tr>
   </tbody>
 </table>

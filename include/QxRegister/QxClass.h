@@ -1,24 +1,30 @@
 /****************************************************************************
 **
 ** http://www.qxorm.com/
-** http://sourceforge.net/projects/qxorm/
-** Original file by Lionel Marty
+** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
 **
 ** This software is provided 'as-is', without any express or implied
 ** warranty. In no event will the authors be held liable for any
-** damages arising from the use of this software.
+** damages arising from the use of this software
 **
-** GNU Lesser General Public License Usage
-** This file must be used under the terms of the GNU Lesser
-** General Public License version 2.1 as published by the Free Software
-** Foundation and appearing in the file 'license.lgpl.txt' included in the
-** packaging of this file.  Please review the following information to
-** ensure the GNU Lesser General Public License version 2.1 requirements
-** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+** Commercial Usage
+** Licensees holding valid commercial QxOrm licenses may use this file in
+** accordance with the commercial license agreement provided with the
+** Software or, alternatively, in accordance with the terms contained in
+** a written agreement between you and Lionel Marty
 **
-** If you have questions regarding the use of this file, please contact :
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU
+** General Public License version 3.0 as published by the Free Software
+** Foundation and appearing in the file 'license.gpl3.txt' included in the
+** packaging of this file. Please review the following information to
+** ensure the GNU General Public License version 3.0 requirements will be
+** met : http://www.gnu.org/copyleft/gpl.html
+**
+** If you are unsure which license is appropriate for your use, or
+** if you have questions regarding the use of this file, please contact :
 ** contact@qxorm.com
 **
 ****************************************************************************/
@@ -101,6 +107,7 @@ public:
 
    inline QxDataMemberX<T> * dataMemberX() const   { return static_cast<QxDataMemberX<T> *>(m_pDataMemberX); }
    inline IxFunctionX * fctMemberX() const         { return m_pFctMemberX.get(); }
+   inline IxFunctionX * fctStaticX() const         { return m_pFctStaticX.get(); }
 
    IxDataMember * id(type_primary_key T::* pDataMemberId, const QString & sKey);
    IxDataMember * id(type_primary_key T::* pDataMemberId, const QString & sKey, long lVersion);
@@ -132,8 +139,21 @@ public:
    template <typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8> IxFunction * fct_8(const typename QxFunction_8<T, R, P1, P2, P3, P4, P5, P6, P7, P8>::type_fct & fct, const QString & sKey);
    template <typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8, typename P9> IxFunction * fct_9(const typename QxFunction_9<T, R, P1, P2, P3, P4, P5, P6, P7, P8, P9>::type_fct & fct, const QString & sKey);
 
+   template <typename R> IxFunction * fctStatic_0(const typename QxFunction_0<void, R>::type_fct & fct, const QString & sKey);
+   template <typename R, typename P1> IxFunction * fctStatic_1(const typename QxFunction_1<void, R, P1>::type_fct & fct, const QString & sKey);
+   template <typename R, typename P1, typename P2> IxFunction * fctStatic_2(const typename QxFunction_2<void, R, P1, P2>::type_fct & fct, const QString & sKey);
+   template <typename R, typename P1, typename P2, typename P3> IxFunction * fctStatic_3(const typename QxFunction_3<void, R, P1, P2, P3>::type_fct & fct, const QString & sKey);
+   template <typename R, typename P1, typename P2, typename P3, typename P4> IxFunction * fctStatic_4(const typename QxFunction_4<void, R, P1, P2, P3, P4>::type_fct & fct, const QString & sKey);
+   template <typename R, typename P1, typename P2, typename P3, typename P4, typename P5> IxFunction * fctStatic_5(const typename QxFunction_5<void, R, P1, P2, P3, P4, P5>::type_fct & fct, const QString & sKey);
+   template <typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6> IxFunction * fctStatic_6(const typename QxFunction_6<void, R, P1, P2, P3, P4, P5, P6>::type_fct & fct, const QString & sKey);
+   template <typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7> IxFunction * fctStatic_7(const typename QxFunction_7<void, R, P1, P2, P3, P4, P5, P6, P7>::type_fct & fct, const QString & sKey);
+   template <typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8> IxFunction * fctStatic_8(const typename QxFunction_8<void, R, P1, P2, P3, P4, P5, P6, P7, P8>::type_fct & fct, const QString & sKey);
+   template <typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8, typename P9> IxFunction * fctStatic_9(const typename QxFunction_9<void, R, P1, P2, P3, P4, P5, P6, P7, P8, P9>::type_fct & fct, const QString & sKey);
+
    static qx_bool invoke(const QString & sKey, T * pOwner, const QString & params = QString(), boost::any * ret = NULL) { return QxClass<T>::getSingleton()->invokeHelper(sKey, pOwner, params, ret); }
    static qx_bool invoke(const QString & sKey, T * pOwner, const type_any_params & params, boost::any * ret = NULL)     { return QxClass<T>::getSingleton()->invokeHelper(sKey, pOwner, params, ret); }
+   static qx_bool invokeStatic(const QString & sKey, const QString & params = QString(), boost::any * ret = NULL)       { return QxClass<T>::getSingleton()->invokeHelper(sKey, params, ret); }
+   static qx_bool invokeStatic(const QString & sKey, const type_any_params & params, boost::any * ret = NULL)           { return QxClass<T>::getSingleton()->invokeHelper(sKey, params, ret); }
 
    virtual bool isAbstract() const
    { return boost::is_abstract<T>::value; }
@@ -165,6 +185,7 @@ private:
 
    void init();
    IxFunction * insertFct(IxFunction_ptr pFct, const QString & sKey);
+   IxFunction * insertFctStatic(IxFunction_ptr pFct, const QString & sKey);
 
    void registerClass() { qx::register_class(* this); }
 
@@ -173,8 +194,8 @@ private:
       BOOST_STATIC_ASSERT(is_valid_base_class);
       QMutexLocker locker(& m_oMutexClass);
       QxClass<type_base_class>::getSingleton();
-      bool bNeedReg = (m_pDataMemberX && (m_pDataMemberX->count() <= 0));
-      bNeedReg = (bNeedReg && m_pFctMemberX && (m_pFctMemberX->count() <= 0));
+      bool bNeedReg = (! this->m_bRegistered);
+      this->m_bRegistered = true;
       if (bNeedReg) { registerClass(); }
    }
 
@@ -183,6 +204,12 @@ private:
 
    qx_bool invokeHelper(const QString & sKey, T * pOwner, const type_any_params & params, boost::any * ret)
    { return ((pOwner && m_pFctMemberX && m_pFctMemberX->exist(sKey)) ? m_pFctMemberX->getByKey(sKey)->invoke(pOwner, params, ret) : QxClass<type_base_class>::invoke(sKey, dynamic_cast<type_base_class *>(pOwner), params, ret)); }
+
+   qx_bool invokeHelper(const QString & sKey, const QString & params, boost::any * ret)
+   { return ((m_pFctStaticX && m_pFctStaticX->exist(sKey)) ? m_pFctStaticX->getByKey(sKey)->invoke(params, ret) : QxClass<type_base_class>::invokeStatic(sKey, params, ret)); }
+
+   qx_bool invokeHelper(const QString & sKey, const type_any_params & params, boost::any * ret)
+   { return ((m_pFctStaticX && m_pFctStaticX->exist(sKey)) ? m_pFctStaticX->getByKey(sKey)->invoke(params, ret) : QxClass<type_base_class>::invokeStatic(sKey, params, ret)); }
 
 private:
 

@@ -44,6 +44,8 @@ public:
    void setDouble(double d)               { m_dDouble = d; }
    void setSex(sex e)                     { m_eSex = e; }
 
+   static int testStaticFct(const QString & s);
+
 private:
 
    void isValid(qx::QxInvalidValueX & invalidValues);

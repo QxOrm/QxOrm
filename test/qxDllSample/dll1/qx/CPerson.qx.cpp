@@ -29,6 +29,8 @@ template <> void register_class(QxClass<qx::test::CPerson> & t)
    pFct = t.fct_0<QString>(& qx::test::CPerson::getFirstName, "fct_getFirstName");
    pFct = t.fct_1<void, long>(& qx::test::CPerson::setPersonId, "fct_setPersonId");
 
+   pFct = t.fctStatic_1<int, const QString &>(& qx::test::CPerson::testStaticFct, "fct_testStaticFct");
+
    QxValidatorX<qx::test::CPerson> * pAllValidator = t.getAllValidator();
    if (! pAllValidator) { qAssert(false); return; }
    pValidator = pAllValidator->add_NotEmpty("firstName", "a person must have a firstname");

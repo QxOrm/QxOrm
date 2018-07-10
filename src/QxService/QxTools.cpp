@@ -1,24 +1,30 @@
 /****************************************************************************
 **
 ** http://www.qxorm.com/
-** http://sourceforge.net/projects/qxorm/
-** Original file by Lionel Marty
+** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
 **
 ** This software is provided 'as-is', without any express or implied
 ** warranty. In no event will the authors be held liable for any
-** damages arising from the use of this software.
+** damages arising from the use of this software
 **
-** GNU Lesser General Public License Usage
-** This file must be used under the terms of the GNU Lesser
-** General Public License version 2.1 as published by the Free Software
-** Foundation and appearing in the file 'license.lgpl.txt' included in the
-** packaging of this file.  Please review the following information to
-** ensure the GNU Lesser General Public License version 2.1 requirements
-** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+** Commercial Usage
+** Licensees holding valid commercial QxOrm licenses may use this file in
+** accordance with the commercial license agreement provided with the
+** Software or, alternatively, in accordance with the terms contained in
+** a written agreement between you and Lionel Marty
 **
-** If you have questions regarding the use of this file, please contact :
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU
+** General Public License version 3.0 as published by the Free Software
+** Foundation and appearing in the file 'license.gpl3.txt' included in the
+** packaging of this file. Please review the following information to
+** ensure the GNU General Public License version 3.0 requirements will be
+** met : http://www.gnu.org/copyleft/gpl.html
+**
+** If you are unsure which license is appropriate for your use, or
+** if you have questions regarding the use of this file, please contact :
 ** contact@qxorm.com
 **
 ****************************************************************************/
@@ -31,6 +37,7 @@
 #include <QxService/QxConnect.h>
 
 #include <QxCommon/QxSimpleCrypt.h>
+#include <QxCommon/QxExceptionCode.h>
 
 #include <QxMemLeak/mem_leak.h>
 
@@ -43,7 +50,7 @@ namespace service {
 qx_bool QxTools::readSocket(QTcpSocket & socket, QxTransaction & transaction, quint32 & size)
 {
    while (socket.bytesAvailable() < (qint64)(QX_SERVICE_TOOLS_HEADER_SIZE))
-   { if (! socket.waitForReadyRead(QxConnect::getSingleton()->getMaxWait())) { return qx_bool(0, "invalid bytes count available to retrieve transaction header"); } }
+   { if (! socket.waitForReadyRead(QxConnect::getSingleton()->getMaxWait())) { return qx_bool(QX_ERROR_SERVICE_READ_ERROR, "invalid bytes count available to retrieve transaction header"); } }
 
    quint32 uiSerializedSize = 0;
    quint16 uiSerializationType(0), uiCompressData(0), uiEncryptData(0);
@@ -57,7 +64,7 @@ qx_bool QxTools::readSocket(QTcpSocket & socket, QxTransaction & transaction, qu
    in >> uiEncryptData;
 
    while (socket.bytesAvailable() < (qint64)(uiSerializedSize))
-   { if (! socket.waitForReadyRead(QxConnect::getSingleton()->getMaxWait())) { return qx_bool(0, "invalid bytes count available to retrieve transaction serialized data"); } }
+   { if (! socket.waitForReadyRead(QxConnect::getSingleton()->getMaxWait())) { return qx_bool(QX_ERROR_SERVICE_READ_ERROR, "invalid bytes count available to retrieve transaction serialized data"); } }
 
    QByteArray dataSerialized = socket.read((qint64)(uiSerializedSize));
    qAssert(dataSerialized.size() == (int)(uiSerializedSize));
@@ -67,7 +74,7 @@ qx_bool QxTools::readSocket(QTcpSocket & socket, QxTransaction & transaction, qu
    {
       QxSimpleCrypt crypto(QxConnect::getSingleton()->getEncryptKey());
       QByteArray decrypted = crypto.decryptToByteArray(dataSerialized);
-      if ((crypto.lastError() != QxSimpleCrypt::ErrorNoError) || decrypted.isEmpty()) { return qx_bool(0, "an error occured during decryption of data"); }
+      if ((crypto.lastError() != QxSimpleCrypt::ErrorNoError) || decrypted.isEmpty()) { return qx_bool(QX_ERROR_UNKNOWN, "an error occured during decryption of data"); }
       dataSerialized = decrypted;
    }
 
@@ -103,7 +110,7 @@ qx_bool QxTools::readSocket(QTcpSocket & socket, QxTransaction & transaction, qu
       case QxConnect::serialization_polymorphic_xml:        bDeserializeOk = qx::serialization::polymorphic_xml::from_byte_array(transaction, dataSerialized); break;
       case QxConnect::serialization_polymorphic_text:       bDeserializeOk = qx::serialization::polymorphic_text::from_byte_array(transaction, dataSerialized); break;
 #endif // _QX_SERIALIZE_POLYMORPHIC
-      default:                                              return qx_bool(0, "unknown serialization type to read data from socket");
+      default:                                              return qx_bool(QX_ERROR_UNKNOWN, "unknown serialization type to read data from socket");
    }
 
    return bDeserializeOk;
@@ -142,11 +149,11 @@ qx_bool QxTools::writeSocket(QTcpSocket & socket, QxTransaction & transaction, q
       case QxConnect::serialization_polymorphic_xml:        dataSerialized = qx::serialization::polymorphic_xml::to_byte_array(transaction, (& owner)); break;
       case QxConnect::serialization_polymorphic_text:       dataSerialized = qx::serialization::polymorphic_text::to_byte_array(transaction, (& owner)); break;
 #endif // _QX_SERIALIZE_POLYMORPHIC
-      default:                                              return qx_bool(0, "unknown serialization type to write data to socket");
+      default:                                              return qx_bool(QX_ERROR_UNKNOWN, "unknown serialization type to write data to socket");
    }
 
    if (dataSerialized.isEmpty())
-   { return qx_bool(0, "an error occured during serialization of data"); }
+   { return qx_bool(QX_ERROR_UNKNOWN, "an error occured during serialization of data"); }
 
    quint16 uiCompressData = 0;
    if (QxConnect::getSingleton()->getCompressData() && (dataSerialized.size() > QX_SERVICE_MIN_SIZE_TO_COMPRESS_DATA))
@@ -159,7 +166,7 @@ qx_bool QxTools::writeSocket(QTcpSocket & socket, QxTransaction & transaction, q
       crypto.setCompressionMode(QxSimpleCrypt::CompressionNever);
       crypto.setIntegrityProtectionMode(QxSimpleCrypt::ProtectionChecksum);
       QByteArray encrypted = crypto.encryptToByteArray(dataSerialized);
-      if ((crypto.lastError() != QxSimpleCrypt::ErrorNoError) || encrypted.isEmpty()) { return qx_bool(0, "an error occured during encryption of data"); }
+      if ((crypto.lastError() != QxSimpleCrypt::ErrorNoError) || encrypted.isEmpty()) { return qx_bool(QX_ERROR_UNKNOWN, "an error occured during encryption of data"); }
       dataSerialized = encrypted;
       uiEncryptData = 1;
    }
@@ -184,7 +191,7 @@ qx_bool QxTools::writeSocket(QTcpSocket & socket, QxTransaction & transaction, q
    }
 
    if (iTotalWritten != iTotalToWrite)
-   { return qx_bool(0, "unable to write all data bytes (header) to socket"); }
+   { return qx_bool(QX_ERROR_SERVICE_WRITE_ERROR, "unable to write all data bytes (header) to socket"); }
 
    iTotalWritten = 0;
    iTotalToWrite = (qint64)(dataSerialized.size());
@@ -197,7 +204,7 @@ qx_bool QxTools::writeSocket(QTcpSocket & socket, QxTransaction & transaction, q
    }
 
    size = (quint32)(dataHeader.size() + dataSerialized.size());
-   return ((iTotalWritten == iTotalToWrite) ? qx_bool(true) : qx_bool(0, "unable to write all data bytes (serialized data) to socket"));
+   return ((iTotalWritten == iTotalToWrite) ? qx_bool(true) : qx_bool(QX_ERROR_SERVICE_WRITE_ERROR, "unable to write all data bytes (serialized data) to socket"));
 }
 
 } // namespace service

@@ -1,7 +1,12 @@
 #include "../include/precompiled.h"
 
 #include <QtGui/qcursor.h>
+
+#if (QT_VERSION >= 0x050000)
+#include <QtWidgets/qmessagebox.h>
+#else // (QT_VERSION >= 0x050000)
 #include <QtGui/qmessagebox.h>
+#endif // (QT_VERSION >= 0x050000)
 
 #include "../include/main_dlg.h"
 

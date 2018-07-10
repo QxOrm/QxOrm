@@ -1,4 +1,10 @@
-#include <QtCore/qcoreapplication.h>
+#include <QtCore/qglobal.h>
+
+#if (QT_VERSION >= 0x050000)
+#include <QtWidgets/qapplication.h>
+#else // (QT_VERSION >= 0x050000)
+#include <QtGui/qapplication.h>
+#endif // (QT_VERSION >= 0x050000)
 
 #include "../include/precompiled.h"
 
@@ -17,7 +23,7 @@ struct test_class_fct { int class_fct() { qDebug("[QxOrm] %s", "'test_class_fct:
 
 int main(int argc, char * argv[])
 {
-   QCoreApplication app(argc, argv);
+   QApplication app(argc, argv);
 
    //--------------------------------
 
@@ -128,10 +134,12 @@ int main(int argc, char * argv[])
 
    //--------------------------------
 
+   boost::any resultInvoke;
    CUser * pUser = new CUser(); // You find a memory leak !!!
    pUser->test();
-   qx_bool bInvokeOk = qx::QxClass<CUser>::invoke("fct_getPersonId", pUser);     qAssert(bInvokeOk);
-   bInvokeOk = qx::QxClassX::invoke("CUser", "fct_getPersonId", pUser);          qAssert(bInvokeOk);
+   qx_bool bInvokeOk = qx::QxClass<CUser>::invoke("fct_getPersonId", pUser);                          qAssert(bInvokeOk);
+   bInvokeOk = qx::QxClassX::invoke("CUser", "fct_getPersonId", pUser);                               qAssert(bInvokeOk);
+   bInvokeOk = qx::QxClassX::invokeStatic("CUser", "fct_testStaticFct", "182", (& resultInvoke));     qAssert(bInvokeOk.getValue() && (boost::any_cast<int>(resultInvoke) == 182));
 
    //--------------------------------
 

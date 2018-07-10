@@ -1,24 +1,30 @@
 /****************************************************************************
 **
 ** http://www.qxorm.com/
-** http://sourceforge.net/projects/qxorm/
-** Original file by Lionel Marty
+** Copyright (C) 2013 Lionel Marty (contact@qxorm.com)
 **
 ** This file is part of the QxOrm library
 **
 ** This software is provided 'as-is', without any express or implied
 ** warranty. In no event will the authors be held liable for any
-** damages arising from the use of this software.
+** damages arising from the use of this software
 **
-** GNU Lesser General Public License Usage
-** This file must be used under the terms of the GNU Lesser
-** General Public License version 2.1 as published by the Free Software
-** Foundation and appearing in the file 'license.lgpl.txt' included in the
-** packaging of this file.  Please review the following information to
-** ensure the GNU Lesser General Public License version 2.1 requirements
-** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+** Commercial Usage
+** Licensees holding valid commercial QxOrm licenses may use this file in
+** accordance with the commercial license agreement provided with the
+** Software or, alternatively, in accordance with the terms contained in
+** a written agreement between you and Lionel Marty
 **
-** If you have questions regarding the use of this file, please contact :
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU
+** General Public License version 3.0 as published by the Free Software
+** Foundation and appearing in the file 'license.gpl3.txt' included in the
+** packaging of this file. Please review the following information to
+** ensure the GNU General Public License version 3.0 requirements will be
+** met : http://www.gnu.org/copyleft/gpl.html
+**
+** If you are unsure which license is appropriate for your use, or
+** if you have questions regarding the use of this file, please contact :
 ** contact@qxorm.com
 **
 ****************************************************************************/
@@ -61,6 +67,7 @@ class QX_DLL_EXPORT IxService
 protected:
 
    QString m_sServiceName;                            //!< Service name <=> class name
+   QString m_sServiceMethodName;                      //!< Service method name to call
    IxParameter_ptr m_pInputParameter;                 //!< List of input parameters (request)
    IxParameter_ptr m_pOutputParameter;                //!< List of output parameters (reply)
    qx_bool m_bMessageReturn;                          //!< Message return to indicate if an error occured
@@ -73,12 +80,14 @@ public:
    virtual ~IxService();
 
    QString getServiceName() const                              { return m_sServiceName; }
+   QString getServiceMethodName() const                        { return m_sServiceMethodName; }
    IxParameter_ptr getInputParameter_BaseClass() const         { return m_pInputParameter; }
    IxParameter_ptr getOutputParameter_BaseClass() const        { return m_pOutputParameter; }
    qx_bool getMessageReturn() const                            { return m_bMessageReturn; }
    boost::shared_ptr<QxTransaction> getTransaction() const;
 
    void setServiceName(const QString & s)                               { qAssert(! s.isEmpty()); m_sServiceName = s; }
+   void setServiceMethodName(const QString & s)                         { qAssert(! s.isEmpty()); m_sServiceMethodName = s; }
    void setInputParameter(IxParameter_ptr p)                            { m_pInputParameter = p; }
    void setOutputParameter(IxParameter_ptr p)                           { m_pOutputParameter = p; }
    void setMessageReturn(const qx_bool & b)                             { m_bMessageReturn = b; }
@@ -88,7 +97,9 @@ public:
    bool isValid() const             { return m_bMessageReturn.getValue(); }
    bool isValidWithOutput() const   { return (isValid() && (m_pOutputParameter.get() != NULL)); }
 
-   virtual void registerClass() const { qDebug("[QxOrm] qx::service::IxService : %s", "need to override 'registerClass()' method"); qAssert(false); }
+   virtual void registerClass() const  { qDebug("[QxOrm] qx::service::IxService : %s", "need to override 'registerClass()' method"); qAssert(false); }
+   virtual void onBeforeProcess()      { ; }
+   virtual void onAfterProcess()       { ; }
 
 };
 

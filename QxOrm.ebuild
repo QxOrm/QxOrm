@@ -8,7 +8,7 @@ inherit qt4-r2
 
 DESCRIPTION="C++ Object Relational Mapping library"
 HOMEPAGE="http://www.qxorm.com/"
-SRC_URI="http://sourceforge.net/projects/qxorm/files/QxOrm_${PV}.zip"
+SRC_URI="http://www.qxorm.com/version/QxOrm_${PV}.zip"
 S=${WORKDIR}/QxOrm
 
 LICENSE="GPL-2"

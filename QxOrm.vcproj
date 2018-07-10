@@ -526,6 +526,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\include\QxCommon\QxException.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\QxCommon\QxExceptionCode.h"
+					>
+				</File>
+				<File
 					RelativePath=".\include\QxCommon\QxHashValue.h"
 					>
 				</File>
