@@ -173,6 +173,7 @@ protected:
 public:
 
    QxModel(QObject * parent = 0) : qx::IxModel(parent), m_lManualInsertIndex(0) { qx::QxModel<T>::init(); }
+   QxModel(qx::IxModel * other, QObject * parent) : qx::IxModel(parent), m_lManualInsertIndex(0) { qx::QxModel<T>::initFrom(other); }
    virtual ~QxModel() { ; }
 
 protected:
@@ -185,6 +186,15 @@ protected:
       m_pDataMemberId = (m_pDataMemberX ? m_pDataMemberX->getId_WithDaoStrategy() : NULL);
       m_pCollection = (& m_model);
       generateRoleNames();
+   }
+
+   void initFrom(qx::IxModel * pOther)
+   {
+      init();
+      qx::QxModel<T> * pOtherWrk = static_cast<qx::QxModel<T> *>(pOther);
+      this->m_model = pOtherWrk->m_model;
+      this->m_lManualInsertIndex = pOtherWrk->m_lManualInsertIndex;
+      this->m_pParent = pOtherWrk->m_pParent;
    }
 
 public:

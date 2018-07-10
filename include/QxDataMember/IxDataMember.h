@@ -65,7 +65,7 @@
 m_iPrecision(6), m_iMinLength(-1), m_iMaxLength(-1), m_bRequired(false), \
 m_bReadOnly(false), m_bAutoIncrement(false), m_bNotNull(false), \
 m_bIsPrimaryKey(false), m_bAccessDataPointer(false), m_bIndex(false), \
-m_pName(NULL), m_pParent(NULL)
+m_bUnique(false), m_pName(NULL), m_pParent(NULL)
 
 #define QX_IX_DATA_MEMBER_PURE_VIRTUAL_ARCHIVE(ArchiveInput, ArchiveOutput) \
 virtual void toArchive(const void * pOwner, ArchiveOutput & ar) const = 0; \
@@ -107,6 +107,7 @@ protected:
    bool        m_bIsPrimaryKey;        //!< Data is a primary key
    bool        m_bAccessDataPointer;   //!< Can access to the data-member pointer
    bool        m_bIndex;               //!< Data is an index to optimize SQL queries
+   bool        m_bUnique;              //!< Data is unique : 2 rows cannot have the same value for this column
 
    QByteArray m_byteName;              //!< Optimization to retrieve name under "const char *" format
    const char * m_pName;               //!< Optimization to retrieve name under "const char *" format
@@ -143,6 +144,7 @@ public:
    inline bool getNotNull() const                  { return m_bNotNull; }
    inline bool getIsPrimaryKey() const             { return m_bIsPrimaryKey; }
    inline bool getIsIndex() const                  { return m_bIndex; }
+   inline bool getIsUnique() const                 { return m_bUnique; }
    inline IxDataMemberX * getParent() const        { return m_pParent; }
    inline IxSqlRelation * getSqlRelation() const   { return m_pSqlRelation.get(); }
    inline bool hasSqlRelation() const              { return (m_pSqlRelation.get() != NULL); }
@@ -163,6 +165,7 @@ public:
    inline void setAutoIncrement(bool bAutoIncrement)           { m_bAutoIncrement = bAutoIncrement; }
    inline void setIsPrimaryKey(bool bIsPrimaryKey)             { m_bIsPrimaryKey = bIsPrimaryKey; }
    inline void setIsIndex(bool bIsIndex)                       { m_bIndex = bIsIndex; }
+   inline void setIsUnique(bool bIsUnique)                     { m_bUnique = bIsUnique; }
    inline void setParent(IxDataMemberX * pParent)              { m_pParent = pParent; }
    inline void setSqlRelation(IxSqlRelation * pSqlRelation)    { m_pSqlRelation.reset(pSqlRelation); }
 

@@ -48,6 +48,7 @@
 #include <boost/mpl/logical.hpp>
 #include <boost/type_traits/is_pointer.hpp>
 #include <boost/type_traits/is_same.hpp>
+#include <boost/type_traits/is_base_of.hpp>
 
 #include <QxCommon/QxStringCvt.h>
 
@@ -275,6 +276,18 @@ namespace model_view {
 template <class T>
 qx::IxModel * create_nested_model(qx::IxModel * pParent, const QModelIndex & idxParent, T & t)
 { return qx::model_view::detail::QxNestedModel<T>::create(pParent, idxParent, t); }
+
+template <class T, class U>
+qx::IxModel * create_nested_model_with_type(qx::IxModel * pParent, const QModelIndex & idxParent, T & t, U * dummy)
+{
+   Q_UNUSED(dummy);
+   BOOST_STATIC_ASSERT((boost::is_base_of<qx::IxModel, U>::value));
+   qx::IxModel * pModel = qx::model_view::create_nested_model(pParent, idxParent, t);
+   if (! pModel) { return NULL; }
+   U * pOther = new U(pModel, pParent);
+   delete pModel;
+   return pOther;
+}
 
 } // namespace model_view
 } // namespace qx

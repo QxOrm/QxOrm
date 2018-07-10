@@ -1,3 +1,6 @@
+Changes in version 1.2.9:
+- Improve nested models in QxModelView module to be able to use several relationships levels in QML
+
 Changes in version 1.2.8:
 - New function qx::model_view::create_nested_model (QxModelView module) used by QxEntityEditor to manage complex data structure to work with relationships in QML views and Qt model/view architecture
 - New section in the QxOrm.pri file with some tips to reduce output binaries size

@@ -40,7 +40,7 @@ CONFIG += dll
 DEFINES += _QX_BUILDING_QX_ORM
 PRECOMPILED_HEADER = ./include/QxPrecompiled.h
 
-unix { VERSION = 1.2.8 }
+unix { VERSION = 1.2.9 }
 
 contains(DEFINES, _QX_STATIC_BUILD) {
 CONFIG -= dll
