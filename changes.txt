@@ -1,5 +1,24 @@
 Changes in version 1.4.5:
-- TODO...
+- Support MongoDB database : QxOrm library becomes a C++/Qt Object Document Mapper ODM library !
+- For more details about MongoDB integration, see QxOrm manual (https://www.qxorm.com/qxorm_en/manual.html#manual_95) and new sample project available in ./test/qxBlogMongoDB/ directory
+- QxOrm library is now available on GitHub (official repository) : https://github.com/QxOrm/QxOrm
+- Fix an issue in qx::IxSqlQueryBuilder class when QxOrm library is used in a multi-thread environment
+- Support latest version of boost (1.66)
+- Update boost portable binary serialization classes to version 5.1 (provided by https://archive.codeplex.com/?p=epa)
+- Fix an issue building SQL query for Oracle database (doesn't support AS keyword for table alias)
+- Improve qx::QxClassX::registerAllClasses() function : possibility to initialize all relations (useful to work with introspection engine)
+- Improve qx::IxPersistable interface : provide new methods toJson() / fromJson()
+- Improve documentation/website : change http://www.qxorm.com by https://www.qxorm.com everywhere
+- Fix fetching relations with soft delete putting SQL condition in the JOIN part instead of WHERE part
+- Fix SQL generator for Oracle database : use new limit/pagination syntax (version Oracle > 12.1)
+- Improve SQL generator interface : add 'onBeforeSqlPrepare()' method to modify/log SQL queries in custom classes
+- Add an option in qx::QxSqlDatabase class to format SQL query (pretty-printing) before logging it (can be customized creating a qx::dao::detail::IxSqlGenerator sub-class)
+- Fix an issue with boost/std::optional (to manage NULL database values) and some databases : if optional is empty, then create a NULL QVariant based on QVariant::Type
+- Add an option in qx::QxSqlDatabase class to insert square brackets (or any other delimiters) in SQL queries for table name and/or column name (to support specific database keywords)
+- Improve introspection engine : add getType() method in qx::IxDataMember interface to get C++ type of a property dynamically
+- Improve qx::QxSqlDatabase singleton settings class to make easier working with several databases : now there are 3 levels of settings : global >> per thread >> per database (see 'bJustForCurrentThread' and 'pJustForThisDatabase' optional parameters in all setXXXX() methods)
+- Fix QxOrm.pri for MinGW compiler on Windows : an issue could occurred to export some symbols from shared library (some Qt signals for example)
+- Add an option in qx::QxSqlDatabase singleton class to display only slow SQL queries (see setTraceSqlOnlySlowQueriesDatabase() and setTraceSqlOnlySlowQueriesTotal() methods)
 
 Changes in version 1.4.4:
 QxOrm library doesn't depend on boost framework anymore (the boost dependency has been fully removed, replaced by some C++11 features).

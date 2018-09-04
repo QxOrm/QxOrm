@@ -105,7 +105,7 @@ struct QxSqlDatabase::QxSqlDatabaseImpl
    void displayLastError(const QSqlDatabase & db, const QString & sDesc) const;
    QString formatLastError(const QSqlDatabase & db) const;
 
-   bool isValid() const { return (! m_sDriverName.isEmpty() && ! m_sDatabaseName.isEmpty()); }
+   bool isValid() const { return (m_pParent ? (! m_pParent->getDriverName().isEmpty() && ! m_pParent->getDatabaseName().isEmpty()) : (! m_sDriverName.isEmpty() && ! m_sDatabaseName.isEmpty())); }
    QString computeDatabaseKey(QSqlDatabase * p) const { return (p ? (p->driverName() + p->hostName() + p->databaseName()) : (m_sDriverName + m_sHostName + m_sDatabaseName)); }
 
    QVariant getSetting(const QString & key) const

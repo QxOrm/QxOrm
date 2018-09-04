@@ -397,6 +397,88 @@
                            </li>
                         </ol>
                      </li>
+                     <li class="manual_li_title_1">
+                        <a href="#manual_95">QxOrm and MongoDB database (C++ ODM Object Document Mapper)</a>
+                        <ol class="manual_ol_title_2" type="1">
+                           <li class="manual_li_title_2">
+                              <a href="#manual_980">Prerequisites : driver <i>libmongoc</i> and <i>libbson</i></a>
+                           </li>
+                           <li class="manual_li_title_2">
+                              <a href="#manual_981">QxOrm.pri (or QxOrm.cmake) configuration file</a>
+                           </li>
+                           <li class="manual_li_title_2">
+                              <a href="#manual_982">Connection to MongoDB database</a>
+                           </li>
+                           <li class="manual_li_title_2">
+                              <a href="#manual_983">Register a MongoDB persistent class (Collection) in QxOrm context (mapping)</a>
+                              <ol class="manual_ol_title_3" type="a">
+                                 <li class="manual_li_title_3">
+                                    <a href="#manual_9830">Manage ObjectId (primary key)</a>
+                                 </li>
+                              </ol>
+                           </li>
+                           <li class="manual_li_title_2">
+                              <a href="#manual_984">Insert a C++ instance (Document) in MongoDB database</a>
+                              <ol class="manual_ol_title_3" type="a">
+                                 <li class="manual_li_title_3">
+                                    <a href="#manual_9840">Insert many C++ instances (list of Documents) in MongoDB database</a>
+                                 </li>
+                              </ol>
+                           </li>
+                           <li class="manual_li_title_2">
+                              <a href="#manual_986">Update a C++ instance (Document) in MongoDB database</a>
+                              <ol class="manual_ol_title_3" type="a">
+                                 <li class="manual_li_title_3">
+                                    <a href="#manual_9860">Update many C++ instances (list of Documents) in MongoDB database</a>
+                                 </li>
+                              </ol>
+                           </li>
+                           <li class="manual_li_title_2">
+                              <a href="#manual_988">Delete a C++ instance (Document) from MongoDB database</a>
+                              <ol class="manual_ol_title_3" type="a">
+                                 <li class="manual_li_title_3">
+                                    <a href="#manual_9880">Delete many C++ instances (list of Documents) from MongoDB database</a>
+                                 </li>
+                              </ol>
+                           </li>
+                           <li class="manual_li_title_2">
+                              <a href="#manual_990">Fetch a C++ instance (Document) from MongoDB database</a>
+                              <ol class="manual_ol_title_3" type="a">
+                                 <li class="manual_li_title_3">
+                                    <a href="#manual_9900">Fetch many C++ instances (list of Documents) from MongoDB database</a>
+                                 </li>
+                              </ol>
+                           </li>
+                           <li class="manual_li_title_2">
+                              <a href="#manual_992">JSON queries</a>
+                              <ol class="manual_ol_title_3" type="a">
+                                 <li class="manual_li_title_3">
+                                    <a href="#manual_9920">Using qx::QxSqlQuery class (or qx_query alias)</a>
+                                 </li>
+                                 <li class="manual_li_title_3">
+                                    <a href="#manual_9921">Using MongoDB aggregation framework</a>
+                                 </li>
+                                 <li class="manual_li_title_3">
+                                    <a href="#manual_9922">Add 'sort', 'limit', 'skip', etc..., properties to JSON query</a>
+                                 </li>
+                                 <li class="manual_li_title_3">
+                                    <a href="#manual_9923">Execute a custom query</a>
+                                 </li>
+                              </ol>
+                           </li>
+                           <li class="manual_li_title_2">
+                              <a href="#manual_993">Relationships engine (MongoDB version 3.6 or + is required)</a>
+                              <ol class="manual_ol_title_3" type="a">
+                                 <li class="manual_li_title_3">
+                                    <a href="#manual_9930">Embedded vs Referenced</a>
+                                 </li>
+                              </ol>
+                           </li>
+                           <li class="manual_li_title_2">
+                              <a href="#manual_994">Create automatically indexes</a>
+                           </li>
+                        </ol>
+                     </li>
                   </ol>
                   </div>
                </td>
@@ -564,7 +646,8 @@
                <li><b>_QX_NO_PRECOMPILED_HEADER :</b> disable precompiled header (used to reduce compilation times of a project) : this option is required <a href="https://gcc.gnu.org/bugzilla/show_bug.cgi?id=56926" target="_blank">with recent versions of MinGW (because of a known compiler bug)</a>, for all other compilers it is recommended to work with <i>precompiled header</i> ;</li>
                <li><b>_QX_NO_RTTI :</b> build QxOrm library (and all projects which depend on QxOrm) without <a href="https://en.wikipedia.org/wiki/Run-time_type_information" target="_blank">RTTI C++ type information</a> ;</li>
                <li><b>_QX_STATIC_BUILD :</b> build QxOrm library in <i>static</i> mode (but build QxOrm as a <i>shared library</i> is recommended).</li>
-               <li><b>_QX_UNITY_BUILD :</b> reduce QxOrm library compilation times using <i>unity build</i> concept : only one <i>all.cpp</i> source file to compile. It is recommended to enable this option with <a href="https://cmake.org/" target="_blank">CMake</a> (because doesn't support natively precompiled headers).</li>
+               <li><b>_QX_UNITY_BUILD :</b> reduce QxOrm library compilation times using <i>unity build</i> concept : only one <i>all.cpp</i> source file to compile. It is recommended to enable this option with <a href="https://cmake.org/" target="_blank">CMake</a> (because doesn't support natively precompiled headers) ;</li>
+               <li><b>_QX_ENABLE_MONGODB :</b> <a href="#manual_95">support MongoDB database</a>, QxOrm library becomes an ODM (Object Document Mapper).</li>
             </ul>
             <br>
             <b>Note :</b> <i>QxOrm.pri</i> (or <i>QxOrm.cmake</i>) configuration file must be included in all projects which depend on QxOrm library, just adding following line in <i>*.pro</i> project file :<br>
@@ -615,6 +698,8 @@
            </ul>
            <b>Note :</b> to connect to a <i>Microsoft SQL Server</i> database, it is necessary to use <i>ODBC</i> (<i>QODBC</i> plugin).
            <br><br>
+           <b>Other note :</b> QxOrm library is able to connect to <a href="#manual_95">MongoDB database (C++ ODM Object Document Mapper)</a>.
+           <br><br>
          </div>
       </div>
 
@@ -630,6 +715,8 @@
          <br><br>
          To do this link between object world and relational world, and to provide all its features, <b>QxOrm</b> library requires that C++ classes are registered in QxOrm context.
          So we will start this chapter this way : <b>how to register a C++ class in QxOrm context ?</b>
+         <br><br>
+         <b>Note :</b> QxOrm library is able to connect to <a href="#manual_95">MongoDB database (C++ ODM Object Document Mapper)</a>.
          <br><br>
          <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_300">Register a class in QxOrm context (mapping)</a></p>
          <div class="manual_div_content">
@@ -2671,6 +2758,94 @@ static inline</span> qx_bool fromVariant<span class="operator">(</span><span cla
 </span><span class="operator">}</span><span class="comment"> // namespace qx</span></pre>
            </td></tr></tbody></table>
            <br><br>
+           <b>Note :</b> here is a template to create a custom persistable type :
+           <br><br>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="pre">#ifndef _MY_CUSTOM_PERSISTABLE_TYPE_H_
+#define _MY_CUSTOM_PERSISTABLE_TYPE_H_
+
+#ifdef _MSC_VER
+#pragma once
+#endif
+
+#include &lt;QxOrm.h&gt;</span>
+
+<span class="keyword">class</span> MyPersistableType
+{
+   <span class="comment">/* What you want here */</span>
+};
+
+QX_REGISTER_CLASS_NAME(MyPersistableType)
+QX_CLASS_VERSION(MyPersistableType, 0)
+
+QDataStream & operator&lt;&lt; (QDataStream & stream, const MyPersistableType & t)
+{
+   <span class="comment">/* Your implementation here */</span>
+}
+
+QDataStream & operator&gt;&gt; (QDataStream & stream, MyPersistableType & t)
+{
+   <span class="comment">/* Your implementation here */</span>
+}
+
+<span class="keyword">namespace</span> qx {
+<span class="keyword">namespace</span> cvt {
+<span class="keyword">namespace</span> detail {
+
+<span class="keyword">template</span> &lt;&gt; <span class="keyword">struct</span> QxConvert_ToVariant&lt; MyPersistableType &gt; {
+<span class="keyword">static</span> <span class="keyword">inline</span> QVariant toVariant(const MyPersistableType & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
+{
+   <span class="comment">/* Here I convert from MyPersistableType to QVariant */</span>
+} };
+
+<span class="keyword">template</span> <> <span class="keyword">struct</span> QxConvert_FromVariant&lt; MyPersistableType &gt; {
+<span class="keyword">static</span> <span class="keyword">inline</span> qx_bool fromVariant(const QVariant & v, MyPersistableType & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
+{
+   <span class="comment">/* Here I convert from QVariant to MyPersistableType */</span>
+   return qx_bool(true);
+} };
+
+} <span class="comment">// namespace detail</span>
+} <span class="comment">// namespace cvt</span>
+} <span class="comment">// namespace qx</span>
+
+<span class="keyword">#ifndef</span> _QX_NO_JSON
+
+<span class="keyword">namespace</span> qx {
+<span class="keyword">namespace</span> cvt {
+<span class="keyword">namespace</span> detail {
+
+<span class="keyword">template</span> &lt;&gt;
+<span class="keyword">struct</span> QxConvert_ToJson&lt; MyPersistableType &gt;
+{
+   <span class="keyword">static inline</span> QJsonValue toJson(const MyPersistableType & t, const QString & format)
+   {
+      <span class="comment">/* Your implementation here */</span>
+   }
+};
+
+<span class="keyword">template</span> &lt;&gt;
+<span class="keyword">struct</span> QxConvert_FromJson&lt; MyPersistableType &gt;
+{
+   <span class="keyword">static inline</span> qx_bool fromJson(const QJsonValue & j, MyPersistableType & t, const QString & format)
+   {
+      <span class="comment">/* Your implementation here */</span>
+   }
+};
+
+} <span class="comment">// namespace detail</span>
+} <span class="comment">// namespace cvt</span>
+} <span class="comment">// namespace qx</span>
+
+<span class="keyword">#endif</span> <span class="comment">// _QX_NO_JSON</span>
+
+<span class="comment">// ------------------------------------</span>
+<span class="comment">// If you are using boost serialization, you have also to implement save/load functions like above 'ExtObject3D' example</span>
+<span class="comment">// ------------------------------------</span>
+
+<span class="keyword">#endif</span> <span class="comment">// _MY_CUSTOM_PERSISTABLE_TYPE_H_</span></pre>
+           </td></tr></tbody></table>
+           <br><br>
          </div>
          <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_470">Generate database DDL SQL schema</a></p>
          <div class="manual_div_content">
@@ -3635,6 +3810,13 @@ if</span><span class="operator"> (</span>pCloneTemp<span class="operator">) {</s
            <br>
            <b>Other note :</b> you can add extra information to introspection engine using <a href="../doxygen/html/classqx_1_1_qx_property_bag.html" target="_blank"><i>property bag</i> pattern</a>.
            Indeed, <i>qx::IxClass</i>, <i>qx::IxDataMember</i> and <i>qx::IxFunction</i> classes contain a list of <i>QVariant</i> items associated to a <i>QString</i> key (read <a href="../doxygen/html/classqx_1_1_qx_property_bag.html" target="_blank"><i>qx::QxPropertyBag</i> class documentation</a> for more details).
+           <br><br>
+           <b>Other note :</b> to initialize QxOrm introspection engine, it is recommanded to call following function once in your <i>main</i> for example :
+           <br><br>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="Register introspection engine">
+<pre><span class="comment">// Following command is recommanded to initialize QxOrm introspection engine</span>
+qx::QxClassX::registerAllClasses(true);</pre>
+           </td></tr></tbody></table>
            <br><br>
          <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_710">Get a data member value dynamically</a></p>
          <div class="manual_div_content">
@@ -4721,6 +4903,491 @@ tableView<span class="operator">.</span>show<span class="operator">();</span></p
             <b>So to use <a href="../doxygen/html/classqx_1_1_qx_model_service.html" target="_blank">qx::QxModelService&lt;T, S&gt;</a> class, it is strongly recommended to use QxEntityEditor application to generate source code automatically.</b>
             <br/><br/>
          </div>
+      </div>
+
+      <p class="manual_p_title_1"><a class="manual_a_title_1" name="manual_95">QxOrm and MongoDB database (C++ ODM Object Document Mapper)</a></p>
+      <div class="manual_div_content_1">
+         QxOrm library is able to connect to standard relational databases (MySQL, PostgreSQL, SQLite, Oracle, Microsoft SQLServer, MariaDB, etc...), and is also able to connect to <a href="https://www.mongodb.com/" target="_blank">the NoSQL <b>MongoDB</b> database</a>.
+         <br/><br/>
+         <a href="https://en.wikipedia.org/wiki/MongoDB" target="_blank">From Wikipedia website :</a> MongoDB is a free and open-source cross-platform document-oriented database program.
+         Classified as a NoSQL database program, MongoDB uses JSON-like documents with schemas.
+         <br/><br/>
+         MongoDB database has several advantages compared to standard relational databases (non-exhaustive list) :
+         <ul>
+            <li><b>Schema-less</b> : you don't have to maintain tables and columns (so you don't need to write some complex scripts to migrate your database from one version to another version). MongoDB <i>Collections</i> can contain <i>Documents</i> with different fields, of different sizes, etc... About QxOrm library, that means that you can write your C++ persistent classes without having to deal with DDL database schema (useful in <b>AGILE development environment</b> for example) ;</li>
+            <li><b>Data are stored in BSON format (similar to JSON)</b> : easy to read even with complex data structures ;</li>
+            <li>Powerful and flexible <b>JSON query engine</b> with possibility to put indexes on any fields of MongoDB <i>Documents</i> ;</li>
+            <li>MongoDB database is <b>free of charge</b>, and provides <b>a support for professionals</b> ;</li>
+            <li>From MongoDB version 3.6 : MongoDB query engine provides a way to simulate <b>JOINS</b> queries (between <i>Documents</i>) like standard relational databases.</li>
+         </ul>
+         <br/>
+         QxOrm library API is the same for MongoDB database and any other standard relational databases.
+         All QxOrm library features are available for MongoDB database : so everything in this user guide can be applied to MongoDB database.
+         Main differences to take into account are :
+         <ul>
+            <li>It is recommended to define a C++ primary key of type <i>QString</i>. There is no numeric auto-incremented value : <a href="https://docs.mongodb.com/manual/reference/method/ObjectId/" target="_blank">MongoDB provides an ObjectId type</a> which can be mapped to QString C++ type and generated automatically (you can also create your own custom C++ type to map to MongoDB ObjectId).</li>
+            <li>Queries are not SQL : <a href="#manual_992">MongoDB provides a JSON query engine</a>.</li>
+         </ul>
+         <br/>
+         <b>Note :</b> QxOrm package provides a sample project named <b>qxBlogMongoDB</b> (in <i>./test/</i> directory).
+         This sample project shows how to connect and work with MongoDB database and QxOrm library.
+         <br/><br/>
+         <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_980">Prerequisites : driver <i>libmongoc</i> and <i>libbson</i></a></p>
+         <div class="manual_div_content">
+            QxOrm library is based on <a href="http://doc.qt.io/qt-5/qtsql-index.html" target="_blank">QtSql module</a> from Qt framework : this module doesn't provide connectors to MongoDB database.
+            So QxOrm library requires 2 extra-dependencies to connect to MongoDB database :
+            <ul>
+               <li><a href="http://mongoc.org/libmongoc/current/" target="_blank">MongoDB C Driver (libmongoc)</a></li>
+               <li><a href="http://mongoc.org/libbson/current/index.html" target="_blank">Libbson</a> : a cross-platform BSON library for C</li>
+            </ul>
+            <br/>
+            <a href="http://mongoc.org/libmongoc/current/installing.html" target="_blank">A guide is available</a> to install these libraries (<i>libmongoc</i> and <i>libbson</i>) on your development environment.
+            <br/><br/>
+         </div>
+         <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_981">QxOrm.pri (or QxOrm.cmake) configuration file</a></p>
+         <div class="manual_div_content">
+            Once <i>libmongoc</i> and <i>libbson</i> libraries are installed on your development environment, you have to enable <b>_QX_ENABLE_MONGODB</b> compilation option in <i>QxOrm.pri</i> (or <i>QxOrm.cmake</i>) configuration file.
+            <br/><br/>
+            <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre>#######################################
+# MongoDB Driver Library Dependencies #
+#######################################
+
+# If you enable <font style="background-color:yellow">_QX_ENABLE_MONGODB</font> option, then QxOrm library will be able to use mongoc driver to store all QxOrm registered classes in a MongoDB database
+# When _QX_ENABLE_MONGODB compilation option is defined, you must provide following paths to manage mongoc library dependencies :
+#  - a BSON_INCLUDE environment variable to define where bson library source code is located (or a QX_BSON_INCLUDE_PATH qmake variable)
+#  - a MONGOC_INCLUDE environment variable to define where mongoc library source code is located (or a QX_MONGOC_INCLUDE_PATH qmake variable)
+#  - a BSON_LIB environment variable to define where bson library is located (or a QX_BSON_LIB_PATH qmake variable)
+#  - a MONGOC_LIB environment variable to define where mongoc library is located (or a QX_MONGOC_LIB_PATH qmake variable)</pre>
+            </td></tr></tbody></table>
+            <br/><br/>
+            <b>Note :</b> once <b>_QX_ENABLE_MONGODB</b> compilation option is defined, you can build and execute <b>qxBlogMongoDB</b> sample project in <i>./test/</i> directory to validate your development environment with QxOrm and MongoDB.
+            <br/><br/>
+         </div>
+         <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_982">Connection to MongoDB database</a></p>
+         <div class="manual_div_content">
+            Here is an example of settings to connect to MongoDB database :
+            <br/><br/>
+            <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="comment">// Parameters to connect to MongoDB database</span>
+qx::QxSqlDatabase * pDatabase = qx::QxSqlDatabase::getSingleton();
+pDatabase->setDriverName(<font style="background-color:yellow"><span class="string">"QXMONGODB"</span></font>);
+pDatabase->setDatabaseName(<span class="string">"qxBlog"</span>);
+pDatabase->setHostName(<span class="string">"localhost"</span>);
+pDatabase->setPort(<span class="int">27017</span>);
+pDatabase->setUserName(<span class="string">""</span>);
+pDatabase->setPassword(<span class="string">""</span>);</pre>
+            </td></tr></tbody></table>
+            <br/><br/>
+         </div>
+         <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_983">Register a MongoDB persistent class (Collection) in QxOrm context (mapping)</a></p>
+         <div class="manual_div_content">
+            Register a MongoDB persistent class in QxOrm context is similar to <a href="#manual_300">register a persistent class for any other standard relational databases</a>.
+            Here is a persistent class example from <i>qxBlogMongoDB</i> sample project :
+            <br/><br/>
+            File <i>blog.h</i> :
+            <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="pre">#ifndef _QX_BLOG_BLOG_H_
+#define _QX_BLOG_BLOG_H_</span>
+
+<span class="keyword">#include</span> <span class="string">"author.h"</span>
+<span class="keyword">#include</span> <span class="string">"comment.h"</span>
+<span class="keyword">#include</span> <span class="string">"category.h"</span>
+
+<span class="keyword">class</span> QX_BLOG_DLL_EXPORT blog
+{
+<span class="keyword">public:</span>
+<span class="comment">// -- properties</span>
+   <font style="background-color:yellow">QString        m_id;</font>
+   QString        m_text;
+   QDateTime      m_dt_creation;
+   author_ptr     m_author;
+   list_comment   m_commentX;
+   list_category  m_categoryX;
+<span class="comment">// -- contructor, virtual destructor</span>
+   blog() { ; }
+   virtual ~blog() { ; }
+};
+
+<font style="background-color:yellow">QX_REGISTER_PRIMARY_KEY(blog, QString)</font>
+QX_REGISTER_HPP_QX_BLOG(blog, qx::trait::no_base_class_defined, 0)
+
+<span class="keyword">typedef</span> std::shared_ptr&lt;blog&gt; blog_ptr;
+<span class="keyword">typedef</span> std::vector&lt;blog_ptr&gt; list_blog;
+
+<span class="pre">#endif</span> <span class="comment">// _QX_BLOG_BLOG_H_</span></pre>
+            </td></tr></tbody></table>
+            <br/>
+            File <i>blog.cpp</i> :
+            <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="keyword">#include</span> <span class="string">"../include/precompiled.h"</span>
+<span class="keyword">#include</span> <span class="string">"../include/blog.h"</span>
+<span class="keyword">#include</span> <span class="string">&lt;QxOrm_Impl.h&gt;</span>
+
+QX_REGISTER_CPP_QX_BLOG(blog)
+
+<span class="keyword">namespace</span> qx {
+<span class="keyword">template</span> &lt;&gt; void register_class(QxClass&lt;blog&gt; & t)
+{
+   t.id(& blog::m_id, <span class="string">"blog_id"</span>);
+
+   t.data(& blog::m_text, <span class="string">"blog_text"</span>);
+   t.data(& blog::m_dt_creation, <span class="string">"date_creation"</span>);
+   <font style="background-color:yellow">t.data(& blog::m_categoryX, <span class="string">"list_category"</span>); <span class="comment">// Embedded relationship</span></font>
+
+   <font style="background-color:yellow">t.relationManyToOne(& blog::m_author, <span class="string">"author_id"</span>); <span class="comment">// Referenced relationship</span></font>
+   <font style="background-color:yellow">t.relationOneToMany(& blog::m_commentX, <span class="string">"list_comment"</span>, <span class="string">"blog_id"</span>); <span class="comment">// Referenced relationship</span></font>
+}}</pre>
+            </td></tr></tbody></table>
+            <br/>
+            <b>Note :</b> this example shows how to define :
+            <ul>
+               <li><a href="#manual_9830">a primary key of type <i>QString</i> (mapped to MongoDB ObjectId)</a> ;</li>
+               <li><a href="#manual_9930">relationships : Embedded vs Referenced</a>.</li>
+            </ul>
+            <br/>
+            <p class="manual_p_title_3"><a class="manual_a_title_3" name="manual_9830">Manage ObjectId (primary key)</a></p>
+            <div class="manual_div_content">
+               It is recommended to define a C++ primary key of type <i>QString</i>.
+               There is no numeric auto-incremented value : <a href="https://docs.mongodb.com/manual/reference/method/ObjectId/" target="_blank">MongoDB provides an ObjectId type</a> which can be mapped to QString C++ type and generated automatically (you can also create your own custom C++ type to map to MongoDB ObjectId).
+               <br/><br/>
+            </div>
+         </div>
+         <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_984">Insert a C++ instance (Document) in MongoDB database</a></p>
+         <div class="manual_div_content">
+            Here is an example to insert a document in MongoDB database with primary key generated automatically (<a href="https://docs.mongodb.com/manual/reference/method/ObjectId/" target="_blank">MongoDB ObjectId</a>) :
+            <br/><br/>
+            <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="comment">// Insert one author without id</span>
+author_ptr author_1 = std::make_shared&lt;author&gt;();
+author_1->m_name = <span class="string">"author_1"</span>;
+author_1->m_sex = author::male;
+author_1->m_birthdate = QDate(1998, 07, 12);
+daoError = qx::dao::insert(author_1);</pre>
+            </td></tr></tbody></table>
+            <br/><br/>
+            Here is an example to insert a document in MongoDB database providing a custom primary key :
+            <br/><br/>
+            <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="comment">// Insert one author with a custom id</span>
+author_ptr author_2 = std::make_shared&lt;author&gt;();
+<font style="background-color:yellow">author_2->m_id = <span class="string">"my_custom_id_author_2"</span>;</font>
+author_2->m_name = <span class="string">"author_2"</span>;
+author_2->m_sex = author::female;
+author_2->m_birthdate = QDate(2003, 02, 28);
+daoError = qx::dao::insert(author_2);</pre>
+            </td></tr></tbody></table>
+            <br/><br/>
+            <p class="manual_p_title_3"><a class="manual_a_title_3" name="manual_9840">Insert many C++ instances (list of Documents) in MongoDB database</a></p>
+            <div class="manual_div_content">
+               Here is an example to insert several documents in MongoDB database :
+               <br/><br/>
+               <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="comment">// Insert many authors with/without ids</span>
+QList&lt;author&gt; authorX;
+author author_3; author_3.m_name = <span class="string">"author_3"</span>; author_3.m_sex = author::female; author_3.m_birthdate = QDate(1968, 05, 01);
+author author_4; author_4.m_id = <span class="string">"my_custom_id_author_4"</span>; author_4.m_name = <span class="string">"author_4"</span>; author_4.m_sex = author::male;
+author author_5; author_5.m_name = <span class="string">"author_5"</span>; author_5.m_sex = author::female; author_5.m_birthdate = QDate(1978, 03, 03);
+authorX.append(author_3); authorX.append(author_4); authorX.append(author_5);
+daoError = qx::dao::insert(authorX);</pre>
+               </td></tr></tbody></table>
+               <br/><br/>
+               <b>Note :</b> <a href="#manual_390">QxOrm library supports several C++ types to manage lists and collections</a>.
+               <br/><br/>
+            </div>
+         </div>
+         <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_986">Update a C++ instance (Document) in MongoDB database</a></p>
+         <div class="manual_div_content">
+            Here is an example to update a document in MongoDB database :
+            <br/><br/>
+            <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="comment">// Update one author</span>
+author author_4;
+author_4.m_id = <span class="string">"my_custom_id_author_4"</span>;
+author_4.m_name = <span class="string">"author_4_modified"</span>;
+daoError = qx::dao::update(author_4);</pre>
+            </td></tr></tbody></table>
+            <br/><br/>
+            <p class="manual_p_title_3"><a class="manual_a_title_3" name="manual_9860">Update many C++ instances (list of Documents) in MongoDB database</a></p>
+            <div class="manual_div_content">
+               Here is an example to update several documents in MongoDB database :
+               <br/><br/>
+               <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="comment">// Update many authors</span>
+QList&lt;author&gt; authorX;
+author_3.m_name = <span class="string">"author_3_modified_twice"</span>; authorX.append(author_3);
+author_2->m_name = <span class="string">"author_2_modified"</span>; authorX.append(* author_2);
+author_1->m_name = <span class="string">"author_1_modified"</span>; authorX.append(* author_1);
+daoError = qx::dao::update(authorX);</pre>
+               </td></tr></tbody></table>
+               <br/><br/>
+               <b>Note :</b> <a href="#manual_390">QxOrm library supports several C++ types to manage lists and collections</a>.
+               <br/><br/>
+            </div>
+         </div>
+         <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_988">Delete a C++ instance (Document) from MongoDB database</a></p>
+         <div class="manual_div_content">
+            Here is an example to delete a document from MongoDB database :
+            <br/><br/>
+            <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="comment">// Delete one author by id</span>
+author_ptr pAuthor = std::make_shared&lt;author&gt;();
+pAuthor->m_id = <span class="string">"my_custom_id_author_4"</span>;
+daoError = qx::dao::delete_by_id(pAuthor);</pre>
+            </td></tr></tbody></table>
+            <br/><br/>
+            <p class="manual_p_title_3"><a class="manual_a_title_3" name="manual_9880">Delete many C++ instances (list of Documents) from MongoDB database</a></p>
+            <div class="manual_div_content">
+               Here is an example to delete several documents from MongoDB database by identifier (primary key) :
+               <br/><br/>
+               <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="comment">// Delete many authors by id</span>
+QList&lt;author&gt; authorX;
+author_3.m_id = <span class="string">"id_author_3"</span>; authorX.append(author_3);
+author_2->m_id = <span class="string">"id_author_2"</span>; authorX.append(* author_2);
+author_1->m_id = <span class="string">"id_author_1"</span>; authorX.append(* author_1);
+daoError = qx::dao::delete_by_id(authorX);</pre>
+               </td></tr></tbody></table>
+               <br/><br/>
+               Here is an example to delete several documents from MongoDB database by <a href="#manual_992">JSON query</a> :
+               <br/><br/>
+               <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="comment">// Delete authors by query (all male)</span>
+qx_query query{ { <span class="string">"sex"</span>, author::male } };
+daoError = qx::dao::delete_by_query&lt;author&gt;(query);</pre>
+               </td></tr></tbody></table>
+               <br/><br/>
+               To delete all documents from <i>author</i> collection :
+               <br/><br/>
+               <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="comment">// Delete all authors</span>
+daoError = qx::dao::delete_all&lt;author&gt;();</pre>
+               </td></tr></tbody></table>
+               <br/><br/>
+               <b>Note :</b> <a href="#manual_390">QxOrm library supports several C++ types to manage lists and collections</a>.
+               <br/><br/>
+            </div>
+         </div>
+         <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_990">Fetch a C++ instance (Document) from MongoDB database</a></p>
+         <div class="manual_div_content">
+            Here is an example to fetch a document from MongoDB database by identifier (primary key) :
+            <br/><br/>
+            <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="comment">// Fetch one author by id</span>
+author_ptr pAuthor = std::make_shared&lt;author&gt;();
+pAuthor->m_id = <span class="string">"my_custom_id_author_2"</span>;
+daoError = qx::dao::fetch_by_id(pAuthor);</pre>
+            </td></tr></tbody></table>
+            <br/><br/>
+            <p class="manual_p_title_3"><a class="manual_a_title_3" name="manual_9900">Fetch many C++ instances (list of Documents) from MongoDB database</a></p>
+            <div class="manual_div_content">
+               Here is an example to fetch several documents from MongoDB database by identifier (primary key) :
+               <br/><br/>
+               <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="comment">// Fetch many authors by id</span>
+QList&lt;author&gt; authorX;
+author_3.m_id = <span class="string">"id_author_3"</span>; authorX.append(author_3);
+author_2->m_id = <span class="string">"id_author_2"</span>; authorX.append(* author_2);
+author_1->m_id = <span class="string">"id_author_1"</span>; authorX.append(* author_1);
+daoError = qx::dao::fetch_by_id(authorX);</pre>
+               </td></tr></tbody></table>
+               <br/><br/>
+               Here is an example to fetch several documents from MongoDB database by <a href="#manual_992">JSON query</a> :
+               <br/><br/>
+               <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="comment">// Fetch many authors by query (only female)</span>
+list_author list_of_female_author;
+qx_query query{ { <span class="string">"sex"</span>, author::female } };
+daoError = qx::dao::fetch_by_query(query, list_of_female_author);</pre>
+               </td></tr></tbody></table>
+               <br/><br/>
+               Here is an example to fetch all documents from <i>author</i> collection in MongoDB database :
+               <br/><br/>
+               <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="comment">// Fetch all authors</span>
+list_author allAuthors;
+daoError = qx::dao::fetch_all(allAuthors);</pre>
+               </td></tr></tbody></table>
+               <br/><br/>
+               Here is an example to fetch all documents from <i>author</i> collection in MongoDB database (providing which fields/columns to fetch) :
+               <br/><br/>
+               <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="comment">// Fetch all authors (with only 'date_creation' and 'name' properties)</span>
+list_author allAuthors;
+QStringList columns = QStringList() &lt;&lt; <span class="string">"date_creation"</span> &lt;&lt; <span class="string">"name"</span>;
+daoError = qx::dao::fetch_all(allAuthors, NULL, columns);</pre>
+               </td></tr></tbody></table>
+               <br/><br/>
+               <b>Note :</b> <a href="#manual_390">QxOrm library supports several C++ types to manage lists and collections</a>.
+               <br/><br/>
+            </div>
+         </div>
+         <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_992">JSON queries</a></p>
+         <div class="manual_div_content">
+            The main difference between standard relational databases and MongoDB database is query format : instead of SQL, MongoDB provides a <a href="https://docs.mongodb.com/manual/tutorial/query-documents/" target="_blank">JSON query engine</a>.
+            <br/><br/>
+            <p class="manual_p_title_3"><a class="manual_a_title_3" name="manual_9920">Using qx::QxSqlQuery class (or qx_query alias)</a></p>
+            <div class="manual_div_content">
+               <a href="#manual_3600">qx::QxSqlQuery class (or qx_query alias)</a> used to build standard SQL queries is also able to build JSON queries for MongoDB database.
+               This class is based on <a href="https://fr.cppreference.com/w/cpp/utility/initializer_list" target="_blank">C++11 std::initializer_list feature</a> to write C++ queries like JSON queries (similar syntax).
+               Please note that you can also write your JSON query with a string (if your compiler doesn't support <a href="https://fr.cppreference.com/w/cpp/utility/initializer_list" target="_blank">C++11 std::initializer_list feature</a> for example).
+               For example :
+               <br/><br/>
+               <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="comment">// Fetch many authors by query (only female)</span>
+list_author list_of_female_author;
+qx_query query <font style="background-color:yellow">{ { <span class="string">"sex"</span>, author::female } }</font>;
+daoError = qx::dao::fetch_by_query(query, list_of_female_author);</pre>
+               </td></tr></tbody></table>
+               <br/><br/>
+            </div>
+            <p class="manual_p_title_3"><a class="manual_a_title_3" name="manual_9921">Using MongoDB aggregation framework</a></p>
+            <div class="manual_div_content">
+               MongoDB database provides <a href="https://docs.mongodb.com/manual/aggregation/" target="_blank">a powerful aggregation framework</a> to build queries.
+               Here is an example to call this MongoDB aggregation engine with <a href="#manual_3600">qx::QxSqlQuery class (or qx_query alias)</a>, the first constructor parameter must be equal to <i>aggregate</i> :
+               <br/><br/>
+               <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="comment">// Fetch by query using MongoDB aggregation framework (only female)</span>
+list_author list_of_female_author;
+qx_query queryAggregate(<font style="background-color:yellow"><span class="string">"aggregate"</span></font>,
+               <span class="string">"[ { \"$match\" : { \"sex\" : " + QString::number(static_cast&lt;int&gt;(author::female)) + " } } ]"</span>);
+daoError = qx::dao::fetch_by_query(queryAggregate, list_of_female_author);</pre>
+               </td></tr></tbody></table>
+               <br/><br/>
+            </div>
+            <p class="manual_p_title_3"><a class="manual_a_title_3" name="manual_9922">Add 'sort', 'limit', 'skip', etc..., properties to JSON query</a></p>
+            <div class="manual_div_content">
+               It is often required to limit data received from database, or to sort them.
+               To manage these operations, MongoDB database provides <a href="https://docs.mongodb.com/manual/reference/method/db.collection.find/" target="_blank">projection</a>.
+               Here is an example of <i>projection</i> with <a href="#manual_3600">qx::QxSqlQuery class (or qx_query alias)</a>, see the <i>QStringList</i> constructor parameter (or second constructor parameter with <a href="https://fr.cppreference.com/w/cpp/utility/initializer_list" target="_blank">std::initializer_list</a>) :
+               <br/><br/>
+               <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="comment">// Fetch by query (only female) adding 'sort', 'limit', 'skip', etc... commands (see second query QStringList parameter)</span>
+list_of_female_author.clear();
+qx_query queryOpts(QStringList() &lt;&lt; <span class="string">"{ \"sex\" : " + QString::number(static_cast<int>(author::female)) + " }"</span>
+                              &lt;&lt; <font style="background-color:yellow"><span class="string">"{ \"sort\" : { \"sex\" : -1 }, \"limit\" : 2 }"</span></font>);
+daoError = qx::dao::fetch_by_query(queryOpts, list_of_female_author);</pre>
+               </td></tr></tbody></table>
+               <br/><br/>
+            </div>
+            <p class="manual_p_title_3"><a class="manual_a_title_3" name="manual_9923">Execute a custom query</a></p>
+            <div class="manual_div_content">
+               To execute a custom query in MongoDB database, QxOrm library provides the <a href="#manual_3610">qx::dao::call_query() function</a>.
+               Query results can be converted to <a href="http://doc.qt.io/qt-5/qvariant.html" target="_blank">QVariantMap or QList&lt;QVariantMap&gt;</a> (if query returns a cursor) to iterate over all database response.
+               Here are some examples of custom queries :
+               <br/><br/>
+               <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="comment">// Drop database</span>
+qx_query dropDB(<span class="string">"{ \"dropDatabase\" : 1 }"</span>);
+QSqlError daoError = qx::dao::call_query(dropDB);</pre>
+               </td></tr></tbody></table>
+               <br/><br/>
+               <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="comment">// Call a custom query and get JSON response as QVariantMap</span>
+qx_query customQuery(<span class="string">"{ \"find\": \"author\", \"filter\": { } }"</span>);
+daoError = qx::dao::call_query(customQuery); qAssert(! daoError.isValid());
+QString responseCustomQuery = customQuery.response().toString();
+QVariantMap responseCustomQueryAsJson;
+qx::serialization::json::from_string(responseCustomQueryAsJson, responseCustomQuery);</pre>
+               </td></tr></tbody></table>
+               <br/><br/>
+               <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="comment">// Call a custom query with cursor and get JSON response as QList&lt;QVariantMap&gt;</span>
+qx_query customQueryCursor(<font style="background-color:yellow"><span class="string">"cursor"</span></font>, <span class="string">"{ \"find\": \"author\", \"filter\": { } }"</span>);
+daoError = qx::dao::call_query(customQueryCursor); qAssert(! daoError.isValid());
+QString responseCustomQueryCursor = customQueryCursor.response().toString();
+QList&lt;QVariantMap&gt; responseCustomQueryCursorAsJson;
+qx::serialization::json::from_string(responseCustomQueryCursorAsJson, responseCustomQueryCursor);</pre>
+               </td></tr></tbody></table>
+               <br/><br/>
+            </div>
+         </div>
+         <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_993">Relationships engine (MongoDB version 3.6 or + is required)</a></p>
+         <div class="manual_div_content">
+            <a href="#manual_380">QxOrm library relationship engine</a> supports MongoDB database (MongoDB version 3.6 or + is required).
+            So QxOrm library is able to fetch Document fields over several Collections using only one query (similar to <i>JOINS</i> in SQL).
+            <br/><br/>
+            Here is an example to fetch a Document and 1 level of relationships (parent > children) :
+            <br/><br/>
+            <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="comment">// Fetch blog with all relations : 'author', 'comment' and 'category' (MongoDB version 3.6+ is required for relationships)</span>
+blog_ptr blog = std::make_shared&lt;blog&gt;();
+blog->m_id = <span class="string">"id_blog_1"</span>;
+daoError = qx::dao::fetch_by_id_with_all_relation(blog);</pre>
+            </td></tr></tbody></table>
+            <br/><br/>
+            Here is an example to fetch a Document and 4 levels of relationships (using <i>*-&gt;*-&gt;*-&gt;*</i> syntax) :
+            <br/><br/>
+            <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="comment">// Fetch blog with many relations using "*-&gt;*-&gt;*-&gt;*" (4 levels of relationships)</span>
+blog_ptr blog = std::make_shared&lt;blog&gt;();
+blog->m_id = <span class="string">"id_blog_1"</span>;
+daoError = qx::dao::fetch_by_id_with_relation(<span class="string">"*-&gt;*-&gt;*-&gt;*"</span>, blog);</pre>
+            </td></tr></tbody></table>
+            <br/><br/>
+            Here is an example to fetch a Document providing a list of relationships and fields to fetch (using <i>{ &lt;col_1&gt;, &lt;col_2&gt;, etc... }</i> syntax) :
+            <br/><br/>
+            <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="comment">// Fetch relations defining fields to fetch with syntax { col_1, col_2, etc... }</span>
+list_blog lstBlogComplexRelation;
+QStringList relations = QStringList() &lt;&lt; <span class="string">"{ blog_text }"</span> &lt;&lt; <span class="string">"author_id { name, birthdate }"</span> &lt;&lt; <span class="string">"list_comment { comment_text } -&gt; blog_id -&gt; *"</span>;
+daoError = qx::dao::fetch_all_with_relation(relations, lstBlogComplexRelation);</pre>
+            </td></tr></tbody></table>
+            <br/><br/>
+            Here is an example to fetch a Document providing a list of relationships and fields to not fetch (using <i>-{ &lt;col_1&gt;, &lt;col_2&gt;, etc... }</i> syntax) :
+            <br/><br/>
+            <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="comment">// Fetch relations defining columns to remove before fetching with syntax -{ col_1, col_2, etc... }</span>
+list_blog lstBlogComplexRelation2;
+QStringList relations = QStringList() &lt;&lt; <span class="string">"-{ blog_text }"</span> &lt;&lt; <span class="string">"author_id -{ name, birthdate }"</span> &lt;&lt; <span class="string">"list_comment -{ comment_text } -&gt; blog_id -&gt; *"</span>;
+daoError = qx::dao::fetch_all_with_relation(relations, lstBlogComplexRelation2);</pre>
+            </td></tr></tbody></table>
+            <br/><br/>
+            <p class="manual_p_title_3"><a class="manual_a_title_3" name="manual_9930">Embedded vs Referenced</a></p>
+            <div class="manual_div_content">
+               One big advantage of MongoDB database is the possibility to store complex data structure (not limited by a 2 dimensions table/column structure like standard relational databases).
+               A MongoDB Document can contain an objet and several sub-objects (hierarchy in Document structure).
+               Include a sub-object in a Document has some advantages (no <i>JOIN</i> for example, so faster to fetch) and some disadvantages (a same object can be duplicated in database).
+               So it is important to adopt the right strategy to store your data.
+               <br/><br/>
+               QxOrm library supports both :
+               <ul>
+                  <li><b>Embedded relationship</b> : the sub-object is included in the Document ;</li>
+                  <li><b>Referenced relationship</b> : create a <i>JOIN</i> like standard relational databases.</li>
+               </ul>
+               <br/>
+               <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="keyword">namespace</span> qx {
+<span class="keyword">template</span> &lt;&gt; void register_class(QxClass&lt;blog&gt; & t)
+{
+   t.id(& blog::m_id, <span class="string">"blog_id"</span>);
+
+   t.data(& blog::m_text, <span class="string">"blog_text"</span>);
+   t.data(& blog::m_dt_creation, <span class="string">"date_creation"</span>);
+   <font style="background-color:yellow">t.data(& blog::m_categoryX, <span class="string">"list_category"</span>); <span class="comment">// Embedded relationship</span></font>
+
+   <font style="background-color:yellow">t.relationManyToOne(& blog::m_author, <span class="string">"author_id"</span>); <span class="comment">// Referenced relationship</span></font>
+   <font style="background-color:yellow">t.relationOneToMany(& blog::m_commentX, <span class="string">"list_comment"</span>, <span class="string">"blog_id"</span>); <span class="comment">// Referenced relationship</span></font>
+}}</pre>
+               </td></tr></tbody></table>
+               <br/><br/>
+            </div>
+         </div>
+         <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_994">Create automatically indexes</a></p>
+         <div class="manual_div_content">
+            QxOrm library provides a way to generate indexes automatically (this function should be called at the beginning of your program, for example in the <i>main</i>) :
+            <ul>
+               <li>all indexes to manage relationships between Collections (to optimize <i>JOINS</i>) ;</li>
+               <li>all indexes defined by <a href="../doxygen/html/classqx_1_1_ix_data_member.html" target="_blank">qx::IxDataMember::setIndex()</a> method (in <i>qx::register_class()</i> function).</li>
+            </ul>
+            <br/>
+            <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="comment">// To optimize queries : create automatically indexes based on relationships and properties marked as 'index'</span>
+daoError = qx::dao::mongodb::QxMongoDB_Helper::autoCreateIndexes(true);</pre>
+            </td></tr></tbody></table>
+            <br/><br/>
+         </div>
+         <br/><br/>
       </div>
 
       </div>

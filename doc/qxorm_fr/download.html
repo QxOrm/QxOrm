@@ -235,6 +235,28 @@
           <tbody>
             <tr>
               <td><i>
+<b><h2>Changes in version 1.4.5:</h2></b>
+- Support MongoDB database : QxOrm library becomes a C++/Qt Object Document Mapper ODM library !<br>
+- For more details about MongoDB integration, see QxOrm manual (https://www.qxorm.com/qxorm_en/manual.html#manual_95) and new sample project available in ./test/qxBlogMongoDB/ directory<br>
+- QxOrm library is now available on GitHub (official repository) : https://github.com/QxOrm/QxOrm<br>
+- Fix an issue in qx::IxSqlQueryBuilder class when QxOrm library is used in a multi-thread environment<br>
+- Support latest version of boost (1.66)<br>
+- Update boost portable binary serialization classes to version 5.1 (provided by https://archive.codeplex.com/?p=epa)<br>
+- Fix an issue building SQL query for Oracle database (doesn't support AS keyword for table alias)<br>
+- Improve qx::QxClassX::registerAllClasses() function : possibility to initialize all relations (useful to work with introspection engine)<br>
+- Improve qx::IxPersistable interface : provide new methods toJson() / fromJson()<br>
+- Improve documentation/website : change http://www.qxorm.com by https://www.qxorm.com everywhere<br>
+- Fix fetching relations with soft delete putting SQL condition in the JOIN part instead of WHERE part<br>
+- Fix SQL generator for Oracle database : use new limit/pagination syntax (version Oracle &gt; 12.1)<br>
+- Improve SQL generator interface : add 'onBeforeSqlPrepare()' method to modify/log SQL queries in custom classes<br>
+- Add an option in qx::QxSqlDatabase class to format SQL query (pretty-printing) before logging it (can be customized creating a qx::dao::detail::IxSqlGenerator sub-class)<br>
+- Fix an issue with boost/std::optional (to manage NULL database values) and some databases : if optional is empty, then create a NULL QVariant based on QVariant::Type<br>
+- Add an option in qx::QxSqlDatabase class to insert square brackets (or any other delimiters) in SQL queries for table name and/or column name (to support specific database keywords)<br>
+- Improve introspection engine : add getType() method in qx::IxDataMember interface to get C++ type of a property dynamically<br>
+- Improve qx::QxSqlDatabase singleton settings class to make easier working with several databases : now there are 3 levels of settings : global &gt;&gt; per thread &gt;&gt; per database (see 'bJustForCurrentThread' and 'pJustForThisDatabase' optional parameters in all setXXXX() methods)<br>
+- Fix QxOrm.pri for MinGW compiler on Windows : an issue could occurred to export some symbols from shared library (some Qt signals for example)<br>
+- Add an option in qx::QxSqlDatabase singleton class to display only slow SQL queries (see setTraceSqlOnlySlowQueriesDatabase() and setTraceSqlOnlySlowQueriesTotal() methods)<br>
+<br>
 <b><h2>Changes in version 1.4.4:</h2></b>
 QxOrm library doesn't depend on boost framework anymore (the boost dependency has been fully removed, replaced by some C++11 features).<br>
 So QxOrm library is now a pure Qt library which depends only on QtCore and QtSql by default.<br>
@@ -469,6 +491,11 @@ Here are all other changes of version 1.4.1:<br>
           <tbody>
             <tr>
               <td><i>
+<b><h2>Changes in version QxEntityEditor 1.2.3:</h2></b>
+- Fix a crash which appears sometimes with complex database schema to draw relationships (orthogonal way)
+- Improve QxEntityEditor command line parameters : possibility to import/export without using GUI (useful to manage a Jenkins server for example)
+- For more details about command line parameters, go to QxEntityEditor documentation : https://www.qxorm.com/qxorm_en/manual_qxee.html#qxee_command_line
+<br>
 <b><h2>Changes in version QxEntityEditor 1.2.2:</h2></b>
 - Fix an issue after importing a project (from database or JSON file) which forced user to refresh or reload current project<br>
 - Improve performance (fetching less data from database) when loading relationships from generated persistent classes (bLoadFromDatabase parameter)<br>

@@ -350,7 +350,7 @@ void complexQueriesOnBlog()
 
    // Fetch relations defining columns to remove before fetching with syntax -{ col_1, col_2, etc... }
    list_blog lstBlogComplexRelation2;
-   daoError = qx::dao::fetch_all_with_relation(QStringList() << "-{ blog_text }" << "author_id -{ name, birthdate }" << "list_comment -{ comment_text } -> blog_id -> *", lstBlogComplexRelation2); qAssert(! daoError.isValid());
+   daoError = qx::dao::fetch_all_with_relation(QStringList() << "- { blog_text }" << "author_id -{ name, birthdate }" << "list_comment -{ comment_text } -> blog_id -> *", lstBlogComplexRelation2); qAssert(! daoError.isValid());
    qx::dump(lstBlogComplexRelation2);
    qAssert(lstBlogComplexRelation2.size() > 0);
    qAssert(lstBlogComplexRelation2[0]->m_text == ""); // Not fetched

@@ -109,6 +109,9 @@ void QxSqlGenerator_Standard::formatSqlQuery(IxDao_Helper * pDaoHelper, QString 
    sql.replace(" GROUP BY ", "\n  GROUP BY ");
    sql.replace(" AND ", "\n  AND ");
    sql.replace(" OR ", "\n  OR ");
+   sql.replace(" VALUES ", "\n  VALUES ");
+   sql.replace(" SET ", "\n  SET ");
+   sql.replace(" RETURNING ", "\n  RETURNING ");
    sql += "\n";
 }
 

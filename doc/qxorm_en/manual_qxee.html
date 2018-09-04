@@ -4306,6 +4306,173 @@ if</span><span class="operator"> (</span>action<span class="operator"> ==</span>
 <i><pre>QxEntityEditor --project="&lt;path_to_your_qxee_project_file&gt;" --plugin=QxEEJsonImport --QxEEJsonImport_file="&lt;path_to_your_json_file&gt;"</pre></i>
          </div>
          <br/><br/>
+         <b>-- Example n°6 :</b> display documentation about all QxEntityEditor command line parameters :
+         <br/>
+         <div style="width:900px; height:auto; overflow:auto; background-color:white">
+<i><pre>QxEntityEditor --?</pre></i>
+         </div>
+         <br/>
+         <b>Note :</b> <i>--?</i>, <i>--help</i> or <i>--h</i> will log following output to console :
+         <br/>
+         <div style="width:900px; height:600px; overflow:auto; background-color:white">
+<i><pre>*** QxEntityEditor 1.2.3 application global command line parameters ***
+
+  --project="&lt;full path to *.qxee project file&gt;" : run QxEntityEditor defining a *.qxee project to load at startup
+  --no_gui : run QxEntityEditor without displaying the user interface
+  --viewer_mode : run QxEntityEditor in read-only mode, this parameter can be used to open large *.qxee projects without any registered license key
+  --log_sql : run QxEntityEditor tracing all SQL logs, this parameter logs all SQL queries executed to *.qxee SQLite database
+  --plugin=&lt;plugin name&gt; : run QxEntityEditor and execute automatically a plugin process (see below for specific parameters per plugin)
+
+*** Import plugin QxEEJsonImport ***
+
+  --QxEEJsonImport_file="&lt;full path to your json file&gt;" : [Required] run QxEntityEditor loading a *.qxee project from a JSON file
+
+*** Import plugin QxEEMySQLImport ***
+
+  --QxEEMySQLImport_db_ip="&lt;DB IP&gt;" : [Required] Database server address (IP)
+  --QxEEMySQLImport_db_port="&lt;DB port&gt;" : [Required] Port number to connect to database
+  --QxEEMySQLImport_db_name="&lt;DB name&gt;" : [Required] Database name
+  --QxEEMySQLImport_filter_regexp="&lt;Regular Expression&gt;" : [Optional] Filter to select tables from database to import
+  --QxEEMySQLImport_login="&lt;DB Login&gt;" : [Optional] Login to connect to database
+  --QxEEMySQLImport_pwd="&lt;DB Password&gt;" : [Optional] Password to connect to database
+  --QxEEMySQLImport_namespace="&lt;Namespace&gt;" : [Optional] C++ namespace where imported classes will be located
+  --QxEEMySQLImport_delete_namespace=0/1 : [Optional] Delete all entities in the namespace before importing
+  --QxEEMySQLImport_import_comment=0/1 : [Optional] Import tables/columns comment to entities/properties description
+  --QxEEMySQLImport_import_default_value=0/1 : [Optional] Import columns default value
+  --QxEEMySQLImport_boost_optional=0/1 : [Optional] Add boost::optional&lt;T&gt; decoration if a column definition allows NULL value
+  --QxEEMySQLImport_organize_diagram=0/1 : [Optional] Organize diagram layout after import process
+  --QxEEMySQLImport_relation_decoration=&lt;numeric value&gt; : [Optional] Decoration used for relationships (0=no decoration, 1=boost::shared_ptr, 2=QSharedPointer, 5=std::shared_ptr)
+  --QxEEMySQLImport_relation_collection=&lt;numeric value&gt; : [Optional] Collection used for relationships (1=qx::QxCollection, 2=std::vector, 3=std::list, 8=QHash, 10=QList)
+  --QxEEMySQLImport_mapping_sql_to_cpp="sql1~cpp1;sql2~cpp2;etc..." : [Optional] List of mappings from SQL type to C++ type
+  --QxEEMySQLImport_verbose=0/1 : [Optional] Display more details during the import process
+
+*** Import plugin QxEEOdbcImport ***
+
+  --QxEEOdbcImport_dsn="&lt;ODBC DSN&gt;" : [Required] ODBC DSN to connect to database
+  --QxEEOdbcImport_db_type=&lt;numeric value&gt; : [Required] Database engine type (0=generic, 1=postgresql, 2=mysql, 3=oracle, 4=mssqlserver, 5=sqlite)
+  --QxEEOdbcImport_filter_regexp="&lt;Regular Expression&gt;" : [Optional] Filter to select tables from database to import
+  --QxEEOdbcImport_login="&lt;DB Login&gt;" : [Optional] Login to connect to database
+  --QxEEOdbcImport_pwd="&lt;DB Password&gt;" : [Optional] Password to connect to database
+  --QxEEOdbcImport_namespace="&lt;Namespace&gt;" : [Optional] C++ namespace where imported classes will be located
+  --QxEEOdbcImport_delete_namespace=0/1 : [Optional] Delete all entities in the namespace before importing
+  --QxEEOdbcImport_import_comment=0/1 : [Optional] Import tables/columns comment to entities/properties description
+  --QxEEOdbcImport_import_default_value=0/1 : [Optional] Import columns default value
+  --QxEEOdbcImport_boost_optional=0/1 : [Optional] Add boost::optional&lt;T&gt; decoration if a column definition allows NULL value
+  --QxEEOdbcImport_organize_diagram=0/1 : [Optional] Organize diagram layout after import process
+  --QxEEOdbcImport_relation_decoration=&lt;numeric value&gt; : [Optional] Decoration used for relationships (0=no decoration, 1=boost::shared_ptr, 2=QSharedPointer, 5=std::shared_ptr)
+  --QxEEOdbcImport_relation_collection=&lt;numeric value&gt; : [Optional] Collection used for relationships (1=qx::QxCollection, 2=std::vector, 3=std::list, 8=QHash, 10=QList)
+  --QxEEOdbcImport_mapping_sql_to_cpp="sql1~cpp1;sql2~cpp2;etc..." : [Optional] List of mappings from SQL type to C++ type
+  --QxEEOdbcImport_verbose=0/1 : [Optional] Display more details during the import process
+
+*** Import plugin QxEEPostgreSQLImport ***
+
+  --QxEEPostgreSQLImport_db_ip="&lt;DB IP&gt;" : [Required] Database server address (IP)
+  --QxEEPostgreSQLImport_db_port="&lt;DB port&gt;" : [Required] Port number to connect to database
+  --QxEEPostgreSQLImport_db_name="&lt;DB name&gt;" : [Required] Database name
+  --QxEEPostgreSQLImport_filter_regexp="&lt;Regular Expression&gt;" : [Optional] Filter to select tables from database to import
+  --QxEEPostgreSQLImport_login="&lt;DB Login&gt;" : [Optional] Login to connect to database
+  --QxEEPostgreSQLImport_pwd="&lt;DB Password&gt;" : [Optional] Password to connect to database
+  --QxEEPostgreSQLImport_namespace="&lt;Namespace&gt;" : [Optional] C++ namespace where imported classes will be located
+  --QxEEPostgreSQLImport_delete_namespace=0/1 : [Optional] Delete all entities in the namespace before importing
+  --QxEEPostgreSQLImport_import_comment=0/1 : [Optional] Import tables/columns comment to entities/properties description
+  --QxEEPostgreSQLImport_import_default_value=0/1 : [Optional] Import columns default value
+  --QxEEPostgreSQLImport_boost_optional=0/1 : [Optional] Add boost::optional&lt;T&gt; decoration if a column definition allows NULL value
+  --QxEEPostgreSQLImport_organize_diagram=0/1 : [Optional] Organize diagram layout after import process
+  --QxEEPostgreSQLImport_relation_decoration=&lt;numeric value&gt; : [Optional] Decoration used for relationships (0=no decoration, 1=boost::shared_ptr, 2=QSharedPointer, 5=std::shared_ptr)
+  --QxEEPostgreSQLImport_relation_collection=&lt;numeric value&gt; : [Optional] Collection used for relationships (1=qx::QxCollection, 2=std::vector, 3=std::list, 8=QHash, 10=QList)
+  --QxEEPostgreSQLImport_mapping_sql_to_cpp="sql1~cpp1;sql2~cpp2;etc..." : [Optional] List of mappings from SQL type to C++ type
+  --QxEEPostgreSQLImport_verbose=0/1 : [Optional] Display more details during the import process
+
+*** Import plugin QxEESQLiteImport ***
+
+  --QxEESQLiteImport_db_path="&lt;DB File Path&gt;" : [Required] SQLite database file path
+  --QxEESQLiteImport_filter_regexp="&lt;Regular Expression&gt;" : [Optional] Filter to select tables from database to import
+  --QxEESQLiteImport_namespace="&lt;Namespace&gt;" : [Optional] C++ namespace where imported classes will be located
+  --QxEESQLiteImport_delete_namespace=0/1 : [Optional] Delete all entities in the namespace before importing
+  --QxEESQLiteImport_import_comment=0/1 : [Optional] Import tables/columns comment to entities/properties description
+  --QxEESQLiteImport_import_default_value=0/1 : [Optional] Import columns default value
+  --QxEESQLiteImport_boost_optional=0/1 : [Optional] Add boost::optional&lt;T&gt; decoration if a column definition allows NULL value
+  --QxEESQLiteImport_organize_diagram=0/1 : [Optional] Organize diagram layout after import process
+  --QxEESQLiteImport_relation_decoration=&lt;numeric value&gt; : [Optional] Decoration used for relationships (0=no decoration, 1=boost::shared_ptr, 2=QSharedPointer, 5=std::shared_ptr)
+  --QxEESQLiteImport_relation_collection=&lt;numeric value&gt; : [Optional] Collection used for relationships (1=qx::QxCollection, 2=std::vector, 3=std::list, 8=QHash, 10=QList)
+  --QxEESQLiteImport_mapping_sql_to_cpp="sql1~cpp1;sql2~cpp2;etc..." : [Optional] List of mappings from SQL type to C++ type
+  --QxEESQLiteImport_verbose=0/1 : [Optional] Display more details during the import process
+
+*** Export plugin QxEECppExport ***
+
+  !!! Note : this plugin loads automatically previous parameters values before starting the export process, but you can use following parameters to override them !!!
+  --QxEECppExport_path="&lt;Export Path&gt;" : [Optional] C++ export path parameter
+  --QxEECppExport_template_type=&lt;numeric value&gt; : [Optional] C++ template type selected to build C++ files (0=no_inheritance, 1=ix_persistable, 2=qx_persistable, 3=ix_persistable_and_q_object, 4=custom)
+  --QxEECppExport_template_header="&lt;Template Header&gt;" : [Optional] Custom C++ template header file path (QxEECppExport_template_type parameter must be equal to 4, which means custom)
+  --QxEECppExport_template_source="&lt;Template Source&gt;" : [Optional] Custom C++ template source file path (QxEECppExport_template_type parameter must be equal to 4, which means custom)
+  --QxEECppExport_qxorm_relative_path=0/1 : [Optional] Relative path to QxOrm library
+  --QxEECppExport_generate_custom_files=0/1 : [Optional] Generate a custom directory with custom files for each entity
+  --QxEECppExport_custom_javacript="&lt;Custom JS&gt;" : [Optional] Custom script (javascript file) to change the default behaviour of the export process
+
+*** Export plugin QxEECppModelViewExport ***
+
+  !!! Note : this plugin loads automatically previous parameters values before starting the export process, but you can use following parameters to override them !!!
+  --QxEECppModelViewExport_path="&lt;Export Path&gt;" : [Optional] C++ model/view export path parameter
+  --QxEECppModelViewExport_namespace="&lt;Namespace&gt;" : [Optional] Namespace where to put all model/view classes
+  --QxEECppModelViewExport_template_type=&lt;numeric value&gt; : [Optional] C++ model/view template type selected to build C++ files (0=default, 1=custom, 2=qx_model_service)
+  --QxEECppModelViewExport_template_header="&lt;Template Header&gt;" : [Optional] Custom C++ template header file path (QxEECppModelViewExport_template_type parameter must be equal to 1, which means custom)
+  --QxEECppModelViewExport_template_source="&lt;Template Source&gt;" : [Optional] Custom C++ template source file path (QxEECppModelViewExport_template_type parameter must be equal to 1, which means custom)
+  --QxEECppModelViewExport_generate_custom_files=0/1 : [Optional] Generate a custom directory with custom files for each entity
+  --QxEECppModelViewExport_custom_javacript="&lt;Custom JS&gt;" : [Optional] Custom script (javascript file) to change the default behaviour of the export process
+
+*** Export plugin QxEECppServicesExport ***
+
+  !!! Note : this plugin loads automatically previous parameters values before starting the export process, but you can use following parameters to override them !!!
+  --QxEECppServicesExport_path="&lt;Export Path&gt;" : [Optional] C++ services export path parameter
+  --QxEECppServicesExport_namespace="&lt;Namespace&gt;" : [Optional] Namespace where to put all services classes
+  --QxEECppServicesExport_template_type=&lt;numeric value&gt; : [Optional] C++ services template type selected to build C++ files (0=default, 1=custom)
+  --QxEECppServicesExport_template_header="&lt;Template Header&gt;" : [Optional] Custom C++ template header file path (QxEECppServicesExport_template_type parameter must be equal to 1, which means custom)
+  --QxEECppServicesExport_template_source="&lt;Template Source&gt;" : [Optional] Custom C++ template source file path (QxEECppServicesExport_template_type parameter must be equal to 1, which means custom)
+  --QxEECppServicesExport_generate_custom_files=0/1 : [Optional] Generate a custom directory with custom files for each entity
+  --QxEECppServicesExport_custom_javacript="&lt;Custom JS&gt;" : [Optional] Custom script (javascript file) to change the default behaviour of the export process
+  --QxEECppServicesExport_generate_server_app=0/1 : [Optional] Generate a sample server application
+  --QxEECppServicesExport_server_app_path="&lt;Server App Path&gt;" : [Optional] Server application location
+
+*** Export plugin QxEEGenericDDLExport ***
+
+  !!! Note : this plugin loads automatically previous parameters values before starting the export process, but you can use following parameters to override them !!!
+  --QxEEGenericDDLExport_path="&lt;Export Path&gt;" : [Optional] DDL export path parameter
+  --QxEEGenericDDLExport_db_type=&lt;numeric value&gt; : [Optional] Database type (0=default, 1=sqlite, 2=mysql, 3=postgresql, 4=oracle, 5=mssqlserver)
+  --QxEEGenericDDLExport_relation_as_fk=0/1 : [Optional] Export relationships as foreign keys in database
+  --QxEEGenericDDLExport_schema_type=&lt;numeric value&gt; : [Optional] Way to export database schema (0=full, 1=evolution, 2=full_and_evolution)
+  --QxEEGenericDDLExport_custom_javacript="&lt;Custom JS&gt;" : [Optional] Custom script (javascript file) to change the default behaviour of the export process
+
+*** Export plugin QxEEPrinter ***
+
+  !!! Note : this plugin loads automatically previous parameters values before starting the export process !!!
+
+*** Export plugin QxEEXmlExport ***
+
+  !!! Note : this plugin loads automatically previous parameters values before starting the export process, but you can use following parameters to override them !!!
+  --QxEEXmlExport_path="&lt;Export Path&gt;" : [Optional] XML or JSON export path parameter
+  --QxEEXmlExport_as_json=0/1 : [Optional] Export project as JSON format
+</pre></i>
+         </div>
+         <br/>
+         <b>Other note :</b> to see logs generated by QxEntityEditor application :
+         <ul>
+           <li><b>Windows :</b> use an external tool, for example <a href="https://docs.microsoft.com/en-us/sysinternals/downloads/debugview" target="_blank">DebugView</a> ;</li>
+           <li><b>Linux :</b> execute QxEntityEditor from a terminal ;</li>
+           <li><b>Mac OS X :</b> execute QxEntityEditor from a terminal inside <i>QxEntityEditor.app</i> sub-directory, for example : <i>cd QxEntityEditor.app/Content/MacOS/</i>, then : <i>./QxEntityEditor</i></li>
+         </ul>
+         <br/><br/>
+         <b>-- Example n°7 :</b> import by ODBC (plugin <i>QxEEOdbcImport</i>) a database schema :
+         <br/>
+         <div style="width:900px; height:auto; overflow:auto; background-color:white">
+<i><pre>QxEntityEditor --no_gui --project="&lt;project_path&gt;" --plugin=QxEEOdbcImport --QxEEOdbcImport_db_type=1 --QxEEOdbcImport_dsn="&lt;your_dsn&gt;" --QxEEOdbcImport_login="&lt;your_login&gt;" --QxEEOdbcImport_pwd="&lt;your_password&gt;" --QxEEOdbcImport_delete_namespace=1</pre></i>
+         </div>
+         <br/><br/>
+         <b>-- Example n°8 :</b> import a PostgreSQL database schema (plugin <i>QxEEPostgreSQLImport</i>) :
+         <br/>
+         <div style="width:900px; height:auto; overflow:auto; background-color:white">
+<i><pre>QxEntityEditor --no_gui --project="&lt;project_path&gt;" --plugin=QxEEPostgreSQLImport --QxEEPostgreSQLImport_db_ip="&lt;ip&gt;" --QxEEPostgreSQLImport_db_port=5432 --QxEEPostgreSQLImport_db_name="&lt;dbname&gt;" --QxEEPostgreSQLImport_login="&lt;your_login&gt;" --QxEEPostgreSQLImport_pwd="&lt;your_password&gt;" --QxEEPostgreSQLImport_delete_namespace=1</pre></i>
+         </div>
+         <br/><br/>
       </div>
 
       </div>
