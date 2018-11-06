@@ -34,6 +34,7 @@
 #include <QxDao/QxSqlGenerator/QxSqlGenerator_Oracle.h>
 
 #include <QxDao/QxSqlDatabase.h>
+#include <QxDao/IxDao_Helper.h>
 
 #include <QxRegister/QxClassX.h>
 
