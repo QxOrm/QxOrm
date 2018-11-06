@@ -242,15 +242,21 @@ void QxSqlQuery::resolve(QSqlQuery & query) const
 
 void QxSqlQuery::resolveOutput(QSqlQuery & query, bool bFetchSqlResult)
 {
+   QxCollection<QString, type_bind_value> lst; lst.reserve(m_lstValue.count());
    bool bKey = (qx::QxSqlDatabase::getSingleton()->getSqlPlaceHolderStyle() != qx::QxSqlDatabase::ph_style_question_mark);
    for (long l = 0; l < m_lstValue.count(); l++)
    {
+      QVariant outputValue;
+      QString key = m_lstValue.getKeyByIndex(l);
       type_bind_value val = m_lstValue.getByIndex(l);
-      if (std::get<1>(val) == QSql::In) { continue; }
-      if (bKey) { std::get<0>(val) = query.boundValue(m_lstValue.getKeyByIndex(l)); }
-      else { std::get<0>(val) = query.boundValue(l); }
+      QSql::ParamType paramType = std::get<1>(val);
+      if (paramType == QSql::In) { lst.insert(key, val); continue; }
+      if (bKey) { outputValue = query.boundValue(key); }
+      else { outputValue = query.boundValue(l); }
+      lst.insert(key, type_bind_value(outputValue, paramType));
    }
    if (bFetchSqlResult) { fetchSqlResult(query); }
+   m_lstValue = lst;
 }
 
 void QxSqlQuery::dumpBoundValues(const QSqlQuery & query)

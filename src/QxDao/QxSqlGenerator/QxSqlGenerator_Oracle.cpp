@@ -43,13 +43,19 @@ namespace qx {
 namespace dao {
 namespace detail {
 
-QxSqlGenerator_Oracle::QxSqlGenerator_Oracle() : QxSqlGenerator_Standard(), m_bOldLimitSyntax(false) { this->initSqlTypeByClassName(); }
+QxSqlGenerator_Oracle::QxSqlGenerator_Oracle() : QxSqlGenerator_Standard(), m_bOldLimitSyntax(false), m_bManageLastInsertId(false) { this->initSqlTypeByClassName(); }
+
+QxSqlGenerator_Oracle::QxSqlGenerator_Oracle(bool bManageLastInsertId) : QxSqlGenerator_Standard(), m_bOldLimitSyntax(false), m_bManageLastInsertId(bManageLastInsertId) { this->initSqlTypeByClassName(); }
 
 QxSqlGenerator_Oracle::~QxSqlGenerator_Oracle() { ; }
 
 bool QxSqlGenerator_Oracle::getOldLimitSyntax() const { return m_bOldLimitSyntax; }
 
 void QxSqlGenerator_Oracle::setOldLimitSyntax(bool b) { m_bOldLimitSyntax = b; }
+
+bool QxSqlGenerator_Oracle::getManageLastInsertId() const { return m_bManageLastInsertId; }
+
+void QxSqlGenerator_Oracle::setManageLastInsertId(bool b) { m_bManageLastInsertId = b; }
 
 QString QxSqlGenerator_Oracle::getTableAliasSep() const { return " "; }
 
@@ -99,6 +105,43 @@ void QxSqlGenerator_Oracle::postProcess(QString & sql, const QxSqlLimit * pLimit
       if (bWithTies) { sql += " OFFSET " + QString::number(iMinRow) + " ROWS FETCH NEXT " + QString::number(iRowsCount) + " ROWS WITH TIES"; }
       else { sql += " OFFSET " + QString::number(iMinRow) + " ROWS FETCH NEXT " + QString::number(iRowsCount) + " ROWS ONLY"; }
    }
+}
+
+void QxSqlGenerator_Oracle::checkSqlInsert(IxDao_Helper * pDaoHelper, QString & sql) const
+{
+   if (! m_bManageLastInsertId) { return; }
+   if (! pDaoHelper) { qAssert(false); return; }
+   if (! pDaoHelper->getDataId()) { return; }
+   qx::IxDataMember * pId = pDaoHelper->getDataId();
+   if (! pId->getAutoIncrement()) { return; }
+   if (pId->getNameCount() > 1) { qAssert(false); return; }
+   QString sqlToAdd = " RETURNING ID INTO :ID; END;";
+   if (sql.right(sqlToAdd.size()) == sqlToAdd) { return; }
+   sql = "BEGIN " + sql + sqlToAdd;
+   pDaoHelper->builder().setSqlQuery(sql);
+}
+
+void QxSqlGenerator_Oracle::onBeforeInsert(IxDao_Helper * pDaoHelper, void * pOwner) const
+{
+   if (! m_bManageLastInsertId) { return; }
+   if (! pDaoHelper || ! pOwner) { qAssert(false); return; }
+   if (! pDaoHelper->getDataId()) { return; }
+   qx::IxDataMember * pId = pDaoHelper->getDataId();
+   if (! pId->getAutoIncrement()) { return; }
+   if (pId->getNameCount() > 1) { qAssert(false); return; }
+   pDaoHelper->query().bindValue(":ID", 0, QSql::InOut);
+}
+
+void QxSqlGenerator_Oracle::onAfterInsert(IxDao_Helper * pDaoHelper, void * pOwner) const
+{
+   if (! m_bManageLastInsertId) { return; }
+   if (! pDaoHelper || ! pOwner) { qAssert(false); return; }
+   if (! pDaoHelper->getDataId()) { return; }
+   qx::IxDataMember * pId = pDaoHelper->getDataId();
+   if (! pId->getAutoIncrement()) { return; }
+   if (pId->getNameCount() > 1) { qAssert(false); return; }
+   QVariant vId = pDaoHelper->query().boundValue(":ID");
+   pId->fromVariant(pOwner, vId, -1, qx::cvt::context::e_database);
 }
 
 void QxSqlGenerator_Oracle::initSqlTypeByClassName() const

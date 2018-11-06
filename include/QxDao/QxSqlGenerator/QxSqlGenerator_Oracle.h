@@ -58,20 +58,28 @@ class QX_DLL_EXPORT QxSqlGenerator_Oracle : public QxSqlGenerator_Standard
 
 protected:
 
-   bool m_bOldLimitSyntax;    //!< Use old limit syntax (for Oracle version < 12.1), more details here : https://stackoverflow.com/questions/470542/how-do-i-limit-the-number-of-rows-returned-by-an-oracle-query-after-ordering
+   bool m_bOldLimitSyntax;       //!< Use old limit syntax (for Oracle version < 12.1), more details here : https://stackoverflow.com/questions/470542/how-do-i-limit-the-number-of-rows-returned-by-an-oracle-query-after-ordering
+   bool m_bManageLastInsertId;   //!< Manage last insert id using RETURNING INTO syntax (thx to Romain Macureau and Abdennour Boutrig)
 
 public:
 
    QxSqlGenerator_Oracle();
+   QxSqlGenerator_Oracle(bool bManageLastInsertId);
    virtual ~QxSqlGenerator_Oracle();
 
    virtual QString getTableAliasSep() const;
    virtual QString getLimit(const QxSqlLimit * pLimit) const;
    virtual void resolveLimit(QSqlQuery & query, const QxSqlLimit * pLimit) const;
    virtual void postProcess(QString & sql, const QxSqlLimit * pLimit) const;
+   virtual void checkSqlInsert(IxDao_Helper * pDaoHelper, QString & sql) const;
+   virtual void onBeforeInsert(IxDao_Helper * pDaoHelper, void * pOwner) const;
+   virtual void onAfterInsert(IxDao_Helper * pDaoHelper, void * pOwner) const;
 
    bool getOldLimitSyntax() const;
    void setOldLimitSyntax(bool b);
+
+   bool getManageLastInsertId() const;
+   void setManageLastInsertId(bool b);
 
 private:
 

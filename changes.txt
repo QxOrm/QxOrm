@@ -1,3 +1,6 @@
+Changes in version 1.4.6:
+- TODO...
+
 Changes in version 1.4.5:
 - Support MongoDB database : QxOrm library becomes a C++/Qt Object Document Mapper ODM library !
 - For more details about MongoDB integration, see QxOrm manual (https://www.qxorm.com/qxorm_en/manual.html#manual_95) and new sample project available in ./test/qxBlogMongoDB/ directory
