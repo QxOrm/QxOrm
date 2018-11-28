@@ -189,6 +189,7 @@
 #include "./QxValidator/QxInvalidValueX.cpp"
 
 #include "./QxModelView/IxModel.cpp"
+#include "./QxModelView/IxDnDModel.cpp"
 #include "./QxModelView/QxNestedModel.cpp"
 #include "./QxModelView/QxModelRowCompare.cpp"
 

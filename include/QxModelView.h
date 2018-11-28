@@ -45,7 +45,7 @@
 
 #include <QxOrm.h>
 
-#include <QxModelView/IxModel.h>
+#include <QxModelView/IxDnDModel.h>
 #include <QxModelView/QxModel.h>
 #include <QxModelView/QxNestedModel.h>
 #include <QxModelView/QxModelService.h>

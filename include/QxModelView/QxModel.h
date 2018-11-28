@@ -197,10 +197,12 @@ protected:
       this->m_pDataMemberId = (this->m_pDataMemberX ? this->m_pDataMemberX->getId_WithDaoStrategy() : NULL);
       this->m_pCollection = (& m_model);
       this->generateRoleNames();
+      clearChildren();
    }
 
    void initFrom(qx::IxModel * pOther)
    {
+       beginResetModel();
       init();
       qx::QxModel<T, B> * pOtherWrk = static_cast<qx::QxModel<T, B> *>(pOther);
       m_model = pOtherWrk->m_model;
@@ -208,6 +210,7 @@ protected:
       this->setParentModel(pOtherWrk->m_pParent);
       if (this->m_pParent) { this->m_eAutoUpdateDatabase = this->m_pParent->getAutoUpdateDatabase(); }
       this->m_hCustomProperties = pOtherWrk->m_hCustomProperties;
+      endResetModel();
    }
 
 public:
@@ -226,12 +229,12 @@ public:
       return true;
    }
 
-   virtual void sort(int column, Qt::SortOrder order = Qt::AscendingOrder)
-   {
-      IxDataMember * pDataMember = this->getDataMember(column); if (! pDataMember) { return; }
-      m_model.sort(qx::model_view::QxModelRowCompare<typename type_collection::type_pair_key_value>((order == Qt::AscendingOrder), pDataMember));
-      this->raiseEvent_layoutChanged();
-   }
+//   virtual void sort(int column, Qt::SortOrder order = Qt::AscendingOrder)
+//   {
+//      IxDataMember * pDataMember = this->getDataMember(column); if (! pDataMember) { return; }
+//      m_model.sort(qx::model_view::QxModelRowCompare<typename type_collection::type_pair_key_value>((order == Qt::AscendingOrder), pDataMember));
+//      this->raiseEvent_layoutChanged();
+//   }
 
    virtual bool getShowEmptyLine() const { return m_pDirtyRow.get(); }
 
@@ -314,6 +317,60 @@ public:
       this->updateShowEmptyLine();
       this->endResetModel();
       return this->m_lastError;
+   }
+
+   /*!
+    * \brief Syncs the model and all its nested child models with the state of the DB
+    * \param cFrom For child models, the collection the parent obtained for this child's
+    * relation after fetching child elements - used in recursive calls in the generated classes.
+    * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class (optional parameter)
+    * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
+    */
+   virtual QSqlError qxSyncAll(IxCollection * cFrom = Q_NULLPTR,
+                               QSqlDatabase * pDatabase = NULL)
+   {
+       type_collection tmp; if (cFrom) tmp = *static_cast<type_collection*>(cFrom);
+       if (this->m_pParent) qAssert(cFrom);
+       else if (!cFrom) {
+           QString s = this->AllRelations(QString());
+           QStringList relation = s.isEmpty() ? QStringList() : s.split('|');
+           if (relation.count() == 0) { this->m_lastError = qx::dao::fetch_all(tmp, this->database(pDatabase), this->m_lstColumns); }
+           else { this->m_lastError = qx::dao::fetch_all_with_relation(relation, tmp, this->database(pDatabase)); }
+       }
+       //keep the children that should be kept and sync them
+       QHash<type_primary_key, int> hIdxByKey; //maybe add this to QxCollection as well?
+       for (int i = 0; i < tmp.count(); ++i) hIdxByKey[tmp.getKeyByIndex(i)] = i;
+       IxModel::type_lst_relation_by_name lChild;
+       QVector<int> vRows;
+       bool bSame = tmp.count() == m_model.count();
+       for (int i = 0; i < m_model.count(); ++i)
+           if (this->m_lstChild.size() > i)
+               if( tmp.contains(m_model.getKeyByIndex(i))) {
+                   int row = hIdxByKey.value(m_model.getKeyByIndex(i));
+                   bSame &= row == i;
+                   vRows.append(row);
+                   while (row > (lChild.count() - 1))
+                   { IxModel::type_relation_by_name h; lChild.append(h); }
+                   lChild[row] = this->m_lstChild.at(i);
+                   foreach (IxModel * c, this->m_lstChild.at(i)) this->m_hChild[c].first = row;
+               }
+               else {
+                   bSame = false;
+                   this->removeListOfChild(i);
+               }
+       this->m_lstChild = lChild;
+       if (bSame) { //do not reset selections in this case
+           this->m_model = tmp;
+           emit this->dataChanged(this->index(0, 0), this->index(tmp.count(), this->columnCount() - 1));
+       }
+       else {
+           this->beginResetModel();
+           this->m_model = tmp;
+           this->updateShowEmptyLine();
+           this->endResetModel();
+       }
+       foreach (int row, vRows) this->syncToNestedModel(row);
+       return this->m_lastError;
    }
 
    /*!
@@ -618,8 +675,6 @@ public:
       return qx::validate((* pItem), groups);
    }
 
-protected:
-
    type_ptr getRowItemAt(int row) const
    {
       if ((row >= 0) && (row < m_model.count())) { return m_model.getByIndex(row); }
@@ -628,6 +683,8 @@ protected:
    }
 
    virtual void * getRowItemAsVoidPtr(int row) const { return getRowItemAt(row).get(); }
+
+protected:
 
    virtual void dumpModelImpl(bool bJsonFormat) const { qx::dump(m_model, bJsonFormat); }
 
@@ -698,6 +755,33 @@ protected:
    }
 
 protected:
+    //!< Copies/moves the element at idx iRow from 'from'. Only works if this and from are the same type
+   virtual bool insertItemFrom(IxModel* from, int iRow, bool bRemoveOrig) Q_DECL_OVERRIDE
+   {
+       qAssert(from->getClass() == this->getClass() && iRow >= 0 && iRow < from->rowCount());
+       if (!(from->getClass() == this->getClass() && iRow >= 0 && iRow < from->rowCount()))
+           return false;
+       auto qxFrom = static_cast<QxModel<T, B>*>(from);
+       auto key = qxFrom->m_model.getKeyByIndex(iRow);
+       if (m_model.contains(key)) return true;
+       auto t = qxFrom->m_model.getByIndex(iRow);
+       if (bRemoveOrig) from->removeRow(iRow);
+       this->beginInsertRows(QModelIndex(), m_model.size(), m_model.size());
+       bool b = m_model.push_back(key, t);
+       //change relation many_to_one if applicable
+       foreach (auto p, m_lstDataMember) {
+           if (!p || !p->getSqlRelation() ||
+                   p->getSqlRelation()->getRelationType() != IxSqlRelation::many_to_one ||
+                   p->getSqlRelation()->getClass() != m_pParent->getClass()) continue;
+
+           void * pItem = getRowItemAsVoidPtr(m_model.size() - 1);
+           qx_bool bSetData = p->fromVariant(pItem, m_pParent->getIdFromChild(this));
+           qAssert(bSetData);
+       }
+       updateShowEmptyLine();
+       this->endInsertRows();
+       return b;
+   }
 
 #ifndef _QX_NO_JSON
 
@@ -751,6 +835,7 @@ protected:
          this->m_pDataMemberId->fromVariant(pItemTemp.get(), id);
          QSqlError daoError = qx::dao::fetch_by_id_with_relation(sRelation, (* pItemTemp));
          if (daoError.isValid()) { return QVariant(); }
+         this->syncToNestedModel(row);
       }
 
       QJsonValue json = pDataMember->toJson(pItemTemp.get()); if (json.isNull()) { return QVariant(); }

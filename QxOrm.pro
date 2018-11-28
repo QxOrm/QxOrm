@@ -39,7 +39,7 @@ include(./QxOrm.pri)
 TEMPLATE = lib
 CONFIG += dll
 DEFINES += _QX_BUILDING_QX_ORM
-DESTDIR = $$PWD/lib/
+DESTDIR = $$PWD/lib$${LIBDIR}/
 
 !contains(DEFINES, _QX_NO_PRECOMPILED_HEADER) {
 PRECOMPILED_HEADER = ./include/QxPrecompiled.h
@@ -60,11 +60,7 @@ CONFIG += staticlib
 # Compiler / Linker Options #
 #############################
 
-CONFIG(debug, debug|release) {
-TARGET = QxOrmd
-} else {
-TARGET = QxOrm
-} # CONFIG(debug, debug|release)
+TARGET = QxOrm$${FILESUFFIX}
 
 unix {
 isEmpty(PREFIX) { PREFIX = /usr/local }
@@ -488,7 +484,7 @@ HEADERS += ./include/QxModelView/QxModel.h
 HEADERS += ./include/QxModelView/QxNestedModel.h
 HEADERS += ./include/QxModelView/QxModelService.h
 HEADERS += ./include/QxModelView/QxModelRowCompare.h
-
+HEADERS += ./include/QxModelView/IxDnDModel.h
 HEADERS += ./include/QxExtras/QxBoostOptionalOnly.h
 HEADERS += ./include/QxExtras/QxStdOptional.h
 
@@ -655,6 +651,7 @@ SOURCES += ./src/QxValidator/QxInvalidValueX.cpp
 SOURCES += ./src/QxModelView/IxModel.cpp
 SOURCES += ./src/QxModelView/QxNestedModel.cpp
 SOURCES += ./src/QxModelView/QxModelRowCompare.cpp
+SOURCES += ./src/QxModelView/IxDnDModel.cpp
 
 SOURCES += ./src/main.cpp
 

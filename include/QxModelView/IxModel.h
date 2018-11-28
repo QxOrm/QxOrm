@@ -223,6 +223,7 @@ public:
    Q_INVOKABLE QObject * getParentModel() const; //!< Can be used to figure out whether this model has a parent model (used only by nested models)
    Q_INVOKABLE void dumpModel(bool bJsonFormat = true) const;
    Q_INVOKABLE QObject * cloneModel();
+   virtual void * getRowItemAsVoidPtr(int row) const = 0;
 
    void setDatabase(const QSqlDatabase & db);
    Q_INVOKABLE void setListOfColumns(const QStringList & lst);
@@ -244,6 +245,8 @@ public:
    virtual QSqlError qxCount(long & lCount, const qx::QxSqlQuery & query = qx::QxSqlQuery(), QSqlDatabase * pDatabase = NULL) = 0;
    virtual QSqlError qxFetchById(const QVariant & id, const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL) = 0;
    virtual QSqlError qxFetchAll(const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL) = 0;
+   virtual QSqlError qxSyncAll(IxCollection * cFrom = Q_NULLPTR,
+                               QSqlDatabase * pDatabase = NULL) = 0;
    virtual QSqlError qxFetchByQuery(const qx::QxSqlQuery & query, const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL) = 0;
    virtual QSqlError qxFetchRow(int row, const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL) = 0;
    virtual QSqlError qxInsert(const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL) = 0;
@@ -280,7 +283,7 @@ public:
    Q_INVOKABLE bool qxDeleteById_(const QVariant & id);
    Q_INVOKABLE bool qxDeleteAll_();
    Q_INVOKABLE bool qxDeleteByQuery_(const QString & sQuery);
-   Q_INVOKABLE bool qxDeleteRow_(int row);
+   Q_INVOKABLE virtual bool qxDeleteRow_(int row);
    Q_INVOKABLE bool qxDestroyById_(const QVariant & id);
    Q_INVOKABLE bool qxDestroyAll_();
    Q_INVOKABLE bool qxDestroyByQuery_(const QString & sQuery);
@@ -310,6 +313,7 @@ protected:
 public:
 
    Q_INVOKABLE void clear(bool bUpdateColumns = false);
+   void clearChildren();
 
    virtual QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
    virtual bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole);
@@ -330,25 +334,30 @@ public:
    virtual Qt::DropActions supportedDragActions() const;
 #endif // (QT_VERSION >= 0x050000)
 
+   void syncToAllNestedModel();
+
+   QString AllRelations(const QString& sFrom);
 protected:
 
    virtual QObject * cloneModelImpl() = 0;
    virtual void dumpModelImpl(bool bJsonFormat) const = 0;
-   virtual void * getRowItemAsVoidPtr(int row) const = 0;
    virtual bool isDirtyRow(int row) const = 0;
    virtual void insertDirtyRowToModel() = 0;
    virtual void updateShowEmptyLine() = 0;
    virtual void syncNestedModel(int row, const QStringList & relation);
    virtual void syncAllNestedModel(const QStringList & relation);
    void syncNestedModelRecursive(IxModel * pNestedModel, const QStringList & relation);
+   virtual void syncToNestedModel(int) {}
 
    void generateRoleNames();
    QSqlDatabase * database(QSqlDatabase * other);
    IxModel * getChild(long row, const QString & relation);
-   void insertChild(long row, const QString & relation, IxModel * pChild);
+   void insertChild(long row, const QString & relation, IxModel*& pChild);
    void removeListOfChild(long row);
-   bool removeRowsGeneric(int row, int count);
+   virtual bool removeRowsGeneric(int row, int count);
    bool removeRowsAutoUpdateOnFieldChange(int row, int count);
+   virtual bool insertItemFrom(IxModel* from, int iRow, bool bRemoveOrig) = 0; //!< Copies/moves the element at idx iRow from 'from'. Only works if this and from are the same type
+   virtual void initFrom(qx::IxModel * pOther) = 0;
 
 #ifndef _QX_NO_JSON
 

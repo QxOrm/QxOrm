@@ -43,7 +43,14 @@ namespace qx {
 
 IxModel::IxModel(QObject * parent /* = 0 */) : QAbstractItemModel(parent), QX_CONSTRUCT_IX_MODEL() { ; }
 
-IxModel::~IxModel() { ; }
+IxModel::~IxModel()
+{
+    clearChildren();
+    if (!m_pParent) return;
+    auto p = m_pParent->getChildPosition(this); if (p.first < 0) return;
+    m_pParent->m_lstChild[p.first].remove(p.second);
+    m_pParent->m_hChild.remove(this);
+}
 
 IxClass * IxModel::getClass() const { return m_pClass; }
 
@@ -219,10 +226,7 @@ void IxModel::clear(bool bUpdateColumns /* = false */)
    if (! bUpdateColumns && (m_pCollection->_count() <= 0)) { return; }
    beginResetModel();
    m_pCollection->_clear();
-   for (long l = (m_lstChild.count() - 1); l >= 0; l--)
-   { removeListOfChild(l); }
-   m_lstChild.clear();
-   m_hChild.clear();
+   clearChildren();
    if (bUpdateColumns) { generateRoleNames(); }
    endResetModel();
 
@@ -233,6 +237,14 @@ void IxModel::clear(bool bUpdateColumns /* = false */)
    }
 }
 
+void IxModel::clearChildren()
+{
+   for (long l = (m_lstChild.count() - 1); l >= 0; l--)
+   { removeListOfChild(l); }
+   m_lstChild.clear();
+   m_hChild.clear();
+}
+
 IxModel * IxModel::getChild(long row, const QString & relation)
 {
    if ((row < 0) || (row >= m_lstChild.count())) { return NULL; }
@@ -241,13 +253,18 @@ IxModel * IxModel::getChild(long row, const QString & relation)
    return child.value(relation);
 }
 
-void IxModel::insertChild(long row, const QString & relation, IxModel * pChild)
+void IxModel::insertChild(long row, const QString & relation, IxModel *&pChild)
 {
    if ((row < 0) || (! pChild)) { return; }
    if (relation.isEmpty()) { return; }
    while (row > (m_lstChild.count() - 1))
    { IxModel::type_relation_by_name tmp; m_lstChild.append(tmp); }
-   m_lstChild[row].insert(relation, pChild);
+   if (m_lstChild.at(row).contains(relation)) {
+       m_lstChild[row][relation]->initFrom(pChild);
+       delete pChild;
+       pChild = m_lstChild[row][relation];
+   }
+   else m_lstChild[row].insert(relation, pChild);
    QPair<int, QString> pairRowRelation(static_cast<int>(row), relation);
    m_hChild.insert(pChild, pairRowRelation);
 }
@@ -490,6 +507,28 @@ void IxModel::syncNestedModel(int row, const QStringList & relation) { Q_UNUSED(
 void IxModel::syncAllNestedModel(const QStringList & relation) { Q_UNUSED(relation); }
 
 void IxModel::syncNestedModelRecursive(IxModel * pNestedModel, const QStringList & relation) { if (pNestedModel) { pNestedModel->syncAllNestedModel(relation); } }
+
+void IxModel::syncToAllNestedModel()
+{
+    if (this->m_lstChild.count() <= 0) { return; }
+    for (long l = 0; l < this->m_pCollection->_count(); l++)
+    { this->syncToNestedModel(static_cast<int>(l)); }
+}
+
+QString IxModel::AllRelations(const QString &sFrom)
+{
+    QStringList lRel;
+    //loop over the relations
+    int lCount = m_pDataMemberX->count();
+    for (int i = 0; i < lCount; i++)
+    {
+        IxDataMember * p = m_pDataMemberX->get(i); if (!p) { continue; }
+        if (p->getSqlRelation() &&
+                p->getSqlRelation()->getRelationType() == IxSqlRelation::many_to_one)
+            lRel << sFrom + p->getSqlRelation()->getKey();
+    }
+    return lRel.join('|').mid(sFrom.size());
+}
 
 void IxModel::generateRoleNames()
 {
