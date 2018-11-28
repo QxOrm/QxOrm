@@ -280,6 +280,17 @@ void IxModel::removeListOfChild(long row)
 QSqlError IxModel::saveChildRelations(IxModel * pChild)
 {
    if (! m_hChild.contains(pChild)) { return QSqlError(); }
+   QStringList l; //save child model bug workaround
+   int lCount = pChild->getClass()->getDataMemberX()->count();
+   for (int i = 0; i < lCount; i++)
+   {
+       IxDataMember * p = pChild->getClass()->getDataMemberX()->get(i); if (!p) { continue; }
+       if (!p->getSqlRelation() ||
+               p->getSqlRelation()->getRelationType() == IxSqlRelation::many_to_one)
+           continue;
+       l.append(p->getKey());
+   }
+   pChild->qxSave(l);
    QPair<int, QString> pairRowRelation = m_hChild.value(pChild);
    return qxSaveRow(pairRowRelation.first, (QStringList() << pairRowRelation.second));
 }
