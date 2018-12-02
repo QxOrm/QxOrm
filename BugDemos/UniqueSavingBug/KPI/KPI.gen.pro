@@ -1,34 +1,31 @@
 #################################################################################################
-## File created by QxEntityEditor 1.2.1 (2018/11/28 12:31) : please, do NOT modify this file ! ##
+## File created by QxEntityEditor 1.2.3 (2018/12/02 15:06) : please, do NOT modify this file ! ##
 #################################################################################################
 
 include($$PWD/../../../QxOrm.pri)
 
 TEMPLATE = lib
 CONFIG += dll
-DEFINES += _BUILDING_MODEL_VIEW_CHILDMODELSAVINGBUG
+DEFINES += _BUILDING_KPI
 INCLUDEPATH += $$PWD/../../../include
 DESTDIR = $$PWD/bin/
 
+CONFIG(debug, debug|release) {
+TARGET = KPId
+} else {
+TARGET = KPI
+} # CONFIG(debug, debug|release)
+
 LIBS += -L"$$PWD/../../../lib$${LIBDIR}"
-LIBS += -L"$$PWD/../C/bin"
 
 CONFIG(debug, debug|release) {
 LIBS += -l"QxOrmd"
-LIBS += -l"ChildModelSavingBugd"
 } else {
 LIBS += -l"QxOrm"
-LIBS += -l"ChildModelSavingBug"
 } # CONFIG(debug, debug|release)
 
-CONFIG(debug, debug|release) {
-TARGET = ChildModelSavingBugModeld
-} else {
-TARGET = ChildModelSavingBugModel
-} # CONFIG(debug, debug|release)
-
-include($$PWD/ChildModelSavingBug.model_view.gen.pri)
+include($$PWD/KPI.gen.pri)
 
 !contains(DEFINES, _QX_UNITY_BUILD) {
-SOURCES += $$PWD/src/ChildModelSavingBug_main.model_view.gen.cpp
+SOURCES += $$PWD/src/KPI_main.gen.cpp
 } # !contains(DEFINES, _QX_UNITY_BUILD)

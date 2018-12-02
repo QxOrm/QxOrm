@@ -16,7 +16,7 @@ TARGET = ChildModelSavingBugd
 TARGET = ChildModelSavingBug
 } # CONFIG(debug, debug|release)
 
-LIBS += -L"$$PWD/../../../lib"
+LIBS += -L"$$PWD/../../../lib$${LIBDIR}"
 
 CONFIG(debug, debug|release) {
 LIBS += -l"QxOrmd"
