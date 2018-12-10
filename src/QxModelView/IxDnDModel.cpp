@@ -153,7 +153,7 @@ void IxDnDModel::UndoCommand::redo()
                 m_ix->insertItemFrom(from, i,
                                  m_uCommand == uChangeRel && from->getParentModel()
                                  && m_ix->getParentModel());
-            if (m_ix->m_pParent) m_ix->m_pParent->saveChildRelations(m_ix);
+            if (m_ix->m_pParent) m_ix->m_pParent->saveChildRelations(m_ix, true);
             return emit m_ix->relationsUpdated();
         }
         IxSqlRelation * rel = Q_NULLPTR; //figure out the relation
@@ -192,7 +192,7 @@ void IxDnDModel::UndoCommand::redo()
         foreach (int i, vFromRows)
             to->insertItemFrom(from, i, m_uCommand == uChangeRel && from->getParentModel());
         m_ix->saveChildRelations(from);
-        m_ix->saveChildRelations(to);
+        m_ix->saveChildRelations(to, true);
         emit m_ix->relationsUpdated();
     } break;
     default:

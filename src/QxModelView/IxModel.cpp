@@ -277,7 +277,7 @@ void IxModel::removeListOfChild(long row)
    m_lstChild.removeAt(row);
 }
 
-QSqlError IxModel::saveChildRelations(IxModel * pChild)
+QSqlError IxModel::saveChildRelations(IxModel * pChild, bool bOnlyIns/* = false*/)
 {
    if (! m_hChild.contains(pChild)) { return QSqlError(); }
    QStringList l; //save child model bug workaround
@@ -290,7 +290,7 @@ QSqlError IxModel::saveChildRelations(IxModel * pChild)
            continue;
        l.append(p->getKey());
    }
-   pChild->qxSave(l);
+   bOnlyIns ? pChild->qxInsert(l) : pChild->qxSave(l);
    QPair<int, QString> pairRowRelation = m_hChild.value(pChild);
    return qxSaveRow(pairRowRelation.first, (QStringList() << pairRowRelation.second));
 }

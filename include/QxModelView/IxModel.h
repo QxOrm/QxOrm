@@ -293,7 +293,7 @@ public:
    Q_INVOKABLE QString qxValidate_(const QStringList & groups = QStringList());
    Q_INVOKABLE QString qxValidateRow_(int row, const QStringList & groups = QStringList());
 
-   QSqlError saveChildRelations(IxModel * pChild);
+   QSqlError saveChildRelations(IxModel * pChild, bool bOnlyIns = false);
    QVariant getIdFromChild(IxModel * pChild) const; //!< Used to save foreign key in a nested model
    QPair<int, QString> getChildPosition(IxModel * pChild) const;
 
