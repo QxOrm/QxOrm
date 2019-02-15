@@ -59,6 +59,8 @@
 
 namespace qx {
 
+class IxSqlRelation;
+
 /*!
  * \ingroup QxRegister
  * \brief qx::IxClass : common interface for all classes registered into QxOrm context
@@ -91,6 +93,8 @@ public:
    IxDataMemberX * getDataMemberX() const;
    IxFunctionX * getFctMemberX() const;
    IxFunctionX * getFctStaticX() const;
+   std::shared_ptr<QxCollection<QString, IxSqlRelation *> > getSqlRelationX();
+   std::shared_ptr<QxCollection<QString, IxDataMember *> > getSqlDataMemberX();
 
    void setKey(const QString & s);
    void setName(const QString & s);

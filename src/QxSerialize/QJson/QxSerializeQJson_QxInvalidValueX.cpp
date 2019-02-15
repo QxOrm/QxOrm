@@ -45,6 +45,8 @@ namespace detail {
 
 QJsonValue QxConvert_ToJson_Helper(const qx::QxInvalidValueX & t, const QString & format)
 {
+   if (t.m_lstInvalidValues.count() <= 0) { return QJsonValue(); }
+
    QJsonArray arr;
    arr.append(QJsonValue(t.m_sCurrentPath));
    arr.append(qx::cvt::to_json(t.m_lstInvalidValues, format));

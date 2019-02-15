@@ -284,7 +284,7 @@ void QxSqlQuery::dumpBoundValues(const QSqlQuery & query)
 void QxSqlQuery::fetchSqlResult(QSqlQuery & query)
 {
    bool bCheckRecord = true;
-   m_pSqlResult.reset(new QxSqlResult());
+   m_pSqlResult = std::make_shared<QxSqlResult>();
    if (query.size() > 0) { m_pSqlResult->values.reserve(query.size()); }
    while (query.next())
    {
@@ -417,7 +417,7 @@ QxSqlQuery & QxSqlQuery::or_OpenParenthesis(const QString & column)
 QxSqlQuery & QxSqlQuery::openParenthesis()
 {
    qx::dao::detail::QxSqlExpression_ptr p;
-   p.reset(new qx::dao::detail::QxSqlExpression(m_iSqlElementIndex++, qx::dao::detail::QxSqlExpression::_open_parenthesis));
+   p = std::make_shared<qx::dao::detail::QxSqlExpression>(m_iSqlElementIndex++, qx::dao::detail::QxSqlExpression::_open_parenthesis);
    m_lstSqlElement.append(p);
    m_iParenthesisCount++;
    return (* this);
@@ -427,7 +427,7 @@ QxSqlQuery & QxSqlQuery::closeParenthesis()
 {
    if (m_iParenthesisCount <= 0) { return (* this); }
    qx::dao::detail::QxSqlExpression_ptr p;
-   p.reset(new qx::dao::detail::QxSqlExpression(m_iSqlElementIndex++, qx::dao::detail::QxSqlExpression::_close_parenthesis));
+   p = std::make_shared<qx::dao::detail::QxSqlExpression>(m_iSqlElementIndex++, qx::dao::detail::QxSqlExpression::_close_parenthesis);
    m_lstSqlElement.append(p);
    m_iParenthesisCount--;
    m_pSqlElementTemp.reset();
@@ -587,7 +587,7 @@ QxSqlQuery & QxSqlQuery::groupBy(const QString & col1, const QString & col2, con
 QxSqlQuery & QxSqlQuery::limit(int rowsCount, int startRow /* = 0 */, bool withTies /* = false */)
 {
    qx::dao::detail::QxSqlLimit_ptr p;
-   p.reset(new qx::dao::detail::QxSqlLimit(m_iSqlElementIndex++));
+   p = std::make_shared<qx::dao::detail::QxSqlLimit>(m_iSqlElementIndex++);
    p->setValues(QVariantList() << QVariant(startRow) << QVariant(rowsCount) << QVariant(withTies));
    m_lstSqlElement.append(p);
    return (* this);
@@ -787,7 +787,7 @@ QxSqlQuery & QxSqlQuery::freeText(const QString & text)
 {
    if (text.isEmpty()) { return (* this); }
    qx::dao::detail::QxSqlFreeText_ptr p;
-   p.reset(new qx::dao::detail::QxSqlFreeText(m_iSqlElementIndex++));
+   p = std::make_shared<qx::dao::detail::QxSqlFreeText>(m_iSqlElementIndex++);
    p->setValue(QVariant(text));
    m_lstSqlElement.append(p);
    return (* this);
@@ -796,10 +796,10 @@ QxSqlQuery & QxSqlQuery::freeText(const QString & text)
 QxSqlQuery & QxSqlQuery::addSqlExpression(const QString & column, qx::dao::detail::QxSqlExpression::type type)
 {
    qx::dao::detail::QxSqlExpression_ptr p;
-   p.reset(new qx::dao::detail::QxSqlExpression(m_iSqlElementIndex++, type));
+   p = std::make_shared<qx::dao::detail::QxSqlExpression>(m_iSqlElementIndex++, type);
    m_lstSqlElement.append(p);
 
-   m_pSqlElementTemp.reset(new qx::dao::detail::QxSqlElementTemp());
+   m_pSqlElementTemp = std::make_shared<qx::dao::detail::QxSqlElementTemp>();
    m_pSqlElementTemp->setColumn(column);
    return (* this);
 }
@@ -810,7 +810,7 @@ QxSqlQuery & QxSqlQuery::addSqlCompare(const QVariant & val, qx::dao::detail::Qx
    { qDebug("[QxOrm] qx::QxSqlQuery : '%s'", "invalid SQL query, need a column name"); qAssert(false); return (* this); }
 
    qx::dao::detail::QxSqlCompare_ptr p;
-   p.reset(new qx::dao::detail::QxSqlCompare(m_iSqlElementIndex++, type, sCustomOperator));
+   p = std::make_shared<qx::dao::detail::QxSqlCompare>(m_iSqlElementIndex++, type, sCustomOperator);
    p->clone(m_pSqlElementTemp.get());
    p->setValue(val);
 
@@ -822,7 +822,7 @@ QxSqlQuery & QxSqlQuery::addSqlCompare(const QVariant & val, qx::dao::detail::Qx
 QxSqlQuery & QxSqlQuery::addSqlSort(const QStringList & columns, qx::dao::detail::QxSqlSort::type type)
 {
    qx::dao::detail::QxSqlSort_ptr p;
-   p.reset(new qx::dao::detail::QxSqlSort(m_iSqlElementIndex++, type));
+   p = std::make_shared<qx::dao::detail::QxSqlSort>(m_iSqlElementIndex++, type);
    p->setColumns(columns);
    m_lstSqlElement.append(p);
    return (* this);
@@ -834,7 +834,7 @@ QxSqlQuery & QxSqlQuery::addSqlIn(const QVariantList & values, qx::dao::detail::
    { qDebug("[QxOrm] qx::QxSqlQuery : '%s'", "invalid SQL query, need a column name"); qAssert(false); return (* this); }
 
    qx::dao::detail::QxSqlIn_ptr p;
-   p.reset(new qx::dao::detail::QxSqlIn(m_iSqlElementIndex++, type));
+   p = std::make_shared<qx::dao::detail::QxSqlIn>(m_iSqlElementIndex++, type);
    p->clone(m_pSqlElementTemp.get());
    p->setValues(values);
 
@@ -849,7 +849,7 @@ QxSqlQuery & QxSqlQuery::addSqlIsNull(qx::dao::detail::QxSqlIsNull::type type)
    { qDebug("[QxOrm] qx::QxSqlQuery : '%s'", "invalid SQL query, need a column name"); qAssert(false); return (* this); }
 
    qx::dao::detail::QxSqlIsNull_ptr p;
-   p.reset(new qx::dao::detail::QxSqlIsNull(m_iSqlElementIndex++, type));
+   p = std::make_shared<qx::dao::detail::QxSqlIsNull>(m_iSqlElementIndex++, type);
    p->clone(m_pSqlElementTemp.get());
 
    m_lstSqlElement.append(p);
@@ -863,7 +863,7 @@ QxSqlQuery & QxSqlQuery::addSqlIsBetween(const QVariant & val1, const QVariant &
    { qDebug("[QxOrm] qx::QxSqlQuery : '%s'", "invalid SQL query, need a column name"); qAssert(false); return (* this); }
 
    qx::dao::detail::QxSqlIsBetween_ptr p;
-   p.reset(new qx::dao::detail::QxSqlIsBetween(m_iSqlElementIndex++, type));
+   p = std::make_shared<qx::dao::detail::QxSqlIsBetween>(m_iSqlElementIndex++, type);
    p->clone(m_pSqlElementTemp.get());
    p->setValues(QVariantList() << val1 << val2);
 

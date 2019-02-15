@@ -121,6 +121,7 @@ set(QX_HEADERS
     ./include/QxDao/IxDao_Helper.h
     ./include/QxDao/IxPersistable.h
     ./include/QxDao/IxPersistableCollection.h
+    ./include/QxDao/IxPersistableList.h
     ./include/QxDao/QxSqlJoin.h
     ./include/QxDao/QxSqlRelationLinked.h
     ./include/QxDao/QxDaoAsync.h
@@ -302,6 +303,7 @@ set(QX_HEADERS
     ./include/QxSerialize/QJson/QxSerializeQJson_std_unordered_map.h
     ./include/QxSerialize/QJson/QxSerializeQJson_std_unordered_set.h
     ./include/QxSerialize/QJson/QxSerializeQJson_std_vector.h
+    ./include/QxRestApi/QxRestApi.h
     ./include/QxTraits/get_base_class.h
     ./include/QxTraits/get_primary_key.h
     ./include/QxTraits/get_class_name.h
@@ -447,6 +449,7 @@ else() # _QX_UNITY_BUILD
        ./src/QxDao/IxDao_Helper.cpp
        ./src/QxDao/IxPersistable.cpp
        ./src/QxDao/IxPersistableCollection.cpp
+       ./src/QxDao/IxPersistableList.cpp
        ./src/QxDao/QxSqlRelationLinked.cpp
        ./src/QxDao/QxDaoAsync.cpp
        ./src/QxDao/QxSqlRelationParams.cpp
@@ -528,6 +531,7 @@ else() # _QX_UNITY_BUILD
        ./src/QxSerialize/QJson/QxSerializeQJson_QxInvalidValueX.cpp
        ./src/QxSerialize/QJson/QxSerializeQJson_QxSqlQuery.cpp
        ./src/QxSerialize/QJson/QxSerializeQJson_QxTransaction.cpp
+       ./src/QxRestApi/QxRestApi.cpp
        ./src/QxService/IxParameter.cpp
        ./src/QxService/IxService.cpp
        ./src/QxService/QxConnect.cpp

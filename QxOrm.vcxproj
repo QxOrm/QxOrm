@@ -104,6 +104,7 @@
     <ClCompile Include="src\QxModelView\IxModel.cpp" />
     <ClCompile Include="src\QxModelView\QxModelRowCompare.cpp" />
     <ClCompile Include="src\QxModelView\QxNestedModel.cpp" />
+    <ClCompile Include="src\QxRestApi\QxRestApi.cpp" />
     <ClCompile Include="src\QxSerialize\QDataStream\QxSerializeQDataStream_primitive_type.cpp" />
     <ClCompile Include="src\QxSerialize\QDataStream\QxSerializeQDataStream_QObject.cpp" />
     <ClCompile Include="src\QxSerialize\QDataStream\QxSerializeQDataStream_QSqlError.cpp" />
@@ -178,6 +179,7 @@
     <ClCompile Include="src\QxDao\IxDao_Helper.cpp" />
     <ClCompile Include="src\QxDao\IxPersistable.cpp" />
     <ClCompile Include="src\QxDao\IxPersistableCollection.cpp" />
+    <ClCompile Include="src\QxDao\IxPersistableList.cpp" />
     <ClCompile Include="src\QxDao\IxSqlQueryBuilder.cpp" />
     <ClCompile Include="src\QxDao\IxSqlRelation.cpp" />
     <ClCompile Include="src\QxDao\QxDaoAsync.cpp" />
@@ -275,6 +277,7 @@
     <ClInclude Include="include\QxMemLeak\static_assert.h" />
     <ClInclude Include="include\QxMemLeak\static_mem_pool.h" />
     <ClInclude Include="include\QxRegister\QxVersion.h" />
+    <ClInclude Include="include\QxRestApi\QxRestApi.h" />
     <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_all_include.h" />
     <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_boost_optional.h" />
     <ClInclude Include="include\QxSerialize\QDataStream\QxSerializeQDataStream_boost_scoped_ptr.h" />
@@ -440,6 +443,7 @@
     <ClInclude Include="include\QxDao\IxDao_Helper.h" />
     <ClInclude Include="include\QxDao\IxPersistable.h" />
     <ClInclude Include="include\QxDao\IxPersistableCollection.h" />
+    <ClInclude Include="include\QxDao\IxPersistableList.h" />
     <ClInclude Include="include\QxDao\IxSqlQueryBuilder.h" />
     <ClInclude Include="include\QxDao\IxSqlRelation.h" />
     <ClInclude Include="include\QxDao\QxDao.h" />

@@ -104,8 +104,41 @@ qx_bool QxConvert_FromJson_Helper(const QJsonValue & j, qx::QxSqlQuery & t, cons
    QHash<QString, int> lstResultPosByKey;
    QVector< QVector<QVariant> > lstResultValues;
 
-   qx::cvt::from_json(obj.value("query"), t.m_sQuery);
-   qx::cvt::from_json(obj.value("list_values"), t.m_lstValue, format);
+   if (obj.contains("sql"))
+   {
+      QJsonValue jsonSql = obj.value("sql");
+      if (jsonSql.isString()) { t.m_sQuery.clear(); t.m_sQuery << jsonSql.toString(); }
+   }
+   else { qx::cvt::from_json(obj.value("query"), t.m_sQuery); }
+
+   if (obj.contains("params"))
+   {
+      QJsonArray arrParams = obj.value("params").toArray();
+      for (int i = 0; i < arrParams.count(); i++)
+      {
+         QJsonValue objParam = arrParams.at(i); if (! objParam.isObject()) { continue; }
+         QJsonObject jsonParam = objParam.toObject();
+         QSql::ParamType jsonParamType = QSql::In;
+         if (jsonParam.contains("type"))
+         {
+            QString paramType = jsonParam.value("type").toString();
+            if (paramType == "in") { jsonParamType = QSql::In; }
+            else if (paramType == "out") { jsonParamType = QSql::Out; }
+            else if (paramType == "in_out") { jsonParamType = QSql::InOut; }
+            else if (paramType == "binary") { jsonParamType = QSql::Binary; }
+         }
+         QString jsonParamKey; QVariant jsonParamValue;
+         qx::cvt::from_json(jsonParam.value("key"), jsonParamKey);
+         qx::cvt::from_json(jsonParam.value("value"), jsonParamValue);
+         if (jsonParamKey.isEmpty()) { t.bind(jsonParamValue, jsonParamType); }
+         else { t.bind(jsonParamKey, jsonParamValue, jsonParamType); }
+      }
+   }
+   else
+   {
+      qx::cvt::from_json(obj.value("list_values"), t.m_lstValue, format);
+   }
+
    t.m_iSqlElementIndex = qRound(obj.value("sql_element_index").toDouble());
    t.m_iParenthesisCount = qRound(obj.value("parenthesis_count").toDouble());
    t.m_bDistinct = obj.value("distinct").toBool();

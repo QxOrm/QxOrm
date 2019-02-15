@@ -73,6 +73,21 @@ inline void count(long & lCount, const qx::QxSqlQuery & query = qx::QxSqlQuery()
 
 /*!
  * \ingroup QxDao
+ * \brief Return the number of lines in the table (database) mapped to the C++ class T (registered into QxOrm context) and filtered by a user SQL query (with possibility to add relations to SQL query)
+ * \param lCount Output parameter with the number of lines in the table associated to the SQL query
+ * \param relation List of relationships keys to be fetched (eager fetch instead of default lazy fetch for a relation)
+ * \param query Define a user SQL query added to default SQL query builded by QxOrm library (optional parameter)
+ * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class (optional parameter)
+ *
+ * qx::dao::throwable::count_with_relation<T>() execute following SQL query :<br>
+ * <i>SELECT COUNT(*) FROM my_table</i> + <i>XXX_JOINS_XXX</i> + <i>WHERE my_query...</i>
+ */
+template <class T>
+inline void count_with_relation(long & lCount, const QStringList & relation, const qx::QxSqlQuery & query = qx::QxSqlQuery(), QSqlDatabase * pDatabase = NULL)
+{ QSqlError err = qx::dao::detail::QxDao_Count_WithRelation<T>::count(lCount, relation, query, pDatabase); if (err.isValid()) { throw qx::dao::sql_error(err); } }
+
+/*!
+ * \ingroup QxDao
  * \brief Insert an element or a list of elements into database
  * \param t Element (or list of elements) to be inserted into database
  * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class (optional parameter)

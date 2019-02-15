@@ -71,7 +71,7 @@ struct QxConvert_FromJson< std::shared_ptr<T> >
    static inline qx_bool fromJson(const QJsonValue & j, std::shared_ptr<T> & t, const QString & format)
    {
       if (j.isNull()) { t.reset(); return qx_bool(true); }
-      t.reset(new T()); return qx::cvt::from_json(j, (* t), format);
+      t = std::make_shared<T>(); return qx::cvt::from_json(j, (* t), format);
    }
 };
 

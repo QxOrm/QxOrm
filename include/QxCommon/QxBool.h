@@ -120,7 +120,7 @@ public:
    void fromString(const QString & s)
    {
       if (s.trimmed().isEmpty()) { (* this) = QxBool(); return; }
-      bool bValue = ((s.left(1) == "1") ? true : false);
+      bool bValue = s.startsWith("1");
       int iPos = s.indexOf("|", 2);
       if (iPos == -1) { (* this) = QxBool(bValue); return; }
       long lCode = s.mid(2, (iPos - 2)).toLong();

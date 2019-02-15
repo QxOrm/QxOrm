@@ -82,7 +82,7 @@ bool QxDaoAsync::asyncCount(const QString & className, const qx::QxSqlQuery & qu
    QMutexLocker locker(& m_mutex);
    if (m_pDaoParams) { QX_DAO_ASYNC_QUERY_ALREADY_RUNNING; return false; }
    if (! QxClassX::implementIxPersistable(className)) { qAssert(false); return false; }
-   m_pDaoParams.reset(new qx::dao::detail::QxDaoAsyncParams());
+   m_pDaoParams = std::make_shared<qx::dao::detail::QxDaoAsyncParams>();
    m_pDaoParams->daoAction = qx::dao::detail::QxDaoAsyncParams::dao_count;
    m_pDaoParams->className = className;
    m_pDaoParams->query = query;
@@ -95,7 +95,7 @@ bool QxDaoAsync::asyncFetchById(IxPersistable_ptr pToFetch, const QVariant & id 
 {
    QMutexLocker locker(& m_mutex);
    if (m_pDaoParams) { QX_DAO_ASYNC_QUERY_ALREADY_RUNNING; return false; }
-   m_pDaoParams.reset(new qx::dao::detail::QxDaoAsyncParams());
+   m_pDaoParams = std::make_shared<qx::dao::detail::QxDaoAsyncParams>();
    m_pDaoParams->daoAction = qx::dao::detail::QxDaoAsyncParams::dao_fetch_by_id;
    m_pDaoParams->pInstance = pToFetch;
    m_pDaoParams->id = id;
@@ -111,7 +111,7 @@ bool QxDaoAsync::asyncFetchAll(const QString & className, const QStringList & co
    QMutexLocker locker(& m_mutex);
    if (m_pDaoParams) { QX_DAO_ASYNC_QUERY_ALREADY_RUNNING; return false; }
    if (! QxClassX::implementIxPersistable(className)) { qAssert(false); return false; }
-   m_pDaoParams.reset(new qx::dao::detail::QxDaoAsyncParams());
+   m_pDaoParams = std::make_shared<qx::dao::detail::QxDaoAsyncParams>();
    m_pDaoParams->daoAction = qx::dao::detail::QxDaoAsyncParams::dao_fetch_all;
    m_pDaoParams->className = className;
    m_pDaoParams->listColumns = columns;
@@ -126,7 +126,7 @@ bool QxDaoAsync::asyncFetchByQuery(const QString & className, const qx::QxSqlQue
    QMutexLocker locker(& m_mutex);
    if (m_pDaoParams) { QX_DAO_ASYNC_QUERY_ALREADY_RUNNING; return false; }
    if (! QxClassX::implementIxPersistable(className)) { qAssert(false); return false; }
-   m_pDaoParams.reset(new qx::dao::detail::QxDaoAsyncParams());
+   m_pDaoParams = std::make_shared<qx::dao::detail::QxDaoAsyncParams>();
    m_pDaoParams->daoAction = qx::dao::detail::QxDaoAsyncParams::dao_fetch_by_query;
    m_pDaoParams->className = className;
    m_pDaoParams->query = query;
@@ -141,7 +141,7 @@ bool QxDaoAsync::asyncInsert(IxPersistable_ptr pToInsert, const QStringList & re
 {
    QMutexLocker locker(& m_mutex);
    if (m_pDaoParams) { QX_DAO_ASYNC_QUERY_ALREADY_RUNNING; return false; }
-   m_pDaoParams.reset(new qx::dao::detail::QxDaoAsyncParams());
+   m_pDaoParams = std::make_shared<qx::dao::detail::QxDaoAsyncParams>();
    m_pDaoParams->daoAction = qx::dao::detail::QxDaoAsyncParams::dao_insert;
    m_pDaoParams->pInstance = pToInsert;
    m_pDaoParams->listRelations = relation;
@@ -154,7 +154,7 @@ bool QxDaoAsync::asyncUpdate(IxPersistable_ptr pToUpdate, const qx::QxSqlQuery &
 {
    QMutexLocker locker(& m_mutex);
    if (m_pDaoParams) { QX_DAO_ASYNC_QUERY_ALREADY_RUNNING; return false; }
-   m_pDaoParams.reset(new qx::dao::detail::QxDaoAsyncParams());
+   m_pDaoParams = std::make_shared<qx::dao::detail::QxDaoAsyncParams>();
    m_pDaoParams->daoAction = qx::dao::detail::QxDaoAsyncParams::dao_update;
    m_pDaoParams->pInstance = pToUpdate;
    m_pDaoParams->query = query;
@@ -169,7 +169,7 @@ bool QxDaoAsync::asyncSave(IxPersistable_ptr pToSave, const QStringList & relati
 {
    QMutexLocker locker(& m_mutex);
    if (m_pDaoParams) { QX_DAO_ASYNC_QUERY_ALREADY_RUNNING; return false; }
-   m_pDaoParams.reset(new qx::dao::detail::QxDaoAsyncParams());
+   m_pDaoParams = std::make_shared<qx::dao::detail::QxDaoAsyncParams>();
    m_pDaoParams->daoAction = qx::dao::detail::QxDaoAsyncParams::dao_save;
    m_pDaoParams->pInstance = pToSave;
    m_pDaoParams->listRelations = relation;
@@ -182,7 +182,7 @@ bool QxDaoAsync::asyncDeleteById(IxPersistable_ptr pToDelete, const QVariant & i
 {
    QMutexLocker locker(& m_mutex);
    if (m_pDaoParams) { QX_DAO_ASYNC_QUERY_ALREADY_RUNNING; return false; }
-   m_pDaoParams.reset(new qx::dao::detail::QxDaoAsyncParams());
+   m_pDaoParams = std::make_shared<qx::dao::detail::QxDaoAsyncParams>();
    m_pDaoParams->daoAction = qx::dao::detail::QxDaoAsyncParams::dao_delete_by_id;
    m_pDaoParams->pInstance = pToDelete;
    m_pDaoParams->id = id;
@@ -196,7 +196,7 @@ bool QxDaoAsync::asyncDeleteAll(const QString & className, QSqlDatabase * pDatab
    QMutexLocker locker(& m_mutex);
    if (m_pDaoParams) { QX_DAO_ASYNC_QUERY_ALREADY_RUNNING; return false; }
    if (! QxClassX::implementIxPersistable(className)) { qAssert(false); return false; }
-   m_pDaoParams.reset(new qx::dao::detail::QxDaoAsyncParams());
+   m_pDaoParams = std::make_shared<qx::dao::detail::QxDaoAsyncParams>();
    m_pDaoParams->daoAction = qx::dao::detail::QxDaoAsyncParams::dao_delete_all;
    m_pDaoParams->className = className;
    m_pDaoParams->pDatabase = pDatabase;
@@ -209,7 +209,7 @@ bool QxDaoAsync::asyncDeleteByQuery(const QString & className, const qx::QxSqlQu
    QMutexLocker locker(& m_mutex);
    if (m_pDaoParams) { QX_DAO_ASYNC_QUERY_ALREADY_RUNNING; return false; }
    if (! QxClassX::implementIxPersistable(className)) { qAssert(false); return false; }
-   m_pDaoParams.reset(new qx::dao::detail::QxDaoAsyncParams());
+   m_pDaoParams = std::make_shared<qx::dao::detail::QxDaoAsyncParams>();
    m_pDaoParams->daoAction = qx::dao::detail::QxDaoAsyncParams::dao_delete_by_query;
    m_pDaoParams->className = className;
    m_pDaoParams->query = query;
@@ -222,7 +222,7 @@ bool QxDaoAsync::asyncDestroyById(IxPersistable_ptr pToDestroy, const QVariant &
 {
    QMutexLocker locker(& m_mutex);
    if (m_pDaoParams) { QX_DAO_ASYNC_QUERY_ALREADY_RUNNING; return false; }
-   m_pDaoParams.reset(new qx::dao::detail::QxDaoAsyncParams());
+   m_pDaoParams = std::make_shared<qx::dao::detail::QxDaoAsyncParams>();
    m_pDaoParams->daoAction = qx::dao::detail::QxDaoAsyncParams::dao_destroy_by_id;
    m_pDaoParams->pInstance = pToDestroy;
    m_pDaoParams->id = id;
@@ -236,7 +236,7 @@ bool QxDaoAsync::asyncDestroyAll(const QString & className, QSqlDatabase * pData
    QMutexLocker locker(& m_mutex);
    if (m_pDaoParams) { QX_DAO_ASYNC_QUERY_ALREADY_RUNNING; return false; }
    if (! QxClassX::implementIxPersistable(className)) { qAssert(false); return false; }
-   m_pDaoParams.reset(new qx::dao::detail::QxDaoAsyncParams());
+   m_pDaoParams = std::make_shared<qx::dao::detail::QxDaoAsyncParams>();
    m_pDaoParams->daoAction = qx::dao::detail::QxDaoAsyncParams::dao_destroy_all;
    m_pDaoParams->className = className;
    m_pDaoParams->pDatabase = pDatabase;
@@ -249,7 +249,7 @@ bool QxDaoAsync::asyncDestroyByQuery(const QString & className, const qx::QxSqlQ
    QMutexLocker locker(& m_mutex);
    if (m_pDaoParams) { QX_DAO_ASYNC_QUERY_ALREADY_RUNNING; return false; }
    if (! QxClassX::implementIxPersistable(className)) { qAssert(false); return false; }
-   m_pDaoParams.reset(new qx::dao::detail::QxDaoAsyncParams());
+   m_pDaoParams = std::make_shared<qx::dao::detail::QxDaoAsyncParams>();
    m_pDaoParams->daoAction = qx::dao::detail::QxDaoAsyncParams::dao_destroy_by_query;
    m_pDaoParams->className = className;
    m_pDaoParams->query = query;
@@ -263,7 +263,7 @@ bool QxDaoAsync::asyncExecuteQuery(const QString & className, qx::QxSqlQuery & q
    QMutexLocker locker(& m_mutex);
    if (m_pDaoParams) { QX_DAO_ASYNC_QUERY_ALREADY_RUNNING; return false; }
    if (! QxClassX::implementIxPersistable(className)) { qAssert(false); return false; }
-   m_pDaoParams.reset(new qx::dao::detail::QxDaoAsyncParams());
+   m_pDaoParams = std::make_shared<qx::dao::detail::QxDaoAsyncParams>();
    m_pDaoParams->daoAction = qx::dao::detail::QxDaoAsyncParams::dao_execute_query;
    m_pDaoParams->className = className;
    m_pDaoParams->query = query;
@@ -276,7 +276,7 @@ bool QxDaoAsync::asyncCallQuery(qx::QxSqlQuery & query, QSqlDatabase * pDatabase
 {
    QMutexLocker locker(& m_mutex);
    if (m_pDaoParams) { QX_DAO_ASYNC_QUERY_ALREADY_RUNNING; return false; }
-   m_pDaoParams.reset(new qx::dao::detail::QxDaoAsyncParams());
+   m_pDaoParams = std::make_shared<qx::dao::detail::QxDaoAsyncParams>();
    m_pDaoParams->daoAction = qx::dao::detail::QxDaoAsyncParams::dao_call_query;
    m_pDaoParams->query = query;
    m_pDaoParams->pDatabase = pDatabase;
@@ -325,7 +325,7 @@ QSqlError QxDaoAsyncRunner::runQuery(qx::dao::detail::QxDaoAsyncParams_ptr pDaoP
 
       switch (pDaoParams->daoAction)
       {
-         case qx::dao::detail::QxDaoAsyncParams::dao_count:             daoError = pInstance->qxCount(pDaoParams->daoCount, pDaoParams->query, pDatabase); break;
+         case qx::dao::detail::QxDaoAsyncParams::dao_count:             daoError = pInstance->qxCount(pDaoParams->daoCount, pDaoParams->query, pDatabase, pDaoParams->listRelations); break;
          case qx::dao::detail::QxDaoAsyncParams::dao_fetch_by_id:       daoError = pInstance->qxFetchById(pDaoParams->id, pDaoParams->listColumns, pDaoParams->listRelations, pDatabase); break;
          case qx::dao::detail::QxDaoAsyncParams::dao_fetch_all:         daoError = pInstance->qxFetchAll(pDaoParams->pListOfInstances.get(), pDaoParams->listColumns, pDaoParams->listRelations, pDatabase); break;
          case qx::dao::detail::QxDaoAsyncParams::dao_fetch_by_query:    daoError = pInstance->qxFetchByQuery(pDaoParams->query, pDaoParams->pListOfInstances.get(), pDaoParams->listColumns, pDaoParams->listRelations, pDatabase); break;

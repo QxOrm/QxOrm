@@ -125,7 +125,7 @@ public:
    // -- List of useful public methods available from 'qx::IxPersistable' interface (using QX_PERSISTABLE_HPP() and QX_PERSISTABLE_CPP() macros) -- //
 
 /*
-   virtual long qxCount(const qx::QxSqlQuery & query = qx::QxSqlQuery(), QSqlDatabase * pDatabase = NULL);
+   virtual long qxCount(const qx::QxSqlQuery & query = qx::QxSqlQuery(), QSqlDatabase * pDatabase = NULL, const QStringList & relation = QStringList());
    virtual QSqlError qxFetchById(const QVariant & id = QVariant(), const QStringList & columns = QStringList(), const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL);
    virtual QSqlError qxFetchAll(qx::IxCollection & list, const QStringList & columns = QStringList(), const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL);
    virtual QSqlError qxFetchByQuery(const qx::QxSqlQuery & query, qx::IxCollection & list, const QStringList & columns = QStringList(), const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL);
@@ -140,7 +140,7 @@ public:
    virtual QSqlError qxDestroyByQuery(const qx::QxSqlQuery & query, QSqlDatabase * pDatabase = NULL);
    virtual qx_bool qxExist(const QVariant & id = QVariant(), QSqlDatabase * pDatabase = NULL);
    virtual qx::QxInvalidValueX qxValidate(const QStringList & groups = QStringList());
-   virtual qx::IxPersistableCollection_ptr qxNewPersistableCollection() const;
+   virtual qx::IxPersistableCollection_ptr qxNewPersistableCollection(bool bAsList = false) const;
    virtual qx::IxClass * qxClass() const;
 */
 

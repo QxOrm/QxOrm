@@ -179,7 +179,7 @@ IxFunction_ptr bind_fct_7(const typename QxFunction_7<Owner, R, P1, P2, P3, P4, 
 {
    typedef std::is_same<Owner, void> qx_verify_owner_tmp;
    static_assert(qx_verify_owner_tmp::value, "qx_verify_owner_tmp::value");
-   IxFunction_ptr ptr; ptr.reset(new QxFunction_7<void, R, P1, P2, P3, P4, P5, P6, P7>(fct));
+   IxFunction_ptr ptr = std::make_shared<QxFunction_7<void, R, P1, P2, P3, P4, P5, P6, P7> >(fct);
    return ptr;
 }
 
@@ -188,7 +188,7 @@ IxFunction_ptr bind_member_fct_7(const typename QxFunction_7<Owner, R, P1, P2, P
 {
    typedef std::is_same<Owner, void> qx_verify_owner_tmp;
    static_assert(! qx_verify_owner_tmp::value, "! qx_verify_owner_tmp::value");
-   IxFunction_ptr ptr; ptr.reset(new QxFunction_7<Owner, R, P1, P2, P3, P4, P5, P6, P7>(fct));
+   IxFunction_ptr ptr = std::make_shared<QxFunction_7<Owner, R, P1, P2, P3, P4, P5, P6, P7> >(fct);
    return ptr;
 }
 

@@ -33,6 +33,8 @@
 
 #include <QxSerialize/QxSerializeCheckInstance.h>
 
+#include <QxDao/QxSqlRelationLinked.h>
+
 #include <QxMemLeak/mem_leak.h>
 
 namespace qx {
@@ -40,24 +42,57 @@ namespace serialization {
 namespace helper {
 
 QSet< QPair<Qt::HANDLE, qptrdiff> > QxSerializeCheckInstance::m_lstInstanceByThread;
+QHash<Qt::HANDLE, int> QxSerializeCheckInstance::m_hashLevelByThread;
+QHash<Qt::HANDLE, QxSerializeCheckInstance::type_hierarchy> QxSerializeCheckInstance::m_hashHierarchyByThread;
+QMutex QxSerializeCheckInstance::m_mutex;
 
 QxSerializeCheckInstance::QxSerializeCheckInstance(const void * pInstance) : m_pInstance(0), m_lThreadId(0)
 {
+   QMutexLocker locker(& m_mutex);
    m_pInstance = reinterpret_cast<qptrdiff>(const_cast<void *>(pInstance));
    m_lThreadId = QThread::currentThreadId(); qAssert(m_pInstance != 0);
    m_lstInstanceByThread.insert(qMakePair(m_lThreadId, m_pInstance));
+   int iLevel = (m_hashLevelByThread.value(m_lThreadId, 0) + 1);
+   m_hashLevelByThread.insert(m_lThreadId, iLevel);
 }
 
 QxSerializeCheckInstance::~QxSerializeCheckInstance()
 {
+   QMutexLocker locker(& m_mutex);
    m_lstInstanceByThread.remove(qMakePair(m_lThreadId, m_pInstance));
+   int iLevel = (m_hashLevelByThread.value(m_lThreadId, 0) - 1);
+   m_hashLevelByThread.insert(m_lThreadId, iLevel);
+   if (iLevel <= 0) { m_hashHierarchyByThread.remove(m_lThreadId); }
 }
 
 bool QxSerializeCheckInstance::contains(const void * pInstance)
 {
+   QMutexLocker locker(& m_mutex);
    Qt::HANDLE lCurrThreadId = QThread::currentThreadId();
    qptrdiff iInstance = reinterpret_cast<qptrdiff>(const_cast<void *>(pInstance));
    return m_lstInstanceByThread.contains(qMakePair(lCurrThreadId, iInstance));
+}
+
+bool QxSerializeCheckInstance::isRoot()
+{
+   QMutexLocker locker(& m_mutex);
+   Qt::HANDLE lThreadId = QThread::currentThreadId();
+   int iLevel = m_hashLevelByThread.value(lThreadId, 0); qAssert(iLevel >= 0);
+   return (iLevel == 0);
+}
+
+QxSerializeCheckInstance::type_hierarchy QxSerializeCheckInstance::getHierarchy()
+{
+   QMutexLocker locker(& m_mutex);
+   Qt::HANDLE lThreadId = QThread::currentThreadId();
+   return m_hashHierarchyByThread.value(lThreadId);
+}
+
+void QxSerializeCheckInstance::setHierarchy(const QxSerializeCheckInstance::type_hierarchy & hierarchy)
+{
+   QMutexLocker locker(& m_mutex);
+   Qt::HANDLE lThreadId = QThread::currentThreadId();
+   m_hashHierarchyByThread.insert(lThreadId, hierarchy);
 }
 
 } // namespace helper

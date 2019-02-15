@@ -87,21 +87,21 @@ template <> struct QxConvert_ToJson< QDateTime > {
 static inline QJsonValue toJson(const QDateTime & t, const QString & format)
 {
 #ifdef _QX_ENABLE_MONGODB
-   if ((t.isValid()) && (format.left(7) == "mongodb"))
+   if (t.isValid() && format.startsWith("mongodb"))
    {
-      QString dt = t.toString(Qt::ISODate); if (dt.count() <= 19) { dt += "Z"; }
+      QString dt = t.toString(QX_JSON_DATE_TIME_FORMAT); if (dt.count() <= QX_JSON_DATE_TIME_FORMAT_SIZE) { dt += "Z"; }
       QJsonObject obj; obj.insert("$date", QJsonValue(dt)); return QJsonValue(obj);
    }
 #endif // _QX_ENABLE_MONGODB
 
-   Q_UNUSED(format); if (t.isValid()) { return QJsonValue(t.toString(Qt::ISODate)); }; return QJsonValue(); }
+   Q_UNUSED(format); if (t.isValid()) { return QJsonValue(t.toString(QX_JSON_DATE_TIME_FORMAT)); }; return QJsonValue(); }
 };
 
 template <> struct QxConvert_ToJson< QDate > {
 static inline QJsonValue toJson(const QDate & t, const QString & format)
 {
 #ifdef _QX_ENABLE_MONGODB
-   if ((t.isValid()) && (format.left(7) == "mongodb"))
+   if (t.isValid() && format.startsWith("mongodb"))
    { QDateTime dt(t); return QxConvert_ToJson<QDateTime>::toJson(dt, format); }
 #endif // _QX_ENABLE_MONGODB
 
@@ -110,7 +110,7 @@ static inline QJsonValue toJson(const QDate & t, const QString & format)
 
 template <> struct QxConvert_ToJson< QTime > {
 static inline QJsonValue toJson(const QTime & t, const QString & format)
-{ Q_UNUSED(format); if (t.isValid()) { return QJsonValue(t.toString(Qt::ISODate)); }; return QJsonValue(); } };
+{ Q_UNUSED(format); if (t.isValid()) { return QJsonValue(t.toString(QX_JSON_DATE_TIME_FORMAT)); }; return QJsonValue(); } };
 
 template <> struct QxConvert_ToJson< QByteArray > {
 static inline QJsonValue toJson(const QByteArray & t, const QString & format)
@@ -120,7 +120,7 @@ template <> struct QxConvert_ToJson< QString > {
 static inline QJsonValue toJson(const QString & t, const QString & format)
 {
 #ifdef _QX_ENABLE_MONGODB
-   if ((t.left(7) == "qx_oid:") && (format.left(7) == "mongodb"))
+   if (t.startsWith("qx_oid:") && format.startsWith("mongodb"))
    { QJsonObject obj; obj.insert("$oid", QJsonValue(t.right(t.size() - 7))); return QJsonValue(obj); }
 #endif // _QX_ENABLE_MONGODB
 

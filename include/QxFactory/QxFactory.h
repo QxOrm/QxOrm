@@ -96,7 +96,7 @@ private:
    template <bool bIsAbstract /* = false */, int dummy>
    struct qxCreateInstance
    {
-      static inline qx::any create(bool bRawPointer)  { if (bRawPointer) { T * p = new T(); return qx::any(p); }; std::shared_ptr<T> ptr; ptr.reset(new T()); return qx::any(ptr); }
+      static inline qx::any create(bool bRawPointer)  { if (bRawPointer) { T * p = new T(); return qx::any(p); }; std::shared_ptr<T> ptr = std::make_shared<T>(); return qx::any(ptr); }
       static inline void * createNudePtr()            { return static_cast<void *>(new T()); }
    };
 

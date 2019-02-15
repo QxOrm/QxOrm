@@ -88,7 +88,7 @@ struct QxNestedModel_Helper
 {
 
    static std::shared_ptr<T> clone(T & t)
-   { std::shared_ptr<T> p; p.reset(new T()); (* p) = t; return p; }
+   { std::shared_ptr<T> p = std::make_shared<T>(); (* p) = t; return p; }
 
    static void synchronize(T & t1, T & t2)
    { t1 = t2; }

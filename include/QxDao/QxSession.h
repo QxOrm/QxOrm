@@ -246,7 +246,7 @@ public:
       IxDataMemberX * pDataMemberX = QxClass<T>::getSingleton()->getDataMemberX();
       IxDataMember * pDataMemberId = (pDataMemberX ? pDataMemberX->getId_WithDaoStrategy() : NULL);
       if (! pDataMemberId) { qAssert(false); return QSqlError(); }
-      std::shared_ptr<T> t; t.reset(new T());
+      std::shared_ptr<T> t = std::make_shared<T>();
       pDataMemberId->fromVariant(t.get(), id, -1, qx::cvt::context::e_database);
       QSqlError err = qx::dao::delete_by_id((* t), this->database());
       if (err.isValid()) { (* this) += err; }
@@ -283,7 +283,7 @@ public:
       IxDataMemberX * pDataMemberX = QxClass<T>::getSingleton()->getDataMemberX();
       IxDataMember * pDataMemberId = (pDataMemberX ? pDataMemberX->getId_WithDaoStrategy() : NULL);
       if (! pDataMemberId) { qAssert(false); return QSqlError(); }
-      std::shared_ptr<T> t; t.reset(new T());
+      std::shared_ptr<T> t = std::make_shared<T>();
       pDataMemberId->fromVariant(t.get(), id, -1, qx::cvt::context::e_database);
       QSqlError err = qx::dao::destroy_by_id((* t), this->database());
       if (err.isValid()) { (* this) += err; }

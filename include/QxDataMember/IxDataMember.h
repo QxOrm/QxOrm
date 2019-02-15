@@ -165,11 +165,11 @@ public:
    void setSqlPlaceHolder(QSqlQuery & query, void * pOwner, const QString & sAppend = QString(), const QString & sOtherName = QString(), bool bCheckFKPartOfPK = false) const;
    QString getSqlAliasEqualToPlaceHolder(const QString & sTable = QString(), bool bClauseWhere = false, const QString & sAppend = QString(), const QString & sSep = QString(" AND "), bool bCheckFKPartOfPK = false) const;
    QString getSqlNameEqualToPlaceHolder(const QString & sAppend = QString(), const QString & sSep = QString(" AND "), bool bCheckFKPartOfPK = false) const;
-   QString getSqlTablePointNameAsAlias(const QString & sTable, const QString & sSep = QString(", "), const QString & sSuffixAlias = QString(), bool bCheckFKPartOfPK = false) const;
+   QString getSqlTablePointNameAsAlias(const QString & sTable, const QString & sSep = QString(", "), const QString & sSuffixAlias = QString(), bool bCheckFKPartOfPK = false, const QString & sCustomAlias = QString()) const;
    QString getSqlName(const QString & sSep = QString(", "), const QString & sOtherName = QString(), bool bCheckFKPartOfPK = false) const;
    QString getSqlNameAndTypeAndParams(const QString & sSep = QString(", "), const QString & sOtherName = QString(), bool bCheckFKPartOfPK = false) const;
 
-   static QString getSqlFromTable(const QString & sTable);
+   static QString getSqlFromTable(const QString & sTable, const QString & sCustomAlias = QString());
    static QString getSqlTableName(const QString & sTable);
    static QString getSqlColumnName(const QString & sColumn);
 

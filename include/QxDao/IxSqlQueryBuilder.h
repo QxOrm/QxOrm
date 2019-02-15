@@ -124,6 +124,7 @@ public:
    static void sql_Insert(QString & sql, IxSqlQueryBuilder & builder);
    static void sql_Update(QString & sql, IxSqlQueryBuilder & builder);
    static void sql_Update(QString & sql, IxSqlQueryBuilder & builder, const QStringList & columns);
+   static void sql_Count_WithRelation(qx::QxSqlRelationLinked * pRelationX, QString & sql, IxSqlQueryBuilder & builder);
 
    static void resolveOutput_FetchAll(void * t, QSqlQuery & query, IxSqlQueryBuilder & builder);
    static void resolveOutput_FetchAll(void * t, QSqlQuery & query, IxSqlQueryBuilder & builder, const QStringList & columns);
@@ -136,9 +137,6 @@ public:
 protected:
 
    bool verifyColumns(const QStringList & columns) const QX_USED;
-
-   IxDataMember * isValid_DataMember(long lIndex) const;
-   IxDataMember * isValid_SqlRelation(long lIndex) const;
 
    bool isInitDone() const;
    QxSoftDelete & softDelete();

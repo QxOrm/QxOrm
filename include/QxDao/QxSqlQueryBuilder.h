@@ -434,6 +434,33 @@ public:
 
 /*!
  * \ingroup QxDao
+ * \brief qx::QxSqlQueryBuilder_Count_WithRelation<T> : concrete SQL query builder for class T to build a COUNT WITH RELATION SQL query
+ */
+template <class T>
+class QxSqlQueryBuilder_Count_WithRelation : public QxSqlQueryBuilder<T>
+{
+
+public:
+
+   typedef typename QxSqlQueryBuilder<T>::type_sql type_sql;
+
+   QxSqlQueryBuilder_Count_WithRelation() : QxSqlQueryBuilder<T>() { ; }
+   virtual ~QxSqlQueryBuilder_Count_WithRelation() { ; }
+
+   virtual IxSqlQueryBuilder & buildSql(const QStringList & columns = QStringList(), QxSqlRelationLinked * pRelationX = NULL)
+   {
+      Q_UNUSED(columns);
+      QX_SQL_BUILDER_INIT_FCT_WITH_RELATION("Count_WithRelation")
+      IxSqlQueryBuilder::sql_Count_WithRelation(pRelationX, sql, (* this));
+      IxSqlQueryBuilder::listSqlAlias().insert(key, this->listSqlQueryAlias());
+      this->setSqlQuery(sql, key);
+      return (* this);
+   }
+
+};
+
+/*!
+ * \ingroup QxDao
  * \brief qx::QxSqlQueryBuilder_FetchAll_WithRelation<T> : concrete SQL query builder for class T to build a FETCH ALL WITH RELATION SQL query
  */
 template <class T>

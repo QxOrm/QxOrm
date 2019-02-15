@@ -45,6 +45,7 @@
 
 #include <QxDao/QxSqlQuery.h>
 #include <QxDao/QxDao.h>
+#include <QxDao/QxSqlSaveMode.h>
 
 #include <QxRegister/QxClass.h>
 
@@ -89,24 +90,26 @@ public:
     * \brief Return the number of lines in the table (database) mapped to the current C++ class (registered into QxOrm context) and filtered by a user SQL query
     * \param query Define a user SQL query added to default SQL query builded by QxOrm library
     * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class
+    * \param relation List of relationships keys to be fetched (eager fetch instead of default lazy fetch for a relation)
     *
     * qx::IxPersistable * p = ...;<br>
     * p->qxCount(...) execute following SQL query :<br>
-    * <i>SELECT COUNT(*) FROM my_table</i> + <i>WHERE my_query...</i>
+    * <i>SELECT COUNT(*) FROM my_table</i> + <i>XXX_JOINS_XXX</i> + <i>WHERE my_query...</i>
     */
-   virtual long qxCount(const qx::QxSqlQuery & query = qx::QxSqlQuery(), QSqlDatabase * pDatabase = NULL) = 0;
+   virtual long qxCount(const qx::QxSqlQuery & query = qx::QxSqlQuery(), QSqlDatabase * pDatabase = NULL, const QStringList & relation = QStringList()) = 0;
 
    /*!
     * \brief Return the number of lines in the table (database) mapped to the current C++ class (registered into QxOrm context) and filtered by a user SQL query
     * \param lCount Output parameter with the number of lines in the table associated to the SQL query
     * \param query Define a user SQL query added to default SQL query builded by QxOrm library
     * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class
+    * \param relation List of relationships keys to be fetched (eager fetch instead of default lazy fetch for a relation)
     *
     * qx::IxPersistable * p = ...;<br>
     * p->qxCount(...) execute following SQL query :<br>
-    * <i>SELECT COUNT(*) FROM my_table</i> + <i>WHERE my_query...</i>
+    * <i>SELECT COUNT(*) FROM my_table</i> + <i>XXX_JOINS_XXX</i> + <i>WHERE my_query...</i>
     */
-   virtual QSqlError qxCount(long & lCount, const qx::QxSqlQuery & query = qx::QxSqlQuery(), QSqlDatabase * pDatabase = NULL) = 0;
+   virtual QSqlError qxCount(long & lCount, const qx::QxSqlQuery & query = qx::QxSqlQuery(), QSqlDatabase * pDatabase = NULL, const QStringList & relation = QStringList()) = 0;
 
    /*!
     * \brief Fetch current instance (retrieve all its properties) mapped to a table in the database (current instance must have a valid id before to be fetched without error, or pass the id to the first parameter of this method)
@@ -183,6 +186,7 @@ public:
     * \brief Insert (if no exist) or update (if already exist) current instance into database
     * \param relation List of relationships keys to insert or update in others tables of database : use "|" separator to put many relationships keys into this parameter
     * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class
+    * \param eSaveRecursiveMode Parameter to call qx::dao::save_with_relation_recursive function
     * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
     *
     * qx::IxPersistable * p = ...;<br>
@@ -191,7 +195,7 @@ public:
     * <br>or (if already exist into database) :<br>
     * <i>UPDATE my_table SET my_column_1 = ?, my_column_2 = ?, etc.</i>
     */
-   virtual QSqlError qxSave(const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL) = 0;
+   virtual QSqlError qxSave(const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL, qx::dao::save_mode::e_save_mode eSaveRecursiveMode = qx::dao::save_mode::e_none) = 0;
 
    /*!
     * \brief Delete current instance from database
@@ -312,9 +316,10 @@ public:
 
    /*!
     * \brief Create a new collection smart-pointer to fetch a list of items of current class type
+    * \param bAsList If true, returns a list (array) of persistent instances instead of key/value hash-map
     * \return Return a new collection smart-pointer to fetch a list of items of current class type
     */
-   virtual std::shared_ptr<qx::IxPersistableCollection> qxNewPersistableCollection() const = 0;
+   virtual std::shared_ptr<qx::IxPersistableCollection> qxNewPersistableCollection(bool bAsList = false) const = 0;
 
    /*!
     * \brief Access to introspection engine (or reflection engine) of QxOrm library
@@ -324,14 +329,16 @@ public:
 
 #ifndef _QX_NO_JSON
    virtual QString toJson(const QString & format = QString()) const = 0;
+   virtual QJsonValue toJson_(const QString & format = QString()) const = 0;
    virtual qx_bool fromJson(const QString & json, const QString & format = QString()) = 0;
+   virtual qx_bool fromJson_(const QJsonValue & json, const QString & format = QString()) = 0;
 #endif // _QX_NO_JSON
 
 public:
 
-   static std::shared_ptr<qx::IxPersistableCollection> qxFetchAll(const QString & className, const QStringList & columns = QStringList(), const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL);
-   static std::shared_ptr<qx::IxPersistableCollection> qxFetchByQuery(const QString & className, const qx::QxSqlQuery & query, const QStringList & columns = QStringList(), const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL);
-   static std::shared_ptr<qx::IxPersistableCollection> qxExecuteQuery(const QString & className, qx::QxSqlQuery & query, QSqlDatabase * pDatabase = NULL);
+   static std::shared_ptr<qx::IxPersistableCollection> qxFetchAll(const QString & className, const QStringList & columns = QStringList(), const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL, bool bAsList = false);
+   static std::shared_ptr<qx::IxPersistableCollection> qxFetchByQuery(const QString & className, const qx::QxSqlQuery & query, const QStringList & columns = QStringList(), const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL, bool bAsList = false);
+   static std::shared_ptr<qx::IxPersistableCollection> qxExecuteQuery(const QString & className, qx::QxSqlQuery & query, QSqlDatabase * pDatabase = NULL, bool bAsList = false);
 
 };
 
@@ -356,21 +363,23 @@ struct is_ix_persistable
 #ifndef _QX_NO_JSON
 #define QX_PERSISTABLE_JSON_HPP(className) \
 virtual QString toJson(const QString & format = QString()) const; \
-virtual qx_bool fromJson(const QString & json, const QString & format = QString());
+virtual QJsonValue toJson_(const QString & format = QString()) const; \
+virtual qx_bool fromJson(const QString & json, const QString & format = QString()); \
+virtual qx_bool fromJson_(const QJsonValue & json, const QString & format = QString());
 #else // _QX_NO_JSON
 #define QX_PERSISTABLE_JSON_HPP(className) /* Nothing */
 #endif // _QX_NO_JSON
 
 #define QX_PERSISTABLE_HPP(className) \
 public: \
-virtual long qxCount(const qx::QxSqlQuery & query = qx::QxSqlQuery(), QSqlDatabase * pDatabase = NULL); \
-virtual QSqlError qxCount(long & lCount, const qx::QxSqlQuery & query = qx::QxSqlQuery(), QSqlDatabase * pDatabase = NULL); \
+virtual long qxCount(const qx::QxSqlQuery & query = qx::QxSqlQuery(), QSqlDatabase * pDatabase = NULL, const QStringList & relation = QStringList()); \
+virtual QSqlError qxCount(long & lCount, const qx::QxSqlQuery & query = qx::QxSqlQuery(), QSqlDatabase * pDatabase = NULL, const QStringList & relation = QStringList()); \
 virtual QSqlError qxFetchById(const QVariant & id = QVariant(), const QStringList & columns = QStringList(), const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL); \
 virtual QSqlError qxFetchAll(qx::IxPersistableCollection * list = NULL, const QStringList & columns = QStringList(), const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL); \
 virtual QSqlError qxFetchByQuery(const qx::QxSqlQuery & query, qx::IxPersistableCollection * list = NULL, const QStringList & columns = QStringList(), const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL); \
 virtual QSqlError qxInsert(const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL); \
 virtual QSqlError qxUpdate(const qx::QxSqlQuery & query = qx::QxSqlQuery(), const QStringList & columns = QStringList(), const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL); \
-virtual QSqlError qxSave(const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL); \
+virtual QSqlError qxSave(const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL, qx::dao::save_mode::e_save_mode eSaveRecursiveMode = qx::dao::save_mode::e_none); \
 virtual QSqlError qxDeleteById(const QVariant & id = QVariant(), QSqlDatabase * pDatabase = NULL); \
 virtual QSqlError qxDeleteAll(QSqlDatabase * pDatabase = NULL); \
 virtual QSqlError qxDeleteByQuery(const qx::QxSqlQuery & query, QSqlDatabase * pDatabase = NULL); \
@@ -381,7 +390,7 @@ virtual QSqlError qxExecuteQuery(qx::QxSqlQuery & query, QSqlDatabase * pDatabas
 virtual QSqlError qxExecuteQuery(qx::QxSqlQuery & query, qx::IxPersistableCollection * list = NULL, QSqlDatabase * pDatabase = NULL); \
 virtual qx_bool qxExist(const QVariant & id = QVariant(), QSqlDatabase * pDatabase = NULL); \
 virtual qx::QxInvalidValueX qxValidate(const QStringList & groups = QStringList()); \
-virtual std::shared_ptr<qx::IxPersistableCollection> qxNewPersistableCollection() const; \
+virtual std::shared_ptr<qx::IxPersistableCollection> qxNewPersistableCollection(bool bAsList = false) const; \
 virtual qx::IxClass * qxClass() const; \
 QX_PERSISTABLE_JSON_HPP(className)
 
@@ -398,21 +407,25 @@ qx::QxPersistableCollectionHelper< className >::type_coll * list_typed = dynamic
 #ifndef _QX_NO_JSON
 #define QX_PERSISTABLE_JSON_CPP(className) \
 QString className::toJson(const QString & format) const { return qx::serialization::json::to_string((* this), 1, format); } \
-qx_bool className::fromJson(const QString & json, const QString & format) { return qx::serialization::json::from_string((* this), json, 1, format); }
+QJsonValue className::toJson_(const QString & format) const { return qx::cvt::to_json((* this), format); } \
+qx_bool className::fromJson(const QString & json, const QString & format) { return qx::serialization::json::from_string((* this), json, 1, format); } \
+qx_bool className::fromJson_(const QJsonValue & json, const QString & format) { return qx::cvt::from_json(json, (* this), format); }
 #else // _QX_NO_JSON
 #define QX_PERSISTABLE_JSON_CPP(className) /* Nothing */
 #endif // _QX_NO_JSON
 
 #define QX_PERSISTABLE_CPP(className) \
 \
-long className::qxCount(const qx::QxSqlQuery & query, QSqlDatabase * pDatabase) \
+long className::qxCount(const qx::QxSqlQuery & query, QSqlDatabase * pDatabase, const QStringList & relation) \
 { \
-   return qx::dao::count< className >(query, pDatabase); \
+   if (relation.count() == 0) { return qx::dao::count< className >(query, pDatabase); } \
+   else { long lCount(0); qx::dao::count_with_relation< className >(lCount, relation, query, pDatabase); return lCount; } \
 } \
 \
-QSqlError className::qxCount(long & lCount, const qx::QxSqlQuery & query, QSqlDatabase * pDatabase) \
+QSqlError className::qxCount(long & lCount, const qx::QxSqlQuery & query, QSqlDatabase * pDatabase, const QStringList & relation) \
 { \
-   return qx::dao::count< className >(lCount, query, pDatabase); \
+   if (relation.count() == 0) { return qx::dao::count< className >(lCount, query, pDatabase); } \
+   else { return qx::dao::count_with_relation< className >(lCount, relation, query, pDatabase); } \
 } \
 \
 QSqlError className::qxFetchById(const QVariant & id, const QStringList & columns, const QStringList & relation, QSqlDatabase * pDatabase) \
@@ -469,10 +482,11 @@ QSqlError className::qxUpdate(const qx::QxSqlQuery & query, const QStringList & 
    return err; \
 } \
 \
-QSqlError className::qxSave(const QStringList & relation, QSqlDatabase * pDatabase) \
+QSqlError className::qxSave(const QStringList & relation, QSqlDatabase * pDatabase, qx::dao::save_mode::e_save_mode eSaveRecursiveMode) \
 { \
    QSqlError err; \
-   if (relation.count() == 0) { err = qx::dao::save((* this), pDatabase); } \
+   if (eSaveRecursiveMode != qx::dao::save_mode::e_none) { err = qx::dao::save_with_relation_recursive((* this), eSaveRecursiveMode, pDatabase); } \
+   else if (relation.count() == 0) { err = qx::dao::save((* this), pDatabase); } \
    else { err = qx::dao::save_with_relation(relation, (* this), pDatabase); } \
    return err; \
 } \
@@ -554,11 +568,10 @@ qx::QxInvalidValueX className::qxValidate(const QStringList & groups) \
    return qx::validate((* this), groups); \
 } \
 \
-std::shared_ptr<qx::IxPersistableCollection> className::qxNewPersistableCollection() const \
+std::shared_ptr<qx::IxPersistableCollection> className::qxNewPersistableCollection(bool bAsList) const \
 { \
-   std::shared_ptr<qx::IxPersistableCollection> coll; \
-   coll.reset(new qx::QxPersistableCollectionHelper< className >::type()); \
-   return coll; \
+   if (bAsList) { std::shared_ptr<qx::IxPersistableCollection> coll = std::make_shared<qx::QxPersistableList< className > >(); return coll; } \
+   else { std::shared_ptr<qx::IxPersistableCollection> coll = std::make_shared<qx::QxPersistableCollectionHelper< className >::type>(); return coll; } \
 } \
 \
 qx::IxClass * className::qxClass() const \

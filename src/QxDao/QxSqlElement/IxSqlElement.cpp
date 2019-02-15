@@ -103,15 +103,15 @@ IxSqlElement_ptr create_sql_element(IxSqlElement::type_class e)
    IxSqlElement_ptr p;
    switch (e)
    {
-      case IxSqlElement::_sql_compare:          p.reset(new QxSqlCompare()); break;
-      case IxSqlElement::_sql_element_temp:     p.reset(new QxSqlElementTemp()); break;
-      case IxSqlElement::_sql_expression:       p.reset(new QxSqlExpression()); break;
-      case IxSqlElement::_sql_free_text:        p.reset(new QxSqlFreeText()); break;
-      case IxSqlElement::_sql_in:               p.reset(new QxSqlIn()); break;
-      case IxSqlElement::_sql_is_between:       p.reset(new QxSqlIsBetween()); break;
-      case IxSqlElement::_sql_is_null:          p.reset(new QxSqlIsNull()); break;
-      case IxSqlElement::_sql_limit:            p.reset(new QxSqlLimit()); break;
-      case IxSqlElement::_sql_sort:             p.reset(new QxSqlSort()); break;
+      case IxSqlElement::_sql_compare:          p = std::make_shared<QxSqlCompare>(); break;
+      case IxSqlElement::_sql_element_temp:     p = std::make_shared<QxSqlElementTemp>(); break;
+      case IxSqlElement::_sql_expression:       p = std::make_shared<QxSqlExpression>(); break;
+      case IxSqlElement::_sql_free_text:        p = std::make_shared<QxSqlFreeText>(); break;
+      case IxSqlElement::_sql_in:               p = std::make_shared<QxSqlIn>(); break;
+      case IxSqlElement::_sql_is_between:       p = std::make_shared<QxSqlIsBetween>(); break;
+      case IxSqlElement::_sql_is_null:          p = std::make_shared<QxSqlIsNull>(); break;
+      case IxSqlElement::_sql_limit:            p = std::make_shared<QxSqlLimit>(); break;
+      case IxSqlElement::_sql_sort:             p = std::make_shared<QxSqlSort>(); break;
       default:                                  qAssert(false);
    }
    return p;

@@ -87,6 +87,38 @@ struct QxDao_Count
 
 };
 
+template <class T>
+struct QxDao_Count_WithRelation
+{
+
+   static QSqlError count(long & lCount, const QStringList & relation, const qx::QxSqlQuery & query, QSqlDatabase * pDatabase)
+   {
+      T t; Q_UNUSED(t); lCount = 0;
+      qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "count with relation", new qx::QxSqlQueryBuilder_Count_WithRelation<T>());
+      if (! dao.isValid()) { return dao.error(); }
+      if (! dao.updateSqlRelationX(relation)) { return dao.errInvalidRelation(); }
+
+#ifdef _QX_ENABLE_MONGODB
+      if (dao.isMongoDB())
+      {
+         qx::dao::mongodb::QxMongoDB_Helper::count((& dao), dao.getDataMemberX()->getClass(), lCount, (& query)); if (! dao.isValid()) { return dao.error(); }
+         return dao.error();
+      }
+#endif // _QX_ENABLE_MONGODB
+
+      QStringList columns;
+      QString sql = dao.builder().buildSql(columns, dao.getSqlRelationLinked()).getSqlQuery();
+      if (sql.isEmpty()) { return dao.errEmpty(); }
+      if (! query.isEmpty()) { dao.addQuery(query, true); sql = dao.builder().getSqlQuery(); }
+      if (! dao.exec()) { return dao.errFailed(); }
+      if (! dao.nextRecord()) { return dao.errNoData(); }
+      lCount = static_cast<long>(dao.query().value(0).toLongLong());
+
+      return dao.error();
+   }
+
+};
+
 } // namespace detail
 } // namespace dao
 } // namespace qx

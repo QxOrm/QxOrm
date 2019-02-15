@@ -97,11 +97,17 @@ public:
    virtual bool __remove(long idx)                       { qx::QxCollection<Key, Value> * coll = this; return coll->removeByIndex(idx); }
    virtual qx::IxPersistable_ptr __at(long idx) const    { const qx::QxCollection<Key, Value> * coll = this; Value val = coll->getByIndex(idx); return std::static_pointer_cast<qx::IxPersistable>(val); }
 
-   virtual long qxCount(const qx::QxSqlQuery & query = qx::QxSqlQuery(), QSqlDatabase * pDatabase = NULL)
-   { return qx::dao::count<T>(query, pDatabase); }
+   virtual long qxCount(const qx::QxSqlQuery & query = qx::QxSqlQuery(), QSqlDatabase * pDatabase = NULL, const QStringList & relation = QStringList())
+   {
+      if (relation.count() == 0) { return qx::dao::count<T>(query, pDatabase); }
+      else { long lCount(0); qx::dao::count_with_relation<T>(lCount, relation, query, pDatabase); return lCount; }
+   }
 
-   virtual QSqlError qxCount(long & lCount, const qx::QxSqlQuery & query = qx::QxSqlQuery(), QSqlDatabase * pDatabase = NULL)
-   { return qx::dao::count<T>(lCount, query, pDatabase); }
+   virtual QSqlError qxCount(long & lCount, const qx::QxSqlQuery & query = qx::QxSqlQuery(), QSqlDatabase * pDatabase = NULL, const QStringList & relation = QStringList())
+   {
+      if (relation.count() == 0) { return qx::dao::count<T>(lCount, query, pDatabase); }
+      else { return qx::dao::count_with_relation<T>(lCount, relation, query, pDatabase); }
+   }
 
    virtual QSqlError qxFetchById(const QVariant & id = QVariant(), const QStringList & columns = QStringList(), const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL)
    {
@@ -143,10 +149,11 @@ public:
       return err;
    }
 
-   virtual QSqlError qxSave(const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL)
+   virtual QSqlError qxSave(const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL, qx::dao::save_mode::e_save_mode eSaveRecursiveMode = qx::dao::save_mode::e_none)
    {
       QSqlError err; qx::QxCollection<Key, Value> * coll = this;
-      if (relation.count() == 0) { err = qx::dao::save((* coll), pDatabase); }
+      if (eSaveRecursiveMode != qx::dao::save_mode::e_none) { err = qx::dao::save_with_relation_recursive((* coll), eSaveRecursiveMode, pDatabase); }
+      else if (relation.count() == 0) { err = qx::dao::save((* coll), pDatabase); }
       else { err = qx::dao::save_with_relation(relation, (* coll), pDatabase); }
       return err;
    }
@@ -181,8 +188,8 @@ public:
    virtual qx::QxInvalidValueX qxValidate(const QStringList & groups = QStringList())
    { qx::QxCollection<Key, Value> * coll = this; return qx::validate((* coll), groups); }
 
-   virtual std::shared_ptr<qx::IxPersistableCollection> qxNewPersistableCollection() const
-   { std::shared_ptr<qx::IxPersistableCollection> coll; coll.reset(new qx::QxPersistableCollection<Key, Value, T>()); return coll; }
+   virtual std::shared_ptr<qx::IxPersistableCollection> qxNewPersistableCollection(bool bAsList = false) const
+   { Q_UNUSED(bAsList); std::shared_ptr<qx::IxPersistableCollection> coll = std::make_shared<qx::QxPersistableCollection<Key, Value, T> >(); return coll; }
 
    virtual qx::IxClass * qxClass() const
    { return qx::QxClass<T>::getSingleton(); }
@@ -192,8 +199,14 @@ public:
    virtual QString toJson(const QString & format = QString()) const
    { const qx::QxCollection<Key, Value> * coll = this; return qx::serialization::json::to_string((* coll), 1, format); }
 
+   virtual QJsonValue toJson_(const QString & format = QString()) const
+   { const qx::QxCollection<Key, Value> * coll = this; return qx::cvt::to_json((* coll), format); }
+
    virtual qx_bool fromJson(const QString & json, const QString & format = QString())
    { qx::QxCollection<Key, Value> * coll = this; return qx::serialization::json::from_string((* coll), json, 1, format); }
+
+   virtual qx_bool fromJson_(const QJsonValue & json, const QString & format = QString())
+   { qx::QxCollection<Key, Value> * coll = this; return qx::cvt::from_json(json, (* coll), format); }
 
 #endif // _QX_NO_JSON
 

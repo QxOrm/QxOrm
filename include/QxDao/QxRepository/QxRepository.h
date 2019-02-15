@@ -180,7 +180,7 @@ public:
       IxDataMemberX * pDataMemberX = QxClass<T>::getSingleton()->getDataMemberX();
       IxDataMember * pDataMemberId = (pDataMemberX ? pDataMemberX->getId_WithDaoStrategy() : NULL);
       if (! pDataMemberId) { qAssert(false); return QSqlError(); }
-      std::shared_ptr<T> t; t.reset(new T());
+      std::shared_ptr<T> t = std::make_shared<T>();
       pDataMemberId->fromVariant(t.get(), id, -1, qx::cvt::context::e_database);
       QSqlError err = qx::dao::delete_by_id((* t), this->database());
       if (err.isValid() && m_pSession) { (* m_pSession) += err; }
@@ -214,7 +214,7 @@ public:
       IxDataMemberX * pDataMemberX = QxClass<T>::getSingleton()->getDataMemberX();
       IxDataMember * pDataMemberId = (pDataMemberX ? pDataMemberX->getId_WithDaoStrategy() : NULL);
       if (! pDataMemberId) { qAssert(false); return QSqlError(); }
-      std::shared_ptr<T> t; t.reset(new T());
+      std::shared_ptr<T> t = std::make_shared<T>();
       pDataMemberId->fromVariant(t.get(), id, -1, qx::cvt::context::e_database);
       QSqlError err = qx::dao::destroy_by_id((* t), this->database());
       if (err.isValid() && m_pSession) { (* m_pSession) += err; }
@@ -401,8 +401,7 @@ public:
 
    virtual qx::IxCollection_ptr _newCollection() const
    {
-      qx::IxCollection_ptr lst;
-      lst.reset(new type_collection_boost());
+      qx::IxCollection_ptr lst = std::make_shared<type_collection_boost>();
       return lst;
    }
 

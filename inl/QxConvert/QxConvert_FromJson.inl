@@ -87,22 +87,22 @@ template <> struct QxConvert_FromJson< QDateTime > {
 static inline qx_bool fromJson(const QJsonValue & j, QDateTime & t, const QString & format)
 {
 #ifdef _QX_ENABLE_MONGODB
-   if ((j.isObject()) && (format.left(7) == "mongodb"))
+   if (j.isObject() && format.startsWith("mongodb"))
    {
       QJsonObject obj = j.toObject(); QString dt;
       if (obj.contains("$date")) { dt = obj.value("$date").toString(); }
-      if (! dt.isEmpty()) { t = QDateTime::fromString(dt, Qt::ISODate); return qx_bool(true); }
+      if (! dt.isEmpty()) { t = QDateTime::fromString(dt, QX_JSON_DATE_TIME_FORMAT); return qx_bool(true); }
    }
 #endif // _QX_ENABLE_MONGODB
 
-   Q_UNUSED(format); t = (j.isNull() ? QDateTime() : QDateTime::fromString(j.toString(), Qt::ISODate)); return qx_bool(true); }
+   Q_UNUSED(format); t = (j.isNull() ? QDateTime() : QDateTime::fromString(j.toString(), QX_JSON_DATE_TIME_FORMAT)); return qx_bool(true); }
 };
 
 template <> struct QxConvert_FromJson< QDate > {
 static inline qx_bool fromJson(const QJsonValue & j, QDate & t, const QString & format)
 {
 #ifdef _QX_ENABLE_MONGODB
-   if ((j.isObject()) && (format.left(7) == "mongodb"))
+   if (j.isObject() && format.startsWith("mongodb"))
    { QDateTime dt; QxConvert_FromJson<QDateTime>::fromJson(j, dt, format); t = dt.date(); return qx_bool(true); }
 #endif // _QX_ENABLE_MONGODB
 
@@ -111,7 +111,7 @@ static inline qx_bool fromJson(const QJsonValue & j, QDate & t, const QString & 
 
 template <> struct QxConvert_FromJson< QTime > {
 static inline qx_bool fromJson(const QJsonValue & j, QTime & t, const QString & format)
-{ Q_UNUSED(format); t = (j.isNull() ? QTime() : QTime::fromString(j.toString(), Qt::ISODate)); return qx_bool(true); } };
+{ Q_UNUSED(format); t = (j.isNull() ? QTime() : QTime::fromString(j.toString(), QX_JSON_DATE_TIME_FORMAT)); return qx_bool(true); } };
 
 template <> struct QxConvert_FromJson< QByteArray > {
 static inline qx_bool fromJson(const QJsonValue & j, QByteArray & t, const QString & format)
@@ -123,7 +123,7 @@ static inline qx_bool fromJson(const QJsonValue & j, QString & t, const QString 
    Q_UNUSED(format); t = j.toString();
 
 #ifdef _QX_ENABLE_MONGODB
-   if (t.isEmpty() && j.isObject() && (format.left(7) == "mongodb"))
+   if (t.isEmpty() && j.isObject() && format.startsWith("mongodb"))
    {
       QJsonObject obj = j.toObject();
       if (obj.contains("$oid")) { t = obj.value("$oid").toString(); }

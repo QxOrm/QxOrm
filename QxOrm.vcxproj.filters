@@ -201,6 +201,12 @@
     <Filter Include="src\QxDao\QxMongoDB">
       <UniqueIdentifier>{0a5ab864-95c9-4876-a256-dce6bd8e0f66}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\QxRestApi">
+      <UniqueIdentifier>{b6c3763f-61b2-494b-9bf0-2b4a4d02d9cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\QxRestApi">
+      <UniqueIdentifier>{cabb7f38-d125-4258-8771-312714c9b107}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -336,6 +342,9 @@
       <Filter>src\QxDao</Filter>
     </ClCompile>
     <ClCompile Include="src\QxDao\IxPersistableCollection.cpp">
+      <Filter>src\QxDao</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QxDao\IxPersistableList.cpp">
       <Filter>src\QxDao</Filter>
     </ClCompile>
     <ClCompile Include="src\QxDao\IxSqlQueryBuilder.cpp">
@@ -586,6 +595,9 @@
     </ClCompile>
     <ClCompile Include="src\QxDao\QxMongoDB\QxMongoDB_Helper.cpp">
       <Filter>src\QxDao\QxMongoDB</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QxRestApi\QxRestApi.cpp">
+      <Filter>src\QxRestApi</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -884,6 +896,9 @@
       <Filter>include\QxDao</Filter>
     </ClInclude>
     <ClInclude Include="include\QxDao\IxPersistableCollection.h">
+      <Filter>include\QxDao</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxDao\IxPersistableList.h">
       <Filter>include\QxDao</Filter>
     </ClInclude>
     <ClInclude Include="include\QxDao\IxSqlQueryBuilder.h">
@@ -1695,6 +1710,9 @@
     </ClInclude>
     <ClInclude Include="include\QxSerialize\QJson\QxSerializeQJson_QVariantMap.h">
       <Filter>include\QxSerialize\QJson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxRestApi\QxRestApi.h">
+      <Filter>include\QxRestApi</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

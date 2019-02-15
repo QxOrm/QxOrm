@@ -679,12 +679,12 @@ qx::dao::detail::IxSqlGenerator * QxSqlDatabase::getSqlGenerator()
    if (m_pImpl->m_pSqlGenerator) { return m_pImpl->m_pSqlGenerator.get(); }
    QMutexLocker locker(& m_pImpl->m_oDbMutex);
 
-   if (m_pImpl->m_sDriverName == "QMYSQL")         { m_pImpl->m_pSqlGenerator.reset(new qx::dao::detail::QxSqlGenerator_MySQL()); }
-   else if (m_pImpl->m_sDriverName == "QPSQL")     { m_pImpl->m_pSqlGenerator.reset(new qx::dao::detail::QxSqlGenerator_PostgreSQL()); }
-   else if (m_pImpl->m_sDriverName == "QSQLITE")   { m_pImpl->m_pSqlGenerator.reset(new qx::dao::detail::QxSqlGenerator_SQLite()); }
-   else if (m_pImpl->m_sDriverName == "QOCI")      { m_pImpl->m_pSqlGenerator.reset(new qx::dao::detail::QxSqlGenerator_Oracle()); }
+   if (m_pImpl->m_sDriverName == "QMYSQL")         { m_pImpl->m_pSqlGenerator = std::make_shared<qx::dao::detail::QxSqlGenerator_MySQL>(); }
+   else if (m_pImpl->m_sDriverName == "QPSQL")     { m_pImpl->m_pSqlGenerator = std::make_shared<qx::dao::detail::QxSqlGenerator_PostgreSQL>(); }
+   else if (m_pImpl->m_sDriverName == "QSQLITE")   { m_pImpl->m_pSqlGenerator = std::make_shared<qx::dao::detail::QxSqlGenerator_SQLite>(); }
+   else if (m_pImpl->m_sDriverName == "QOCI")      { m_pImpl->m_pSqlGenerator = std::make_shared<qx::dao::detail::QxSqlGenerator_Oracle>(); }
 
-   if (! m_pImpl->m_pSqlGenerator) { m_pImpl->m_pSqlGenerator.reset(new qx::dao::detail::QxSqlGenerator_Standard()); }
+   if (! m_pImpl->m_pSqlGenerator) { m_pImpl->m_pSqlGenerator = std::make_shared<qx::dao::detail::QxSqlGenerator_Standard>(); }
    m_pImpl->m_pSqlGenerator->init();
    return m_pImpl->m_pSqlGenerator.get();
 }

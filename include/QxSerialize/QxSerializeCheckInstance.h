@@ -48,6 +48,12 @@
 #include <QtCore/qthread.h>
 
 namespace qx {
+
+class QxSqlRelationLinked;
+
+} // namespace qx
+
+namespace qx {
 namespace serialization {
 namespace helper {
 
@@ -58,9 +64,16 @@ namespace helper {
 class QX_DLL_EXPORT QxSerializeCheckInstance
 {
 
+public:
+
+   typedef QPair<std::shared_ptr<qx::QxSqlRelationLinked>, QString> type_hierarchy;
+
 protected:
 
    static QSet< QPair<Qt::HANDLE, qptrdiff> > m_lstInstanceByThread;    //!< List of all instances currently used by a serialization process
+   static QHash<Qt::HANDLE, int> m_hashLevelByThread;                   //!< Manage how deep level is serialization process
+   static QHash<Qt::HANDLE, type_hierarchy> m_hashHierarchyByThread;    //!< Store current hierarchy used by serialization process
+   static QMutex m_mutex;                                               //!< Mutex => qx::serialization::helper::QxSerializeCheckInstance is thread-safe
 
    qptrdiff m_pInstance;      //!< Instance associated to this helper class
    Qt::HANDLE m_lThreadId;    //!< Thread id associated to this helper class
@@ -71,6 +84,10 @@ public:
    virtual ~QxSerializeCheckInstance();
 
    static bool contains(const void * pInstance);
+   static bool isRoot();
+
+   static type_hierarchy getHierarchy();
+   static void setHierarchy(const type_hierarchy & hierarchy);
 
 };
 

@@ -69,8 +69,7 @@ public:
    template <class DataType>
    IxValidator * add_RecursiveValidator(const QString & sPropertyKey, const QString & sGroup = QString())
    {
-      IxValidator_ptr pValidator;
-      pValidator.reset(new QxValidator_Recursive<DataType, T>());
+      IxValidator_ptr pValidator = std::make_shared<QxValidator_Recursive<DataType, T> >();
       pValidator->setGroup(sGroup);
       pValidator->setDataMember(getDataMember(sPropertyKey));
       insertIntoGroup(pValidator, sGroup);

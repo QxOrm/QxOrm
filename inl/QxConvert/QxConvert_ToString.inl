@@ -163,6 +163,23 @@ static inline QString toString(const std::wstring & t, const QString & format, i
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); Q_UNUSED(t); qAssert(false); /* Need STL compatibility ! */ return QString(); } };
 #endif // ((! defined(QT_NO_STL)) && (! defined(QT_NO_STL_WCHAR)))
 
+#ifndef _QX_NO_JSON
+
+template <>
+struct QxConvert_ToString< QJsonValue >
+{
+   static inline QString toString(const QJsonValue & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
+   {
+      Q_UNUSED(index); Q_UNUSED(ctx);
+      QJsonDocument::JsonFormat jsonFormat = QJsonDocument::Compact;
+      if (! format.isEmpty()) { jsonFormat = ((format == "indented") ? QJsonDocument::Indented : jsonFormat); }
+      QJsonDocument doc = (t.isArray() ? QJsonDocument(t.toArray()) : QJsonDocument(t.toObject()));
+      return QString::fromUtf8(doc.toJson(jsonFormat));
+   }
+};
+
+#endif // _QX_NO_JSON
+
 #ifdef _QX_ENABLE_BOOST
 
 template <typename T> struct QxConvert_ToString< boost::optional<T> > {

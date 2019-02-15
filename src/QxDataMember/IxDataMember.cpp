@@ -503,12 +503,12 @@ QString IxDataMember::getSqlNameEqualToPlaceHolder(const QString & sAppend /* = 
    return sResult;
 }
 
-QString IxDataMember::getSqlTablePointNameAsAlias(const QString & sTable, const QString & sSep /* = QString(", ") */, const QString & sSuffixAlias /* = QString() */, bool bCheckFKPartOfPK /* = false */) const
+QString IxDataMember::getSqlTablePointNameAsAlias(const QString & sTable, const QString & sSep /* = QString(", ") */, const QString & sSuffixAlias /* = QString() */, bool bCheckFKPartOfPK /* = false */, const QString & sCustomAlias /* = QString() */) const
 {
    QString sResult;
    int iIndexNameFK = 0;
    IxSqlRelation * pRelation = NULL;
-   QString sTableAlias = sTable;
+   QString sTableAlias = (sCustomAlias.isEmpty() ? sTable : sCustomAlias);
    sTableAlias.replace(".", "_");
    sTableAlias = getSqlTableName(sTableAlias);
 
@@ -519,7 +519,7 @@ QString IxDataMember::getSqlTablePointNameAsAlias(const QString & sTable, const 
    for (int i = 0; i < m_pImpl->m_lstNames.count(); i++)
    {
       if (bCheckFKPartOfPK && m_pImpl->m_bIsPrimaryKey && isThereRelationPartOfPrimaryKey(i, pRelation, iIndexNameFK)) { continue; }
-      sResult += sTableAlias + "." + getSqlColumnName(getName(i)) + sTableAliasSep + getSqlAlias(sTable, false, i) + sSuffixAlias + sSep;
+      sResult += sTableAlias + "." + getSqlColumnName(getName(i)) + sTableAliasSep + getSqlAlias((sCustomAlias.isEmpty() ? sTable : sCustomAlias), false, i) + sSuffixAlias + sSep;
    }
 
    if (! sResult.isEmpty())
@@ -561,10 +561,10 @@ QString IxDataMember::getSqlNameAndTypeAndParams(const QString & sSep /* = QStri
    return sResult;
 }
 
-QString IxDataMember::getSqlFromTable(const QString & sTable)
+QString IxDataMember::getSqlFromTable(const QString & sTable, const QString & sCustomAlias /* = QString() */)
 {
-   if (! sTable.contains(".")) { return getSqlTableName(sTable); }
-   QString sTableAlias = sTable;
+   if (sCustomAlias.isEmpty() && ! sTable.contains(".")) { return getSqlTableName(sTable); }
+   QString sTableAlias = (sCustomAlias.isEmpty() ? sTable : sCustomAlias);
    sTableAlias.replace(".", "_");
 
    QString sTableAliasSep = " AS ";

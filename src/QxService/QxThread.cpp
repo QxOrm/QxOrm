@@ -112,7 +112,7 @@ void QxThread::doProcess(QTcpSocket & socket)
 qx_bool QxThread::readSocket(QTcpSocket & socket)
 {
    quint32 uiTransactionSize = 0;
-   m_pTransaction.reset(new QxTransaction());
+   m_pTransaction = std::make_shared<QxTransaction>();
    qx_bool bReadOk = QxTools::readSocket(socket, (* m_pTransaction), uiTransactionSize);
    if (! bReadOk) { m_pTransaction.reset(); return bReadOk; }
    m_pTransaction->setInputTransactionSize(uiTransactionSize);

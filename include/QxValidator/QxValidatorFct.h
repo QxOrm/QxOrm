@@ -186,8 +186,8 @@ template <class T>
 QxInvalidValueX validate(T & t, const QStringList & groups)
 {
    QxInvalidValueX invalidValues;
-   for (long l = 0; l < groups.count(); l++)
-   { invalidValues.insert(qx::validate(t, groups.at(l))); }
+   if (groups.count() <= 0) { return qx::validate(t); }
+   for (long l = 0; l < groups.count(); l++) { invalidValues.insert(qx::validate(t, groups.at(l))); }
    return invalidValues;
 }
 

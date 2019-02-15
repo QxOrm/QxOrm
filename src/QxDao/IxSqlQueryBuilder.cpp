@@ -36,6 +36,8 @@
 #include <QxDao/QxSqlRelationParams.h>
 #include <QxDao/QxSqlGenerator/IxSqlGenerator.h>
 
+#include <QxRegister/IxClass.h>
+
 #include <QxMemLeak/mem_leak.h>
 
 namespace qx {
@@ -154,14 +156,11 @@ void IxSqlQueryBuilder::clone(const IxSqlQueryBuilder & other)
 
 void IxSqlQueryBuilder::init()
 {
-   if (! m_pImpl->m_pDataMemberX || m_pImpl->m_bInitDone) { return; }
+   if (! m_pImpl->m_pDataMemberX || ! m_pImpl->m_pDataMemberX->getClass() || m_pImpl->m_bInitDone) { return; }
    m_pImpl->m_pDataMemberId = m_pImpl->m_pDataMemberX->getId_WithDaoStrategy();
    m_pImpl->m_sTableName = m_pImpl->m_pDataMemberX->getName();
-   m_pImpl->m_lstDataMemberPtr.reset(new QxCollection<QString, IxDataMember *>());
-   m_pImpl->m_lstSqlRelationPtr.reset(new IxSqlRelationX());
-   IxDataMember * p = NULL; long lCount = m_pImpl->m_pDataMemberX->count_WithDaoStrategy();
-   for (long l = 0; l < lCount; ++l) { if ((p = isValid_DataMember(l))) { m_pImpl->m_lstDataMemberPtr->insert(p->getKey(), p); } }
-   for (long l = 0; l < lCount; ++l) { if ((p = isValid_SqlRelation(l))) { m_pImpl->m_lstSqlRelationPtr->insert(p->getKey(), p->getSqlRelation()); } }
+   m_pImpl->m_lstDataMemberPtr = m_pImpl->m_pDataMemberX->getClass()->getSqlDataMemberX();
+   m_pImpl->m_lstSqlRelationPtr = m_pImpl->m_pDataMemberX->getClass()->getSqlRelationX();
    m_pImpl->m_bInitDone = true;
 }
 
@@ -189,7 +188,7 @@ void IxSqlQueryBuilder::displaySqlQuery(int time_ms /* = -1 */, int time_db /* =
 void IxSqlQueryBuilder::initIdX(long lAllRelationCount)
 {
    if (! m_pImpl->m_bCartesianProduct) { qAssert(false); return; }
-   m_pImpl->m_pIdX.reset(new IxSqlQueryBuilderImpl::type_lst_ptr_by_id());
+   m_pImpl->m_pIdX = std::make_shared<IxSqlQueryBuilderImpl::type_lst_ptr_by_id>();
    for (long l = 0; l < (lAllRelationCount + 1); ++l)
    { IxSqlQueryBuilderImpl::type_ptr_by_id_ptr pItem = IxSqlQueryBuilderImpl::type_ptr_by_id_ptr(new IxSqlQueryBuilderImpl::type_ptr_by_id()); m_pImpl->m_pIdX->append(pItem); }
 }
@@ -266,22 +265,6 @@ bool IxSqlQueryBuilder::verifyColumns(const QStringList & columns) const
    Q_UNUSED(columns);
    return true;
 #endif // _QX_MODE_DEBUG
-}
-
-IxDataMember * IxSqlQueryBuilder::isValid_DataMember(long lIndex) const
-{
-   IxDataMember * p = m_pImpl->m_pDataMemberX->get_WithDaoStrategy(lIndex);
-   bool bValid = (p && p->getDao() && ! p->hasSqlRelation());
-   bValid = (bValid && (p != m_pImpl->m_pDataMemberId));
-   return (bValid ? p : NULL);
-}
-
-IxDataMember * IxSqlQueryBuilder::isValid_SqlRelation(long lIndex) const
-{
-   IxDataMember * p = m_pImpl->m_pDataMemberX->get_WithDaoStrategy(lIndex);
-   bool bIsValid = (p && p->getDao() && p->hasSqlRelation());
-   if (bIsValid) { p->getSqlRelation()->init(); }
-   return (bIsValid ? p : NULL);
 }
 
 void IxSqlQueryBuilder::sql_CreateTable(QString & sql, IxSqlQueryBuilder & builder)
@@ -377,16 +360,16 @@ void IxSqlQueryBuilder::sql_FetchAll_WithRelation(qx::QxSqlRelationLinked * pRel
    qx::QxSoftDelete oSoftDelete = builder.getSoftDelete();
    QString table = builder.table();
    sql = "SELECT ";
-   if (pId) { sql += (pId->getSqlTablePointNameAsAlias(table) + ", "); }
-   while ((p = builder.nextData(l))) { if (pRelationX->checkRootColumns(p->getKey())) { sql += (p->getSqlTablePointNameAsAlias(table) + ", "); } }
-   if (! oSoftDelete.isEmpty()) { l++; sql += (oSoftDelete.buildSqlTablePointName() + ", "); }
+   if (pId) { sql += (pId->getSqlTablePointNameAsAlias(table, ", ", "", false, pRelationX->getRootCustomAlias()) + ", "); }
+   while ((p = builder.nextData(l))) { if (pRelationX->checkRootColumns(p->getKey())) { sql += (p->getSqlTablePointNameAsAlias(table, ", ", "", false, pRelationX->getRootCustomAlias()) + ", "); } }
+   if (! oSoftDelete.isEmpty()) { l++; sql += (oSoftDelete.buildSqlTablePointName(pRelationX->getRootCustomAlias()) + ", "); }
    pRelationX->hierarchySelect(params);
    sql = sql.left(sql.count() - 2); // Remove last ", "
-   sql += " FROM " + qx::IxDataMember::getSqlFromTable(table) + ", ";
+   sql += " FROM " + qx::IxDataMember::getSqlFromTable(table, pRelationX->getRootCustomAlias()) + ", ";
    pRelationX->hierarchyFrom(params);
    sql = sql.left(sql.count() - 2); // Remove last ", "
    pRelationX->hierarchyJoin(params);
-   if (! oSoftDelete.isEmpty()) { sql += " WHERE " + oSoftDelete.buildSqlQueryToFetch(); }
+   if (! oSoftDelete.isEmpty()) { sql += " WHERE " + oSoftDelete.buildSqlQueryToFetch(pRelationX->getRootCustomAlias()); }
    pRelationX->hierarchyWhereSoftDelete(params);
 }
 
@@ -469,6 +452,20 @@ void IxSqlQueryBuilder::sql_Update(QString & sql, IxSqlQueryBuilder & builder, c
    { p = pDataMemberX->get_WithDaoStrategy(columns.at(i)); if (p && (p != pId)) { sql += p->getSqlNameEqualToPlaceHolder("", ", ") + ", "; } }
    sql = sql.left(sql.count() - 2); // Remove last ", "
    sql += " WHERE " + pId->getSqlNameEqualToPlaceHolder("_bis", " AND ");
+}
+
+void IxSqlQueryBuilder::sql_Count_WithRelation(qx::QxSqlRelationLinked * pRelationX, QString & sql, IxSqlQueryBuilder & builder)
+{
+   if (! pRelationX) { qAssert(false); return; }
+   qx::QxSqlRelationParams params(0, 0, (& sql), (& builder), NULL, NULL);
+   qx::QxSoftDelete oSoftDelete = builder.getSoftDelete();
+   QString table = builder.table();
+   sql = "SELECT COUNT(*) FROM " + qx::IxDataMember::getSqlFromTable(table, pRelationX->getRootCustomAlias()) + ", ";
+   pRelationX->hierarchyFrom(params);
+   sql = sql.left(sql.count() - 2); // Remove last ", "
+   pRelationX->hierarchyJoin(params);
+   if (! oSoftDelete.isEmpty()) { sql += " WHERE " + oSoftDelete.buildSqlQueryToFetch(pRelationX->getRootCustomAlias()); }
+   pRelationX->hierarchyWhereSoftDelete(params);
 }
 
 void IxSqlQueryBuilder::resolveOutput_FetchAll(void * t, QSqlQuery & query, IxSqlQueryBuilder & builder)

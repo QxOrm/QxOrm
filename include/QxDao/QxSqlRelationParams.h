@@ -87,6 +87,8 @@ protected:
    bool                             m_bRecursiveMode;       //!< Recursive mode to iterate over each level of relationship
    QSet<void *>                     m_lstRecursiveItems;    //!< Used by recursive process to avoid infinite loop
    QPair<QSet<QString>, long> *     m_pColumns;             //!< List of relation columns to fetch (syntax : my_relation { column_1, column_2, etc... }), if empty then fetch all columns
+   QString                          m_sCustomAlias;         //!< Custom SQL table alias instead of generating a new one automatically
+   QString                          m_sCustomAliasOwner;    //!< Custom SQL table alias owner instead of generating a new one automatically
 
 public:
 
@@ -118,6 +120,8 @@ public:
    inline bool checkColumns(const QString & s) const        { return (! m_pColumns || m_pColumns->first.isEmpty() || m_pColumns->first.contains(s)); }
    inline long getColumnsCount() const                      { return (m_pColumns ? m_pColumns->first.count() : 0); }
    inline long getColumnsOffset() const                     { return (m_pColumns ? m_pColumns->second : 0); }
+   inline QString getCustomAlias() const                    { return m_sCustomAlias; }
+   inline QString getCustomAliasOwner() const               { return m_sCustomAliasOwner; }
 
    inline void setId(const QVariant & vId)                     { m_vId = vId; }
    inline void setIndex(long lIndex)                           { m_lIndex = lIndex; }
@@ -136,6 +140,8 @@ public:
    inline void insertRecursiveItem(void * p)                   { if (p) { m_lstRecursiveItems.insert(p); } }
    inline void setColumns(QPair<QSet<QString>, long> * p)      { m_pColumns = p; }
    inline void setColumnsOffset(long l)                        { if (m_pColumns) { m_pColumns->second = l; } }
+   inline void setCustomAlias(const QString & s)               { m_sCustomAlias = s; }
+   inline void setCustomAliasOwner(const QString & s)          { m_sCustomAliasOwner = s; }
 
 };
 

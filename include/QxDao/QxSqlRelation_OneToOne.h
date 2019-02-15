@@ -131,12 +131,14 @@ public:
       if (params.relationX())
       {
          long lOffsetCurrent = (lCurrIndex + lOffsetRelation);
+         QString sOldCustomAliasOwner = params.getCustomAliasOwner(); params.setCustomAliasOwner(params.getCustomAlias());
          long lIndexOwnerOld = params.indexOwner(); params.setIndexOwner(params.index());
          void * pOwnerOld = params.owner(); params.setOwner(& currData);
          lOffsetOld = params.offset(); params.setOffset(lOffsetCurrent);
          while ((pRelation = this->nextRelation(lRelation)))
          { if (this->addLazyRelation(params, pRelation)) { pRelation->lazyFetch_ResolveOutput(params); } }
          params.setOwner(pOwnerOld); params.setOffset(lOffsetOld);
+         params.setCustomAliasOwner(sOldCustomAliasOwner);
          params.setIndexOwner(lIndexOwnerOld);
       }
 

@@ -236,16 +236,16 @@ bool IxDao_Helper::nextRecord()
 
 bool IxDao_Helper::updateSqlRelationX(const QStringList & relation)
 {
+   qx_bool bHierarchyOk(true);
    m_pImpl->m_bCartesianProduct = false;
-   m_pImpl->m_pSqlRelationLinked.reset(new qx::QxSqlRelationLinked());
-   qx_bool bBuildOk = m_pImpl->m_pSqlRelationLinked->buildHierarchy(this->builder().getLstRelation(), relation);
-   if (! bBuildOk) { m_pImpl->m_pSqlRelationLinked.reset(); }
-   if (! bBuildOk) { QString txt = bBuildOk.getDesc(); qDebug("[QxOrm] %s", qPrintable(txt)); return false; }
+   m_pImpl->m_pSqlRelationLinked = qx::QxSqlRelationLinked::getHierarchy((m_pImpl->m_pDataMemberX ? m_pImpl->m_pDataMemberX->getClass() : NULL), relation, bHierarchyOk);
+   if (! bHierarchyOk) { m_pImpl->m_pSqlRelationLinked.reset(); }
+   if (! bHierarchyOk) { QString txt = bHierarchyOk.getDesc(); qDebug("[QxOrm] %s", qPrintable(txt)); return false; }
    m_pImpl->m_bCartesianProduct = m_pImpl->m_pSqlRelationLinked->getCartesianProduct();
    if (m_pImpl->m_pQueryBuilder) { m_pImpl->m_pQueryBuilder->setCartesianProduct(m_pImpl->m_bCartesianProduct); }
    if (m_pImpl->m_pQueryBuilder) { m_pImpl->m_pQueryBuilder->setHashRelation(relation.join("|")); }
    if (m_pImpl->m_bCartesianProduct) { m_pImpl->m_pQueryBuilder->initIdX(m_pImpl->m_pSqlRelationLinked->getAllRelationCount()); }
-   return bBuildOk.getValue();
+   return bHierarchyOk.getValue();
 }
 
 void IxDao_Helper::dumpRecord() const

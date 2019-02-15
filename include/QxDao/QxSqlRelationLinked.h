@@ -53,6 +53,8 @@
 
 namespace qx {
 
+class IxClass;
+
 /*!
  * \ingroup QxDao
  * \brief qx::QxSqlRelationLinked : hierarchy of relationships to build SQL query
@@ -85,7 +87,7 @@ class QX_DLL_EXPORT QxSqlRelationLinked
 public:
 
    typedef std::shared_ptr<QxSqlRelationLinked> type_ptr;
-   typedef std::tuple<qx::dao::sql_join::join_type, IxSqlRelation *, QPair<QSet<QString>, long> > type_relation;
+   typedef std::tuple<qx::dao::sql_join::join_type, IxSqlRelation *, QPair<QSet<QString>, long>, QString> type_relation;
    typedef qx::QxCollection<QString, type_relation> type_lst_relation;
    typedef QHash<QString, type_ptr> type_lst_relation_linked;
 
@@ -100,7 +102,7 @@ public:
    QxSqlRelationLinked(bool bRoot);
    virtual ~QxSqlRelationLinked();
 
-   qx_bool buildHierarchy(IxSqlRelationX * pRelationX, const QStringList & sRelationX);
+   static type_ptr getHierarchy(IxClass * pClass, const QStringList & sRelationX, qx_bool & bOk);
 
    void hierarchySelect(QxSqlRelationParams & params);
    void hierarchyFrom(QxSqlRelationParams & params);
@@ -118,15 +120,15 @@ public:
    type_lst_relation_linked getRelationLinkedX() const;
    type_lst_relation getRelationX() const;
 
+   bool isRoot() const;
    bool checkRootColumns(const QString & s) const;
    long getRootColumnsCount() const;
    long getRootColumnsOffset() const;
    void setRootColumnsOffset(long l);
+   QString getRootCustomAlias() const;
 
 protected:
 
-   QStringList removeColumns(const QStringList & columnsToRemove, IxSqlRelation * pRelation) const;
-   qx_bool insertRelationToHierarchy(const QStringList & sRelationX, const QString & sKey, qx::dao::sql_join::join_type eJoinType);
    bool isValidDaoHelper(QxSqlRelationParams & params) const;
 
 };

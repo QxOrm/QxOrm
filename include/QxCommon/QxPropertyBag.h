@@ -78,7 +78,7 @@ public:
 private:
 
    inline void initPropertyBag()
-   { if (! m_lstPropertyBag) { m_lstPropertyBag.reset(new type_hash_prop_bag()); } }
+   { if (! m_lstPropertyBag) { m_lstPropertyBag = std::make_shared<type_hash_prop_bag>(); } }
 
 };
 

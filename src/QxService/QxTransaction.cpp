@@ -179,7 +179,7 @@ void execute_client(IxService * pService, const QString & sMethod)
    if (pService == NULL) { qAssert(false); return; }
    if (sMethod.isEmpty()) { qAssert(false); return; }
    QxTransaction_ptr pTransaction;
-   pTransaction.reset(new QxTransaction());
+   pTransaction = std::make_shared<QxTransaction>();
    pService->setTransaction(pTransaction);
    pTransaction->executeClient(pService, sMethod);
    pTransaction->setMessageReturn(pService->getMessageReturn());

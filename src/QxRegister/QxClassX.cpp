@@ -234,6 +234,8 @@ void QxClassX::registerAllClasses(bool bInitAllRelations /* = false */)
          IxDataMember * pDataMember = pDataMemberX->get_WithDaoStrategy(l); if (! pDataMember) { continue; }
          if (isValid_SqlRelation(pDataMember)) { pDataMember->getSqlRelation()->init(); }
       }
+      pClass->getSqlDataMemberX();
+      pClass->getSqlRelationX();
    }
 }
 

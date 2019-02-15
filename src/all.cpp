@@ -80,6 +80,7 @@
 #include "./QxDao/IxDao_Helper.cpp"
 #include "./QxDao/IxPersistable.cpp"
 #include "./QxDao/IxPersistableCollection.cpp"
+#include "./QxDao/IxPersistableList.cpp"
 #include "./QxDao/QxSqlRelationLinked.cpp"
 #include "./QxDao/QxDaoAsync.cpp"
 #include "./QxDao/QxSqlRelationParams.cpp"
@@ -173,6 +174,8 @@
 #include "./QxSerialize/QJson/QxSerializeQJson_QxInvalidValueX.cpp"
 #include "./QxSerialize/QJson/QxSerializeQJson_QxSqlQuery.cpp"
 #include "./QxSerialize/QJson/QxSerializeQJson_QxTransaction.cpp"
+
+#include "./QxRestApi/QxRestApi.cpp"
 
 #include "./QxService/IxParameter.cpp"
 #include "./QxService/IxService.cpp"

@@ -189,6 +189,7 @@ HEADERS += ./include/QxDao/QxDateTimeNeutral.h
 HEADERS += ./include/QxDao/IxDao_Helper.h
 HEADERS += ./include/QxDao/IxPersistable.h
 HEADERS += ./include/QxDao/IxPersistableCollection.h
+HEADERS += ./include/QxDao/IxPersistableList.h
 HEADERS += ./include/QxDao/QxSqlJoin.h
 HEADERS += ./include/QxDao/QxSqlRelationLinked.h
 HEADERS += ./include/QxDao/QxDaoAsync.h
@@ -385,6 +386,8 @@ HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_std_unordered_map.h
 HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_std_unordered_set.h
 HEADERS += ./include/QxSerialize/QJson/QxSerializeQJson_std_vector.h
 
+HEADERS += ./include/QxRestApi/QxRestApi.h
+
 HEADERS += ./include/QxTraits/get_base_class.h
 HEADERS += ./include/QxTraits/get_primary_key.h
 HEADERS += ./include/QxTraits/get_class_name.h
@@ -546,6 +549,7 @@ SOURCES += ./src/QxDao/QxSession.cpp
 SOURCES += ./src/QxDao/IxDao_Helper.cpp
 SOURCES += ./src/QxDao/IxPersistable.cpp
 SOURCES += ./src/QxDao/IxPersistableCollection.cpp
+SOURCES += ./src/QxDao/IxPersistableList.cpp
 SOURCES += ./src/QxDao/QxSqlRelationLinked.cpp
 SOURCES += ./src/QxDao/QxDaoAsync.cpp
 SOURCES += ./src/QxDao/QxSqlRelationParams.cpp
@@ -637,6 +641,8 @@ SOURCES += ./src/QxSerialize/QJson/QxSerializeQJson_QxInvalidValue.cpp
 SOURCES += ./src/QxSerialize/QJson/QxSerializeQJson_QxInvalidValueX.cpp
 SOURCES += ./src/QxSerialize/QJson/QxSerializeQJson_QxSqlQuery.cpp
 SOURCES += ./src/QxSerialize/QJson/QxSerializeQJson_QxTransaction.cpp
+
+SOURCES += ./src/QxRestApi/QxRestApi.cpp
 
 SOURCES += ./src/QxService/IxParameter.cpp
 SOURCES += ./src/QxService/IxService.cpp

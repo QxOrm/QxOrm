@@ -281,7 +281,7 @@ struct QxMongoDB_Helper::QxMongoDB_HelperImpl
       if (! pClass) { return QSqlError("[QxOrm] Parameter 'qx::IxClass' is required to get MongoDB database collection name", "", QSqlError::UnknownError); }
       QSqlError err = initDatabase(coll); if (err.isValid()) { return err; }
       std::string dbName = toStdString(qx::QxSqlDatabase::getSingleton()->getDatabaseName());
-      coll.collection.reset(new qx_scoped_wrapper<mongoc_collection_t>(coll.client->get(), dbName, toStdString(pClass->getName())));
+      coll.collection = std::make_shared<qx_scoped_wrapper<mongoc_collection_t> >(coll.client->get(), dbName, toStdString(pClass->getName()));
       if (! coll.collection->get()) { return QSqlError("[QxOrm] Unable to create a 'mongoc_collection_t' instance from MongoDB database (" + qx::QxSqlDatabase::getSingleton()->getDatabaseName() + " - " + pClass->getName() + ")", "", QSqlError::UnknownError); }
       return QSqlError();
    }
@@ -289,11 +289,11 @@ struct QxMongoDB_Helper::QxMongoDB_HelperImpl
    QSqlError initDatabase(qx_db_collection & coll)
    {
       QSqlError err = initPool(); if (err.isValid()) { return err; }
-      coll.client.reset(new qx_scoped_wrapper<mongoc_client_t>(m_pPool->get()));
+      coll.client = std::make_shared<qx_scoped_wrapper<mongoc_client_t> >(m_pPool->get());
       if (! coll.client->get()) { return QSqlError("[QxOrm] Unable to get a MongoDB client connection from pool of type 'mongoc_client_t'", "", QSqlError::UnknownError); }
       std::string dbName = toStdString(qx::QxSqlDatabase::getSingleton()->getDatabaseName());
       if (dbName.empty()) { return QSqlError("[QxOrm] Unable to connect to MongoDB database : please define a database name using qx::QxSqlDatabase::getSingleton()->setDatabaseName()", "", QSqlError::UnknownError); }
-      coll.db.reset(new qx_scoped_wrapper<mongoc_database_t>(coll.client->get(), dbName));
+      coll.db = std::make_shared<qx_scoped_wrapper<mongoc_database_t> >(coll.client->get(), dbName);
       if (! coll.db->get()) { return QSqlError("[QxOrm] Unable to create a 'mongoc_database_t' instance from MongoDB database (" + qx::QxSqlDatabase::getSingleton()->getDatabaseName() + ")", "", QSqlError::UnknownError); }
       return QSqlError();
    }
@@ -310,7 +310,7 @@ struct QxMongoDB_Helper::QxMongoDB_HelperImpl
    QString asJson(const QString & s) const
    {
       QString json = s; QRegExp regexp("\\d*"); bool isNumber = regexp.exactMatch(s);
-      if (s.left(7) == "qx_oid:") { return "{ \"$oid\": \"" + s.right(s.size() - 7) + "\" }"; }
+      if (s.startsWith("qx_oid:")) { return "{ \"$oid\": \"" + s.right(s.size() - 7) + "\" }"; }
       return ((isNumber ? QString() : QString("\"")) + json.replace("\"", "\\\"") + (isNumber ? QString() : QString("\"")));
    }
 

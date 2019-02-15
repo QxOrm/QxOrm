@@ -190,6 +190,49 @@ int main(int argc, char * argv[])
    qAssert(lstBlogComplexRelation2[0]->m_commentX[0]->m_text == ""); // Not fetched
    qAssert(lstBlogComplexRelation2[0]->m_commentX[0]->m_blog);
 
+#ifndef _QX_NO_JSON
+   // Custom JSON serialization process
+   QString customJsonFull = qx::serialization::json::to_string(blog_tmp, 1);
+   QString customJsonFiltered = qx::serialization::json::to_string(blog_tmp, 1, "filter: { blog_text } | author_id { name, birthdate } | list_comment { comment_text } -> blog_id -> *");
+   qDebug("[QxOrm] custom JSON serialization process (full) : \n%s", qPrintable(customJsonFull));
+   qDebug("[QxOrm] custom JSON serialization process (filtered) : \n%s", qPrintable(customJsonFiltered));
+
+   blog_ptr blogFromJsonFull; blogFromJsonFull.reset(new blog());
+   blog_ptr blogFromJsonFiltered; blogFromJsonFiltered.reset(new blog());
+   qx::serialization::json::from_string(blogFromJsonFull, customJsonFull, 1);
+   qx::serialization::json::from_string(blogFromJsonFiltered, customJsonFull, 1, "filter: { blog_text } | author_id { name, birthdate } | list_comment { comment_text } -> blog_id -> *");
+
+   qx::dump(blogFromJsonFull);
+   qAssert(blogFromJsonFull->m_commentX.count() == 2);
+   qAssert(blogFromJsonFull->m_categoryX.count() == 2);
+   qAssert(blogFromJsonFull->m_text == "update blog_text_1");
+   qAssert(blogFromJsonFull->m_author && blogFromJsonFull->m_author->m_id == "author_id_2");
+
+   qx::dump(blogFromJsonFiltered);
+   qAssert(blogFromJsonFiltered->m_text != ""); // Fetched
+   qAssert(blogFromJsonFiltered->m_dt_creation.isNull()); // Not fetched
+   qAssert(blogFromJsonFiltered->m_author->m_sex == author::unknown); // Not fetched
+   qAssert(blogFromJsonFiltered->m_author->m_name != ""); // Fetched
+   qAssert(blogFromJsonFiltered->m_commentX.size() > 0);
+   qAssert(blogFromJsonFiltered->m_commentX[0]->m_dt_create.isNull()); // Not fetched
+   qAssert(blogFromJsonFiltered->m_commentX[0]->m_text != ""); // Fetched
+   qAssert(blogFromJsonFiltered->m_commentX[0]->m_blog);
+#endif // _QX_NO_JSON
+
+   // Fetch relations defining columns to fetch with syntax { col_1, col_2, etc... } + custom table alias using syntax <my_table_alias> + custom table alias suffix using syntax <..._my_alias_suffix>
+   list_blog lstBlogComplexRelation3;
+   daoError = qx::dao::fetch_all_with_relation(QStringList() << "<blog_alias> { blog_text }" << "author_id <author_alias> { name, birthdate }" << "list_comment <list_comment_alias> { comment_text } -> blog_id <blog_alias_2> -> * <..._my_alias_suffix>", lstBlogComplexRelation3);
+   qx::dump(lstBlogComplexRelation3);
+   qAssert(lstBlogComplexRelation3.size() > 0);
+   qAssert(lstBlogComplexRelation3[0]->m_text != ""); // Fetched
+   qAssert(lstBlogComplexRelation3[0]->m_dt_creation.isNull()); // Not fetched
+   qAssert(lstBlogComplexRelation3[0]->m_author->m_sex == author::unknown); // Not fetched
+   qAssert(lstBlogComplexRelation3[0]->m_author->m_name != ""); // Fetched
+   qAssert(lstBlogComplexRelation3[0]->m_commentX.size() > 0);
+   qAssert(lstBlogComplexRelation3[0]->m_commentX[0]->m_dt_create.isNull()); // Not fetched
+   qAssert(lstBlogComplexRelation3[0]->m_commentX[0]->m_text != ""); // Fetched
+   qAssert(lstBlogComplexRelation3[0]->m_commentX[0]->m_blog);
+
    // Check qx::dao::save_with_relation_recursive() function
    daoError = qx::dao::save_with_relation_recursive(blog_tmp);
    qAssert(! daoError.isValid());
@@ -199,6 +242,11 @@ int main(int argc, char * argv[])
    // Call 'age()' method with class name and method name (reflexion)
    qx_bool bInvokeOk = qx::QxClassX::invoke("author", "age", author_1);
    qAssert(bInvokeOk);
+
+   // Check count with relations and filter
+   long lBlogCountWithRelation = 0; qx_query queryBlogCountWithRelation;
+   daoError = qx::dao::count_with_relation<blog>(lBlogCountWithRelation, QStringList() << "author_id" << "list_comment -> blog_id -> *", queryBlogCountWithRelation);
+   qAssert(! daoError.isValid() && (lBlogCountWithRelation > 0));
 
    // Test 'isDirty()' method
    qx::dao::ptr<blog> blog_isdirty = qx::dao::ptr<blog>(new blog());

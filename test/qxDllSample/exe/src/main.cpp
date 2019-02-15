@@ -357,10 +357,18 @@ int main(int argc, char * argv[])
    qx::IxPersistable * pFooPersistable = static_cast<qx::IxPersistable *>(pFoo.get());
    fooAsJson = qx::serialization::json::to_string(* pFooPersistable);
    qDebug("[QxOrm] qx::IxPersistable::toJson() test 2 :\n%s", qPrintable(fooAsJson));
+
    qx::IxPersistableCollection_ptr pFooPersistableCollection = qx::IxPersistable::qxFetchAll("Foo");
    qAssert(pFooPersistableCollection && (pFooPersistableCollection->__count() != 0));
    fooAsJson = pFooPersistableCollection->toJson();
    qDebug("[QxOrm] qx::IxPersistableCollection::toJson() test 3 :\n%s", qPrintable(fooAsJson));
+   daoError = pFooPersistableCollection->qxSave(); qAssert(! daoError.isValid());
+
+   QStringList emptyColumnsRelations;
+   pFooPersistableCollection = qx::IxPersistable::qxFetchAll("Foo", emptyColumnsRelations, emptyColumnsRelations, NULL, true);
+   qAssert(pFooPersistableCollection && (pFooPersistableCollection->__count() != 0));
+   fooAsJson = pFooPersistableCollection->toJson();
+   qDebug("[QxOrm] qx::IxPersistableCollection::toJson() test 4 :\n%s", qPrintable(fooAsJson));
    daoError = pFooPersistableCollection->qxSave(); qAssert(! daoError.isValid());
 #endif // _QX_NO_JSON
 

@@ -103,7 +103,7 @@ void IxValidatorX::insertIntoGroup(IxValidator_ptr pValidator, const QString & s
    if (! m_lstValidatorByGroup.exist(sGroup))
    {
       type_lst_validator_ptr newLstValidator;
-      newLstValidator.reset(new type_lst_validator());
+      newLstValidator = std::make_shared<type_lst_validator>();
       m_lstValidatorByGroup.insert(sGroup, newLstValidator);
    }
 
@@ -114,7 +114,7 @@ void IxValidatorX::insertIntoGroup(IxValidator_ptr pValidator, const QString & s
 IxValidator_ptr IxValidatorX::createValidator(IxValidator::validator_type type, const QString & sPropertyKey, const QString & sMessage, const QString & sGroup)
 {
    IxValidator_ptr pValidator;
-   pValidator.reset(new IxValidator(type));
+   pValidator = std::make_shared<IxValidator>(type);
    if (! sMessage.isEmpty()) { pValidator->setMessage(sMessage); }
    if (! sGroup.isEmpty()) { pValidator->setGroup(sGroup); }
    pValidator->setDataMember(getDataMember(sPropertyKey));

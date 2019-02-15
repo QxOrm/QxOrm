@@ -188,8 +188,8 @@ void IxSqlRelation::init()
    if (IxSqlRelation::IxSqlRelationImpl::m_bTraceRelationInit)
    { QString sTraceMsg = "[QxOrm] Init relationship '" + this->getKey() + "' from '" + (m_pImpl->m_pClassOwner ? m_pImpl->m_pClassOwner->getKey() : QString()) + "' to '" + (m_pImpl->m_pClass ? m_pImpl->m_pClass->getKey() : QString()) + "'"; qDebug() << sTraceMsg; }
 
-   m_pImpl->m_lstSqlRelationPtr.reset(new IxSqlRelationX());
-   m_pImpl->m_lstDataMemberPtr.reset(new QxCollection<QString, IxDataMember *>());
+   m_pImpl->m_lstSqlRelationPtr = std::make_shared<IxSqlRelationX>();
+   m_pImpl->m_lstDataMemberPtr = std::make_shared<QxCollection<QString, IxDataMember *> >();
    IxDataMember * p = NULL; long lCount = m_pImpl->m_pDataMemberX->count_WithDaoStrategy();
 
    for (long l = 0; l < lCount; ++l)
@@ -274,6 +274,7 @@ IxSqlRelation * IxSqlRelation::nextRelation(long & lIndex) const
 
 QString IxSqlRelation::tableAlias(QxSqlRelationParams & params) const
 {
+   if (! params.getCustomAlias().isEmpty()) { return params.getCustomAlias(); }
    QString sTableAlias = (m_pImpl->m_pDataMemberX ? (m_pImpl->m_pDataMemberX->getName() + "_" + QString::number(params.index())) : QString(""));
    sTableAlias.replace(".", "_");
    return sTableAlias;
@@ -282,6 +283,7 @@ QString IxSqlRelation::tableAlias(QxSqlRelationParams & params) const
 QString IxSqlRelation::tableAliasOwner(QxSqlRelationParams & params) const
 {
    if (! m_pImpl->m_pClassOwner) { qAssert(false); return ""; }
+   if (! params.getCustomAliasOwner().isEmpty()) { return params.getCustomAliasOwner(); }
    QString sTableAliasOwner = (m_pImpl->m_pClassOwner->getName() + "_" + QString::number(params.indexOwner()));
    if (params.indexOwner() <= 0) { sTableAliasOwner = params.builder().table(); }
    if (! params.getTableAlias().isEmpty()) { sTableAliasOwner = params.getTableAlias(); }
@@ -376,14 +378,15 @@ void IxSqlRelation::updateOffset_ManyToMany(bool bEager, QxSqlRelationParams & p
 
    if (! params.relationX()) { return; }
    long lRelation = 0; IxSqlRelation * pRelation = NULL;
-   long lIndexOwnerOld = params.indexOwner();
-   params.setIndexOwner(params.index());
+   long lIndexOwnerOld = params.indexOwner(); params.setIndexOwner(params.index());
+   QString sOldCustomAliasOwner = params.getCustomAliasOwner(); params.setCustomAliasOwner(params.getCustomAlias());
    while ((pRelation = this->nextRelation(lRelation)))
    {
       if (this->addLazyRelation(params, pRelation))
       { pRelation->updateOffset(false, params); }
    }
    params.setIndexOwner(lIndexOwnerOld);
+   params.setCustomAliasOwner(sOldCustomAliasOwner);
 }
 
 void IxSqlRelation::updateOffset_ManyToOne(bool bEager, QxSqlRelationParams & params) const
@@ -406,14 +409,15 @@ void IxSqlRelation::updateOffset_ManyToOne(bool bEager, QxSqlRelationParams & pa
 
    if (! bEager || ! params.relationX()) { return; }
    long lRelation = 0; IxSqlRelation * pRelation = NULL;
-   long lIndexOwnerOld = params.indexOwner();
-   params.setIndexOwner(params.index());
+   long lIndexOwnerOld = params.indexOwner(); params.setIndexOwner(params.index());
+   QString sOldCustomAliasOwner = params.getCustomAliasOwner(); params.setCustomAliasOwner(params.getCustomAlias());
    while ((pRelation = this->nextRelation(lRelation)))
    {
       if (this->addLazyRelation(params, pRelation))
       { pRelation->updateOffset(false, params); }
    }
    params.setIndexOwner(lIndexOwnerOld);
+   params.setCustomAliasOwner(sOldCustomAliasOwner);
 }
 
 void IxSqlRelation::updateOffset_OneToMany(bool bEager, QxSqlRelationParams & params) const
@@ -438,14 +442,15 @@ void IxSqlRelation::updateOffset_OneToMany(bool bEager, QxSqlRelationParams & pa
 
    if (! params.relationX()) { return; }
    long lRelation = 0; IxSqlRelation * pRelation = NULL;
-   long lIndexOwnerOld = params.indexOwner();
-   params.setIndexOwner(params.index());
+   long lIndexOwnerOld = params.indexOwner(); params.setIndexOwner(params.index());
+   QString sOldCustomAliasOwner = params.getCustomAliasOwner(); params.setCustomAliasOwner(params.getCustomAlias());
    while ((pRelation = this->nextRelation(lRelation)))
    {
       if (this->addLazyRelation(params, pRelation))
       { pRelation->updateOffset(false, params); }
    }
    params.setIndexOwner(lIndexOwnerOld);
+   params.setCustomAliasOwner(sOldCustomAliasOwner);
 }
 
 void IxSqlRelation::updateOffset_OneToOne(bool bEager, QxSqlRelationParams & params) const
@@ -467,14 +472,15 @@ void IxSqlRelation::updateOffset_OneToOne(bool bEager, QxSqlRelationParams & par
 
    if (! params.relationX()) { return; }
    long lRelation = 0; IxSqlRelation * pRelation = NULL;
-   long lIndexOwnerOld = params.indexOwner();
-   params.setIndexOwner(params.index());
+   long lIndexOwnerOld = params.indexOwner(); params.setIndexOwner(params.index());
+   QString sOldCustomAliasOwner = params.getCustomAliasOwner(); params.setCustomAliasOwner(params.getCustomAlias());
    while ((pRelation = this->nextRelation(lRelation)))
    {
       if (this->addLazyRelation(params, pRelation))
       { pRelation->updateOffset(false, params); }
    }
    params.setIndexOwner(lIndexOwnerOld);
+   params.setCustomAliasOwner(sOldCustomAliasOwner);
 }
 
 void IxSqlRelation::eagerSelect_ManyToMany(QxSqlRelationParams & params) const
@@ -489,14 +495,14 @@ void IxSqlRelation::eagerSelect_ManyToMany(QxSqlRelationParams & params) const
 
    if (params.relationX())
    {
-      long lIndexOwnerOld = params.indexOwner();
-      QString sTableAliasOld = params.getTableAlias();
-      params.setIndexOwner(params.index());
-      params.setTableAlias(tableAlias);
+      long lIndexOwnerOld = params.indexOwner(); params.setIndexOwner(params.index());
+      QString sTableAliasOld = params.getTableAlias(); params.setTableAlias(tableAlias);
+      QString sOldCustomAliasOwner = params.getCustomAliasOwner(); params.setCustomAliasOwner(params.getCustomAlias());
       while ((pRelation = this->nextRelation(l2)))
       { if (this->addLazyRelation(params, pRelation)) { pRelation->lazySelect(params); } }
       params.setIndexOwner(lIndexOwnerOld);
       params.setTableAlias(sTableAliasOld);
+      params.setCustomAliasOwner(sOldCustomAliasOwner);
    }
 
    if (! this->m_pImpl->m_oSoftDelete.isEmpty()) { sql += (this->m_pImpl->m_oSoftDelete.buildSqlTablePointName(tableAlias) + ", "); }
@@ -518,14 +524,14 @@ void IxSqlRelation::eagerSelect_ManyToOne(QxSqlRelationParams & params) const
 
    if (params.relationX())
    {
-      long lIndexOwnerOld = params.indexOwner();
-      QString sTableAliasOld = params.getTableAlias();
-      params.setIndexOwner(params.index());
-      params.setTableAlias(tableAlias);
+      long lIndexOwnerOld = params.indexOwner(); params.setIndexOwner(params.index());
+      QString sTableAliasOld = params.getTableAlias(); params.setTableAlias(tableAlias);
+      QString sOldCustomAliasOwner = params.getCustomAliasOwner(); params.setCustomAliasOwner(params.getCustomAlias());
       while ((pRelation = this->nextRelation(l2)))
       { if (this->addLazyRelation(params, pRelation)) { pRelation->lazySelect(params); } }
       params.setIndexOwner(lIndexOwnerOld);
       params.setTableAlias(sTableAliasOld);
+      params.setCustomAliasOwner(sOldCustomAliasOwner);
    }
 
    if (! this->m_pImpl->m_oSoftDelete.isEmpty()) { sql += (this->m_pImpl->m_oSoftDelete.buildSqlTablePointName(tableAlias) + ", "); }
@@ -545,14 +551,14 @@ void IxSqlRelation::eagerSelect_OneToMany(QxSqlRelationParams & params) const
 
    if (params.relationX())
    {
-      long lIndexOwnerOld = params.indexOwner();
-      QString sTableAliasOld = params.getTableAlias();
-      params.setIndexOwner(params.index());
-      params.setTableAlias(tableAlias);
+      long lIndexOwnerOld = params.indexOwner(); params.setIndexOwner(params.index());
+      QString sTableAliasOld = params.getTableAlias(); params.setTableAlias(tableAlias);
+      QString sOldCustomAliasOwner = params.getCustomAliasOwner(); params.setCustomAliasOwner(params.getCustomAlias());
       while ((pRelation = this->nextRelation(l2)))
       { if (this->addLazyRelation(params, pRelation)) { pRelation->lazySelect(params); } }
       params.setIndexOwner(lIndexOwnerOld);
       params.setTableAlias(sTableAliasOld);
+      params.setCustomAliasOwner(sOldCustomAliasOwner);
    }
 
    if (! this->m_pImpl->m_oSoftDelete.isEmpty()) { sql += (this->m_pImpl->m_oSoftDelete.buildSqlTablePointName(tableAlias) + ", "); }
@@ -570,14 +576,14 @@ void IxSqlRelation::eagerSelect_OneToOne(QxSqlRelationParams & params) const
 
    if (params.relationX())
    {
-      long lIndexOwnerOld = params.indexOwner();
-      QString sTableAliasOld = params.getTableAlias();
-      params.setIndexOwner(params.index());
-      params.setTableAlias(tableAlias);
+      long lIndexOwnerOld = params.indexOwner(); params.setIndexOwner(params.index());
+      QString sTableAliasOld = params.getTableAlias(); params.setTableAlias(tableAlias);
+      QString sOldCustomAliasOwner = params.getCustomAliasOwner(); params.setCustomAliasOwner(params.getCustomAlias());
       while ((pRelation = this->nextRelation(l2)))
       { if (this->addLazyRelation(params, pRelation)) { pRelation->lazySelect(params); } }
       params.setIndexOwner(lIndexOwnerOld);
       params.setTableAlias(sTableAliasOld);
+      params.setCustomAliasOwner(sOldCustomAliasOwner);
    }
 
    if (! this->m_pImpl->m_oSoftDelete.isEmpty()) { sql += (this->m_pImpl->m_oSoftDelete.buildSqlTablePointName(tableAlias) + ", "); }

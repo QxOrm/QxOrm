@@ -63,11 +63,6 @@ struct QX_DLL_EXPORT QxSerializeJsonRegistered_Helper
    static QJsonValue save(IxClass * pClass, const void * pOwner, const QString & format);
    static qx_bool load(const QJsonValue & j, IxClass * pClass, void * pOwner, const QString & format);
 
-private:
-
-   static void saveHelper(QJsonObject & obj, IxClass * pClass, const void * pOwner, const QString & format);
-   static void loadHelper(const QJsonObject & obj, IxClass * pClass, void * pOwner, const QString & format);
-
 };
 
 template <typename T>

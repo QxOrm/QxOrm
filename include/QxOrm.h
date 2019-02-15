@@ -49,6 +49,7 @@
  * \defgroup QxDao QxDao : QxOrm library database communication used by persistence engine (ORM - Object Relational Mapping)
  * \defgroup QxValidator QxValidator : QxOrm library validation engine using validator pattern
  * \defgroup QxModelView QxModelView : All classes registered into QxOrm context can be used with Qt model/view architecture (Qt widgets and/or QML views)
+ * \defgroup QxRestApi QxRestApi : QxOrm library REST API to send requests in JSON format from external application, from web-site or from QML view
  * \defgroup QxService QxService : QxOrm library services engine to provide easy and powerful way to create C++ application server (to transfer data over network)
  * \defgroup QxCache QxCache : QxOrm library basic thread-safe cache feature to backup and restore any kind of objects (for example, object fetched from database)
  * \defgroup QxConvert QxConvert : QxOrm library conversion tools to-from QString type and to-from QVariant type
@@ -121,6 +122,7 @@
 #include <QxDao/QxDateTimeNeutral.h>
 #include <QxDao/IxPersistable.h>
 #include <QxDao/IxPersistableCollection.h>
+#include <QxDao/IxPersistableList.h>
 #include <QxDao/QxSqlJoin.h>
 #include <QxDao/QxSqlRelationLinked.h>
 #include <QxDao/QxDaoAsync.h>
@@ -161,6 +163,10 @@
 #include <QxRegister/IxTypeInfo.h>
 #include <QxRegister/QxRegisterQtProperty.h>
 #include <QxRegister/QxVersion.h>
+
+#ifndef _QX_NO_JSON
+#include <QxRestApi/QxRestApi.h>
+#endif // _QX_NO_JSON
 
 #include <QxValidator/IxValidator.h>
 #include <QxValidator/IxValidatorX.h>

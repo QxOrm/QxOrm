@@ -119,7 +119,7 @@ struct construct_ptr< std::unique_ptr<T> >
 
 template <typename T>
 struct construct_ptr< std::shared_ptr<T> >
-{ static inline void get(std::shared_ptr<T> & t) { t.reset(new T()); } };
+{ static inline void get(std::shared_ptr<T> & t) { t = std::make_shared<T>(); } };
 
 } // namespace trait
 } // namespace qx

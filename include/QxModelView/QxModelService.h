@@ -114,8 +114,7 @@ public:
       this->clear();
 
       S services;
-      type_collection_ptr tmp;
-      tmp.reset(new type_collection());
+      type_collection_ptr tmp = std::make_shared<type_collection>();
       this->m_lastError = services.fetchAll(tmp, this->m_lstColumns, relation);
 
       if (tmp->count() <= 0) { return this->m_lastError; }
@@ -132,8 +131,7 @@ public:
       this->clear();
 
       S services;
-      type_collection_ptr tmp;
-      tmp.reset(new type_collection());
+      type_collection_ptr tmp = std::make_shared<type_collection>();
       this->m_lastError = services.fetchByQuery(query, tmp, this->m_lstColumns, relation);
 
       if (tmp->count() <= 0) { return this->m_lastError; }
@@ -166,8 +164,7 @@ public:
       Q_UNUSED(pDatabase);
       if (relation.count() > 0) { this->syncAllNestedModel(relation); }
 
-      type_collection_ptr tmp;
-      tmp.reset(new type_collection());
+      type_collection_ptr tmp = std::make_shared<type_collection>();
       (* tmp) = this->m_model;
 
       S services;
@@ -196,8 +193,7 @@ public:
       Q_UNUSED(pDatabase);
       if (relation.count() > 0) { this->syncAllNestedModel(relation); }
 
-      type_collection_ptr tmp;
-      tmp.reset(new type_collection());
+      type_collection_ptr tmp = std::make_shared<type_collection>();
       (* tmp) = this->m_model;
 
       S services;
@@ -226,8 +222,7 @@ public:
       Q_UNUSED(pDatabase);
       if (relation.count() > 0) { this->syncAllNestedModel(relation); }
 
-      type_collection_ptr tmp;
-      tmp.reset(new type_collection());
+      type_collection_ptr tmp = std::make_shared<type_collection>();
       (* tmp) = this->m_model;
 
       S services;
@@ -337,8 +332,7 @@ public:
       this->clear();
 
       S services;
-      type_collection_ptr tmp;
-      tmp.reset(new type_collection());
+      type_collection_ptr tmp = std::make_shared<type_collection>();
       this->m_lastError = services.executeQuery(query, tmp);
 
       if (tmp->count() <= 0) { return this->m_lastError; }
@@ -365,8 +359,7 @@ public:
    {
       Q_UNUSED(groups);
       S services;
-      type_collection_ptr tmp;
-      tmp.reset(new type_collection());
+      type_collection_ptr tmp = std::make_shared<type_collection>();
       (* tmp) = this->m_model;
       return services.isValid(tmp);
    }

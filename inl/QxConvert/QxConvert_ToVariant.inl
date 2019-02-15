@@ -156,6 +156,14 @@ template <> struct QxConvert_ToVariant< qx_bool > {
 static inline QVariant toVariant(const qx_bool & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return t.toString(); } };
 
+#ifndef _QX_NO_JSON
+
+template <> struct QxConvert_ToVariant< QJsonValue > {
+static inline QVariant toVariant(const QJsonValue & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
+{ Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return t.toVariant(); } };
+
+#endif // _QX_NO_JSON
+
 #ifdef _QX_ENABLE_BOOST
 
 template <typename T> struct QxConvert_ToVariant< boost::optional<T> > {

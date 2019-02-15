@@ -55,6 +55,7 @@ struct save_mode
 
    enum e_save_mode
    {
+      e_none,
       e_check_insert_or_update,
       e_insert_only,
       e_update_only

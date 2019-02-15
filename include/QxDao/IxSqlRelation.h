@@ -59,6 +59,7 @@ class IxDataMemberX;
 class IxSqlRelation;
 
 typedef QxCollection<QString, IxSqlRelation *> IxSqlRelationX;
+typedef std::shared_ptr<IxSqlRelationX> IxSqlRelationX_ptr;
 
 /*!
  * \ingroup QxDao

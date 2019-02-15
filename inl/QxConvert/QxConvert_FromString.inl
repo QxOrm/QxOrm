@@ -167,6 +167,25 @@ static inline qx_bool fromString(const QString & s, std::wstring & t, const QStr
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); Q_UNUSED(t); Q_UNUSED(s); qAssert(false); /* Need STL compatibility ! */ return qx_bool(true); } };
 #endif // ((! defined(QT_NO_STL)) && (! defined(QT_NO_STL_WCHAR)))
 
+#ifndef _QX_NO_JSON
+
+template <>
+struct QxConvert_FromString< QJsonValue >
+{
+   static inline qx_bool fromString(const QString & s, QJsonValue & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
+   {
+      Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx);
+      QJsonParseError jsonError;
+      QByteArray dataAsByteArray = s.toUtf8();
+      QJsonDocument doc = QJsonDocument::fromJson(dataAsByteArray, (& jsonError));
+      if (jsonError.error != QJsonParseError::NoError) { return qx_bool(static_cast<long>(jsonError.error), jsonError.errorString()); }
+      t = (doc.isArray() ? QJsonValue(doc.array()) : QJsonValue(doc.object()));
+      return qx_bool(true);
+   }
+};
+
+#endif // _QX_NO_JSON
+
 #ifdef _QX_ENABLE_BOOST
 
 template <typename T> struct QxConvert_FromString< boost::optional<T> > {

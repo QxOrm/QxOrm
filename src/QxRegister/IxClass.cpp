@@ -47,16 +47,19 @@ struct IxClass::IxClassImpl
    IxFunctionX_ptr m_pFctMemberX;                     //!< List of function member
    IxFunctionX_ptr m_pFctStaticX;                     //!< List of function static
 
-   QString m_sKey;                                    //!< 'IxClass' key <=> class name
-   QString m_sName;                                   //!< 'IxClass' name <=> database table name (if empty => class name)
-   QString m_sDescription;                            //!< 'IxClass' description
-   long m_lVersion;                                   //!< 'IxClass' version
-   bool m_bFinalClass;                                //!< Class without base class (for example, qx::trait::no_base_class_defined and QObject)
-   bool m_bDaoReadOnly;                               //!< If 'true', cannot INSERT, UPDATE OR DELETE an instance of this class using qx::dao namespace
-   bool m_bRegistered;                                //!< Class registered into QxOrm context
-   qx::dao::strategy::inheritance m_eDaoStrategy;     //!< Dao class strategy to access data member
-   qx::QxSoftDelete m_oSoftDelete;                    //!< Soft delete (or logical delete) behavior
-   IxValidatorX_ptr m_pAllValidator;                  //!< List of validator associated to the class
+   QMutex m_mutex;                                                               //!< Mutex => qx::IxClass is thread-safe
+   QString m_sKey;                                                               //!< 'IxClass' key <=> class name
+   QString m_sName;                                                              //!< 'IxClass' name <=> database table name (if empty => class name)
+   QString m_sDescription;                                                       //!< 'IxClass' description
+   long m_lVersion;                                                              //!< 'IxClass' version
+   bool m_bFinalClass;                                                           //!< Class without base class (for example, qx::trait::no_base_class_defined and QObject)
+   bool m_bDaoReadOnly;                                                          //!< If 'true', cannot INSERT, UPDATE OR DELETE an instance of this class using qx::dao namespace
+   bool m_bRegistered;                                                           //!< Class registered into QxOrm context
+   qx::dao::strategy::inheritance m_eDaoStrategy;                                //!< Dao class strategy to access data member
+   qx::QxSoftDelete m_oSoftDelete;                                               //!< Soft delete (or logical delete) behavior
+   IxValidatorX_ptr m_pAllValidator;                                             //!< List of validator associated to the class
+   std::shared_ptr<IxSqlRelationX> m_pSqlRelationX;                              //!< Collection of SQL relationships
+   std::shared_ptr<QxCollection<QString, IxDataMember *> > m_pSqlDataMemberX;    //!< Collection of SQL columns (data member)
 
    QByteArray m_byteName;                             //!< Optimization to retrieve name under "const char *" format
    const char * m_pName;                              //!< Optimization to retrieve name under "const char *" format
@@ -65,6 +68,23 @@ struct IxClass::IxClassImpl
    ~IxClassImpl() { ; }
 
    void updateNamePtr() { m_byteName = m_sName.toLatin1(); m_pName = m_byteName.constData(); }
+
+   IxDataMember * isValid_SqlRelation(long lIndex) const
+   {
+      IxDataMember * p = (m_pDataMemberX ? m_pDataMemberX->get_WithDaoStrategy(lIndex) : NULL);
+      bool bIsValid = (p && p->getDao() && p->hasSqlRelation());
+      if (bIsValid) { p->getSqlRelation()->init(); }
+      return (bIsValid ? p : NULL);
+   }
+
+   IxDataMember * isValid_SqlDataMember(long lIndex) const
+   {
+      IxDataMember * pId = (m_pDataMemberX ? m_pDataMemberX->getId_WithDaoStrategy() : NULL);
+      IxDataMember * p = (m_pDataMemberX ? m_pDataMemberX->get_WithDaoStrategy(lIndex) : NULL);
+      bool bValid = (p && p->getDao() && ! p->hasSqlRelation());
+      bValid = (bValid && (p != pId));
+      return (bValid ? p : NULL);
+   }
 
 };
 
@@ -102,6 +122,30 @@ IxDataMemberX * IxClass::getDataMemberX() const { return m_pImpl->m_pDataMemberX
 IxFunctionX * IxClass::getFctMemberX() const { return m_pImpl->m_pFctMemberX.get(); }
 
 IxFunctionX * IxClass::getFctStaticX() const { return m_pImpl->m_pFctStaticX.get(); }
+
+std::shared_ptr<QxCollection<QString, IxSqlRelation *> > IxClass::getSqlRelationX()
+{
+   if ((m_pImpl->m_pSqlRelationX) || (! m_pImpl->m_pDataMemberX)) { return m_pImpl->m_pSqlRelationX; }
+
+   QMutexLocker locker(& m_pImpl->m_mutex);
+   if (m_pImpl->m_pSqlRelationX) { return m_pImpl->m_pSqlRelationX; }
+   m_pImpl->m_pSqlRelationX = std::make_shared<IxSqlRelationX>();
+   IxDataMember * p = NULL; long lCount = m_pImpl->m_pDataMemberX->count_WithDaoStrategy();
+   for (long l = 0; l < lCount; ++l) { if ((p = m_pImpl->isValid_SqlRelation(l))) { m_pImpl->m_pSqlRelationX->insert(p->getKey(), p->getSqlRelation()); } }
+   return m_pImpl->m_pSqlRelationX;
+}
+
+std::shared_ptr<QxCollection<QString, IxDataMember *> > IxClass::getSqlDataMemberX()
+{
+   if ((m_pImpl->m_pSqlDataMemberX) || (! m_pImpl->m_pDataMemberX)) { return m_pImpl->m_pSqlDataMemberX; }
+
+   QMutexLocker locker(& m_pImpl->m_mutex);
+   if (m_pImpl->m_pSqlDataMemberX) { return m_pImpl->m_pSqlDataMemberX; }
+   m_pImpl->m_pSqlDataMemberX = std::make_shared<QxCollection<QString, IxDataMember *> >();
+   IxDataMember * p = NULL; long lCount = m_pImpl->m_pDataMemberX->count_WithDaoStrategy();
+   for (long l = 0; l < lCount; ++l) { if ((p = m_pImpl->isValid_SqlDataMember(l))) { m_pImpl->m_pSqlDataMemberX->insert(p->getKey(), p); } }
+   return m_pImpl->m_pSqlDataMemberX;
+}
 
 IxValidatorX_ptr & IxClass::getAllValidatorRef() { return m_pImpl->m_pAllValidator; }
 

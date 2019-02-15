@@ -59,7 +59,7 @@ QDataStream & operator>> (QDataStream & stream, std::shared_ptr<T> & t)
 {
    qint8 iIsNull = 0;
    stream >> iIsNull;
-   if (! iIsNull) { t.reset(new T()); stream >> (* t); }
+   if (! iIsNull) { t = std::make_shared<T>(); stream >> (* t); }
    else { t.reset(); }
    return stream;
 }
