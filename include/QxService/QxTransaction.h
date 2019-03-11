@@ -29,6 +29,10 @@
 **
 ****************************************************************************/
 
+#ifdef Q_MOC_RUN
+#include <QxCommon/QxConfig.h> // Need to include this file for the 'moc' process
+#endif // Q_MOC_RUN
+
 #ifdef _QX_ENABLE_QT_NETWORK
 #ifndef _QX_SERVICE_TRANSACTION_H_
 #define _QX_SERVICE_TRANSACTION_H_
@@ -44,6 +48,12 @@
  * \brief Transaction of QxService module (contains request from client and reply from server)
  */
 
+#ifdef _QX_NO_PRECOMPILED_HEADER
+#ifndef Q_MOC_RUN
+#include <QxPrecompiled.h> // Need to include precompiled header for the generated moc file
+#endif // Q_MOC_RUN
+#endif // _QX_NO_PRECOMPILED_HEADER
+
 #include <QtCore/qdatastream.h>
 
 #ifndef _QX_NO_JSON
@@ -52,14 +62,21 @@
 
 #include <QtNetwork/qtcpsocket.h>
 
+#ifndef QT_NO_SSL
+#include <QtNetwork/qsslsocket.h>
+#include <QtNetwork/qsslconfiguration.h>
+#include <QtNetwork/qsslcertificate.h>
+#include <QtNetwork/qsslerror.h>
+#include <QtNetwork/qsslkey.h>
+#endif // QT_NO_SSL
+
+#ifndef Q_MOC_RUN
 #include <QxCommon/QxBool.h>
-
 #include <QxRegister/QxRegisterInternalHelper.h>
-
 #include <QxService/IxService.h>
 #include <QxService/IxParameter.h>
-
 #include <QxConvert/QxConvert.h>
+#endif // Q_MOC_RUN
 
 namespace qx {
 namespace service {
@@ -92,9 +109,10 @@ namespace service {
  *
  * <a href="https://www.qxorm.com/qxorm_en/tutorial_2.html" target="_blank">Click here to access to a tutorial to explain how to work with QxService module.</a>
  */
-class QX_DLL_EXPORT QxTransaction
+class QX_DLL_EXPORT QxTransaction : public QObject
 {
 
+   Q_OBJECT
    QX_REGISTER_FRIEND_CLASS(qx::service::QxTransaction)
 
    friend QX_DLL_EXPORT QDataStream & ::operator<< (QDataStream & stream, const qx::service::QxTransaction & t);
@@ -106,6 +124,10 @@ class QX_DLL_EXPORT QxTransaction
    friend QX_DLL_EXPORT QJsonValue qx::cvt::detail::QxConvert_ToJson_Helper(const qx::service::QxTransaction & t, const QString & format);
    friend QX_DLL_EXPORT qx_bool qx::cvt::detail::QxConvert_FromJson_Helper(const QJsonValue & j, qx::service::QxTransaction & t, const QString & format);
 #endif // _QX_NO_JSON
+
+public:
+
+   enum connection_status { conn_none, conn_keep_alive, conn_close };
 
 protected:
 
@@ -128,11 +150,13 @@ protected:
    IxParameter_ptr      m_pInputParameter;                  //!< List of input parameters (request)
    IxParameter_ptr      m_pOutputParameter;                 //!< List of output parameters (reply)
    IxService_ptr        m_pServiceInstance;                 //!< Service instance created by 'm_sServiceName' property
+   connection_status    m_eForceConnectionStatus;           //!< Sometimes we have to force connection status
 
 public:
 
-   QxTransaction() : m_uiInputTransactionSize(0), m_uiOutputTransactionSize(0), m_lPortSource(0), m_lPortTarget(0) { ; }
+   QxTransaction() : QObject(), m_uiInputTransactionSize(0), m_uiOutputTransactionSize(0), m_lPortSource(0), m_lPortTarget(0), m_eForceConnectionStatus(conn_none) { ; }
    virtual ~QxTransaction() { ; }
+   virtual void clear();
 
    QString getTransactionId() const                      { return m_sTransactionId; }
    quint32 getInputTransactionSize() const               { return m_uiInputTransactionSize; }
@@ -152,6 +176,7 @@ public:
    qx_bool getMessageReturn() const                      { return m_bMessageReturn; }
    IxParameter_ptr getInputParameter() const             { return m_pInputParameter; }
    IxParameter_ptr getOutputParameter() const            { return m_pOutputParameter; }
+   connection_status getForceConnectionStatus() const    { return m_eForceConnectionStatus; }
 
    void setTransactionId(const QString & s)                    { m_sTransactionId = s; }
    void setInputTransactionSize(quint32 ui)                    { m_uiInputTransactionSize = ui; }
@@ -171,18 +196,28 @@ public:
    void setMessageReturn(const qx_bool & b)                    { m_bMessageReturn = b; }
    void setInputParameter(IxParameter_ptr p)                   { m_pInputParameter = p; }
    void setOutputParameter(IxParameter_ptr p)                  { m_pOutputParameter = p; }
+   void setForceConnectionStatus(connection_status e)          { m_eForceConnectionStatus = e; }
 
-public:
+   virtual void executeServer();
+   virtual qx_bool writeSocketServer(QTcpSocket & socket);
+   virtual qx_bool readSocketServer(QTcpSocket & socket);
 
-   void executeServer();
-   void executeClient(IxService * pService, const QString & sMethod);
+   virtual void executeClient(IxService * pService, const QString & sMethod);
+   virtual qx_bool writeSocketClient(QTcpSocket & socket);
+   virtual qx_bool readSocketClient(QTcpSocket & socket);
 
    QString getInfos() const;
 
 protected:
 
-   qx_bool writeSocket(QTcpSocket & socket);
-   qx_bool readSocket(QTcpSocket & socket);
+#ifndef QT_NO_SSL
+   QSslSocket * initSocketSSL();
+   bool checkSocketSSLEncrypted(QTcpSocket * socket);
+#endif // QT_NO_SSL
+
+Q_SIGNALS:
+
+   void onCustomRequestHandler();
 
 };
 

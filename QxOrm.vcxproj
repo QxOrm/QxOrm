@@ -101,6 +101,13 @@
     <ClCompile Include="src\QxDao\QxMongoDB\QxMongoDB_Helper.cpp" />
     <ClCompile Include="src\QxDao\QxSoftDelete.cpp" />
     <ClCompile Include="src\QxDao\QxTimeNeutral.cpp" />
+    <ClCompile Include="src\QxHttpServer\QxHttpCookie.cpp" />
+    <ClCompile Include="src\QxHttpServer\QxHttpRequest.cpp" />
+    <ClCompile Include="src\QxHttpServer\QxHttpResponse.cpp" />
+    <ClCompile Include="src\QxHttpServer\QxHttpServer.cpp" />
+    <ClCompile Include="src\QxHttpServer\QxHttpSession.cpp" />
+    <ClCompile Include="src\QxHttpServer\QxHttpSessionManager.cpp" />
+    <ClCompile Include="src\QxHttpServer\QxHttpTransaction.cpp" />
     <ClCompile Include="src\QxModelView\IxModel.cpp" />
     <ClCompile Include="src\QxModelView\QxModelRowCompare.cpp" />
     <ClCompile Include="src\QxModelView\QxNestedModel.cpp" />
@@ -235,6 +242,13 @@
     <ClInclude Include="include\QxDao\QxSqlSaveMode.h" />
     <ClInclude Include="include\QxExtras\QxBoostOptionalOnly.h" />
     <ClInclude Include="include\QxExtras\QxStdOptional.h" />
+    <ClInclude Include="include\QxHttpServer\QxHttpCookie.h" />
+    <ClInclude Include="include\QxHttpServer\QxHttpRequest.h" />
+    <ClInclude Include="include\QxHttpServer\QxHttpResponse.h" />
+    <ClInclude Include="include\QxHttpServer\QxHttpServer.h" />
+    <ClInclude Include="include\QxHttpServer\QxHttpSession.h" />
+    <ClInclude Include="include\QxHttpServer\QxHttpSessionManager.h" />
+    <ClInclude Include="include\QxHttpServer\QxHttpTransaction.h" />
     <ClInclude Include="include\QxMemLeak.h" />
     <ClInclude Include="include\QxModelView.h" />
     <ClInclude Include="include\QxModelView\IxModel.h" />

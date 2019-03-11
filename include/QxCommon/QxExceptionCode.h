@@ -51,6 +51,7 @@
 #define QX_ERROR_SERVER_NOT_FOUND                     4
 #define QX_ERROR_SERVICE_WRITE_ERROR                  5
 #define QX_ERROR_SERVICE_READ_ERROR                   6
+#define QX_ERROR_SERVICE_SSL_ENCRYPTED                7
 
 #define QX_EXCEPTION_UNKNOWN                          qx::exception(QX_ERROR_UNKNOWN, "unknown error")
 #define QX_EXCEPTION_SERVICE_NOT_SPECIFIED            qx::exception(QX_ERROR_SERVICE_NOT_SPECIFIED, "[QxOrm] empty service name")
@@ -58,5 +59,6 @@
 #define QX_EXCEPTION_SERVER_NOT_FOUND                 qx::exception(QX_ERROR_SERVER_NOT_FOUND, "[QxOrm] unable to connect to server")
 #define QX_EXCEPTION_SERVICE_WRITE_ERROR              qx::exception(QX_ERROR_SERVICE_WRITE_ERROR, "[QxOrm] unable to write request to socket")
 #define QX_EXCEPTION_SERVICE_READ_ERROR               qx::exception(QX_ERROR_SERVICE_READ_ERROR, "[QxOrm] unable to read reply from socket")
+#define QX_EXCEPTION_SERVICE_SSL_ENCRYPTED            qx::exception(QX_ERROR_SERVICE_SSL_ENCRYPTED, "[QxOrm] SSL socket encrypted error")
 
 #endif // _QX_EXCEPTION_CODE_H_

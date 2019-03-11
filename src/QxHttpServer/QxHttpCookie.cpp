@@ -33,52 +33,48 @@
 
 #include <QxPrecompiled.h>
 
-#include <QxService/QxServer.h>
-#include <QxService/QxThreadPool.h>
-#include <QxService/QxThread.h>
-#include <QxService/QxTransaction.h>
-#include <QxService/QxConnect.h>
+#include <QxHttpServer/QxHttpCookie.h>
 
 #include <QxMemLeak/mem_leak.h>
 
 namespace qx {
-namespace service {
 
-#if (QT_VERSION >= 0x050000)
-void QxServer::incomingConnection(qintptr socketDescriptor)
-#else // (QT_VERSION >= 0x050000)
-void QxServer::incomingConnection(int socketDescriptor)
-#endif // (QT_VERSION >= 0x050000)
+QxHttpCookie::QxHttpCookie() : path("/"), maxAge(0), secure(false), httpOnly(false) { ; }
+
+QxHttpCookie::QxHttpCookie(const QByteArray & name_, const QByteArray & value_, const QByteArray & domain_ /* = QByteArray() */, const QByteArray & path_ /* = QByteArray("/") */, qlonglong maxAge_ /* = 0 */, bool secure_ /* = false */, bool httpOnly_ /* = false */) : name(name_), value(value_), domain(domain_), path(path_), maxAge(maxAge_), secure(secure_), httpOnly(httpOnly_) { ; }
+
+QxHttpCookie::~QxHttpCookie() { ; }
+
+QByteArray QxHttpCookie::toString() const
 {
-   QMutexLocker locker(& m_mutex);
-   QxThread * pThread = getAvailable();
-   if (m_pThreadPool && m_pThreadPool->isStopped()) { return; }
-   if (! pThread) { if (m_pThreadPool) { m_pThreadPool->raiseError("[QxOrm] no service available : cannot accept incoming connection (increase thread count value)", QxTransaction_ptr()); } return; }
-   pThread->execute(socketDescriptor);
+   QByteArray result = name;
+   if (! value.isEmpty()) { result += "=" + value; }
+   if (! domain.isEmpty()) { result += "; Domain=" + domain; }
+   if (! path.isEmpty()) { result += "; Path=" + path; }
+   if (maxAge != 0) { result += "; Max-Age=" + QByteArray::number(maxAge); }
+   if (secure) { result += "; Secure"; }
+   if (httpOnly) { result += "; HttpOnly"; }
+   return result;
 }
 
-QxThread * QxServer::getAvailable() const
+QHash<QByteArray, QxHttpCookie> QxHttpCookie::parse(const QByteArray & cookies)
 {
-   if (! m_pThreadPool) { qAssert(false); return NULL; }
-   if (m_pThreadPool->isStopped()) { return NULL; }
-   QxThread * pThread = m_pThreadPool->getAvailable();
-   if (pThread) { return pThread; }
-   qDebug("[QxOrm] qx::service::QxServer no service available : %s", "need to wait (try to increase thread count value)");
-
-   int iCurrRetryCount = 0;
-   int iMaxRetryCount = QxConnect::getSingleton()->getMaxWait();
-   while ((! pThread) && (iCurrRetryCount < iMaxRetryCount))
+   QHash<QByteArray, QxHttpCookie> result;
+   QList<QByteArray> lst = cookies.split(';');
+   Q_FOREACH(QByteArray data, lst)
    {
-      if (m_pThreadPool->isStopped()) { return NULL; }
-      qx::service::QxThreadPool::sleepThread(1);
-      pThread = m_pThreadPool->getAvailable();
-      iCurrRetryCount++;
-   }
+      QByteArray name, value;
+      int pos = data.indexOf('=');
+      if (pos <= 0) { name = data.trimmed(); }
+      else { name = data.left(pos).trimmed(); value = data.mid(pos + 1).trimmed(); }
+      if (name.isEmpty()) { continue; }
 
-   return pThread;
+      QxHttpCookie cookie(name, value);
+      result.insert(cookie.name, cookie);
+   }
+   return result;
 }
 
-} // namespace service
 } // namespace qx
 
 #endif // _QX_ENABLE_QT_NETWORK

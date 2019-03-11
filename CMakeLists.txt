@@ -386,6 +386,13 @@ set(QX_HEADERS
     ./include/QxService/QxThreadPool.h
     ./include/QxService/QxTools.h
     ./include/QxService/QxTransaction.h
+    ./include/QxHttpServer/QxHttpRequest.h
+    ./include/QxHttpServer/QxHttpResponse.h
+    ./include/QxHttpServer/QxHttpServer.h
+    ./include/QxHttpServer/QxHttpTransaction.h
+    ./include/QxHttpServer/QxHttpCookie.h
+    ./include/QxHttpServer/QxHttpSession.h
+    ./include/QxHttpServer/QxHttpSessionManager.h
     ./include/QxValidator/IxValidator.h
     ./include/QxValidator/IxValidatorX.h
     ./include/QxValidator/QxInvalidValue.h
@@ -540,6 +547,13 @@ else() # _QX_UNITY_BUILD
        ./src/QxService/QxThreadPool.cpp
        ./src/QxService/QxTools.cpp
        ./src/QxService/QxTransaction.cpp
+       ./src/QxHttpServer/QxHttpRequest.cpp
+       ./src/QxHttpServer/QxHttpResponse.cpp
+       ./src/QxHttpServer/QxHttpServer.cpp
+       ./src/QxHttpServer/QxHttpTransaction.cpp
+       ./src/QxHttpServer/QxHttpCookie.cpp
+       ./src/QxHttpServer/QxHttpSession.cpp
+       ./src/QxHttpServer/QxHttpSessionManager.cpp
        ./src/QxValidator/IxValidator.cpp
        ./src/QxValidator/IxValidatorX.cpp
        ./src/QxValidator/QxInvalidValue.cpp

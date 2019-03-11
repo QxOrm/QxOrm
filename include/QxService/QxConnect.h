@@ -44,31 +44,17 @@
  * \brief Define connection parameters used by QxService module of QxOrm library
  */
 
+#ifndef QT_NO_SSL
+#include <QtNetwork/qsslsocket.h>
+#include <QtNetwork/qsslconfiguration.h>
+#include <QtNetwork/qsslcertificate.h>
+#include <QtNetwork/qsslerror.h>
+#include <QtNetwork/qsslkey.h>
+#endif // QT_NO_SSL
+
+#ifndef Q_MOC_RUN
 #include <QxSingleton/QxSingleton.h>
-
-#if _QX_SERIALIZE_BINARY
-#define QX_SERVICE_DEFAULT_SERIALIZATION_TYPE serialization_binary
-#elif _QX_SERIALIZE_WIDE_BINARY
-#define QX_SERVICE_DEFAULT_SERIALIZATION_TYPE serialization_wide_binary
-#elif _QX_SERIALIZE_PORTABLE_BINARY
-#define QX_SERVICE_DEFAULT_SERIALIZATION_TYPE serialization_portable_binary
-#elif _QX_SERIALIZE_POLYMORPHIC
-#define QX_SERVICE_DEFAULT_SERIALIZATION_TYPE serialization_polymorphic_binary
-#elif _QX_SERIALIZE_TEXT
-#define QX_SERVICE_DEFAULT_SERIALIZATION_TYPE serialization_text
-#elif _QX_SERIALIZE_XML
-#define QX_SERVICE_DEFAULT_SERIALIZATION_TYPE serialization_xml
-#elif _QX_SERIALIZE_WIDE_TEXT
-#define QX_SERVICE_DEFAULT_SERIALIZATION_TYPE serialization_wide_text
-#elif _QX_SERIALIZE_WIDE_XML
-#define QX_SERVICE_DEFAULT_SERIALIZATION_TYPE serialization_wide_xml
-#endif // _QX_SERIALIZE_BINARY
-
-#ifndef QX_SERVICE_DEFAULT_SERIALIZATION_TYPE
-#define QX_SERVICE_DEFAULT_SERIALIZATION_TYPE serialization_qt
-#endif // QX_SERVICE_DEFAULT_SERIALIZATION_TYPE
-
-#define QX_SERVICE_DEFAULT_ENCRYPT_KEY Q_UINT64_C(0x0f2aac3b24358a1a)
+#endif // Q_MOC_RUN
 
 namespace qx {
 namespace service {
@@ -91,38 +77,64 @@ public:
                              serialization_polymorphic_binary, serialization_polymorphic_xml, serialization_polymorphic_text, 
                              serialization_qt, serialization_json };
 
-protected:
+private:
 
-   QString              m_sIp;                  //!< Ip address
-   long                 m_lPort;                //!< Port number
-   serialization_type   m_eSerializationType;   //!< Serialization type to send data over network
-   long                 m_lThreadCount;         //!< Thread count to execute all transactions (cf. 'QxThreadPool')
-   int                  m_iMaxWait;             //!< Max wait in milliseconds for network processes
-   bool                 m_bCompressData;        //!< Compress data over network
-   bool                 m_bEncryptData;         //!< Encrypt data before transfering it over network
-   quint64              m_uiEncryptKey;         //!< 64 bit key to encrypt/decrypt data
+   struct QxConnectImpl;
+   std::unique_ptr<QxConnectImpl> m_pImpl; //!< Private implementation idiom
+
+   QxConnect();
+   virtual ~QxConnect();
 
 public:
 
-   QxConnect() : qx::QxSingleton<QxConnect>("qx::service::QxConnect"), m_lPort(0), m_eSerializationType(QX_SERVICE_DEFAULT_SERIALIZATION_TYPE), m_lThreadCount(30), m_iMaxWait(30000), m_bCompressData(false), m_bEncryptData(false) { m_uiEncryptKey = QX_SERVICE_DEFAULT_ENCRYPT_KEY; }
-   virtual ~QxConnect();
+   QString getIp();
+   long getPort();
+   serialization_type getSerializationType();
+   long getThreadCount();
+   int getMaxWait();
+   bool getCompressData();
+   bool getEncryptData();
+   quint64 getEncryptKey();
+   long getKeepAlive();
+   bool getModeHTTP();
+   qlonglong getSessionTimeOut();
 
-   QString getIp() const                              { return m_sIp; }
-   long getPort() const                               { return m_lPort; }
-   serialization_type getSerializationType() const    { return m_eSerializationType; }
-   long getThreadCount() const                        { return m_lThreadCount; }
-   int getMaxWait() const                             { return m_iMaxWait; }
-   bool getCompressData() const                       { return m_bCompressData; }
-   bool getEncryptData() const                        { return m_bEncryptData; }
-   quint64 getEncryptKey() const                      { return m_uiEncryptKey; }
+#ifndef QT_NO_SSL
+   bool getSSLEnabled();
+   QSslConfiguration getSSLConfiguration();
+   QList<QSslCertificate> getSSLCACertificates();
+   QSslCertificate getSSLLocalCertificate();
+   QSslKey getSSLPrivateKey();
+   QList<QSslError> getSSLIgnoreErrors();
+   QSsl::SslProtocol getSSLProtocol();
+   QString getSSLPeerVerifyName();
+   QSslSocket::PeerVerifyMode getSSLPeerVerifyMode();
+   int getSSLPeerVerifyDepth();
+#endif // QT_NO_SSL
 
-   void setIp(const QString & s)                      { m_sIp = s; }
-   void setPort(long l)                               { m_lPort = l; }
-   void setSerializationType(serialization_type e)    { m_eSerializationType = e; }
-   void setThreadCount(long l)                        { qAssert(l > 0); m_lThreadCount = l; }
-   void setMaxWait(int i)                             { qAssert(i > 0); m_iMaxWait = i; }
-   void setCompressData(bool b)                       { m_bCompressData = b; }
-   void setEncryptData(bool b, quint64 key = 0)       { m_bEncryptData = b; if (key != 0) { m_uiEncryptKey = key; } }
+   void setIp(const QString & s);
+   void setPort(long l);
+   void setSerializationType(serialization_type e);
+   void setThreadCount(long l);
+   void setMaxWait(int i);
+   void setCompressData(bool b);
+   void setEncryptData(bool b, quint64 key = 0);
+   void setKeepAlive(long l);
+   void setModeHTTP(bool b);
+   void setSessionTimeOut(qlonglong l);
+
+#ifndef QT_NO_SSL
+   void setSSLEnabled(bool b);
+   void setSSLConfiguration(QSslConfiguration cfg);
+   void setSSLCACertificates(QList<QSslCertificate> lst);
+   void setSSLLocalCertificate(QSslCertificate cert);
+   void setSSLPrivateKey(QSslKey key);
+   void setSSLIgnoreErrors(QList<QSslError> lst);
+   void setSSLProtocol(QSsl::SslProtocol e);
+   void setSSLPeerVerifyName(const QString & s);
+   void setSSLPeerVerifyMode(QSslSocket::PeerVerifyMode e);
+   void setSSLPeerVerifyDepth(int i);
+#endif // QT_NO_SSL
 
 };
 

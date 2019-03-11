@@ -29,7 +29,9 @@
 **
 ****************************************************************************/
 
+#ifdef Q_MOC_RUN
 #include <QxCommon/QxConfig.h> // Need to include this file for the 'moc' process
+#endif // Q_MOC_RUN
 
 #ifdef _QX_ENABLE_QT_NETWORK
 #ifndef _QX_SERVICE_THREAD_POOL_H_
@@ -79,19 +81,20 @@ protected:
 
    QList<QxThread *> m_lstAllServices;       //!< List of all services created by 'QxThreadPool'
    QQueue<QxThread *> m_lstAvailable;        //!< List of services available to execute process
-   bool m_bIsRunning;                        //!< Flag to indicate if thread is running
+   bool m_bIsStopped;                        //!< Flag to indicate if thread has been stopped
    QMutex m_mutex;                           //!< Mutex => 'QxThreadPool' is thread-safe
 
 public:
 
-   QxThreadPool() : QThread(), m_bIsRunning(false) { ; }
+   QxThreadPool() : QThread(), m_bIsStopped(false) { ; }
    virtual ~QxThreadPool() { if (isRunning()) { qDebug("[QxOrm] qx::service::QxThreadPool thread is running : %s", "quit and wait"); quit(); wait(); } }
 
+   bool isStopped() const;
    QxThread * getAvailable();
    void setAvailable(QxThread * p);
    void raiseError(const QString & err, QxTransaction_ptr transaction);
 
-   void sleepThread(unsigned long msecs) { QThread::msleep(msecs); }
+   static void sleepThread(unsigned long msecs) { QThread::msleep(msecs); }
 
 protected:
 
@@ -106,6 +109,7 @@ Q_SIGNALS:
    void error(const QString & err, qx::service::QxTransaction_ptr transaction);
    void transactionStarted(qx::service::QxTransaction_ptr transaction);
    void transactionFinished(qx::service::QxTransaction_ptr transaction);
+   void customRequestHandler(qx::service::QxTransaction_ptr transaction);
    void serverIsRunning(bool bIsRunning, qx::service::QxServer * pServer);
 
 };

@@ -12,12 +12,18 @@
 #include <QtDeclarative/qdeclarativecontext.h>
 #endif // (QT_VERSION >= 0x050000)
 
+#include <QtGui/qdesktopservices.h>
+
 #include "../include/blog.h"
 #include "../include/author.h"
 #include "../include/comment.h"
 #include "../include/category.h"
 
 #include <QxOrm_Impl.h>
+
+#ifdef _QX_ENABLE_QT_NETWORK
+void myHttpRequestHandler(qx::QxHttpRequest & request, qx::QxHttpResponse & response);
+#endif // _QX_ENABLE_QT_NETWORK
 
 int main(int argc, char * argv[])
 {
@@ -346,17 +352,125 @@ int main(int argc, char * argv[])
    daoError = qx::dao::save_with_relation_recursive(blog_cloned, qx::dao::save_mode::e_insert_only); qAssert(! daoError.isValid());
 
 #if (QT_VERSION >= 0x050000)
-   qx::QxRestApi * pRestApi = new qx::QxRestApi();
 
-   QQuickView qmlView;
-   QString sQmlFile = "qrc:/documents/test_rest_api.qml";
+   {
+      qx::QxRestApi api;
 
-   qmlView.rootContext()->setContextProperty("qxRestApi", pRestApi);
-   qmlView.setResizeMode(QQuickView::SizeRootObjectToView);
-   qmlView.setSource(QUrl(sQmlFile));
-   qmlView.show();
-   qApp->exec();
+      QQuickView qmlView;
+      QString sQmlFile = "qrc:/documents/test_rest_api.qml";
+
+      qmlView.rootContext()->setContextProperty("qxRestApi", (& api));
+      qmlView.setResizeMode(QQuickView::SizeRootObjectToView);
+      qmlView.setSource(QUrl(sQmlFile));
+      qmlView.show();
+      qApp->exec();
+   }
+
+#ifdef _QX_ENABLE_QT_NETWORK
+
+   {
+      // Just to be sure to have static files on the system
+      QDir appPath(QDir::currentPath()); appPath.mkdir("files");
+      QFile::copy(":/documents/test_http_server.html", appPath.filePath("files/test_http_server.html"));
+      QFile::copy(":/documents/logo_qxorm_and_qxee.png", appPath.filePath("files/logo_qxorm_and_qxee.png"));
+      QFile::copy(":/documents/jquery.js", appPath.filePath("files/jquery.js"));
+
+      // HTTP server settings
+      qx::service::QxConnect * serverSettings = qx::service::QxConnect::getSingleton();
+      serverSettings->setKeepAlive(5000);
+      serverSettings->setCompressData(true);
+      serverSettings->setThreadCount(50);
+      serverSettings->setPort(9642);
+
+#ifndef QT_NO_SSL
+      if (false) // If you want to test SSL/TLS secured connection, just force this condition to 'true'
+      {
+         // Certificates created with this tutorial : https://deliciousbrains.com/ssl-certificate-authority-for-local-https-development/
+         QFile::copy(":/documents/cert_qxorm_ca.pem", appPath.filePath("files/cert_qxorm_ca.pem"));
+         QFile::copy(":/documents/cert_qxorm_server.crt", appPath.filePath("files/cert_qxorm_server.crt"));
+         QFile::copy(":/documents/cert_qxorm_server.key", appPath.filePath("files/cert_qxorm_server.key"));
+
+         QFile fileCertCA(appPath.filePath("files/cert_qxorm_ca.pem"));
+         fileCertCA.open(QIODevice::ReadOnly);
+         QList<QSslCertificate> certCA; certCA << QSslCertificate(fileCertCA.readAll());
+
+         QFile fileCertServerPublic(appPath.filePath("files/cert_qxorm_server.crt"));
+         fileCertServerPublic.open(QIODevice::ReadOnly);
+         QSslCertificate certServerPublic(fileCertServerPublic.readAll());
+
+         QFile fileCertServerPrivate(appPath.filePath("files/cert_qxorm_server.key"));
+         fileCertServerPrivate.open(QIODevice::ReadOnly);
+         QSslKey certServerPrivate(fileCertServerPrivate.readAll(), QSsl::Rsa, QSsl::Pem, QSsl::PrivateKey, "qxorm");
+
+         serverSettings->setSSLEnabled(true);
+         serverSettings->setSSLCACertificates(certCA);
+         serverSettings->setSSLLocalCertificate(certServerPublic);
+         serverSettings->setSSLPrivateKey(certServerPrivate);
+      }
+#endif // QT_NO_SSL
+
+      // Create a QxOrm HTTP server instance and start it
+      qx::QxHttpServer httpServer;
+      httpServer.setCustomRequestHandler(myHttpRequestHandler);
+      httpServer.startServer();
+
+      // Open default web browser to connect to QxOrm HTTP server instance
+#ifndef QT_NO_SSL
+      if (serverSettings->getSSLEnabled()) { QDesktopServices::openUrl(QUrl("https://localhost:9642/files/test_http_server.html")); }
+      else { QDesktopServices::openUrl(QUrl("http://localhost:9642/files/test_http_server.html")); }
+#else // QT_NO_SSL
+      QDesktopServices::openUrl(QUrl("http://localhost:9642/files/test_http_server.html"));
+#endif // QT_NO_SSL
+
+      QQuickView qmlView;
+      QString sQmlFile = "qrc:/documents/test_http_server.qml";
+
+      qmlView.rootContext()->setContextProperty("qxHttpServer", (& httpServer));
+      qmlView.setResizeMode(QQuickView::SizeRootObjectToView);
+      qmlView.setSource(QUrl(sQmlFile));
+      qmlView.show();
+      qApp->exec();
+   }
+
+#else // _QX_ENABLE_QT_NETWORK
+
+   qDebug("[QxOrm] qxBlogRestApi example project : %s", "cannot start QxOrm HTTP server because _QX_ENABLE_QT_NETWORK compilation option is not defined");
+
+#endif // _QX_ENABLE_QT_NETWORK
+
+#else // (QT_VERSION >= 0x050000)
+
+   qDebug("[QxOrm] %s", "qxBlogRestApi example project only works with Qt5 or +");
+
 #endif // (QT_VERSION >= 0x050000)
 
    return 0;
 }
+
+#ifdef _QX_ENABLE_QT_NETWORK
+
+void myHttpRequestHandler(qx::QxHttpRequest & request, qx::QxHttpResponse & response)
+{
+   if ((request.command() == "GET") && (request.url().path().startsWith("/files/")))
+   {
+      qx::QxHttpServer::buildResponseStaticFile(request, response, QDir::currentPath());
+   }
+   else if (request.url().path().startsWith("/qx"))
+   {
+      qx::QxHttpServer::buildResponseQxRestApi(request, response);
+
+      // Not useful here but this is how to get a server session per user
+      // If this is the first time to access to session, then a cookie is created automatically and attached to the response
+      // Then each request sent by web browser will contain a cookie with the session id
+      // The session expires on server side after qx::service::QxConnect::setSessionTimeOut() milliseconds
+      qx::QxHttpSession_ptr session = qx::QxHttpSessionManager::getSession(request, response);
+      if (session) { session->set("last_request_per_user", QDateTime::currentDateTime()); }
+   }
+   else
+   {
+      response.status() = 404;
+      response.data() = "HTTP custom request handler is not able to process request (method=" + request.command().toLatin1() + ", path=" + request.url().path().toLatin1() + ")";
+   }
+}
+
+#endif // _QX_ENABLE_QT_NETWORK

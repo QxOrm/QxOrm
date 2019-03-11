@@ -186,6 +186,14 @@
 #include "./QxService/QxTools.cpp"
 #include "./QxService/QxTransaction.cpp"
 
+#include "./QxHttpServer/QxHttpRequest.cpp"
+#include "./QxHttpServer/QxHttpResponse.cpp"
+#include "./QxHttpServer/QxHttpServer.cpp"
+#include "./QxHttpServer/QxHttpTransaction.cpp"
+#include "./QxHttpServer/QxHttpCookie.cpp"
+#include "./QxHttpServer/QxHttpSession.cpp"
+#include "./QxHttpServer/QxHttpSessionManager.cpp"
+
 #include "./QxValidator/IxValidator.cpp"
 #include "./QxValidator/IxValidatorX.cpp"
 #include "./QxValidator/QxInvalidValue.cpp"

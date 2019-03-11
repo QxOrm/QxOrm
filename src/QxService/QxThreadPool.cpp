@@ -39,13 +39,18 @@
 #include <QxService/QxThread.h>
 #include <QxService/QxConnect.h>
 
+#include <QxHttpServer/QxHttpSessionManager.h>
+
 #include <QxMemLeak/mem_leak.h>
 
 namespace qx {
 namespace service {
 
+bool QxThreadPool::isStopped() const { return m_bIsStopped; }
+
 QxThread * QxThreadPool::getAvailable()
 {
+   if (m_bIsStopped) { return NULL; }
    QMutexLocker locker(& m_mutex);
    QxThread * p = (m_lstAvailable.isEmpty() ? NULL : m_lstAvailable.dequeue());
    if (p) { qAssert(p->isAvailable()); }
@@ -54,7 +59,7 @@ QxThread * QxThreadPool::getAvailable()
 
 void QxThreadPool::setAvailable(QxThread * p)
 {
-   if (! m_bIsRunning) { return; }
+   if (m_bIsStopped) { return; }
    QMutexLocker locker(& m_mutex);
    if ((p == NULL) || (! p->isAvailable())) { qAssert(false); return; }
    for (long l = 0; l < m_lstAvailable.count(); l++)
@@ -70,11 +75,15 @@ void QxThreadPool::raiseError(const QString & err, QxTransaction_ptr transaction
 
 void QxThreadPool::run()
 {
+   // To be sure that HTTP session manager event loop is running on this thread
+   qx::QxHttpSessionManager::deleteSingleton();
+   qx::QxHttpSessionManager::getSingleton();
+
    initServices();
-   m_bIsRunning = true;
    runServer();
-   m_bIsRunning = false;
+   m_bIsStopped = true;
    clearServices();
+   qx::QxHttpSessionManager::deleteSingleton();
 }
 
 void QxThreadPool::runServer()
@@ -96,20 +105,25 @@ void QxThreadPool::initServices()
    qRegisterMetaType<qx::service::QxTransaction_ptr>("QxTransaction_ptr");
    for (long l = 0; l < QxConnect::getSingleton()->getThreadCount(); l++)
    {
-      QxThread * pNewThread = new QxThread(this);
-      QObject::connect(pNewThread, SIGNAL(error(const QString &, qx::service::QxTransaction_ptr)), this, SIGNAL(error(const QString &, qx::service::QxTransaction_ptr)));
-      QObject::connect(pNewThread, SIGNAL(transactionStarted(qx::service::QxTransaction_ptr)), this, SIGNAL(transactionStarted(qx::service::QxTransaction_ptr)));
-      QObject::connect(pNewThread, SIGNAL(transactionFinished(qx::service::QxTransaction_ptr)), this, SIGNAL(transactionFinished(qx::service::QxTransaction_ptr)));
-      m_lstAllServices.append(pNewThread);
-      m_lstAvailable.enqueue(pNewThread);
-      pNewThread->start();
+      QThread * pThread = new QThread();
+      QxThread * pWorker = new QxThread(this, pThread);
+      pWorker->moveToThread(pThread);
+      QObject::connect(pWorker, SIGNAL(error(const QString &, qx::service::QxTransaction_ptr)), this, SIGNAL(error(const QString &, qx::service::QxTransaction_ptr)));
+      QObject::connect(pWorker, SIGNAL(transactionStarted(qx::service::QxTransaction_ptr)), this, SIGNAL(transactionStarted(qx::service::QxTransaction_ptr)));
+      QObject::connect(pWorker, SIGNAL(transactionFinished(qx::service::QxTransaction_ptr)), this, SIGNAL(transactionFinished(qx::service::QxTransaction_ptr)));
+      QObject::connect(pWorker, SIGNAL(customRequestHandler(qx::service::QxTransaction_ptr)), this, SIGNAL(customRequestHandler(qx::service::QxTransaction_ptr)), Qt::DirectConnection);
+      QObject::connect(pWorker, SIGNAL(finished()), pThread, SLOT(quit()));
+      QObject::connect(pThread, SIGNAL(finished()), pThread, SLOT(deleteLater()));
+      m_lstAllServices.append(pWorker);
+      m_lstAvailable.enqueue(pWorker);
+      pWorker->init();
+      pThread->start();
    }
 }
 
 void QxThreadPool::clearServices()
 {
    QMutexLocker locker(& m_mutex);
-   for (long l = 0; l < m_lstAllServices.count(); l++) { m_lstAllServices.at(l)->disconnect(); }
    for (long l = 0; l < m_lstAllServices.count(); l++) { m_lstAllServices.at(l)->stop(); }
    for (long l = 0; l < m_lstAllServices.count(); l++) { m_lstAllServices.at(l)->wait(); }
    for (long l = 0; l < m_lstAllServices.count(); l++) { delete m_lstAllServices.at(l); }

@@ -154,6 +154,7 @@ public:
    static QSqlDatabase getDatabase();
    static QSqlDatabase getDatabase(QSqlError & dbError);
    static QSqlDatabase getDatabaseCloned();
+   static QSqlDatabase checkDatabaseByThread();
    static void closeAllDatabases();
    static void clearAllDatabases();
    static bool isEmpty();

@@ -29,7 +29,9 @@
 **
 ****************************************************************************/
 
+#ifdef Q_MOC_RUN
 #include <QxCommon/QxConfig.h> // Need to include this file for the 'moc' process
+#endif // Q_MOC_RUN
 
 #ifdef _QX_ENABLE_QT_NETWORK
 #ifndef _QX_SERVICE_THREAD_H_
@@ -52,7 +54,21 @@
 #endif // Q_MOC_RUN
 #endif // _QX_NO_PRECOMPILED_HEADER
 
+#ifdef QT_NO_OPENSSL
+#ifndef QT_NO_SSL
+#define QT_NO_SSL /* Nothing */
+#endif // QT_NO_SSL
+#endif // QT_NO_OPENSSL
+
 #include <QtNetwork/qtcpsocket.h>
+
+#ifndef QT_NO_SSL
+#include <QtNetwork/qsslsocket.h>
+#include <QtNetwork/qsslconfiguration.h>
+#include <QtNetwork/qsslcertificate.h>
+#include <QtNetwork/qsslerror.h>
+#include <QtNetwork/qsslkey.h>
+#endif // QT_NO_SSL
 
 #ifndef Q_MOC_RUN
 #include <QxService/QxTransaction.h>
@@ -75,7 +91,7 @@ class QxThreadPool;
  *
  * <a href="https://www.qxorm.com/qxorm_en/tutorial_2.html" target="_blank">Click here to access to a tutorial to explain how to work with QxService module.</a>
  */
-class QX_DLL_EXPORT QxThread : public QThread
+class QX_DLL_EXPORT QxThread : public QObject
 {
 
    Q_OBJECT
@@ -84,35 +100,60 @@ protected:
 
    QX_TYPE_SOCKET_DESC m_iSocketDescriptor;     //!< Socket descriptor to retrieve 'QTcpSocket'
    QxThreadPool * m_pThreadPool;                //!< Parent thread pool to set available
+   QThread * m_pThread;                         //!< Thread where this worker is executed
    QxTransaction_ptr m_pTransaction;            //!< Current service transaction
-   bool m_bIsRunning;                           //!< Set this flag to 'false' to terminate thread
+   bool m_bIsStopped;                           //!< Set this flag to 'true' to terminate thread
+   bool m_bIsDisconnected;                      //!< Socket has been disconnected
    QMutex m_mutex;                              //!< Mutex => 'QxThread' is thread-safe
 
 public:
 
-   QxThread(QxThreadPool * pool) : QThread(), m_iSocketDescriptor(0), m_pThreadPool(pool), m_bIsRunning(false) { qAssert(m_pThreadPool); }
+   QxThread(QxThreadPool * pool, QThread * thread) : QObject(), m_iSocketDescriptor(0), m_pThreadPool(pool), m_pThread(thread), m_bIsStopped(false), m_bIsDisconnected(false) { qAssert(m_pThreadPool); qAssert(m_pThread); }
    virtual ~QxThread() { clearData(); }
 
-   bool isAvailable();
+   void init();
    void stop();
+   void wait();
+   bool isAvailable();
    void execute(QX_TYPE_SOCKET_DESC socketDescriptor);
-
-   static void sleepCurrentThread(unsigned long msecs) { QThread::msleep(msecs); }
 
 protected:
 
-   virtual void run();
-
+   void quit();
    void clearData();
+   bool hasBeenStopped();
    void doProcess(QTcpSocket & socket);
-   qx_bool readSocket(QTcpSocket & socket);
-   qx_bool writeSocket(QTcpSocket & socket);
+   bool checkKeepAlive(QTcpSocket & socket);
+   QX_TYPE_SOCKET_DESC getSocketDescriptor();
+
+#ifndef QT_NO_SSL
+   bool checkSocketSSLEncrypted(QTcpSocket * socket);
+   QSslSocket * initSocketSSL();
+#endif // QT_NO_SSL
 
 Q_SIGNALS:
 
    void error(const QString & err, qx::service::QxTransaction_ptr transaction);
    void transactionStarted(qx::service::QxTransaction_ptr transaction);
    void transactionFinished(qx::service::QxTransaction_ptr transaction);
+   void customRequestHandler(qx::service::QxTransaction_ptr transaction);
+   void incomingConnection();
+   void finished();
+
+private Q_SLOTS:
+
+   void onCustomRequestHandler();
+   void onIncomingConnection();
+   void onSocketDisconnected();
+   void onSocketReadyRead();
+
+#ifndef QT_NO_SSL
+#ifndef QT_NO_OPENSSL
+   void onSocketSSLEncrypted();
+   void onSocketSSLErrors(const QList<QSslError> & errors);
+   void onSocketSSLPeerVerifyError(const QSslError & error);
+#endif // QT_NO_OPENSSL
+#endif // QT_NO_SSL
 
 };
 

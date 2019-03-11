@@ -242,4 +242,10 @@
 #define QX_USED /* Nothing */
 #endif // QX_USED
 
+#ifdef QT_NO_OPENSSL
+#ifndef QT_NO_SSL
+#define QT_NO_SSL /* Nothing */
+#endif // QT_NO_SSL
+#endif // QT_NO_OPENSSL
+
 #endif // _QX_MACRO_H_

@@ -58,6 +58,29 @@ QX_REGISTER_INTERNAL_HELPER_START_FILE_CPP(qx::service::QxTransaction)
 namespace qx {
 namespace service {
 
+void QxTransaction::clear()
+{
+   m_sTransactionId = QString();
+   m_uiInputTransactionSize = 0;
+   m_uiOutputTransactionSize = 0;
+   m_dtTransactionBegin = QDateTime();
+   m_dtTransactionRequestSent = QDateTime();
+   m_dtTransactionRequestReceived = QDateTime();
+   m_dtTransactionReplySent = QDateTime();
+   m_dtTransactionReplyReceived = QDateTime();
+   m_dtTransactionEnd = QDateTime();
+   m_sIpSource = QString();
+   m_sIpTarget = QString();
+   m_lPortSource = 0;
+   m_lPortTarget = 0;
+   m_sServiceName = QString();
+   m_sServiceMethod = QString();
+   m_bMessageReturn = qx_bool();
+   m_pInputParameter.reset();
+   m_pOutputParameter.reset();
+   m_pServiceInstance.reset();
+}
+
 void QxTransaction::executeServer()
 {
    if (m_sServiceName.isEmpty()) { m_bMessageReturn = qx_bool(QX_ERROR_SERVICE_NOT_SPECIFIED, "[QxOrm] empty service name => cannot instantiate service and execute process"); return; }
@@ -85,24 +108,62 @@ void QxTransaction::executeServer()
    m_pServiceInstance.reset();
 }
 
+qx_bool QxTransaction::writeSocketServer(QTcpSocket & socket)
+{
+   quint32 uiTransactionSize = 0;
+   IxParameter_ptr pInputBackup = getInputParameter();
+   setInputParameter(IxParameter_ptr());
+   setTransactionReplySent(QDateTime::currentDateTime());
+   qx_bool bWriteOk = QxTools::writeSocket(socket, (* this), uiTransactionSize);
+   setInputParameter(pInputBackup);
+   setOutputTransactionSize(uiTransactionSize);
+   return bWriteOk;
+}
+
+qx_bool QxTransaction::readSocketServer(QTcpSocket & socket)
+{
+   quint32 uiTransactionSize = 0;
+   qx_bool bReadOk = QxTools::readSocket(socket, (* this), uiTransactionSize); if (! bReadOk) { return bReadOk; }
+   setInputTransactionSize(uiTransactionSize);
+   setTransactionRequestReceived(QDateTime::currentDateTime());
+   return bReadOk;
+}
+
 void QxTransaction::executeClient(IxService * pService, const QString & sMethod)
 {
    if ((pService == NULL) || sMethod.isEmpty()) { qAssert(false); return; }
    if (pService->getServiceName().isEmpty()) { pService->setMessageReturn(qx_bool(QX_ERROR_SERVICE_NOT_SPECIFIED, "[QxOrm] empty service name")); return; }
+   std::unique_ptr<QTcpSocket> socket;
    pService->registerClass();
 
-   QTcpSocket socket;
+#ifndef QT_NO_SSL
+   bool bSSLEnabled = QxConnect::getSingleton()->getSSLEnabled();
+   if (bSSLEnabled) { socket.reset(initSocketSSL()); }
+   else { socket.reset(new QTcpSocket()); }
+#else // QT_NO_SSL
+   socket.reset(new QTcpSocket());
+#endif // QT_NO_SSL
+
    QString serverName = QxConnect::getSingleton()->getIp();
    long serverPort = QxConnect::getSingleton()->getPort();
-   socket.connectToHost(serverName, serverPort);
-   if (! socket.waitForConnected(QxConnect::getSingleton()->getMaxWait()))
-   { pService->setMessageReturn(qx_bool(QX_ERROR_SERVER_NOT_FOUND, "[QxOrm] unable to connect to server")); return; }
+
+#ifndef QT_NO_SSL
+   if (bSSLEnabled) { static_cast<QSslSocket *>(socket.get())->connectToHostEncrypted(serverName, serverPort); }
+   else { socket->connectToHost(serverName, serverPort); }
+   if (bSSLEnabled && (! checkSocketSSLEncrypted(socket.get())))
+   { pService->setMessageReturn(qx_bool(QX_ERROR_SERVICE_SSL_ENCRYPTED, "[QxOrm] SSL socket encrypted error : " + socket->errorString())); return; }
+#else // QT_NO_SSL
+   socket->connectToHost(serverName, serverPort);
+#endif // QT_NO_SSL
+
+   if (! socket->waitForConnected(QxConnect::getSingleton()->getMaxWait()))
+   { pService->setMessageReturn(qx_bool(QX_ERROR_SERVER_NOT_FOUND, "[QxOrm] unable to connect to server : " + socket->errorString())); return; }
 
    if (m_sTransactionId.isEmpty())
    { setTransactionId(QUuid::createUuid().toString()); }
 
-   setIpSource(socket.localAddress().toString());
-   setPortSource(socket.localPort());
+   setIpSource(socket->localAddress().toString());
+   setPortSource(socket->localPort());
    setIpTarget(serverName);
    setPortTarget(serverPort);
    setServiceName(pService->getServiceName());
@@ -110,20 +171,20 @@ void QxTransaction::executeClient(IxService * pService, const QString & sMethod)
    setTransactionBegin(QDateTime::currentDateTime());
    setInputParameter(pService->getInputParameter_BaseClass());
 
-   qx_bool bWriteOk = writeSocket(socket);
+   qx_bool bWriteOk = writeSocketClient(* socket);
    if (! bWriteOk) { pService->setMessageReturn(qx_bool(QX_ERROR_SERVICE_WRITE_ERROR, QString("[QxOrm] unable to write request to socket : '") + bWriteOk.getDesc() + QString("'"))); return; }
-   qx_bool bReadOk = readSocket(socket);
+   qx_bool bReadOk = readSocketClient(* socket);
    if (! bReadOk) { pService->setMessageReturn(qx_bool(QX_ERROR_SERVICE_READ_ERROR, QString("[QxOrm] unable to read reply from socket : '") + bReadOk.getDesc() + QString("'"))); return; }
 
    pService->setOutputParameter(getOutputParameter());
    pService->setMessageReturn(getMessageReturn());
    setTransactionEnd(QDateTime::currentDateTime());
-   socket.disconnectFromHost();
-   if (socket.state() != QAbstractSocket::UnconnectedState)
-   { socket.waitForDisconnected(QxConnect::getSingleton()->getMaxWait()); }
+   socket->disconnectFromHost();
+   if (socket->state() != QAbstractSocket::UnconnectedState)
+   { socket->waitForDisconnected(QxConnect::getSingleton()->getMaxWait()); }
 }
 
-qx_bool QxTransaction::writeSocket(QTcpSocket & socket)
+qx_bool QxTransaction::writeSocketClient(QTcpSocket & socket)
 {
    quint32 uiTransactionSize = 0;
    qx_bool bWriteOk = QxTools::writeSocket(socket, (* this), uiTransactionSize);
@@ -133,7 +194,7 @@ qx_bool QxTransaction::writeSocket(QTcpSocket & socket)
    return bWriteOk;
 }
 
-qx_bool QxTransaction::readSocket(QTcpSocket & socket)
+qx_bool QxTransaction::readSocketClient(QTcpSocket & socket)
 {
    QxTransaction tmp;
    quint32 uiTransactionSize = 0;
@@ -173,6 +234,38 @@ QString QxTransaction::getInfos() const
 #endif // _QX_NO_JSON
    return infos;
 }
+
+#ifndef QT_NO_SSL
+
+QSslSocket * QxTransaction::initSocketSSL()
+{
+   QSslSocket * socket = new QSslSocket();
+   QxConnect * settings = QxConnect::getSingleton();
+   QSslConfiguration config = settings->getSSLConfiguration();
+   if (config.isNull()) { config = QSslConfiguration::defaultConfiguration(); }
+   QList<QSslCertificate> allCACertificates = settings->getSSLCACertificates();
+   config.setCaCertificates(allCACertificates); // because QSslSocket::setCaCertificates() is obsolete
+
+   socket->setSslConfiguration(config);
+   socket->ignoreSslErrors(settings->getSSLIgnoreErrors());
+   socket->setProtocol(settings->getSSLProtocol());
+   socket->setPeerVerifyName(settings->getSSLPeerVerifyName());
+   socket->setPeerVerifyMode(settings->getSSLPeerVerifyMode());
+   socket->setPeerVerifyDepth(settings->getSSLPeerVerifyDepth());
+   socket->setPrivateKey(settings->getSSLPrivateKey());
+   socket->setLocalCertificate(settings->getSSLLocalCertificate());
+
+   return socket;
+}
+
+bool QxTransaction::checkSocketSSLEncrypted(QTcpSocket * socket)
+{
+   if (! QxConnect::getSingleton()->getSSLEnabled()) { qAssert(false); return false; }
+   QSslSocket * ssl = static_cast<QSslSocket *>(socket);
+   return ssl->waitForEncrypted(QxConnect::getSingleton()->getMaxWait());
+}
+
+#endif // QT_NO_SSL
 
 void execute_client(IxService * pService, const QString & sMethod)
 {

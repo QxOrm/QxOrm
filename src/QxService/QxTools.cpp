@@ -54,7 +54,7 @@ namespace service {
 qx_bool QxTools::readSocket(QTcpSocket & socket, QxTransaction & transaction, quint32 & size)
 {
    while (socket.bytesAvailable() < (qint64)(QX_SERVICE_TOOLS_HEADER_SIZE))
-   { if (! socket.waitForReadyRead(QxConnect::getSingleton()->getMaxWait())) { return qx_bool(QX_ERROR_SERVICE_READ_ERROR, "invalid bytes count available to retrieve transaction header"); } }
+   { if (! socket.waitForReadyRead(QxConnect::getSingleton()->getMaxWait())) { return qx_bool(QX_ERROR_SERVICE_READ_ERROR, "invalid bytes count available to retrieve transaction header (" + socket.errorString() + ")"); } }
 
    quint32 uiSerializedSize = 0;
    quint16 uiSerializationType(0), uiCompressData(0), uiEncryptData(0);
@@ -68,7 +68,7 @@ qx_bool QxTools::readSocket(QTcpSocket & socket, QxTransaction & transaction, qu
    in >> uiEncryptData;
 
    while (socket.bytesAvailable() < (qint64)(uiSerializedSize))
-   { if (! socket.waitForReadyRead(QxConnect::getSingleton()->getMaxWait())) { return qx_bool(QX_ERROR_SERVICE_READ_ERROR, "invalid bytes count available to retrieve transaction serialized data"); } }
+   { if (! socket.waitForReadyRead(QxConnect::getSingleton()->getMaxWait())) { return qx_bool(QX_ERROR_SERVICE_READ_ERROR, "invalid bytes count available to retrieve transaction serialized data (" + socket.errorString() + ")"); } }
 
    QByteArray dataSerialized = socket.read((qint64)(uiSerializedSize));
    qAssert(dataSerialized.size() == (int)(uiSerializedSize));
@@ -203,7 +203,7 @@ qx_bool QxTools::writeSocket(QTcpSocket & socket, QxTransaction & transaction, q
    }
 
    if (iTotalWritten != iTotalToWrite)
-   { return qx_bool(QX_ERROR_SERVICE_WRITE_ERROR, "unable to write all data bytes (header) to socket"); }
+   { return qx_bool(QX_ERROR_SERVICE_WRITE_ERROR, "unable to write all data bytes (header) to socket (" + socket.errorString() + ")"); }
 
    iTotalWritten = 0;
    iTotalToWrite = (qint64)(dataSerialized.size());
@@ -216,7 +216,7 @@ qx_bool QxTools::writeSocket(QTcpSocket & socket, QxTransaction & transaction, q
    }
 
    size = (quint32)(dataHeader.size() + dataSerialized.size());
-   return ((iTotalWritten == iTotalToWrite) ? qx_bool(true) : qx_bool(QX_ERROR_SERVICE_WRITE_ERROR, "unable to write all data bytes (serialized data) to socket"));
+   return ((iTotalWritten == iTotalToWrite) ? qx_bool(true) : qx_bool(QX_ERROR_SERVICE_WRITE_ERROR, "unable to write all data bytes (serialized data) to socket (" + socket.errorString() + ")"));
 }
 
 } // namespace service

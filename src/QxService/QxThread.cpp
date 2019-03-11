@@ -33,10 +33,14 @@
 
 #include <QxPrecompiled.h>
 
+#include <QtCore/qcoreapplication.h>
+
 #include <QxService/QxThread.h>
 #include <QxService/QxThreadPool.h>
 #include <QxService/QxTools.h>
 #include <QxService/QxConnect.h>
+
+#include <QxHttpServer/QxHttpTransaction.h>
 
 #include <QxCommon/QxException.h>
 #include <QxCommon/QxExceptionCode.h>
@@ -45,6 +49,11 @@
 
 namespace qx {
 namespace service {
+
+void QxThread::init()
+{
+   QObject::connect(this, SIGNAL(incomingConnection()), this, SLOT(onIncomingConnection()));
+}
 
 bool QxThread::isAvailable()
 {
@@ -55,84 +64,216 @@ bool QxThread::isAvailable()
 void QxThread::stop()
 {
    QMutexLocker locker(& m_mutex);
-   m_bIsRunning = false;
+   m_bIsStopped = true;
+   if (m_iSocketDescriptor == 0) { quit(); }
+}
+
+void QxThread::wait()
+{
+   if (m_pThread) { m_pThread->wait(); }
+}
+
+void QxThread::quit()
+{
+   Q_EMIT finished();
+   if (m_pThread) { m_pThread->quit(); }
+}
+
+bool QxThread::hasBeenStopped()
+{
+   QMutexLocker locker(& m_mutex);
+   return m_bIsStopped;
 }
 
 void QxThread::execute(QX_TYPE_SOCKET_DESC socketDescriptor)
 {
    QMutexLocker locker(& m_mutex);
-   if (m_iSocketDescriptor != 0) { return; }
+   if (m_bIsStopped) { return; }
+   if (m_iSocketDescriptor != 0) { qAssert(false); return; }
    m_iSocketDescriptor = socketDescriptor;
+   if (m_iSocketDescriptor != 0) { Q_EMIT incomingConnection(); }
 }
 
-void QxThread::run()
+QX_TYPE_SOCKET_DESC QxThread::getSocketDescriptor()
 {
-   m_bIsRunning = true;
-   while (m_bIsRunning)
-   {
-      while (m_iSocketDescriptor == 0) { if (! m_bIsRunning) { return; } msleep(5); }
-      QTcpSocket socket;
-      doProcess(socket);
-      socket.disconnectFromHost();
-      if (socket.state() != QAbstractSocket::UnconnectedState)
-      { socket.waitForDisconnected(QxConnect::getSingleton()->getMaxWait()); }
-      clearData();
-      if (m_pThreadPool) { m_pThreadPool->setAvailable(this); }
-   }
+   QMutexLocker locker(& m_mutex);
+   return m_iSocketDescriptor;
 }
+
+void QxThread::onIncomingConnection()
+{
+   if (getSocketDescriptor() == 0) { qAssert(false); return; }
+   if (hasBeenStopped()) { quit(); return; }
+   std::unique_ptr<QTcpSocket> socket;
+   m_bIsDisconnected = false;
+
+#ifndef QT_NO_SSL
+   bool bSSLEnabled = QxConnect::getSingleton()->getSSLEnabled();
+   if (bSSLEnabled) { socket.reset(initSocketSSL()); }
+   else { socket.reset(new QTcpSocket()); }
+#else // QT_NO_SSL
+   socket.reset(new QTcpSocket());
+#endif // QT_NO_SSL
+
+   QObject::connect(socket.get(), SIGNAL(disconnected()), this, SLOT(onSocketDisconnected()));
+   QObject::connect(socket.get(), SIGNAL(readyRead()), this, SLOT(onSocketReadyRead()));
+
+   if (socket->setSocketDescriptor(getSocketDescriptor()))
+   {
+#ifndef QT_NO_SSL
+      if ((! bSSLEnabled) || (checkSocketSSLEncrypted(socket.get())))
+      {
+#endif // QT_NO_SSL
+         do { doProcess(* socket); }
+         while (checkKeepAlive(* socket) && (! hasBeenStopped()) && (! m_bIsDisconnected));
+         socket->disconnectFromHost();
+         if ((! m_bIsDisconnected) && (socket->state() != QAbstractSocket::UnconnectedState))
+         { socket->waitForDisconnected(QxConnect::getSingleton()->getMaxWait()); }
+#ifndef QT_NO_SSL
+      }
+      else { Q_EMIT error("[QxOrm] SSL socket encrypted error : " + socket->errorString(), QxTransaction_ptr()); }
+#endif // QT_NO_SSL
+   }
+   else { Q_EMIT error("[QxOrm] invalid socket descriptor : cannot start transaction (" + socket->errorString() + ")", QxTransaction_ptr()); }
+
+   clearData();
+   if (m_pThreadPool) { m_pThreadPool->setAvailable(this); }
+   if (hasBeenStopped()) { quit(); }
+}
+
+bool QxThread::checkKeepAlive(QTcpSocket & socket)
+{
+   if (m_pTransaction && (m_pTransaction->getForceConnectionStatus() == qx::service::QxTransaction::conn_close)) { return false; }
+   long lKeepAlive = QxConnect::getSingleton()->getKeepAlive();
+   if (lKeepAlive == 0) { return false; }
+
+   long lCurrRetry = 0;
+   long lMaxRetry = lKeepAlive;
+   do
+   {
+      if (socket.waitForReadyRead(1)) { return true; }
+      if (socket.bytesAvailable() > 0) { return true; }
+      if (hasBeenStopped() || m_bIsDisconnected) { return false; }
+      QCoreApplication::processEvents();
+      lCurrRetry++;
+   }
+   while ((lMaxRetry == -1) || (lCurrRetry < lMaxRetry));
+   return false;
+}
+
+#ifndef QT_NO_SSL
+
+bool QxThread::checkSocketSSLEncrypted(QTcpSocket * socket)
+{
+   if (! QxConnect::getSingleton()->getSSLEnabled()) { qAssert(false); return false; }
+   QSslSocket * ssl = static_cast<QSslSocket *>(socket);
+   ssl->startServerEncryption();
+   return ssl->waitForEncrypted(QxConnect::getSingleton()->getMaxWait());
+}
+
+QSslSocket * QxThread::initSocketSSL()
+{
+   QSslSocket * socket = new QSslSocket();
+   QxConnect * settings = QxConnect::getSingleton();
+   QSslConfiguration config = settings->getSSLConfiguration();
+   if (config.isNull()) { config = QSslConfiguration::defaultConfiguration(); }
+   QList<QSslCertificate> allCACertificates = settings->getSSLCACertificates();
+   config.setCaCertificates(allCACertificates); // because QSslSocket::setCaCertificates() is obsolete
+
+   QObject::connect(socket, SIGNAL(encrypted()), this, SLOT(onSocketSSLEncrypted()));
+   QObject::connect(socket, SIGNAL(sslErrors(const QList<QSslError> &)), this, SLOT(onSocketSSLErrors(const QList<QSslError> &)));
+   QObject::connect(socket, SIGNAL(peerVerifyError(const QSslError &)), this, SLOT(onSocketSSLPeerVerifyError(const QSslError &)));
+
+   socket->setSslConfiguration(config);
+   socket->ignoreSslErrors(settings->getSSLIgnoreErrors());
+   socket->setProtocol(settings->getSSLProtocol());
+   socket->setPeerVerifyName(settings->getSSLPeerVerifyName());
+   socket->setPeerVerifyMode(settings->getSSLPeerVerifyMode());
+   socket->setPeerVerifyDepth(settings->getSSLPeerVerifyDepth());
+   socket->setPrivateKey(settings->getSSLPrivateKey());
+   socket->setLocalCertificate(settings->getSSLLocalCertificate());
+
+   return socket;
+}
+
+#endif // QT_NO_SSL
 
 void QxThread::clearData()
 {
    QMutexLocker locker(& m_mutex);
    m_pTransaction.reset();
    m_iSocketDescriptor = 0;
+   m_bIsDisconnected = false;
 }
 
 void QxThread::doProcess(QTcpSocket & socket)
 {
-   if (! socket.setSocketDescriptor(m_iSocketDescriptor))
-   { Q_EMIT error("[QxOrm] invalid socket descriptor : cannot start transaction", QxTransaction_ptr()); return; }
+   long lMaxWait = QxConnect::getSingleton()->getMaxWait();
+   bool bModeHTTP = QxConnect::getSingleton()->getModeHTTP();
+   if (bModeHTTP) { m_pTransaction = std::make_shared<qx::QxHttpTransaction>(); }
+   else { m_pTransaction = std::make_shared<QxTransaction>(); }
+   QObject::connect(m_pTransaction.get(), SIGNAL(onCustomRequestHandler()), this, SLOT(onCustomRequestHandler()), Qt::DirectConnection);
 
-   qx_bool bReadOk = readSocket(socket);
+   qx_bool bReadOk = m_pTransaction->readSocketServer(socket);
    if (! bReadOk) { Q_EMIT error(QString("[QxOrm] unable to read request from socket : '") + bReadOk.getDesc() + QString("'"), QxTransaction_ptr()); return; }
-   if (! m_bIsRunning) { return; }
+   if (hasBeenStopped() || m_bIsDisconnected) { return; }
+   socket.readAll();
 
    Q_EMIT transactionStarted(m_pTransaction);
    try { m_pTransaction->executeServer(); }
    catch (const qx::exception & x) { qx_bool xb = x.toQxBool(); m_pTransaction->setMessageReturn(xb); }
    catch (const std::exception & e) { m_pTransaction->setMessageReturn(qx_bool(QX_ERROR_UNKNOWN, e.what())); }
    catch (...) { m_pTransaction->setMessageReturn(qx_bool(QX_ERROR_UNKNOWN, "unknown error")); }
-   if (! m_bIsRunning) { return; }
+   if (hasBeenStopped() || m_bIsDisconnected) { return; }
 
-   qx_bool bWriteOk = writeSocket(socket);
+   qx_bool bWriteOk = m_pTransaction->writeSocketServer(socket);
    if (! bWriteOk) { Q_EMIT error(QString("[QxOrm] unable to write reply to socket : '") + bWriteOk.getDesc() + QString("'"), m_pTransaction); }
+
+   long lCurrRetry = 0;
+   while ((socket.bytesToWrite() > 0) && ((lMaxWait == -1) || (lCurrRetry < lMaxWait)) && (! hasBeenStopped()) && (! m_bIsDisconnected))
+   { socket.waitForBytesWritten(1); QCoreApplication::processEvents(); lCurrRetry++; }
    Q_EMIT transactionFinished(m_pTransaction);
 }
 
-qx_bool QxThread::readSocket(QTcpSocket & socket)
+void QxThread::onCustomRequestHandler()
 {
-   quint32 uiTransactionSize = 0;
-   m_pTransaction = std::make_shared<QxTransaction>();
-   qx_bool bReadOk = QxTools::readSocket(socket, (* m_pTransaction), uiTransactionSize);
-   if (! bReadOk) { m_pTransaction.reset(); return bReadOk; }
-   m_pTransaction->setInputTransactionSize(uiTransactionSize);
-   m_pTransaction->setTransactionRequestReceived(QDateTime::currentDateTime());
-   return bReadOk;
+   if (m_pTransaction) { Q_EMIT customRequestHandler(m_pTransaction); }
+   else { qAssert(false); }
 }
 
-qx_bool QxThread::writeSocket(QTcpSocket & socket)
+void QxThread::onSocketDisconnected()
 {
-   if (! m_pTransaction) { return qx_bool(QX_ERROR_SERVICE_NOT_SPECIFIED, "empty service transaction"); }
-
-   quint32 uiTransactionSize = 0;
-   IxParameter_ptr pInputBackup = m_pTransaction->getInputParameter();
-   m_pTransaction->setInputParameter(IxParameter_ptr());
-   m_pTransaction->setTransactionReplySent(QDateTime::currentDateTime());
-   qx_bool bWriteOk = QxTools::writeSocket(socket, (* m_pTransaction), uiTransactionSize);
-   m_pTransaction->setInputParameter(pInputBackup);
-   m_pTransaction->setOutputTransactionSize(uiTransactionSize);
-   return bWriteOk;
+   m_bIsDisconnected = true;
 }
+
+void QxThread::onSocketReadyRead()
+{
+   /* Nothing here */
+}
+
+#ifndef QT_NO_SSL
+
+void QxThread::onSocketSSLEncrypted()
+{
+   /* Nothing here */
+}
+
+void QxThread::onSocketSSLErrors(const QList<QSslError> & errors)
+{
+   for (int i = 0; i < errors.count(); i++)
+   {
+      QSslError err = errors.at(i); QString msg = err.errorString();
+      qDebug("[QxOrm] qx::service::QxThread::onSocketSSLErrors() : %s", qPrintable(msg));
+   }
+}
+
+void QxThread::onSocketSSLPeerVerifyError(const QSslError & error)
+{
+   QString msg = error.errorString();
+   qDebug("[QxOrm] qx::service::QxThread::onSocketSSLPeerVerifyError() : %s", qPrintable(msg));
+}
+
+#endif // QT_NO_SSL
 
 } // namespace service
 } // namespace qx

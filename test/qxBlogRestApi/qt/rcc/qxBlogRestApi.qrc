@@ -1,5 +1,12 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource>
    <file>documents/test_rest_api.qml</file>
+   <file>documents/test_http_server.qml</file>
+   <file>documents/test_http_server.html</file>
+   <file>documents/logo_qxorm_and_qxee.png</file>
+   <file>documents/jquery.js</file>
+   <file>documents/cert_qxorm_ca.pem</file>
+   <file>documents/cert_qxorm_server.crt</file>
+   <file>documents/cert_qxorm_server.key</file>
 </qresource>
 </RCC>

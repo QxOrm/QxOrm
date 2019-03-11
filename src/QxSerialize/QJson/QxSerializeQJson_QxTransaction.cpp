@@ -89,7 +89,7 @@ QJsonValue QxConvert_ToJson_Helper(const qx::service::QxTransaction & t, const Q
 
 qx_bool QxConvert_FromJson_Helper(const QJsonValue & j, qx::service::QxTransaction & t, const QString & format)
 {
-   t = qx::service::QxTransaction();
+   t.clear();
    if (! j.isObject()) { return qx_bool(true); }
    QJsonObject obj = j.toObject();
    t.m_sTransactionId = obj.value("transaction_id").toString();

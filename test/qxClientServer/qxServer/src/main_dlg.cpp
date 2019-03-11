@@ -47,7 +47,6 @@ void main_dlg::onClickStartStop()
    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
    if (m_pThreadPool)
    {
-      m_pThreadPool->disconnect();
       m_pThreadPool.reset();
       txtError->setPlainText("");
       txtTransaction->setPlainText("");

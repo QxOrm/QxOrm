@@ -207,6 +207,12 @@
     <Filter Include="src\QxRestApi">
       <UniqueIdentifier>{cabb7f38-d125-4258-8771-312714c9b107}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\QxHttpServer">
+      <UniqueIdentifier>{7f5837e0-52bb-414f-ab46-6ea56ac11b9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\QxHttpServer">
+      <UniqueIdentifier>{1446cbe8-39dd-4997-bf83-89d4124860d2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -598,6 +604,27 @@
     </ClCompile>
     <ClCompile Include="src\QxRestApi\QxRestApi.cpp">
       <Filter>src\QxRestApi</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QxHttpServer\QxHttpRequest.cpp">
+      <Filter>src\QxHttpServer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QxHttpServer\QxHttpResponse.cpp">
+      <Filter>src\QxHttpServer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QxHttpServer\QxHttpServer.cpp">
+      <Filter>src\QxHttpServer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QxHttpServer\QxHttpTransaction.cpp">
+      <Filter>src\QxHttpServer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QxHttpServer\QxHttpCookie.cpp">
+      <Filter>src\QxHttpServer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QxHttpServer\QxHttpSession.cpp">
+      <Filter>src\QxHttpServer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QxHttpServer\QxHttpSessionManager.cpp">
+      <Filter>src\QxHttpServer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1713,6 +1740,27 @@
     </ClInclude>
     <ClInclude Include="include\QxRestApi\QxRestApi.h">
       <Filter>include\QxRestApi</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxHttpServer\QxHttpRequest.h">
+      <Filter>include\QxHttpServer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxHttpServer\QxHttpResponse.h">
+      <Filter>include\QxHttpServer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxHttpServer\QxHttpServer.h">
+      <Filter>include\QxHttpServer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxHttpServer\QxHttpTransaction.h">
+      <Filter>include\QxHttpServer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxHttpServer\QxHttpCookie.h">
+      <Filter>include\QxHttpServer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxHttpServer\QxHttpSession.h">
+      <Filter>include\QxHttpServer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxHttpServer\QxHttpSessionManager.h">
+      <Filter>include\QxHttpServer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

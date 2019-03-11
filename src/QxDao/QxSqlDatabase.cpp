@@ -570,6 +570,17 @@ QSqlDatabase QxSqlDatabase::getDatabaseCloned()
    return QSqlDatabase::cloneDatabase(QxSqlDatabase::getDatabase(dbError), sKeyClone);
 }
 
+QSqlDatabase QxSqlDatabase::checkDatabaseByThread()
+{
+   QxSqlDatabase::QxSqlDatabaseImpl * pImpl = QxSqlDatabase::getSingleton()->m_pImpl.get();
+   QMutexLocker locker(& pImpl->m_oDbMutex);
+   Qt::HANDLE lCurrThreadId = QThread::currentThreadId();
+   if (! pImpl->m_lstDbByThread.contains(lCurrThreadId)) { return QSqlDatabase(); }
+   QString sDbKey = pImpl->m_lstDbByThread.value(lCurrThreadId);
+   if (! QSqlDatabase::contains(sDbKey)) { return QSqlDatabase(); }
+   return QSqlDatabase::database(sDbKey);
+}
+
 QSqlDatabase QxSqlDatabase::QxSqlDatabaseImpl::getDatabaseByCurrThreadId(QSqlError & dbError)
 {
    QMutexLocker locker(& m_oDbMutex);

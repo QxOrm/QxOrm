@@ -51,6 +51,7 @@
  * \defgroup QxModelView QxModelView : All classes registered into QxOrm context can be used with Qt model/view architecture (Qt widgets and/or QML views)
  * \defgroup QxRestApi QxRestApi : QxOrm library REST API to send requests in JSON format from external application, from web-site or from QML view
  * \defgroup QxService QxService : QxOrm library services engine to provide easy and powerful way to create C++ application server (to transfer data over network)
+ * \defgroup QxHttpServer QxHttpServer : QxOrm library HTTP server (based on QxService module) : support SSL/TLS, persistent connection, deliver static files, REST API, etc...
  * \defgroup QxCache QxCache : QxOrm library basic thread-safe cache feature to backup and restore any kind of objects (for example, object fetched from database)
  * \defgroup QxConvert QxConvert : QxOrm library conversion tools to-from QString type and to-from QVariant type
  * \defgroup QxExtras QxExtras : QxOrm library extra-tools (for example : enable std::optional for C++17 compilers, enable boost::optional feature without enabling all boost features)
@@ -176,5 +177,15 @@
 #include <QxValidator/QxValidatorX.h>
 #include <QxValidator/QxValidatorError.h>
 #include <QxValidator/QxValidatorFct.h>
+
+#ifdef _QX_ENABLE_QT_NETWORK
+#include <QxHttpServer/QxHttpRequest.h>
+#include <QxHttpServer/QxHttpResponse.h>
+#include <QxHttpServer/QxHttpServer.h>
+#include <QxHttpServer/QxHttpTransaction.h>
+#include <QxHttpServer/QxHttpCookie.h>
+#include <QxHttpServer/QxHttpSession.h>
+#include <QxHttpServer/QxHttpSessionManager.h>
+#endif // _QX_ENABLE_QT_NETWORK
 
 #endif // _QX_ORM_H_

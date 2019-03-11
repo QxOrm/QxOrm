@@ -473,6 +473,14 @@ HEADERS += ./include/QxService/QxThreadPool.h
 HEADERS += ./include/QxService/QxTools.h
 HEADERS += ./include/QxService/QxTransaction.h
 
+HEADERS += ./include/QxHttpServer/QxHttpRequest.h
+HEADERS += ./include/QxHttpServer/QxHttpResponse.h
+HEADERS += ./include/QxHttpServer/QxHttpServer.h
+HEADERS += ./include/QxHttpServer/QxHttpTransaction.h
+HEADERS += ./include/QxHttpServer/QxHttpCookie.h
+HEADERS += ./include/QxHttpServer/QxHttpSession.h
+HEADERS += ./include/QxHttpServer/QxHttpSessionManager.h
+
 #HEADERS += ./include/QxXml/QxXmlReader.h
 #HEADERS += ./include/QxXml/QxXmlWriter.h
 #HEADERS += ./include/QxXml/QxXml.h
@@ -652,6 +660,14 @@ SOURCES += ./src/QxService/QxThread.cpp
 SOURCES += ./src/QxService/QxThreadPool.cpp
 SOURCES += ./src/QxService/QxTools.cpp
 SOURCES += ./src/QxService/QxTransaction.cpp
+
+SOURCES += ./src/QxHttpServer/QxHttpRequest.cpp
+SOURCES += ./src/QxHttpServer/QxHttpResponse.cpp
+SOURCES += ./src/QxHttpServer/QxHttpServer.cpp
+SOURCES += ./src/QxHttpServer/QxHttpTransaction.cpp
+SOURCES += ./src/QxHttpServer/QxHttpCookie.cpp
+SOURCES += ./src/QxHttpServer/QxHttpSession.cpp
+SOURCES += ./src/QxHttpServer/QxHttpSessionManager.cpp
 
 SOURCES += ./src/QxValidator/IxValidator.cpp
 SOURCES += ./src/QxValidator/IxValidatorX.cpp
