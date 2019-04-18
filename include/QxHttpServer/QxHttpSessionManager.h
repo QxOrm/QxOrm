@@ -45,7 +45,7 @@
  * \file QxHttpSessionManager.h
  * \author Lionel Marty
  * \ingroup QxHttpServer
- * \brief HTTP session manager
+ * \brief HTTP session manager (https://www.qxorm.com/qxorm_en/manual.html#manual_998)
  */
 
 #ifdef _QX_NO_PRECOMPILED_HEADER
@@ -66,7 +66,7 @@ namespace qx {
 
 /*!
  * \ingroup QxHttpServer
- * \brief qx::QxHttpSessionManager : HTTP session manager
+ * \brief qx::QxHttpSessionManager : HTTP session manager (https://www.qxorm.com/qxorm_en/manual.html#manual_998)
  */
 class QX_DLL_EXPORT QxHttpSessionManager : public QObject, public qx::QxSingleton<QxHttpSessionManager>
 {

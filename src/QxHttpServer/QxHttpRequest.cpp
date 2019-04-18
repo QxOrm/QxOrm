@@ -33,7 +33,10 @@
 
 #include <QxPrecompiled.h>
 
+#include <QtCore/quuid.h>
+
 #include <QxHttpServer/QxHttpRequest.h>
+#include <QxHttpServer/QxHttpTransaction.h>
 
 #include <QxMemLeak/mem_leak.h>
 
@@ -48,16 +51,19 @@ struct QxHttpRequest::QxHttpRequestImpl
    QByteArray m_data;                           //!< HTTP request body content
    QHash<QByteArray, QByteArray> m_headers;     //!< HTTP request headers
    QHash<QByteArray, QxHttpCookie> m_cookies;   //!< HTTP request cookies
+   QHash<QString, QVariant> m_dispatchParams;   //!< HTTP request dynamic URL parameters from server dispatcher
    QHash<QString, QString> m_params;            //!< HTTP request parameters (from URL and from body if content-type is 'application/x-www-form-urlencoded', which means web-form submit)
    QString m_address;                           //!< HTTP client IP address
    long m_port;                                 //!< HTTP client port
+   QxHttpTransaction * m_transaction;           //!< HTTP transaction
+   QString m_guid;                              //!< HTTP request internal GUID (can be used for logging for example)
 
-   QxHttpRequestImpl() : m_port(0) { ; }
+   QxHttpRequestImpl(QxHttpTransaction * transaction) : m_port(0), m_transaction(transaction) { qAssert(m_transaction != NULL); m_guid = QUuid::createUuid().toString(); }
    ~QxHttpRequestImpl() { ; }
 
 };
 
-QxHttpRequest::QxHttpRequest() : m_pImpl(new QxHttpRequestImpl()) { ; }
+QxHttpRequest::QxHttpRequest(QxHttpTransaction * transaction) : m_pImpl(new QxHttpRequestImpl(transaction)) { ; }
 
 QxHttpRequest::~QxHttpRequest() { ; }
 
@@ -82,6 +88,8 @@ QHash<QByteArray, QxHttpCookie> & QxHttpRequest::cookies() { return m_pImpl->m_c
 
 QxHttpCookie QxHttpRequest::cookie(const QByteArray & name) { return m_pImpl->m_cookies.value(name); }
 
+QHash<QString, QVariant> & QxHttpRequest::dispatchParams() { return m_pImpl->m_dispatchParams; }
+
 QHash<QString, QString> & QxHttpRequest::params() { return m_pImpl->m_params; }
 
 QString QxHttpRequest::param(const QString & key) { return m_pImpl->m_params.value(key); }
@@ -89,6 +97,8 @@ QString QxHttpRequest::param(const QString & key) { return m_pImpl->m_params.val
 QString & QxHttpRequest::sourceAddress() { return m_pImpl->m_address; }
 
 long & QxHttpRequest::sourcePort() { return m_pImpl->m_port; }
+
+QString QxHttpRequest::guid() const { return m_pImpl->m_guid; }
 
 } // namespace qx
 

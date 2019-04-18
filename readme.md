@@ -1,8 +1,10 @@
 # QxOrm library - Official repository
-[QxOrm library](https://www.qxorm.com/) is an **Object Relational Mapping (ORM)** and **Object Document Mapper (ODM)** database library for C++ Qt developers. With a simple C++ setting function per class, you have access to the following features :
-- [persistence](https://www.qxorm.com/qxorm_en/manual.html#manual_30) : communication with databases (support 1-1, 1-n, n-1 and n-n relationships) ;
-- [serialization](https://www.qxorm.com/qxorm_en/manual.html#manual_60) : binary, XML and JSON format ;
-- [reflection](https://www.qxorm.com/qxorm_en/manual.html#manual_70) (or [introspection](https://www.qxorm.com/qxorm_en/manual.html#manual_70)) : access dynamically to classes definitions, retrieve properties and call classes methods.
+[QxOrm library](https://www.qxorm.com/) is an **Object Relational Mapping (ORM)** and **Object Document Mapper (ODM)** database library for C++ Qt developers. Main features are :
+- [Persistence](https://www.qxorm.com/qxorm_en/manual.html#manual_30) : support most common databases like SQLite, MySQL, PostgreSQL, Oracle, MS SQL Server, [MongoDB](https://www.qxorm.com/qxorm_en/manual.html#manual_95) (with 1-1, 1-n, n-1 and n-n relationships) ;
+- [Serialization](https://www.qxorm.com/qxorm_en/manual.html#manual_60) : JSON, binary and XML format ;
+- [Reflection](https://www.qxorm.com/qxorm_en/manual.html#manual_70) (or [Introspection](https://www.qxorm.com/qxorm_en/manual.html#manual_70)) : access dynamically to classes definitions, retrieve properties and call classes methods ;
+- [HTTP web server](https://www.qxorm.com/qxorm_en/manual.html#manual_96) : standalone multi-threaded HTTP 1.1 web server (support SSL/TLS, persistent connections, cookies, sessions, chunked responses, URL dispatcher/routing) ;
+- [JSON API](https://www.qxorm.com/qxorm_en/manual.html#manual_97) : interoperability with other technology than C++/Qt (REST web services, QML applications, scripting language).
 
 ## Documentation
 QxOrm website provides a [user manual](https://www.qxorm.com/qxorm_en/manual.html).
@@ -25,6 +27,11 @@ QxEntityEditor is based on plugins and provides many ways to import/export your 
 - because each project is different, QxEntityEditor provides several ways to customize generated files (especially a [javascript engine and an integrated debugger](https://www.qxorm.com/qxorm_en/manual_qxee.html#js_engine)).
 
 ![QxEntityEditor application](https://www.qxorm.com/qxentityeditor/resource/qxee_sample_small.png)
+
+## Dependencies
+By default, QxOrm library depends only on [QtCore](https://doc.qt.io/qt-5/qtcore-index.html) and [QtSql](https://doc.qt.io/qt-5/qtsql-index.html) libraries from [Qt framework](https://www.qt.io/).
+If you enable [QxOrm HTTP web server](https://www.qxorm.com/qxorm_en/manual.html#manual_96) feature, then QxOrm library will depend also on [QtNetwork](https://doc.qt.io/qt-5/qtnetwork-index.html) library.
+Some features require [boost](https://www.boost.org/) dependency (disabled by default).
 
 ## Authors
 QxOrm is developed by Lionel Marty, a software development engineer since 2003.

@@ -38,11 +38,14 @@
  * QxOrm engine is based on a simple and non intrusive mapping function per class to provide :
  *
  * - <a href="https://www.qxorm.com/qxorm_en/manual.html#manual_30" target="_blank"><b>Persistence</b></a> (based on QtSql Qt module) ;
- * - <a href="https://www.qxorm.com/qxorm_en/manual.html#manual_60" target="_blank"><b>Serialization</b></a> (XML and binary, based on Qt and boost serialization engines) ;
- * - <a href="https://www.qxorm.com/qxorm_en/manual.html#manual_70" target="_blank"><b>Reflection</b></a> or <a href="https://www.qxorm.com/qxorm_en/manual.html#manual_70" target="_blank"><b>Introspection</b></a> (invoke dynamically class methods and access to properties).
+ * - <a href="https://www.qxorm.com/qxorm_en/manual.html#manual_60" target="_blank"><b>Serialization</b></a> (JSON, XML and binary, based on Qt and boost serialization engines) ;
+ * - <a href="https://www.qxorm.com/qxorm_en/manual.html#manual_70" target="_blank"><b>Reflection</b></a> or <a href="https://www.qxorm.com/qxorm_en/manual.html#manual_70" target="_blank"><b>Introspection</b></a> (invoke dynamically class methods and access to properties) ;
+ * - <a href="https://www.qxorm.com/qxorm_en/manual.html#manual_96" target="_blank"><b>HTTP web server</b></a> : standalone multi-threaded HTTP 1.1 web server (support SSL/TLS, persistent connections, cookies, sessions, chunked responses, URL dispatcher/routing) ;
+ * - <a href="https://www.qxorm.com/qxorm_en/manual.html#manual_97" target="_blank"><b>JSON API</b></a> : interoperability with other technology than C++/Qt (REST web services, QML applications, scripting language).
  *
  * QxOrm is developed by Lionel Marty, a software development engineer since 2003.<br>
- * QxOrm library has been accepted into the <a href="http://forum.qt.io/category/24/qt-ambassador-program" target="_blank">Qt Ambassador Program</a>.
+ * QxOrm library has been accepted into the <a href="http://forum.qt.io/category/24/qt-ambassador-program" target="_blank">Qt Ambassador Program</a>.<br>
+ * QxOrm library is available on <a href="https://github.com/QxOrm/QxOrm" target="_blank">GitHub</a>.
  *
  * For more information about QxOrm library (quick sample, tutorial and forum), please visit : <a href="https://www.qxorm.com/" target="_blank">https://www.qxorm.com/</a>.<br>
  * <a href="https://www.qxorm.com/qxorm_en/manual.html" target="_blank">A manual (user guide) to learn how to work with QxOrm library is available on QxOrm website</a>.

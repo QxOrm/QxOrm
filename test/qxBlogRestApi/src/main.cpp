@@ -21,10 +21,6 @@
 
 #include <QxOrm_Impl.h>
 
-#ifdef _QX_ENABLE_QT_NETWORK
-void myHttpRequestHandler(qx::QxHttpRequest & request, qx::QxHttpResponse & response);
-#endif // _QX_ENABLE_QT_NETWORK
-
 int main(int argc, char * argv[])
 {
    // Qt application
@@ -409,9 +405,47 @@ int main(int argc, char * argv[])
       }
 #endif // QT_NO_SSL
 
-      // Create a QxOrm HTTP server instance and start it
+      // Create a QxOrm HTTP server instance
       qx::QxHttpServer httpServer;
-      httpServer.setCustomRequestHandler(myHttpRequestHandler);
+
+      // Define all HTTP server routes (dispatcher) to handle requests
+      // Each callback is executed in a dedicated thread, so QxOrm HTTP server can handle several requests in parallel
+      httpServer.dispatch("GET", "/files/*", [](qx::QxHttpRequest & request, qx::QxHttpResponse & response) {
+         qx::QxHttpServer::buildResponseStaticFile(request, response, QDir::currentPath(), 5000);
+      });
+      httpServer.dispatch("POST", "/qx", [](qx::QxHttpRequest & request, qx::QxHttpResponse & response) {
+         qx::QxHttpServer::buildResponseQxRestApi(request, response);
+
+         // Not useful here but this is how to get a server session per user
+         // If this is the first time to access to session, then a cookie is created automatically and attached to the response
+         // Then each request sent by web browser will contain a cookie with the session id
+         // The session expires on server side after qx::service::QxConnect::setSessionTimeOut() milliseconds
+         qx::QxHttpSession_ptr session = qx::QxHttpSessionManager::getSession(request, response);
+         if (session) { session->set("last_request_per_user", QDateTime::currentDateTime()); }
+      });
+      httpServer.dispatch("GET", "/params/<var1>/<var2:int>", [](qx::QxHttpRequest & request, qx::QxHttpResponse & response) {
+         response.data() = "Test URL dispatch parameters :\r\n";
+         response.data() += " - var1 = " + request.dispatchParams().value("var1").toByteArray() + "\r\n";
+         response.data() += " - var2 = " + request.dispatchParams().value("var2").toByteArray() + "\r\n";
+      });
+      httpServer.dispatch("GET", "/test_big_json", [](qx::QxHttpRequest & request, qx::QxHttpResponse & response) {
+         // To compare with this benchmark : https://blog.binaryspaceship.com/2017/cpp-rest-api-frameworks-benchmark/
+         // This is more a JSON benchmark than HTTP server benchmark (RapidJSON is faster than Qt QJson engine)
+         QJsonArray arr; Q_UNUSED(request);
+         for (int i = 0; i < 10000; ++i)
+         {
+            QJsonObject item;
+            item.insert("id", QString::number(i));
+            item.insert("name", QString("Hello World"));
+            item.insert("type", QString("application"));
+            arr.append(item);
+         }
+         QJsonDocument doc(arr);
+         response.headers().insert("Content-Type", "application/json; charset=utf-8");
+         response.data() = doc.toJson(QJsonDocument::Compact);
+      });
+
+      // Start HTTP server
       httpServer.startServer();
 
       // Open default web browser to connect to QxOrm HTTP server instance
@@ -446,31 +480,3 @@ int main(int argc, char * argv[])
 
    return 0;
 }
-
-#ifdef _QX_ENABLE_QT_NETWORK
-
-void myHttpRequestHandler(qx::QxHttpRequest & request, qx::QxHttpResponse & response)
-{
-   if ((request.command() == "GET") && (request.url().path().startsWith("/files/")))
-   {
-      qx::QxHttpServer::buildResponseStaticFile(request, response, QDir::currentPath());
-   }
-   else if (request.url().path().startsWith("/qx"))
-   {
-      qx::QxHttpServer::buildResponseQxRestApi(request, response);
-
-      // Not useful here but this is how to get a server session per user
-      // If this is the first time to access to session, then a cookie is created automatically and attached to the response
-      // Then each request sent by web browser will contain a cookie with the session id
-      // The session expires on server side after qx::service::QxConnect::setSessionTimeOut() milliseconds
-      qx::QxHttpSession_ptr session = qx::QxHttpSessionManager::getSession(request, response);
-      if (session) { session->set("last_request_per_user", QDateTime::currentDateTime()); }
-   }
-   else
-   {
-      response.status() = 404;
-      response.data() = "HTTP custom request handler is not able to process request (method=" + request.command().toLatin1() + ", path=" + request.url().path().toLatin1() + ")";
-   }
-}
-
-#endif // _QX_ENABLE_QT_NETWORK

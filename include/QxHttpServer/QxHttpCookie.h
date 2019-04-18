@@ -41,14 +41,14 @@
  * \file QxHttpCookie.h
  * \author Lionel Marty
  * \ingroup QxHttpServer
- * \brief HTTP cookie
+ * \brief HTTP cookie (https://www.qxorm.com/qxorm_en/manual.html#manual_999)
  */
 
 namespace qx {
 
 /*!
  * \ingroup QxHttpServer
- * \brief qx::QxHttpCookie : HTTP cookie
+ * \brief qx::QxHttpCookie : HTTP cookie (https://www.qxorm.com/qxorm_en/manual.html#manual_999)
  */
 struct QX_DLL_EXPORT QxHttpCookie
 {

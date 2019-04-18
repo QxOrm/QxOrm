@@ -82,6 +82,7 @@ public:
 
    qx::QxHttpRequest & request();
    qx::QxHttpResponse & response();
+   qx_bool writeChunked(const QByteArray & data);
 
    virtual void clear();
    virtual void executeServer();

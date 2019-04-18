@@ -218,7 +218,7 @@
                                     <a href="#manual_3840">Fetch relationships</a>
                                  </li>
                                  <li class="manual_li_title_3">
-                                    <a href="#manual_3850">Select columns fetching relationships</a>
+                                    <a href="#manual_3850">Select columns fetching relationships and define custom SQL alias</a>
                                  </li>
                               </ol>
                            </li>
@@ -479,6 +479,136 @@
                            </li>
                         </ol>
                      </li>
+                     <li class="manual_li_title_1">
+                        <a href="#manual_96">HTTP/HTTPS web server (QxHttpServer module)</a>
+                        <ol class="manual_ol_title_2" type="1">
+                           <li class="manual_li_title_2">
+                              <a href="#manual_995">Hello World !</a>
+                           </li>
+                           <li class="manual_li_title_2">
+                              <a href="#manual_996">HTTP/HTTPS web server settings</a>
+                              <ol class="manual_ol_title_3" type="a">
+                                 <li class="manual_li_title_3">
+                                    <a href="#manual_9961">Secured connections SSL/TLS</a>
+                                 </li>
+                              </ol>
+                           </li>
+                           <li class="manual_li_title_2">
+                              <a href="#manual_997">Routing URL (dispatcher / endpoints)</a>
+                              <ol class="manual_ol_title_3" type="a">
+                                 <li class="manual_li_title_3">
+                                    <a href="#manual_9962">Dynamic URL routing</a>
+                                 </li>
+                              </ol>
+                           </li>
+                           <li class="manual_li_title_2">
+                              <a href="#manual_856">Get HTTP request parameters</a>
+                           </li>
+                           <li class="manual_li_title_2">
+                              <a href="#manual_857">Build HTTP response</a>
+                           </li>
+                           <li class="manual_li_title_2">
+                              <a href="#manual_998">Sessions (storage per client on server side)</a>
+                           </li>
+                           <li class="manual_li_title_2">
+                              <a href="#manual_999">Cookies</a>
+                           </li>
+                           <li class="manual_li_title_2">
+                              <a href="#manual_851">Static files</a>
+                           </li>
+                           <li class="manual_li_title_2">
+                              <a href="#manual_852">Chunked responses</a>
+                           </li>
+                           <li class="manual_li_title_2">
+                              <a href="#manual_853">Requests using JSON API (QxRestApi module)</a>
+                           </li>
+                           <li class="manual_li_title_2">
+                              <a href="#manual_854">WebSocket</a>
+                           </li>
+                           <li class="manual_li_title_2">
+                              <a href="#manual_855">Performance (tested with Apache Benchmark)</a>
+                              <ol class="manual_ol_title_3" type="a">
+                                 <li class="manual_li_title_3">
+                                    <a href="#manual_8550">Improve performance with epoll dispatcher on Linux</a>
+                                 </li>
+                              </ol>
+                           </li>
+                        </ol>
+                     </li>
+                     <li class="manual_li_title_1">
+                        <a href="#manual_97">JSON REST API (QxRestApi module)</a>
+                        <ol class="manual_ol_title_2" type="1">
+                           <li class="manual_li_title_2">
+                              <a href="#manual_971">How it works</a>
+                              <ol class="manual_ol_title_3" type="a">
+                                 <li class="manual_li_title_3">
+                                    <a href="#manual_9710">Use cases</a>
+                                 </li>
+                              </ol>
+                           </li>
+                           <li class="manual_li_title_2">
+                              <a href="#manual_972">qxBlogRestApi example project (QML and HTTP web server)</a>
+                           </li>
+                           <li class="manual_li_title_2">
+                              <a href="#manual_973">Fetch</a>
+                              <ol class="manual_ol_title_3" type="a">
+                                 <li class="manual_li_title_3">
+                                    <a href="#manual_9731">fetch_all</a>
+                                 </li>
+                                 <li class="manual_li_title_3">
+                                    <a href="#manual_9732">fetch_by_id</a>
+                                 </li>
+                                 <li class="manual_li_title_3">
+                                    <a href="#manual_9733">fetch_by_query</a>
+                                 </li>
+                                 <li class="manual_li_title_3">
+                                    <a href="#manual_9734">count</a>
+                                 </li>
+                                 <li class="manual_li_title_3">
+                                    <a href="#manual_9735">exist</a>
+                                 </li>
+                              </ol>
+                           </li>
+                           <li class="manual_li_title_2">
+                              <a href="#manual_974">Insert</a>
+                           </li>
+                           <li class="manual_li_title_2">
+                              <a href="#manual_975">Update</a>
+                           </li>
+                           <li class="manual_li_title_2">
+                              <a href="#manual_976">Save (insert or update)</a>
+                           </li>
+                           <li class="manual_li_title_2">
+                              <a href="#manual_977">Delete</a>
+                              <ol class="manual_ol_title_3" type="a">
+                                 <li class="manual_li_title_3">
+                                    <a href="#manual_9771">delete_all / destroy_all</a>
+                                 </li>
+                                 <li class="manual_li_title_3">
+                                    <a href="#manual_9772">delete_by_query / destroy_by_query</a>
+                                 </li>
+                                 <li class="manual_li_title_3">
+                                    <a href="#manual_9773">delete_by_id / destroy_by_id</a>
+                                 </li>
+                              </ol>
+                           </li>
+                           <li class="manual_li_title_2">
+                              <a href="#manual_978">Validate</a>
+                           </li>
+                           <li class="manual_li_title_2">
+                              <a href="#manual_979">Custom SQL query or stored procedure</a>
+                           </li>
+                           <li class="manual_li_title_2">
+                              <a href="#manual_961">Call C++ natives functions</a>
+                           </li>
+                           <li class="manual_li_title_2">
+                              <a href="#manual_962">Meta-data (C++ classes registered into QxOrm context)</a>
+                           </li>
+                           <li class="manual_li_title_2">
+                              <a href="#manual_963">Send a list of JSON requests</a>
+                           </li>
+                        </ol>
+                     </li>
                   </ol>
                   </div>
                </td>
@@ -510,12 +640,11 @@
            <br><br>
            Based on a simple <b>C++ setting function per class</b> (like <a href="http://hibernate.org/" target="_blank"><i>Hibernate</i></a> XML mapping file in Java), <b>QxOrm</b> library provides following features :
            <ul>
-             <li><b><font style="background-color:yellow"><a href="./manual.html#manual_30">persistence</a></font></b> : communication with databases (support <i>1-1</i>, <i>1-n</i>, <i>n-1</i> and <i>n-n</i> relationships) ;
-             </li>
-             <li><b><font style="background-color:yellow"><a href="./manual.html#manual_60">serialization</a></font></b> : binary, XML and JSON format ;
-             </li>
-             <li><b><font style="background-color:yellow"><a href="./manual.html#manual_70">reflection</a></font></b> (or <b><font style="background-color:yellow"><a href="./manual.html#manual_70">introspection</a></font></b>) : access dynamically to classes definitions, retrieve properties and call classes methods.
-             </li>
+             <li><b><font style="background-color:yellow"><a href="./manual.html#manual_30">Persistence</a></font></b> : support most common databases like SQLite, MySQL, PostgreSQL, Oracle, MS SQL Server, <a href="./manual.html#manual_95">MongoDB</a> (with <i>1-1</i>, <i>1-n</i>, <i>n-1</i> and <i>n-n</i> relationships) ;</li>
+             <li><b><font style="background-color:yellow"><a href="./manual.html#manual_60">Serialization</a></font></b> : JSON, binary and XML format ;</li>
+             <li><b><font style="background-color:yellow"><a href="./manual.html#manual_70">Reflection</a></font></b> (or <b><font style="background-color:yellow"><a href="./manual.html#manual_70">introspection</a></font></b>) : access dynamically to classes definitions, retrieve properties and call classes methods ;</li>
+             <li><b><font style="background-color:yellow"><a href="./manual.html#manual_96">HTTP web server</a></font></b> : standalone multi-threaded HTTP 1.1 web server (support SSL/TLS, persistent connections, cookies, sessions, chunked responses, URL dispatcher/routing) ;</li>
+             <li><b><font style="background-color:yellow"><a href="./manual.html#manual_97">JSON API</a></font></b> : interoperability with other technology than C++/Qt (REST web services, QML applications, scripting language).</li>
            </ul>
            QxOrm depends on <a href="http://www.qt.io/" target="_blank"><b>Qt</b></a> (from version 4.5.0) and <a href="http://www.boost.org/" target="_blank"><b>boost</b></a> (from version 1.38, and by default just header files <i>*.hpp</i> are necessary).<br>
            QxOrm library has been accepted into the <a href="http://forum.qt.io/category/24/qt-ambassador-program" target="_blank">Qt Ambassador Program</a>.
@@ -1878,7 +2007,7 @@ WHERE blog.blog_id = :blog_id</span></pre>
               </div>
               <br><br>
             </div>
-            <p class="manual_p_title_3"><a class="manual_a_title_3" name="manual_3850">Select columns fetching relationships</a></p>
+            <p class="manual_p_title_3"><a class="manual_a_title_3" name="manual_3850">Select columns fetching relationships and define custom SQL alias</a></p>
             <div class="manual_div_content">
                It is sometimes necessary to not request all table columns to optimize : indeed, selecting columns really used by a process limits network traffic between database and C++ application, so performance are improved.<br>
                <br>
@@ -1909,6 +2038,36 @@ WHERE blog.blog_id = :blog_id</span></pre>
                </td></tr></tbody></table>
                <br>
                <b>Note :</b> another syntax is available to select columns to not fetch : <b>my_relation -{ col_1, col_2, etc... }</b>.
+               <br><br>
+               <b>Other note :</b> you can also define <b>a custom SQL alias per relation</b>.
+               This is useful to write your <i>WHERE</i> conditions in the SQL query.
+               A SQL alias can be defined between characters <b>&lt;</b> <b>&gt;</b>.
+               <br><br>
+               <b>Example :</b> here is a fetch with relationships example defining some SQL aliases per relation :
+               <br><br>
+               <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="select relationships columns">
+<pre>list_blog lstBlogComplexRelation3;
+QStringList relations;
+relations &lt;&lt; <span class="string">"<font style="background-color:yellow">&lt;blog_alias&gt;</font> { blog_text }"</span>;
+relations &lt;&lt; <span class="string">"author_id <font style="background-color:yellow">&lt;author_alias&gt;</font> { name, birthdate }"</span>;
+relations &lt;&lt; <span class="string">"list_comment <font style="background-color:yellow">&lt;list_comment_alias&gt;</font> { comment_text } -&gt; blog_id <font style="background-color:yellow">&lt;blog_alias_2&gt;</font> -&gt; * <font style="background-color:yellow">&lt;..._my_alias_suffix&gt;</font>"</span>;
+QSqlError daoError = qx::dao::fetch_all_with_relation(relations, lstBlogComplexRelation3);
+qx::dump(lstBlogComplexRelation3);</pre>
+               </td></tr></tbody></table>
+               <br><br>
+               This code generates following SQL query :
+               <br>
+               <div style="width:900px; height:230px; overflow:auto; background-color:white">
+<pre><span class="int">SELECT blog_alias.blog_id AS blog_alias_blog_id_0, blog_alias.blog_text AS blog_alias_blog_text_0, blog_alias.author_id AS blog_alias_author_id_0, author_alias.author_id AS author_alias_author_id_0, author_alias.name AS author_alias_name_0, author_alias.birthdate AS author_alias_birthdate_0, list_comment_alias.comment_id AS list_comment_alias_comment_id_0, list_comment_alias.blog_id AS list_comment_alias_blog_id_0, list_comment_alias.comment_text AS list_comment_alias_comment_text_0, list_comment_alias.blog_id AS list_comment_alias_blog_id_0_2, blog_alias_2.blog_id AS blog_alias_2_blog_id_0, blog_alias_2.blog_text AS blog_alias_2_blog_text_0, blog_alias_2.date_creation AS blog_alias_2_date_creation_0, blog_alias_2.author_id AS blog_alias_2_author_id_0_3, author_my_alias_suffix.author_id AS author_my_alias_suffix_author_id_0, author_my_alias_suffix.name AS author_my_alias_suffix_name_0, author_my_alias_suffix.birthdate AS author_my_alias_suffix_birthdate_0, author_my_alias_suffix.sex AS author_my_alias_suffix_sex_0, comment_my_alias_suffix.comment_id AS comment_my_alias_suffix_comment_id_0, comment_my_alias_suffix.blog_id AS comment_my_alias_suffix_blog_id_0, comment_my_alias_suffix.comment_text AS comment_my_alias_suffix_comment_text_0, comment_my_alias_suffix.date_creation AS comment_my_alias_suffix_date_creation_0, comment_my_alias_suffix.blog_id AS comment_my_alias_suffix_blog_id_0_5, category_my_alias_suffix.category_id AS category_my_alias_suffix_category_id_0, category_my_alias_suffix.name AS category_my_alias_suffix_name_0, category_my_alias_suffix.description AS category_my_alias_suffix_description_0
+  FROM blog AS <font style="background-color:yellow">blog_alias</font>
+  LEFT OUTER JOIN author <font style="background-color:yellow">author_alias</font> ON author_alias.author_id = blog_alias.author_id
+  LEFT OUTER JOIN comment <font style="background-color:yellow">list_comment_alias</font> ON list_comment_alias.blog_id = blog_alias.blog_id
+  LEFT OUTER JOIN blog <font style="background-color:yellow">blog_alias_2</font> ON blog_alias_2.blog_id = list_comment_alias.blog_id
+  LEFT OUTER JOIN author <font style="background-color:yellow">author_my_alias_suffix</font> ON author_my_alias_suffix.author_id = blog_alias_2.author_id
+  LEFT OUTER JOIN comment <font style="background-color:yellow">comment_my_alias_suffix</font> ON comment_my_alias_suffix.blog_id = blog_alias_2.blog_id
+  LEFT OUTER JOIN category_blog category_blog_6 ON blog_alias_2.blog_id = category_blog_6.blog_id
+  LEFT OUTER JOIN category <font style="background-color:yellow">category_my_alias_suffix</font> ON category_blog_6.category_id = category_my_alias_suffix.category_id</span></pre>
+               </div>
                <br><br>
             </div>
          </div>
@@ -3544,9 +3703,8 @@ template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</
             </td></tr></tbody></table>
             <br>
             Above example generates following JSON stream :<br>
-            <div style="width:900px; height:200px; overflow:auto; background-color:white">
-<pre>
-{
+            <div class="json_pretty">
+<pre>{
     "author_id_2": {
         "author_id": "author_id_2",
         "birthdate": "2016-03-24",
@@ -3563,9 +3721,43 @@ template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</
         "name": "author_3",
         "sex": 1
     }
-}
-</pre>
+}</pre>
             </div>
+            <br><br>
+            <b>Note :</b> <a href="#manual_97">QxRestApi module</a> provided by QxOrm library is based on JSON serialization engine.
+            <br><br>
+            <b>Other note :</b> you can customize output JSON format (to filter some properties generated by JSON serialization process).
+            All JSON serialization functions provide an optional parameter of type <i>QString</i> named <i>format</i>.
+            Prerequisites to use this <i>format</i> parameter are :
+            <ul>
+               <li><i>format</i> parameter must start with prefix : <i><b>filter:</b></i> ;</li>
+               <li>output properties can be defined inside <i><b>{ }</b></i> ;</li>
+               <li>relationships are splitted by character <i><b>|</b></i> ;</li>
+               <li>character <i><b>*</b></i> means : <i>all relationships for 1 level</i> ;</li>
+               <li>character <i><b>-</b></i> before <i><b>{ }</b></i> means : <i>all properties except</i>.</li>
+            </ul>
+            <br>
+            <b>Example :</b> here is a JSON serialization example defining an output format to filter some properties on several levels of relationships :
+            <br><br>
+            <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="Qt JSON serialization">
+<pre><span class="comment">// Serialize a C++ instance to a JSON string</span>
+QString jsonFormat = <font style="background-color:yellow"><span class="string">"filter: { blog_text } | author_id { name, birthdate } | list_comment { comment_text } -&gt; blog_id -&gt; *"</span></font>;
+QString outputJsonFiltered = qx::serialization::json::to_string(blog, <span class="int">1</span>, <font style="background-color:yellow">jsonFormat</font>);
+qDebug(<span class="string">"[QxOrm] custom JSON serialization process (filtered) : \n%s"</span>, qPrintable(outputJsonFiltered));
+
+<span class="comment">// Fill a C++ instance based on a JSON string</span>
+blog_ptr blogFromJsonFiltered; blogFromJsonFiltered.reset(<span class="operator">new</span> blog());
+qx::serialization::json::from_string(blogFromJsonFiltered, outputJsonFiltered, <span class="int">1</span>, <font style="background-color:yellow">jsonFormat</font>);
+qx::dump(blogFromJsonFiltered);
+qAssert(blogFromJsonFiltered-&gt;m_text != <span class="string">""</span>); <span class="comment">// Fetched</span>
+qAssert(blogFromJsonFiltered-&gt;m_dt_creation.isNull()); <span class="comment">// Not fetched</span>
+qAssert(blogFromJsonFiltered-&gt;m_author->m_sex == author::unknown); <span class="comment">// Not fetched</span>
+qAssert(blogFromJsonFiltered-&gt;m_author->m_name != <span class="string">""</span>); <span class="comment">// Fetched</span>
+qAssert(blogFromJsonFiltered-&gt;m_commentX.size() > <span class="int">0</span>);
+qAssert(blogFromJsonFiltered-&gt;m_commentX[0]->m_dt_create.isNull()); <span class="comment">// Not fetched</span>
+qAssert(blogFromJsonFiltered-&gt;m_commentX[0]->m_text != <span class="string">""</span>); <span class="comment">// Fetched</span>
+qAssert(blogFromJsonFiltered-&gt;m_commentX[0]->m_blog);</pre>
+            </td></tr></tbody></table>
             <br><br>
          </div>
          <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_610">XML boost serialization</a></p>
@@ -5388,6 +5580,4050 @@ daoError = qx::dao::mongodb::QxMongoDB_Helper::autoCreateIndexes(true);</pre>
             <br/><br/>
          </div>
          <br/><br/>
+      </div>
+
+      <p class="manual_p_title_1"><a class="manual_a_title_1" name="manual_96">HTTP/HTTPS web server (QxHttpServer module)</a></p>
+      <div class="manual_div_content_1">
+         QxOrm library provides a standalone, multi-threaded and easy to use HTTP 1.1 web server named <b>QxHttpServer module</b> (based on <a href="#manual_80">QxService module</a>).
+         <b>QxHttpServer module</b> doesn't require any <a href="https://httpd.apache.org/" target="_blank">Apache</a> or <a href="https://nginx.org/en/" target="_blank">Nginx</a> installation.
+         <br/><br/>
+         <b>QxHttpServer module</b> supports several features :
+         <ul>
+            <li><a href="#manual_9961">SSL/TLS secured connections</a></li>
+            <li><a href="#manual_997">Dynamic URL routing (dispatcher / define endpoints)</a></li>
+            <li><a href="#manual_998">Sessions (server side storage per client)</a></li>
+            <li><a href="#manual_999">Cookies</a></li>
+            <li><a href="#manual_851">Manage static files</a></li>
+            <li><a href="#manual_852">Chunked responses</a></li>
+            <li><a href="#manual_853">JSON API requests (QxRestApi module)</a></li>
+         </ul>
+         Combined with <a href="#manual_97">QxRestApi module</a> (which provides a JSON API to request your persistent data layer), <b>QxHttpServer module</b> is designed to develop modern web applications.
+         For example, <a href="https://en.wikipedia.org/wiki/Single-page_application" target="_blank">SPA (<i>Single-Page Applications</i>)</a> web applications with famous Javascript frameworks like <a href="https://angularjs.org/" target="_blank">AngularJS</a>, <a href="https://reactjs.org/" target="_blank">React</a>, <a href="https://www.meteor.com/" target="_blank">Meteor.js</a>, etc...
+         <br/><br/>
+         <b>Note :</b> to enable <b>QxHttpServer</b> module, you have to define <font style="background-color:yellow"><b>_QX_ENABLE_QT_NETWORK</b></font> compilation option in <a href="#manual_220"><i>QxOrm.pri</i> (ou <i>QxOrm.cmake</i>) configuration file</a>.
+         <b>_QX_ENABLE_QT_NETWORK</b> compilation option adds a dependency to <a href="http://doc.qt.io/qt-5/qtnetwork-index.html" target="_blank">QtNetwork</a> binary provided by Qt library.
+         <br/><br/>
+         <b>Other note :</b> QxOrm package contains a <a href="#manual_972">test project named <b><i>qxBlogRestApi</i></b></a>.
+         This test project is a web application with several examples to request a persistent data layer from a web page (HTML and Javascript).
+         <br/><br/>
+         <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_995">Hello World !</a></p>
+         <div class="manual_div_content">
+            Here is a HTTP web server source code based on <b>QxHttpServer module</b> (this web server just returns <i>Hello World !</i> to web client) :
+            <br/><br/>
+            <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="keyword">#include</span> &lt;<span class="string">QtCore/qcoreapplication.h</span>&gt;
+<span class="keyword">#include</span> &lt;<span class="string">QxOrm.h</span>&gt;
+
+<span class="type">int</span> main(<span class="type">int</span> argc, <span class="type">char *</span> argv[])
+{
+   <span class="type">QCoreApplication</span> app(argc, argv);
+
+   <span class="comment">// HTTP server settings</span>
+   <span class="type">qx::service::QxConnect *</span> serverSettings = qx::service::QxConnect::getSingleton();
+   serverSettings-&gt;setPort(<span class="int">9642</span>); <span class="comment">// HTTP server listening port</span>
+   serverSettings-&gt;setKeepAlive(<span class="int">5000</span>); <span class="comment">// Keep-alive connection with client during 5s, then socket is disconnected and thread becomes available for other clients</span>
+   serverSettings-&gt;setThreadCount(<span class="int">50</span>); <span class="comment">// Number of threads waiting for client's requests,</span>
+                                                           <span class="comment">// which means also how many requests can be handled simultaneously (in parallel) by HTTP server</span>
+
+   <span class="comment">// Create a QxOrm HTTP server instance</span>
+   <span class="type">qx::QxHttpServer</span> httpServer;
+
+   <span class="comment">// Define all HTTP server routes (dispatcher) to handle requests</span>
+   <span class="comment">// Each callback is executed in a dedicated thread, so QxOrm HTTP server can handle several requests in parallel</span>
+   httpServer.dispatch(<span class="string">"GET"</span>, <span class="string">"/"</span>, [](qx::QxHttpRequest & request, qx::QxHttpResponse & response) {
+      response.data() = <span class="string">"Hello World !"</span>;
+   });
+
+   <span class="comment">// Start HTTP server</span>
+   httpServer.startServer();
+
+   <span class="comment">// Start event loop</span>
+   return app.exec();
+}</pre>
+            </td></tr></tbody></table>
+            <br/><br/>
+            <b>Result :</b> open a web browser (Chrome, Firefox, Safari, Internet Explorer, Opera, etc...) and go to this URL : <u><b>http://localhost:9642/</b></u>. Your web browser should display :
+            <br/><br/>
+            <img alt="QxHttpServer Hello World !" src="./resource/qx_http_server_hello_world_01.png" border="0">
+            <br/><br/>
+         </div>
+         <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_996">HTTP/HTTPS web server settings</a></p>
+         <div class="manual_div_content">
+            HTTP web server settings are available with <a href="../doxygen/html/classqx_1_1service_1_1_qx_connect.html" target="_blank">qx::service::QxConnect</a> singleton class :
+            <ul>
+               <li><i>setPort()</i> : web server listening port (default web server port is 80 but you can define what you want) ;</li>
+               <li><i>setThreadCount()</i> : number of threads used by web server to handle HTTP requests (which means number of simultaneous clients managed by web server) ;</li>
+               <li><i>setMaxWait()</i> : timeout in milli-seconds (for example to read/write on socket), -1 value means no timeout ;</li>
+               <li><i>setCompressData()</i> : if HTTP client supports GZIP compression, then text responses (HTML / Javascript / CSS files, JSON stream, etc...) will be compressed as GZIP ;</li>
+               <li><i>setKeepAlive()</i> : socket stay connected to client during <i>X</i> milli-seconds, -1 value means never disconnect ;</li>
+               <li><i>setSessionTimeOut()</i> : timeout in milli-seconds before deleting unused <a href="#manual_998">sessions (server side storage per client)</a>.</li>
+            </ul>
+            <br/>
+            <p class="manual_p_title_3"><a class="manual_a_title_3" name="manual_9961">Secured connections SSL/TLS</a></p>
+            <div class="manual_div_content">
+               <a href="../doxygen/html/classqx_1_1service_1_1_qx_connect.html" target="_blank">qx::service::QxConnect</a> singleton class provides also some parameters to manage HTTPS secured connections (SSL and/or TLS).<br/>
+               Here is a secured connection settings example with server certificate and CA certificate authority (you can test this code with <a href="#manual_972"><b><i>qxBlogRestApi</i> project example</b></a>) :
+               <br/><br/>
+               <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="comment">// Certificates created with this tutorial : https://deliciousbrains.com/ssl-certificate-authority-for-local-https-development/</span>
+QFile::copy(<span class="string">":/documents/cert_qxorm_ca.pem"</span>, appPath.filePath(<span class="string">"files/cert_qxorm_ca.pem"</span>));
+QFile::copy(<span class="string">":/documents/cert_qxorm_server.crt"</span>, appPath.filePath(<span class="string">"files/cert_qxorm_server.crt"</span>));
+QFile::copy(<span class="string">":/documents/cert_qxorm_server.key"</span>, appPath.filePath(<span class="string">"files/cert_qxorm_server.key"</span>));
+
+<span class="type">QFile</span> fileCertCA(appPath.filePath(<span class="string">"files/cert_qxorm_ca.pem"</span>));
+fileCertCA.open(QIODevice::ReadOnly);
+<span class="type">QList&lt;QSslCertificate&gt;</span> certCA; certCA &lt;&lt; QSslCertificate(fileCertCA.readAll());
+
+<span class="type">QFile</span> fileCertServerPublic(appPath.filePath(<span class="string">"files/cert_qxorm_server.crt"</span>));
+fileCertServerPublic.open(QIODevice::ReadOnly);
+<span class="type">QSslCertificate</span> certServerPublic(fileCertServerPublic.readAll());
+
+<span class="type">QFile</span> fileCertServerPrivate(appPath.filePath(<span class="string">"files/cert_qxorm_server.key"</span>));
+fileCertServerPrivate.open(QIODevice::ReadOnly);
+<span class="type">QSslKey</span> certServerPrivate(fileCertServerPrivate.readAll(), QSsl::Rsa, QSsl::Pem, QSsl::PrivateKey, "qxorm");
+
+<span class="type">qx::service::QxConnect *</span> serverSettings = qx::service::QxConnect::getSingleton();
+serverSettings-&gt;setSSLEnabled(true);
+serverSettings-&gt;setSSLCACertificates(certCA);
+serverSettings-&gt;setSSLLocalCertificate(certServerPublic);
+serverSettings-&gt;setSSLPrivateKey(certServerPrivate);
+</pre>
+               </td></tr></tbody></table>
+               <br/><br/>
+               <b>Note :</b> by default, all SSL errors are ignored (often certificates errors).
+               To manage your own security level, you can use following functions (from <a href="../doxygen/html/classqx_1_1service_1_1_qx_connect.html" target="_blank">qx::service::QxConnect</a> singleton class) :
+               <ul>
+                  <li><i>setSSLIgnoreErrors(QList&lt;QSslError&gt; lst) :</i> list of SSL errors to ignore (by default all errors are ignored), see <a href="https://doc.qt.io/Qt-5/qsslerror.html" target="_blank">QSslError Qt class</a> ;</li>
+                  <li><i>setSSLPeerVerifyName(const QString & s) :</i> see <a href="https://doc.qt.io/qt-5/qsslsocket.html" target="_blank">QSslSocket Qt class</a> for more details ;</li>
+                  <li><i>setSSLPeerVerifyMode(QSslSocket::PeerVerifyMode e) :</i> see <a href="https://doc.qt.io/qt-5/qsslsocket.html" target="_blank">QSslSocket Qt class</a> for more details ;</li>
+                  <li><i>setSSLPeerVerifyDepth(int i) :</i> see <a href="https://doc.qt.io/qt-5/qsslsocket.html" target="_blank">QSslSocket Qt class</a> for more details ;</li>
+                  <li><i>setSSLConfiguration(QSslConfiguration cfg) :</i> see <a href="https://doc.qt.io/qt-5/qsslconfiguration.html" target="_blank">QSslConfiguration Qt class</a> for more details ;</li>
+                  <li><i>setSSLProtocol(QSsl::SslProtocol e) :</i> see <a href="https://doc.qt.io/qt-5/qssl.html#SslProtocol-enum" target="_blank">list of SSL and TLS protocols in Qt documentation</a>.</li>
+               </ul>
+               <br/>
+            </div>
+         </div>
+         <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_997">Routing URL (dispatcher / endpoints)</a></p>
+         <div class="manual_div_content">
+            <b>QxHttpServer module</b> provides an URL routing engine (<i>dispatcher</i>) to define functions (or lambda) to execute based on HTTP request parameters (HTTP method <i>GET, POST, DELETE, etc...</i> + URL).<br/>
+            Functions (or lambda) must be defined with this signature : <font style="background-color:yellow"><b>void myRequestHandler(qx::QxHttpRequest & request, qx::QxHttpResponse & response);</b></font>
+            <br/><br/>
+            <a href="../doxygen/html/classqx_1_1_qx_http_server.html" target="_blank"><i>qx::QxHttpServer</i></a> class (or its <a href="../doxygen/html/classqx_1_1_qx_http_server.html" target="_blank"><i>qx_http_server</i></a> alias) has following methods :
+            <ul>
+               <li><i>setCustomRequestHandler()</i> : define a function (or lambda) executed if dispatcher doesn't find any other matched function ;</li>
+               <li><i>dispatch()</i> : first parameter is HTTP method (<i>GET, POST, DELETE, etc...</i>), second parameter is requested URL (or its pattern), third parameter is function (or lambda) to execute ;</li>
+               <li><i>beforeDispatching()</i> : function (or lambda) executed before handling HTTP request (can be used for example to log, or to manage an authentication process) ;</li>
+               <li><i>afterDispatching()</i> : function (or lambda) executed after handling HTTP request (can be used for example to log) ;</li>
+               <li><i>clearDispatcher()</i> : remove all routing rules from dispatcher (only function or lambda defined by <i>setCustomRequestHandler()</i> will be executed).</li>
+            </ul>
+            <b>Note :</b> dispatcher is thread-safe, so you can define URL routing rules even if web server is running.
+            <br/><br/>
+            <b>Other note :</b> each function (or lambda) is <font style="background-color:yellow"><b>executed in its own thread</b></font>.
+            So QxOrm library HTTP web server can handle several HTTP requests simultaneously.
+            <br/><br/>
+            <b>Example n°1 :</b> this routing rule handles all HTTP requests with method <i>GET</i> + URL starts with <i>/files/</i>, and returns a static file content stored on server (<i>QDir::currentPath()</i> is static files root directory, and <i>5000</i> is chunked response size, this last parameter is optional) :
+            <br/><br/>
+            <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre>httpServer.dispatch(<span class="string">"GET"</span>, <span class="string">"/files/*"</span>, [](qx::QxHttpRequest & request, qx::QxHttpResponse & response) {
+   qx::QxHttpServer::buildResponseStaticFile(request, response, QDir::currentPath(), <span class="int">5000</span>);
+});</pre>
+            </td></tr></tbody></table>
+            <br/><br/>
+            <b>Example n°2 :</b> this routing rule handles all HTTP requests with method <i>POST</i> + URL is <i>/qx</i>, and calls <a href="#manual_97">QxRestApi module</a> (which provides a JSON API to request persistent data layer).
+            Example n°1 (<i>static files</i>) and example n°2 (<i>QxRestApi module</i>) are a good starting point to develop a SPA (<i>Single-Page Applications</i>) web application with famous Javascript frameworks like <a href="https://angularjs.org/" target="_blank">AngularJS</a>, <a href="https://reactjs.org/" target="_blank">React</a>, <a href="https://www.meteor.com/" target="_blank">Meteor.js</a>, etc...
+            <br/><br/>
+            <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre>httpServer.dispatch(<span class="string">"POST"</span>, <span class="string">"/qx"</span>, [](qx::QxHttpRequest & request, qx::QxHttpResponse & response) {
+   qx::QxHttpServer::buildResponseQxRestApi(request, response);
+});</pre>
+            </td></tr></tbody></table>
+            <br/><br/>
+            <b>Example n°3 :</b> this routing rule handles all HTTP requests with method <i>GET</i> + URL is <i>/test_big_json</i>, and builds a JSON response with an array of 10000 items :
+            <br/><br/>
+            <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre>httpServer.dispatch(<span class="string">"GET"</span>, <span class="string">"/test_big_json"</span>, [](qx::QxHttpRequest & request, qx::QxHttpResponse & response) {
+   <span class="comment">// To compare with this benchmark : https://blog.binaryspaceship.com/2017/cpp-rest-api-frameworks-benchmark/</span>
+   <span class="comment">// This is more a JSON benchmark than HTTP server benchmark (RapidJSON is faster than Qt QJson engine)</span>
+   QJsonArray arr; Q_UNUSED(request);
+   for (int i = 0; i &lt; 10000; ++i)
+   {
+      QJsonObject item;
+      item.insert(<span class="string">"id"</span>, QString::number(i));
+      item.insert(<span class="string">"name"</span>, QString("Hello World"));
+      item.insert(<span class="string">"type"</span>, QString("application"));
+      arr.append(item);
+   }
+   QJsonDocument doc(arr);
+   response.headers().insert(<span class="string">"Content-Type"</span>, <span class="string">"application/json; charset=utf-8"</span>);
+   response.data() = doc.toJson(QJsonDocument::Compact);
+});</pre>
+            </td></tr></tbody></table>
+            <br/><br/>
+            <b>Note :</b> <font style="background-color:yellow"><i>dispatch()</i> order is very important</font>.
+            The first item found by the dispatcher which matches requested URL is executed (all other dispatcher items are ignored).
+            So you have to define first the most specific URL, and you have to define last the most generic URL (for example, pattern <i>/*</i> matches all URLs, so this is the most generic dispatcher item).
+            <br/><br/>
+            <p class="manual_p_title_3"><a class="manual_a_title_3" name="manual_9962">Dynamic URL routing</a></p>
+            <div class="manual_div_content">
+               <b>QxHttpServer dispatcher</b> supports dynamic URL routing.<br/>
+               You can define some variables inside URL pattern with this syntax : <font style="background-color:yellow"><i>&lt;var_name:var_type&gt;</i></font> (<i>var_type</i> is optional, and can be equal to : <i>int, long, float, double, string</i>).
+               <br/><br/>
+               Dynamic URL routing is useful to define REST API.<br/>
+               For example, <i>/blog/&lt;blog_id:int&gt;</i> pattern + <i>GET</i> HTTP method can be used to fetch a blog based on its numeric unique identifier (<i>fetch_by_id</i>).
+               <br/><br/>
+               URL is a list of segments splitted by character <i>/</i>.<br/>
+               <b>QxHttpServer dispatcher</b> checks each segment from requested URL : if all segments match the pattern, then the function (or lambda) is executed.<br/>
+               To get dynamic variables values from URL, you must write : <font style="background-color:yellow"><i>request.dispatchParams().value("var_name")</i></font> (which returns a <i>QVariant</i>).
+               <br/><br/>
+               <b>Example :</b> this routing rule handles all HTTP requests with method <i>GET</i> + URL starts with <i>/params/</i>, followed by a segment which will contain the value of <i>var1</i> variable, followed by a <b><i>numeric</i></b> segment which will contain the value of <i>var2</i> variable.
+               The lambda returns a HTTP response which displays the values of <i>var1</i> and <i>var2</i> variables from URL.
+               If the web browser calls <i>/params/abc/123/</i> URL then the function (or lambda) will be executed, <b>BUT</b> if the web browser calls <i>/params/abc/def/</i> URL then the function (or lambda) won't be executed (because <i>def</i> is not numeric) and dispatcher will search another item to execute :
+               <br/><br/>
+               <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre>httpServer.dispatch(<span class="string">"GET"</span>, <font style="background-color:yellow"><span class="string">"/params/&lt;var1&gt;/&lt;var2:int&gt;"</span></font>, [](qx::QxHttpRequest & request, qx::QxHttpResponse & response) {
+   response.data() = <span class="string">"Test URL dispatch parameters :\r\n"</span>;
+   response.data() += <span class="string">" - var1 = "</span> + request.dispatchParams().value(<span class="string">"var1"</span>).toByteArray() + <span class="string">"\r\n"</span>;
+   response.data() += <span class="string">" - var2 = "</span> + request.dispatchParams().value(<span class="string">"var2"</span>).toByteArray() + <span class="string">"\r\n"</span>;
+});</pre>
+               </td></tr></tbody></table>
+               <br/><br/>
+               <b>Note :</b> you can also define a regular expression to route URLs with this syntax : <font style="background-color:yellow"><i>&lt;var_name:{my_reg_exp}&gt;</i></font>.
+               <br/><br/>
+            </div>
+         </div>
+         <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_856">Get HTTP request parameters</a></p>
+         <div class="manual_div_content">
+            <a href="../doxygen/html/classqx_1_1_qx_http_request.html" target="_blank"><i>qx::QxHttpRequest</i></a> class (or its <a href="../doxygen/html/classqx_1_1_qx_http_request.html" target="_blank"><i>qx_http_request</i></a> alias) contains all HTTP request parameters :
+            <ul>
+               <li><i>QUrl & url() :</i> web browser requested URL ;</li>
+               <li><i>QString & command() :</i> HTTP method (<i>GET, POST, PUT, DELETE, etc...</i>) ;</li>
+               <li><i>QString & version() :</i> HTTP version provided by web browser (for example <i>HTTP/1.1</i>) ;</li>
+               <li><i>QByteArray & data() :</i> HTTP request content ;</li>
+               <li><i>QByteArray header(const QByteArray & key) :</i> get a HTTP header value provided by web browser (for example : <i>request.header("Accept-Encoding")</i>) ;</li>
+               <li><i>QxHttpCookie cookie(const QByteArray & name) :</i> get a <a href="#manual_999">HTTP cookie</a> provided by web browser ;</li>
+               <li><i>QString param(const QString & key) :</i> get a HTTP parameter value (from URL, or from HTTP request content if <i>'content-type'</i> is <i>'application/x-www-form-urlencoded'</i>) ;</li>
+               <li><i>QHash&lt;QString, QVariant&gt; & dispatchParams() :</i> list of URL dynamic parameters computed by <a href="#manual_9962">dispatcher (routing engine)</a> ;</li>
+               <li><i>QString & sourceAddress() :</i> IP address of client web browser ;</li>
+               <li><i>long & sourcePort() :</i> port used by client web browser ;</li>
+               <li><i>QString guid() :</i> internal HTTP request unique identifier (can be used to log for example).</li>
+            </ul>
+            <br/>
+         </div>
+         <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_857">Build HTTP response</a></p>
+         <div class="manual_div_content">
+            <a href="../doxygen/html/classqx_1_1_qx_http_response.html" target="_blank"><i>qx::QxHttpResponse</i></a> class (or its <a href="../doxygen/html/classqx_1_1_qx_http_response.html" target="_blank"><i>qx_http_response</i></a> alias) is used to build HTTP response :
+            <ul>
+               <li><i>int & status() :</i> HTTP response code (by default 200 which means OK) ;</li>
+               <li><i>QByteArray & data() :</i> HTTP response content ;</li>
+               <li><i>QByteArray header(const QByteArray & key) :</i> send a HTTP header to web browser (by default, some headers are created automatically : <i>Server</i>, <i>Date</i>, <i>Content-Type</i> and <i>Connection</i>) ;</li>
+               <li><i>QxHttpCookie cookie(const QByteArray & name) :</i> send a <a href="#manual_999">HTTP cookie</a> to web browser ;</li>
+               <li><i>qx_bool writeChunked(const QByteArray & data) :</i> can be used to send <a href="#manual_852">chunked responses</a>.</li>
+            </ul>
+            <br/>
+         </div>
+         <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_998">Sessions (storage per client on server side)</a></p>
+         <div class="manual_div_content">
+            HTTP sessions are a way to store some data related to a client on server side.
+            Session data are available for each client's requests (until session is expired).
+            The first time server access to a client's session, a <a href="#manual_999">HTTP cookie</a> with a unique identifier is generated and attached to HTTP response.
+            Then all HTTP requests sent by client web browser will contain automatically a <a href="#manual_999">HTTP cookie</a> with the same unique identifier.
+            When a session is unused and expired, then it is deleted automatically.
+            <br/><br/>
+            <a href="../doxygen/html/classqx_1_1_qx_http_session.html" target="_blank"><i>qx::QxHttpSession</i></a> class (or its <a href="../doxygen/html/classqx_1_1_qx_http_session.html" target="_blank"><i>qx_http_session</i></a> alias) is a HTTP session on server side.<br/>
+            <a href="../doxygen/html/classqx_1_1_qx_http_session_manager.html" target="_blank">qx::QxHttpSessionManager</a> singleton class must be used to access to a session :
+            <br/><br/>
+            <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre>httpServer.dispatch(<span class="string">"GET"</span>, <span class="string">"/"</span>, [](qx::QxHttpRequest & request, qx::QxHttpResponse & response) {
+   <span class="comment">// If this is the first time to access to session, then a cookie is created automatically and attached to the response</span>
+   <span class="comment">// Then each request sent by web browser will contain a cookie with the session id</span>
+   <span class="comment">// The session expires on server side after qx::service::QxConnect::setSessionTimeOut() milliseconds</span>
+   <font style="background-color:yellow">qx::QxHttpSession_ptr session = qx::QxHttpSessionManager::getSession(request, response);</font>
+   if (session) { session-&gt;set(<span class="string">"last_request_per_user"</span>, QDateTime::currentDateTime()); }
+});</pre>
+            </td></tr></tbody></table>
+            <br/><br/>
+            <b>Note :</b> <a href="../doxygen/html/classqx_1_1_qx_http_session.html" target="_blank"><i>qx::QxHttpSession</i></a> class contains a hash-map (<i>QHash&lt;QByteArray, QVariant&gt;</i>) to store any values related to a client.
+            <br/><br/>
+            <b>Other note :</b> <a href="../doxygen/html/classqx_1_1service_1_1_qx_connect.html" target="_blank">qx::service::QxConnect::setSessionTimeOut()</a> method can be used to define a timeout (in milli-seconds) to delete unused sessions.
+            <br/><br/>
+         </div>
+         <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_999">Cookies</a></p>
+         <div class="manual_div_content">
+            <a href="https://en.wikipedia.org/wiki/HTTP_cookie" target="_blank">From Wikipedia website :</a> an HTTP cookie (also called web cookie, Internet cookie, browser cookie, or simply cookie) is a small piece of data sent from a website and stored on the user's computer by the user's web browser while the user is browsing.
+            Cookies were designed to be a reliable mechanism for websites to remember stateful information (such as items added in the shopping cart in an online store) or to record the user's browsing activity (including clicking particular buttons, logging in, or recording which pages were visited in the past).
+            <br/><br/>
+            <a href="#manual_856">qx::QxHttpRequest</a> and <a href="#manual_857">qx::QxHttpResponse</a> classes provide the method <b><i>cookies()</i></b> to get cookies sent by web browser or generate some cookies in HTTP response.
+            For example :
+            <br/><br/>
+            <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="type">qx::QxHttpCookie</span> cookie;
+cookie.name = <span class="string">"my_http_cookie"</span>;
+cookie.value = <span class="string">"my_value"</span>;
+response.cookies().insert(cookie.name, cookie);</pre>
+            </td></tr></tbody></table>
+            <br/><br/>
+            <b>Note : </b> an HTTP cookie is added automatically to HTTP response when accessing for the first time to a <a href="#manual_999">session (server side storage per client)</a>.
+            <br/><br/>
+         </div>
+         <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_851">Static files</a></p>
+         <div class="manual_div_content">
+            <a href="../doxygen/html/classqx_1_1_qx_http_server.html" target="_blank"><i>qx::QxHttpServer</i></a> class (or its <a href="../doxygen/html/classqx_1_1_qx_http_server.html" target="_blank"><i>qx_http_server</i></a> alias) provides a static method to send to client web browser a file content stored on server side (for example : HTML, Javascript, CSS, PNG, JPEG, videos, etc...).
+            <br/><br/>
+            <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre>httpServer.dispatch(<span class="string">"GET"</span>, <span class="string">"/files/*"</span>, [](qx::QxHttpRequest & request, qx::QxHttpResponse & response) {
+   <font style="background-color:yellow">qx::QxHttpServer::buildResponseStaticFile(request, response, QDir::currentPath(), 5000);</font>
+});</pre>
+            </td></tr></tbody></table>
+            <br/>
+            <ul>
+               <li>The third parameter (<i>QDir::currentPath()</i> in the example) defines the root directory where files are stored on the server ;</li>
+               <li>The fourth parameter (<i>5000</i> in the example) is optional and defines <a href="#manual_852">chunked response size</a>. This parameter can be useful to send big files (streaming).</li>
+            </ul>
+            <br/>
+         </div>
+         <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_852">Chunked responses</a></p>
+         <div class="manual_div_content">
+            <a href="https://en.wikipedia.org/wiki/Chunked_transfer_encoding" target="_blank">From Wikipedia website :</a> Chunked transfer encoding is a streaming data transfer mechanism available in version 1.1 of the Hypertext Transfer Protocol (HTTP).
+            In chunked transfer encoding, the data stream is divided into a series of non-overlapping "chunks".
+            The chunks are sent out and received independently of one another.
+            No knowledge of the data stream outside the currently-being-processed chunk is necessary for both the sender and the receiver at any given time.
+            Each chunk is preceded by its size in bytes.
+            The transmission ends when a zero-length chunk is received.
+            The chunked keyword in the Transfer-Encoding header is used to indicate chunked transfer.
+            <br/><br/>
+            The introduction of chunked encoding in HTTP 1.1 provided various benefits :
+            <ul>
+               <li>Chunked transfer encoding allows a server to maintain an HTTP persistent connection for dynamically generated content.</li>
+               <li>Chunked encoding allows the sender to send additional header fields after the message body. This is important in cases where values of a field cannot be known until the content has been produced, such as when the content of the message must be digitally signed.</li>
+            </ul>
+            <br/>
+            <a href="#manual_857">qx::QxHttpResponse</a> class provides the <i>qx_bool writeChunked(const QByteArray & data)</i> method to send chunked response.
+            It is used for example <a href="#manual_851">to send big static files (streaming)</a> :
+            <br/><br/>
+            <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="keyword">while</span> (! file.atEnd())
+{
+   <span class="keyword">if</span> (! <font style="background-color:yellow">response.writeChunked(file.read(chunkedSize))</font>) { <span class="keyword">return</span>; }
+}</pre>
+            </td></tr></tbody></table>
+            <br/><br/>
+            <b>Note :</b> the first <i>response.writeChunked()</i> call sends automatically all HTTP response headers.
+            So you have to define all HTTP response headers before calling <i>response.writeChunked()</i>.
+            <br/><br/>
+         </div>
+         <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_853">Requests using JSON API (QxRestApi module)</a></p>
+         <div class="manual_div_content">
+            <a href="#manual_97">QxRestApi module</a> provides a generic JSON API to request your persistent data layer (CRUD operations, complex queries, several levels of relationships, custom JSON output format, call dynamically native C++ functions registered in QxOrm context, instance validation, call custom database queries).
+            <br/><br/>
+            This user manual has a full chapter dedicated to <a href="#manual_97">QxRestApi module</a> : it contains several examples to request persistent data layer.
+            Combining <a href="#manual_97">QxRestApi module</a> and <b>QxHttpServer module</b> : you have all tools to develop modern web applications.
+            For example, <a href="https://en.wikipedia.org/wiki/Single-page_application" target="_blank">SPA (<i>Single-Page Applications</i>)</a> web applications with famous Javascript frameworks like <a href="https://angularjs.org/" target="_blank">AngularJS</a>, <a href="https://reactjs.org/" target="_blank">React</a>, <a href="https://www.meteor.com/" target="_blank">Meteor.js</a>, etc...
+            <br/><br/>
+            <b>Note :</b> QxOrm package provides a <a href="#manual_972">test project named <b><i>qxBlogRestApi</i></b></a>.
+            This project includes a HTTP web server developed with QxOrm library, and a client source code developed with HTML + Javascript (with <a href="https://jquery.com/" target="_blank">jQuery</a>).
+            <br/><br/>
+            For example, here is the Javascript function used to send JSON requests (POST method) from client web browser to QxOrm HTTP web server (all requests are sent to the same URL <i>/qx</i>) :
+            <br/><br/>
+            <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="keyword">function</span> sendRequest(request) {
+   <font style="background-color:yellow">$.post(<span class="string">"/qx"</span>, request</font>, function(data, status, xhr) {
+      $(<span class="string">"#txtResponse"</span>).val(JSON.stringify(data, null, 3));
+   }, <span class="string">"json"</span>).fail(function(error) {
+      alert(<span class="string">"An error occurred sending request to QxOrm HTTP server : "</span> + error);
+   });
+}</pre>
+            </td></tr></tbody></table>
+            <br/><br/>
+            On server side, handling these requests is very easy : <a href="../doxygen/html/classqx_1_1_qx_http_server.html" target="_blank"><i>qx::QxHttpServer</i></a> class (or its <a href="../doxygen/html/classqx_1_1_qx_http_server.html" target="_blank"><i>qx_http_server</i></a> alias) provides the <b>qx::QxHttpServer::buildResponseQxRestApi()</b> static method :
+            <br/><br/>
+            <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre>httpServer.dispatch(<span class="string">"POST"</span>, <span class="string">"/qx"</span>, [](qx::QxHttpRequest & request, qx::QxHttpResponse & response) {
+   <font style="background-color:yellow">qx::QxHttpServer::buildResponseQxRestApi(request, response);</font>
+});</pre>
+            </td></tr></tbody></table>
+            <br/><br/>
+            Here is a JSON request example sent by client web browser to get the list of all blogs stored in database (<i>fetch_all</i>) :
+            <br/><br/>
+            <div class="json_pretty">
+<pre>{
+   "request_id": "2b393e4c-a00c-45dc-a279-e9d76f1c55cf",
+   "action": "fetch_all",
+   "entity": "blog"
+}</pre>
+            </div>
+            <br/><br/>
+            Here is the JSON response with the list of all blogs :
+            <br/><br/>
+            <div class="json_pretty">
+<pre>{
+   "data": [
+      {
+         "author_id": {
+            "author_id": "author_id_2",
+            "birthdate": null,
+            "list_blog": [],
+            "name": "",
+            "sex": 2
+         },
+         "blog_id": 1,
+         "blog_text": "blog property 'text' modified => blog is dirty !!!",
+         "date_creation": "2019-03-27T20:51:23.107",
+         "list_category": [],
+         "list_comment": []
+      },
+      {
+         "author_id": {
+            "author_id": "author_id_2",
+            "birthdate": null,
+            "list_blog": [],
+            "name": "",
+            "sex": 2
+         },
+         "blog_id": 2,
+         "blog_text": "blog property 'text' modified => blog is dirty !!!",
+         "date_creation": "2019-03-27T20:51:23.107",
+         "list_category": [],
+         "list_comment": []
+      },
+      {
+         "author_id": {
+            "author_id": "author_id_2",
+            "birthdate": null,
+            "list_blog": [],
+            "name": "",
+            "sex": 2
+         },
+         "blog_id": 3,
+         "blog_text": "blog property 'text' modified => blog is dirty !!!",
+         "date_creation": "2019-03-27T20:51:23.107",
+         "list_category": [],
+         "list_comment": []
+      },
+      {
+         "author_id": {
+            "author_id": "author_id_2",
+            "birthdate": null,
+            "list_blog": [],
+            "name": "",
+            "sex": 2
+         },
+         "blog_id": 4,
+         "blog_text": "blog property 'text' modified => blog is dirty !!!",
+         "date_creation": "2019-03-27T20:51:23.107",
+         "list_category": [],
+         "list_comment": []
+      }
+   ],
+   "request_id": "2b393e4c-a00c-45dc-a279-e9d76f1c55cf"
+}</pre>
+            </div>
+            <br/><br/>
+         </div>
+         <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_854">WebSocket</a></p>
+         <div class="manual_div_content">
+            <a href="https://en.wikipedia.org/wiki/WebSocket" target="_blank">From Wikipedia website :</a> WebSocket is a computer communications protocol, providing full-duplex communication channels over a single TCP connection.
+            The WebSocket protocol enables interaction between a web browser (or other client application) and a web server with lower overheads, facilitating real-time data transfer from and to the server.
+            This is made possible by providing a standardized way for the server to send content to the client without being first requested by the client, and allowing messages to be passed back and forth while keeping the connection open.
+            In this way, a two-way ongoing conversation can take place between the client and the server.
+            <br/><br/>
+            QxOrm library is based on Qt framework which already provides a <a href="https://doc.qt.io/qt-5/qtwebsockets-index.html" target="_blank">WebSocket implementation</a>.<br/>
+            Create a web server with Qt WebSocket is very easy : <a href="https://doc.qt.io/qt-5/echoserver.html" target="_blank">there are several examples in Qt documentation</a>.
+            <br/><br/>
+            So you can implement a web server like this :
+            <ul>
+               <li>a listening port for HTTP connections (using <b>QxHttpServer module</b>) ;</li>
+               <li>another listening port for WebSocket connections (using <a href="https://doc.qt.io/qt-5/qtwebsockets-index.html" target="_blank">QtWebSockets</a> module provided by Qt).</li>
+            </ul>
+            <br/>
+            <b>Note :</b> a WebSocket connection is often created in Javascript code from client web browser, so having 2 listening ports (1 for HTTP, and another for WebSocket) is not a problem.
+            <br/><br/>
+         </div>
+         <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_855">Performance (tested with Apache Benchmark)</a></p>
+         <div class="manual_div_content">
+            Here is a performance test result with following parameters :
+            <ul>
+               <li>Operating System (OS) : <i>Windows 2010 64bits</i> ;</li>
+               <li>CPU : <i>Intel Core i7-6820HQ @ 2.70GHz</i> (laptop) ;</li>
+               <li>Qt version : <i>5.1.1</i> (release mode) ;</li>
+               <li>QxOrm version : <i>1.4.6</i> (built in release mode with Visual Studio 2012, default parameters, no specific optimization) ;</li>
+               <li>HTTP web server : <a href="#manual_972"><i>qxBlogRestApi</i> test project</a> ;</li>
+               <li>Tool to execute the test : <a href="https://httpd.apache.org/docs/2.4/programs/ab.html" target="_blank">Apache Benchmark</a> ;</li>
+               <li>Simulate 20000 requests with 50 concurrents connections simultaneously : <i><b>ab -n 20000 -c 50 -k http://localhost:9642/params/abc/123</b></i></li>
+            </ul>
+            <br/>
+            Test results show that QxOrm HTTP web server can handle <font style="background-color:yellow">more than 12000 requests per second</font> :
+            <br/><br/>
+            <img alt="QxHttpServer performance" src="./resource/qx_http_server_apache_bench_test_01.png" border="0">
+            <br/><br/>
+            <p class="manual_p_title_3"><a class="manual_a_title_3" name="manual_8550">Improve performance with epoll dispatcher on Linux</a></p>
+            <div class="manual_div_content">
+               On Linux, you can improve HTTP web server performance using <a href="https://en.wikipedia.org/wiki/Epoll" target="_blank">epoll</a> to manage your sockets.
+               By default, Qt framework is based on a slower process (<i>select</i>), but a method exists to define another event loop and dispatcher.
+               Several libraries are available, for example :
+               <ul>
+                  <li><a href="https://github.com/sjinks/qt_eventdispatcher_epoll" target="_blank">qt_eventdispatcher_epoll</a></li>
+                  <li><a href="https://github.com/connectedtable/qeventdispatcher_epoll" target="_blank">qeventdispatcher_epoll</a></li>
+               </ul>
+               <br/>
+               <a href="../doxygen/html/classqx_1_1_qx_http_server.html" target="_blank"><i>qx::QxHttpServer</i></a> class (or its <a href="../doxygen/html/classqx_1_1_qx_http_server.html" target="_blank"><i>qx_http_server</i></a> alias) provides a method to define a custom epoll event dispatcher (you must call it before running the QxOrm HTTP web server) :
+               <br/><br/>
+               <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre>   httpServer.setEventDispatcher(new QEventDispatcherEpoll());   </pre>
+               </td></tr></tbody></table>
+               <br/><br/>
+            </div>
+         </div>
+      </div>
+
+      <p class="manual_p_title_1"><a class="manual_a_title_1" name="manual_97">JSON REST API (QxRestApi module)</a></p>
+      <div class="manual_div_content_1">
+         <b>QxRestApi module</b> is a JSON API to manage (in a generic way) your persistent data layer (database) or <a href="#manual_961">call C++ native functions</a> (registered in QxOrm context).
+         <b>QxRestApi module</b> is based on a request/response mechanism : send a request in JSON format and receive a response in JSON format.
+         <b>QxRestApi module</b> can be used for example to develop <a href="https://en.wikipedia.org/wiki/Representational_state_transfer" target="_blank">REST services</a>.
+         <br/><br/>
+         <b>QxRestApi module</b> supports following features :
+         <ul>
+            <li>CRUD operations ;</li>
+            <li>complex queries with several levels of relationships ;</li>
+            <li>custom JSON output format ;</li>
+            <li>call dynamically C++ native functions registered in QxOrm context ;</li>
+            <li>instance validation ;</li>
+            <li>call custom database queries or stored procedures.</li>
+         </ul>
+         <br/>
+         <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_971">How it works</a></p>
+         <div class="manual_div_content">
+            <b>QxRestApi module</b> is very easy to use : <a href="../doxygen/html/classqx_1_1_qx_rest_api.html" target="_blank"><i>qx::QxRestApi</i></a> class has only 1 main method : <i><b>processRequest()</b></i>.<br/>
+            <b>Prerequisites :</b> all classes registered into QxOrm context <font style="background-color:yellow"><a href="#manual_450">must implement <b>qx::IxPersistable</b> interface</a></font>.
+            <br/><br/>
+            A JSON query contains following properties :
+            <br/><br/>
+            <div style="width: 1000px; max-height: 300px; overflow: auto; background-color: white;">
+<pre>{
+   <span class="string">"request_id"</span> : <span class="comment">// [optional] unique identifier generated by client to associate response to request (if provided by caller, then the response will contain the same unique identifier)</span>
+   <span class="string">"action"</span> : <span class="comment">// [required] what is the action to execute on the server</span>
+   <span class="string">"entity"</span> : <span class="comment">// [optional or required depending on action] C++ class registered in QxOrm context</span>
+   <span class="string">"data"</span> : <span class="comment">// [optional or required depending on action] data in JSON format needed to execute action</span>
+   <span class="string">"columns"</span> : <span class="comment">// [optional] list of columns to fetch or update (if empty, means all columns)</span>
+   <span class="string">"relations"</span> : <span class="comment">// [optional] list of relationships to fetch or save</span>
+   <span class="string">"query"</span> : <span class="comment">// [optional or required depending on action] query to execute on database</span>
+   <span class="string">"output_format"</span> : <span class="comment">// [optional] output fields for the response (filter), if empty then response will contain all fields</span>
+   <span class="string">"fct"</span> : <span class="comment">// [required only with action 'call_entity_function'] used to call C++ native functions</span>
+   <span class="string">"save_mode"</span> : <span class="comment">// [optional] used only with action 'save' to define insert or update or check both insert/update</span>
+}</pre>
+            </div>
+            <br/><br/>
+            A JSON response contains following properties :
+            <br/><br/>
+            <div style="width: 1000px; max-height: 300px; overflow: auto; background-color: white;">
+<pre>{
+   <span class="string">"request_id"</span> : <span class="comment">// unique identifier generated by client's request (if any)</span>
+   <span class="string">"data"</span> : <span class="comment">// contain the response data</span>
+   <span class="string">"error"</span> : <span class="comment">// if an error occured, then contain a code and description of the error</span>
+}</pre>
+            </div>
+            <br/><br/>
+            <p class="manual_p_title_3"><a class="manual_a_title_3" name="manual_9710">Use cases</a></p>
+            <div class="manual_div_content">
+               Several programming languages support natively JSON format (Javascript, PHP, Python, etc...).
+               <b>QxRestApi module</b> provides an interoperability between QxOrm library and any other applications developed with another technology (not C++/Qt for example).
+               <br/><br/>
+               <b>QxRestApi module</b> can be useful for :
+               <ul>
+                  <li>Develop an HTTP web server (with <a href="#manual_96">QxHttpServer module</a> for example) ;</li>
+                  <li>Publish <a href="https://en.wikipedia.org/wiki/Representational_state_transfer" target="_blank">REST web-services</a> ;</li>
+                  <li>Access to your persistent data layer from a QML application (see <a href="#manual_972">qxBlogRestApi test project</a>) ;</li>
+                  <li>Possibility to script your C++ application (with Python for example).</li>
+               </ul>
+               <br/>
+            </div>
+         </div>
+         <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_972">qxBlogRestApi example project (QML and HTTP web server)</a></p>
+         <div class="manual_div_content">
+            QxOrm package contains a test project named <b>qxBlogRestApi</b> (in <i>./test/qxBlogRestApi/</i> directory).<br/>
+            This test project shows 2 ways to work with <b>QxRestApi module</b> :
+            <ul>
+               <li>The first screen is a <font style="background-color:yellow">QML application</font> which uses embedded QML Javascript engine to request a persistent data layer or call C++ native functions :
+               <br/><br/><img alt="QxHttpServer performance" src="./resource/qx_blog_rest_api_qml_01.png" border="0"><br/><br/><br/></li>
+               <li>The second screen runs an <font style="background-color:yellow">HTTP web server</font> based on <a href="#manual_96">QxHttpServer module</a>, then opens default web browser (to load HTML + Javascript with <a href="https://jquery.com/" target="_blank">jQuery</a>) :
+               <br/><br/><img alt="QxHttpServer performance" src="./resource/qx_blog_rest_api_http_01.png" border="0"><br/></li>
+            </ul>
+            <br/>
+            These 2 windows are developed with different programming languages (QML versus HTML + Javascript), but provide exactly same features :
+            <ul>
+               <li>On top-left position : a text area to write a JSON request to send to <b>QxRestApi module</b> ;</li>
+               <li>Just below the JSON request text area : a button to send JSON request to <b>QxRestApi module</b> ;</li>
+               <li>On bottom-left position : a list of pre-loaded JSON requests examples (a click on this list fills automatically the JSON request text area) ;</li>
+               <li>On right side : a JSON response text area received from <b>QxRestApi module</b> (after executing a JSON request).</li>
+            </ul>
+            <br/>
+         </div>
+         <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_973">Fetch</a></p>
+         <div class="manual_div_content">
+            This chapter provides several ways to get data from database (fetch) :
+            <ul>
+               <li>Fetch all items from a table and <a href="#manual_3840">their relationships</a> (<a href="#manual_9731">fetch_all</a>) ;</li>
+               <li>Fetch an item from a table based on its unique identifier (<a href="#manual_9732">fetch_by_id</a>) ;</li>
+               <li>Fetch some items from a table <a href="#manual_360">filtered by a query</a> (<a href="#manual_9733">fetch_by_query</a>) ;</li>
+               <li>Count items in a table with or without a query (<a href="#manual_9734">count</a>) ;</li>
+               <li>Test if an item exists in database based on its unique identifier (<a href="#manual_9735">exist</a>).</li>
+            </ul>
+            <br/>
+            <p class="manual_p_title_3"><a class="manual_a_title_3" name="manual_9731">fetch_all</a></p>
+            <div class="manual_div_content">
+               The <b><i>fetch_all</i></b> action gets all items from a table in database (and eventually <a href="#manual_3840">several levels of relationships</a>).
+               <br/><br/>
+               <font style="background-color:yellow"><b>-- Example n°1 --</b></font> fetch all blogs (as list format) :
+               <br/><br/>
+               <font style="color:blue"><i>JSON request :</i></font><br/>
+               <div class="json_pretty">
+<pre>{
+   "request_id": "5e988bac-c812-4cb1-b0d8-6a2c9dc4478b",
+   "action": "fetch_all",
+   "entity": "blog"
+}</pre>
+               </div>
+               <font style="color:blue"><i>JSON response :</i></font><br/>
+               <div class="json_pretty">
+<pre>{
+   "data": [
+      {
+         "author_id": {
+            "author_id": "author_id_2",
+            "birthdate": null,
+            "list_blog": [],
+            "name": "",
+            "sex": 2
+         },
+         "blog_id": 1,
+         "blog_text": "blog property 'text' modified => blog is dirty !!!",
+         "date_creation": "2019-04-01T16:18:54",
+         "list_category": [],
+         "list_comment": []
+      },
+      {
+         "author_id": {
+            "author_id": "author_id_2",
+            "birthdate": null,
+            "list_blog": [],
+            "name": "",
+            "sex": 2
+         },
+         "blog_id": 2,
+         "blog_text": "blog property 'text' modified => blog is dirty !!!",
+         "date_creation": "2019-04-01T16:18:54",
+         "list_category": [],
+         "list_comment": []
+      },
+      {
+         "author_id": {
+            "author_id": "author_id_2",
+            "birthdate": null,
+            "list_blog": [],
+            "name": "",
+            "sex": 2
+         },
+         "blog_id": 3,
+         "blog_text": "blog property 'text' modified => blog is dirty !!!",
+         "date_creation": "2019-04-01T16:18:54",
+         "list_category": [],
+         "list_comment": []
+      },
+      {
+         "author_id": {
+            "author_id": "author_id_2",
+            "birthdate": null,
+            "list_blog": [],
+            "name": "",
+            "sex": 2
+         },
+         "blog_id": 4,
+         "blog_text": "blog property 'text' modified => blog is dirty !!!",
+         "date_creation": "2019-04-01T16:18:54",
+         "list_category": [],
+         "list_comment": []
+      }
+   ],
+   "request_id": "5e988bac-c812-4cb1-b0d8-6a2c9dc4478b"
+}</pre>
+               </div>
+               <br/><br/>
+               <font style="background-color:yellow"><b>-- Example n°2 --</b></font> fetch all blogs (as <i>hash-map</i> with key/value format) :
+               <br/><br/>
+               <font style="color:blue"><i>JSON request :</i></font><br/>
+               <div class="json_pretty">
+<pre>{
+   "request_id": "ad400135-19fd-40e0-8034-201be6a2ff7a",
+   "action": "fetch_all",
+   "entity": "blog",
+   "data": [
+      {
+         "key": "",
+         "value": ""
+      }
+   ]
+}</pre>
+               </div>
+               <font style="color:blue"><i>JSON response :</i></font><br/>
+               <div class="json_pretty">
+<pre>{
+   "data": [
+      {
+         "key": 1,
+         "value": {
+            "author_id": {
+               "author_id": "author_id_2",
+               "birthdate": null,
+               "list_blog": [],
+               "name": "",
+               "sex": 2
+            },
+            "blog_id": 1,
+            "blog_text": "blog property 'text' modified => blog is dirty !!!",
+            "date_creation": "2019-04-01T16:18:54",
+            "list_category": [],
+            "list_comment": []
+         }
+      },
+      {
+         "key": 2,
+         "value": {
+            "author_id": {
+               "author_id": "author_id_2",
+               "birthdate": null,
+               "list_blog": [],
+               "name": "",
+               "sex": 2
+            },
+            "blog_id": 2,
+            "blog_text": "blog property 'text' modified => blog is dirty !!!",
+            "date_creation": "2019-04-01T16:18:54",
+            "list_category": [],
+            "list_comment": []
+         }
+      },
+      {
+         "key": 3,
+         "value": {
+            "author_id": {
+               "author_id": "author_id_2",
+               "birthdate": null,
+               "list_blog": [],
+               "name": "",
+               "sex": 2
+            },
+            "blog_id": 3,
+            "blog_text": "blog property 'text' modified => blog is dirty !!!",
+            "date_creation": "2019-04-01T16:18:54",
+            "list_category": [],
+            "list_comment": []
+         }
+      },
+      {
+         "key": 4,
+         "value": {
+            "author_id": {
+               "author_id": "author_id_2",
+               "birthdate": null,
+               "list_blog": [],
+               "name": "",
+               "sex": 2
+            },
+            "blog_id": 4,
+            "blog_text": "blog property 'text' modified => blog is dirty !!!",
+            "date_creation": "2019-04-01T16:18:54",
+            "list_category": [],
+            "list_comment": []
+         }
+      }
+   ],
+   "request_id": "ad400135-19fd-40e0-8034-201be6a2ff7a"
+}</pre>
+               </div>
+               <br/><br/>
+               <font style="background-color:yellow"><b>-- Example n°3 --</b></font> fetch all blogs and <a href="#manual_3840">2 levels of relationships</a> :
+               <br/><br/>
+               <font style="color:blue"><i>JSON request :</i></font><br/>
+               <div class="json_pretty">
+<pre>{
+   "request_id": "cf9ea2a8-3e41-438f-9a48-bbc8593d2b99",
+   "action": "fetch_all",
+   "entity": "blog",
+   "relations": [
+      "*-&gt;*"
+   ]
+}</pre>
+               </div>
+               <font style="color:blue"><i>JSON response :</i></font><br/>
+               <div class="json_pretty">
+<pre>{
+   "data": [
+      {
+         "author_id": {
+            "author_id": "author_id_2",
+            "birthdate": "2019-04-01",
+            "list_blog": [
+               {
+                  "author_id": {
+                     "author_id": "author_id_2",
+                     "birthdate": null,
+                     "list_blog": [],
+                     "name": "",
+                     "sex": 2
+                  },
+                  "blog_id": 1,
+                  "blog_text": "blog property 'text' modified => blog is dirty !!!",
+                  "date_creation": "2019-04-01T16:18:54",
+                  "list_category": [],
+                  "list_comment": []
+               },
+               {
+                  "author_id": {
+                     "author_id": "author_id_2",
+                     "birthdate": null,
+                     "list_blog": [],
+                     "name": "",
+                     "sex": 2
+                  },
+                  "blog_id": 2,
+                  "blog_text": "blog property 'text' modified => blog is dirty !!!",
+                  "date_creation": "2019-04-01T16:18:54",
+                  "list_category": [],
+                  "list_comment": []
+               },
+               {
+                  "author_id": {
+                     "author_id": "author_id_2",
+                     "birthdate": null,
+                     "list_blog": [],
+                     "name": "",
+                     "sex": 2
+                  },
+                  "blog_id": 3,
+                  "blog_text": "blog property 'text' modified => blog is dirty !!!",
+                  "date_creation": "2019-04-01T16:18:54",
+                  "list_category": [],
+                  "list_comment": []
+               },
+               {
+                  "author_id": {
+                     "author_id": "author_id_2",
+                     "birthdate": null,
+                     "list_blog": [],
+                     "name": "",
+                     "sex": 2
+                  },
+                  "blog_id": 4,
+                  "blog_text": "blog property 'text' modified => blog is dirty !!!",
+                  "date_creation": "2019-04-01T16:18:54",
+                  "list_category": [],
+                  "list_comment": []
+               }
+            ],
+            "name": "author name modified at index 1 => container is dirty !!!",
+            "sex": 1
+         },
+         "blog_id": 1,
+         "blog_text": "blog property 'text' modified => blog is dirty !!!",
+         "date_creation": "2019-04-01T16:18:54",
+         "list_category": [
+            {
+               "key": 1,
+               "value": {
+                  "category_id": 1,
+                  "description": "desc_1",
+                  "list_blog": [
+                     {
+                        "key": 1,
+                        "value": {
+                           "author_id": {
+                              "author_id": "author_id_2",
+                              "birthdate": null,
+                              "list_blog": [],
+                              "name": "",
+                              "sex": 2
+                           },
+                           "blog_id": 1,
+                           "blog_text": "blog property 'text' modified => blog is dirty !!!",
+                           "date_creation": "2019-04-01T16:18:54",
+                           "list_category": [],
+                           "list_comment": []
+                        }
+                     }
+                  ],
+                  "name": "category_1"
+               }
+            },
+            {
+               "key": 3,
+               "value": {
+                  "category_id": 3,
+                  "description": "desc_3",
+                  "list_blog": [
+                     {
+                        "key": 1,
+                        "value": {
+                           "author_id": {
+                              "author_id": "author_id_2",
+                              "birthdate": null,
+                              "list_blog": [],
+                              "name": "",
+                              "sex": 2
+                           },
+                           "blog_id": 1,
+                           "blog_text": "blog property 'text' modified => blog is dirty !!!",
+                           "date_creation": "2019-04-01T16:18:54",
+                           "list_category": [],
+                           "list_comment": []
+                        }
+                     }
+                  ],
+                  "name": "category_3"
+               }
+            }
+         ],
+         "list_comment": [
+            {
+               "blog_id": {
+                  "author_id": {
+                     "author_id": "author_id_2",
+                     "birthdate": null,
+                     "list_blog": [],
+                     "name": "",
+                     "sex": 2
+                  },
+                  "blog_id": 1,
+                  "blog_text": "blog property 'text' modified => blog is dirty !!!",
+                  "date_creation": "2019-04-01T16:18:54",
+                  "list_category": [],
+                  "list_comment": []
+               },
+               "comment_id": 1,
+               "comment_text": "comment_1 text",
+               "date_creation": "2019-04-01T16:18:54"
+            },
+            {
+               "blog_id": {
+                  "author_id": {
+                     "author_id": "author_id_2",
+                     "birthdate": null,
+                     "list_blog": [],
+                     "name": "",
+                     "sex": 2
+                  },
+                  "blog_id": 1,
+                  "blog_text": "blog property 'text' modified => blog is dirty !!!",
+                  "date_creation": "2019-04-01T16:18:54",
+                  "list_category": [],
+                  "list_comment": []
+               },
+               "comment_id": 3,
+               "comment_text": "comment_1 text",
+               "date_creation": "2019-04-01T16:18:54"
+            },
+            {
+               "blog_id": {
+                  "author_id": {
+                     "author_id": "author_id_2",
+                     "birthdate": null,
+                     "list_blog": [],
+                     "name": "",
+                     "sex": 2
+                  },
+                  "blog_id": 1,
+                  "blog_text": "blog property 'text' modified => blog is dirty !!!",
+                  "date_creation": "2019-04-01T16:18:54",
+                  "list_category": [],
+                  "list_comment": []
+               },
+               "comment_id": 5,
+               "comment_text": "comment_1 text",
+               "date_creation": "2019-04-01T16:18:54"
+            },
+            {
+               "blog_id": {
+                  "author_id": {
+                     "author_id": "author_id_2",
+                     "birthdate": null,
+                     "list_blog": [],
+                     "name": "",
+                     "sex": 2
+                  },
+                  "blog_id": 1,
+                  "blog_text": "blog property 'text' modified => blog is dirty !!!",
+                  "date_creation": "2019-04-01T16:18:54",
+                  "list_category": [],
+                  "list_comment": []
+               },
+               "comment_id": 7,
+               "comment_text": "comment_1 text",
+               "date_creation": "2019-04-01T16:18:54"
+            },
+            {
+               "blog_id": {
+                  "author_id": {
+                     "author_id": "author_id_2",
+                     "birthdate": null,
+                     "list_blog": [],
+                     "name": "",
+                     "sex": 2
+                  },
+                  "blog_id": 1,
+                  "blog_text": "blog property 'text' modified => blog is dirty !!!",
+                  "date_creation": "2019-04-01T16:18:54",
+                  "list_category": [],
+                  "list_comment": []
+               },
+               "comment_id": 2,
+               "comment_text": "comment_2 text",
+               "date_creation": "2019-04-01T16:18:54"
+            },
+            {
+               "blog_id": {
+                  "author_id": {
+                     "author_id": "author_id_2",
+                     "birthdate": null,
+                     "list_blog": [],
+                     "name": "",
+                     "sex": 2
+                  },
+                  "blog_id": 1,
+                  "blog_text": "blog property 'text' modified => blog is dirty !!!",
+                  "date_creation": "2019-04-01T16:18:54",
+                  "list_category": [],
+                  "list_comment": []
+               },
+               "comment_id": 4,
+               "comment_text": "comment_2 text",
+               "date_creation": "2019-04-01T16:18:54"
+            },
+            {
+               "blog_id": {
+                  "author_id": {
+                     "author_id": "author_id_2",
+                     "birthdate": null,
+                     "list_blog": [],
+                     "name": "",
+                     "sex": 2
+                  },
+                  "blog_id": 1,
+                  "blog_text": "blog property 'text' modified => blog is dirty !!!",
+                  "date_creation": "2019-04-01T16:18:54",
+                  "list_category": [],
+                  "list_comment": []
+               },
+               "comment_id": 6,
+               "comment_text": "comment_2 text",
+               "date_creation": "2019-04-01T16:18:54"
+            },
+            {
+               "blog_id": {
+                  "author_id": {
+                     "author_id": "author_id_2",
+                     "birthdate": null,
+                     "list_blog": [],
+                     "name": "",
+                     "sex": 2
+                  },
+                  "blog_id": 1,
+                  "blog_text": "blog property 'text' modified => blog is dirty !!!",
+                  "date_creation": "2019-04-01T16:18:54",
+                  "list_category": [],
+                  "list_comment": []
+               },
+               "comment_id": 8,
+               "comment_text": "comment_2 text",
+               "date_creation": "2019-04-01T16:18:54"
+            }
+         ]
+      },
+      {
+         "author_id": {
+            "author_id": "author_id_2",
+            "birthdate": "2019-04-01",
+            "list_blog": [
+               {
+                  "author_id": {
+                     "author_id": "author_id_2",
+                     "birthdate": null,
+                     "list_blog": [],
+                     "name": "",
+                     "sex": 2
+                  },
+                  "blog_id": 1,
+                  "blog_text": "blog property 'text' modified => blog is dirty !!!",
+                  "date_creation": "2019-04-01T16:18:54",
+                  "list_category": [],
+                  "list_comment": []
+               },
+               {
+                  "author_id": {
+                     "author_id": "author_id_2",
+                     "birthdate": null,
+                     "list_blog": [],
+                     "name": "",
+                     "sex": 2
+                  },
+                  "blog_id": 2,
+                  "blog_text": "blog property 'text' modified => blog is dirty !!!",
+                  "date_creation": "2019-04-01T16:18:54",
+                  "list_category": [],
+                  "list_comment": []
+               },
+               {
+                  "author_id": {
+                     "author_id": "author_id_2",
+                     "birthdate": null,
+                     "list_blog": [],
+                     "name": "",
+                     "sex": 2
+                  },
+                  "blog_id": 3,
+                  "blog_text": "blog property 'text' modified => blog is dirty !!!",
+                  "date_creation": "2019-04-01T16:18:54",
+                  "list_category": [],
+                  "list_comment": []
+               },
+               {
+                  "author_id": {
+                     "author_id": "author_id_2",
+                     "birthdate": null,
+                     "list_blog": [],
+                     "name": "",
+                     "sex": 2
+                  },
+                  "blog_id": 4,
+                  "blog_text": "blog property 'text' modified => blog is dirty !!!",
+                  "date_creation": "2019-04-01T16:18:54",
+                  "list_category": [],
+                  "list_comment": []
+               }
+            ],
+            "name": "author name modified at index 1 => container is dirty !!!",
+            "sex": 1
+         },
+         "blog_id": 2,
+         "blog_text": "blog property 'text' modified => blog is dirty !!!",
+         "date_creation": "2019-04-01T16:18:54",
+         "list_category": [
+            {
+               "key": 4,
+               "value": {
+                  "category_id": 4,
+                  "description": "desc_1",
+                  "list_blog": [
+                     {
+                        "key": 2,
+                        "value": {
+                           "author_id": {
+                              "author_id": "author_id_2",
+                              "birthdate": null,
+                              "list_blog": [],
+                              "name": "",
+                              "sex": 2
+                           },
+                           "blog_id": 2,
+                           "blog_text": "blog property 'text' modified => blog is dirty !!!",
+                           "date_creation": "2019-04-01T16:18:54",
+                           "list_category": [],
+                           "list_comment": []
+                        }
+                     }
+                  ],
+                  "name": "category_1"
+               }
+            },
+            {
+               "key": 5,
+               "value": {
+                  "category_id": 5,
+                  "description": "desc_3",
+                  "list_blog": [
+                     {
+                        "key": 2,
+                        "value": {
+                           "author_id": {
+                              "author_id": "author_id_2",
+                              "birthdate": null,
+                              "list_blog": [],
+                              "name": "",
+                              "sex": 2
+                           },
+                           "blog_id": 2,
+                           "blog_text": "blog property 'text' modified => blog is dirty !!!",
+                           "date_creation": "2019-04-01T16:18:54",
+                           "list_category": [],
+                           "list_comment": []
+                        }
+                     }
+                  ],
+                  "name": "category_3"
+               }
+            }
+         ],
+         "list_comment": []
+      },
+      {
+         "author_id": {
+            "author_id": "author_id_2",
+            "birthdate": "2019-04-01",
+            "list_blog": [
+               {
+                  "author_id": {
+                     "author_id": "author_id_2",
+                     "birthdate": null,
+                     "list_blog": [],
+                     "name": "",
+                     "sex": 2
+                  },
+                  "blog_id": 1,
+                  "blog_text": "blog property 'text' modified => blog is dirty !!!",
+                  "date_creation": "2019-04-01T16:18:54",
+                  "list_category": [],
+                  "list_comment": []
+               },
+               {
+                  "author_id": {
+                     "author_id": "author_id_2",
+                     "birthdate": null,
+                     "list_blog": [],
+                     "name": "",
+                     "sex": 2
+                  },
+                  "blog_id": 2,
+                  "blog_text": "blog property 'text' modified => blog is dirty !!!",
+                  "date_creation": "2019-04-01T16:18:54",
+                  "list_category": [],
+                  "list_comment": []
+               },
+               {
+                  "author_id": {
+                     "author_id": "author_id_2",
+                     "birthdate": null,
+                     "list_blog": [],
+                     "name": "",
+                     "sex": 2
+                  },
+                  "blog_id": 3,
+                  "blog_text": "blog property 'text' modified => blog is dirty !!!",
+                  "date_creation": "2019-04-01T16:18:54",
+                  "list_category": [],
+                  "list_comment": []
+               },
+               {
+                  "author_id": {
+                     "author_id": "author_id_2",
+                     "birthdate": null,
+                     "list_blog": [],
+                     "name": "",
+                     "sex": 2
+                  },
+                  "blog_id": 4,
+                  "blog_text": "blog property 'text' modified => blog is dirty !!!",
+                  "date_creation": "2019-04-01T16:18:54",
+                  "list_category": [],
+                  "list_comment": []
+               }
+            ],
+            "name": "author name modified at index 1 => container is dirty !!!",
+            "sex": 1
+         },
+         "blog_id": 3,
+         "blog_text": "blog property 'text' modified => blog is dirty !!!",
+         "date_creation": "2019-04-01T16:18:54",
+         "list_category": [
+            {
+               "key": 6,
+               "value": {
+                  "category_id": 6,
+                  "description": "desc_1",
+                  "list_blog": [
+                     {
+                        "key": 3,
+                        "value": {
+                           "author_id": {
+                              "author_id": "author_id_2",
+                              "birthdate": null,
+                              "list_blog": [],
+                              "name": "",
+                              "sex": 2
+                           },
+                           "blog_id": 3,
+                           "blog_text": "blog property 'text' modified => blog is dirty !!!",
+                           "date_creation": "2019-04-01T16:18:54",
+                           "list_category": [],
+                           "list_comment": []
+                        }
+                     }
+                  ],
+                  "name": "category_1"
+               }
+            },
+            {
+               "key": 7,
+               "value": {
+                  "category_id": 7,
+                  "description": "desc_3",
+                  "list_blog": [
+                     {
+                        "key": 3,
+                        "value": {
+                           "author_id": {
+                              "author_id": "author_id_2",
+                              "birthdate": null,
+                              "list_blog": [],
+                              "name": "",
+                              "sex": 2
+                           },
+                           "blog_id": 3,
+                           "blog_text": "blog property 'text' modified => blog is dirty !!!",
+                           "date_creation": "2019-04-01T16:18:54",
+                           "list_category": [],
+                           "list_comment": []
+                        }
+                     }
+                  ],
+                  "name": "category_3"
+               }
+            }
+         ],
+         "list_comment": []
+      },
+      {
+         "author_id": {
+            "author_id": "author_id_2",
+            "birthdate": "2019-04-01",
+            "list_blog": [
+               {
+                  "author_id": {
+                     "author_id": "author_id_2",
+                     "birthdate": null,
+                     "list_blog": [],
+                     "name": "",
+                     "sex": 2
+                  },
+                  "blog_id": 1,
+                  "blog_text": "blog property 'text' modified => blog is dirty !!!",
+                  "date_creation": "2019-04-01T16:18:54",
+                  "list_category": [],
+                  "list_comment": []
+               },
+               {
+                  "author_id": {
+                     "author_id": "author_id_2",
+                     "birthdate": null,
+                     "list_blog": [],
+                     "name": "",
+                     "sex": 2
+                  },
+                  "blog_id": 2,
+                  "blog_text": "blog property 'text' modified => blog is dirty !!!",
+                  "date_creation": "2019-04-01T16:18:54",
+                  "list_category": [],
+                  "list_comment": []
+               },
+               {
+                  "author_id": {
+                     "author_id": "author_id_2",
+                     "birthdate": null,
+                     "list_blog": [],
+                     "name": "",
+                     "sex": 2
+                  },
+                  "blog_id": 3,
+                  "blog_text": "blog property 'text' modified => blog is dirty !!!",
+                  "date_creation": "2019-04-01T16:18:54",
+                  "list_category": [],
+                  "list_comment": []
+               },
+               {
+                  "author_id": {
+                     "author_id": "author_id_2",
+                     "birthdate": null,
+                     "list_blog": [],
+                     "name": "",
+                     "sex": 2
+                  },
+                  "blog_id": 4,
+                  "blog_text": "blog property 'text' modified => blog is dirty !!!",
+                  "date_creation": "2019-04-01T16:18:54",
+                  "list_category": [],
+                  "list_comment": []
+               }
+            ],
+            "name": "author name modified at index 1 => container is dirty !!!",
+            "sex": 1
+         },
+         "blog_id": 4,
+         "blog_text": "blog property 'text' modified => blog is dirty !!!",
+         "date_creation": "2019-04-01T16:18:54",
+         "list_category": [
+            {
+               "key": 8,
+               "value": {
+                  "category_id": 8,
+                  "description": "desc_1",
+                  "list_blog": [
+                     {
+                        "key": 4,
+                        "value": {
+                           "author_id": {
+                              "author_id": "author_id_2",
+                              "birthdate": null,
+                              "list_blog": [],
+                              "name": "",
+                              "sex": 2
+                           },
+                           "blog_id": 4,
+                           "blog_text": "blog property 'text' modified => blog is dirty !!!",
+                           "date_creation": "2019-04-01T16:18:54",
+                           "list_category": [],
+                           "list_comment": []
+                        }
+                     }
+                  ],
+                  "name": "category_1"
+               }
+            },
+            {
+               "key": 9,
+               "value": {
+                  "category_id": 9,
+                  "description": "desc_3",
+                  "list_blog": [
+                     {
+                        "key": 4,
+                        "value": {
+                           "author_id": {
+                              "author_id": "author_id_2",
+                              "birthdate": null,
+                              "list_blog": [],
+                              "name": "",
+                              "sex": 2
+                           },
+                           "blog_id": 4,
+                           "blog_text": "blog property 'text' modified => blog is dirty !!!",
+                           "date_creation": "2019-04-01T16:18:54",
+                           "list_category": [],
+                           "list_comment": []
+                        }
+                     }
+                  ],
+                  "name": "category_3"
+               }
+            }
+         ],
+         "list_comment": []
+      }
+   ],
+   "request_id": "cf9ea2a8-3e41-438f-9a48-bbc8593d2b99"
+}</pre>
+               </div>
+               <br/><br/>
+               <font style="background-color:yellow"><b>-- Example n°4 --</b></font> fetch all blogs and <a href="#manual_3840">some relationships</a> + define an output JSON format (all properties will not be exported to JSON response) :
+               <br/><br/>
+               <font style="color:blue"><i>JSON request :</i></font><br/>
+               <div class="json_pretty">
+<pre>{
+   "request_id": "4c45fdf9-8001-4509-bb4b-ce27a4a8708a",
+   "action": "fetch_all",
+   "entity": "blog",
+   "relations": [
+      "&lt;blog_alias&gt; { blog_text }",
+      "author_id &lt;author_alias&gt; { name, birthdate }",
+      "list_comment &lt;list_comment_alias&gt; { comment_text } -&gt; blog_id &lt;blog_alias_2&gt; -&gt; * &lt;..._my_alias_suffix&gt;"
+   ],
+   "output_format": [
+      "{ blog_text }",
+      "author_id { name, birthdate }",
+      "list_comment { comment_text } -&gt; blog_id -&gt; *"
+   ]
+}</pre>
+               </div>
+               <font style="color:blue"><i>JSON response :</i></font><br/>
+               <div class="json_pretty">
+<pre>{
+   "data": [
+      {
+         "author_id": {
+            "author_id": "author_id_2",
+            "birthdate": "2019-04-01",
+            "name": "author name modified at index 1 => container is dirty !!!"
+         },
+         "blog_id": 1,
+         "blog_text": "blog property 'text' modified => blog is dirty !!!",
+         "list_comment": [
+            {
+               "blog_id": {
+                  "author_id": {
+                     "author_id": "author_id_2",
+                     "birthdate": "2019-04-01",
+                     "name": "author name modified at index 1 => container is dirty !!!",
+                     "sex": 1
+                  },
+                  "blog_id": 1,
+                  "blog_text": "blog property 'text' modified => blog is dirty !!!",
+                  "date_creation": "2019-04-01T16:18:54",
+                  "list_category": [
+                     {
+                        "key": 1,
+                        "value": {
+                           "category_id": 1,
+                           "description": "desc_1",
+                           "name": "category_1"
+                        }
+                     },
+                     {
+                        "key": 3,
+                        "value": {
+                           "category_id": 3,
+                           "description": "desc_3",
+                           "name": "category_3"
+                        }
+                     }
+                  ],
+                  "list_comment": [
+                     {
+                        "comment_id": 1,
+                        "comment_text": "comment_1 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 3,
+                        "comment_text": "comment_1 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 5,
+                        "comment_text": "comment_1 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 7,
+                        "comment_text": "comment_1 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 2,
+                        "comment_text": "comment_2 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 4,
+                        "comment_text": "comment_2 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 6,
+                        "comment_text": "comment_2 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 8,
+                        "comment_text": "comment_2 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     }
+                  ]
+               },
+               "comment_id": 1,
+               "comment_text": "comment_1 text"
+            },
+            {
+               "blog_id": {
+                  "author_id": {
+                     "author_id": "author_id_2",
+                     "birthdate": "2019-04-01",
+                     "name": "author name modified at index 1 => container is dirty !!!",
+                     "sex": 1
+                  },
+                  "blog_id": 1,
+                  "blog_text": "blog property 'text' modified => blog is dirty !!!",
+                  "date_creation": "2019-04-01T16:18:54",
+                  "list_category": [
+                     {
+                        "key": 1,
+                        "value": {
+                           "category_id": 1,
+                           "description": "desc_1",
+                           "name": "category_1"
+                        }
+                     },
+                     {
+                        "key": 3,
+                        "value": {
+                           "category_id": 3,
+                           "description": "desc_3",
+                           "name": "category_3"
+                        }
+                     }
+                  ],
+                  "list_comment": [
+                     {
+                        "comment_id": 1,
+                        "comment_text": "comment_1 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 3,
+                        "comment_text": "comment_1 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 5,
+                        "comment_text": "comment_1 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 7,
+                        "comment_text": "comment_1 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 2,
+                        "comment_text": "comment_2 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 4,
+                        "comment_text": "comment_2 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 6,
+                        "comment_text": "comment_2 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 8,
+                        "comment_text": "comment_2 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     }
+                  ]
+               },
+               "comment_id": 3,
+               "comment_text": "comment_1 text"
+            },
+            {
+               "blog_id": {
+                  "author_id": {
+                     "author_id": "author_id_2",
+                     "birthdate": "2019-04-01",
+                     "name": "author name modified at index 1 => container is dirty !!!",
+                     "sex": 1
+                  },
+                  "blog_id": 1,
+                  "blog_text": "blog property 'text' modified => blog is dirty !!!",
+                  "date_creation": "2019-04-01T16:18:54",
+                  "list_category": [
+                     {
+                        "key": 1,
+                        "value": {
+                           "category_id": 1,
+                           "description": "desc_1",
+                           "name": "category_1"
+                        }
+                     },
+                     {
+                        "key": 3,
+                        "value": {
+                           "category_id": 3,
+                           "description": "desc_3",
+                           "name": "category_3"
+                        }
+                     }
+                  ],
+                  "list_comment": [
+                     {
+                        "comment_id": 1,
+                        "comment_text": "comment_1 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 3,
+                        "comment_text": "comment_1 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 5,
+                        "comment_text": "comment_1 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 7,
+                        "comment_text": "comment_1 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 2,
+                        "comment_text": "comment_2 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 4,
+                        "comment_text": "comment_2 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 6,
+                        "comment_text": "comment_2 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 8,
+                        "comment_text": "comment_2 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     }
+                  ]
+               },
+               "comment_id": 5,
+               "comment_text": "comment_1 text"
+            },
+            {
+               "blog_id": {
+                  "author_id": {
+                     "author_id": "author_id_2",
+                     "birthdate": "2019-04-01",
+                     "name": "author name modified at index 1 => container is dirty !!!",
+                     "sex": 1
+                  },
+                  "blog_id": 1,
+                  "blog_text": "blog property 'text' modified => blog is dirty !!!",
+                  "date_creation": "2019-04-01T16:18:54",
+                  "list_category": [
+                     {
+                        "key": 1,
+                        "value": {
+                           "category_id": 1,
+                           "description": "desc_1",
+                           "name": "category_1"
+                        }
+                     },
+                     {
+                        "key": 3,
+                        "value": {
+                           "category_id": 3,
+                           "description": "desc_3",
+                           "name": "category_3"
+                        }
+                     }
+                  ],
+                  "list_comment": [
+                     {
+                        "comment_id": 1,
+                        "comment_text": "comment_1 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 3,
+                        "comment_text": "comment_1 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 5,
+                        "comment_text": "comment_1 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 7,
+                        "comment_text": "comment_1 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 2,
+                        "comment_text": "comment_2 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 4,
+                        "comment_text": "comment_2 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 6,
+                        "comment_text": "comment_2 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 8,
+                        "comment_text": "comment_2 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     }
+                  ]
+               },
+               "comment_id": 7,
+               "comment_text": "comment_1 text"
+            },
+            {
+               "blog_id": {
+                  "author_id": {
+                     "author_id": "author_id_2",
+                     "birthdate": "2019-04-01",
+                     "name": "author name modified at index 1 => container is dirty !!!",
+                     "sex": 1
+                  },
+                  "blog_id": 1,
+                  "blog_text": "blog property 'text' modified => blog is dirty !!!",
+                  "date_creation": "2019-04-01T16:18:54",
+                  "list_category": [
+                     {
+                        "key": 1,
+                        "value": {
+                           "category_id": 1,
+                           "description": "desc_1",
+                           "name": "category_1"
+                        }
+                     },
+                     {
+                        "key": 3,
+                        "value": {
+                           "category_id": 3,
+                           "description": "desc_3",
+                           "name": "category_3"
+                        }
+                     }
+                  ],
+                  "list_comment": [
+                     {
+                        "comment_id": 1,
+                        "comment_text": "comment_1 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 3,
+                        "comment_text": "comment_1 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 5,
+                        "comment_text": "comment_1 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 7,
+                        "comment_text": "comment_1 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 2,
+                        "comment_text": "comment_2 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 4,
+                        "comment_text": "comment_2 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 6,
+                        "comment_text": "comment_2 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 8,
+                        "comment_text": "comment_2 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     }
+                  ]
+               },
+               "comment_id": 2,
+               "comment_text": "comment_2 text"
+            },
+            {
+               "blog_id": {
+                  "author_id": {
+                     "author_id": "author_id_2",
+                     "birthdate": "2019-04-01",
+                     "name": "author name modified at index 1 => container is dirty !!!",
+                     "sex": 1
+                  },
+                  "blog_id": 1,
+                  "blog_text": "blog property 'text' modified => blog is dirty !!!",
+                  "date_creation": "2019-04-01T16:18:54",
+                  "list_category": [
+                     {
+                        "key": 1,
+                        "value": {
+                           "category_id": 1,
+                           "description": "desc_1",
+                           "name": "category_1"
+                        }
+                     },
+                     {
+                        "key": 3,
+                        "value": {
+                           "category_id": 3,
+                           "description": "desc_3",
+                           "name": "category_3"
+                        }
+                     }
+                  ],
+                  "list_comment": [
+                     {
+                        "comment_id": 1,
+                        "comment_text": "comment_1 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 3,
+                        "comment_text": "comment_1 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 5,
+                        "comment_text": "comment_1 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 7,
+                        "comment_text": "comment_1 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 2,
+                        "comment_text": "comment_2 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 4,
+                        "comment_text": "comment_2 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 6,
+                        "comment_text": "comment_2 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 8,
+                        "comment_text": "comment_2 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     }
+                  ]
+               },
+               "comment_id": 4,
+               "comment_text": "comment_2 text"
+            },
+            {
+               "blog_id": {
+                  "author_id": {
+                     "author_id": "author_id_2",
+                     "birthdate": "2019-04-01",
+                     "name": "author name modified at index 1 => container is dirty !!!",
+                     "sex": 1
+                  },
+                  "blog_id": 1,
+                  "blog_text": "blog property 'text' modified => blog is dirty !!!",
+                  "date_creation": "2019-04-01T16:18:54",
+                  "list_category": [
+                     {
+                        "key": 1,
+                        "value": {
+                           "category_id": 1,
+                           "description": "desc_1",
+                           "name": "category_1"
+                        }
+                     },
+                     {
+                        "key": 3,
+                        "value": {
+                           "category_id": 3,
+                           "description": "desc_3",
+                           "name": "category_3"
+                        }
+                     }
+                  ],
+                  "list_comment": [
+                     {
+                        "comment_id": 1,
+                        "comment_text": "comment_1 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 3,
+                        "comment_text": "comment_1 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 5,
+                        "comment_text": "comment_1 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 7,
+                        "comment_text": "comment_1 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 2,
+                        "comment_text": "comment_2 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 4,
+                        "comment_text": "comment_2 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 6,
+                        "comment_text": "comment_2 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 8,
+                        "comment_text": "comment_2 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     }
+                  ]
+               },
+               "comment_id": 6,
+               "comment_text": "comment_2 text"
+            },
+            {
+               "blog_id": {
+                  "author_id": {
+                     "author_id": "author_id_2",
+                     "birthdate": "2019-04-01",
+                     "name": "author name modified at index 1 => container is dirty !!!",
+                     "sex": 1
+                  },
+                  "blog_id": 1,
+                  "blog_text": "blog property 'text' modified => blog is dirty !!!",
+                  "date_creation": "2019-04-01T16:18:54",
+                  "list_category": [
+                     {
+                        "key": 1,
+                        "value": {
+                           "category_id": 1,
+                           "description": "desc_1",
+                           "name": "category_1"
+                        }
+                     },
+                     {
+                        "key": 3,
+                        "value": {
+                           "category_id": 3,
+                           "description": "desc_3",
+                           "name": "category_3"
+                        }
+                     }
+                  ],
+                  "list_comment": [
+                     {
+                        "comment_id": 1,
+                        "comment_text": "comment_1 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 3,
+                        "comment_text": "comment_1 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 5,
+                        "comment_text": "comment_1 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 7,
+                        "comment_text": "comment_1 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 2,
+                        "comment_text": "comment_2 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 4,
+                        "comment_text": "comment_2 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 6,
+                        "comment_text": "comment_2 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     },
+                     {
+                        "comment_id": 8,
+                        "comment_text": "comment_2 text",
+                        "date_creation": "2019-04-01T16:18:54"
+                     }
+                  ]
+               },
+               "comment_id": 8,
+               "comment_text": "comment_2 text"
+            }
+         ]
+      },
+      {
+         "author_id": {
+            "author_id": "author_id_2",
+            "birthdate": "2019-04-01",
+            "name": "author name modified at index 1 => container is dirty !!!"
+         },
+         "blog_id": 2,
+         "blog_text": "blog property 'text' modified => blog is dirty !!!",
+         "list_comment": []
+      },
+      {
+         "author_id": {
+            "author_id": "author_id_2",
+            "birthdate": "2019-04-01",
+            "name": "author name modified at index 1 => container is dirty !!!"
+         },
+         "blog_id": 3,
+         "blog_text": "blog property 'text' modified => blog is dirty !!!",
+         "list_comment": []
+      },
+      {
+         "author_id": {
+            "author_id": "author_id_2",
+            "birthdate": "2019-04-01",
+            "name": "author name modified at index 1 => container is dirty !!!"
+         },
+         "blog_id": 4,
+         "blog_text": "blog property 'text' modified => blog is dirty !!!",
+         "list_comment": []
+      }
+   ],
+   "request_id": "4c45fdf9-8001-4509-bb4b-ce27a4a8708a"
+}</pre>
+               </div>
+               <br/><br/>
+            </div>
+            <p class="manual_p_title_3"><a class="manual_a_title_3" name="manual_9732">fetch_by_id</a></p>
+            <div class="manual_div_content">
+               The <b><i>fetch_by_id</i></b> action gets an item from a table based on its unique identifier.
+               <br/><br/>
+               <font style="background-color:yellow"><b>-- Example n°1 --</b></font> fetch a blog which has an unique identifier equals to 1 :
+               <br/><br/>
+               <font style="color:blue"><i>JSON request :</i></font><br/>
+               <div class="json_pretty">
+<pre>{
+   "request_id": "4d6fbb9e-e088-482a-abfa-4e7ddee80569",
+   "action": "fetch_by_id",
+   "entity": "blog",
+   "data": {
+      "blog_id": 1
+   }
+}</pre>
+               </div>
+               <font style="color:blue"><i>JSON response :</i></font><br/>
+               <div class="json_pretty">
+<pre>{
+   "data": {
+      "author_id": {
+         "author_id": "author_id_2",
+         "birthdate": null,
+         "list_blog": [],
+         "name": "",
+         "sex": 2
+      },
+      "blog_id": 1,
+      "blog_text": "blog property 'text' modified => blog is dirty !!!",
+      "date_creation": "2019-04-01T16:18:54",
+      "list_category": [],
+      "list_comment": []
+   },
+   "request_id": "4d6fbb9e-e088-482a-abfa-4e7ddee80569"
+}</pre>
+               </div>
+               <br/><br/>
+               <font style="background-color:yellow"><b>-- Example n°2 --</b></font> fetch only some blog's columns which has an unique identifier equals to 1 (other columns are part of JSON response but with an empty or null value) :
+               <br/><br/>
+               <font style="color:blue"><i>JSON request :</i></font><br/>
+               <div class="json_pretty">
+<pre>{
+   "request_id": "72c9b362-d194-410e-98ed-23797a34318e",
+   "action": "fetch_by_id",
+   "entity": "blog",
+   "data": {
+      "blog_id": 1
+   },
+   "columns": [
+      "blog_text",
+      "date_creation"
+   ]
+}</pre>
+               </div>
+               <font style="color:blue"><i>JSON response :</i></font><br/>
+               <div class="json_pretty">
+<pre>{
+   "data": {
+      "author_id": null,
+      "blog_id": 1,
+      "blog_text": "blog property 'text' modified => blog is dirty !!!",
+      "date_creation": "2019-04-01T16:18:54",
+      "list_category": [],
+      "list_comment": []
+   },
+   "request_id": "72c9b362-d194-410e-98ed-23797a34318e"
+}</pre>
+               </div>
+               <br/><br/>
+               <font style="background-color:yellow"><b>-- Example n°3 --</b></font> fetch a list of blogs based on their unique identifier :
+               <br/><br/>
+               <font style="color:blue"><i>JSON request :</i></font><br/>
+               <div class="json_pretty">
+<pre>{
+   "request_id": "59c37f70-26ee-42e5-9177-b32c331adce1",
+   "action": "fetch_by_id",
+   "entity": "blog",
+   "data": [
+      {
+         "blog_id": 1
+      },
+      {
+         "blog_id": 2
+      },
+      {
+         "blog_id": 3
+      }
+   ]
+}</pre>
+               </div>
+               <font style="color:blue"><i>JSON response :</i></font><br/>
+               <div class="json_pretty">
+<pre>{
+   "data": [
+      {
+         "author_id": {
+            "author_id": "author_id_2",
+            "birthdate": null,
+            "list_blog": [],
+            "name": "",
+            "sex": 2
+         },
+         "blog_id": 1,
+         "blog_text": "blog property 'text' modified => blog is dirty !!!",
+         "date_creation": "2019-04-01T16:18:54",
+         "list_category": [],
+         "list_comment": []
+      },
+      {
+         "author_id": {
+            "author_id": "author_id_2",
+            "birthdate": null,
+            "list_blog": [],
+            "name": "",
+            "sex": 2
+         },
+         "blog_id": 2,
+         "blog_text": "blog property 'text' modified => blog is dirty !!!",
+         "date_creation": "2019-04-01T16:18:54",
+         "list_category": [],
+         "list_comment": []
+      },
+      {
+         "author_id": {
+            "author_id": "author_id_2",
+            "birthdate": null,
+            "list_blog": [],
+            "name": "",
+            "sex": 2
+         },
+         "blog_id": 3,
+         "blog_text": "blog property 'text' modified => blog is dirty !!!",
+         "date_creation": "2019-04-01T16:18:54",
+         "list_category": [],
+         "list_comment": []
+      }
+   ],
+   "request_id": "59c37f70-26ee-42e5-9177-b32c331adce1"
+}</pre>
+               </div>
+               <br/><br/>
+               <font style="background-color:yellow"><b>-- Example n°4 --</b></font> fetch a list of blogs (with some relationships) based on their unique identifier, and define a JSON output format (all properties will not be exported to JSON response) :
+               <br/><br/>
+               <font style="color:blue"><i>JSON request :</i></font><br/>
+               <div class="json_pretty">
+<pre>{
+   "request_id": "325d64f4-29ac-47ab-9846-d6a71a9e9d73",
+   "action": "fetch_by_id",
+   "entity": "blog",
+   "data": [
+      {
+         "blog_id": 1
+      },
+      {
+         "blog_id": 2
+      }
+   ],
+   "relations": [
+      "{ blog_text }",
+      "author_id &lt;author_alias&gt; { name, birthdate }",
+      "list_comment &lt;list_comment_alias&gt; { comment_text }"
+   ],
+   "output_format": [
+      "{ blog_text }",
+      "author_id { name, birthdate }",
+      "list_comment { comment_text }"
+   ]
+}</pre>
+               </div>
+               <font style="color:blue"><i>JSON response :</i></font><br/>
+               <div class="json_pretty">
+<pre>{
+   "data": [
+      {
+         "author_id": {
+            "author_id": "author_id_2",
+            "birthdate": "2019-04-01",
+            "name": "author name modified at index 1 => container is dirty !!!"
+         },
+         "blog_id": 1,
+         "blog_text": "blog property 'text' modified => blog is dirty !!!",
+         "list_comment": [
+            {
+               "comment_id": 1,
+               "comment_text": "comment_1 text"
+            },
+            {
+               "comment_id": 2,
+               "comment_text": "comment_2 text"
+            },
+            {
+               "comment_id": 3,
+               "comment_text": "comment_1 text"
+            },
+            {
+               "comment_id": 4,
+               "comment_text": "comment_2 text"
+            },
+            {
+               "comment_id": 5,
+               "comment_text": "comment_1 text"
+            },
+            {
+               "comment_id": 6,
+               "comment_text": "comment_2 text"
+            },
+            {
+               "comment_id": 7,
+               "comment_text": "comment_1 text"
+            },
+            {
+               "comment_id": 8,
+               "comment_text": "comment_2 text"
+            }
+         ]
+      },
+      {
+         "author_id": {
+            "author_id": "author_id_2",
+            "birthdate": "2019-04-01",
+            "name": "author name modified at index 1 => container is dirty !!!"
+         },
+         "blog_id": 2,
+         "blog_text": "blog property 'text' modified => blog is dirty !!!",
+         "list_comment": []
+      }
+   ],
+   "request_id": "325d64f4-29ac-47ab-9846-d6a71a9e9d73"
+}</pre>
+               </div>
+               <br/><br/>
+            </div>
+            <p class="manual_p_title_3"><a class="manual_a_title_3" name="manual_9733">fetch_by_query</a></p>
+            <div class="manual_div_content">
+               The <b><i>fetch_by_query</i></b> action gets some items from a table <a href="#manual_360">filtered by a query</a>.
+               <br/><br/>
+               <font style="background-color:yellow"><b>-- Example n°1 --</b></font> fetch only items from <i>author</i> table with a sex of type <i>female</i> (<i>female</i> == enum equals to 1) :
+               <br/><br/>
+               <font style="color:blue"><i>JSON request :</i></font><br/>
+               <div class="json_pretty">
+<pre>{
+   "request_id": "c178194c-a76f-4a77-af12-2b97fc7078e4",
+   "action": "fetch_by_query",
+   "entity": "author",
+   "query": {
+      "sql": "WHERE author.sex = :sex",
+      "params": [
+         {
+            "key": ":sex",
+            "value": 1
+         }
+      ]
+   }
+}</pre>
+               </div>
+               <font style="color:blue"><i>JSON response :</i></font><br/>
+               <div class="json_pretty">
+<pre>{
+   "data": [
+      {
+         "author_id": "author_id_2",
+         "birthdate": "2019-04-01",
+         "list_blog": [],
+         "name": "author name modified at index 1 => container is dirty !!!",
+         "sex": 1
+      },
+      {
+         "author_id": "author_id_3",
+         "birthdate": "1998-03-06",
+         "list_blog": [],
+         "name": "author_3",
+         "sex": 1
+      }
+   ],
+   "request_id": "c178194c-a76f-4a77-af12-2b97fc7078e4"
+}</pre>
+               </div>
+               <br/><br/>
+               <font style="background-color:yellow"><b>-- Example n°2 --</b></font> fetch some items from <i>author</i> table (and <a href="#manual_3840">all relationships</a>) with a sex of type <i>female</i> :
+               <br/><br/>
+               <font style="color:blue"><i>JSON request :</i></font><br/>
+               <div class="json_pretty">
+<pre>{
+   "request_id": "84e2e13a-0bf9-4d78-b655-970568a97e4c",
+   "action": "fetch_by_query",
+   "entity": "author",
+   "query": {
+      "sql": "WHERE author.sex = :sex",
+      "params": [
+         {
+            "key": ":sex",
+            "value": 1,
+            "type": "in"
+         }
+      ]
+   },
+   "relations": [
+      "*"
+   ]
+}</pre>
+               </div>
+               <font style="color:blue"><i>JSON response :</i></font><br/>
+               <div class="json_pretty">
+<pre>{
+   "data": [
+      {
+         "author_id": "author_id_2",
+         "birthdate": "2019-04-01",
+         "list_blog": [
+            {
+               "author_id": {
+                  "author_id": "author_id_2",
+                  "birthdate": null,
+                  "list_blog": [],
+                  "name": "",
+                  "sex": 2
+               },
+               "blog_id": 1,
+               "blog_text": "blog property 'text' modified => blog is dirty !!!",
+               "date_creation": "2019-04-01T16:18:54",
+               "list_category": [],
+               "list_comment": []
+            },
+            {
+               "author_id": {
+                  "author_id": "author_id_2",
+                  "birthdate": null,
+                  "list_blog": [],
+                  "name": "",
+                  "sex": 2
+               },
+               "blog_id": 2,
+               "blog_text": "blog property 'text' modified => blog is dirty !!!",
+               "date_creation": "2019-04-01T16:18:54",
+               "list_category": [],
+               "list_comment": []
+            },
+            {
+               "author_id": {
+                  "author_id": "author_id_2",
+                  "birthdate": null,
+                  "list_blog": [],
+                  "name": "",
+                  "sex": 2
+               },
+               "blog_id": 3,
+               "blog_text": "blog property 'text' modified => blog is dirty !!!",
+               "date_creation": "2019-04-01T16:18:54",
+               "list_category": [],
+               "list_comment": []
+            },
+            {
+               "author_id": {
+                  "author_id": "author_id_2",
+                  "birthdate": null,
+                  "list_blog": [],
+                  "name": "",
+                  "sex": 2
+               },
+               "blog_id": 4,
+               "blog_text": "blog property 'text' modified => blog is dirty !!!",
+               "date_creation": "2019-04-01T16:18:54",
+               "list_category": [],
+               "list_comment": []
+            }
+         ],
+         "name": "author name modified at index 1 => container is dirty !!!",
+         "sex": 1
+      },
+      {
+         "author_id": "author_id_3",
+         "birthdate": "1998-03-06",
+         "list_blog": [],
+         "name": "author_3",
+         "sex": 1
+      }
+   ],
+   "request_id": "84e2e13a-0bf9-4d78-b655-970568a97e4c"
+}</pre>
+               </div>
+               <br/><br/>
+               <font style="background-color:yellow"><b>-- Example n°3 --</b></font> fetch some items from <i>author</i> table (and <a href="#manual_3840">all relationships</a>) with a sex of type <i>female</i>, and define a JSON output format (all properties will not be exported to JSON response) :
+               <br/><br/>
+               <font style="color:blue"><i>JSON request :</i></font><br/>
+               <div class="json_pretty">
+<pre>{
+   "request_id": "c18b59e7-54f9-4a4f-843d-f0797f4fb676",
+   "action": "fetch_by_query",
+   "entity": "author",
+   "query": {
+      "sql": "WHERE author.sex = :sex",
+      "params": [
+         {
+            "key": ":sex",
+            "value": 1,
+            "type": "in"
+         }
+      ]
+   },
+   "relations": [
+      "*"
+   ],
+   "output_format": [
+      "{ birthdate, name }",
+      "list_blog { blog_text, date_creation }"
+   ]
+}</pre>
+               </div>
+               <font style="color:blue"><i>JSON response :</i></font><br/>
+               <div class="json_pretty">
+<pre>{
+   "data": [
+      {
+         "author_id": "author_id_2",
+         "birthdate": "2019-04-01",
+         "list_blog": [
+            {
+               "blog_id": 1,
+               "blog_text": "blog property 'text' modified => blog is dirty !!!",
+               "date_creation": "2019-04-01T16:18:54"
+            },
+            {
+               "blog_id": 2,
+               "blog_text": "blog property 'text' modified => blog is dirty !!!",
+               "date_creation": "2019-04-01T16:18:54"
+            },
+            {
+               "blog_id": 3,
+               "blog_text": "blog property 'text' modified => blog is dirty !!!",
+               "date_creation": "2019-04-01T16:18:54"
+            },
+            {
+               "blog_id": 4,
+               "blog_text": "blog property 'text' modified => blog is dirty !!!",
+               "date_creation": "2019-04-01T16:18:54"
+            }
+         ],
+         "name": "author name modified at index 1 => container is dirty !!!"
+      },
+      {
+         "author_id": "author_id_3",
+         "birthdate": "1998-03-06",
+         "list_blog": [],
+         "name": "author_3"
+      }
+   ],
+   "request_id": "c18b59e7-54f9-4a4f-843d-f0797f4fb676"
+}</pre>
+               </div>
+               <br/><br/>
+            </div>
+            <p class="manual_p_title_3"><a class="manual_a_title_3" name="manual_9734">count</a></p>
+            <div class="manual_div_content">
+               The <b><i>count</i></b> action returns a number of items from a table in database with or without a query (and with or without relationships).
+               <br/><br/>
+               <font style="background-color:yellow"><b>-- Example n°1 --</b></font> count all blogs stored in database :
+               <br/><br/>
+               <font style="color:blue"><i>JSON request :</i></font><br/>
+               <div class="json_pretty">
+<pre>{
+   "request_id": "1ef62fd7-d847-4d67-9fd0-0207af463aa4",
+   "action": "count",
+   "entity": "blog"
+}</pre>
+               </div>
+               <font style="color:blue"><i>JSON response :</i></font><br/>
+               <div class="json_pretty">
+<pre>{
+   "data": {
+      "count": 4
+   },
+   "request_id": "1ef62fd7-d847-4d67-9fd0-0207af463aa4"
+}</pre>
+               </div>
+               <br/><br/>
+               <font style="background-color:yellow"><b>-- Example n°2 --</b></font> count items from <i>author</i> table with a sex of type <i>female</i> :
+               <br/><br/>
+               <font style="color:blue"><i>JSON request :</i></font><br/>
+               <div class="json_pretty">
+<pre>{
+   "request_id": "a80646d1-5a42-46fb-9306-3b91c7f594c8",
+   "action": "count",
+   "entity": "author",
+   "query": {
+      "sql": "WHERE author.sex = :sex",
+      "params": [
+         {
+            "key": ":sex",
+            "value": 1
+         }
+      ]
+   }
+}</pre>
+               </div>
+               <font style="color:blue"><i>JSON response :</i></font><br/>
+               <div class="json_pretty">
+<pre>{
+   "data": {
+      "count": 2
+   },
+   "request_id": "a80646d1-5a42-46fb-9306-3b91c7f594c8"
+}</pre>
+               </div>
+               <br/><br/>
+               <font style="background-color:yellow"><b>-- Example n°3 --</b></font> count all blogs associated to an <i>author</i> with a sex of type <i>female</i> :
+               <br/><br/>
+               <font style="color:blue"><i>JSON request :</i></font><br/>
+               <div class="json_pretty">
+<pre>{
+   "request_id": "6ef252f7-385c-465e-8304-b9afa9fea490",
+   "action": "count",
+   "entity": "blog",
+   "query": {
+      "sql": "WHERE author_alias.sex = :sex",
+      "params": [
+         {
+            "key": ":sex",
+            "value": 1
+         }
+      ]
+   },
+   "relations": [
+      "author_id &lt;author_alias&gt; { sex }"
+   ]
+}</pre>
+               </div>
+               <font style="color:blue"><i>JSON response :</i></font><br/>
+               <div class="json_pretty">
+<pre>{
+   "data": {
+      "count": 4
+   },
+   "request_id": "6ef252f7-385c-465e-8304-b9afa9fea490"
+}</pre>
+               </div>
+               <br/><br/>
+            </div>
+            <p class="manual_p_title_3"><a class="manual_a_title_3" name="manual_9735">exist</a></p>
+            <div class="manual_div_content">
+               The <b><i>exist</i></b> action checks if an item from a table exists in database based on its unique identifier.
+               <br/><br/>
+               <font style="background-color:yellow"><b>-- Example n°1 --</b></font> check if a blog with unique identifier equals to 1 exists in database :
+               <br/><br/>
+               <font style="color:blue"><i>JSON request :</i></font><br/>
+               <div class="json_pretty">
+<pre>{
+   "request_id": "e8db33db-b249-4349-93fe-ad12e208520e",
+   "action": "exist",
+   "entity": "blog",
+   "data": {
+      "blog_id": 1
+   }
+}</pre>
+               </div>
+               <font style="color:blue"><i>JSON response :</i></font><br/>
+               <div class="json_pretty">
+<pre>{
+   "data": {
+      "exist": true
+   },
+   "request_id": "e8db33db-b249-4349-93fe-ad12e208520e"
+}</pre>
+               </div>
+               <br/><br/>
+               <font style="background-color:yellow"><b>-- Example n°2 --</b></font> check if several blogs exist (based on their unique identifier) :
+               <br/><br/>
+               <font style="color:blue"><i>JSON request :</i></font><br/>
+               <div class="json_pretty">
+<pre>{
+   "request_id": "f2d6ca3f-36de-4920-8f4c-c04842603467",
+   "action": "exist",
+   "entity": "blog",
+   "data": [
+      {
+         "blog_id": 1
+      },
+      {
+         "blog_id": 999
+      },
+      {
+         "blog_id": 3
+      }
+   ]
+}</pre>
+               </div>
+               <font style="color:blue"><i>JSON response :</i></font><br/>
+               <div class="json_pretty">
+<pre>{
+   "data": {
+      "exist": false
+   },
+   "request_id": "f2d6ca3f-36de-4920-8f4c-c04842603467"
+}</pre>
+               </div>
+               <br/><br/>
+               <font style="background-color:yellow"><b>-- Example n°3 --</b></font> check if an <i>author</i> exists :
+               <br/><br/>
+               <font style="color:blue"><i>JSON request :</i></font><br/>
+               <div class="json_pretty">
+<pre>{
+   "request_id": "2c7df172-8010-4816-b8e1-3edbb0b0b90e",
+   "action": "exist",
+   "entity": "author",
+   "data": {
+      "author_id": "author_id_2"
+   }
+}</pre>
+               </div>
+               <font style="color:blue"><i>JSON response :</i></font><br/>
+               <div class="json_pretty">
+<pre>{
+   "data": {
+      "exist": true
+   },
+   "request_id": "2c7df172-8010-4816-b8e1-3edbb0b0b90e"
+}</pre>
+               </div>
+               <br/><br/>
+            </div>
+         </div>
+         <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_974">Insert</a></p>
+         <div class="manual_div_content">
+            The <b><i>insert</i></b> action adds 1 or several items in database.
+            Unique identifiers generated by database (for example auto-incremented identifiers) are provided in JSON response.
+            <br/><br/>
+            <font style="background-color:yellow"><b>-- Example n°1 --</b></font> insert a blog in database :
+            <br/><br/>
+            <font style="color:blue"><i>JSON request :</i></font><br/>
+            <div class="json_pretty">
+<pre>{
+   "request_id": "573e4940-607a-4037-8a09-11ec52deb21c",
+   "action": "insert",
+   "entity": "blog",
+   "data": {
+      "blog_text": "this is a new blog from QxOrm REST API !",
+      "date_creation": "2018-01-30T12:42:01",
+      "author_id": "author_id_2"
+   }
+}</pre>
+            </div>
+            <font style="color:blue"><i>JSON response :</i></font><br/>
+            <div class="json_pretty">
+<pre>{
+   "data": {
+      "blog_id": 5
+   },
+   "request_id": "573e4940-607a-4037-8a09-11ec52deb21c"
+}</pre>
+            </div>
+            <br/><br/>
+            <font style="background-color:yellow"><b>-- Example n°2 --</b></font> insert a list of blogs in database :
+            <br/><br/>
+            <font style="color:blue"><i>JSON request :</i></font><br/>
+            <div class="json_pretty">
+<pre>{
+   "request_id": "6ade2d01-086c-45d6-971b-b65e8836475f",
+   "action": "insert",
+   "entity": "blog",
+   "data": [
+      {
+         "blog_text": "new blog from QxOrm REST API !",
+         "date_creation": "2018-01-30T12:42:01",
+         "author_id": "author_id_2"
+      },
+      {
+         "blog_text": "another blog from QxOrm REST API !",
+         "date_creation": "2016-06-12T08:33:12",
+         "author_id": "author_id_1"
+      }
+   ]
+}</pre>
+            </div>
+            <font style="color:blue"><i>JSON response :</i></font><br/>
+            <div class="json_pretty">
+<pre>{
+   "data": [
+      {
+         "blog_id": 6
+      },
+      {
+         "blog_id": 7
+      }
+   ],
+   "request_id": "6ade2d01-086c-45d6-971b-b65e8836475f"
+}</pre>
+            </div>
+            <br/><br/>
+            <font style="background-color:yellow"><b>-- Example n°3 --</b></font> insert an <i>author</i> in database :
+            <br/><br/>
+            <font style="color:blue"><i>JSON request :</i></font><br/>
+            <div class="json_pretty">
+<pre>{
+   "request_id": "0cffa916-99f4-4395-bccd-02918a4b3c57",
+   "action": "insert",
+   "entity": "author",
+   "data": {
+      "author_id": "author_id_from_rest_api",
+      "birthdate": "1978-05-11",
+      "name": "new author created by QxOrm REST API",
+      "sex": 1
+   }
+}</pre>
+            </div>
+            <font style="color:blue"><i>JSON response :</i></font><br/>
+            <div class="json_pretty">
+<pre>{
+   "data": {
+      "author_id": "author_id_from_rest_api"
+   },
+   "request_id": "0cffa916-99f4-4395-bccd-02918a4b3c57"
+}</pre>
+            </div>
+            <br/>
+            <b>Note :</b> the <i>author</i> table requires an unique identifier filled by caller (because it's not auto-incremented).
+            If we execute the same JSON request a second time, then we have following error :
+            <br/>
+            <div class="json_pretty">
+<pre>{
+   "error": {
+      "code": 19,
+      "desc": "Unable to fetch row\ncolumn author_id is not unique"
+   },
+   "request_id": "0cffa916-99f4-4395-bccd-02918a4b3c57"
+}</pre>
+            </div>
+            <br/><br/>
+         </div>
+         <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_975">Update</a></p>
+         <div class="manual_div_content">
+            The <b><i>update</i></b> action modifies 1 or several items in database.
+            <br/><br/>
+            <font style="background-color:yellow"><b>-- Example n°1 --</b></font> update a blog with unique identifier equals to 1 :
+            <br/><br/>
+            <font style="color:blue"><i>JSON request :</i></font><br/>
+            <div class="json_pretty">
+<pre>{
+   "request_id": "4fa24a7f-a3d8-4bbf-85c1-c86df83dec0b",
+   "action": "update",
+   "entity": "blog",
+   "data": {
+      "blog_id": 1,
+      "blog_text": "modify blog from QxOrm REST API",
+      "date_creation": "2013-11-25T09:56:33",
+      "author_id": "author_id_1"
+   }
+}</pre>
+            </div>
+            <font style="color:blue"><i>JSON response :</i></font><br/>
+            <div class="json_pretty">
+<pre>{
+   "data": {
+      "blog_id": 1
+   },
+   "request_id": "4fa24a7f-a3d8-4bbf-85c1-c86df83dec0b"
+}</pre>
+            </div>
+            <br/><br/>
+            <font style="background-color:yellow"><b>-- Example n°2 --</b></font> update only some columns of a blog :
+            <br/><br/>
+            <font style="color:blue"><i>JSON request :</i></font><br/>
+            <div class="json_pretty">
+<pre>{
+   "request_id": "d0704db1-5c3a-48ad-b27e-14aa54ac0efb",
+   "action": "update",
+   "entity": "blog",
+   "data": {
+      "blog_id": 2,
+      "blog_text": "modify blog from QxOrm REST API",
+      "date_creation": "2013-11-25T09:56:33"
+   },
+   "columns": [
+      "blog_text",
+      "date_creation"
+   ]
+}</pre>
+            </div>
+            <font style="color:blue"><i>JSON response :</i></font><br/>
+            <div class="json_pretty">
+<pre>{
+   "data": {
+      "blog_id": 2
+   },
+   "request_id": "d0704db1-5c3a-48ad-b27e-14aa54ac0efb"
+}</pre>
+            </div>
+            <br/><br/>
+            <font style="background-color:yellow"><b>-- Example n°3 --</b></font> update a list of <i>author</i> :
+            <br/><br/>
+            <font style="color:blue"><i>JSON request :</i></font><br/>
+            <div class="json_pretty">
+<pre>{
+   "request_id": "26ec3a7b-cf2d-47f7-bab7-db303f15ee51",
+   "action": "update",
+   "entity": "author",
+   "data": [
+      {
+         "author_id": "author_id_from_rest_api",
+         "birthdate": "1992-11-03",
+         "name": "modify author from QxOrm REST API",
+         "sex": 0
+      },
+      {
+         "author_id": "author_id_1",
+         "birthdate": "1978-12-25",
+         "name": "modify another author from QxOrm REST API",
+         "sex": 2
+      }
+   ]
+}</pre>
+            </div>
+            <font style="color:blue"><i>JSON response :</i></font><br/>
+            <div class="json_pretty">
+<pre>{
+   "data": [
+      {
+         "author_id": "author_id_from_rest_api"
+      },
+      {
+         "author_id": "author_id_1"
+      }
+   ],
+   "request_id": "26ec3a7b-cf2d-47f7-bab7-db303f15ee51"
+}</pre>
+            </div>
+            <br/><br/>
+         </div>
+         <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_976">Save (insert or update)</a></p>
+         <div class="manual_div_content">
+            The <b><i>save</i></b> action adds or modifies (<i>insert</i> or <i>update</i>) 1 or several items in database.
+            When inserting, unique identifiers generated by database (for example auto-incremented identifiers) are provided in JSON response.
+            <br/><br/>
+            JSON request has an optional parameter named <i>save_mode</i> which can have following values :
+            <ul>
+               <li><i>check_insert_or_update :</i> save the instance and its relationships recursively (several levels of relations) checking for each relation if an <i>insert</i> or <i>update</i> is required (can be slow with a lot of relations) ;</li>
+               <li><i>insert_only :</i> insert recursively (several levels of relations) the instance and its relationships ;</li>
+               <li><i>update_only :</i> update recursively (several levels of relations) the instance and its relationships.</li>
+            </ul>
+            <br/>
+            <font style="background-color:yellow"><b>-- Example n°1 --</b></font> save (insert or update based on the unique identifier) a blog in database :
+            <br/><br/>
+            <font style="color:blue"><i>JSON request :</i></font><br/>
+            <div class="json_pretty">
+<pre>{
+   "request_id": "ec3c71eb-5014-4b36-85a0-aeb7ae48a5e9",
+   "action": "save",
+   "entity": "blog",
+   "data": {
+      "blog_id": 1,
+      "blog_text": "modify blog from QxOrm REST API",
+      "date_creation": "2013-11-25T09:56:33",
+      "author_id": "author_id_1"
+   }
+}</pre>
+            </div>
+            <font style="color:blue"><i>JSON response :</i></font><br/>
+            <div class="json_pretty">
+<pre>{
+   "data": {
+      "blog_id": 1
+   },
+   "request_id": "ec3c71eb-5014-4b36-85a0-aeb7ae48a5e9"
+}</pre>
+            </div>
+            <br/><br/>
+            <font style="background-color:yellow"><b>-- Example n°2 --</b></font> save (insert or update based on the unique identifier) a list of blogs in database :
+            <br/><br/>
+            <font style="color:blue"><i>JSON request :</i></font><br/>
+            <div class="json_pretty">
+<pre>{
+   "request_id": "dc7c804e-f95a-4a9b-a4e3-547adcacf090",
+   "action": "save",
+   "entity": "blog",
+   "data": [
+      {
+         "blog_id": 1,
+         "blog_text": "save blog from QxOrm REST API !",
+         "date_creation": "2018-01-30T12:42:01",
+         "author_id": "author_id_2"
+      },
+      {
+         "blog_text": "save another blog from QxOrm REST API !",
+         "date_creation": "2016-06-12T08:33:12",
+         "author_id": "author_id_1"
+      }
+   ]
+}</pre>
+            </div>
+            <font style="color:blue"><i>JSON response :</i></font><br/>
+            <div class="json_pretty">
+<pre>{
+   "data": [
+      {
+         "blog_id": 1
+      },
+      {
+         "blog_id": 5
+      }
+   ],
+   "request_id": "dc7c804e-f95a-4a9b-a4e3-547adcacf090"
+}</pre>
+            </div>
+            <br/><br/>
+            <font style="background-color:yellow"><b>-- Example n°3 --</b></font> save (insert or update based on the unique identifier) a blog and all its relationships recursively (several levels) :
+            <br/><br/>
+            <font style="color:blue"><i>JSON request :</i></font><br/>
+            <div class="json_pretty">
+<pre>{
+   "request_id": "5b78e468-2fa3-4aeb-82ce-4d85408f5fa7",
+   "action": "save",
+   "entity": "blog",
+   "data": {
+      "blog_id": 1,
+      "blog_text": "save recursive blog from QxOrm REST API",
+      "date_creation": "2013-11-25T09:56:33",
+      "author_id": {
+         "author_id": "author_id_1",
+         "birthdate": "1965-07-21",
+         "name": "save recursive author from QxOrm REST API",
+         "sex": 0
+      }
+   },
+   "save_mode": "check_insert_or_update"
+}</pre>
+            </div>
+            <font style="color:blue"><i>JSON response :</i></font><br/>
+            <div class="json_pretty">
+<pre>{
+   "data": {
+      "blog_id": 1
+   },
+   "request_id": "5b78e468-2fa3-4aeb-82ce-4d85408f5fa7"
+}</pre>
+            </div>
+            <br/><br/>
+            <font style="background-color:yellow"><b>-- Example n°4 --</b></font> insert (<i>save_mode</i> = <i>insert_only</i>) a blog and all its relationships recursively (several levels) :
+            <br/><br/>
+            <font style="color:blue"><i>JSON request :</i></font><br/>
+            <div class="json_pretty">
+<pre>{
+   "request_id": "ef147c62-74e0-4be2-a294-ffeb020d5304",
+   "action": "save",
+   "entity": "blog",
+   "data": {
+      "blog_text": "save recursive - new blog from QxOrm REST API",
+      "date_creation": "2013-11-25T09:56:33",
+      "author_id": {
+         "author_id": "author_id_save_recursive",
+         "birthdate": "1965-07-21",
+         "name": "save recursive (insert only) author from QxOrm REST API",
+         "sex": 0
+      }
+   },
+   "save_mode": "insert_only"
+}</pre>
+            </div>
+            <font style="color:blue"><i>JSON response :</i></font><br/>
+            <div class="json_pretty">
+<pre>{
+   "data": {
+      "blog_id": 7
+   },
+   "request_id": "ef147c62-74e0-4be2-a294-ffeb020d5304"
+}</pre>
+            </div>
+            <br/><br/>
+         </div>
+         <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_977">Delete</a></p>
+         <div class="manual_div_content">
+            This chapter provides several ways to remove data from database (delete or destroy) :
+            <ul>
+               <li>Delete all rows from a table (<a href="#manual_9771">delete_all / destroy_all</a>) ;</li>
+               <li>Delete some rows from a table based on a query (<a href="#manual_9772">delete_by_query / destroy_by_query</a>) ;</li>
+               <li>Delete some rows from a table based on the unique identifier (<a href="#manual_9773">delete_by_id / destroy_by_id</a>).</li>
+            </ul>
+            <br/>
+            <b>Note :</b> difference between <i>delete</i> and <i>destroy</i> is <a href="#manual_3400">soft delete behaviour (logical delete)</a>.
+            <br/><br/>
+            <p class="manual_p_title_3"><a class="manual_a_title_3" name="manual_9771">delete_all / destroy_all</a></p>
+            <div class="manual_div_content">
+               The <b><i>delete_all</i></b> and <b><i>destroy_all</i></b> actions remove all items (rows) from a table.
+               The difference between <i>delete</i> and <i>destroy</i> is <a href="#manual_3400">soft delete behaviour (logical delete)</a>.
+               <br/><br/>
+               <font style="background-color:yellow"><b>-- Example n°1 --</b></font> delete all rows from the <i>comment</i> table :
+               <br/><br/>
+               <font style="color:blue"><i>JSON request :</i></font><br/>
+               <div class="json_pretty">
+<pre>{
+   "request_id": "7b06b5c0-409f-4e0d-bfc4-acafbfe7e796",
+   "action": "delete_all",
+   "entity": "comment"
+}</pre>
+               </div>
+               <font style="color:blue"><i>JSON response :</i></font><br/>
+               <div class="json_pretty">
+<pre>{
+   "data": {
+      "deleted": true
+   },
+   "request_id": "7b06b5c0-409f-4e0d-bfc4-acafbfe7e796"
+}</pre>
+               </div>
+               <br/><br/>
+            </div>
+            <p class="manual_p_title_3"><a class="manual_a_title_3" name="manual_9772">delete_by_query / destroy_by_query</a></p>
+            <div class="manual_div_content">
+               The <b><i>delete_by_query</i></b> and <b><i>destroy_by_query</i></b> actions remove some items (rows) from a table based on a query.
+               The difference between <i>delete</i> and <i>destroy</i> is <a href="#manual_3400">soft delete behaviour (logical delete)</a>.
+               <br/><br/>
+               <font style="background-color:yellow"><b>-- Example n°1 --</b></font> delete all rows from the <i>author</i> table with a sex of type <i>female</i> (<i>female</i> = enum with value 1) :
+               <br/><br/>
+               <font style="color:blue"><i>JSON request :</i></font><br/>
+               <div class="json_pretty">
+<pre>{
+   "request_id": "169ff0be-6e49-457b-a99c-22bd7141dc02",
+   "action": "delete_by_query",
+   "entity": "author",
+   "query": {
+      "sql": "WHERE author.sex = :sex",
+      "params": [
+         {
+            "key": ":sex",
+            "value": 1
+         }
+      ]
+   }
+}</pre>
+               </div>
+               <font style="color:blue"><i>JSON response :</i></font><br/>
+               <div class="json_pretty">
+<pre>{
+   "data": {
+      "deleted": true
+   },
+   "request_id": "169ff0be-6e49-457b-a99c-22bd7141dc02"
+}</pre>
+               </div>
+               <br/><br/>
+            </div>
+            <p class="manual_p_title_3"><a class="manual_a_title_3" name="manual_9773">delete_by_id / destroy_by_id</a></p>
+            <div class="manual_div_content">
+               The <b><i>delete_by_id</i></b> and <b><i>destroy_by_id</i></b> actions remove some items (rows) from a table based on the unique identifier.
+               The difference between <i>delete</i> and <i>destroy</i> is <a href="#manual_3400">soft delete behaviour (logical delete)</a>.
+               <br/><br/>
+               <font style="background-color:yellow"><b>-- Example n°1 --</b></font> delete from database the blog with unique identifier equals to 4 :
+               <br/><br/>
+               <font style="color:blue"><i>JSON request :</i></font><br/>
+               <div class="json_pretty">
+<pre>{
+   "request_id": "80bff383-8ebd-4bde-bb42-37b6f67bc39f",
+   "action": "delete_by_id",
+   "entity": "blog",
+   "data": {
+      "blog_id": 4
+   }
+}</pre>
+               </div>
+               <font style="color:blue"><i>JSON response :</i></font><br/>
+               <div class="json_pretty">
+<pre>{
+   "data": {
+      "blog_id": 4
+   },
+   "request_id": "80bff383-8ebd-4bde-bb42-37b6f67bc39f"
+}</pre>
+               </div>
+               <br/><br/>
+               <font style="background-color:yellow"><b>-- Example n°2 --</b></font> delete from database a list of 2 blogs with unique identifier equals to 3 and 2 :
+               <br/><br/>
+               <font style="color:blue"><i>JSON request :</i></font><br/>
+               <div class="json_pretty">
+<pre>{
+   "request_id": "38020cb7-d725-4c0e-80a0-63db7569155e",
+   "action": "delete_by_id",
+   "entity": "blog",
+   "data": [
+      {
+         "blog_id": 3
+      },
+      {
+         "blog_id": 2
+      }
+   ]
+}</pre>
+               </div>
+               <font style="color:blue"><i>JSON response :</i></font><br/>
+               <div class="json_pretty">
+<pre>{
+   "data": [
+      {
+         "blog_id": 3
+      },
+      {
+         "blog_id": 2
+      }
+   ],
+   "request_id": "38020cb7-d725-4c0e-80a0-63db7569155e"
+}</pre>
+               </div>
+               <br/><br/>
+            </div>
+         </div>
+         <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_978">Validate</a></p>
+         <div class="manual_div_content">
+            The <b><i>validate</i></b> action checks some properties of your instance (without triggering any action to database).
+            The <b><i>validate</i></b> action calls the <a href="#manual_420">QxValidator module</a> from QxOrm library.
+            <br/><br/>
+            <font style="background-color:yellow"><b>-- Example n°1 --</b></font> a <i>blog</i> must contain some text (<i>blog_text</i> property) to be saved in database.
+            With the following JSON request, we get a JSON response with an error message which means that the blog instance is not valid :
+            <br/><br/>
+            <font style="color:blue"><i>JSON request :</i></font><br/>
+            <div class="json_pretty">
+<pre>{
+   "request_id": "92043c2b-4ba8-4583-8fad-c828251734ba",
+   "action": "validate",
+   "entity": "blog",
+   "data": {
+      "blog_id": 9999,
+      "blog_text": ""
+   }
+}</pre>
+            </div>
+            <font style="color:blue"><i>JSON response :</i></font><br/>
+            <div class="json_pretty">
+<pre>{
+   "data": {
+      "invalid_values": [
+         "blog",
+         [
+            {
+               "message": "'blog_text' property cannot be empty",
+               "path": "blog"
+            }
+         ]
+      ]
+   },
+   "request_id": "92043c2b-4ba8-4583-8fad-c828251734ba"
+}</pre>
+            </div>
+            <br/><br/>
+            <font style="background-color:yellow"><b>-- Example n°2 --</b></font> we add a value to <i>blog_text</i> property, so the <i>blog</i> instance becomes valid (the JSON response has an <i>invalid_values</i> property with a <i>null</i> value) :
+            <br/><br/>
+            <font style="color:blue"><i>JSON request :</i></font><br/>
+            <div class="json_pretty">
+<pre>{
+   "request_id": "92043c2b-4ba8-4583-8fad-c828251734ba",
+   "action": "validate",
+   "entity": "blog",
+   "data": {
+      "blog_id": 9999,
+      "blog_text": "my blog text !!!"
+   }
+}</pre>
+            </div>
+            <font style="color:blue"><i>JSON response :</i></font><br/>
+            <div class="json_pretty">
+<pre>{
+   "data": {
+      "invalid_values": null
+   },
+   "request_id": "92043c2b-4ba8-4583-8fad-c828251734ba"
+}</pre>
+            </div>
+            <br/><br/>
+         </div>
+         <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_979">Custom SQL query or stored procedure</a></p>
+         <div class="manual_div_content">
+            The <b><i>call_custom_query</i></b> action executes a custom SQL query or a stored procedure.
+            <br/><br/>
+            <font style="background-color:yellow"><b>-- Example n°1 --</b></font> insert in database a new <i>author</i> with a custom SQL query :
+            <br/><br/>
+            <font style="color:blue"><i>JSON request :</i></font><br/>
+            <div class="json_pretty">
+<pre>{
+   "request_id": "ff2a2256-041d-4c5f-bd86-3745ce46ead8",
+   "action": "call_custom_query",
+   "query": {
+      "sql": "INSERT INTO author (author_id, name, birthdate, sex) VALUES (:author_id, :name, :birthdate, :sex)",
+      "params": [
+         {
+            "key": ":author_id",
+            "value": "author_id_custom_query"
+         },
+         {
+            "key": ":name",
+            "value": "new author inserted by custom query"
+         },
+         {
+            "key": ":birthdate",
+            "value": "20190215"
+         },
+         {
+            "key": ":sex",
+            "value": 2
+         }
+      ]
+   }
+}</pre>
+            </div>
+            <font style="color:blue"><i>JSON response :</i></font><br/>
+            <div class="json_pretty">
+<pre>{
+   "data": {
+      "query_output": {
+         "distinct": false,
+         "list_values": {
+            ":author_id": [
+               "author_id_custom_query",
+               1
+            ],
+            ":birthdate": [
+               "20190215",
+               1
+            ],
+            ":name": [
+               "new author inserted by custom query",
+               1
+            ],
+            ":sex": [
+               2,
+               1
+            ]
+         },
+         "parenthesis_count": 0,
+         "query": [
+            "INSERT INTO author (author_id, name, birthdate, sex) VALUES (:author_id, :name, :birthdate, :sex)"
+         ],
+         "response": "",
+         "result_position_by_key": {},
+         "result_values": [],
+         "sql_element_index": 0,
+         "sql_element_list": [],
+         "sql_element_temp_type": 0,
+         "type": ""
+      }
+   },
+   "request_id": "ff2a2256-041d-4c5f-bd86-3745ce46ead8"
+}</pre>
+            </div>
+            <br/><br/>
+         </div>
+         <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_961">Call C++ natives functions</a></p>
+         <div class="manual_div_content">
+            The <b><i>call_entity_function</i></b> action executes C++ natives functions registered into QxOrm context.<br/>
+            <b>Prerequisites :</b> the C++ native function must be a <i>static</i> method with this signature : <b><i><font style="background-color:yellow">static QJsonValue myNativeCppFct(const QJsonValue & request);</font></i></b>
+            <br/><br/>
+            Here is an example of C++ function registered into QxOrm context, this function can be called by the JSON API engine (<i>QxRestApi</i> module) :
+            <br/><br/>
+            <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="keyword">namespace</span> qx {
+<span class="keyword">template</span> &lt;&gt; <span class="keyword">void</span> register_class(QxClass&lt;blog&gt; & t)
+{
+   <span class="comment">// Register 'helloWorld()' static function in QxOrm context (can be called by QxRestApi JSON API module)</span>
+   t.fctStatic_1&lt;<span class="type">QJsonValue</span>, const <span class="type">QJsonValue</span> & &gt;(& blog::helloWorld, <span class="string">"helloWorld"</span>);
+}}
+
+<span class="comment">// 'helloWorld()' static function implementation</span>
+<span class="type">QJsonValue</span> blog::helloWorld(const <span class="type">QJsonValue</span> & request)
+{
+   <span class="type">QJsonObject</span> response;
+   response.insert(<span class="string">"request"</span>, request);
+   response.insert(<span class="string">"response"</span>, QString(<span class="string">"Hello World !"</span>));
+   return response;
+}</pre>
+            </td></tr></tbody></table>
+            <br/><br/>
+            Here is how to execute the C++ <i>helloWorld</i> function from JSON API using <b><i>call_entity_function</i></b> action :
+            <br/><br/>
+            <font style="color:blue"><i>JSON request :</i></font><br/>
+            <div class="json_pretty">
+<pre>{
+   "request_id": "ab1ba7d3-9f98-4b18-a310-a9c34498d043",
+   "action": "call_entity_function",
+   "entity": "blog",
+   "fct": "helloWorld",
+   "data": {
+      "param1": "test",
+      "param2": "static fct call"
+   }
+}</pre>
+            </div>
+            <font style="color:blue"><i>JSON response :</i></font><br/>
+            <div class="json_pretty">
+<pre>{
+   "data": {
+      "request": {
+         "param1": "test",
+         "param2": "static fct call"
+      },
+      "response": "Hello World !"
+   },
+   "request_id": "ab1ba7d3-9f98-4b18-a310-a9c34498d043"
+}</pre>
+            </div>
+            <br/><br/>
+         </div>
+         <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_962">Meta-data (C++ classes registered into QxOrm context)</a></p>
+         <div class="manual_div_content">
+            The <b><i>get_meta_data</i></b> action fetches some meta-data from 1 or all entities registered into QxOrm context (C++ classes structure with list of properties and relationships).
+            <br/><br/>
+            <font style="background-color:yellow"><b>-- Example n°1 --</b></font> get all meta-data of <a href="#manual_972"><i>qxBlogRestApi</i> example project</a> :
+            <br/><br/>
+            <font style="color:blue"><i>JSON request :</i></font><br/>
+            <div class="json_pretty">
+<pre>{
+   "request_id": "842ed7b5-9b94-455f-86dc-32992866b3d5",
+   "action": "get_meta_data",
+   "entity": "*"
+}</pre>
+            </div>
+            <font style="color:blue"><i>JSON response :</i></font><br/>
+            <div class="json_pretty">
+<pre>{
+   "data": {
+      "entities": [
+         {
+            "base_entity": "",
+            "description": "",
+            "entity_id": {
+               "description": "",
+               "key": "author_id",
+               "type": "QString"
+            },
+            "key": "author",
+            "name": "author",
+            "properties": [
+               {
+                  "description": "",
+                  "key": "name",
+                  "type": "QString"
+               },
+               {
+                  "description": "",
+                  "key": "birthdate",
+                  "type": "QDate"
+               },
+               {
+                  "description": "",
+                  "key": "sex",
+                  "type": "enum author::enum_sex *"
+               }
+            ],
+            "relations": [
+               {
+                  "description": "",
+                  "key": "list_blog",
+                  "target": "blog",
+                  "type": "std::vector&lt;std::shared_ptr&lt;blog&gt;&gt;",
+                  "type_relation": "relation one-to-many"
+               }
+            ],
+            "version": 0
+         },
+         {
+            "base_entity": "",
+            "description": "",
+            "entity_id": {
+               "description": "",
+               "key": "blog_id",
+               "type": "long"
+            },
+            "key": "blog",
+            "name": "blog",
+            "properties": [
+               {
+                  "description": "",
+                  "key": "blog_text",
+                  "type": "QString"
+               },
+               {
+                  "description": "",
+                  "key": "date_creation",
+                  "type": "QDateTime"
+               }
+            ],
+            "relations": [
+               {
+                  "description": "",
+                  "key": "author_id",
+                  "target": "author",
+                  "type": "std::shared_ptr&lt;author&gt;",
+                  "type_relation": "relation many-to-one"
+               },
+               {
+                  "description": "",
+                  "key": "list_comment",
+                  "target": "comment",
+                  "type": "QList&lt;std::shared_ptr&lt;comment&gt;&gt;",
+                  "type_relation": "relation one-to-many"
+               },
+               {
+                  "description": "",
+                  "key": "list_category",
+                  "target": "category",
+                  "type": "qx::QxCollection&lt;long, QSharedPointer&lt;category&gt;&gt;",
+                  "type_relation": "relation many-to-many"
+               }
+            ],
+            "version": 0
+         },
+         {
+            "base_entity": "",
+            "description": "",
+            "entity_id": {
+               "description": "",
+               "key": "comment_id",
+               "type": "long"
+            },
+            "key": "comment",
+            "name": "comment",
+            "properties": [
+               {
+                  "description": "",
+                  "key": "comment_text",
+                  "type": "QString"
+               },
+               {
+                  "description": "",
+                  "key": "date_creation",
+                  "type": "QDateTime"
+               }
+            ],
+            "relations": [
+               {
+                  "description": "",
+                  "key": "blog_id",
+                  "target": "blog",
+                  "type": "std::shared_ptr&lt;blog&gt;",
+                  "type_relation": "relation many-to-one"
+               }
+            ],
+            "version": 0
+         },
+         {
+            "base_entity": "",
+            "description": "",
+            "entity_id": {
+               "description": "",
+               "key": "category_id",
+               "type": "long"
+            },
+            "key": "category",
+            "name": "category",
+            "properties": [
+               {
+                  "description": "",
+                  "key": "name",
+                  "type": "QString"
+               },
+               {
+                  "description": "",
+                  "key": "description",
+                  "type": "QString"
+               }
+            ],
+            "relations": [
+               {
+                  "description": "",
+                  "key": "list_blog",
+                  "target": "blog",
+                  "type": "qx::QxCollection&lt;long, std::shared_ptr&lt;blog&gt;&gt;",
+                  "type_relation": "relation many-to-many"
+               }
+            ],
+            "version": 0
+         }
+      ]
+   },
+   "request_id": "842ed7b5-9b94-455f-86dc-32992866b3d5"
+}</pre>
+            </div>
+            <br/><br/>
+         </div>
+         <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_963">Send a list of JSON requests</a></p>
+         <div class="manual_div_content">
+            To limit transactions count between client and server, it is possible to send a list of JSON requests to <b>QxRestApi module</b>.
+            Each JSON request can contain its own unique identifier <i>request_id</i> (to match a JSON response with the right JSON request).
+            When a list of JSON requests is sent to <b>QxRestApi module</b>, then <a href="#manual_370">a transaction (commit/rollback)</a> is automatically created (so if an error occurred, then all actions in database are cancelled).
+            <br/><br/>
+            <font style="background-color:yellow"><b>-- Example n°1 --</b></font> send a list of 4 JSON requests to <b>QxRestApi module</b> (1 request to <a href="#manual_962">fetch project meta-data</a> + 3 requests to <a href="#manual_9731"><i>fetch_all</i> blogs with several ways to get relationships</a>) :
+            <br/><br/>
+            <font style="color:blue"><i>JSON request :</i></font><br/>
+            <div class="json_pretty">
+<pre>[
+   {
+      "request_id": "53c96a23-2566-4b3d-ae6c-bff634600e79",
+      "action": "get_meta_data",
+      "entity": "*"
+   },
+   {
+      "request_id": "56e3ca99-5c12-4aca-aa6c-7d0e43c1e636",
+      "action": "fetch_all",
+      "entity": "blog"
+   },
+   {
+      "request_id": "692968e4-8885-41ad-b918-6ce2791b3bb8",
+      "action": "fetch_all",
+      "entity": "blog",
+      "data": [
+         {
+            "key": "",
+            "value": ""
+         }
+      ]
+   },
+   {
+      "request_id": "4ffe38a6-d642-44b0-8be1-198e84256321",
+      "action": "fetch_all",
+      "entity": "blog",
+      "relations": [
+         "*->*"
+      ]
+   }
+]</pre>
+            </div>
+            <font style="color:blue"><i>JSON response :</i></font><br/>
+            <div class="json_pretty">
+<pre>[
+   {
+      "data": {
+         "entities": [
+            {
+               "base_entity": "",
+               "description": "",
+               "entity_id": {
+                  "description": "",
+                  "key": "author_id",
+                  "type": "QString"
+               },
+               "key": "author",
+               "name": "author",
+               "properties": [
+                  {
+                     "description": "",
+                     "key": "name",
+                     "type": "QString"
+                  },
+                  {
+                     "description": "",
+                     "key": "birthdate",
+                     "type": "QDate"
+                  },
+                  {
+                     "description": "",
+                     "key": "sex",
+                     "type": "enum author::enum_sex *"
+                  }
+               ],
+               "relations": [
+                  {
+                     "description": "",
+                     "key": "list_blog",
+                     "target": "blog",
+                     "type": "std::vector&lt;std::shared_ptr&lt;blog&gt;&gt;",
+                     "type_relation": "relation one-to-many"
+                  }
+               ],
+               "version": 0
+            },
+            {
+               "base_entity": "",
+               "description": "",
+               "entity_id": {
+                  "description": "",
+                  "key": "blog_id",
+                  "type": "long"
+               },
+               "key": "blog",
+               "name": "blog",
+               "properties": [
+                  {
+                     "description": "",
+                     "key": "blog_text",
+                     "type": "QString"
+                  },
+                  {
+                     "description": "",
+                     "key": "date_creation",
+                     "type": "QDateTime"
+                  }
+               ],
+               "relations": [
+                  {
+                     "description": "",
+                     "key": "author_id",
+                     "target": "author",
+                     "type": "std::shared_ptr&lt;author&gt;",
+                     "type_relation": "relation many-to-one"
+                  },
+                  {
+                     "description": "",
+                     "key": "list_comment",
+                     "target": "comment",
+                     "type": "QList&lt;std::shared_ptr&lt;comment&gt;&gt;",
+                     "type_relation": "relation one-to-many"
+                  },
+                  {
+                     "description": "",
+                     "key": "list_category",
+                     "target": "category",
+                     "type": "qx::QxCollection&lt;long, QSharedPointer&lt;category&gt;&gt;",
+                     "type_relation": "relation many-to-many"
+                  }
+               ],
+               "version": 0
+            },
+            {
+               "base_entity": "",
+               "description": "",
+               "entity_id": {
+                  "description": "",
+                  "key": "comment_id",
+                  "type": "long"
+               },
+               "key": "comment",
+               "name": "comment",
+               "properties": [
+                  {
+                     "description": "",
+                     "key": "comment_text",
+                     "type": "QString"
+                  },
+                  {
+                     "description": "",
+                     "key": "date_creation",
+                     "type": "QDateTime"
+                  }
+               ],
+               "relations": [
+                  {
+                     "description": "",
+                     "key": "blog_id",
+                     "target": "blog",
+                     "type": "std::shared_ptr&lt;blog&gt;",
+                     "type_relation": "relation many-to-one"
+                  }
+               ],
+               "version": 0
+            },
+            {
+               "base_entity": "",
+               "description": "",
+               "entity_id": {
+                  "description": "",
+                  "key": "category_id",
+                  "type": "long"
+               },
+               "key": "category",
+               "name": "category",
+               "properties": [
+                  {
+                     "description": "",
+                     "key": "name",
+                     "type": "QString"
+                  },
+                  {
+                     "description": "",
+                     "key": "description",
+                     "type": "QString"
+                  }
+               ],
+               "relations": [
+                  {
+                     "description": "",
+                     "key": "list_blog",
+                     "target": "blog",
+                     "type": "qx::QxCollection&lt;long, std::shared_ptr&lt;blog&gt;&gt;",
+                     "type_relation": "relation many-to-many"
+                  }
+               ],
+               "version": 0
+            }
+         ]
+      },
+      "request_id": "53c96a23-2566-4b3d-ae6c-bff634600e79"
+   },
+   {
+      "data": [
+         {
+            "author_id": {
+               "author_id": "author_id_1",
+               "birthdate": null,
+               "list_blog": [],
+               "name": "",
+               "sex": 2
+            },
+            "blog_id": 1,
+            "blog_text": "save recursive blog from QxOrm REST API",
+            "date_creation": "2013-11-25T09:56:33",
+            "list_category": [],
+            "list_comment": []
+         },
+         {
+            "author_id": {
+               "author_id": "author_id_1",
+               "birthdate": null,
+               "list_blog": [],
+               "name": "",
+               "sex": 2
+            },
+            "blog_id": 5,
+            "blog_text": "save another blog from QxOrm REST API !",
+            "date_creation": "2016-06-12T08:33:12",
+            "list_category": [],
+            "list_comment": []
+         },
+         {
+            "author_id": {
+               "author_id": "author_id_save_recursive",
+               "birthdate": null,
+               "list_blog": [],
+               "name": "",
+               "sex": 2
+            },
+            "blog_id": 6,
+            "blog_text": "save recursive - new blog from QxOrm REST API",
+            "date_creation": "2013-11-25T09:56:33",
+            "list_category": [],
+            "list_comment": []
+         },
+         {
+            "author_id": {
+               "author_id": "author_id_save_recursive",
+               "birthdate": null,
+               "list_blog": [],
+               "name": "",
+               "sex": 2
+            },
+            "blog_id": 7,
+            "blog_text": "save recursive - new blog from QxOrm REST API",
+            "date_creation": "2013-11-25T09:56:33",
+            "list_category": [],
+            "list_comment": []
+         }
+      ],
+      "request_id": "56e3ca99-5c12-4aca-aa6c-7d0e43c1e636"
+   },
+   {
+      "data": [
+         {
+            "key": 1,
+            "value": {
+               "author_id": {
+                  "author_id": "author_id_1",
+                  "birthdate": null,
+                  "list_blog": [],
+                  "name": "",
+                  "sex": 2
+               },
+               "blog_id": 1,
+               "blog_text": "save recursive blog from QxOrm REST API",
+               "date_creation": "2013-11-25T09:56:33",
+               "list_category": [],
+               "list_comment": []
+            }
+         },
+         {
+            "key": 5,
+            "value": {
+               "author_id": {
+                  "author_id": "author_id_1",
+                  "birthdate": null,
+                  "list_blog": [],
+                  "name": "",
+                  "sex": 2
+               },
+               "blog_id": 5,
+               "blog_text": "save another blog from QxOrm REST API !",
+               "date_creation": "2016-06-12T08:33:12",
+               "list_category": [],
+               "list_comment": []
+            }
+         },
+         {
+            "key": 6,
+            "value": {
+               "author_id": {
+                  "author_id": "author_id_save_recursive",
+                  "birthdate": null,
+                  "list_blog": [],
+                  "name": "",
+                  "sex": 2
+               },
+               "blog_id": 6,
+               "blog_text": "save recursive - new blog from QxOrm REST API",
+               "date_creation": "2013-11-25T09:56:33",
+               "list_category": [],
+               "list_comment": []
+            }
+         },
+         {
+            "key": 7,
+            "value": {
+               "author_id": {
+                  "author_id": "author_id_save_recursive",
+                  "birthdate": null,
+                  "list_blog": [],
+                  "name": "",
+                  "sex": 2
+               },
+               "blog_id": 7,
+               "blog_text": "save recursive - new blog from QxOrm REST API",
+               "date_creation": "2013-11-25T09:56:33",
+               "list_category": [],
+               "list_comment": []
+            }
+         }
+      ],
+      "request_id": "692968e4-8885-41ad-b918-6ce2791b3bb8"
+   },
+   {
+      "data": [
+         {
+            "author_id": {
+               "author_id": "author_id_1",
+               "birthdate": "2019-04-02",
+               "list_blog": [
+                  {
+                     "author_id": {
+                        "author_id": "author_id_1",
+                        "birthdate": null,
+                        "list_blog": [],
+                        "name": "",
+                        "sex": 2
+                     },
+                     "blog_id": 5,
+                     "blog_text": "save another blog from QxOrm REST API !",
+                     "date_creation": "2016-06-12T08:33:12",
+                     "list_category": [],
+                     "list_comment": []
+                  },
+                  {
+                     "author_id": {
+                        "author_id": "author_id_1",
+                        "birthdate": null,
+                        "list_blog": [],
+                        "name": "",
+                        "sex": 2
+                     },
+                     "blog_id": 1,
+                     "blog_text": "save recursive blog from QxOrm REST API",
+                     "date_creation": "2013-11-25T09:56:33",
+                     "list_category": [],
+                     "list_comment": []
+                  }
+               ],
+               "name": "author_1",
+               "sex": 0
+            },
+            "blog_id": 1,
+            "blog_text": "save recursive blog from QxOrm REST API",
+            "date_creation": "2013-11-25T09:56:33",
+            "list_category": [],
+            "list_comment": []
+         },
+         {
+            "author_id": {
+               "author_id": "author_id_1",
+               "birthdate": "2019-04-02",
+               "list_blog": [
+                  {
+                     "author_id": {
+                        "author_id": "author_id_1",
+                        "birthdate": null,
+                        "list_blog": [],
+                        "name": "",
+                        "sex": 2
+                     },
+                     "blog_id": 5,
+                     "blog_text": "save another blog from QxOrm REST API !",
+                     "date_creation": "2016-06-12T08:33:12",
+                     "list_category": [],
+                     "list_comment": []
+                  },
+                  {
+                     "author_id": {
+                        "author_id": "author_id_1",
+                        "birthdate": null,
+                        "list_blog": [],
+                        "name": "",
+                        "sex": 2
+                     },
+                     "blog_id": 1,
+                     "blog_text": "save recursive blog from QxOrm REST API",
+                     "date_creation": "2013-11-25T09:56:33",
+                     "list_category": [],
+                     "list_comment": []
+                  }
+               ],
+               "name": "author_1",
+               "sex": 0
+            },
+            "blog_id": 5,
+            "blog_text": "save another blog from QxOrm REST API !",
+            "date_creation": "2016-06-12T08:33:12",
+            "list_category": [],
+            "list_comment": []
+         },
+         {
+            "author_id": {
+               "author_id": "author_id_save_recursive",
+               "birthdate": null,
+               "list_blog": [],
+               "name": "",
+               "sex": 2
+            },
+            "blog_id": 6,
+            "blog_text": "save recursive - new blog from QxOrm REST API",
+            "date_creation": "2013-11-25T09:56:33",
+            "list_category": [],
+            "list_comment": []
+         },
+         {
+            "author_id": {
+               "author_id": "author_id_save_recursive",
+               "birthdate": null,
+               "list_blog": [],
+               "name": "",
+               "sex": 2
+            },
+            "blog_id": 7,
+            "blog_text": "save recursive - new blog from QxOrm REST API",
+            "date_creation": "2013-11-25T09:56:33",
+            "list_category": [],
+            "list_comment": []
+         }
+      ],
+      "request_id": "4ffe38a6-d642-44b0-8be1-198e84256321"
+   }
+]</pre>
+            </div>
+            <br/><br/>
+         </div>
       </div>
 
       </div>

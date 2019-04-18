@@ -20,8 +20,10 @@ public:
 // -- contructor, virtual destructor
    blog() : qx::IxPersistable(), m_id(0) { ; }
    virtual ~blog() { ; }
+#ifndef _QX_NO_JSON
 // -- function callable by introspection and REST API
    static QJsonValue helloWorld(const QJsonValue & request);
+#endif // _QX_NO_JSON
 private:
 // -- function to validate a blog instance
    void isValid(qx::QxInvalidValueX & invalidValues);

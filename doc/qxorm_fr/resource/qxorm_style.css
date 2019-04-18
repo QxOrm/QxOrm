@@ -417,3 +417,11 @@ hr
    max-width: 200px;
    border-width: 0px;
 }
+
+.json_pretty { width: 1000px; max-height: 300px; overflow: auto; background-color: white; }
+.json_pretty pre { outline: 1px solid #ccc; padding: 5px; margin: 5px; white-space: pre; }
+.json_pretty .string { color: green; }
+.json_pretty .number { color: darkorange; }
+.json_pretty .boolean { color: blue; }
+.json_pretty .null { color: magenta; }
+.json_pretty .key { color: red; }

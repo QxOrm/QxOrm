@@ -59,4 +59,34 @@ function initQxOrmManualWebPage() {
          $(this).text(currLevel1 + '.' + currLevel2 + '.' + currLevel3 + '. ' + $(this).text());
       }
    });
+
+   // Iterate over all 'json_pretty' div
+   $('#manual_content .json_pretty').each(function(index, value) {
+      try {
+         var jsonObj = JSON.parse($(this).text());
+         var jsonPretty = JSON.stringify(jsonObj, null, 2);
+         var jsonHighlighted = jsonSyntaxHighlight(jsonPretty);
+         $(this).html(""); $(this).get(0).appendChild(document.createElement('pre')).innerHTML = jsonHighlighted;
+      }
+      catch(exc) { ; }
+   });
+}
+
+function jsonSyntaxHighlight(json) {
+   json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+   return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+      var cls = 'number';
+      if (/^"/.test(match)) {
+         if (/:$/.test(match)) {
+            cls = 'key';
+         } else {
+            cls = 'string';
+         }
+      } else if (/true|false/.test(match)) {
+         cls = 'boolean';
+      } else if (/null/.test(match)) {
+         cls = 'null';
+      }
+      return '<span class="' + cls + '">' + match + '</span>';
+   });
 }

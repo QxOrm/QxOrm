@@ -46,7 +46,13 @@
 
 #include <QxHttpServer/QxHttpCookie.h>
 
+#ifndef Q_MOC_RUN
+#include <QxCommon/QxBool.h>
+#endif // Q_MOC_RUN
+
 namespace qx {
+
+class QxHttpTransaction;
 
 /*!
  * \ingroup QxHttpServer
@@ -62,16 +68,18 @@ private:
 
 public:
 
-   QxHttpResponse();
+   QxHttpResponse(QxHttpTransaction * transaction);
    virtual ~QxHttpResponse();
 
    int & status();
    QByteArray & data();
+   QByteArray statusDesc();
    QHash<QByteArray, QByteArray> & headers();
    QByteArray header(const QByteArray & key);
    QHash<QByteArray, QxHttpCookie> & cookies();
    QxHttpCookie cookie(const QByteArray & name);
-   QByteArray statusDesc();
+   qx_bool writeChunked(const QByteArray & data);
+   bool isChunked() const;
 
 };
 

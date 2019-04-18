@@ -50,6 +50,8 @@
 
 namespace qx {
 
+class QxHttpTransaction;
+
 /*!
  * \ingroup QxHttpServer
  * \brief qx::QxHttpRequest : HTTP request (headers + body)
@@ -64,7 +66,7 @@ private:
 
 public:
 
-   QxHttpRequest();
+   QxHttpRequest(QxHttpTransaction * transaction);
    virtual ~QxHttpRequest();
 
    QUrl & url();
@@ -75,10 +77,12 @@ public:
    QByteArray header(const QByteArray & key);
    QHash<QByteArray, QxHttpCookie> & cookies();
    QxHttpCookie cookie(const QByteArray & name);
+   QHash<QString, QVariant> & dispatchParams();
    QHash<QString, QString> & params();
    QString param(const QString & key);
    QString & sourceAddress();
    long & sourcePort();
+   QString guid() const;
 
 };
 

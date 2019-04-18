@@ -40,7 +40,7 @@
  * \file QxRestApi.h
  * \author Lionel Marty
  * \ingroup QxRestApi
- * \brief Provide a REST API to send requests in JSON format from external application, from web-site or from QML view (TODO: link to documentation)
+ * \brief Provide a REST API to send requests in JSON format from external application, from web-site or from QML view (https://www.qxorm.com/qxorm_en/manual.html#manual_97)
  */
 
 #ifdef _QX_NO_PRECOMPILED_HEADER
@@ -62,7 +62,7 @@ namespace qx {
 
 /*!
  * \ingroup QxRestApi
- * \brief qx::QxRestApi : provide a REST API to send requests in JSON format from external application, from web-site or from QML view (TODO: link to documentation)
+ * \brief qx::QxRestApi : provide a REST API to send requests in JSON format from external application, from web-site or from QML view (https://www.qxorm.com/qxorm_en/manual.html#manual_97)
  */
 class QX_DLL_EXPORT QxRestApi : public QObject
 {
@@ -76,7 +76,7 @@ private:
 
 public:
 
-   QxRestApi();
+   QxRestApi(QObject * parent = NULL);
    virtual ~QxRestApi();
 
    Q_INVOKABLE QString processRequest(const QString & request);

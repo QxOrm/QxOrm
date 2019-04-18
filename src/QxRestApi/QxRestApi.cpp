@@ -122,7 +122,7 @@ struct QxRestApi::QxRestApiImpl
 
 };
 
-QxRestApi::QxRestApi() : QObject(), m_pImpl(new QxRestApiImpl()) { ; }
+QxRestApi::QxRestApi(QObject * parent /* = NULL */) : QObject(parent), m_pImpl(new QxRestApiImpl()) { ; }
 
 QxRestApi::~QxRestApi() { ; }
 

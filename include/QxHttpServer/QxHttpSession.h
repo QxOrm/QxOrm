@@ -41,7 +41,7 @@
  * \file QxHttpSession.h
  * \author Lionel Marty
  * \ingroup QxHttpServer
- * \brief HTTP session
+ * \brief HTTP session (https://www.qxorm.com/qxorm_en/manual.html#manual_998)
  */
 
 namespace qx {
@@ -50,7 +50,7 @@ class QxHttpSessionManager;
 
 /*!
  * \ingroup QxHttpServer
- * \brief qx::QxHttpSession : HTTP session
+ * \brief qx::QxHttpSession : HTTP session (https://www.qxorm.com/qxorm_en/manual.html#manual_998)
  */
 class QX_DLL_EXPORT QxHttpSession
 {

@@ -34,6 +34,7 @@
 #include <QxPrecompiled.h>
 
 #include <QxHttpServer/QxHttpResponse.h>
+#include <QxHttpServer/QxHttpTransaction.h>
 
 #include <QxService/QxConnect.h>
 
@@ -52,8 +53,10 @@ struct QxHttpResponse::QxHttpResponseImpl
    QByteArray m_data;                              //!< HTTP response body content
    QHash<QByteArray, QByteArray> m_headers;        //!< HTTP response headers
    QHash<QByteArray, QxHttpCookie> m_cookies;      //!< HTTP response cookies
+   QxHttpTransaction * m_transaction;              //!< HTTP transaction
+   bool m_isChunked;                               //!< HTTP response is chunked (useful for streaming for example)
 
-   QxHttpResponseImpl() : m_status(200) { initHeaders(); }
+   QxHttpResponseImpl(QxHttpTransaction * transaction) : m_status(200), m_transaction(transaction), m_isChunked(false) { qAssert(m_transaction != NULL); initHeaders(); }
    ~QxHttpResponseImpl() { ; }
 
    void initHeaders()
@@ -63,6 +66,15 @@ struct QxHttpResponse::QxHttpResponseImpl
       m_headers.insert("Content-Type", "text/plain; charset=iso-8859-1");
       if (qx::service::QxConnect::getSingleton()->getKeepAlive() != 0) { m_headers.insert("Connection", "keep-alive"); }
       else { m_headers.insert("Connection", "close"); }
+   }
+
+   qx_bool writeChunked(const QByteArray & data)
+   {
+      if (data.isEmpty()) { return qx_bool(true); }
+      if (! m_transaction) { qAssert(false); return qx_bool(false, "No HTTP transaction associated to the response"); }
+      qx_bool bWriteChunked = m_transaction->writeChunked(data);
+      if (bWriteChunked) { m_isChunked = true; }
+      return bWriteChunked;
    }
 
    QByteArray currentDateTimeGMT()
@@ -106,7 +118,7 @@ struct QxHttpResponse::QxHttpResponseImpl
 
 };
 
-QxHttpResponse::QxHttpResponse() : m_pImpl(new QxHttpResponseImpl()) { ; }
+QxHttpResponse::QxHttpResponse(QxHttpTransaction * transaction) : m_pImpl(new QxHttpResponseImpl(transaction)) { ; }
 
 QxHttpResponse::~QxHttpResponse() { ; }
 
@@ -126,6 +138,10 @@ QByteArray QxHttpResponse::header(const QByteArray & key)
 QHash<QByteArray, QxHttpCookie> & QxHttpResponse::cookies() { return m_pImpl->m_cookies; }
 
 QxHttpCookie QxHttpResponse::cookie(const QByteArray & name) { return m_pImpl->m_cookies.value(name); }
+
+qx_bool QxHttpResponse::writeChunked(const QByteArray & data) { return m_pImpl->writeChunked(data); }
+
+bool QxHttpResponse::isChunked() const { return m_pImpl->m_isChunked; }
 
 QByteArray QxHttpResponse::statusDesc()
 {

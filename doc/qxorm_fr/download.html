@@ -235,6 +235,22 @@
           <tbody>
             <tr>
               <td><i>
+<b><h2>Changes in version 1.4.6:</h2></b>
+- New QxHttpServer module : C++/Qt standalone multi-threaded HTTP 1.1 web server (support SSL/TLS, persistent connections, cookies, sessions, chunked responses, URL dispatcher/routing, no other dependency except QtNetwork) : https://www.qxorm.com/qxorm_en/manual.html#manual_96<br>
+- New QxRestApi module : provide a REST API to send requests in JSON format from external application (web services), from web-site (written in Angular for example), from QML or from scripting langage (like Python) : https://www.qxorm.com/qxorm_en/manual.html#manual_97<br>
+- With QxHttpServer and QxRestApi modules, QxOrm library can now be used to create web applications, especially single-page applications (SPA) with famous Javascript frameworks like AngularJS, React, Meteor.js, etc...<br>
+- New project example named qxBlogRestApi : QML application with a list of REST requests to show how to send JSON queries from Javascript to QxRestApi module + HTTP web server application to show how to create web applications using QxHttpServer module<br>
+- QxRestApi module supports : all CRUD operations, complex queries, several levels of relationships, custom JSON output format, call dynamically native C++ functions registered in QxOrm context, instance validation, call custom database queries<br>
+- Improve JSON serialization engine : possibility to define a custom filter to not export all properties (https://www.qxorm.com/qxorm_en/manual.html#manual_606)<br>
+- Possibility to define a custom SQL table alias for complex queries with relationships using syntax &lt;my_table_alias&gt; (https://www.qxorm.com/qxorm_en/manual.html#manual_3850)<br>
+- Improve SQL generator for Oracle database : manage last insert id using RETURNING INTO syntax (thx to Romain Macureau and Abdennour Boutrig)<br>
+- Fix an issue with stored procedure and output parameters<br>
+- New function available : qx::dao::count_with_relation&lt;T&gt;()<br>
+- Fix JSON serialization in multi-thread environment<br>
+- Change JSON QDateTime and QTime serialization format : use Qt::ISODateWithMs instead of Qt::ISODate (Qt 5.8 or +)<br>
+- Improve QxService module : support SSL/TLS secure connections + keep-alive connections<br>
+- Remove *.suo files (MSVC++ temporary project files) from QxOrm package<br>
+<br>
 <b><h2>Changes in version 1.4.5:</h2></b>
 - Support MongoDB database : QxOrm library becomes a C++/Qt Object Document Mapper ODM library !<br>
 - For more details about MongoDB integration, see QxOrm manual (https://www.qxorm.com/qxorm_en/manual.html#manual_95) and new sample project available in ./test/qxBlogMongoDB/ directory<br>
@@ -491,6 +507,11 @@ Here are all other changes of version 1.4.1:<br>
           <tbody>
             <tr>
               <td><i>
+<b><h2>Changes in version QxEntityEditor 1.2.4:</h2></b>
+- New feature in Javascript engine to customize exports : include QxRestApi module to query *.qxee project file<br>
+- Fix a property/relation sorting issue in C++ export after importing a database schema (which could be annoying to make some C++ files diffs between 2 exports)<br>
+- Fix a crash which could occurred sometimes importing a new table on an existing schema<br>
+<br>
 <b><h2>Changes in version QxEntityEditor 1.2.3:</h2></b>
 - Fix a crash which appears sometimes with complex database schema to draw relationships (orthogonal way)<br>
 - Improve QxEntityEditor command line parameters : possibility to import/export without using GUI (useful to manage a Jenkins server for example)<br>

@@ -45,7 +45,7 @@
  * \file QxHttpServer.h
  * \author Lionel Marty
  * \ingroup QxHttpServer
- * \brief HTTP server which manages connections in a multi-threaded environment (support SSL/TLS, persistent connection, etc...)
+ * \brief HTTP server which manages connections in a multi-threaded environment (support SSL/TLS, persistent connection, etc...) : https://www.qxorm.com/qxorm_en/manual.html#manual_96
  */
 
 #ifdef _QX_NO_PRECOMPILED_HEADER
@@ -64,11 +64,15 @@
 #include <QxService/QxServer.h>
 #endif // Q_MOC_RUN
 
+#if (QT_VERSION >= 0x050000)
+class QAbstractEventDispatcher;
+#endif // (QT_VERSION >= 0x050000)
+
 namespace qx {
 
 /*!
  * \ingroup QxHttpServer
- * \brief qx::QxHttpServer : HTTP server which manages connections in a multi-threaded environment (support SSL/TLS, persistent connection, etc...)
+ * \brief qx::QxHttpServer : HTTP server which manages connections in a multi-threaded environment (support SSL/TLS, persistent connection, etc...) : https://www.qxorm.com/qxorm_en/manual.html#manual_96
  */
 class QX_DLL_EXPORT QxHttpServer : public QObject
 {
@@ -86,14 +90,23 @@ private:
 
 public:
 
-   QxHttpServer();
+   QxHttpServer(QObject * parent = NULL);
    virtual ~QxHttpServer();
 
    Q_INVOKABLE void startServer();
    Q_INVOKABLE void stopServer();
-   void setCustomRequestHandler(type_fct_custom_request_handler fct);
 
-   static void buildResponseStaticFile(qx::QxHttpRequest & request, qx::QxHttpResponse & response, const QString & serverPath);
+   void setCustomRequestHandler(type_fct_custom_request_handler fct);
+   QxHttpServer & dispatch(const QString & command, const QString & path, type_fct_custom_request_handler fct, long position = -1);
+   void beforeDispatching(type_fct_custom_request_handler fct);
+   void afterDispatching(type_fct_custom_request_handler fct);
+   void clearDispatcher();
+
+#if (QT_VERSION >= 0x050000)
+   void setEventDispatcher(QAbstractEventDispatcher * pEventDispatcher);
+#endif // (QT_VERSION >= 0x050000)
+
+   static void buildResponseStaticFile(qx::QxHttpRequest & request, qx::QxHttpResponse & response, const QString & serverPath, qlonglong chunkedSize = 0);
    static void buildResponseQxRestApi(qx::QxHttpRequest & request, qx::QxHttpResponse & response);
 
 Q_SIGNALS:

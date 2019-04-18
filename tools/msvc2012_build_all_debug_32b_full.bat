@@ -50,6 +50,10 @@ REM -- BUILD TEST QXBLOG MODEL VIEW --
 msbuild ".\test\qxBlogModelView\qxBlog.sln" /p:Configuration="%MSVC_CONFIG%" /p:Platform="%MSVC_PLATFORM%" /t:build /nologo /v:detailed
 IF NOT EXIST ".\test\_bin\qxBlogModelView%LIB_SUFFIX%.exe" GOTO END
 
+REM -- BUILD TEST QXBLOG REST API AND HTTP SERVER --
+msbuild ".\test\qxBlogRestApi\qxBlog.sln" /p:Configuration="%MSVC_CONFIG%" /p:Platform="%MSVC_PLATFORM%" /t:build /nologo /v:detailed
+IF NOT EXIST ".\test\_bin\qxBlogRestApi%LIB_SUFFIX%.exe" GOTO END
+
 REM -- CHECK BATCH TYPE : FULL OR MINIMAL --
 IF "%BATCH_TYPE%"=="minimal" GOTO END
 

@@ -273,11 +273,12 @@ endif() # _QX_ENABLE_QT_GUI
 # Qt Network Module Dependency #
 ################################
 
-# By default, QxOrm library doesn't depend on Qt Network shared library => it means that QxService module (network transactions to transfer your persistent layer) is not enabled by default
-# To enable this feature, just define the compilation option : _QX_ENABLE_QT_NETWORK
+# By default, QxOrm library doesn't depend on Qt Network shared library => it means that QxService module (network transactions to transfer your persistent layer) and QxHttpServer module (standalone multi-threaded HTTP 1.1 web server) are not enabled by default
+# To enable these features (QxService and QxHttpServer modules), just define the compilation option : _QX_ENABLE_QT_NETWORK
 # For more details about QxService module, a tutorial (qxClientServer) is available on QxOrm website : https://www.qxorm.com/qxorm_en/tutorial_2.html
+# For more details about QxHttpServer module, a manual is available on QxOrm website : https://www.qxorm.com/qxorm_en/manual.html#manual_96
 
-option(_QX_ENABLE_QT_NETWORK "If you enable _QX_ENABLE_QT_NETWORK option, then QxService module of QxOrm library will be available (network transactions to transfer persistent data layer)" OFF)
+option(_QX_ENABLE_QT_NETWORK "If you enable _QX_ENABLE_QT_NETWORK option, then QxService and QxHttpServer modules of QxOrm library will be available (network transactions to transfer persistent data layer + standalone multi-threaded HTTP 1.1 web server)" OFF)
 
 if(_QX_ENABLE_QT_NETWORK)
    add_definitions(-D_QX_ENABLE_QT_NETWORK)

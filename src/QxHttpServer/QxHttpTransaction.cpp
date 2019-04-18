@@ -53,8 +53,11 @@ struct QxHttpTransaction::QxHttpTransactionImpl
 
    qx::QxHttpRequest m_request;        //!< HTTP transaction request
    qx::QxHttpResponse m_response;      //!< HTTP transaction response
+   QTcpSocket * m_socket;              //!< HTTP transaction socket
+   bool m_headersWritten;              //!< HTTP response headers already written (used to write chunked data)
+   bool m_chunkAllowed;                //!< If we receive a HTTP 1.0 request, then chunked responses are not supported by client
 
-   QxHttpTransactionImpl() { ; }
+   QxHttpTransactionImpl(QxHttpTransaction * parent) : m_request(parent), m_response(parent), m_socket(NULL), m_headersWritten(false), m_chunkAllowed(true) { qAssert(parent != NULL); }
    ~QxHttpTransactionImpl() { ; }
 
    bool waitForReadSocket(QTcpSocket & socket)
@@ -87,13 +90,48 @@ struct QxHttpTransaction::QxHttpTransactionImpl
       return (iTotalWritten == iTotalToWrite);
    }
 
+   qx_bool writeHeaders(QTcpSocket & socket)
+   {
+      // Check if headers/cookies has already been written
+      if (m_headersWritten) { return qx_bool(true); }
+      m_headersWritten = true;
+
+      // HTTP response first line
+      QByteArray line = "HTTP/1.1 " + QByteArray::number(m_response.status()) + " " + m_response.statusDesc() + "\r\n";
+      if (! writeToSocket(socket, line)) { return qx_bool(500, "Internal server error : cannot write to socket HTTP response first line '" + line + "' (" + socket.errorString() + ")"); }
+
+      // HTTP response headers
+      QHashIterator<QByteArray, QByteArray> itrHeaders(m_response.headers());
+      while (itrHeaders.hasNext())
+      {
+         itrHeaders.next();
+         if (itrHeaders.key().trimmed().isEmpty()) { continue; }
+         line = itrHeaders.key() + ": " + itrHeaders.value() + "\r\n";
+         if (! writeToSocket(socket, line)) { return qx_bool(500, "Internal server error : cannot write to socket HTTP response header '" + line + "' (" + socket.errorString() + ")"); }
+      }
+
+      // HTTP response cookies
+      QHashIterator<QByteArray, QxHttpCookie> itrCookies(m_response.cookies());
+      while (itrCookies.hasNext())
+      {
+         itrCookies.next();
+         if (itrCookies.value().name.trimmed().isEmpty()) { continue; }
+         line = "Set-Cookie: " + itrCookies.value().toString() + "\r\n";
+         if (! writeToSocket(socket, line)) { return qx_bool(500, "Internal server error : cannot write to socket HTTP response cookie '" + line + "' (" + socket.errorString() + ")"); }
+      }
+
+      // Empty line : means end of headers/cookies
+      if (! writeToSocket(socket, "\r\n")) { return qx_bool(500, "Internal server error : cannot write to socket HTTP response header end line (" + socket.errorString() + ")"); }
+      return qx_bool(true);
+   }
+
 };
 
-QxHttpTransaction::QxHttpTransaction() : qx::service::QxTransaction(), m_pImpl(new QxHttpTransactionImpl()) { ; }
+QxHttpTransaction::QxHttpTransaction() : qx::service::QxTransaction(), m_pImpl(new QxHttpTransactionImpl(this)) { ; }
 
 QxHttpTransaction::~QxHttpTransaction() { ; }
 
-void QxHttpTransaction::clear() { qx::service::QxTransaction::clear(); m_pImpl.reset(new QxHttpTransactionImpl()); }
+void QxHttpTransaction::clear() { qx::service::QxTransaction::clear(); m_pImpl.reset(new QxHttpTransactionImpl(this)); }
 
 qx::QxHttpRequest & QxHttpTransaction::request() { return m_pImpl->m_request; }
 
@@ -116,12 +154,14 @@ qx_bool QxHttpTransaction::writeSocketServer(QTcpSocket & socket)
    }
 
    // Check if we can compress response data
+   bool chunked = (m_pImpl->m_response.isChunked() && m_pImpl->m_chunkAllowed);
    bool compress = qx::service::QxConnect::getSingleton()->getCompressData();
    QString contentType = m_pImpl->m_response.header("Content-Type").toLower();
    compress = (compress && (contentType.startsWith("text/") || contentType.startsWith("application/json") || contentType.startsWith("application/javascript")));
    compress = (compress && (m_pImpl->m_request.header("Accept-Encoding").toLower().contains("gzip")));
    compress = (compress && (m_pImpl->m_response.data().size() > 99));
    compress = (compress && (m_pImpl->m_response.status() == 200));
+   compress = (compress && (! chunked));
 
    // Compress response data
    if (compress)
@@ -133,41 +173,19 @@ qx_bool QxHttpTransaction::writeSocketServer(QTcpSocket & socket)
    // Insert 'Content-Length' header
    QByteArray & body = m_pImpl->m_response.data();
    QByteArray contentLength = QByteArray::number(body.count());
-   m_pImpl->m_response.headers().insert("Content-Length", contentLength);
+   if (! chunked) { m_pImpl->m_response.headers().insert("Content-Length", contentLength); }
 
    // Check if we have to force to close connection
    if (m_pImpl->m_request.header("Connection").toLower() == "close")
    { setForceConnectionStatus(qx::service::QxTransaction::conn_close); }
 
-   // HTTP response first line
-   QByteArray line = "HTTP/1.1 " + QByteArray::number(m_pImpl->m_response.status()) + " " + m_pImpl->m_response.statusDesc() + "\r\n";
-   if (! m_pImpl->writeToSocket(socket, line)) { return qx_bool(500, "Internal server error : cannot write to socket HTTP response first line '" + line + "' (" + socket.errorString() + ")"); }
-
-   // HTTP response headers
-   QHashIterator<QByteArray, QByteArray> itrHeaders(m_pImpl->m_response.headers());
-   while (itrHeaders.hasNext())
-   {
-      itrHeaders.next();
-      if (itrHeaders.key().trimmed().isEmpty()) { continue; }
-      line = itrHeaders.key() + ": " + itrHeaders.value() + "\r\n";
-      if (! m_pImpl->writeToSocket(socket, line)) { return qx_bool(500, "Internal server error : cannot write to socket HTTP response header '" + line + "' (" + socket.errorString() + ")"); }
-   }
-
-   // HTTP response cookies
-   QHashIterator<QByteArray, QxHttpCookie> itrCookies(m_pImpl->m_response.cookies());
-   while (itrCookies.hasNext())
-   {
-      itrCookies.next();
-      if (itrCookies.value().name.trimmed().isEmpty()) { continue; }
-      line = "Set-Cookie: " + itrCookies.value().toString() + "\r\n";
-      if (! m_pImpl->writeToSocket(socket, line)) { return qx_bool(500, "Internal server error : cannot write to socket HTTP response cookie '" + line + "' (" + socket.errorString() + ")"); }
-   }
-
-   // Empty line : means end of headers/cookies
-   if (! m_pImpl->writeToSocket(socket, "\r\n")) { return qx_bool(500, "Internal server error : cannot write to socket HTTP response header end line (" + socket.errorString() + ")"); }
+   // HTTP response headers and cookies
+   qx_bool bWriteHeaders = m_pImpl->writeHeaders(socket);
+   if (! bWriteHeaders) { return bWriteHeaders; }
 
    // HTTP response body content
-   if (! m_pImpl->writeToSocket(socket, body)) { return qx_bool(500, "Internal server error : cannot write to socket HTTP response body content of " + QString::number(body.count()) + " bytes (" + socket.errorString() + ")"); }
+   if (chunked) { if (! m_pImpl->writeToSocket(socket, "0\r\n\r\n")) { return qx_bool(500, "Internal server error : cannot write to socket HTTP last empty chunked data (" + socket.errorString() + ")"); } }
+   else if (! m_pImpl->writeToSocket(socket, body)) { return qx_bool(500, "Internal server error : cannot write to socket HTTP response body content of " + QString::number(body.count()) + " bytes (" + socket.errorString() + ")"); }
    return qx_bool(true);
 }
 
@@ -178,6 +196,7 @@ qx_bool QxHttpTransaction::readSocketServer(QTcpSocket & socket)
    setPortSource(static_cast<long>(socket.peerPort()));
    m_pImpl->m_request.sourceAddress() = socket.peerAddress().toString();
    m_pImpl->m_request.sourcePort() = static_cast<long>(socket.peerPort());
+   m_pImpl->m_socket = (& socket);
 
    // HTTP request first line
    setMessageReturn(qx_bool(true));
@@ -186,7 +205,7 @@ qx_bool QxHttpTransaction::readSocketServer(QTcpSocket & socket)
    QStringList lst = QString::fromUtf8(line).split(" ");
    if (lst.count() < 3) { setMessageReturn(qx_bool(400, "Bad request : invalid HTTP request first line : " + line)); return qx_bool(true); }
    if (! lst.at(2).contains("HTTP")) { setMessageReturn(qx_bool(400, "Bad request : invalid HTTP request first line, third parameter must contain 'HTTP' : " + line)); return qx_bool(true); }
-   m_pImpl->m_request.command() = lst.at(0);
+   m_pImpl->m_request.command() = lst.at(0).toUpper();
    m_pImpl->m_request.url() = QUrl(lst.at(1));
    m_pImpl->m_request.version() = lst.at(2);
 
@@ -204,6 +223,14 @@ qx_bool QxHttpTransaction::readSocketServer(QTcpSocket & socket)
       if (key.toLower() == "content-length") { iContentLength = value.toInt(); }
    }
    while (1);
+
+   // Check HTTP 1.0 compatibility
+   if (m_pImpl->m_request.version().contains("1.0"))
+   {
+      m_pImpl->m_chunkAllowed = false;
+      if (m_pImpl->m_request.header("Connection").toLower() != "keep-alive")
+      { setForceConnectionStatus(qx::service::QxTransaction::conn_close); }
+   }
 
    QByteArray body;
    if (iContentLength > 0)
@@ -236,6 +263,27 @@ qx_bool QxHttpTransaction::readSocketServer(QTcpSocket & socket)
       else if (! param.isEmpty()) { m_pImpl->m_request.params().insert(QUrl::fromPercentEncoding(param), ""); }
    }
 
+   return qx_bool(true);
+}
+
+qx_bool QxHttpTransaction::writeChunked(const QByteArray & data)
+{
+   // Check input data
+   if (data.isEmpty()) { return qx_bool(true); }
+   if (! m_pImpl->m_socket) { return qx_bool(false, "No socket to write HTTP chunked data"); }
+   if (! m_pImpl->m_chunkAllowed) { m_pImpl->m_response.data() += data; return qx_bool(true); }
+
+   // HTTP response headers and cookies
+   if (! m_pImpl->m_headersWritten)
+   {
+      m_pImpl->m_response.headers().insert("Transfer-Encoding", "chunked");
+      qx_bool bWriteHeaders = m_pImpl->writeHeaders(* m_pImpl->m_socket);
+      if (! bWriteHeaders) { return bWriteHeaders; }
+   }
+
+   // Write chunked data
+   QByteArray chunked = (QByteArray::number(data.count(), 16) + "\r\n" + data + "\r\n");
+   if (! m_pImpl->writeToSocket((* m_pImpl->m_socket), chunked)) { return qx_bool(500, "Internal server error : cannot write to socket HTTP chunked data of " + QString::number(data.count()) + " bytes (" + m_pImpl->m_socket->errorString() + ")"); }
    return qx_bool(true);
 }
 
