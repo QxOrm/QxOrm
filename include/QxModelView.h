@@ -49,6 +49,5 @@
 #include <QxModelView/QxModel.h>
 #include <QxModelView/QxNestedModel.h>
 #include <QxModelView/QxModelService.h>
-#include <QxModelView/QxModelRowCompare.h>
 
 #endif // _QX_MODEL_VIEW_H_

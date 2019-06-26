@@ -197,12 +197,12 @@ protected:
       this->m_pDataMemberId = (this->m_pDataMemberX ? this->m_pDataMemberX->getId_WithDaoStrategy() : NULL);
       this->m_pCollection = (& m_model);
       this->generateRoleNames();
-      clearChildren();
+      this->clearChildren();
    }
 
    void initFrom(qx::IxModel * pOther)
    {
-       beginResetModel();
+       this->beginResetModel();
       init();
       qx::QxModel<T, B> * pOtherWrk = static_cast<qx::QxModel<T, B> *>(pOther);
       m_model = pOtherWrk->m_model;
@@ -210,7 +210,7 @@ protected:
       this->setParentModel(pOtherWrk->m_pParent);
       if (this->m_pParent) { this->m_eAutoUpdateDatabase = this->m_pParent->getAutoUpdateDatabase(); }
       this->m_hCustomProperties = pOtherWrk->m_hCustomProperties;
-      endResetModel();
+      this->endResetModel();
    }
 
 public:
@@ -769,13 +769,13 @@ protected:
        this->beginInsertRows(QModelIndex(), m_model.size(), m_model.size());
        bool b = m_model.push_back(key, t);
        //change relation many_to_one if applicable
-       foreach (auto p, m_lstDataMember) {
+       foreach (auto p, this->m_lstDataMember) {
            if (!p || !p->getSqlRelation() ||
                    p->getSqlRelation()->getRelationType() != IxSqlRelation::many_to_one ||
-                   p->getSqlRelation()->getClass() != m_pParent->getClass()) continue;
+                   p->getSqlRelation()->getClass() != this->m_pParent->getClass()) continue;
 
            void * pItem = getRowItemAsVoidPtr(m_model.size() - 1);
-           qx_bool bSetData = p->fromVariant(pItem, m_pParent->getIdFromChild(this));
+           qx_bool bSetData = p->fromVariant(pItem, this->m_pParent->getIdFromChild(this));
            qAssert(bSetData);
        }
        updateShowEmptyLine();

@@ -47,6 +47,7 @@
 #include <QxModelView/IxModel.h>
 #include <QtWidgets/QUndoStack>
 #include <QMimeData>
+#include <QxModelView/QxModelRowCompare.h>
 
 namespace qx {
 
