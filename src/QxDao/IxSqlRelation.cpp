@@ -230,8 +230,8 @@ void IxSqlRelation::init()
       }
    }
 
-   m_pImpl->m_bInitInEvent = false;
    m_pImpl->m_bInitDone = true;
+   m_pImpl->m_bInitInEvent = false;
 }
 
 void IxSqlRelation::setTraceRelationInit(bool bTrace) { IxSqlRelation::IxSqlRelationImpl::m_bTraceRelationInit = bTrace; }
