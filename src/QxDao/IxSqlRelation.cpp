@@ -114,6 +114,8 @@ struct IxSqlRelation::IxSqlRelationImpl
 
 };
 
+QMutex IxSqlRelation::s_mutex;
+
 bool IxSqlRelation::IxSqlRelationImpl::m_bTraceRelationInit = false;
 
 IxSqlRelation::IxSqlRelation(IxDataMember * p) : qx::QxPropertyBag(), m_pImpl(new IxSqlRelationImpl(p)) { ; }
@@ -168,9 +170,10 @@ void IxSqlRelation::setExtraTable(const QString & s) const { m_pImpl->m_sExtraTa
 
 void IxSqlRelation::init()
 {
-   if (m_pImpl->m_bInitInEvent || m_pImpl->m_bInitDone) { return; }
+    s_mutex.lock();
+   if (m_pImpl->m_bInitInEvent || m_pImpl->m_bInitDone) { s_mutex.unlock(); return; }
    m_pImpl->m_bInitInEvent = true;
-
+   s_mutex.unlock();
    m_pImpl->m_pDataMemberX = (m_pImpl->m_pClass ? m_pImpl->m_pClass->getDataMemberX() : NULL);
    m_pImpl->m_pDataMemberId = (m_pImpl->m_pDataMemberX ? m_pImpl->m_pDataMemberX->getId_WithDaoStrategy() : NULL);
    m_pImpl->m_pDataMemberIdOwner = ((m_pImpl->m_pClassOwner && m_pImpl->m_pClassOwner->getDataMemberX()) ? m_pImpl->m_pClassOwner->getDataMemberX()->getId_WithDaoStrategy() : NULL);

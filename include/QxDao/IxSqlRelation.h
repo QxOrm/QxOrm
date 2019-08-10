@@ -188,6 +188,7 @@ protected:
    void setForeignKeyDataType(const QString & s) const;
    void setExtraTable(const QString & s) const;
 
+   static QMutex s_mutex;
 };
 
 } // namespace qx
