@@ -50,6 +50,7 @@ QxCollection<Key, Value>::~QxCollection()
 template <typename Key, typename Value>
 QxCollection<Key, Value> & QxCollection<Key, Value>::operator= (const QxCollection<Key, Value> & other)
 {
+    QMutexLocker ml(&m_mutex);
    if (this != (& other)) { cloneCollection(this, other); }
    return (* this);
 }
@@ -70,6 +71,7 @@ template <typename Key, typename Value>
 void QxCollection<Key, Value>::cloneCollection(QxCollection<Key, Value> * pClone, const QxCollection<Key, Value> & pRef)
 {
    if (! pClone) { return; }
+   QMutexLocker ml(&m_mutex);
    qAssert(pRef.m_list.size() == pRef.m_hash.size());
    pClone->m_list = pRef.m_list;
    pClone->m_hash = pRef.m_hash;
@@ -78,6 +80,7 @@ void QxCollection<Key, Value>::cloneCollection(QxCollection<Key, Value> * pClone
 template <typename Key, typename Value>
 bool QxCollection<Key, Value>::isSameCollection(const QxCollection<Key, Value> * p1, const QxCollection<Key, Value> & p2) const
 {
+    QMutexLocker ml(&m_mutex);
    qAssert(p2.m_list.size() == p2.m_hash.size());
    if (! p1 || (p1->size() != p2.size())) { return false; }
    return ((p1->m_list == p2.m_list) && (p1->m_hash == p2.m_hash));
@@ -87,6 +90,7 @@ template <typename Key, typename Value>
 void QxCollection<Key, Value>::updateHashPosition(long from /* = 0 */, long to /* = -1 */)
 {
    if (m_batch) { return; }
+   QMutexLocker ml(&m_mutex);
    qAssert(m_list.size() == m_hash.size());
    if (to == -1) { to = (m_list.size() - 1); }
    if ((from < 0) || (to >= m_list.size()) || (from > to)) { return; }
@@ -100,24 +104,28 @@ void QxCollection<Key, Value>::updateHashPosition(long from /* = 0 */, long to /
 template <typename Key, typename Value>
 typename QxCollection<Key, Value>::iterator QxCollection<Key, Value>::begin()
 {
+    QMutexLocker ml(&m_mutex);
    return m_list.begin();
 }
 
 template <typename Key, typename Value>
 typename QxCollection<Key, Value>::iterator QxCollection<Key, Value>::end()
 {
+    QMutexLocker ml(&m_mutex);
    return m_list.end();
 }
 
 template <typename Key, typename Value>
 typename QxCollection<Key, Value>::const_iterator QxCollection<Key, Value>::begin() const
 {
+    QMutexLocker ml(&m_mutex);
    return m_list.begin();
 }
 
 template <typename Key, typename Value>
 typename QxCollection<Key, Value>::const_iterator QxCollection<Key, Value>::end() const
 {
+    QMutexLocker ml(&m_mutex);
    return m_list.end();
 }
 
@@ -126,24 +134,28 @@ typename QxCollection<Key, Value>::const_iterator QxCollection<Key, Value>::end(
 template <typename Key, typename Value>
 typename QxCollection<Key, Value>::reverse_iterator QxCollection<Key, Value>::rbegin()
 {
+    QMutexLocker ml(&m_mutex);
    return m_list.rbegin();
 }
 
 template <typename Key, typename Value>
 typename QxCollection<Key, Value>::reverse_iterator QxCollection<Key, Value>::rend()
 {
+    QMutexLocker ml(&m_mutex);
    return m_list.rend();
 }
 
 template <typename Key, typename Value>
 typename QxCollection<Key, Value>::const_reverse_iterator QxCollection<Key, Value>::rbegin() const
 {
+    QMutexLocker ml(&m_mutex);
    return m_list.rbegin();
 }
 
 template <typename Key, typename Value>
 typename QxCollection<Key, Value>::const_reverse_iterator QxCollection<Key, Value>::rend() const
 {
+    QMutexLocker ml(&m_mutex);
    return m_list.rend();
 }
 
@@ -152,6 +164,7 @@ typename QxCollection<Key, Value>::const_reverse_iterator QxCollection<Key, Valu
 template <typename Key, typename Value>
 void QxCollection<Key, Value>::reserve(long size)
 {
+    QMutexLocker ml(&m_mutex);
    qAssert(m_list.size() == m_hash.size());
    if (size <= 0) { return; }
    m_list.reserve(size);
@@ -161,6 +174,7 @@ void QxCollection<Key, Value>::reserve(long size)
 template <typename Key, typename Value>
 void QxCollection<Key, Value>::reverse()
 {
+    QMutexLocker ml(&m_mutex);
    qAssert(m_list.size() == m_hash.size());
    std::reverse(m_list.begin(), m_list.end());
    updateHashPosition();
@@ -169,6 +183,7 @@ void QxCollection<Key, Value>::reverse()
 template <typename Key, typename Value>
 void QxCollection<Key, Value>::clear()
 {
+    QMutexLocker ml(&m_mutex);
    m_hash.clear();
    m_list.clear();
 }
@@ -176,6 +191,7 @@ void QxCollection<Key, Value>::clear()
 template <typename Key, typename Value>
 long QxCollection<Key, Value>::count() const
 {
+    QMutexLocker ml(&m_mutex);
    qAssert(m_list.size() == m_hash.size());
    return static_cast<long>(m_list.size());
 }
@@ -189,6 +205,7 @@ long QxCollection<Key, Value>::size() const
 template <typename Key, typename Value>
 bool QxCollection<Key, Value>::contains(const Key & key) const
 {
+    QMutexLocker ml(&m_mutex);
    qAssert(m_list.size() == m_hash.size());
    return (m_hash.contains(key));
 }
@@ -202,6 +219,7 @@ bool QxCollection<Key, Value>::exist(const Key & key) const
 template <typename Key, typename Value>
 bool QxCollection<Key, Value>::empty() const
 {
+    QMutexLocker ml(&m_mutex);
    qAssert(m_list.size() == m_hash.size());
    return m_list.isEmpty();
 }
@@ -221,6 +239,7 @@ bool QxCollection<Key, Value>::push_front(const Key & key, const Value & value)
 template <typename Key, typename Value>
 bool QxCollection<Key, Value>::insert(const Key & key, const Value & value)
 {
+    QMutexLocker ml(&m_mutex);
    qAssert(! exist(key));
    qAssert(m_list.size() == m_hash.size());
    m_list.append(qMakePair(key, value));
@@ -231,6 +250,7 @@ bool QxCollection<Key, Value>::insert(const Key & key, const Value & value)
 template <typename Key, typename Value>
 bool QxCollection<Key, Value>::insert(long index, const Key & key, const Value & value)
 {
+    QMutexLocker ml(&m_mutex);
    qAssert(! exist(key));
    if (index < 0) { index = 0; }
    if (index >= size()) { return this->insert(key, value); }
@@ -244,6 +264,7 @@ bool QxCollection<Key, Value>::insert(long index, const Key & key, const Value &
 template <typename Key, typename Value>
 bool QxCollection<Key, Value>::insert(const QxCollection<Key, Value> & other)
 {
+    QMutexLocker ml(&m_mutex);
    m_list.append(other.m_list);
    m_hash.unite(other.m_hash);
    updateHashPosition();
@@ -255,6 +276,7 @@ template <typename Key, typename Value>
 bool QxCollection<Key, Value>::insert(long index, const QxCollection<Key, Value> & other)
 {
    if (index < 0) { index = 0; }
+   QMutexLocker ml(&m_mutex);
    if ((index >= size()) && (index != 0)) { index = (size() - 1); }
    qAssert(m_list.size() == m_hash.size());
    m_batch = true;
@@ -273,6 +295,7 @@ bool QxCollection<Key, Value>::insert(long index, const QxCollection<Key, Value>
 template <typename Key, typename Value>
 bool QxCollection<Key, Value>::replace(long index, const Key & key, const Value & value)
 {
+    QMutexLocker ml(&m_mutex);
    qAssert(! exist(key));
    m_hash.remove(m_list.at(index).first);
    m_list.replace(index, qMakePair(key, value));
@@ -284,6 +307,7 @@ bool QxCollection<Key, Value>::replace(long index, const Key & key, const Value 
 template <typename Key, typename Value>
 bool QxCollection<Key, Value>::swap(long index1, long index2)
 {
+    QMutexLocker ml(&m_mutex);
    if (index1 < 0 || index1 >= size()) { return false; }
    if (index2 < 0 || index2 >= size()) { return false; }
    if (index1 == index2) { return true; }
@@ -305,6 +329,7 @@ bool QxCollection<Key, Value>::move(long indexFrom, long indexTo)
 template <typename Key, typename Value>
 bool QxCollection<Key, Value>::removeByKey(const Key & key)
 {
+    QMutexLocker ml(&m_mutex);
    qAssert(exist(key));
    long pos = m_hash.value(key, -1);
    if ((pos < 0) || (pos >= m_list.size())) { return false; }
@@ -319,6 +344,7 @@ bool QxCollection<Key, Value>::removeByKey(const Key & key)
 template <typename Key, typename Value>
 bool QxCollection<Key, Value>::removeByIndex(long index)
 {
+    QMutexLocker ml(&m_mutex);
    if (index < 0 || index >= size()) { return false; }
    const Key & key = m_list.at(index).first;
    qAssert(m_hash.value(key, -1) == index);
@@ -332,6 +358,7 @@ bool QxCollection<Key, Value>::removeByIndex(long index)
 template <typename Key, typename Value>
 bool QxCollection<Key, Value>::removeByIndex(long first, long last)
 {
+    QMutexLocker ml(&m_mutex);
    if (first < 0 || first >= size()) { return false; }
    if (last < 0 || last >= size()) { return false; }
    if (first > last) { return false; }
@@ -351,12 +378,14 @@ bool QxCollection<Key, Value>::removeFirst()
 template <typename Key, typename Value>
 bool QxCollection<Key, Value>::removeLast()
 {
+    QMutexLocker ml(&m_mutex);
    return this->removeByIndex(size() - 1);
 }
 
 template <typename Key, typename Value>
 typename QxCollection<Key, Value>::const_reference_value QxCollection<Key, Value>::getByKey(const Key & key) const
 {
+    QMutexLocker ml(&m_mutex);
    qAssert(exist(key));
    qAssert(m_list.size() == m_hash.size());
    const type_pair_key_value & pair = m_list.at(m_hash.value(key, -1));
@@ -367,6 +396,7 @@ typename QxCollection<Key, Value>::const_reference_value QxCollection<Key, Value
 template <typename Key, typename Value>
 typename QxCollection<Key, Value>::const_reference_value QxCollection<Key, Value>::getByIndex(long index) const
 {
+    QMutexLocker ml(&m_mutex);
    qAssert(m_list.size() == m_hash.size());
    qAssert((index >= 0) && (index < size()));
    qAssert(m_hash.value(m_list.at(index).first, -1) == index);
@@ -376,6 +406,7 @@ typename QxCollection<Key, Value>::const_reference_value QxCollection<Key, Value
 template <typename Key, typename Value>
 typename QxCollection<Key, Value>::const_reference_value QxCollection<Key, Value>::getFirst() const
 {
+    QMutexLocker ml(&m_mutex);
    qAssert(! empty());
    qAssert(m_list.size() == m_hash.size());
    return m_list.at(0).second;
@@ -384,6 +415,7 @@ typename QxCollection<Key, Value>::const_reference_value QxCollection<Key, Value
 template <typename Key, typename Value>
 typename QxCollection<Key, Value>::const_reference_value QxCollection<Key, Value>::getLast() const
 {
+    QMutexLocker ml(&m_mutex);
    qAssert(! empty());
    qAssert(m_list.size() == m_hash.size());
    return m_list.at(m_list.size() - 1).second;
@@ -392,6 +424,7 @@ typename QxCollection<Key, Value>::const_reference_value QxCollection<Key, Value
 template <typename Key, typename Value>
 typename QxCollection<Key, Value>::const_reference_key QxCollection<Key, Value>::getKeyByIndex(long index) const
 {
+    QMutexLocker ml(&m_mutex);
    qAssert(m_list.size() == m_hash.size());
    qAssert((index >= 0) && (index < size()));
    qAssert(m_hash.value(m_list.at(index).first, -1) == index);
@@ -401,6 +434,7 @@ typename QxCollection<Key, Value>::const_reference_key QxCollection<Key, Value>:
 template <typename Key, typename Value>
 void QxCollection<Key, Value>::sortByKey(bool bAscending /* = true */)
 {
+    QMutexLocker ml(&m_mutex);
    if (bAscending)   { std::sort(m_list.begin(), m_list.end(), (& compareKeyValue<std::is_pointer<Key>::value || qx::trait::is_smart_ptr<Key>::value, 0>::compareByKeyAscending)); }
    else              { std::sort(m_list.begin(), m_list.end(), (& compareKeyValue<std::is_pointer<Key>::value || qx::trait::is_smart_ptr<Key>::value, 0>::compareByKeyDescending)); }
    updateHashPosition();
@@ -410,6 +444,7 @@ void QxCollection<Key, Value>::sortByKey(bool bAscending /* = true */)
 template <typename Key, typename Value>
 void QxCollection<Key, Value>::sortByValue(bool bAscending /* = true */)
 {
+    QMutexLocker ml(&m_mutex);
    if (bAscending)   { std::sort(m_list.begin(), m_list.end(), (& compareKeyValue<std::is_pointer<Value>::value || qx::trait::is_smart_ptr<Value>::value, 0>::compareByValueAscending)); }
    else              { std::sort(m_list.begin(), m_list.end(), (& compareKeyValue<std::is_pointer<Value>::value || qx::trait::is_smart_ptr<Value>::value, 0>::compareByValueDescending)); }
    updateHashPosition();
@@ -421,6 +456,7 @@ void QxCollection<Key, Value>::sortByValue(bool bAscending /* = true */)
 template <typename Key, typename Value>
 QDataStream & operator<< (QDataStream & stream, const qx::QxCollection<Key, Value> & t)
 {
+    QMutexLocker ml(&t.m_mutex);
    long lCount = t.count();
    stream << (qint32)(lCount);
 
@@ -438,6 +474,7 @@ QDataStream & operator>> (QDataStream & stream, qx::QxCollection<Key, Value> & t
 {
    qint32 lCount = 0;
    stream >> lCount;
+   QMutexLocker ml(&t.m_mutex);
    t.clear();
    t.reserve(lCount);
 

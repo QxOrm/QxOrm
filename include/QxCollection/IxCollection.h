@@ -58,7 +58,7 @@ class QX_DLL_EXPORT IxCollection
 
 public:
 
-   IxCollection() { ; }
+   IxCollection() : m_mutex(QMutex::Recursive) { ; }
    virtual ~IxCollection() = 0;
 
    virtual long _count() const = 0;
@@ -70,6 +70,7 @@ public:
    T _get(long index) const
    { return qx::any_cast_dynamic<T>::get(_at(index)); }
 
+   mutable QMutex m_mutex;
 };
 
 typedef std::shared_ptr<qx::IxCollection> IxCollection_ptr;
