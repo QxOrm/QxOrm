@@ -229,6 +229,27 @@ public:
       return true;
    }
 
+   bool insertRows(int row, const type_collection& c)
+   {
+       if ((row < 0) || (c.size() <= 0)) { return false; }
+       this->beginInsertRows(QModelIndex(), row, (row + c.size() - 1));
+       for (int i = 0; i < c.size(); ++i)
+       {
+          insertItem(row, c.getByIndex(i));
+       }
+       this->endInsertRows();
+       return true;
+   }
+
+   bool insertRow(int row, const type_ptr& p)
+   {
+       if ((row < 0)) { return false; }
+       this->beginInsertRows(QModelIndex(), row, (row));
+       insertItem(row, p);
+       this->endInsertRows();
+       return true;
+   }
+
 //   virtual void sort(int column, Qt::SortOrder order = Qt::AscendingOrder)
 //   {
 //      IxDataMember * pDataMember = this->getDataMember(column); if (! pDataMember) { return; }
