@@ -229,23 +229,36 @@ public:
       return true;
    }
 
+   //! Convenience insertRows. The data must have already been inserted in the DB (e.g. dao::insert)
    bool insertRows(int row, const type_collection& c)
    {
        if ((row < 0) || (c.size() <= 0)) { return false; }
+       QVector<type_primary_key> vKey(c.size());
+       for (int i = 0; i < c.size(); ++i)
+       {
+          QPair<type_primary_key, bool> pKey = key(c.getByIndex(i));
+          if (!pKey.second || m_model.exist(pKey.first)) { return false; }
+          vKey[i] = pKey.first;
+       }
        this->beginInsertRows(QModelIndex(), row, (row + c.size() - 1));
        for (int i = 0; i < c.size(); ++i)
        {
-          insertItem(row, c.getByIndex(i));
+          m_model.insert(row, vKey.at(i), c.getByIndex(i));
        }
+       this->updateShowEmptyLine();
        this->endInsertRows();
        return true;
    }
 
+   //! Convenience insertRow. The data must have already been inserted in the DB (e.g. dao::insert)
    bool insertRow(int row, const type_ptr& p)
    {
        if ((row < 0)) { return false; }
+       QPair<type_primary_key, bool> pKey = key(p);
+       if (!pKey.second || m_model.exist(pKey.first)) { return false; }
        this->beginInsertRows(QModelIndex(), row, (row));
-       insertItem(row, p);
+       m_model.insert(row, pKey.first, p);
+       this->updateShowEmptyLine();
        this->endInsertRows();
        return true;
    }
@@ -773,6 +786,16 @@ protected:
    {
       for (long l = 0; l < m_model.count(); l++)
       { updateKey(l); }
+   }
+
+   QPair<type_primary_key, bool> key(const type_ptr& pItem)
+   {
+       QVariant vKey = this->m_pDataMemberId->toVariant(pItem.get());
+       type_primary_key key;
+       if ((! vKey.isValid())) { return qMakePair(key, false); }
+       if (! qx::trait::is_valid_primary_key(vKey)) { return qMakePair(key, false); }
+       qx::cvt::from_variant(vKey, key);
+       return qMakePair(key, true);
    }
 
 protected:
