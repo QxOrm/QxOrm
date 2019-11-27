@@ -1,3 +1,6 @@
+Changes in version 1.4.7:
+- TODO...
+
 Changes in version 1.4.6:
 - New QxHttpServer module : C++/Qt standalone multi-threaded HTTP 1.1 web server (support SSL/TLS, persistent connections, cookies, sessions, chunked responses, URL dispatcher/routing, no other dependency except QtNetwork) : https://www.qxorm.com/qxorm_en/manual.html#manual_96
 - New QxRestApi module : provide a REST API to send requests in JSON format from external application (web services), from web-site (written in Angular for example), from QML or from scripting langage (like Python) : https://www.qxorm.com/qxorm_en/manual.html#manual_97

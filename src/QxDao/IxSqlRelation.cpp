@@ -786,7 +786,7 @@ QSqlError IxSqlRelation::deleteFromExtraTable_ManyToMany(QxSqlRelationParams & p
 
 bool IxSqlRelation::addLazyRelation(QxSqlRelationParams & params, IxSqlRelation * pRelation) const
 {
-   if (! params.relationX() || ! pRelation) { return false; }
+   if (! params.relationX() || ! pRelation || ! params.checkColumns(pRelation->getKey())) { return false; }
    qx::QxSqlRelationLinked_ptr pRelationLinked = params.relationX()->value(this->getKey());
    return (! pRelationLinked || ! pRelationLinked->existRelation(pRelation->getKey()));
 }

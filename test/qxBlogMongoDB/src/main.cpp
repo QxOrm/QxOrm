@@ -283,6 +283,11 @@ void basicCRUDOnBlog()
    blog_1->m_categoryX.insert(category_3->m_id, category_3);
    daoError = qx::dao::save(blog_1); qAssert(! daoError.isValid());
    qAssert(qx::dao::count<blog>() == 1);
+
+   // Push a second blog
+   blog_ptr blog_2 = std::make_shared<blog>();
+   blog_2->m_text = "blog_text_2";
+   daoError = qx::dao::save(blog_2); qAssert(! daoError.isValid());
 }
 
 void complexQueriesOnBlog()
@@ -291,7 +296,7 @@ void complexQueriesOnBlog()
    list_blog allBlogs;
    QSqlError daoError = qx::dao::fetch_all(allBlogs); qAssert(! daoError.isValid());
    qx::dump(allBlogs);
-   qAssert(allBlogs.size() == 1);
+   qAssert(allBlogs.size() == 2);
 
    // Fetch blog into a new variable with all relations : 'author', 'comment' and 'category' (MongoDB version 3.6+ is required for relationships)
    blog_ptr blog_tmp = std::make_shared<blog>();
@@ -365,6 +370,23 @@ void complexQueriesOnBlog()
    // Check qx::dao::save_with_relation_recursive() function
    daoError = qx::dao::save_with_relation_recursive(blog_tmp); qAssert(! daoError.isValid());
    daoError = qx::dao::save_with_relation_recursive(blog_tmp, qx::dao::save_mode::e_update_only); qAssert(! daoError.isValid());
+
+   // Fetch the second blog stored in database
+   blog_tmp = std::make_shared<blog>();
+   blog_tmp->m_id = allBlogs[1]->m_id;
+   daoError = qx::dao::fetch_by_id_with_all_relation(blog_tmp); qAssert(! daoError.isValid());
+   qx::dump(blog_tmp);
+   qAssert(blog_tmp->m_text == "blog_text_2");
+   qAssert(blog_tmp->m_author == NULL);
+   qAssert(blog_tmp->m_categoryX.size() == 0);
+   qAssert(blog_tmp->m_commentX.size() == 0);
+
+   // Fetch 2 blogs by id with their relationships
+   QList<blog_ptr> lstBlogById;
+   blog_tmp = std::make_shared<blog>(); blog_tmp->m_id = allBlogs[1]->m_id; lstBlogById.append(blog_tmp);
+   blog_tmp = std::make_shared<blog>(); blog_tmp->m_id = allBlogs[0]->m_id; lstBlogById.append(blog_tmp);
+   daoError = qx::dao::fetch_by_id_with_all_relation(lstBlogById); qAssert(! daoError.isValid());
+   qx::dump(lstBlogById);
 }
 
 void miscellaneousOperations()
@@ -377,7 +399,7 @@ void miscellaneousOperations()
 
    // Fetch all blogs (without relation)
    list_blog allBlogs; QSqlError daoError = qx::dao::fetch_all(allBlogs); qAssert(! daoError.isValid());
-   qx::dump(allBlogs); qAssert(allBlogs.size() == 1);
+   qx::dump(allBlogs); qAssert(allBlogs.size() == 2);
 
    // Test 'isDirty()' method
    qx::dao::ptr<blog> blog_isdirty = qx::dao::ptr<blog>(new blog());

@@ -657,7 +657,13 @@ QSqlError QxMongoDB_Helper::QxMongoDB_HelperImpl::findOne_(qx::dao::detail::IxDa
 {
    QString lookup = buildLookup(pDaoHelper, false); QSqlError err;
    if ((! lookup.isEmpty()) || (query && (query->type() == "aggregate")))
-   { QStringList result; err = aggregate_(pDaoHelper, pClass, result, query, lookup); json = ((result.count() > 0) ? result.at(0) : QString()); return err; }
+   {
+      QStringList result;
+      if ((! query) && (! json.isEmpty())) { qx_query query_tmp(json); err = aggregate_(pDaoHelper, pClass, result, (& query_tmp), lookup); }
+      else { err = aggregate_(pDaoHelper, pClass, result, query, lookup); }
+      json = ((result.count() > 0) ? result.at(0) : QString());
+      return err;
+   }
 
    QString id = (query ? QString() : json); json = QString();
    qx_db_collection coll; err = initCollection(pClass, coll); if (err.isValid()) { return err; }
