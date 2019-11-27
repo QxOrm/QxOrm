@@ -52,6 +52,11 @@ int main(int argc, char * argv[])
    // Populate blog collection
    basicCRUDOnBlog();
 
+	 // push second blog:
+   blog_ptr blog_2 = std::make_shared<blog>();
+   blog_2->m_text = "Blog_text2";
+   daoError = qx::dao::save(blog_2); qAssert(! daoError.isValid());
+
    // Process some complex queries on blog collection (with relationships)
    complexQueriesOnBlog();
 
@@ -291,11 +296,11 @@ void complexQueriesOnBlog()
    list_blog allBlogs;
    QSqlError daoError = qx::dao::fetch_all(allBlogs); qAssert(! daoError.isValid());
    qx::dump(allBlogs);
-   qAssert(allBlogs.size() == 1);
+   qAssert(allBlogs.size() == 2);
 
    // Fetch blog into a new variable with all relations : 'author', 'comment' and 'category' (MongoDB version 3.6+ is required for relationships)
    blog_ptr blog_tmp = std::make_shared<blog>();
-   blog_tmp->m_id = allBlogs[0]->m_id;
+   blog_tmp->m_id = allBlogs[1]->m_id;
    daoError = qx::dao::fetch_by_id_with_all_relation(blog_tmp); qAssert(! daoError.isValid());
    qx::dump(blog_tmp);
    qAssert(blog_tmp->m_commentX.count() == 2);
