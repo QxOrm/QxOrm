@@ -98,6 +98,7 @@
     <ClCompile Include="src\category.cpp" />
     <ClCompile Include="src\comment.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\TestQtProperty.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\author.h" />
@@ -106,6 +107,7 @@
     <ClInclude Include="include\comment.h" />
     <ClInclude Include="include\export.h" />
     <ClInclude Include="include\precompiled.h" />
+    <ClInclude Include="include\TestQtProperty.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="qxBlog.pro" />

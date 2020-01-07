@@ -485,13 +485,13 @@ void IxSqlQueryBuilder::resolveOutput_FetchAll(void * t, QSqlQuery & query, IxSq
 
 void IxSqlQueryBuilder::resolveOutput_FetchAll(void * t, QSqlQuery & query, IxSqlQueryBuilder & builder, const QStringList & columns)
 {
-   qx::IxDataMember * p = NULL;
+   qx::IxDataMember * p = NULL; int idx = 0;
    qx::IxDataMember * pId = builder.getDataId();
    qx::IxDataMemberX * pDataMemberX = builder.getDataMemberX(); qAssert(pDataMemberX);
    short iOffset = (pId ? pId->getNameCount() : 0);
    if (pId) { for (int i = 0; i < pId->getNameCount(); i++) { pId->fromVariant(t, query.value(i), i, qx::cvt::context::e_database); } }
    for (int i = 0; i < columns.count(); i++)
-   { p = pDataMemberX->get_WithDaoStrategy(columns.at(i)); if (p && (p != pId)) { p->fromVariant(t, query.value(i + iOffset), -1, qx::cvt::context::e_database); } }
+   { p = pDataMemberX->get_WithDaoStrategy(columns.at(i)); if (p && (p != pId)) { p->fromVariant(t, query.value(idx + iOffset), -1, qx::cvt::context::e_database); idx++; } }
 }
 
 void IxSqlQueryBuilder::resolveOutput_FetchAll_WithRelation(qx::QxSqlRelationLinked * pRelationX, void * t, QSqlQuery & query, IxSqlQueryBuilder & builder)

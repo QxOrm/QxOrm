@@ -30,9 +30,11 @@ HEADERS += ./include/author.h
 HEADERS += ./include/blog.h
 HEADERS += ./include/category.h
 HEADERS += ./include/comment.h
+HEADERS += ./include/TestQtProperty.h
 
 SOURCES += ./src/author.cpp
 SOURCES += ./src/blog.cpp
 SOURCES += ./src/category.cpp
 SOURCES += ./src/comment.cpp
+SOURCES += ./src/TestQtProperty.cpp
 SOURCES += ./src/main.cpp

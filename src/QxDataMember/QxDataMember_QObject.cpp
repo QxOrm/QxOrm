@@ -68,18 +68,6 @@ bool QxDataMember_QObject::isEqual(const void * pOwner1, const void * pOwner2) c
    return (var1 == var2);
 }
 
-QString QxDataMember_QObject::toString(const void * pOwner, const QString & sFormat, int iIndexName /* = -1 */) const
-{
-   Q_UNUSED(sFormat); Q_UNUSED(iIndexName);
-   return m_metaProperty.read(static_cast<const QObject *>(pOwner)).toString();
-}
-
-qx_bool QxDataMember_QObject::fromString(void * pOwner, const QString & s, const QString & sFormat, int iIndexName /* = -1 */)
-{
-   Q_UNUSED(sFormat); Q_UNUSED(iIndexName);
-   return m_metaProperty.write(static_cast<QObject *>(pOwner), QVariant::fromValue(s));
-}
-
 QVariant QxDataMember_QObject::toVariant(const void * pOwner, const QString & sFormat, int iIndexName /* = -1 */, qx::cvt::context::ctx_type ctx /* = qx::cvt::context::e_no_context */) const
 {
    Q_UNUSED(sFormat); Q_UNUSED(iIndexName); Q_UNUSED(ctx);
@@ -102,13 +90,34 @@ QString QxDataMember_QObject::getType() const
 QJsonValue QxDataMember_QObject::toJson(const void * pOwner, const QString & sFormat) const
 {
    Q_UNUSED(sFormat);
-   return QJsonValue::fromVariant(m_metaProperty.read(static_cast<const QObject *>(pOwner)));
+   QVariant val = m_metaProperty.read(static_cast<const QObject *>(pOwner));
+
+#ifdef _QX_ENABLE_MONGODB
+   if (getIsPrimaryKey() && sFormat.startsWith("mongodb"))
+   {
+      QString tmp = val.toString();
+      if (tmp.startsWith("qx_oid:")) { QJsonObject obj; obj.insert("$oid", QJsonValue(tmp.right(tmp.size() - 7))); return QJsonValue(obj); }
+   }
+#endif // _QX_ENABLE_MONGODB
+
+   return QJsonValue::fromVariant(val);
 }
 
 qx_bool QxDataMember_QObject::fromJson(void * pOwner, const QJsonValue & j, const QString & sFormat)
 {
    Q_UNUSED(sFormat);
-   return m_metaProperty.write(static_cast<QObject *>(pOwner), j.toVariant());
+   QVariant val = j.toVariant();
+
+#ifdef _QX_ENABLE_MONGODB
+   if (getIsPrimaryKey() && val.toString().isEmpty() && j.isObject() && sFormat.startsWith("mongodb"))
+   {
+      QJsonObject obj = j.toObject(); QString tmp;
+      if (obj.contains("$oid")) { tmp = obj.value("$oid").toString(); }
+      if (! tmp.isEmpty()) { tmp = ("qx_oid:" + tmp); val = tmp; }
+   }
+#endif // _QX_ENABLE_MONGODB
+
+   return m_metaProperty.write(static_cast<QObject *>(pOwner), val);
 }
 
 #endif // _QX_NO_JSON

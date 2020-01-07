@@ -6,6 +6,7 @@
 #include "../include/author.h"
 #include "../include/comment.h"
 #include "../include/category.h"
+#include "../include/TestQtProperty.h"
 
 #include <QxOrm_Impl.h>
 
@@ -14,6 +15,7 @@ void basicCRUDOnCategory();
 void basicCRUDOnBlog();
 void complexQueriesOnBlog();
 void miscellaneousOperations();
+void testQtProperty();
 
 int main(int argc, char * argv[])
 {
@@ -57,6 +59,9 @@ int main(int argc, char * argv[])
 
    // Process some others operations on database
    miscellaneousOperations();
+
+   // Test Qt properties registered via QX_REGISTER_ALL_QT_PROPERTIES() macro (https://www.qxorm.com/qxorm_en/manual.html#manual_520)
+   testQtProperty();
 
    return 0;
 }
@@ -456,4 +461,14 @@ void miscellaneousOperations()
    qx::serialization::json::from_string(responseCustomQueryCursorAsJson, responseCustomQueryCursor);
    qx::dump(responseCustomQueryCursorAsJson);
    qAssert(responseCustomQueryCursorAsJson.count() == qx::dao::count<author>());
+}
+
+void testQtProperty()
+{
+   TestQtProperty tst;
+   tst.setDesc("tst");
+   QSqlError daoError = qx::dao::insert(tst); qAssert(! daoError.isValid());
+   tst.setDesc("tst update");
+   daoError = qx::dao::update(tst); qAssert(! daoError.isValid());
+   daoError = qx::dao::fetch_by_id(tst); qAssert(! daoError.isValid());
 }

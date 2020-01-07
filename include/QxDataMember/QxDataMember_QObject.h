@@ -75,8 +75,6 @@ public:
    virtual ~QxDataMember_QObject() { ; }
 
    virtual bool isEqual(const void * pOwner1, const void * pOwner2) const;
-   virtual QString toString(const void * pOwner, const QString & sFormat, int iIndexName = -1) const;
-   virtual qx_bool fromString(void * pOwner, const QString & s, const QString & sFormat, int iIndexName = -1);
    virtual QVariant toVariant(const void * pOwner, const QString & sFormat, int iIndexName = -1, qx::cvt::context::ctx_type ctx = qx::cvt::context::e_no_context) const;
    virtual qx_bool fromVariant(void * pOwner, const QVariant & v, const QString & sFormat, int iIndexName = -1, qx::cvt::context::ctx_type ctx = qx::cvt::context::e_no_context);
    virtual QString getType() const;

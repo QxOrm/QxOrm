@@ -17,6 +17,7 @@ set(HEADERS
     ./include/blog.h
     ./include/category.h
     ./include/comment.h
+    ./include/TestQtProperty.h
    )
 
 set(SRCS
@@ -24,6 +25,7 @@ set(SRCS
     ./src/blog.cpp
     ./src/category.cpp
     ./src/comment.cpp
+    ./src/TestQtProperty.cpp
     ./src/main.cpp
    )
 
