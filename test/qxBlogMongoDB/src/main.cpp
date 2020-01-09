@@ -471,4 +471,5 @@ void testQtProperty()
    tst.setDesc("tst update");
    daoError = qx::dao::update(tst); qAssert(! daoError.isValid());
    daoError = qx::dao::fetch_by_id(tst); qAssert(! daoError.isValid());
+   std::shared_ptr<qx::IxPersistableCollection> lst = qx::IxPersistable::qxFetchAll("TestQtProperty"); qAssert(lst->__count() == 1);
 }

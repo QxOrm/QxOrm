@@ -6,6 +6,7 @@
 
 QX_REGISTER_CPP_QX_BLOG(TestQtProperty)
 QX_REGISTER_ALL_QT_PROPERTIES(TestQtProperty, "id")
+QX_PERSISTABLE_CPP(TestQtProperty)
 
 /*
    Instead of using 'QX_REGISTER_ALL_QT_PROPERTIES(...)' macro, it's also

@@ -11,10 +11,11 @@
 #endif // Q_MOC_RUN
 #endif // _QX_NO_PRECOMPILED_HEADER
 
-class QX_BLOG_DLL_EXPORT TestQtProperty : public QObject
+class QX_BLOG_DLL_EXPORT TestQtProperty : public QObject, public qx::IxPersistable
 {
 
    Q_OBJECT
+   QX_PERSISTABLE_HPP(TestQtProperty)
    Q_PROPERTY(QString id READ id WRITE setId)
    Q_PROPERTY(long number READ number WRITE setNumber)
    Q_PROPERTY(QString desc READ desc WRITE setDesc)
