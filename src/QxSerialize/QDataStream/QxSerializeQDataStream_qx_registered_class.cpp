@@ -44,14 +44,14 @@ QDataStream & QxSerializeRegistered_Helper::save(QDataStream & stream, IxClass *
    stream << (quint32)(13939);
    bool bJustId = false;
 
-   if (qx::serialization::helper::QxSerializeCheckInstance::contains(pOwner))
+   if (qx::serialization::helper::QxSerializeCheckInstance::contains(pOwner, pClass))
    {
       bJustId = true; stream << bJustId;
       qx::IxDataMember * pId = pClass->getId(true); if (! pId) { return stream; }
       QVariant val = pId->toVariant(pOwner); stream << val;
       return stream;
    }
-   qx::serialization::helper::QxSerializeCheckInstance checker(pOwner);
+   qx::serialization::helper::QxSerializeCheckInstance checker(pOwner, pClass);
    stream << bJustId; Q_UNUSED(checker);
 
    do

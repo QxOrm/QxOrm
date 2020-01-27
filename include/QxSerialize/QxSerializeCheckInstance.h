@@ -50,6 +50,7 @@
 namespace qx {
 
 class QxSqlRelationLinked;
+class IxClass;
 
 } // namespace qx
 
@@ -70,20 +71,21 @@ public:
 
 protected:
 
-   static QSet< QPair<Qt::HANDLE, qptrdiff> > m_lstInstanceByThread;    //!< List of all instances currently used by a serialization process
-   static QHash<Qt::HANDLE, int> m_hashLevelByThread;                   //!< Manage how deep level is serialization process
-   static QHash<Qt::HANDLE, type_hierarchy> m_hashHierarchyByThread;    //!< Store current hierarchy used by serialization process
-   static QMutex m_mutex;                                               //!< Mutex => qx::serialization::helper::QxSerializeCheckInstance is thread-safe
+   static QSet< QPair<Qt::HANDLE, QPair<qptrdiff, qx::IxClass *> > > m_lstInstanceByThread;  //!< List of all instances currently used by a serialization process
+   static QHash<Qt::HANDLE, int> m_hashLevelByThread;                                        //!< Manage how deep level is serialization process
+   static QHash<Qt::HANDLE, type_hierarchy> m_hashHierarchyByThread;                         //!< Store current hierarchy used by serialization process
+   static QMutex m_mutex;                                                                    //!< Mutex => qx::serialization::helper::QxSerializeCheckInstance is thread-safe
 
    qptrdiff m_pInstance;      //!< Instance associated to this helper class
    Qt::HANDLE m_lThreadId;    //!< Thread id associated to this helper class
+   qx::IxClass * m_pClass;    //!< Class associated to this helper class
 
 public:
 
-   QxSerializeCheckInstance(const void * pInstance);
+   QxSerializeCheckInstance(const void * pInstance, qx::IxClass * pClass);
    virtual ~QxSerializeCheckInstance();
 
-   static bool contains(const void * pInstance);
+   static bool contains(const void * pInstance, qx::IxClass * pClass);
    static bool isRoot();
 
    static type_hierarchy getHierarchy();

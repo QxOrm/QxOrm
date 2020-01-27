@@ -4290,6 +4290,8 @@ if</span><span class="operator"> (</span>action<span class="operator"> ==</span>
   --no_gui : run QxEntityEditor without displaying the user interface
   --viewer_mode : run QxEntityEditor in read-only mode, this parameter can be used to open large *.qxee projects without any registered license key
   --log_sql : run QxEntityEditor tracing all SQL logs, this parameter logs all SQL queries executed to *.qxee SQLite database
+  --font : define application font (due to issues since macOS Catalina 10.15) with syntax &lt;family&gt;||&lt;pointSize&gt;||&lt;weight&gt;||&lt;italic&gt; (only &lt;family&gt; is required), for example : Courier New||14
+  --style_sheet : define application style sheet (more details here : https://doc.qt.io/qt-5/stylesheet-reference.html), for example : QWidget { background-color: black }
   --plugin=&lt;plugin name&gt; : run QxEntityEditor and execute automatically a plugin process (see below for specific parameters per plugin)
 
 *** Import plugin QxEEJsonImport ***
@@ -4458,7 +4460,7 @@ if</span><span class="operator"> (</span>action<span class="operator"> ==</span>
         <img alt="QxOrm" src="./resource/logo_qxorm_small.png" width="168" height="40">
       </td>
       <td align="center" valign="middle">
-        <font size="2">© 2018 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
+        <font size="2">© 2020 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
       </td>
       <td align="right" valign="middle">
         <form action="https://www.paypal.com/cgi-bin/webscr" method="post">

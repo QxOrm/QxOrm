@@ -35,23 +35,25 @@
 
 #include <QxDao/QxSqlRelationLinked.h>
 
+#include <QxRegister/IxClass.h>
+
 #include <QxMemLeak/mem_leak.h>
 
 namespace qx {
 namespace serialization {
 namespace helper {
 
-QSet< QPair<Qt::HANDLE, qptrdiff> > QxSerializeCheckInstance::m_lstInstanceByThread;
+QSet< QPair<Qt::HANDLE, QPair<qptrdiff, qx::IxClass *> > > QxSerializeCheckInstance::m_lstInstanceByThread;
 QHash<Qt::HANDLE, int> QxSerializeCheckInstance::m_hashLevelByThread;
 QHash<Qt::HANDLE, QxSerializeCheckInstance::type_hierarchy> QxSerializeCheckInstance::m_hashHierarchyByThread;
 QMutex QxSerializeCheckInstance::m_mutex;
 
-QxSerializeCheckInstance::QxSerializeCheckInstance(const void * pInstance) : m_pInstance(0), m_lThreadId(0)
+QxSerializeCheckInstance::QxSerializeCheckInstance(const void * pInstance, qx::IxClass * pClass) : m_pInstance(0), m_lThreadId(0), m_pClass(pClass)
 {
    QMutexLocker locker(& m_mutex);
    m_pInstance = reinterpret_cast<qptrdiff>(const_cast<void *>(pInstance));
    m_lThreadId = QThread::currentThreadId(); qAssert(m_pInstance != 0);
-   m_lstInstanceByThread.insert(qMakePair(m_lThreadId, m_pInstance));
+   m_lstInstanceByThread.insert(qMakePair(m_lThreadId, qMakePair(m_pInstance, m_pClass)));
    int iLevel = (m_hashLevelByThread.value(m_lThreadId, 0) + 1);
    m_hashLevelByThread.insert(m_lThreadId, iLevel);
 }
@@ -59,18 +61,18 @@ QxSerializeCheckInstance::QxSerializeCheckInstance(const void * pInstance) : m_p
 QxSerializeCheckInstance::~QxSerializeCheckInstance()
 {
    QMutexLocker locker(& m_mutex);
-   m_lstInstanceByThread.remove(qMakePair(m_lThreadId, m_pInstance));
+   m_lstInstanceByThread.remove(qMakePair(m_lThreadId, qMakePair(m_pInstance, m_pClass)));
    int iLevel = (m_hashLevelByThread.value(m_lThreadId, 0) - 1);
    m_hashLevelByThread.insert(m_lThreadId, iLevel);
    if (iLevel <= 0) { m_hashHierarchyByThread.remove(m_lThreadId); }
 }
 
-bool QxSerializeCheckInstance::contains(const void * pInstance)
+bool QxSerializeCheckInstance::contains(const void * pInstance, qx::IxClass * pClass)
 {
    QMutexLocker locker(& m_mutex);
    Qt::HANDLE lCurrThreadId = QThread::currentThreadId();
    qptrdiff iInstance = reinterpret_cast<qptrdiff>(const_cast<void *>(pInstance));
-   return m_lstInstanceByThread.contains(qMakePair(lCurrThreadId, iInstance));
+   return m_lstInstanceByThread.contains(qMakePair(lCurrThreadId, qMakePair(iInstance, pClass)));
 }
 
 bool QxSerializeCheckInstance::isRoot()

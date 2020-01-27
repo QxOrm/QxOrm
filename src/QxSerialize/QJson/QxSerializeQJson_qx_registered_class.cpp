@@ -60,7 +60,7 @@ QJsonValue QxSerializeJsonRegistered_Helper::save(IxClass * pClass, const void *
 {
    if (! pClass || ! pOwner) { qAssert(false); return QJsonValue(); }
    bool bOnlyId = ((! format.isEmpty()) && ((format == QX_JSON_SERIALIZE_ONLY_ID) || (format == "mongodb:only_id") || (format == "mongodb:relation_id")));
-   bool bCheckInstance = qx::serialization::helper::QxSerializeCheckInstance::contains(pOwner);
+   bool bCheckInstance = qx::serialization::helper::QxSerializeCheckInstance::contains(pOwner, pClass);
    QJsonObject obj;
 
    if (bCheckInstance || bOnlyId)
@@ -76,7 +76,7 @@ QJsonValue QxSerializeJsonRegistered_Helper::save(IxClass * pClass, const void *
    bool bWithFilter = format.startsWith("filter:");
    qx_bool bHierarchyOk = (bWithFilter ? QxSerializeJsonRegistered_initHierarchy_WithFilter(pClass, pOwner, format) : qx_bool(true));
    if (! bHierarchyOk) { obj.insert("error", bHierarchyOk.getDesc()); return QJsonValue(obj); }
-   qx::serialization::helper::QxSerializeCheckInstance checker(pOwner);
+   qx::serialization::helper::QxSerializeCheckInstance checker(pOwner, pClass);
    Q_UNUSED(checker);
 
    do
@@ -272,7 +272,7 @@ void QxSerializeJsonRegistered_loadHelper_WithFilter(const QJsonObject & obj, Ix
 {
    qx_bool bHierarchyOk = QxSerializeJsonRegistered_initHierarchy_WithFilter(pClass, pOwner, format);
    if (! bHierarchyOk) { QString msg = bHierarchyOk.getDesc(); qDebug("[QxOrm] !!! Error in QxSerializeJsonRegistered_loadHelper_WithFilter !!! : '%s'", qPrintable(msg)); return; }
-   qx::serialization::helper::QxSerializeCheckInstance checker(pOwner);
+   qx::serialization::helper::QxSerializeCheckInstance checker(pOwner, pClass);
    Q_UNUSED(checker);
 
    qx::serialization::helper::QxSerializeCheckInstance::type_hierarchy currHierarchy = qx::serialization::helper::QxSerializeCheckInstance::getHierarchy();
