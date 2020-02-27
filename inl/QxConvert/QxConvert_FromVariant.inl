@@ -160,6 +160,14 @@ template <> struct QxConvert_FromVariant< QJsonValue > {
 static inline qx_bool fromVariant(const QVariant & v, QJsonValue & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); t = QJsonValue::fromVariant(v); return qx_bool(true); } };
 
+template <> struct QxConvert_FromVariant< QJsonArray > {
+static inline qx_bool fromVariant(const QVariant & v, QJsonArray & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
+{ Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); t = v.toJsonArray(); return qx_bool(true); } };
+
+template <> struct QxConvert_FromVariant< QJsonObject > {
+static inline qx_bool fromVariant(const QVariant & v, QJsonObject & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
+{ Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); t = v.toJsonObject(); return qx_bool(true); } };
+
 #endif // _QX_NO_JSON
 
 #ifdef _QX_ENABLE_BOOST

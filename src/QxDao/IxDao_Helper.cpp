@@ -31,6 +31,8 @@
 
 #include <QxPrecompiled.h>
 
+#include <QtCore/qelapsedtimer.h>
+
 #include <QxDao/IxDao_Helper.h>
 
 #include <QxRegister/IxClass.h>
@@ -53,10 +55,10 @@
 #define QX_DAO_ERR_READ_ONLY                 "[QxOrm] cannot execute INSERT, UPDATE or DELETE query with a read only entity"
 
 #define QX_CONSTRUCT_IX_DAO_HELPER() \
-m_timeDatabase(0), m_lDataCount(0), m_bTransaction(false), m_bQuiet(false), \
-m_bTraceQuery(true), m_bTraceRecord(false), m_bCartesianProduct(false), \
-m_bValidatorThrowable(false), m_bNeedToClearDatabaseByThread(false), \
-m_bMongoDB(false), m_pDataMemberX(NULL), m_pDataId(NULL), m_pSqlGenerator(NULL)
+m_timeTotal(0), m_timeExec(0), m_timeNext(0), m_timePrepare(0), m_timeBuildHierarchy(0), m_timeBuildCppInstance(0), m_timeReadCppInstance(0), \
+m_timeBuildSql(0), m_timeOpen(0), m_timeTransaction(0), m_nextCount(0), m_lDataCount(0), m_bTransaction(false), m_bQuiet(false), m_bTraceQuery(true), \
+m_bTraceRecord(false), m_bCartesianProduct(false), m_bValidatorThrowable(false), m_bNeedToClearDatabaseByThread(false), \
+m_bMongoDB(false), m_bDisplayTimerDetails(false), m_pDataMemberX(NULL), m_pDataId(NULL), m_pSqlGenerator(NULL)
 
 namespace qx {
 namespace dao {
@@ -65,8 +67,27 @@ namespace detail {
 struct IxDao_Helper::IxDao_HelperImpl
 {
 
-   QTime          m_time;                             //!< Time (in ms) to execute query (total time : SQL + fetch C++ classes)
-   int            m_timeDatabase;                     //!< Time (in ms) to execute SQL query in database
+   QElapsedTimer  m_timerTotal;                       //!< Timer to manage total elapsed time : build SQL query + all database operations + fetch C++ classes
+   QElapsedTimer  m_timerExec;                        //!< Timer to manage database exec() elapsed time
+   QElapsedTimer  m_timerNext;                        //!< Timer to manage database next() elapsed time
+   QElapsedTimer  m_timerPrepare;                     //!< Timer to manage database prepare() elapsed time
+   QElapsedTimer  m_timerBuildHierarchy;              //!< Timer to manage build relationships hierarchy elapsed time
+   QElapsedTimer  m_timerBuildCppInstance;            //!< Timer to manage build C++ instance elapsed time
+   QElapsedTimer  m_timerReadCppInstance;             //!< Timer to manage read C++ instance elapsed time
+   QElapsedTimer  m_timerBuildSql;                    //!< Timer to manage build SQL query elapsed time
+   QElapsedTimer  m_timerOpen;                        //!< Timer to manage open database elapsed time
+   QElapsedTimer  m_timerTransaction;                 //!< Timer to manage database transaction (commit/rollback) elapsed time
+   qint64         m_timeTotal;                        //!< Time (in nanoseconds) for total elapsed time : build SQL query + all database operations + fetch C++ classes
+   qint64         m_timeExec;                         //!< Time (in nanoseconds) to execute SQL query in database
+   qint64         m_timeNext;                         //!< Time (in nanoseconds) of all calls of QSqlQuery::next() method
+   qint64         m_timePrepare;                      //!< Time (in nanoseconds) of all calls of QSqlQuery::prepare() method
+   qint64         m_timeBuildHierarchy;               //!< Time (in nanoseconds) to build relationships hierarchy
+   qint64         m_timeBuildCppInstance;             //!< Time (in nanoseconds) to build C++ instance
+   qint64         m_timeReadCppInstance;              //!< Time (in nanoseconds) to read C++ instance
+   qint64         m_timeBuildSql;                     //!< Time (in nanoseconds) to build SQL query
+   qint64         m_timeOpen;                         //!< Time (in nanoseconds) to open database
+   qint64         m_timeTransaction;                  //!< Time (in nanoseconds) for database transaction (commit/rollback)
+   int            m_nextCount;                        //!< Number of calls of QSqlQuery::next() method
    QSqlDatabase   m_database;                         //!< Connection to database to execute query
    QSqlQuery      m_query;                            //!< Query to execute
    QSqlError      m_error;                            //!< Error executing query
@@ -82,6 +103,7 @@ struct IxDao_Helper::IxDao_HelperImpl
    bool           m_bNeedToClearDatabaseByThread;     //!< Internal purpose only to clear current database context by thread in destructor
    bool           m_bMongoDB;                         //!< Current database context is a MongoDB database
    QStringList    m_lstItemsAsJson;                   //!< List of items to insert/update/delete as JSON (used for MongoDB database)
+   bool           m_bDisplayTimerDetails;             //!< Display in logs all timers details (exec(), next(), prepare(), open(), etc...)
 
    qx::IxSqlQueryBuilder_ptr     m_pQueryBuilder;        //!< Sql query builder
    qx::IxDataMemberX *           m_pDataMemberX;         //!< Collection of data member
@@ -93,6 +115,8 @@ struct IxDao_Helper::IxDao_HelperImpl
 
    IxDao_HelperImpl(qx::IxSqlQueryBuilder * pBuilder) : QX_CONSTRUCT_IX_DAO_HELPER() { m_pQueryBuilder.reset(pBuilder); }
    ~IxDao_HelperImpl() { ; }
+
+   void displaySqlQuery();
 
 };
 
@@ -150,20 +174,19 @@ bool IxDao_Helper::getAddAutoIncrementIdToUpdateQuery() const { return qx::QxSql
 
 QStringList & IxDao_Helper::itemsAsJson() { return m_pImpl->m_lstItemsAsJson; }
 
-void IxDao_Helper::setTimeDatabase(int ms) { m_pImpl->m_timeDatabase = ms; }
-
-bool IxDao_Helper::exec()
+bool IxDao_Helper::exec(bool bForceEmptyExec /* = false */)
 {
-   bool bExec = false; QTime timeDB; timeDB.start();
-   if (m_pImpl->m_qxQuery.isEmpty()) { bExec = this->query().exec(this->builder().getSqlQuery()); }
+   bool bExec = false;
+   IxDao_Timer timer(this, IxDao_Helper::timer_db_exec);
+   if ((m_pImpl->m_qxQuery.isEmpty()) && (! bForceEmptyExec)) { bExec = this->query().exec(this->builder().getSqlQuery()); }
    else { bExec = this->query().exec(); }
-   m_pImpl->m_timeDatabase = timeDB.elapsed();
    return bExec;
 }
 
 bool IxDao_Helper::prepare(QString & sql)
 {
    QString sqlTemp = sql;
+   IxDao_Timer timer(this, IxDao_Helper::timer_db_prepare);
    if (m_pImpl->m_pSqlGenerator) { m_pImpl->m_pSqlGenerator->onBeforeSqlPrepare(this, sql); }
    if (sqlTemp != sql) { qDebug("[QxOrm] SQL query has been changed by SQL generator (onBeforeSqlPrepare) :\n   - before : '%s'\n   - after : '%s'", qPrintable(sqlTemp), qPrintable(sql)); }
    return this->query().prepare(sql);
@@ -223,21 +246,26 @@ bool IxDao_Helper::transaction()
 {
    if (m_pImpl->m_bMongoDB) { return false; }
    if (isValid() && hasFeature(QSqlDriver::Transactions))
-   { m_pImpl->m_bTransaction = m_pImpl->m_database.transaction(); }
+   {
+      IxDao_Timer timer(this, IxDao_Helper::timer_db_transaction);
+      m_pImpl->m_bTransaction = m_pImpl->m_database.transaction();
+   }
    return m_pImpl->m_bTransaction;
 }
 
 bool IxDao_Helper::nextRecord()
 {
-   if (! m_pImpl->m_query.next()) { return false; }
-   if (m_pImpl->m_bTraceRecord) { dumpRecord(); }
-   return true;
+   IxDao_Timer timer(this, IxDao_Helper::timer_db_next);
+   bool bNext = m_pImpl->m_query.next();
+   if (bNext && m_pImpl->m_bTraceRecord) { dumpRecord(); }
+   return bNext;
 }
 
 bool IxDao_Helper::updateSqlRelationX(const QStringList & relation)
 {
    qx_bool bHierarchyOk(true);
    m_pImpl->m_bCartesianProduct = false;
+   IxDao_Timer timer(this, IxDao_Helper::timer_cpp_build_hierarchy);
    m_pImpl->m_pSqlRelationLinked = qx::QxSqlRelationLinked::getHierarchy((m_pImpl->m_pDataMemberX ? m_pImpl->m_pDataMemberX->getClass() : NULL), relation, bHierarchyOk);
    if (! bHierarchyOk) { m_pImpl->m_pSqlRelationLinked.reset(); }
    if (! bHierarchyOk) { QString txt = bHierarchyOk.getDesc(); qDebug("[QxOrm] %s", qPrintable(txt)); return false; }
@@ -259,6 +287,113 @@ void IxDao_Helper::dumpRecord() const
    { v = record.value(i); sDump += (v.isNull() ? QString("NULL") : v.toString()) + QString("|"); }
    sDump = sDump.left(sDump.count() - 1); // Remove last "|"
    qDebug("[QxOrm] dump sql record : %s", qPrintable(sDump));
+}
+
+void IxDao_Helper::timerStart(IxDao_Helper::timer_type timer)
+{
+   switch (timer)
+   {
+      case IxDao_Helper::timer_total:
+         m_pImpl->m_timerTotal.start();
+         break;
+      case IxDao_Helper::timer_db_exec:
+         m_pImpl->m_timerExec.start();
+         break;
+      case IxDao_Helper::timer_db_next:
+         if (! m_pImpl->m_bDisplayTimerDetails) { break; }
+         m_pImpl->m_timerNext.start();
+         break;
+      case IxDao_Helper::timer_db_prepare:
+         if (! m_pImpl->m_bDisplayTimerDetails) { break; }
+         m_pImpl->m_timerPrepare.start();
+         break;
+      case IxDao_Helper::timer_cpp_build_hierarchy:
+         if (! m_pImpl->m_bDisplayTimerDetails) { break; }
+         m_pImpl->m_timerBuildHierarchy.start();
+         break;
+      case IxDao_Helper::timer_cpp_build_instance:
+         if (! m_pImpl->m_bDisplayTimerDetails) { break; }
+         m_pImpl->m_timerBuildCppInstance.start();
+         break;
+      case IxDao_Helper::timer_cpp_read_instance:
+         if (! m_pImpl->m_bDisplayTimerDetails) { break; }
+         m_pImpl->m_timerReadCppInstance.start();
+         break;
+      case IxDao_Helper::timer_build_sql:
+         if (! m_pImpl->m_bDisplayTimerDetails) { break; }
+         m_pImpl->m_timerBuildSql.start();
+         break;
+      case IxDao_Helper::timer_db_open:
+         if (! m_pImpl->m_bDisplayTimerDetails) { break; }
+         m_pImpl->m_timerOpen.start();
+         break;
+      case IxDao_Helper::timer_db_transaction:
+         if (! m_pImpl->m_bDisplayTimerDetails) { break; }
+         m_pImpl->m_timerTransaction.start();
+         break;
+      default:
+         break;
+   }
+}
+
+qint64 IxDao_Helper::timerElapsed(IxDao_Helper::timer_type timer)
+{
+   qint64 elapsed = 0;
+   switch (timer)
+   {
+      case IxDao_Helper::timer_total:
+         elapsed = m_pImpl->m_timerTotal.nsecsElapsed();
+         m_pImpl->m_timeTotal += elapsed;
+         break;
+      case IxDao_Helper::timer_db_exec:
+         elapsed = m_pImpl->m_timerExec.nsecsElapsed();
+         m_pImpl->m_timeExec += elapsed;
+         break;
+      case IxDao_Helper::timer_db_next:
+         if (! m_pImpl->m_bDisplayTimerDetails) { break; }
+         elapsed = m_pImpl->m_timerNext.nsecsElapsed();
+         m_pImpl->m_timeNext += elapsed;
+         m_pImpl->m_nextCount++;
+         break;
+      case IxDao_Helper::timer_db_prepare:
+         if (! m_pImpl->m_bDisplayTimerDetails) { break; }
+         elapsed = m_pImpl->m_timerPrepare.nsecsElapsed();
+         m_pImpl->m_timePrepare += elapsed;
+         break;
+      case IxDao_Helper::timer_cpp_build_hierarchy:
+         if (! m_pImpl->m_bDisplayTimerDetails) { break; }
+         elapsed = m_pImpl->m_timerBuildHierarchy.nsecsElapsed();
+         m_pImpl->m_timeBuildHierarchy += elapsed;
+         break;
+      case IxDao_Helper::timer_cpp_build_instance:
+         if (! m_pImpl->m_bDisplayTimerDetails) { break; }
+         elapsed = m_pImpl->m_timerBuildCppInstance.nsecsElapsed();
+         m_pImpl->m_timeBuildCppInstance += elapsed;
+         break;
+      case IxDao_Helper::timer_cpp_read_instance:
+         if (! m_pImpl->m_bDisplayTimerDetails) { break; }
+         elapsed = m_pImpl->m_timerReadCppInstance.nsecsElapsed();
+         m_pImpl->m_timeReadCppInstance += elapsed;
+         break;
+      case IxDao_Helper::timer_build_sql:
+         if (! m_pImpl->m_bDisplayTimerDetails) { break; }
+         elapsed = m_pImpl->m_timerBuildSql.nsecsElapsed();
+         m_pImpl->m_timeBuildSql += elapsed;
+         break;
+      case IxDao_Helper::timer_db_open:
+         if (! m_pImpl->m_bDisplayTimerDetails) { break; }
+         elapsed = m_pImpl->m_timerOpen.nsecsElapsed();
+         m_pImpl->m_timeOpen += elapsed;
+         break;
+      case IxDao_Helper::timer_db_transaction:
+         if (! m_pImpl->m_bDisplayTimerDetails) { break; }
+         elapsed = m_pImpl->m_timerTransaction.nsecsElapsed();
+         m_pImpl->m_timeTransaction += elapsed;
+         break;
+      default:
+         break;
+   }
+   return elapsed;
 }
 
 void IxDao_Helper::addQuery(const qx::QxSqlQuery & query, bool bResolve)
@@ -310,11 +445,12 @@ QSqlError IxDao_Helper::updateError(const QSqlError & error)
 
 void IxDao_Helper::init(QSqlDatabase * pDatabase, const QString & sContext)
 {
-   m_pImpl->m_time.start();
+   timerStart(IxDao_Helper::timer_total);
    m_pImpl->m_context = sContext;
    m_pImpl->m_bTraceQuery = qx::QxSqlDatabase::getSingleton()->getTraceSqlQuery();
    m_pImpl->m_bTraceRecord = qx::QxSqlDatabase::getSingleton()->getTraceSqlRecord();
    m_pImpl->m_bMongoDB = (qx::QxSqlDatabase::getSingleton()->getDriverName() == "QXMONGODB");
+   m_pImpl->m_bDisplayTimerDetails = qx::QxSqlDatabase::getSingleton()->getDisplayTimerDetails();
    qAssert(! m_pImpl->m_context.isEmpty());
 
 #ifndef _QX_ENABLE_MONGODB
@@ -328,6 +464,7 @@ void IxDao_Helper::init(QSqlDatabase * pDatabase, const QString & sContext)
    if (! m_pImpl->m_bMongoDB)
    {
       QSqlError dbError;
+      IxDao_Timer timer(this, IxDao_Helper::timer_db_open);
       if (pDatabase) { m_pImpl->m_bNeedToClearDatabaseByThread = qx::QxSqlDatabase::getSingleton()->setCurrentDatabaseByThread(pDatabase); }
       m_pImpl->m_database = (pDatabase ? (* pDatabase) : qx::QxSqlDatabase::getDatabase(dbError));
       if (dbError.isValid()) { updateError(dbError); return; }
@@ -351,11 +488,19 @@ void IxDao_Helper::terminate()
 {
    if ((m_pImpl->m_lstInvalidValues.count() > 0) && m_pImpl->m_bValidatorThrowable)
    {
-      if (m_pImpl->m_bTransaction) { m_pImpl->m_database.rollback(); }
+      if (m_pImpl->m_bTransaction)
+      {
+         IxDao_Timer timer(this, IxDao_Helper::timer_db_transaction);
+         m_pImpl->m_database.rollback();
+      }
    }
    else if (! isValid())
    {
-      if (m_pImpl->m_bTransaction) { m_pImpl->m_database.rollback(); }
+      if (m_pImpl->m_bTransaction)
+      {
+         IxDao_Timer timer(this, IxDao_Helper::timer_db_transaction);
+         m_pImpl->m_database.rollback();
+      }
       if (! m_pImpl->m_bQuiet)
       {
          int ierr = m_pImpl->m_error.number();
@@ -367,12 +512,24 @@ void IxDao_Helper::terminate()
    }
    else if (m_pImpl->m_pQueryBuilder)
    {
-      if (m_pImpl->m_bTransaction) { m_pImpl->m_database.commit(); }
-      if (! m_pImpl->m_bQuiet && m_pImpl->m_bTraceQuery) { m_pImpl->m_pQueryBuilder->displaySqlQuery(m_pImpl->m_time.elapsed(), m_pImpl->m_timeDatabase, (m_pImpl->m_bMongoDB ? m_pImpl->m_qxQuery.queryAt(0) : QString())); }
+      if (m_pImpl->m_bTransaction)
+      {
+         IxDao_Timer timer(this, IxDao_Helper::timer_db_transaction);
+         m_pImpl->m_database.commit();
+      }
+      if (! m_pImpl->m_bQuiet && m_pImpl->m_bTraceQuery)
+      {
+         timerElapsed(IxDao_Helper::timer_total);
+         m_pImpl->displaySqlQuery();
+      }
    }
    else
    {
-      if (m_pImpl->m_bTransaction) { m_pImpl->m_database.rollback(); }
+      if (m_pImpl->m_bTransaction)
+      {
+         IxDao_Timer timer(this, IxDao_Helper::timer_db_transaction);
+         m_pImpl->m_database.rollback();
+      }
       if (! m_pImpl->m_bQuiet) { qDebug("%s", QX_DAO_ERR_UNKNOWN_ERROR); qAssert(false); }
    }
 
@@ -389,6 +546,38 @@ void IxDao_Helper::dumpBoundValues() const
 
    if ((! isValid() && bBoundValuesOnError) || (bBoundValues))
    { qx::QxSqlQuery::dumpBoundValues(m_pImpl->m_query); }
+}
+
+void IxDao_Helper::IxDao_HelperImpl::displaySqlQuery()
+{
+   QString query = (m_bMongoDB ? m_qxQuery.queryAt(0) : QString());
+   QString sql = ((query.isEmpty() && m_pQueryBuilder) ? m_pQueryBuilder->getSqlQuery() : query);
+   bool bFormatSql = qx::QxSqlDatabase::getSingleton()->getFormatSqlQueryBeforeLogging();
+   qx::dao::detail::IxSqlGenerator * pSqlGenerator = qx::QxSqlDatabase::getSingleton()->getSqlGenerator();
+   qint64 iTraceSqlOnlySlowQueriesDatabase = static_cast<qint64>(qx::QxSqlDatabase::getSingleton()->getTraceSqlOnlySlowQueriesDatabase());
+   qint64 iTraceSqlOnlySlowQueriesTotal = static_cast<qint64>(qx::QxSqlDatabase::getSingleton()->getTraceSqlOnlySlowQueriesTotal());
+   if ((iTraceSqlOnlySlowQueriesDatabase > 0) && (iTraceSqlOnlySlowQueriesTotal < 0)) { iTraceSqlOnlySlowQueriesTotal = 999999999; }
+   else if ((iTraceSqlOnlySlowQueriesTotal > 0) && (iTraceSqlOnlySlowQueriesDatabase < 0)) { iTraceSqlOnlySlowQueriesDatabase = 999999999; }
+   if (bFormatSql && pSqlGenerator) { pSqlGenerator->formatSqlQuery(NULL, sql); }
+
+   if ((m_timeTotal >= (iTraceSqlOnlySlowQueriesTotal * 1000000)) || (m_timeExec >= (iTraceSqlOnlySlowQueriesDatabase * 1000000))) // convert milli-seconds to nano-seconds
+   {
+      QString log = "sql query (total: " + ((m_timeTotal == 0) ? QString("0") : QString::number((static_cast<double>(m_timeTotal) / 1000000.0), 'g', 3)) + " ms";
+      log += ", db_exec: " + ((m_timeExec == 0) ? QString("0") : QString::number((static_cast<double>(m_timeExec) / 1000000.0), 'g', 3)) + " ms";
+      if (m_bDisplayTimerDetails)
+      {
+         log += ", db_prepare: " + ((m_timePrepare == 0) ? QString("0") : QString::number((static_cast<double>(m_timePrepare) / 1000000.0), 'g', 3)) + " ms";
+         log += ", db_next(" + QString::number(m_nextCount) + "): " + ((m_timeNext == 0) ? QString("0") : QString::number((static_cast<double>(m_timeNext) / 1000000.0), 'g', 3)) + " ms";
+         log += ", db_open: " + ((m_timeOpen == 0) ? QString("0") : QString::number((static_cast<double>(m_timeOpen) / 1000000.0), 'g', 3)) + " ms";
+         log += ", db_transaction: " + ((m_timeTransaction == 0) ? QString("0") : QString::number((static_cast<double>(m_timeTransaction) / 1000000.0), 'g', 3)) + " ms";
+         log += ", build_relations: " + ((m_timeBuildHierarchy == 0) ? QString("0") : QString::number((static_cast<double>(m_timeBuildHierarchy) / 1000000.0), 'g', 3)) + " ms";
+         log += ", build_sql: " + ((m_timeBuildSql == 0) ? QString("0") : QString::number((static_cast<double>(m_timeBuildSql) / 1000000.0), 'g', 3)) + " ms";
+         log += ", build_cpp: " + ((m_timeBuildCppInstance == 0) ? QString("0") : QString::number((static_cast<double>(m_timeBuildCppInstance) / 1000000.0), 'g', 3)) + " ms";
+         log += ", read_cpp: " + ((m_timeReadCppInstance == 0) ? QString("0") : QString::number((static_cast<double>(m_timeReadCppInstance) / 1000000.0), 'g', 3)) + " ms";
+      }
+      log += ") : " + sql;
+      qDebug("[QxOrm] %s", qPrintable(log));
+   }
 }
 
 } // namespace detail

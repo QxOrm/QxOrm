@@ -58,7 +58,7 @@ struct QxDao_ExecuteQuery_Generic
       dao.builder().setSqlQuery(sql);
       if (! dao.prepare(sql)) { return dao.errFailed(true); }
       query.resolve(dao.query());
-      if (! dao.query().exec()) { return dao.errFailed(); }
+      if (! dao.exec(true)) { return dao.errFailed(); }
       query.resolveOutput(dao.query(), false);
       if (! dao.nextRecord()) { return dao.error(); }
       qx::dao::on_before_fetch<T>((& t), (& dao));
@@ -107,7 +107,7 @@ struct QxDao_ExecuteQuery_Container
       dao.builder().setSqlQuery(sql);
       if (! dao.prepare(sql)) { return dao.errFailed(true); }
       query.resolve(dao.query());
-      if (! dao.query().exec()) { return dao.errFailed(); }
+      if (! dao.exec(true)) { return dao.errFailed(); }
       query.resolveOutput(dao.query(), false);
 
       QVector< QPair<int, qx::IxDataMember *> > vColumnToFetch;

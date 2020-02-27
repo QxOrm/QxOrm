@@ -428,7 +428,7 @@ public:
    virtual QxSqlQuery & isBetween(const QVariant & val1, const QVariant & val2);
    virtual QxSqlQuery & isNotBetween(const QVariant & val1, const QVariant & val2);
 
-   virtual QxSqlQuery & freeText(const QString & text);
+   virtual QxSqlQuery & freeText(const QString & text, const QVariantList & values = QVariantList());
 
 private:
 
@@ -590,7 +590,7 @@ virtual className & isNotNull(); \
 virtual className & isBetween(const QVariant & val1, const QVariant & val2); \
 virtual className & isNotBetween(const QVariant & val1, const QVariant & val2); \
 \
-virtual className & freeText(const QString & text);
+virtual className & freeText(const QString & text, const QVariantList & values = QVariantList());
 
 #define QX_SQL_QUERY_DERIVED_IMPL_COVARIANT_RETURN_TYPE_CPP(className) \
 \
@@ -686,6 +686,6 @@ className & className::isNotNull() { return static_cast<className &>(qx::QxSqlQu
 className & className::isBetween(const QVariant & val1, const QVariant & val2) { return static_cast<className &>(qx::QxSqlQuery::isBetween(val1, val2)); } \
 className & className::isNotBetween(const QVariant & val1, const QVariant & val2) { return static_cast<className &>(qx::QxSqlQuery::isNotBetween(val1, val2)); } \
 \
-className & className::freeText(const QString & text) { return static_cast<className &>(qx::QxSqlQuery::freeText(text)); }
+className & className::freeText(const QString & text, const QVariantList & values) { return static_cast<className &>(qx::QxSqlQuery::freeText(text, values)); }
 
 #endif // _QX_SQL_QUERY_H_

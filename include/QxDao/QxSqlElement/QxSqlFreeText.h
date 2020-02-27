@@ -56,6 +56,10 @@ namespace detail {
 class QX_DLL_EXPORT QxSqlFreeText : public IxSqlElement
 {
 
+protected:
+
+   QString m_sText;  //!< Custom SQL text to insert to SQL query
+
 public:
 
    QxSqlFreeText();
@@ -67,6 +71,8 @@ public:
    virtual void postProcess(QString & sql) const;
 
    virtual IxSqlElement::type_class getTypeClass() const;
+
+   void setText(const QString & txt);
 
 protected:
 

@@ -31,8 +31,6 @@
 
 #include <QxPrecompiled.h>
 
-#include <QtCore/qcryptographichash.h>
-
 #include <QxDao/QxSqlRelationLinked.h>
 #include <QxDao/IxSqlQueryBuilder.h>
 
@@ -139,6 +137,9 @@ struct QxSqlRelationLinked::QxSqlRelationLinkedImpl
       }
    }
 
+   static std::shared_ptr<QxSqlRelationLinked> getRelationLinkedSaved(const QPair<IxClass *, QByteArray> & key)               { QMutexLocker locker(& m_mutex); return m_relationLinkedSaved.value(key); }
+   static void insertRelationLinkedSaved(const QPair<IxClass *, QByteArray> & key, std::shared_ptr<QxSqlRelationLinked> ptr)  { QMutexLocker locker(& m_mutex); m_relationLinkedSaved.insert(key, ptr); }
+
 };
 
 QMutex QxSqlRelationLinked::QxSqlRelationLinkedImpl::m_mutex;
@@ -169,20 +170,16 @@ QxSqlRelationLinked::type_lst_relation QxSqlRelationLinked::getRelationX() const
 std::shared_ptr<QxSqlRelationLinked> QxSqlRelationLinked::getHierarchy(IxClass * pClass, const QStringList & sRelationX, qx_bool & bOk)
 {
    if (! pClass) { qAssert(false); bOk = qx_bool(false, "class is empty"); return std::shared_ptr<QxSqlRelationLinked>(); }
-   QByteArray md5 = QCryptographicHash::hash(sRelationX.join("|").toLatin1(), QCryptographicHash::Md5);
-   QPair<IxClass *, QByteArray> key(pClass, md5);
-   std::shared_ptr<QxSqlRelationLinked> ptr = QxSqlRelationLinked::QxSqlRelationLinkedImpl::m_relationLinkedSaved.value(key);
+   QByteArray hash = sRelationX.join("|").toLatin1();
+   QPair<IxClass *, QByteArray> key(pClass, hash);
+   std::shared_ptr<QxSqlRelationLinked> ptr = QxSqlRelationLinked::QxSqlRelationLinkedImpl::getRelationLinkedSaved(key);
    std::shared_ptr<QxSqlRelationLinked> result = std::make_shared<QxSqlRelationLinked>();
    if (ptr) { (* result->m_pImpl) = (* ptr->m_pImpl); return result; }
 
    ptr = std::make_shared<QxSqlRelationLinked>();
    bOk = ptr->m_pImpl->buildHierarchy(pClass->getSqlRelationX().get(), sRelationX);
    if (! bOk) { return std::shared_ptr<QxSqlRelationLinked>(); }
-
-   QMutexLocker locker(& QxSqlRelationLinked::QxSqlRelationLinkedImpl::m_mutex);
-   std::shared_ptr<QxSqlRelationLinked> tmp = QxSqlRelationLinked::QxSqlRelationLinkedImpl::m_relationLinkedSaved.value(key);
-   if (tmp) { (* result->m_pImpl) = (* tmp->m_pImpl); return result; }
-   QxSqlRelationLinked::QxSqlRelationLinkedImpl::m_relationLinkedSaved.insert(key, ptr);
+   QxSqlRelationLinked::QxSqlRelationLinkedImpl::insertRelationLinkedSaved(key, ptr);
    (* result->m_pImpl) = (* ptr->m_pImpl);
    return result;
 }

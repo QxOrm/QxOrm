@@ -49,7 +49,8 @@ m_bSessionAutoTransaction(true), m_bValidatorThrowable(false), \
 m_bAutoReplaceSqlAliasIntoQuery(true), m_bVerifyOffsetRelation(false), \
 m_bAddAutoIncrementIdToUpdateQuery(true), m_bForceParentIdToAllChildren(false), \
 m_bAddSqlSquareBracketsForTableName(false), m_bAddSqlSquareBracketsForColumnName(false), \
-m_bFormatSqlQueryBeforeLogging(false), m_iTraceSqlOnlySlowQueriesDatabase(-1), m_iTraceSqlOnlySlowQueriesTotal(-1)
+m_bFormatSqlQueryBeforeLogging(false), m_iTraceSqlOnlySlowQueriesDatabase(-1), m_iTraceSqlOnlySlowQueriesTotal(-1), \
+m_bDisplayTimerDetails(false)
 
 QX_DLL_EXPORT_QX_SINGLETON_CPP(qx::QxSqlDatabase)
 
@@ -89,6 +90,7 @@ struct QxSqlDatabase::QxSqlDatabaseImpl
    QStringList m_lstSqlDelimiterForColumnName;              //!< Add delimiter characters for column name in SQL queries (to support specific database keywords) : for example, use ` for MySQL database
    int m_iTraceSqlOnlySlowQueriesDatabase;                  //!< Trace only slow sql queries (database execution time only, in milliseconds)
    int m_iTraceSqlOnlySlowQueriesTotal;                     //!< Trace only slow sql queries (database execution time + C++ qx::dao execution time, in milliseconds)
+   bool m_bDisplayTimerDetails;                             //!< Display in logs all timers details (exec(), next(), prepare(), open(), etc...)
 
    QHash<QPair<Qt::HANDLE, QString>, QVariant> m_lstSettingsByThread;               //!< List of settings per thread (override global settings) : can be useful to use different databases per thread (see bJustForCurrentThread parameter in all setXXXX() methods)
    QHash<Qt::HANDLE, qx::dao::detail::IxSqlGenerator_ptr> m_lstGeneratorByThread;   //!< List of SQL generator per thread (override global settings) : can be useful to use different databases per thread (see bJustForCurrentThread parameter in setSqlGenerator() method)
@@ -368,6 +370,14 @@ int QxSqlDatabase::getTraceSqlOnlySlowQueriesTotal() const
    return m_pImpl->m_iTraceSqlOnlySlowQueriesTotal;
 }
 
+bool QxSqlDatabase::getDisplayTimerDetails() const
+{
+   if ((m_pImpl->m_lstSettingsByThread.count() <= 0) && (m_pImpl->m_lstSettingsByDatabase.count() <= 0)) { return m_pImpl->m_bDisplayTimerDetails; }
+   QVariant setting = m_pImpl->getSetting("DisplayTimerDetails");
+   if (! setting.isNull()) { return setting.toBool(); }
+   return m_pImpl->m_bDisplayTimerDetails;
+}
+
 void QxSqlDatabase::setDriverName(const QString & s, bool bJustForCurrentThread /* = false */, QSqlDatabase * pJustForThisDatabase /* = NULL */)
 {
    bool bUpdateGlobal = m_pImpl->setSetting("DriverName", s, bJustForCurrentThread, pJustForThisDatabase);
@@ -553,6 +563,12 @@ void QxSqlDatabase::setTraceSqlOnlySlowQueriesTotal(int i, bool bJustForCurrentT
 {
    bool bUpdateGlobal = m_pImpl->setSetting("TraceSqlOnlySlowQueriesTotal", i, bJustForCurrentThread, pJustForThisDatabase);
    if (bUpdateGlobal) { m_pImpl->m_iTraceSqlOnlySlowQueriesTotal = i; }
+}
+
+void QxSqlDatabase::setDisplayTimerDetails(bool b, bool bJustForCurrentThread /* = false */, QSqlDatabase * pJustForThisDatabase /* = NULL */)
+{
+   bool bUpdateGlobal = m_pImpl->setSetting("DisplayTimerDetails", b, bJustForCurrentThread, pJustForThisDatabase);
+   if (bUpdateGlobal) { m_pImpl->m_bDisplayTimerDetails = b; }
 }
 
 QSqlDatabase QxSqlDatabase::getDatabase(QSqlError & dbError) { return QxSqlDatabase::getSingleton()->m_pImpl->getDatabaseByCurrThreadId(dbError); }

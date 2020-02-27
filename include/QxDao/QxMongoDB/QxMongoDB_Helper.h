@@ -69,6 +69,8 @@ namespace qx {
 namespace dao {
 namespace mongodb {
 
+struct QxMongoDB_Fetcher;
+
 /*!
  * \ingroup QxDao
  * \brief qx::dao::mongodb::QxMongoDB_Helper : helper class to store all QxOrm registered classes in a MongoDB database : qx::QxSqlDatabase::getSingleton()->setDriverName("QXMONGODB");
@@ -101,15 +103,30 @@ public:
    static QSqlError deleteOne(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, const QString & json, const qx::QxSqlQuery * query = NULL);
    static QSqlError deleteMany(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, const QStringList & json, const qx::QxSqlQuery * query = NULL);
    static QSqlError findOne(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, QString & json, const qx::QxSqlQuery * query = NULL);
-   static QSqlError findMany(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, QStringList & json, const qx::QxSqlQuery * query = NULL);
-   static QSqlError aggregate(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, QStringList & json, const qx::QxSqlQuery * query = NULL, const QString & lookup = QString());
+   static QSqlError findMany(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, QStringList & json, const qx::QxSqlQuery * query = NULL, QxMongoDB_Fetcher * pFetcher = NULL);
+   static QSqlError aggregate(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, QStringList & json, const qx::QxSqlQuery * query = NULL, const QString & lookup = QString(), QxMongoDB_Fetcher * pFetcher = NULL);
    static QSqlError count(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, long & cnt, const qx::QxSqlQuery * query = NULL);
    static QSqlError executeCommand(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, qx::QxSqlQuery * query);
 
    static QSqlError autoCreateIndexes(bool log = true);
    static bool setOptions(opts e, const QString & optsAsJson);
    static void setLogDatabaseReply(bool b);
+   static void setLogDatabaseInfo(bool b);
    static void clearPoolConnection();
+
+};
+
+/*!
+ * \ingroup QxDao
+ * \brief qx::dao::mongodb::QxMongoDB_Fetcher : used to fetch a list of items from MongoDB database without having to put them in a buffer before fetching
+ */
+struct QX_DLL_EXPORT QxMongoDB_Fetcher
+{
+
+   QxMongoDB_Fetcher();
+   virtual ~QxMongoDB_Fetcher();
+
+   virtual void fetch(const QString & json) = 0;
 
 };
 

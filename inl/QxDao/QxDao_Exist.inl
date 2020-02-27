@@ -54,9 +54,13 @@ struct QxDao_Exist_Generic
       QString sql = dao.builder().buildSql().getSqlQuery();
       if (! dao.getDataId() || sql.isEmpty()) { dao.errEmpty(); return qx_bool(false); }
       if (! dao.prepare(sql)) { dao.errFailed(true); return qx_bool(false); }
-      qx::dao::detail::QxSqlQueryHelper_Exist<T>::resolveInput(t, dao.query(), dao.builder());
-      if (! dao.query().exec()) { dao.errFailed(); return qx_bool(false); }
 
+      {
+         qx::dao::detail::IxDao_Timer timer((& dao), qx::dao::detail::IxDao_Helper::timer_cpp_read_instance);
+         qx::dao::detail::QxSqlQueryHelper_Exist<T>::resolveInput(t, dao.query(), dao.builder());
+      }
+
+      if (! dao.exec(true)) { dao.errFailed(); return qx_bool(false); }
       return qx_bool(dao.nextRecord());
    }
 
@@ -148,8 +152,12 @@ private:
          }
 #endif // _QX_ENABLE_MONGODB
 
-         qx::dao::detail::QxSqlQueryHelper_Exist<U>::resolveInput(item, dao.query(), dao.builder());
-         if (! dao.query().exec()) { dao.errFailed(); return false; }
+         {
+            qx::dao::detail::IxDao_Timer timer((& dao), qx::dao::detail::IxDao_Helper::timer_cpp_read_instance);
+            qx::dao::detail::QxSqlQueryHelper_Exist<U>::resolveInput(item, dao.query(), dao.builder());
+         }
+
+         if (! dao.exec(true)) { dao.errFailed(); return false; }
          return dao.nextRecord();
       }
    };

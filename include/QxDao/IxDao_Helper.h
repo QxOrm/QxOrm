@@ -76,12 +76,21 @@ namespace qx {
 namespace dao {
 namespace detail {
 
+struct IxDao_Timer;
+
 /*!
  * \ingroup QxDao
  * \brief qx::dao::detail::IxDao_Helper : helper class to communicate with database
  */
 class QX_DLL_EXPORT IxDao_Helper
 {
+
+   friend struct IxDao_Timer;
+
+public:
+
+   enum timer_type { timer_none, timer_total, timer_db_exec, timer_db_next, timer_db_prepare, timer_cpp_build_hierarchy, 
+                     timer_cpp_build_instance, timer_cpp_read_instance, timer_build_sql, timer_db_open, timer_db_transaction };
 
 private:
 
@@ -134,13 +143,12 @@ public:
    bool transaction();
    bool nextRecord();
    void quiet();
-   bool exec();
+   bool exec(bool bForceEmptyExec = false);
    bool prepare(QString & sql);
 
    QSqlError updateError(const QSqlError & error);
    bool updateSqlRelationX(const QStringList & relation);
    void addQuery(const qx::QxSqlQuery & query, bool bResolve);
-   void setTimeDatabase(int ms);
    void dumpRecord() const;
 
    template <class U>
@@ -166,8 +174,25 @@ protected:
 
    void dumpBoundValues() const;
    QSqlError updateError(const QString & sError);
+   void timerStart(IxDao_Helper::timer_type timer);
+   qint64 timerElapsed(IxDao_Helper::timer_type timer);
    void init(QSqlDatabase * pDatabase, const QString & sContext);
    void terminate();
+
+};
+
+/*!
+ * \ingroup QxDao
+ * \brief qx::dao::detail::IxDao_Timer : scoped timer to measure database elapsed times (using C++ RAII)
+ */
+struct IxDao_Timer
+{
+
+   IxDao_Helper * m_pDaoHelper;              //!< Pointer to dao helper class
+   IxDao_Helper::timer_type m_eTimerType;    //!< Timer type (database or C++ action)
+
+   IxDao_Timer(IxDao_Helper * pDaoHelper, IxDao_Helper::timer_type timer) : m_pDaoHelper(pDaoHelper), m_eTimerType(timer) { if (m_pDaoHelper) { m_pDaoHelper->timerStart(m_eTimerType); } }
+   ~IxDao_Timer() { if (m_pDaoHelper) { m_pDaoHelper->timerElapsed(m_eTimerType); } }
 
 };
 

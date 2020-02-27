@@ -56,16 +56,16 @@
 #define QX_SQL_ERR_NO_ID_REGISTERED             "'QxSqlQueryBuilder<T>' error : no id registered"
 
 #define QX_SQL_BUILDER_INIT_FCT(oper) \
-QMutexLocker locker(& IxSqlQueryBuilder::getMutex()); \
+qx::dao::detail::IxDao_Timer timer(this->getDaoHelper(), qx::dao::detail::IxDao_Helper::timer_build_sql); \
 QString key = QxClass<type_sql>::getSingleton()->getKey() + oper; \
-QString sql = IxSqlQueryBuilder::listSqlQuery().value(key); \
-if (! sql.isEmpty()) { this->setSqlQuery(sql); return (* this); }
+if (this->findSqlQuery(key)) { return (* this); } \
+QString sql; Q_UNUSED(sql);
 
 #define QX_SQL_BUILDER_INIT_FCT_WITH_RELATION(oper) \
-QMutexLocker locker(& IxSqlQueryBuilder::getMutex()); \
+qx::dao::detail::IxDao_Timer timer(this->getDaoHelper(), qx::dao::detail::IxDao_Helper::timer_build_sql); \
 QString key = QxClass<type_sql>::getSingleton()->getKey() + this->getHashRelation() + oper; \
-QString sql = IxSqlQueryBuilder::listSqlQuery().value(key); \
-if (! sql.isEmpty()) { this->setSqlQuery(sql); this->listSqlQueryAlias() = IxSqlQueryBuilder::listSqlAlias().value(key); return (* this); }
+if (this->findSqlQuery(key)) { this->findSqlAlias(key); return (* this); } \
+QString sql; Q_UNUSED(sql);
 
 namespace qx {
 
@@ -452,8 +452,8 @@ public:
       Q_UNUSED(columns);
       QX_SQL_BUILDER_INIT_FCT_WITH_RELATION("Count_WithRelation")
       IxSqlQueryBuilder::sql_Count_WithRelation(pRelationX, sql, (* this));
-      IxSqlQueryBuilder::listSqlAlias().insert(key, this->listSqlQueryAlias());
       this->setSqlQuery(sql, key);
+      this->insertSqlAlias(key);
       return (* this);
    }
 
@@ -479,8 +479,8 @@ public:
       Q_UNUSED(columns);
       QX_SQL_BUILDER_INIT_FCT_WITH_RELATION("FetchAll_WithRelation")
       qx::dao::detail::QxSqlQueryHelper_FetchAll_WithRelation<type_sql>::sql(pRelationX, sql, (* this));
-      IxSqlQueryBuilder::listSqlAlias().insert(key, this->listSqlQueryAlias());
       this->setSqlQuery(sql, key);
+      this->insertSqlAlias(key);
       return (* this);
    }
 
@@ -508,8 +508,8 @@ public:
       if (! this->getDataId()) { qDebug("[QxOrm] %s", QX_SQL_ERR_NO_ID_REGISTERED); qAssert(false); return (* this); }
       QxSqlQueryBuilder_FetchAll_WithRelation<type_sql> builder; builder.clone(* this);
       qx::dao::detail::QxSqlQueryHelper_FetchById_WithRelation<type_sql>::sql(pRelationX, sql, builder);
-      IxSqlQueryBuilder::listSqlAlias().insert(key, this->listSqlQueryAlias());
       this->setSqlQuery(sql, key);
+      this->insertSqlAlias(key);
       return (* this);
    }
 

@@ -104,7 +104,6 @@ public:
    void addSqlQueryAlias(const QString & sql, const QString & sqlAlias);
    bool getAddAutoIncrementIdToUpdateQuery() const;
    void replaceSqlQueryAlias(QString & sql) const;
-   void displaySqlQuery(int time_ms = -1, int time_db = -1, const QString & query = QString()) const;
 
    virtual void init();
    virtual void clone(const IxSqlQueryBuilder & other);
@@ -143,11 +142,9 @@ protected:
    const QxSoftDelete & softDelete() const;
    void setSoftDelete(const QxSoftDelete & o);
    void setDataMemberX(IxDataMemberX * p);
-   QHash<QString, QString> & listSqlQueryAlias();
-   const QHash<QString, QString> & listSqlQueryAlias() const;
-   static QHash<QString, QString> & listSqlQuery();
-   static QHash<QString, QHash<QString, QString> > & listSqlAlias();
-   static QMutex & getMutex();
+   bool findSqlQuery(const QString & key);
+   bool findSqlAlias(const QString & key);
+   void insertSqlAlias(const QString & key);
 
 };
 

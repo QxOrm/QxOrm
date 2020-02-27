@@ -31,6 +31,8 @@
 
 #include <QxPrecompiled.h>
 
+#include <QtCore/qelapsedtimer.h>
+
 #include <QtSql/qsqlrecord.h>
 
 #include <QxDao/QxSqlQuery.h>
@@ -783,12 +785,13 @@ QxSqlQuery & QxSqlQuery::isNotBetween(const QVariant & val1, const QVariant & va
    return addSqlIsBetween(val1, val2, qx::dao::detail::QxSqlIsBetween::_is_not_between);
 }
 
-QxSqlQuery & QxSqlQuery::freeText(const QString & text)
+QxSqlQuery & QxSqlQuery::freeText(const QString & text, const QVariantList & values /* = QVariantList() */)
 {
    if (text.isEmpty()) { return (* this); }
    qx::dao::detail::QxSqlFreeText_ptr p;
    p = std::make_shared<qx::dao::detail::QxSqlFreeText>(m_iSqlElementIndex++);
-   p->setValue(QVariant(text));
+   p->setText(text);
+   p->setValues(values);
    m_lstSqlElement.append(p);
    return (* this);
 }
@@ -895,7 +898,7 @@ QSqlError call_query_helper(qx::QxSqlQuery & query, QSqlDatabase * pDatabase, bo
    if (dbError.isValid()) { return dbError; }
    bool bBoundValues = qx::QxSqlDatabase::getSingleton()->getTraceSqlBoundValues();
    bool bBoundValuesOnError = qx::QxSqlDatabase::getSingleton()->getTraceSqlBoundValuesOnError();
-   QTime timeQuery; timeQuery.start();
+   QElapsedTimer timer; timer.start();
    QString sql = query.query();
    QSqlQuery q = QSqlQuery(d);
    q.setForwardOnly(true);
@@ -909,16 +912,27 @@ QSqlError call_query_helper(qx::QxSqlQuery & query, QSqlDatabase * pDatabase, bo
    }
    while (0);
 
-   int ms = timeQuery.elapsed();
-   if (dbError.isValid()) { qDebug("[QxOrm] custom sql query failed (%d ms) : %s", ms, qPrintable(sql)); int ierr = dbError.number(); QString tmp = dbError.driverText(); qDebug("Database error number '%d' : %s", ierr, qPrintable(tmp)); tmp = dbError.databaseText(); qDebug("%s", qPrintable(tmp)); }
+   qlonglong ms = static_cast<qlonglong>(timer.elapsed());
+   if (dbError.isValid())
+   {
+      QString log = "custom sql query failed (" + QString::number(ms) + " ms) : " + sql;
+      qDebug("[QxOrm] %s", qPrintable(log));
+      int ierr = dbError.number();
+      QString tmp = dbError.driverText();
+      qDebug("Database error number '%d' : %s", ierr, qPrintable(tmp));
+      tmp = dbError.databaseText(); qDebug("%s", qPrintable(tmp));
+   }
    else if (qx::QxSqlDatabase::getSingleton()->getTraceSqlQuery())
    {
-      int iTraceSqlOnlySlowQueriesDatabase = qx::QxSqlDatabase::getSingleton()->getTraceSqlOnlySlowQueriesDatabase();
-      int iTraceSqlOnlySlowQueriesTotal = qx::QxSqlDatabase::getSingleton()->getTraceSqlOnlySlowQueriesTotal();
-      if ((iTraceSqlOnlySlowQueriesDatabase > 0) && (iTraceSqlOnlySlowQueriesTotal < 0)) { iTraceSqlOnlySlowQueriesTotal = 9999999; }
-      else if ((iTraceSqlOnlySlowQueriesTotal > 0) && (iTraceSqlOnlySlowQueriesDatabase < 0)) { iTraceSqlOnlySlowQueriesDatabase = 9999999; }
+      qlonglong iTraceSqlOnlySlowQueriesDatabase = static_cast<qlonglong>(qx::QxSqlDatabase::getSingleton()->getTraceSqlOnlySlowQueriesDatabase());
+      qlonglong iTraceSqlOnlySlowQueriesTotal = static_cast<qlonglong>(qx::QxSqlDatabase::getSingleton()->getTraceSqlOnlySlowQueriesTotal());
+      if ((iTraceSqlOnlySlowQueriesDatabase > 0) && (iTraceSqlOnlySlowQueriesTotal < 0)) { iTraceSqlOnlySlowQueriesTotal = 999999999; }
+      else if ((iTraceSqlOnlySlowQueriesTotal > 0) && (iTraceSqlOnlySlowQueriesDatabase < 0)) { iTraceSqlOnlySlowQueriesDatabase = 999999999; }
       if ((ms >= iTraceSqlOnlySlowQueriesTotal) || (ms >= iTraceSqlOnlySlowQueriesDatabase))
-      { qDebug("[QxOrm] custom sql query (%d ms) : %s", ms, qPrintable(sql)); }
+      {
+         QString log = "custom sql query (" + QString::number(ms) + " ms) : " + sql;
+         qDebug("[QxOrm] %s", qPrintable(log));
+      }
    }
 
    if ((dbError.isValid() && bBoundValuesOnError) || (bBoundValues)) { qx::QxSqlQuery::dumpBoundValues(q); }

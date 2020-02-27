@@ -214,8 +214,9 @@ struct QxMongoDB_Helper::QxMongoDB_HelperImpl
    std::unique_ptr<qx_scoped_wrapper<mongoc_client_pool_t> > m_pPool;                  //!< MongoDB database pool to get client connections
    QHash<int, QString> m_lstOpts;                                                      //!< MongoDB database options per action (based on QxMongoDB_Helper::opts enum)
    bool m_bLogDatabaseReply;                                                           //!< Log MongoDB database replies
+   bool m_bLogDatabaseInfo;                                                            //!< Log MongoDB database info (ping, server name, etc...)
 
-   QxMongoDB_HelperImpl() : m_bLogDatabaseReply(false) { m_pInstance.reset(new qx_scoped_wrapper<qx::dao::mongodb::qx_engine>()); }
+   QxMongoDB_HelperImpl() : m_bLogDatabaseReply(false), m_bLogDatabaseInfo(true) { m_pInstance.reset(new qx_scoped_wrapper<qx::dao::mongodb::qx_engine>()); }
    ~QxMongoDB_HelperImpl() { m_pPool.reset(); m_pUri.reset(); m_pInstance.reset(); }
 
    QSqlError insertOne_(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, const QString & json, QString & insertedId);
@@ -225,8 +226,8 @@ struct QxMongoDB_Helper::QxMongoDB_HelperImpl
    QSqlError deleteOne_(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, const QString & json, const qx::QxSqlQuery * query);
    QSqlError deleteMany_(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, const QStringList & json, const qx::QxSqlQuery * query);
    QSqlError findOne_(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, QString & json, const qx::QxSqlQuery * query);
-   QSqlError findMany_(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, QStringList & json, const qx::QxSqlQuery * query);
-   QSqlError aggregate_(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, QStringList & json, const qx::QxSqlQuery * query, const QString & lookup);
+   QSqlError findMany_(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, QStringList & json, const qx::QxSqlQuery * query, QxMongoDB_Fetcher * pFetcher);
+   QSqlError aggregate_(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, QStringList & json, const qx::QxSqlQuery * query, const QString & lookup, QxMongoDB_Fetcher * pFetcher);
    QSqlError count_(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, long & cnt, const qx::QxSqlQuery * query);
    QSqlError executeCommand_(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, qx::QxSqlQuery * query);
 
@@ -246,7 +247,7 @@ struct QxMongoDB_Helper::QxMongoDB_HelperImpl
          if (! db->getConnectOptions().isEmpty()) { uri += "/?" + db->getConnectOptions(); }
          if (! uri.isEmpty()) { uri = "mongodb://" + uri; }
          if (uri.isEmpty()) { return QSqlError("[QxOrm] Please define a connection string to a MongoDB database through 'qx::QxSqlDatabase::getSingleton()' settings", "", QSqlError::UnknownError); }
-         qDebug("[QxOrm] Connect to MongoDB database : %s", qPrintable(uri));
+         if (m_bLogDatabaseInfo) { qDebug("[QxOrm] Connect to MongoDB database : %s", qPrintable(uri)); }
 
          std::string uri_ = toStdString(uri);
          m_pUri.reset(new qx_scoped_wrapper<mongoc_uri_t>(uri_));
@@ -262,7 +263,7 @@ struct QxMongoDB_Helper::QxMongoDB_HelperImpl
 #endif // Q_COMPILER_INITIALIZER_LISTS
       QSqlError err = executeCommand_(NULL, NULL, (& ping));
       if (err.isValid()) { m_pPool.reset(); m_pUri.reset(); return err; }
-      else { qDebug("[QxOrm] Ping to MongoDB database server : %s", "OK"); }
+      else { if (m_bLogDatabaseInfo) { qDebug("[QxOrm] Ping to MongoDB database server : %s", "OK"); } }
 
 #ifdef Q_COMPILER_INITIALIZER_LISTS
       qx_query buildInfo{ { "buildInfo", 1 } };
@@ -271,7 +272,7 @@ struct QxMongoDB_Helper::QxMongoDB_HelperImpl
 #endif // Q_COMPILER_INITIALIZER_LISTS
       err = executeCommand_(NULL, NULL, (& buildInfo));
       if (err.isValid()) { m_pPool.reset(); m_pUri.reset(); return err; }
-      else { QString resp = buildInfo.response().toString(); qDebug("[QxOrm] Fetch build info from MongoDB database server : \n%s", qPrintable(resp)); }
+      else { if (m_bLogDatabaseInfo) { QString resp = buildInfo.response().toString(); qDebug("[QxOrm] Fetch build info from MongoDB database server : \n%s", qPrintable(resp)); } }
 
       return QSqlError();
    }
@@ -427,16 +428,19 @@ struct QxMongoDB_Helper::QxMongoDB_HelperImpl
 
 };
 
+QxMongoDB_Fetcher::QxMongoDB_Fetcher() { ; }
+
+QxMongoDB_Fetcher::~QxMongoDB_Fetcher() { ; }
+
 QxMongoDB_Helper::QxMongoDB_Helper() : QxSingleton<QxMongoDB_Helper>("qx::dao::mongodb::QxMongoDB_Helper"), m_pImpl(new QxMongoDB_HelperImpl()) { ; }
 
 QxMongoDB_Helper::~QxMongoDB_Helper() { ; }
 
 QSqlError QxMongoDB_Helper::insertOne(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, const QString & json, QString & insertedId)
 {
-   QTime timeDB; if (pDaoHelper) { timeDB.start(); }
+   qx::dao::detail::IxDao_Timer timer(pDaoHelper, qx::dao::detail::IxDao_Helper::timer_db_exec);
    QxMongoDB_Helper * pSingleton = QxMongoDB_Helper::getSingleton(); qAssert(pSingleton != NULL);
    QSqlError err = pSingleton->m_pImpl->insertOne_(pDaoHelper, pClass, json, insertedId);
-   if (pDaoHelper) { int ms = timeDB.elapsed(); pDaoHelper->setTimeDatabase(ms); }
    return (pDaoHelper ? pDaoHelper->updateError(err) : err);
 }
 
@@ -461,10 +465,9 @@ QSqlError QxMongoDB_Helper::QxMongoDB_HelperImpl::insertOne_(qx::dao::detail::Ix
 
 QSqlError QxMongoDB_Helper::insertMany(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, const QStringList & json, QStringList & insertedId)
 {
-   QTime timeDB; if (pDaoHelper) { timeDB.start(); }
+   qx::dao::detail::IxDao_Timer timer(pDaoHelper, qx::dao::detail::IxDao_Helper::timer_db_exec);
    QxMongoDB_Helper * pSingleton = QxMongoDB_Helper::getSingleton(); qAssert(pSingleton != NULL);
    QSqlError err = pSingleton->m_pImpl->insertMany_(pDaoHelper, pClass, json, insertedId);
-   if (pDaoHelper) { int ms = timeDB.elapsed(); pDaoHelper->setTimeDatabase(ms); }
    return (pDaoHelper ? pDaoHelper->updateError(err) : err);
 }
 
@@ -495,10 +498,9 @@ QSqlError QxMongoDB_Helper::QxMongoDB_HelperImpl::insertMany_(qx::dao::detail::I
 
 QSqlError QxMongoDB_Helper::updateOne(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, const QString & json, const qx::QxSqlQuery * query /* = NULL */)
 {
-   QTime timeDB; if (pDaoHelper) { timeDB.start(); }
+   qx::dao::detail::IxDao_Timer timer(pDaoHelper, qx::dao::detail::IxDao_Helper::timer_db_exec);
    QxMongoDB_Helper * pSingleton = QxMongoDB_Helper::getSingleton(); qAssert(pSingleton != NULL);
    QSqlError err = pSingleton->m_pImpl->updateOne_(pDaoHelper, pClass, json, query);
-   if (pDaoHelper) { int ms = timeDB.elapsed(); pDaoHelper->setTimeDatabase(ms); }
    return (pDaoHelper ? pDaoHelper->updateError(err) : err);
 }
 
@@ -535,10 +537,9 @@ QSqlError QxMongoDB_Helper::QxMongoDB_HelperImpl::updateOne_(qx::dao::detail::Ix
 
 QSqlError QxMongoDB_Helper::updateMany(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, const QStringList & json, const qx::QxSqlQuery * query /* = NULL */)
 {
-   QTime timeDB; if (pDaoHelper) { timeDB.start(); }
+   qx::dao::detail::IxDao_Timer timer(pDaoHelper, qx::dao::detail::IxDao_Helper::timer_db_exec);
    QxMongoDB_Helper * pSingleton = QxMongoDB_Helper::getSingleton(); qAssert(pSingleton != NULL);
    QSqlError err = pSingleton->m_pImpl->updateMany_(pDaoHelper, pClass, json, query);
-   if (pDaoHelper) { int ms = timeDB.elapsed(); pDaoHelper->setTimeDatabase(ms); }
    return (pDaoHelper ? pDaoHelper->updateError(err) : err);
 }
 
@@ -590,10 +591,9 @@ QSqlError QxMongoDB_Helper::QxMongoDB_HelperImpl::updateMany_(qx::dao::detail::I
 
 QSqlError QxMongoDB_Helper::deleteOne(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, const QString & json, const qx::QxSqlQuery * query /* = NULL */)
 {
-   QTime timeDB; if (pDaoHelper) { timeDB.start(); }
+   qx::dao::detail::IxDao_Timer timer(pDaoHelper, qx::dao::detail::IxDao_Helper::timer_db_exec);
    QxMongoDB_Helper * pSingleton = QxMongoDB_Helper::getSingleton(); qAssert(pSingleton != NULL);
    QSqlError err = pSingleton->m_pImpl->deleteOne_(pDaoHelper, pClass, json, query);
-   if (pDaoHelper) { int ms = timeDB.elapsed(); pDaoHelper->setTimeDatabase(ms); }
    return (pDaoHelper ? pDaoHelper->updateError(err) : err);
 }
 
@@ -617,10 +617,9 @@ QSqlError QxMongoDB_Helper::QxMongoDB_HelperImpl::deleteOne_(qx::dao::detail::Ix
 
 QSqlError QxMongoDB_Helper::deleteMany(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, const QStringList & json, const qx::QxSqlQuery * query /* = NULL */)
 {
-   QTime timeDB; if (pDaoHelper) { timeDB.start(); }
+   qx::dao::detail::IxDao_Timer timer(pDaoHelper, qx::dao::detail::IxDao_Helper::timer_db_exec);
    QxMongoDB_Helper * pSingleton = QxMongoDB_Helper::getSingleton(); qAssert(pSingleton != NULL);
    QSqlError err = pSingleton->m_pImpl->deleteMany_(pDaoHelper, pClass, json, query);
-   if (pDaoHelper) { int ms = timeDB.elapsed(); pDaoHelper->setTimeDatabase(ms); }
    return (pDaoHelper ? pDaoHelper->updateError(err) : err);
 }
 
@@ -646,10 +645,9 @@ QSqlError QxMongoDB_Helper::QxMongoDB_HelperImpl::deleteMany_(qx::dao::detail::I
 
 QSqlError QxMongoDB_Helper::findOne(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, QString & json, const qx::QxSqlQuery * query /* = NULL */)
 {
-   QTime timeDB; if (pDaoHelper) { timeDB.start(); }
+   qx::dao::detail::IxDao_Timer timer(pDaoHelper, qx::dao::detail::IxDao_Helper::timer_db_exec);
    QxMongoDB_Helper * pSingleton = QxMongoDB_Helper::getSingleton(); qAssert(pSingleton != NULL);
    QSqlError err = pSingleton->m_pImpl->findOne_(pDaoHelper, pClass, json, query);
-   if (pDaoHelper) { int ms = timeDB.elapsed(); pDaoHelper->setTimeDatabase(ms); }
    return (pDaoHelper ? pDaoHelper->updateError(err) : err);
 }
 
@@ -659,8 +657,8 @@ QSqlError QxMongoDB_Helper::QxMongoDB_HelperImpl::findOne_(qx::dao::detail::IxDa
    if ((! lookup.isEmpty()) || (query && (query->type() == "aggregate")))
    {
       QStringList result;
-      if ((! query) && (! json.isEmpty())) { qx_query query_tmp(json); err = aggregate_(pDaoHelper, pClass, result, (& query_tmp), lookup); }
-      else { err = aggregate_(pDaoHelper, pClass, result, query, lookup); }
+      if ((! query) && (! json.isEmpty())) { qx_query query_tmp(json); err = aggregate_(pDaoHelper, pClass, result, (& query_tmp), lookup, NULL); }
+      else { err = aggregate_(pDaoHelper, pClass, result, query, lookup, NULL); }
       json = ((result.count() > 0) ? result.at(0) : QString());
       return err;
    }
@@ -695,20 +693,19 @@ QSqlError QxMongoDB_Helper::QxMongoDB_HelperImpl::findOne_(qx::dao::detail::IxDa
    return QSqlError();
 }
 
-QSqlError QxMongoDB_Helper::findMany(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, QStringList & json, const qx::QxSqlQuery * query /* = NULL */)
+QSqlError QxMongoDB_Helper::findMany(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, QStringList & json, const qx::QxSqlQuery * query /* = NULL */, QxMongoDB_Fetcher * pFetcher /* = NULL */)
 {
-   QTime timeDB; if (pDaoHelper) { timeDB.start(); }
+   qx::dao::detail::IxDao_Timer timer(pDaoHelper, qx::dao::detail::IxDao_Helper::timer_db_exec);
    QxMongoDB_Helper * pSingleton = QxMongoDB_Helper::getSingleton(); qAssert(pSingleton != NULL);
-   QSqlError err = pSingleton->m_pImpl->findMany_(pDaoHelper, pClass, json, query);
-   if (pDaoHelper) { int ms = timeDB.elapsed(); pDaoHelper->setTimeDatabase(ms); }
+   QSqlError err = pSingleton->m_pImpl->findMany_(pDaoHelper, pClass, json, query, pFetcher);
    return (pDaoHelper ? pDaoHelper->updateError(err) : err);
 }
 
-QSqlError QxMongoDB_Helper::QxMongoDB_HelperImpl::findMany_(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, QStringList & json, const qx::QxSqlQuery * query)
+QSqlError QxMongoDB_Helper::QxMongoDB_HelperImpl::findMany_(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, QStringList & json, const qx::QxSqlQuery * query, QxMongoDB_Fetcher * pFetcher)
 {
    QString lookup = buildLookup(pDaoHelper, false);
    if ((! lookup.isEmpty()) || (query && (query->type() == "aggregate")))
-   { return aggregate_(pDaoHelper, pClass, json, query, lookup); }
+   { return aggregate_(pDaoHelper, pClass, json, query, lookup, pFetcher); }
 
    QString listId = (query ? QString() : ((json.count() > 0) ? QString("{ \"_id\": { \"$in\": [ %ID% ] } }") : QString()));
    if (! listId.isEmpty()) { QString ids; Q_FOREACH(QString s, json) { ids += asJson(s) + ", "; }; ids = ids.left(ids.count() - 2); listId.replace("%ID%", ids); }
@@ -733,7 +730,12 @@ QSqlError QxMongoDB_Helper::QxMongoDB_HelperImpl::findMany_(qx::dao::detail::IxD
 
    const bson_t * doc = NULL;
    while (mongoc_cursor_next(cursor.get(), (& doc)))
-   { char * val = bson_as_relaxed_extended_json(doc, NULL); json << QString(val); bson_free(val); }
+   {
+      char * val = bson_as_relaxed_extended_json(doc, NULL);
+      if (pFetcher) { QString tmp(val); pFetcher->fetch(tmp); if (pDaoHelper && (! pDaoHelper->isValid())) { bson_free(val); return pDaoHelper->error(); } }
+      else { json << QString(val); }
+      bson_free(val);
+   }
 
    bson_error_t bsonError;
    if (mongoc_cursor_error(cursor.get(), (& bsonError)))
@@ -741,16 +743,15 @@ QSqlError QxMongoDB_Helper::QxMongoDB_HelperImpl::findMany_(qx::dao::detail::IxD
    return QSqlError();
 }
 
-QSqlError QxMongoDB_Helper::aggregate(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, QStringList & json, const qx::QxSqlQuery * query /* = NULL */, const QString & lookup /* = QString() */)
+QSqlError QxMongoDB_Helper::aggregate(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, QStringList & json, const qx::QxSqlQuery * query /* = NULL */, const QString & lookup /* = QString() */, QxMongoDB_Fetcher * pFetcher /* = NULL */)
 {
-   QTime timeDB; if (pDaoHelper) { timeDB.start(); }
+   qx::dao::detail::IxDao_Timer timer(pDaoHelper, qx::dao::detail::IxDao_Helper::timer_db_exec);
    QxMongoDB_Helper * pSingleton = QxMongoDB_Helper::getSingleton(); qAssert(pSingleton != NULL);
-   QSqlError err = pSingleton->m_pImpl->aggregate_(pDaoHelper, pClass, json, query, lookup);
-   if (pDaoHelper) { int ms = timeDB.elapsed(); pDaoHelper->setTimeDatabase(ms); }
+   QSqlError err = pSingleton->m_pImpl->aggregate_(pDaoHelper, pClass, json, query, lookup, pFetcher);
    return (pDaoHelper ? pDaoHelper->updateError(err) : err);
 }
 
-QSqlError QxMongoDB_Helper::QxMongoDB_HelperImpl::aggregate_(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, QStringList & json, const qx::QxSqlQuery * query, const QString & lookup)
+QSqlError QxMongoDB_Helper::QxMongoDB_HelperImpl::aggregate_(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, QStringList & json, const qx::QxSqlQuery * query, const QString & lookup, QxMongoDB_Fetcher * pFetcher)
 {
    QString listId = (query ? QString() : ((json.count() > 0) ? QString("{ \"_id\": { \"$in\": [ %ID% ] } }") : QString()));
    if (! listId.isEmpty()) { QString ids; Q_FOREACH(QString s, json) { ids += asJson(s) + ", "; }; ids = ids.left(ids.count() - 2); listId.replace("%ID%", ids); }
@@ -772,7 +773,12 @@ QSqlError QxMongoDB_Helper::QxMongoDB_HelperImpl::aggregate_(qx::dao::detail::Ix
 
    const bson_t * doc = NULL;
    while (mongoc_cursor_next(cursor.get(), (& doc)))
-   { char * val = bson_as_relaxed_extended_json(doc, NULL); json << QString(val); bson_free(val); }
+   {
+      char * val = bson_as_relaxed_extended_json(doc, NULL);
+      if (pFetcher) { QString tmp(val); pFetcher->fetch(tmp); if (pDaoHelper && (! pDaoHelper->isValid())) { bson_free(val); return pDaoHelper->error(); } }
+      else { json << QString(val); }
+      bson_free(val);
+   }
 
    bson_error_t bsonError;
    if (mongoc_cursor_error(cursor.get(), (& bsonError)))
@@ -782,10 +788,9 @@ QSqlError QxMongoDB_Helper::QxMongoDB_HelperImpl::aggregate_(qx::dao::detail::Ix
 
 QSqlError QxMongoDB_Helper::executeCommand(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, qx::QxSqlQuery * query)
 {
-   QTime timeDB; if (pDaoHelper) { timeDB.start(); }
+   qx::dao::detail::IxDao_Timer timer(pDaoHelper, qx::dao::detail::IxDao_Helper::timer_db_exec);
    QxMongoDB_Helper * pSingleton = QxMongoDB_Helper::getSingleton(); qAssert(pSingleton != NULL);
    QSqlError err = pSingleton->m_pImpl->executeCommand_(pDaoHelper, pClass, query);
-   if (pDaoHelper) { int ms = timeDB.elapsed(); pDaoHelper->setTimeDatabase(ms); }
    return (pDaoHelper ? pDaoHelper->updateError(err) : err);
 }
 
@@ -843,10 +848,9 @@ QSqlError QxMongoDB_Helper::QxMongoDB_HelperImpl::executeCommand_(qx::dao::detai
 
 QSqlError QxMongoDB_Helper::count(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, long & cnt, const qx::QxSqlQuery * query /* = NULL */)
 {
-   QTime timeDB; if (pDaoHelper) { timeDB.start(); }
+   qx::dao::detail::IxDao_Timer timer(pDaoHelper, qx::dao::detail::IxDao_Helper::timer_db_exec);
    QxMongoDB_Helper * pSingleton = QxMongoDB_Helper::getSingleton(); qAssert(pSingleton != NULL);
    QSqlError err = pSingleton->m_pImpl->count_(pDaoHelper, pClass, cnt, query);
-   if (pDaoHelper) { int ms = timeDB.elapsed(); pDaoHelper->setTimeDatabase(ms); }
    return (pDaoHelper ? pDaoHelper->updateError(err) : err);
 }
 
@@ -921,6 +925,12 @@ void QxMongoDB_Helper::setLogDatabaseReply(bool b)
 {
    QxMongoDB_Helper * pSingleton = QxMongoDB_Helper::getSingleton(); qAssert(pSingleton != NULL);
    pSingleton->m_pImpl->m_bLogDatabaseReply = b;
+}
+
+void QxMongoDB_Helper::setLogDatabaseInfo(bool b)
+{
+   QxMongoDB_Helper * pSingleton = QxMongoDB_Helper::getSingleton(); qAssert(pSingleton != NULL);
+   pSingleton->m_pImpl->m_bLogDatabaseInfo = b;
 }
 
 void QxMongoDB_Helper::clearPoolConnection()

@@ -121,6 +121,7 @@ public:
    QStringList getSqlDelimiterForColumnName() const;
    int getTraceSqlOnlySlowQueriesDatabase() const;
    int getTraceSqlOnlySlowQueriesTotal() const;
+   bool getDisplayTimerDetails() const;
 
    void setDriverName(const QString & s, bool bJustForCurrentThread = false, QSqlDatabase * pJustForThisDatabase = NULL);
    void setConnectOptions(const QString & s, bool bJustForCurrentThread = false, QSqlDatabase * pJustForThisDatabase = NULL);
@@ -150,6 +151,7 @@ public:
    void setSqlDelimiterForColumnName(const QStringList & lst, bool bJustForCurrentThread = false, QSqlDatabase * pJustForThisDatabase = NULL);
    void setTraceSqlOnlySlowQueriesDatabase(int i, bool bJustForCurrentThread = false, QSqlDatabase * pJustForThisDatabase = NULL);
    void setTraceSqlOnlySlowQueriesTotal(int i, bool bJustForCurrentThread = false, QSqlDatabase * pJustForThisDatabase = NULL);
+   void setDisplayTimerDetails(bool b, bool bJustForCurrentThread = false, QSqlDatabase * pJustForThisDatabase = NULL);
 
    static QSqlDatabase getDatabase();
    static QSqlDatabase getDatabase(QSqlError & dbError);

@@ -237,6 +237,27 @@ struct generic_container_base_key_value_std_style
 };
 
 template <typename Container, typename Key, typename Value>
+struct generic_container_base_key_value_without_reserve
+{
+
+   QX_TRAIT_GENERIC_CONTAINER_TYPEDEF(Container, Key, Value)
+
+   static inline long size(const Container & t)                      { return static_cast<long>(t.size()); }
+   static inline void clear(Container & t)                           { t.clear(); }
+   static inline void reserve(Container & t, long l)                 { Q_UNUSED(t); Q_UNUSED(l); }
+   static inline type_item createItem()                              { return type_item(type_item::newKey(), type_item::newValue()); }
+   static inline Value * insertItem(Container & t, type_item & item) { return (& (t.insert(std::make_pair(item.key(), item.value())).first->second)); }
+   static inline type_iterator end(Container & t)                    { return t.end(); }
+
+   static inline type_iterator begin(Container & t, type_item & item)
+   { if (t.size() <= 0) { return t.end(); }; item.value(* t.begin().second); item.key(* t.begin().first); return t.begin(); }
+
+   static inline type_iterator next(Container & t, type_iterator itr, type_item & item)
+   { itr++; if (itr == t.end()) { return t.end(); }; item.value(* itr.second); item.key(* itr.first); return itr; }
+
+};
+
+template <typename Container, typename Key, typename Value>
 struct generic_container_base_key_value_multi_std_style
 {
 
@@ -293,7 +314,7 @@ struct generic_container< std::set<T> > : public qx::trait::detail::generic_cont
 { QX_TRAIT_GENERIC_CONTAINER_TYPEDEF(QX_TEMPLATE_T_P1(std::set, T), qx::trait::no_type, T) };
 
 template <typename Key, typename Value>
-struct generic_container< std::map<Key, Value> > : public qx::trait::detail::generic_container_base_key_value_std_style< std::map<Key, Value>, Key, Value >
+struct generic_container< std::map<Key, Value> > : public qx::trait::detail::generic_container_base_key_value_without_reserve< std::map<Key, Value>, Key, Value >
 { QX_TRAIT_GENERIC_CONTAINER_TYPEDEF(QX_TEMPLATE_T_P1_P2(std::map, Key, Value), Key, Value) };
 
 #ifdef _QX_ENABLE_BOOST

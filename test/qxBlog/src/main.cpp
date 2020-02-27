@@ -22,6 +22,7 @@ int main(int argc, char * argv[])
    qx::QxSqlDatabase::getSingleton()->setUserName("root");
    qx::QxSqlDatabase::getSingleton()->setPassword("");
    qx::QxSqlDatabase::getSingleton()->setFormatSqlQueryBeforeLogging(true);
+   qx::QxSqlDatabase::getSingleton()->setDisplayTimerDetails(true);
 
    // Only for debug purpose : assert if invalid offset detected fetching a relation
    qx::QxSqlDatabase::getSingleton()->setVerifyOffsetRelation(true);
@@ -69,6 +70,20 @@ int main(int argc, char * argv[])
    // Dump list of female author (xml serialization)
    qx::dump(list_of_female_author, false);
    qx::dump(list_of_female_author, true);
+
+   // Test qx::QxSqlQuery::freeText() with/without placeholders
+   query = qx_query(); query.freeText("WHERE author.sex = " + QString::number(static_cast<int>(author::female)));
+   daoError = qx::dao::fetch_by_query(query, list_of_female_author);
+   qAssert(list_of_female_author.count() == 2);
+   query = qx_query(); query.freeText("WHERE author.sex = :sex", QVariantList() << author::female);
+   daoError = qx::dao::fetch_by_query(query, list_of_female_author);
+   qAssert(list_of_female_author.count() == 2);
+   query = qx_query(); query.freeText("WHERE author.sex=:sex AND author.author_id=:author_id", QVariantList() << author::female << "author_id_2");
+   daoError = qx::dao::fetch_by_query(query, list_of_female_author);
+   qAssert(list_of_female_author.count() == 1);
+   query = qx_query(); query.freeText("WHERE (author.sex = :sex) AND (author.author_id = :author_id)", QVariantList() << author::female << "author_id_2");
+   daoError = qx::dao::fetch_by_query(query, list_of_female_author);
+   qAssert(list_of_female_author.count() == 1);
 
    // Create 3 categories
    category_ptr category_1 = category_ptr(new category());

@@ -162,6 +162,14 @@ template <> struct QxConvert_ToVariant< QJsonValue > {
 static inline QVariant toVariant(const QJsonValue & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return t.toVariant(); } };
 
+template <> struct QxConvert_ToVariant< QJsonArray > {
+static inline QVariant toVariant(const QJsonArray & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
+{ Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); QVariant var(t); return var; } };
+
+template <> struct QxConvert_ToVariant< QJsonObject > {
+static inline QVariant toVariant(const QJsonObject & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
+{ Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); QVariant var(t); return var; } };
+
 #endif // _QX_NO_JSON
 
 #ifdef _QX_ENABLE_BOOST

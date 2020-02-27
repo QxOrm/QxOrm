@@ -33,6 +33,8 @@
 
 #include <QxDao/QxSqlElement/QxSqlFreeText.h>
 
+#include <QxDao/QxSqlDatabase.h>
+
 #include <QxMemLeak/mem_leak.h>
 
 namespace qx {
@@ -47,15 +49,42 @@ QxSqlFreeText::~QxSqlFreeText() { ; }
 
 IxSqlElement::type_class QxSqlFreeText::getTypeClass() const { return IxSqlElement::_sql_free_text; }
 
-QString QxSqlFreeText::toString() const { return ((m_lstValues.count() > 0) ? m_lstValues.at(0).toString() : QString("")); }
+QString QxSqlFreeText::toString() const { return m_sText; }
 
-void QxSqlFreeText::resolve(QSqlQuery & query) const { Q_UNUSED(query); }
+void QxSqlFreeText::resolve(QSqlQuery & query) const
+{
+   if (m_lstValues.count() <= 0) { return; }
+   qx::QxSqlDatabase::ph_style phStyle = qx::QxSqlDatabase::getSingleton()->getSqlPlaceHolderStyle();
+   bool bQuestionMark = (phStyle == qx::QxSqlDatabase::ph_style_question_mark);
+   QString toFind = ((phStyle == qx::QxSqlDatabase::ph_style_2_point_name) ? QString(":") : QString("@"));
+   QString txt = m_sText.trimmed();
+   int posBegin = -1;
+   int posEnd = -1;
+
+   for (int i = 0; i < m_lstValues.count(); i++)
+   {
+      QVariant val(m_lstValues.at(i));
+      if (bQuestionMark) { query.addBindValue(val); }
+      else
+      {
+         posBegin = txt.indexOf(toFind);
+         posEnd = txt.indexOf(" ", (posBegin + 1));
+         if ((posEnd == -1) && (i == (m_lstValues.count() - 1))) { posEnd = txt.size(); }
+         if ((posBegin == -1) || (posEnd == -1) || (posEnd <= posBegin)) { qAssert(false); break; }
+         QString key = txt.mid(posBegin, (posEnd - posBegin)).replace(")", "");
+         txt = txt.right(txt.size() - posEnd).trimmed();
+         query.bindValue(key, val);
+      }
+   }
+}
 
 void QxSqlFreeText::postProcess(QString & sql) const { Q_UNUSED(sql); }
 
 QString QxSqlFreeText::getExtraSettings() const { return ""; }
 
 void QxSqlFreeText::setExtraSettings(const QString & s) { Q_UNUSED(s); }
+
+void QxSqlFreeText::setText(const QString & txt) { m_sText = txt; }
 
 } // namespace detail
 } // namespace dao

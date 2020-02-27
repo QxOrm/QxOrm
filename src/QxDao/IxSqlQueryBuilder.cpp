@@ -78,7 +78,7 @@ struct IxSqlQueryBuilder::IxSqlQueryBuilderImpl
 
 QHash<QString, QString> IxSqlQueryBuilder::IxSqlQueryBuilderImpl::m_lstSqlQuery;
 QHash<QString, QHash<QString, QString> > IxSqlQueryBuilder::IxSqlQueryBuilderImpl::m_lstSqlAlias;
-QMutex IxSqlQueryBuilder::IxSqlQueryBuilderImpl::m_mutex(QMutex::Recursive);
+QMutex IxSqlQueryBuilder::IxSqlQueryBuilderImpl::m_mutex;
 
 IxSqlQueryBuilder::IxSqlQueryBuilder() : m_pImpl(new IxSqlQueryBuilderImpl()) { ; }
 
@@ -128,16 +128,6 @@ void IxSqlQueryBuilder::setSoftDelete(const QxSoftDelete & o) { m_pImpl->m_oSoft
 
 void IxSqlQueryBuilder::setDataMemberX(IxDataMemberX * p) { m_pImpl->m_pDataMemberX = p; }
 
-QHash<QString, QString> & IxSqlQueryBuilder::listSqlQueryAlias() { return m_pImpl->m_lstSqlQueryAlias; }
-
-const QHash<QString, QString> & IxSqlQueryBuilder::listSqlQueryAlias() const { return m_pImpl->m_lstSqlQueryAlias; }
-
-QHash<QString, QString> & IxSqlQueryBuilder::listSqlQuery() { return IxSqlQueryBuilderImpl::m_lstSqlQuery; }
-
-QHash<QString, QHash<QString, QString> > & IxSqlQueryBuilder::listSqlAlias() { return IxSqlQueryBuilderImpl::m_lstSqlAlias; }
-
-QMutex & IxSqlQueryBuilder::getMutex() { return IxSqlQueryBuilderImpl::m_mutex; }
-
 void IxSqlQueryBuilder::clone(const IxSqlQueryBuilder & other)
 {
    this->m_pImpl->m_lstDataMemberPtr = other.m_pImpl->m_lstDataMemberPtr;
@@ -167,22 +157,36 @@ void IxSqlQueryBuilder::init()
 void IxSqlQueryBuilder::setSqlQuery(const QString & sql, const QString & key /* = QString() */)
 {
    m_pImpl->m_sSqlQuery = sql;
-   if (! key.isEmpty()) { IxSqlQueryBuilderImpl::m_lstSqlQuery.insert(key, sql); }
+   if (! key.isEmpty())
+   {
+      QMutexLocker locker(& IxSqlQueryBuilderImpl::m_mutex);
+      IxSqlQueryBuilderImpl::m_lstSqlQuery.insert(key, sql);
+   }
 }
 
-void IxSqlQueryBuilder::displaySqlQuery(int time_ms /* = -1 */, int time_db /* = -1 */, const QString & query /* = QString() */) const
+bool IxSqlQueryBuilder::findSqlQuery(const QString & key)
 {
-   QString sql = (query.isEmpty() ? m_pImpl->m_sSqlQuery : query);
-   bool bFormatSql = qx::QxSqlDatabase::getSingleton()->getFormatSqlQueryBeforeLogging();
-   qx::dao::detail::IxSqlGenerator * pSqlGenerator = qx::QxSqlDatabase::getSingleton()->getSqlGenerator();
-   int iTraceSqlOnlySlowQueriesDatabase = qx::QxSqlDatabase::getSingleton()->getTraceSqlOnlySlowQueriesDatabase();
-   int iTraceSqlOnlySlowQueriesTotal = qx::QxSqlDatabase::getSingleton()->getTraceSqlOnlySlowQueriesTotal();
-   if ((iTraceSqlOnlySlowQueriesDatabase > 0) && (iTraceSqlOnlySlowQueriesTotal < 0)) { iTraceSqlOnlySlowQueriesTotal = 9999999; }
-   else if ((iTraceSqlOnlySlowQueriesTotal > 0) && (iTraceSqlOnlySlowQueriesDatabase < 0)) { iTraceSqlOnlySlowQueriesDatabase = 9999999; }
-   if (bFormatSql && pSqlGenerator) { pSqlGenerator->formatSqlQuery(NULL, sql); }
-   if (time_ms < 0) { qDebug("[QxOrm] sql query : %s", qPrintable(sql)); }
-   else if ((time_ms >= iTraceSqlOnlySlowQueriesTotal) || (time_db >= iTraceSqlOnlySlowQueriesDatabase))
-   { qDebug("[QxOrm] sql query (total: %d ms, db: %d ms) : %s", time_ms, time_db, qPrintable(sql)); }
+   if (key.isEmpty()) { return false; }
+   QMutexLocker locker(& IxSqlQueryBuilderImpl::m_mutex);
+   QString sql = IxSqlQueryBuilderImpl::m_lstSqlQuery.value(key);
+   if (! sql.isEmpty()) { m_pImpl->m_sSqlQuery = sql; }
+   return (! sql.isEmpty());
+}
+
+bool IxSqlQueryBuilder::findSqlAlias(const QString & key)
+{
+   if (key.isEmpty()) { return false; }
+   QMutexLocker locker(& IxSqlQueryBuilderImpl::m_mutex);
+   if (! IxSqlQueryBuilderImpl::m_lstSqlAlias.contains(key)) { return false; }
+   m_pImpl->m_lstSqlQueryAlias = IxSqlQueryBuilderImpl::m_lstSqlAlias.value(key);
+   return true;
+}
+
+void IxSqlQueryBuilder::insertSqlAlias(const QString & key)
+{
+   if (key.isEmpty()) { return; }
+   QMutexLocker locker(& IxSqlQueryBuilderImpl::m_mutex);
+   IxSqlQueryBuilderImpl::m_lstSqlAlias.insert(key, m_pImpl->m_lstSqlQueryAlias);
 }
 
 void IxSqlQueryBuilder::initIdX(long lAllRelationCount)

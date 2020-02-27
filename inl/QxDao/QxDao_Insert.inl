@@ -64,8 +64,13 @@ struct QxDao_Insert_Generic
 
       if (pSqlGenerator) { pSqlGenerator->onBeforeInsert((& dao), (& t)); }
       qx::dao::on_before_insert<T>((& t), (& dao)); if (! dao.isValid()) { return dao.error(); }
-      qx::dao::detail::QxSqlQueryHelper_Insert<T>::resolveInput(t, dao.query(), dao.builder());
-      if (! dao.query().exec()) { return dao.errFailed(); }
+
+      {
+         qx::dao::detail::IxDao_Timer timer((& dao), qx::dao::detail::IxDao_Helper::timer_cpp_read_instance);
+         qx::dao::detail::QxSqlQueryHelper_Insert<T>::resolveInput(t, dao.query(), dao.builder());
+      }
+
+      if (! dao.exec(true)) { return dao.errFailed(); }
       dao.updateLastInsertId(t);
       if (pSqlGenerator) { pSqlGenerator->onAfterInsert((& dao), (& t)); }
       qx::dao::on_after_insert<T>((& t), (& dao)); if (! dao.isValid()) { return dao.error(); }
@@ -181,8 +186,13 @@ private:
          IxSqlGenerator * pSqlGenerator = dao.getSqlGenerator();
          if (pSqlGenerator) { pSqlGenerator->onBeforeInsert((& dao), (& item)); }
          qx::dao::on_before_insert<U>((& item), (& dao)); if (! dao.isValid()) { return false; }
-         qx::dao::detail::QxSqlQueryHelper_Insert<U>::resolveInput(item, dao.query(), dao.builder());
-         if (! dao.query().exec()) { dao.errFailed(); return false; }
+
+         {
+            qx::dao::detail::IxDao_Timer timer((& dao), qx::dao::detail::IxDao_Helper::timer_cpp_read_instance);
+            qx::dao::detail::QxSqlQueryHelper_Insert<U>::resolveInput(item, dao.query(), dao.builder());
+         }
+
+         if (! dao.exec(true)) { dao.errFailed(); return false; }
          dao.updateLastInsertId(item);
          if (pSqlGenerator) { pSqlGenerator->onAfterInsert((& dao), (& item)); }
          qx::dao::on_after_insert<U>((& item), (& dao)); if (! dao.isValid()) { return false; }

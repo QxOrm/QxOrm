@@ -52,6 +52,8 @@ struct QxDao_FetchAll_WithRelation_Generic
          qx::dao::on_before_fetch<T>((& t), (& dao)); if (! dao.isValid()) { return dao.error(); }
          QString json = qx::serialization::json::to_string(t, 1, "mongodb:only_id");
          qx::dao::mongodb::QxMongoDB_Helper::findOne((& dao), dao.getDataMemberX()->getClass(), json, (& query)); if (! dao.isValid()) { return dao.error(); }
+
+         qx::dao::detail::IxDao_Timer timer((& dao), qx::dao::detail::IxDao_Helper::timer_cpp_build_instance);
          qx::serialization::json::from_string(t, json, 1, "mongodb");
          qx::dao::on_after_fetch<T>((& t), (& dao)); if (! dao.isValid()) { return dao.error(); }
          return dao.error();
@@ -64,12 +66,14 @@ struct QxDao_FetchAll_WithRelation_Generic
       if (! query.isEmpty()) { dao.addQuery(query, true); sql = dao.builder().getSqlQuery(); }
       if (! dao.exec()) { return dao.errFailed(); }
 
-      qx::dao::on_before_fetch<T>((& t), (& dao));
-      if (! dao.isValid()) { return dao.error(); }
-      if (dao.getCartesianProduct()) { fetchAll_Complex(t, dao); }
-      else { fetchAll_Simple(t, dao); }
-      if (! dao.isValid()) { return dao.error(); }
-      qx::dao::on_after_fetch<T>((& t), (& dao));
+      {
+         qx::dao::on_before_fetch<T>((& t), (& dao));
+         if (! dao.isValid()) { return dao.error(); }
+         if (dao.getCartesianProduct()) { fetchAll_Complex(t, dao); }
+         else { fetchAll_Simple(t, dao); }
+         if (! dao.isValid()) { return dao.error(); }
+         qx::dao::on_after_fetch<T>((& t), (& dao));
+      }
 
       return dao.error();
    }
@@ -78,17 +82,97 @@ private:
 
    static inline void fetchAll_Simple(T & t, type_dao_helper & dao)
    {
-      if (dao.nextRecord())
-      { type_query_helper::resolveOutput(dao.getSqlRelationLinked(), t, dao.query(), dao.builder()); }
+      if (! dao.nextRecord()) { return; }
+      qx::dao::detail::IxDao_Timer timer((& dao), qx::dao::detail::IxDao_Helper::timer_cpp_build_instance);
+      type_query_helper::resolveOutput(dao.getSqlRelationLinked(), t, dao.query(), dao.builder());
    }
 
    static inline void fetchAll_Complex(T & t, type_dao_helper & dao)
    {
       while (dao.nextRecord())
-      { type_query_helper::resolveOutput(dao.getSqlRelationLinked(), t, dao.query(), dao.builder()); if (! dao.isValid()) { return; } }
+      {
+         qx::dao::detail::IxDao_Timer timer((& dao), qx::dao::detail::IxDao_Helper::timer_cpp_build_instance);
+         type_query_helper::resolveOutput(dao.getSqlRelationLinked(), t, dao.query(), dao.builder());
+         if (! dao.isValid()) { return; }
+      }
    }
 
 };
+
+#ifdef _QX_ENABLE_MONGODB
+template <class T>
+struct QxDao_FetchAll_WithRelation_MongoDB_Fetcher : public qx::dao::mongodb::QxMongoDB_Fetcher
+{
+
+   typedef qx::dao::detail::QxDao_Helper_Container<T> type_dao_helper;
+   typedef qx::trait::generic_container<T> type_generic_container;
+   typedef typename type_generic_container::type_item type_item;
+   typedef typename type_item::type_value_qx type_value_qx;
+   typedef typename type_item::type_value type_value;
+
+   T & m_t;
+   type_dao_helper & m_dao;
+
+   QxDao_FetchAll_WithRelation_MongoDB_Fetcher(T & t, type_dao_helper & dao) : qx::dao::mongodb::QxMongoDB_Fetcher(), m_t(t), m_dao(dao) { ; }
+   virtual ~QxDao_FetchAll_WithRelation_MongoDB_Fetcher() { ; }
+
+   virtual void fetch(const QString & json)
+   { fetcherHelper<type_item::is_value_pointer, 0>::insertNewItem(m_t, m_dao, json); }
+
+private:
+
+   template <bool bIsPointer /* = false */, int dummy>
+   struct fetcherHelper
+   {
+      static void insertNewItem(T & t, type_dao_helper & dao, const QString & json)
+      {
+         type_item item = type_generic_container::createItem();
+         qx::IxDataMember * pId = dao.getDataId(); qAssert(pId);
+
+         if (json.isEmpty()) { return; }
+         type_value_qx & item_val_tmp = item.value_qx();
+         qx::dao::detail::IxDao_Timer timer((& dao), qx::dao::detail::IxDao_Helper::timer_cpp_build_instance);
+         qx::serialization::json::from_string(item_val_tmp, json, 1, "mongodb:columns{,_id," + pId->getKey() + ",}");
+         for (int i = 0; i < (pId ? pId->getNameCount() : 0); i++)
+         {
+            QVariant id = pId->toVariant((& item_val_tmp), "", i, qx::cvt::context::e_database);
+            qx::cvt::from_variant(id, item.key(), "", i, qx::cvt::context::e_database);
+         }
+         type_value * pValue = type_generic_container::insertItem(t, item);
+         type_value_qx & item_val = (pValue ? (* static_cast<type_value_qx *>(pValue)) : item.value_qx());
+         qx::dao::on_before_fetch<type_value_qx>((& item_val), (& dao)); if (! dao.isValid()) { return; }
+         qx::serialization::json::from_string(item_val, json, 1, "mongodb");
+         qx::dao::on_after_fetch<type_value_qx>((& item_val), (& dao)); if (! dao.isValid()) { return; }
+         qx::dao::detail::QxDao_Keep_Original<type_item>::backup(item);
+      }
+   };
+
+   template <int dummy>
+   struct fetcherHelper<true, dummy>
+   {
+      static void insertNewItem(T & t, type_dao_helper & dao, const QString & json)
+      {
+         type_item item = type_generic_container::createItem();
+         type_value_qx & item_val = item.value_qx();
+         qx::IxDataMember * pId = dao.getDataId(); qAssert(pId);
+
+         if (json.isEmpty()) { return; }
+         qx::dao::detail::IxDao_Timer timer((& dao), qx::dao::detail::IxDao_Helper::timer_cpp_build_instance);
+         qx::dao::on_before_fetch<type_value_qx>((& item_val), (& dao)); if (! dao.isValid()) { return; }
+         qx::serialization::json::from_string(item_val, json, 1, "mongodb");
+         for (int i = 0; i < (pId ? pId->getNameCount() : 0); i++)
+         {
+            QVariant id = pId->toVariant((& item_val), "", i, qx::cvt::context::e_database);
+            qx::cvt::from_variant(id, item.key(), "", i, qx::cvt::context::e_database);
+         }
+         qx::dao::on_after_fetch<type_value_qx>((& item_val), (& dao)); if (! dao.isValid()) { return; }
+         qx::dao::detail::QxDao_Keep_Original<type_item>::backup(item);
+         qx::trait::generic_container<T>::insertItem(t, item);
+      }
+   };
+
+};
+#endif // _QX_ENABLE_MONGODB
 
 template <class T>
 struct QxDao_FetchAll_WithRelation_Container
@@ -113,9 +197,8 @@ struct QxDao_FetchAll_WithRelation_Container
       if (dao.isMongoDB())
       {
          QStringList & itemsAsJson = dao.itemsAsJson();
-         qx::dao::mongodb::QxMongoDB_Helper::findMany((& dao), dao.getDataMemberX()->getClass(), itemsAsJson, (& query)); if (! dao.isValid()) { return dao.error(); }
-         qx::trait::generic_container<T>::reserve(t, itemsAsJson.size());
-         for (int i = (itemsAsJson.size() - 1); i >= 0; i--) { insertHelper<type_item::is_value_pointer, 0>::insertNewItem(t, dao); if (! dao.isValid()) { return dao.error(); } }
+         QxDao_FetchAll_WithRelation_MongoDB_Fetcher<T> fetcher(t, dao);
+         qx::dao::mongodb::QxMongoDB_Helper::findMany((& dao), dao.getDataMemberX()->getClass(), itemsAsJson, (& query), (& fetcher));
          return dao.error();
       }
 #endif // _QX_ENABLE_MONGODB
@@ -153,28 +236,7 @@ private:
          type_item item = type_generic_container::createItem();
          qx::IxDataMember * pId = dao.getDataId(); qAssert(pId);
 
-#ifdef _QX_ENABLE_MONGODB
-         if (dao.isMongoDB())
-         {
-            if (dao.itemsAsJson().isEmpty()) { return; }
-            QString json = dao.itemsAsJson().takeFirst(); if (json.isEmpty()) { return; }
-            type_value_qx & item_val_tmp = item.value_qx();
-            qx::serialization::json::from_string(item_val_tmp, json, 1, "mongodb:columns{,_id," + pId->getKey() + ",}");
-            for (int i = 0; i < (pId ? pId->getNameCount() : 0); i++)
-            {
-               QVariant id = pId->toVariant((& item_val_tmp), "", i, qx::cvt::context::e_database);
-               qx::cvt::from_variant(id, item.key(), "", i, qx::cvt::context::e_database);
-            }
-            type_value * pValue = type_generic_container::insertItem(t, item);
-            type_value_qx & item_val = (pValue ? (* static_cast<type_value_qx *>(pValue)) : item.value_qx());
-            qx::dao::on_before_fetch<type_value_qx>((& item_val), (& dao)); if (! dao.isValid()) { return; }
-            qx::serialization::json::from_string(item_val, json, 1, "mongodb");
-            qx::dao::on_after_fetch<type_value_qx>((& item_val), (& dao)); if (! dao.isValid()) { return; }
-            qx::dao::detail::QxDao_Keep_Original<type_item>::backup(item);
-            return;
-         }
-#endif // _QX_ENABLE_MONGODB
-
+         qx::dao::detail::IxDao_Timer timer((& dao), qx::dao::detail::IxDao_Helper::timer_cpp_build_instance);
          if (pId) { for (int i = 0; i < pId->getNameCount(); i++) { QVariant v = dao.query().value(i); qx::cvt::from_variant(v, item.key(), "", i, qx::cvt::context::e_database); } }
          type_value * pValue = type_generic_container::insertItem(t, item);
          type_value_qx & item_val = (pValue ? (* static_cast<type_value_qx *>(pValue)) : item.value_qx());
@@ -194,25 +256,7 @@ private:
          type_value_qx & item_val = item.value_qx();
          qx::IxDataMember * pId = dao.getDataId(); qAssert(pId);
 
-#ifdef _QX_ENABLE_MONGODB
-         if (dao.isMongoDB())
-         {
-            if (dao.itemsAsJson().isEmpty()) { return; }
-            qx::dao::on_before_fetch<type_value_qx>((& item_val), (& dao)); if (! dao.isValid()) { return; }
-            QString json = dao.itemsAsJson().takeFirst(); if (json.isEmpty()) { return; }
-            qx::serialization::json::from_string(item_val, json, 1, "mongodb");
-            for (int i = 0; i < (pId ? pId->getNameCount() : 0); i++)
-            {
-               QVariant id = pId->toVariant((& item_val), "", i, qx::cvt::context::e_database);
-               qx::cvt::from_variant(id, item.key(), "", i, qx::cvt::context::e_database);
-            }
-            qx::dao::on_after_fetch<type_value_qx>((& item_val), (& dao)); if (! dao.isValid()) { return; }
-            qx::dao::detail::QxDao_Keep_Original<type_item>::backup(item);
-            qx::trait::generic_container<T>::insertItem(t, item);
-            return;
-         }
-#endif // _QX_ENABLE_MONGODB
-
+         qx::dao::detail::IxDao_Timer timer((& dao), qx::dao::detail::IxDao_Helper::timer_cpp_build_instance);
          if (pId) { for (int i = 0; i < pId->getNameCount(); i++) { QVariant v = dao.query().value(i); qx::cvt::from_variant(v, item.key(), "", i, qx::cvt::context::e_database); } }
          qx::dao::on_before_fetch<type_value_qx>((& item_val), (& dao)); if (! dao.isValid()) { return; }
          type_query_helper::resolveOutput(dao.getSqlRelationLinked(), item_val, dao.query(), dao.builder()); if (! dao.isValid()) { return; }
