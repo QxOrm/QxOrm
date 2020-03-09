@@ -57,13 +57,13 @@
 
 #define QX_SQL_BUILDER_INIT_FCT(oper) \
 qx::dao::detail::IxDao_Timer timer(this->getDaoHelper(), qx::dao::detail::IxDao_Helper::timer_build_sql); \
-QString key = QxClass<type_sql>::getSingleton()->getKey() + oper; \
+QString key = QxClass<type_sql>::getSingleton()->getKey() + (this->getDaoHelper() ? this->getDaoHelper()->qxQuery().getJoinQueryHash() : QString()) + oper; \
 if (this->findSqlQuery(key)) { return (* this); } \
 QString sql; Q_UNUSED(sql);
 
 #define QX_SQL_BUILDER_INIT_FCT_WITH_RELATION(oper) \
 qx::dao::detail::IxDao_Timer timer(this->getDaoHelper(), qx::dao::detail::IxDao_Helper::timer_build_sql); \
-QString key = QxClass<type_sql>::getSingleton()->getKey() + this->getHashRelation() + oper; \
+QString key = QxClass<type_sql>::getSingleton()->getKey() + (this->getDaoHelper() ? this->getDaoHelper()->qxQuery().getJoinQueryHash() : QString()) + this->getHashRelation() + oper; \
 if (this->findSqlQuery(key)) { this->findSqlAlias(key); return (* this); } \
 QString sql; Q_UNUSED(sql);
 

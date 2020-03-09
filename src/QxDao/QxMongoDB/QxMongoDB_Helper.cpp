@@ -227,7 +227,7 @@ struct QxMongoDB_Helper::QxMongoDB_HelperImpl
    QSqlError deleteMany_(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, const QStringList & json, const qx::QxSqlQuery * query);
    QSqlError findOne_(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, QString & json, const qx::QxSqlQuery * query);
    QSqlError findMany_(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, QStringList & json, const qx::QxSqlQuery * query, QxMongoDB_Fetcher * pFetcher);
-   QSqlError aggregate_(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, QStringList & json, const qx::QxSqlQuery * query, const QString & lookup, QxMongoDB_Fetcher * pFetcher);
+   QSqlError aggregate_(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, QStringList & json, const qx::QxSqlQuery * query, const QString & lookup, QxMongoDB_Fetcher * pFetcher, bool bModeDelete = false);
    QSqlError count_(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, long & cnt, const qx::QxSqlQuery * query);
    QSqlError executeCommand_(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, qx::QxSqlQuery * query);
 
@@ -626,6 +626,7 @@ QSqlError QxMongoDB_Helper::deleteMany(qx::dao::detail::IxDao_Helper * pDaoHelpe
 QSqlError QxMongoDB_Helper::QxMongoDB_HelperImpl::deleteMany_(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, const QStringList & json, const qx::QxSqlQuery * query)
 {
    if ((json.count() <= 0) && (! query)) { return QSqlError(); }
+   if (query && (query->type() == "aggregate")) { QStringList empty; return aggregate_(pDaoHelper, pClass, empty, query, "", NULL, true); }
    QString listId = (query ? QString() : ((json.count() > 0) ? QString("{ \"_id\": { \"$in\": [ %ID% ] } }") : QString()));
    if (! listId.isEmpty()) { QString ids; Q_FOREACH(QString s, json) { ids += asJson(s) + ", "; }; ids = ids.left(ids.count() - 2); listId.replace("%ID%", ids); }
    if (pDaoHelper) { pDaoHelper->qxQuery().queryAt(0, "MongoDB delete many '" + (pClass ? pClass->getName() : QString()) + "' :\n" + json.join(", \n") + "\n" + (query ? query->queryAt(0) : QString())); }
@@ -751,7 +752,7 @@ QSqlError QxMongoDB_Helper::aggregate(qx::dao::detail::IxDao_Helper * pDaoHelper
    return (pDaoHelper ? pDaoHelper->updateError(err) : err);
 }
 
-QSqlError QxMongoDB_Helper::QxMongoDB_HelperImpl::aggregate_(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, QStringList & json, const qx::QxSqlQuery * query, const QString & lookup, QxMongoDB_Fetcher * pFetcher)
+QSqlError QxMongoDB_Helper::QxMongoDB_HelperImpl::aggregate_(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, QStringList & json, const qx::QxSqlQuery * query, const QString & lookup, QxMongoDB_Fetcher * pFetcher, bool bModeDelete /* = false */)
 {
    QString listId = (query ? QString() : ((json.count() > 0) ? QString("{ \"_id\": { \"$in\": [ %ID% ] } }") : QString()));
    if (! listId.isEmpty()) { QString ids; Q_FOREACH(QString s, json) { ids += asJson(s) + ", "; }; ids = ids.left(ids.count() - 2); listId.replace("%ID%", ids); }
@@ -771,11 +772,22 @@ QSqlError QxMongoDB_Helper::QxMongoDB_HelperImpl::aggregate_(qx::dao::detail::Ix
    qx_scoped_wrapper<mongoc_cursor_t> cursor(cursor_);
    if (! cursor.get()) { return QSqlError("[QxOrm] Unable to create a 'mongoc_cursor_t' cursor instance (" + pClass->getName() + ")", "", QSqlError::UnknownError); }
 
-   const bson_t * doc = NULL;
+   const bson_t * doc = NULL; QStringList listIdsToDelete;
    while (mongoc_cursor_next(cursor.get(), (& doc)))
    {
       char * val = bson_as_relaxed_extended_json(doc, NULL);
-      if (pFetcher) { QString tmp(val); pFetcher->fetch(tmp); if (pDaoHelper && (! pDaoHelper->isValid())) { bson_free(val); return pDaoHelper->error(); } }
+      if (bModeDelete)
+      {
+         QJsonValue obj; QString tmp(val);
+         qx::cvt::from_string(tmp, obj);
+         if (obj.isObject())
+         {
+            QJsonValue id = obj.toObject().value("_id");
+            qx::cvt::from_json(id, tmp, "mongodb");
+            if (! tmp.isEmpty()) { listIdsToDelete.append(tmp); }
+         }
+      }
+      else if (pFetcher) { QString tmp(val); pFetcher->fetch(tmp); if (pDaoHelper && (! pDaoHelper->isValid())) { bson_free(val); return pDaoHelper->error(); } }
       else { json << QString(val); }
       bson_free(val);
    }
@@ -783,6 +795,7 @@ QSqlError QxMongoDB_Helper::QxMongoDB_HelperImpl::aggregate_(qx::dao::detail::Ix
    bson_error_t bsonError;
    if (mongoc_cursor_error(cursor.get(), (& bsonError)))
    { return QSqlError("[QxOrm] MongoDB cursor error trying to find many documents (" + pClass->getName() + ") : " + QString(bsonError.message), "", QSqlError::UnknownError); }
+   if (bModeDelete && (listIdsToDelete.count() > 0)) { return deleteMany_(pDaoHelper, pClass, listIdsToDelete, NULL); }
    return QSqlError();
 }
 

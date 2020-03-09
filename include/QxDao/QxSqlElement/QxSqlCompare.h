@@ -60,7 +60,8 @@ public:
 
    enum type { _is_equal_to, _is_not_equal_to, _is_greater_than, 
                _is_greater_than_or_equal_to, _is_less_than, _is_less_than_or_equal_to, 
-               _like, _not_like, _starts_with, _ends_with, _contains_string, _custom_operator };
+               _like, _not_like, _starts_with, _ends_with, _contains_string, _custom_operator, 
+               _is_equal_to_select, _is_not_equal_to_select };
 
 protected:
 

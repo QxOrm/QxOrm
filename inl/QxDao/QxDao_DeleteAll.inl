@@ -45,7 +45,7 @@ struct QxDao_DeleteAll
       if (bVerifySoftDelete && ! oSoftDelete.isEmpty())
       { delete pBuilder; pBuilder = new qx::QxSqlQueryBuilder_SoftDeleteAll<T>(); }
 
-      qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "delete all", pBuilder);
+      qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "delete all", pBuilder, (& query));
       if (! dao.isValid()) { return dao.error(); }
       if (dao.isReadOnly()) { return dao.errReadOnly(); }
 
@@ -60,7 +60,7 @@ struct QxDao_DeleteAll
       QString sql = dao.builder().buildSql().getSqlQuery();
       if (sql.isEmpty()) { return dao.errEmpty(); }
       if (! pDatabase) { dao.transaction(); }
-      if (! query.isEmpty()) { dao.addQuery(query, true); sql = dao.builder().getSqlQuery(); }
+      if (! query.isEmpty()) { dao.addQuery(true); sql = dao.builder().getSqlQuery(); }
       if (! dao.exec()) { return dao.errFailed(); }
 
       return dao.error();

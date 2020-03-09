@@ -31,6 +31,8 @@
 
 #include <QxPrecompiled.h>
 
+#include <QtCore/qmutex.h>
+
 #include <QtSql/qsqlquery.h>
 #include <QtSql/qsqlrecord.h>
 
@@ -38,6 +40,7 @@
 #include <QxDao/IxSqlQueryBuilder.h>
 #include <QxDao/QxSqlDatabase.h>
 #include <QxDao/QxSqlRelationLinked.h>
+#include <QxDao/QxSqlQuery.h>
 
 #include <QxDataMember/IxDataMember.h>
 #include <QxDataMember/IxDataMemberX.h>
@@ -58,7 +61,7 @@
 m_pClass(NULL), m_pClassOwner(NULL), m_pDataMember(p), m_pDataMemberX(NULL), \
 m_pDataMemberId(NULL), m_pDataMemberIdOwner(NULL), m_lOffsetRelation(100), \
 m_eJoinType(qx::dao::sql_join::left_outer_join), m_eRelationType(IxSqlRelation::no_relation), \
-m_bInitInEvent(false), m_bInitDone(false), m_iIsSameDataOwner(0)
+m_bInitInEvent(false), m_bInitDone(false), m_iIsSameDataOwner(0), m_mutex(QMutex::Recursive)
 
 namespace qx {
 
@@ -82,9 +85,10 @@ struct IxSqlRelation::IxSqlRelationImpl
    QString                          m_sExtraTable;          //!< Extra-table that holds the relationship (n-n)
    QString                          m_sForeignKeyOwner;     //!< SQL query foreign key for owner (n-n)
    QString                          m_sForeignKeyDataType;  //!< SQL query foreign key for data type (n-n)
-   bool                             m_bInitInEvent;         //!< Class initialisation in progress
-   bool                             m_bInitDone;            //!< Class initialisation finished
+   bool                             m_bInitInEvent;         //!< Class initialization in progress
+   bool                             m_bInitDone;            //!< Class initialization finished
    int                              m_iIsSameDataOwner;     //!< Check if relationship source entity and target entity are equal
+   QMutex                           m_mutex;                //!< Mutex => 'qx::IxSqlRelation' is thread-safe (initialization process)
 
    type_lst_data_member_ptr m_lstDataMemberPtr;             //!< Optimization : handle to collection of 'IxDataMember'
    std::shared_ptr<IxSqlRelationX> m_lstSqlRelationPtr;     //!< Optimization : handle to collection of 'IxSqlRelation'
@@ -152,7 +156,7 @@ IxDataMember * IxSqlRelation::getDataIdOwner() const { return m_pImpl->m_pDataMe
 
 void IxSqlRelation::setIsSameDataOwner(int i) { m_pImpl->m_iIsSameDataOwner = i; }
 
-bool IxSqlRelation::canInit() const { return (! m_pImpl->m_bInitInEvent && ! m_pImpl->m_bInitDone); }
+bool IxSqlRelation::canInit() const { if (m_pImpl->m_bInitDone) { return false; } { QMutexLocker locker(& m_pImpl->m_mutex); return (! m_pImpl->m_bInitInEvent); } }
 
 void IxSqlRelation::setClass(IxClass * pClass, IxClass * pClassOwner) { m_pImpl->m_pClass = pClass; m_pImpl->m_pClassOwner = pClassOwner; }
 
@@ -168,6 +172,7 @@ void IxSqlRelation::setExtraTable(const QString & s) const { m_pImpl->m_sExtraTa
 
 void IxSqlRelation::init()
 {
+   QMutexLocker locker(& m_pImpl->m_mutex);
    if (m_pImpl->m_bInitInEvent || m_pImpl->m_bInitDone) { return; }
    m_pImpl->m_bInitInEvent = true;
 
@@ -230,8 +235,8 @@ void IxSqlRelation::init()
       }
    }
 
-   m_pImpl->m_bInitInEvent = false;
    m_pImpl->m_bInitDone = true;
+   m_pImpl->m_bInitInEvent = false;
 }
 
 void IxSqlRelation::setTraceRelationInit(bool bTrace) { IxSqlRelation::IxSqlRelationImpl::m_bTraceRelationInit = bTrace; }
@@ -606,13 +611,24 @@ void IxSqlRelation::eagerJoin_ManyToMany(QxSqlRelationParams & params) const
    for (int i = 0; i < pIdOwner->getNameCount(); i++)
    { sql += pIdOwner->getSqlAlias(tableOwner, true, i) + " = " + sExtraTableAlias + "." + lstForeignKeyOwner.at(i) + " AND "; }
    sql = sql.left(sql.count() - 5); // Remove last " AND "
+
+   QString joinQuery;
+   qx::dao::detail::IxDao_Helper * pDaoHelper = params.builder().getDaoHelper();
+   if (pDaoHelper)
+   {
+      qx_query & query = pDaoHelper->qxQuery();
+      joinQuery = query.getJoinQuery(this->getKey(), tableAlias);
+   }
+
    sql += this->getSqlJoin(params.joinType()) + qx::IxDataMember::getSqlTableName(table) + " " + tableAlias + " ON ";
+   if (! joinQuery.isEmpty()) { sql += "("; }
    params.builder().addSqlQueryAlias(table, tableAlias);
    for (int i = 0; i < pIdData->getNameCount(); i++)
    { sql += sExtraTableAlias + "." + lstForeignKeyDataType.at(i) + " = " + pIdData->getSqlAlias(tableAlias, true, i) + " AND "; }
    if (! this->m_pImpl->m_oSoftDelete.isEmpty() && this->m_pImpl->m_oSoftDelete.getSqlFetchInJoin())
    { sql += this->m_pImpl->m_oSoftDelete.buildSqlQueryToFetch(tableAlias) + " AND "; }
    sql = sql.left(sql.count() - 5); // Remove last " AND "
+   if (! joinQuery.isEmpty()) { sql += " " + joinQuery + ")"; }
 }
 
 void IxSqlRelation::eagerJoin_ManyToOne(QxSqlRelationParams & params) const
@@ -623,13 +639,24 @@ void IxSqlRelation::eagerJoin_ManyToOne(QxSqlRelationParams & params) const
    QString table = this->table(); QString tableAlias = this->tableAlias(params);
    QString tableRef = this->tableAliasOwner(params);
    if (! pId || ! pData) { return; }
+
+   QString joinQuery;
+   qx::dao::detail::IxDao_Helper * pDaoHelper = params.builder().getDaoHelper();
+   if (pDaoHelper)
+   {
+      qx_query & query = pDaoHelper->qxQuery();
+      joinQuery = query.getJoinQuery(this->getKey(), tableAlias);
+   }
+
    sql += this->getSqlJoin(params.joinType()) + qx::IxDataMember::getSqlTableName(table) + " " + tableAlias + " ON ";
+   if (! joinQuery.isEmpty()) { sql += "("; }
    params.builder().addSqlQueryAlias(table, tableAlias);
    for (int i = 0; i < pId->getNameCount(); i++)
    { sql += pId->getSqlAlias(tableAlias, true, i) + " = " + pData->getSqlAlias(tableRef, true, i) + " AND "; }
    if (! this->m_pImpl->m_oSoftDelete.isEmpty() && this->m_pImpl->m_oSoftDelete.getSqlFetchInJoin())
    { sql += this->m_pImpl->m_oSoftDelete.buildSqlQueryToFetch(tableAlias) + " AND "; }
    sql = sql.left(sql.count() - 5); // Remove last " AND "
+   if (! joinQuery.isEmpty()) { sql += " " + joinQuery + ")"; }
 }
 
 void IxSqlRelation::eagerJoin_OneToMany(QxSqlRelationParams & params) const
@@ -640,13 +667,24 @@ void IxSqlRelation::eagerJoin_OneToMany(QxSqlRelationParams & params) const
    QString table = this->table(); QString tableAlias = this->tableAlias(params);
    QString tableRef = this->tableAliasOwner(params);
    if (! pId || ! pForeign) { return; }
+
+   QString joinQuery;
+   qx::dao::detail::IxDao_Helper * pDaoHelper = params.builder().getDaoHelper();
+   if (pDaoHelper)
+   {
+      qx_query & query = pDaoHelper->qxQuery();
+      joinQuery = query.getJoinQuery(this->getKey(), tableAlias);
+   }
+
    sql += this->getSqlJoin(params.joinType()) + qx::IxDataMember::getSqlTableName(table) + " " + tableAlias + " ON ";
+   if (! joinQuery.isEmpty()) { sql += "("; }
    params.builder().addSqlQueryAlias(table, tableAlias);
    for (int i = 0; i < pId->getNameCount(); i++)
    { sql += pForeign->getSqlAlias(tableAlias, true, i) + " = " + pId->getSqlAlias(tableRef, true, i) + " AND "; }
    if (! this->m_pImpl->m_oSoftDelete.isEmpty() && this->m_pImpl->m_oSoftDelete.getSqlFetchInJoin())
    { sql += this->m_pImpl->m_oSoftDelete.buildSqlQueryToFetch(tableAlias) + " AND "; }
    sql = sql.left(sql.count() - 5); // Remove last " AND "
+   if (! joinQuery.isEmpty()) { sql += " " + joinQuery + ")"; }
 }
 
 void IxSqlRelation::eagerJoin_OneToOne(QxSqlRelationParams & params) const
@@ -657,13 +695,24 @@ void IxSqlRelation::eagerJoin_OneToOne(QxSqlRelationParams & params) const
    QString table = this->table(); QString tableAlias = this->tableAlias(params);
    QString tableRef = this->tableAliasOwner(params);
    if (! pId || ! pIdRef) { return; }
+
+   QString joinQuery;
+   qx::dao::detail::IxDao_Helper * pDaoHelper = params.builder().getDaoHelper();
+   if (pDaoHelper)
+   {
+      qx_query & query = pDaoHelper->qxQuery();
+      joinQuery = query.getJoinQuery(this->getKey(), tableAlias);
+   }
+
    sql += this->getSqlJoin(params.joinType()) + qx::IxDataMember::getSqlTableName(table) + " " + tableAlias + " ON ";
+   if (! joinQuery.isEmpty()) { sql += "("; }
    params.builder().addSqlQueryAlias(table, tableAlias);
    for (int i = 0; i < pId->getNameCount(); i++)
    { sql += pId->getSqlAlias(tableAlias, true, i) + " = " + pIdRef->getSqlAlias(tableRef, true, i) + " AND "; }
    if (! this->m_pImpl->m_oSoftDelete.isEmpty() && this->m_pImpl->m_oSoftDelete.getSqlFetchInJoin())
    { sql += this->m_pImpl->m_oSoftDelete.buildSqlQueryToFetch(tableAlias) + " AND "; }
    sql = sql.left(sql.count() - 5); // Remove last " AND "
+   if (! joinQuery.isEmpty()) { sql += " " + joinQuery + ")"; }
 }
 
 void IxSqlRelation::eagerWhereSoftDelete_ManyToMany(QxSqlRelationParams & params) const

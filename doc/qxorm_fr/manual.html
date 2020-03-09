@@ -220,6 +220,9 @@
                                  <li class="manual_li_title_3">
                                     <a href="#manual_3850">Sélectionner les colonnes des relations à récupérer et définition des alias SQL</a>
                                  </li>
+                                 <li class="manual_li_title_3">
+                                    <a href="#manual_3855">Ajout SQL dans les clauses LEFT OUTER JOIN / INNER JOIN</a>
+                                 </li>
                               </ol>
                            </li>
                            <li class="manual_li_title_2">
@@ -2103,6 +2106,44 @@ qx::dump(lstBlogComplexRelation3);</pre>
                </div>
                <br><br>
             </div>
+            <p class="manual_p_title_3"><a class="manual_a_title_3" name="manual_3855">Ajout SQL dans les clauses LEFT OUTER JOIN / INNER JOIN</a></p>
+            <div class="manual_div_content">
+               La classe <a href="../doxygen/html/classqx_1_1_qx_sql_query.html" target="_blank">qx::QxSqlQuery</a> (ou son alias <a href="../doxygen/html/classqx_1_1_qx_sql_query.html" target="_blank">qx_query</a>) dispose de la méthode suivante :
+               <br><br>
+               <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="qx::QxSqlQuery::addJoinQuery()">
+<pre>QxSqlQuery & QxSqlQuery::<font style="background-color:yellow">addJoinQuery</font>(const QString & relationKeyOrAlias, const QxSqlQuery & joinQuery);</pre>
+               </td></tr></tbody></table>
+               <br><br>
+               La méthode <i>qx::QxSqlQuery::addJoinQuery()</i> permet d'insérer des sous-requêtes SQL dans les clauses <i>LEFT OUTER JOIN</i> / <i>INNER JOIN</i>.<br>
+               Par exemple :
+               <br><br>
+               <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td title="qx::QxSqlQuery::addJoinQuery()">
+<pre><span class="comment">// Test to add join SQL sub-queries (inside LEFT OUTER JOIN or INNER JOIN)</span>
+list_blog lstBlogWithJoinQueries;
+qx_query query = qx_query().where(<span class="string">"blog_alias.blog_text"</span>).isEqualTo(<span class="string">"update blog_text_1"</span>);
+<font style="background-color:yellow">query.addJoinQuery</font>(<span class="string">"list_comment_alias"</span>, <span class="string">"AND list_comment_alias.comment_text IS NOT NULL"</span>);
+<font style="background-color:yellow">query.addJoinQuery</font>(<span class="string">"author_alias"</span>, qx_query().freeText(<span class="string">"AND author_alias.sex = :sex"</span>, QVariantList() &lt;&lt; author::female));
+daoError = qx::dao::fetch_by_query_with_relation(QStringList() &lt;&lt; <span class="string">"&lt;blog_alias&gt; { blog_text }"</span> &lt;&lt; <span class="string">"author_id &lt;author_alias&gt; { name, birthdate, sex }"</span> 
+                                                               &lt;&lt; <span class="string">"list_comment &lt;list_comment_alias&gt; { comment_text }"</span>, query, lstBlogWithJoinQueries);
+qx::dump(lstBlogWithJoinQueries);
+qAssert(lstBlogWithJoinQueries.size() &gt; 0);
+qAssert(lstBlogWithJoinQueries[0]-&gt;m_text == <span class="string">"update blog_text_1"</span>);
+qAssert(lstBlogWithJoinQueries[0]-&gt;m_author-&gt;m_sex == author::female);</pre>
+               </td></tr></tbody></table>
+               <br><br>
+               Le code C++ ci-dessus va construire la requête SQL suivante :
+               <br><br>
+               <div style="width:900px; height:200px; overflow:auto; background-color:white">
+<pre><span class="int">SELECT blog_alias.blog_id AS blog_alias_blog_id_0, blog_alias.blog_text AS blog_alias_blog_text_0, blog_alias.author_id AS blog_alias_author_id_0, author_alias.author_id AS author_alias_author_id_0, author_alias.name AS author_alias_name_0, author_alias.birthdate AS author_alias_birthdate_0, author_alias.sex AS author_alias_sex_0, list_comment_alias.comment_id AS list_comment_alias_comment_id_0, list_comment_alias.blog_id AS list_comment_alias_blog_id_0, list_comment_alias.comment_text AS list_comment_alias_comment_text_0
+  FROM blog AS blog_alias
+  LEFT OUTER JOIN author author_alias ON (author_alias.author_id = blog_alias.author_id
+      <font style="background-color:yellow">AND author_alias.sex = :sex</font>)
+  LEFT OUTER JOIN comment list_comment_alias ON (list_comment_alias.blog_id = blog_alias.blog_id
+      <font style="background-color:yellow">AND list_comment_alias.comment_text IS NOT NULL</font>)
+  WHERE blog_alias.blog_text = :blog_alias_blog_text_1_0</span></pre>
+               </div>
+               <br><br>
+            </div>
          </div>
          <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_390">Collections supportées par QxOrm</a></p>
          <div class="manual_div_content">
@@ -2163,7 +2204,8 @@ qx::dump(lstBlogComplexRelation3);</pre>
               <ul><li>conserve l'ordre d'insertion des éléments dans la liste ;
               </li><li>accès rapide à un élément par son index : équivaut à <i>std::vector&lt;T&gt;</i> ou <i>QList&lt;T&gt;</i> par exemple ;
               </li><li>accès rapide à un élément par une clé (<i>hash-map</i>) : équivaut à <i>QHash&lt;Key, Value&gt;</i> ou <i>boost::unordered_map&lt;Key, Value&gt;</i> par exemple ;
-              </li><li>fonctions de tri sur le type <i>Key</i> et sur le type <i>Value</i>.
+              </li><li>fonctions de tri sur le type <i>Key</i> et sur le type <i>Value</i> ;
+              </li><li>thread-safe.
               </li></ul>
               <b>Remarque :</b>
               <i>qx::QxCollection&lt;Key, Value&gt;</i> est compatible avec la macro <i>foreach</i> fournie par la bibliothèque <b>Qt</b> ainsi que par la macro <a href="http://www.boost.org/doc/libs/release/doc/html/foreach.html" target="_blank"><i>BOOST_FOREACH</i></a> fournie par la bibliothèque <b>boost</b>.<br>

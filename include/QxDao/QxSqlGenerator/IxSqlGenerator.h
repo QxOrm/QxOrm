@@ -53,6 +53,7 @@ class IxDao_Helper;
 class IxSqlElement;
 class QxSqlCompare;
 class QxSqlElementTemp;
+class QxSqlEmbedQuery;
 class QxSqlExpression;
 class QxSqlFreeText;
 class QxSqlIn;

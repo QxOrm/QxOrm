@@ -113,7 +113,7 @@ class QX_DLL_EXPORT IxSqlElement
 public:
 
    enum type_class { _no_type, _sql_compare, _sql_element_temp, _sql_expression, _sql_free_text, 
-                     _sql_in, _sql_is_between, _sql_is_null, _sql_limit, _sql_sort };
+                     _sql_in, _sql_is_between, _sql_is_null, _sql_limit, _sql_sort, _sql_embed_query };
 
 protected:
 

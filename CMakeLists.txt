@@ -131,6 +131,7 @@ set(QX_HEADERS
     ./include/QxDao/QxSqlElement/QxSqlCompare.h
     ./include/QxDao/QxSqlElement/QxSqlElement.h
     ./include/QxDao/QxSqlElement/QxSqlElementTemp.h
+    ./include/QxDao/QxSqlElement/QxSqlEmbedQuery.h
     ./include/QxDao/QxSqlElement/QxSqlExpression.h
     ./include/QxDao/QxSqlElement/QxSqlFreeText.h
     ./include/QxDao/QxSqlElement/QxSqlIn.h
@@ -467,6 +468,7 @@ else() # _QX_UNITY_BUILD
        ./src/QxDao/QxSqlElement/IxSqlElement.cpp
        ./src/QxDao/QxSqlElement/QxSqlCompare.cpp
        ./src/QxDao/QxSqlElement/QxSqlElementTemp.cpp
+       ./src/QxDao/QxSqlElement/QxSqlEmbedQuery.cpp
        ./src/QxDao/QxSqlElement/QxSqlExpression.cpp
        ./src/QxDao/QxSqlElement/QxSqlFreeText.cpp
        ./src/QxDao/QxSqlElement/QxSqlIn.cpp

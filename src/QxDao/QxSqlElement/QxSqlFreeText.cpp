@@ -80,9 +80,9 @@ void QxSqlFreeText::resolve(QSqlQuery & query) const
 
 void QxSqlFreeText::postProcess(QString & sql) const { Q_UNUSED(sql); }
 
-QString QxSqlFreeText::getExtraSettings() const { return ""; }
+QString QxSqlFreeText::getExtraSettings() const { return m_sText; }
 
-void QxSqlFreeText::setExtraSettings(const QString & s) { Q_UNUSED(s); }
+void QxSqlFreeText::setExtraSettings(const QString & s) { m_sText = s; }
 
 void QxSqlFreeText::setText(const QString & txt) { m_sText = txt; }
 

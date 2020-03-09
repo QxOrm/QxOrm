@@ -248,6 +248,17 @@ int main(int argc, char * argv[])
    qAssert(lstBlogComplexRelation3[0]->m_commentX[0]->m_text != ""); // Fetched
    qAssert(lstBlogComplexRelation3[0]->m_commentX[0]->m_blog);
 
+   // Test to add join SQL sub-queries (inside LEFT OUTER JOIN or INNER JOIN)
+   list_blog lstBlogWithJoinQueries;
+   query = qx_query().where("blog_alias.blog_text").isEqualTo("update blog_text_1");
+   query.addJoinQuery("list_comment_alias", "AND list_comment_alias.comment_text IS NOT NULL");
+   query.addJoinQuery("author_alias", qx_query().freeText("AND author_alias.sex = :sex", QVariantList() << author::female));
+   daoError = qx::dao::fetch_by_query_with_relation(QStringList() << "<blog_alias> { blog_text }" << "author_id <author_alias> { name, birthdate, sex }" << "list_comment <list_comment_alias> { comment_text }", query, lstBlogWithJoinQueries);
+   qx::dump(lstBlogWithJoinQueries);
+   qAssert(lstBlogWithJoinQueries.size() > 0);
+   qAssert(lstBlogWithJoinQueries[0]->m_text == "update blog_text_1");
+   qAssert(lstBlogWithJoinQueries[0]->m_author->m_sex == author::female);
+
    // Check qx::dao::save_with_relation_recursive() function
    daoError = qx::dao::save_with_relation_recursive(blog_tmp);
    qAssert(! daoError.isValid());

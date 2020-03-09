@@ -40,7 +40,7 @@ struct QxDao_Count
    static long count(const qx::QxSqlQuery & query, QSqlDatabase * pDatabase)
    {
       T t; Q_UNUSED(t);
-      qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "count", new qx::QxSqlQueryBuilder_Count<T>());
+      qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "count", new qx::QxSqlQueryBuilder_Count<T>(), (& query));
       if (! dao.isValid()) { return 0; }
 
 #ifdef _QX_ENABLE_MONGODB
@@ -54,7 +54,7 @@ struct QxDao_Count
 
       QString sql = dao.builder().buildSql().getSqlQuery();
       if (sql.isEmpty()) { dao.errEmpty(); return 0; }
-      if (! query.isEmpty()) { dao.addQuery(query, true); sql = dao.builder().getSqlQuery(); }
+      if (! query.isEmpty()) { dao.addQuery(true); sql = dao.builder().getSqlQuery(); }
       if (! dao.exec()) { dao.errFailed(); return 0; }
       if (! dao.nextRecord()) { dao.errNoData(); return 0; }
 
@@ -64,7 +64,7 @@ struct QxDao_Count
    static QSqlError count(long & lCount, const qx::QxSqlQuery & query, QSqlDatabase * pDatabase)
    {
       T t; Q_UNUSED(t); lCount = 0;
-      qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "count", new qx::QxSqlQueryBuilder_Count<T>());
+      qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "count", new qx::QxSqlQueryBuilder_Count<T>(), (& query));
       if (! dao.isValid()) { return dao.error(); }
 
 #ifdef _QX_ENABLE_MONGODB
@@ -77,7 +77,7 @@ struct QxDao_Count
 
       QString sql = dao.builder().buildSql().getSqlQuery();
       if (sql.isEmpty()) { return dao.errEmpty(); }
-      if (! query.isEmpty()) { dao.addQuery(query, true); sql = dao.builder().getSqlQuery(); }
+      if (! query.isEmpty()) { dao.addQuery(true); sql = dao.builder().getSqlQuery(); }
       if (! dao.exec()) { return dao.errFailed(); }
       if (! dao.nextRecord()) { return dao.errNoData(); }
       lCount = static_cast<long>(dao.query().value(0).toLongLong());
@@ -94,7 +94,7 @@ struct QxDao_Count_WithRelation
    static QSqlError count(long & lCount, const QStringList & relation, const qx::QxSqlQuery & query, QSqlDatabase * pDatabase)
    {
       T t; Q_UNUSED(t); lCount = 0;
-      qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "count with relation", new qx::QxSqlQueryBuilder_Count_WithRelation<T>());
+      qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "count with relation", new qx::QxSqlQueryBuilder_Count_WithRelation<T>(), (& query));
       if (! dao.isValid()) { return dao.error(); }
       if (! dao.updateSqlRelationX(relation)) { return dao.errInvalidRelation(); }
 
@@ -109,7 +109,7 @@ struct QxDao_Count_WithRelation
       QStringList columns;
       QString sql = dao.builder().buildSql(columns, dao.getSqlRelationLinked()).getSqlQuery();
       if (sql.isEmpty()) { return dao.errEmpty(); }
-      if (! query.isEmpty()) { dao.addQuery(query, true); sql = dao.builder().getSqlQuery(); }
+      if (! query.isEmpty()) { dao.addQuery(true); sql = dao.builder().getSqlQuery(); }
       if (! dao.exec()) { return dao.errFailed(); }
       if (! dao.nextRecord()) { return dao.errNoData(); }
       lCount = static_cast<long>(dao.query().value(0).toLongLong());

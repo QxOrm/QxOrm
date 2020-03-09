@@ -100,6 +100,7 @@
     <ClCompile Include="src\QxDao\QxDateTimeNeutral.cpp" />
     <ClCompile Include="src\QxDao\QxMongoDB\QxMongoDB_Helper.cpp" />
     <ClCompile Include="src\QxDao\QxSoftDelete.cpp" />
+    <ClCompile Include="src\QxDao\QxSqlElement\QxSqlEmbedQuery.cpp" />
     <ClCompile Include="src\QxDao\QxTimeNeutral.cpp" />
     <ClCompile Include="src\QxHttpServer\QxHttpCookie.cpp" />
     <ClCompile Include="src\QxHttpServer\QxHttpRequest.cpp" />
@@ -239,6 +240,7 @@
     <ClInclude Include="include\QxDaoRepository.h" />
     <ClInclude Include="include\QxDao\QxDaoThrowable.h" />
     <ClInclude Include="include\QxDao\QxMongoDB\QxMongoDB_Helper.h" />
+    <ClInclude Include="include\QxDao\QxSqlElement\QxSqlEmbedQuery.h" />
     <ClInclude Include="include\QxDao\QxSqlSaveMode.h" />
     <ClInclude Include="include\QxExtras\QxBoostOptionalOnly.h" />
     <ClInclude Include="include\QxExtras\QxStdOptional.h" />

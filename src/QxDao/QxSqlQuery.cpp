@@ -59,9 +59,17 @@ namespace qx {
 
 QxSqlQuery::QxSqlQuery() : m_iSqlElementIndex(0), m_iParenthesisCount(0), m_bDistinct(false) { m_sQuery << QString(); }
 
-QxSqlQuery::QxSqlQuery(const char * query) : m_iSqlElementIndex(0), m_iParenthesisCount(0), m_bDistinct(false) { m_sQuery << QString(query); }
+QxSqlQuery::QxSqlQuery(const char * query, const QVariantList & values /* = QVariantList() */) : m_iSqlElementIndex(0), m_iParenthesisCount(0), m_bDistinct(false)
+{
+   if (values.count() <= 0) { m_sQuery << QString(query); }
+   else { addFreeText(query, values); }
+}
 
-QxSqlQuery::QxSqlQuery(const QString & query) : m_iSqlElementIndex(0), m_iParenthesisCount(0), m_bDistinct(false) { m_sQuery << query; }
+QxSqlQuery::QxSqlQuery(const QString & query, const QVariantList & values /* = QVariantList() */) : m_iSqlElementIndex(0), m_iParenthesisCount(0), m_bDistinct(false)
+{
+   if (values.count() <= 0) { m_sQuery << query; }
+   else { addFreeText(query, values); }
+}
 
 QxSqlQuery::QxSqlQuery(const QStringList & query) : m_sQuery(query), m_iSqlElementIndex(0), m_iParenthesisCount(0), m_bDistinct(false) { ; }
 
@@ -158,7 +166,7 @@ void QxSqlQuery::setType(const QString & s)
 
 bool QxSqlQuery::isEmpty() const
 {
-   return (queryAt(0).isEmpty() && (m_lstSqlElement.count() <= 0));
+   return (queryAt(0).isEmpty() && (m_lstSqlElement.count() <= 0) && (m_lstJoinQueryUser.count() <= 0));
 }
 
 bool QxSqlQuery::isDistinct() const
@@ -176,6 +184,8 @@ void QxSqlQuery::clear()
    m_iParenthesisCount = 0;
    m_vResponse = QVariant();
    m_sType = "";
+   m_lstJoinQueryUser.clear();
+   m_lstJoinQueryToResolve.clear();
 }
 
 QxSqlQuery & QxSqlQuery::query(const QString & sQuery)
@@ -226,6 +236,13 @@ QVariant QxSqlQuery::boundValue(int iPosition) const
 void QxSqlQuery::resolve(QSqlQuery & query) const
 {
    verifyQuery();
+
+   for (int i = 0; i < m_lstJoinQueryToResolve.count(); i++)
+   {
+      const QxSqlQuery & joinQuery = m_lstJoinQueryToResolve.at(i);
+      joinQuery.resolve(query);
+   }
+
    if (m_lstSqlElement.count() > 0)
    {
       for (int i = 0; i < m_lstSqlElement.count(); i++)
@@ -259,6 +276,36 @@ void QxSqlQuery::resolveOutput(QSqlQuery & query, bool bFetchSqlResult)
    }
    if (bFetchSqlResult) { fetchSqlResult(query); }
    m_lstValue = lst;
+}
+
+QString QxSqlQuery::getJoinQuery(const QString & relationKey, const QString & relationAlias)
+{
+   if (m_lstJoinQueryUser.contains(relationKey))
+   {
+      QxSqlQuery & query = m_lstJoinQueryUser[relationKey];
+      m_lstJoinQueryToResolve.append(query);
+      return query.query().trimmed();
+   }
+   else if (m_lstJoinQueryUser.contains(relationAlias))
+   {
+      QxSqlQuery & query = m_lstJoinQueryUser[relationAlias];
+      m_lstJoinQueryToResolve.append(query);
+      return query.query().trimmed();
+   }
+   return QString();
+}
+
+QString QxSqlQuery::getJoinQueryHash()
+{
+   QString hash;
+   QHashIterator<QString, QxSqlQuery> itr(m_lstJoinQueryUser);
+   while (itr.hasNext())
+   {
+      itr.next();
+      QxSqlQuery tmp = itr.value();
+      hash += "|" + itr.key() + "|" + tmp.query();
+   }
+   return hash;
 }
 
 void QxSqlQuery::dumpBoundValues(const QSqlQuery & query)
@@ -755,14 +802,32 @@ QxSqlQuery & QxSqlQuery::notIn(const QVariant & val1, const QVariant & val2, con
    return notIn(QVariantList() << val1 << val2 << val3 << val4 << val5 << val6 << val7 << val8 << val9);
 }
 
-QxSqlQuery & QxSqlQuery::in_Select(const QString & sql)
+QxSqlQuery & QxSqlQuery::in_Select(const QxSqlQuery & query)
 {
-   return addSqlIn(QVariantList() << QVariant(sql), qx::dao::detail::QxSqlIn::_in_select);
+   if (query.m_lstSqlElement.count() <= 0) { addSqlIn(QVariantList() << QVariant(query.queryAt(0)), qx::dao::detail::QxSqlIn::_in_select); }
+   else { addEmbedQuery(query, qx::dao::detail::QxSqlEmbedQuery::_in, true); }
+   return (* this);
 }
 
-QxSqlQuery & QxSqlQuery::notIn_Select(const QString & sql)
+QxSqlQuery & QxSqlQuery::notIn_Select(const QxSqlQuery & query)
 {
-   return addSqlIn(QVariantList() << QVariant(sql), qx::dao::detail::QxSqlIn::_not_in_select);
+   if (query.m_lstSqlElement.count() <= 0) { addSqlIn(QVariantList() << QVariant(query.queryAt(0)), qx::dao::detail::QxSqlIn::_not_in_select); }
+   else { addEmbedQuery(query, qx::dao::detail::QxSqlEmbedQuery::_not_in, true); }
+   return (* this);
+}
+
+QxSqlQuery & QxSqlQuery::isEqualTo_Select(const QxSqlQuery & query)
+{
+   if (query.m_lstSqlElement.count() <= 0) { addSqlCompare(query.queryAt(0), qx::dao::detail::QxSqlCompare::_is_equal_to_select); }
+   else { addEmbedQuery(query, qx::dao::detail::QxSqlEmbedQuery::_is_equal_to, true); }
+   return (* this);
+}
+
+QxSqlQuery & QxSqlQuery::isNotEqualTo_Select(const QxSqlQuery & query)
+{
+   if (query.m_lstSqlElement.count() <= 0) { addSqlCompare(query.queryAt(0), qx::dao::detail::QxSqlCompare::_is_not_equal_to_select); }
+   else { addEmbedQuery(query, qx::dao::detail::QxSqlEmbedQuery::_is_not_equal_to, true); }
+   return (* this);
 }
 
 QxSqlQuery & QxSqlQuery::isNull()
@@ -788,11 +853,12 @@ QxSqlQuery & QxSqlQuery::isNotBetween(const QVariant & val1, const QVariant & va
 QxSqlQuery & QxSqlQuery::freeText(const QString & text, const QVariantList & values /* = QVariantList() */)
 {
    if (text.isEmpty()) { return (* this); }
-   qx::dao::detail::QxSqlFreeText_ptr p;
-   p = std::make_shared<qx::dao::detail::QxSqlFreeText>(m_iSqlElementIndex++);
-   p->setText(text);
-   p->setValues(values);
-   m_lstSqlElement.append(p);
+   return addFreeText(text, values);
+}
+
+QxSqlQuery & QxSqlQuery::addJoinQuery(const QString & relationKeyOrAlias, const QxSqlQuery & joinQuery)
+{
+   m_lstJoinQueryUser.insert(relationKeyOrAlias, joinQuery);
    return (* this);
 }
 
@@ -810,7 +876,7 @@ QxSqlQuery & QxSqlQuery::addSqlExpression(const QString & column, qx::dao::detai
 QxSqlQuery & QxSqlQuery::addSqlCompare(const QVariant & val, qx::dao::detail::QxSqlCompare::type type, const QString & sCustomOperator /* = QString() */)
 {
    if (! m_pSqlElementTemp)
-   { qDebug("[QxOrm] qx::QxSqlQuery : '%s'", "invalid SQL query, need a column name"); qAssert(false); return (* this); }
+   { qDebug("[QxOrm] qx::QxSqlQuery::addSqlCompare : '%s'", "invalid SQL query, need a column name"); qAssert(false); return (* this); }
 
    qx::dao::detail::QxSqlCompare_ptr p;
    p = std::make_shared<qx::dao::detail::QxSqlCompare>(m_iSqlElementIndex++, type, sCustomOperator);
@@ -834,7 +900,7 @@ QxSqlQuery & QxSqlQuery::addSqlSort(const QStringList & columns, qx::dao::detail
 QxSqlQuery & QxSqlQuery::addSqlIn(const QVariantList & values, qx::dao::detail::QxSqlIn::type type)
 {
    if (! m_pSqlElementTemp)
-   { qDebug("[QxOrm] qx::QxSqlQuery : '%s'", "invalid SQL query, need a column name"); qAssert(false); return (* this); }
+   { qDebug("[QxOrm] qx::QxSqlQuery::addSqlIn : '%s'", "invalid SQL query, need a column name"); qAssert(false); return (* this); }
 
    qx::dao::detail::QxSqlIn_ptr p;
    p = std::make_shared<qx::dao::detail::QxSqlIn>(m_iSqlElementIndex++, type);
@@ -849,7 +915,7 @@ QxSqlQuery & QxSqlQuery::addSqlIn(const QVariantList & values, qx::dao::detail::
 QxSqlQuery & QxSqlQuery::addSqlIsNull(qx::dao::detail::QxSqlIsNull::type type)
 {
    if (! m_pSqlElementTemp)
-   { qDebug("[QxOrm] qx::QxSqlQuery : '%s'", "invalid SQL query, need a column name"); qAssert(false); return (* this); }
+   { qDebug("[QxOrm] qx::QxSqlQuery::addSqlIsNull : '%s'", "invalid SQL query, need a column name"); qAssert(false); return (* this); }
 
    qx::dao::detail::QxSqlIsNull_ptr p;
    p = std::make_shared<qx::dao::detail::QxSqlIsNull>(m_iSqlElementIndex++, type);
@@ -863,12 +929,37 @@ QxSqlQuery & QxSqlQuery::addSqlIsNull(qx::dao::detail::QxSqlIsNull::type type)
 QxSqlQuery & QxSqlQuery::addSqlIsBetween(const QVariant & val1, const QVariant & val2, qx::dao::detail::QxSqlIsBetween::type type)
 {
    if (! m_pSqlElementTemp)
-   { qDebug("[QxOrm] qx::QxSqlQuery : '%s'", "invalid SQL query, need a column name"); qAssert(false); return (* this); }
+   { qDebug("[QxOrm] qx::QxSqlQuery::addSqlIsBetween : '%s'", "invalid SQL query, need a column name"); qAssert(false); return (* this); }
 
    qx::dao::detail::QxSqlIsBetween_ptr p;
    p = std::make_shared<qx::dao::detail::QxSqlIsBetween>(m_iSqlElementIndex++, type);
    p->clone(m_pSqlElementTemp.get());
    p->setValues(QVariantList() << val1 << val2);
+
+   m_lstSqlElement.append(p);
+   m_pSqlElementTemp.reset();
+   return (* this);
+}
+
+QxSqlQuery & QxSqlQuery::addFreeText(const QString & text, const QVariantList & values)
+{
+   qx::dao::detail::QxSqlFreeText_ptr p;
+   p = std::make_shared<qx::dao::detail::QxSqlFreeText>(m_iSqlElementIndex++);
+   p->setText(text);
+   p->setValues(values);
+   m_lstSqlElement.append(p);
+   return (* this);
+}
+
+QxSqlQuery & QxSqlQuery::addEmbedQuery(const QxSqlQuery & query, qx::dao::detail::QxSqlEmbedQuery::type type, bool requirePreviousElement)
+{
+   if ((requirePreviousElement) && (! m_pSqlElementTemp))
+   { qDebug("[QxOrm] qx::QxSqlQuery::addEmbedQuery : '%s'", "invalid SQL query, need a column name"); qAssert(false); return (* this); }
+
+   qx::dao::detail::QxSqlEmbedQuery_ptr p;
+   p = std::make_shared<qx::dao::detail::QxSqlEmbedQuery>(m_iSqlElementIndex++, type);
+   if (requirePreviousElement) { p->clone(m_pSqlElementTemp.get()); }
+   p->setQuery(query);
 
    m_lstSqlElement.append(p);
    m_pSqlElementTemp.reset();
@@ -971,6 +1062,8 @@ inline void qx_save(Archive & ar, const qx::QxSqlQuery & t, const unsigned int f
    ar << boost::serialization::make_nvp("result_values", lstResultValues);
    ar << boost::serialization::make_nvp("response", t.m_vResponse);
    ar << boost::serialization::make_nvp("type", t.m_sType);
+   ar << boost::serialization::make_nvp("list_join_query_user", t.m_lstJoinQueryUser);
+   ar << boost::serialization::make_nvp("list_join_query_resolve", t.m_lstJoinQueryToResolve);
 
    if (! t.m_pSqlElementTemp)
    {
@@ -1010,6 +1103,8 @@ inline void qx_load(Archive & ar, qx::QxSqlQuery & t, const unsigned int file_ve
    ar >> boost::serialization::make_nvp("result_values", lstResultValues);
    ar >> boost::serialization::make_nvp("response", t.m_vResponse);
    ar >> boost::serialization::make_nvp("type", t.m_sType);
+   ar >> boost::serialization::make_nvp("list_join_query_user", t.m_lstJoinQueryUser);
+   ar >> boost::serialization::make_nvp("list_join_query_resolve", t.m_lstJoinQueryToResolve);
 
    t.m_pSqlResult.reset();
    if ((lstResultPosByKey.count() > 0) || (lstResultValues.count() > 0))
@@ -1073,6 +1168,8 @@ QDataStream & operator<< (QDataStream & stream, const qx::QxSqlQuery & t)
    stream << lstResultValues;
    stream << t.m_vResponse;
    stream << t.m_sType;
+   stream << t.m_lstJoinQueryUser;
+   stream << t.m_lstJoinQueryToResolve;
 
    if (! t.m_pSqlElementTemp)
    {
@@ -1113,6 +1210,8 @@ QDataStream & operator>> (QDataStream & stream, qx::QxSqlQuery & t)
    stream >> lstResultValues;
    stream >> t.m_vResponse;
    stream >> t.m_sType;
+   stream >> t.m_lstJoinQueryUser;
+   stream >> t.m_lstJoinQueryToResolve;
 
    t.m_pSqlResult.reset();
    if ((lstResultPosByKey.count() > 0) || (lstResultValues.count() > 0))

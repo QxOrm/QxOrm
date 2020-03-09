@@ -40,7 +40,7 @@
  * \file QxCollection.h
  * \author Lionel Marty
  * \ingroup QxCollection
- * \brief QxOrm container (keep insertion order + quick access by index + quick access by key)
+ * \brief QxOrm thread-safe container (keep insertion order + quick access by index + quick access by key)
  */
 
 #ifdef _MSC_VER
@@ -48,6 +48,8 @@
 #pragma warning(disable:4996)
 #pragma warning(disable:4503)
 #endif // _MSC_VER
+
+#include <QtCore/qmutex.h>
 
 #include <QxCollection/IxCollection.h>
 #include <QxCollection/QxForeach.h>
@@ -61,7 +63,7 @@ namespace qx {
 
 /*!
  * \ingroup QxCollection
- * \brief qx::QxCollection<Key, Value> : QxOrm container (keep insertion order + quick access by index + quick access by key)
+ * \brief qx::QxCollection<Key, Value> : QxOrm thread-safe container (keep insertion order + quick access by index + quick access by key)
  *
  * Based on boost::multi_index_container, this collection has advantages of std::vector<T> (keep insertion order + quick access by index)
  * and boost::unordered_map<Key, Value> or QHash<Key, Value> (quick access by key : hash-map).
@@ -169,9 +171,10 @@ public:
 
 protected:
 
-   type_list_pair_key_value m_list;
-   type_hash_position m_hash;
-   bool m_batch;
+   mutable QMutex m_mutex;             //!< Mutex => 'qx::QxCollection' is thread-safe
+   type_list_pair_key_value m_list;    //!< Container to keep insertion order
+   type_hash_position m_hash;          //!< Container for fast search by key
+   bool m_batch;                       //!< Batch mode to sync internal containers
 
 public:
 
@@ -230,13 +233,13 @@ public:
    void sortByValue(bool bAscending = true);      //!< Sort all items in the list
 
    template <typename Compare>
-   void sort(Compare comp) { std::sort(m_list.begin(), m_list.end(), comp); updateHashPosition(); }
+   void sort(Compare comp) { { QMutexLocker locker(& m_mutex); std::sort(m_list.begin(), m_list.end(), comp); } updateHashPosition(); }
 
 protected:
 
    void cloneCollection(QxCollection<Key, Value> * pClone, const QxCollection<Key, Value> & pRef);
    bool isSameCollection(const QxCollection<Key, Value> * p1, const QxCollection<Key, Value> & p2) const;
-   void updateHashPosition(long from = 0, long to = -1);
+   void updateHashPosition(long from = 0, long to = -1, bool check = false);
 
    template <bool bIsPointer /* = false */, int dummy>
    struct compareKeyValue

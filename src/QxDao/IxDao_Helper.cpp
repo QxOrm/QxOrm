@@ -60,6 +60,12 @@ m_timeBuildSql(0), m_timeOpen(0), m_timeTransaction(0), m_nextCount(0), m_lDataC
 m_bTraceRecord(false), m_bCartesianProduct(false), m_bValidatorThrowable(false), m_bNeedToClearDatabaseByThread(false), \
 m_bMongoDB(false), m_bDisplayTimerDetails(false), m_pDataMemberX(NULL), m_pDataId(NULL), m_pSqlGenerator(NULL)
 
+#if (QT_VERSION >= 0x040800)
+#define QX_DAO_TIMER_ELAPSED(timer) timer.nsecsElapsed()
+#else // (QT_VERSION >= 0x040800)
+#define QX_DAO_TIMER_ELAPSED(timer) (timer.elapsed() * 1000000) // convert milli-seconds to nano-seconds
+#endif // (QT_VERSION >= 0x040800)
+
 namespace qx {
 namespace dao {
 namespace detail {
@@ -113,14 +119,14 @@ struct IxDao_Helper::IxDao_HelperImpl
    qx::QxInvalidValueX           m_lstInvalidValues;     //!< List of invalid values using validator engine
    qx::QxSqlRelationLinked_ptr   m_pSqlRelationLinked;   //!< List of relation linked to build a hierarchy of relationships
 
-   IxDao_HelperImpl(qx::IxSqlQueryBuilder * pBuilder) : QX_CONSTRUCT_IX_DAO_HELPER() { m_pQueryBuilder.reset(pBuilder); }
+   IxDao_HelperImpl(qx::IxSqlQueryBuilder * pBuilder, const qx::QxSqlQuery * pQuery) : QX_CONSTRUCT_IX_DAO_HELPER() { m_pQueryBuilder.reset(pBuilder); if (pQuery) { m_qxQuery = (* pQuery); } }
    ~IxDao_HelperImpl() { ; }
 
    void displaySqlQuery();
 
 };
 
-IxDao_Helper::IxDao_Helper(qx::IxSqlQueryBuilder * pBuilder) : m_pImpl(new IxDao_HelperImpl(pBuilder)) { ; }
+IxDao_Helper::IxDao_Helper(qx::IxSqlQueryBuilder * pBuilder, const qx::QxSqlQuery * pQuery /* = NULL */) : m_pImpl(new IxDao_HelperImpl(pBuilder, pQuery)) { ; }
 
 IxDao_Helper::~IxDao_Helper() { terminate(); if (m_pImpl->m_bNeedToClearDatabaseByThread) { qx::QxSqlDatabase::getSingleton()->clearCurrentDatabaseByThread(); } }
 
@@ -342,52 +348,52 @@ qint64 IxDao_Helper::timerElapsed(IxDao_Helper::timer_type timer)
    switch (timer)
    {
       case IxDao_Helper::timer_total:
-         elapsed = m_pImpl->m_timerTotal.nsecsElapsed();
+         elapsed = QX_DAO_TIMER_ELAPSED(m_pImpl->m_timerTotal);
          m_pImpl->m_timeTotal += elapsed;
          break;
       case IxDao_Helper::timer_db_exec:
-         elapsed = m_pImpl->m_timerExec.nsecsElapsed();
+         elapsed = QX_DAO_TIMER_ELAPSED(m_pImpl->m_timerExec);
          m_pImpl->m_timeExec += elapsed;
          break;
       case IxDao_Helper::timer_db_next:
          if (! m_pImpl->m_bDisplayTimerDetails) { break; }
-         elapsed = m_pImpl->m_timerNext.nsecsElapsed();
+         elapsed = QX_DAO_TIMER_ELAPSED(m_pImpl->m_timerNext);
          m_pImpl->m_timeNext += elapsed;
          m_pImpl->m_nextCount++;
          break;
       case IxDao_Helper::timer_db_prepare:
          if (! m_pImpl->m_bDisplayTimerDetails) { break; }
-         elapsed = m_pImpl->m_timerPrepare.nsecsElapsed();
+         elapsed = QX_DAO_TIMER_ELAPSED(m_pImpl->m_timerPrepare);
          m_pImpl->m_timePrepare += elapsed;
          break;
       case IxDao_Helper::timer_cpp_build_hierarchy:
          if (! m_pImpl->m_bDisplayTimerDetails) { break; }
-         elapsed = m_pImpl->m_timerBuildHierarchy.nsecsElapsed();
+         elapsed = QX_DAO_TIMER_ELAPSED(m_pImpl->m_timerBuildHierarchy);
          m_pImpl->m_timeBuildHierarchy += elapsed;
          break;
       case IxDao_Helper::timer_cpp_build_instance:
          if (! m_pImpl->m_bDisplayTimerDetails) { break; }
-         elapsed = m_pImpl->m_timerBuildCppInstance.nsecsElapsed();
+         elapsed = QX_DAO_TIMER_ELAPSED(m_pImpl->m_timerBuildCppInstance);
          m_pImpl->m_timeBuildCppInstance += elapsed;
          break;
       case IxDao_Helper::timer_cpp_read_instance:
          if (! m_pImpl->m_bDisplayTimerDetails) { break; }
-         elapsed = m_pImpl->m_timerReadCppInstance.nsecsElapsed();
+         elapsed = QX_DAO_TIMER_ELAPSED(m_pImpl->m_timerReadCppInstance);
          m_pImpl->m_timeReadCppInstance += elapsed;
          break;
       case IxDao_Helper::timer_build_sql:
          if (! m_pImpl->m_bDisplayTimerDetails) { break; }
-         elapsed = m_pImpl->m_timerBuildSql.nsecsElapsed();
+         elapsed = QX_DAO_TIMER_ELAPSED(m_pImpl->m_timerBuildSql);
          m_pImpl->m_timeBuildSql += elapsed;
          break;
       case IxDao_Helper::timer_db_open:
          if (! m_pImpl->m_bDisplayTimerDetails) { break; }
-         elapsed = m_pImpl->m_timerOpen.nsecsElapsed();
+         elapsed = QX_DAO_TIMER_ELAPSED(m_pImpl->m_timerOpen);
          m_pImpl->m_timeOpen += elapsed;
          break;
       case IxDao_Helper::timer_db_transaction:
          if (! m_pImpl->m_bDisplayTimerDetails) { break; }
-         elapsed = m_pImpl->m_timerTransaction.nsecsElapsed();
+         elapsed = QX_DAO_TIMER_ELAPSED(m_pImpl->m_timerTransaction);
          m_pImpl->m_timeTransaction += elapsed;
          break;
       default:
@@ -396,10 +402,10 @@ qint64 IxDao_Helper::timerElapsed(IxDao_Helper::timer_type timer)
    return elapsed;
 }
 
-void IxDao_Helper::addQuery(const qx::QxSqlQuery & query, bool bResolve)
+void IxDao_Helper::addQuery(bool bResolve)
 {
-   m_pImpl->m_qxQuery = query;
    if (m_pImpl->m_qxQuery.isEmpty()) { return; }
+   IxDao_Timer timer(this, IxDao_Helper::timer_build_sql);
    QString sql = this->builder().getSqlQuery();
    QString sqlToAdd = m_pImpl->m_qxQuery.query().trimmed();
    bool bAddSqlCondition = false;

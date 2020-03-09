@@ -41,7 +41,7 @@ class QxDao_Helper : public IxDao_Helper
 
 public:
 
-   QxDao_Helper(T & t, QSqlDatabase * pDatabase, const QString & sContext, qx::IxSqlQueryBuilder * pBuilder) : IxDao_Helper(pBuilder) { Q_UNUSED(t); init(pDatabase, sContext); }
+   QxDao_Helper(T & t, QSqlDatabase * pDatabase, const QString & sContext, qx::IxSqlQueryBuilder * pBuilder, const qx::QxSqlQuery * pQuery = NULL) : IxDao_Helper(pBuilder, pQuery) { Q_UNUSED(t); init(pDatabase, sContext); }
    virtual ~QxDao_Helper() { static_assert(qx::trait::is_qx_registered<typename qx::QxSqlQueryBuilder<T>::type_sql>::value, "qx::trait::is_qx_registered<typename qx::QxSqlQueryBuilder<T>::type_sql>::value"); }
 
 };

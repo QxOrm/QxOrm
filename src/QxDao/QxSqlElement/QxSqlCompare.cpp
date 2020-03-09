@@ -69,6 +69,8 @@ QString QxSqlCompare::toString() const
       case _ends_with:                       sReturn = sColumn + " LIKE " + sKey;                              break;
       case _contains_string:                 sReturn = sColumn + " LIKE " + sKey;                              break;
       case _custom_operator:                 sReturn = sColumn + " " + m_sCustomOperator + " " + sKey;         break;
+      case _is_equal_to_select:              sReturn = sColumn + " = (" + sKey + ")";                          break;
+      case _is_not_equal_to_select:          sReturn = sColumn + " <> (" + sKey + ")";                         break;
       default:                               qAssert(false);
    }
 

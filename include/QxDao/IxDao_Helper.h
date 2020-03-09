@@ -99,7 +99,7 @@ private:
 
 protected:
 
-   IxDao_Helper(qx::IxSqlQueryBuilder * pBuilder);
+   IxDao_Helper(qx::IxSqlQueryBuilder * pBuilder, const qx::QxSqlQuery * pQuery = NULL);
    virtual ~IxDao_Helper();
 
 public:
@@ -148,7 +148,7 @@ public:
 
    QSqlError updateError(const QSqlError & error);
    bool updateSqlRelationX(const QStringList & relation);
-   void addQuery(const qx::QxSqlQuery & query, bool bResolve);
+   void addQuery(bool bResolve);
    void dumpRecord() const;
 
    template <class U>

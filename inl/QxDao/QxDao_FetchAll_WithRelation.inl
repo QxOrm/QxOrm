@@ -42,7 +42,7 @@ struct QxDao_FetchAll_WithRelation_Generic
 
    static QSqlError fetchAll(const QStringList & relation, const qx::QxSqlQuery & query, T & t, QSqlDatabase * pDatabase)
    {
-      type_dao_helper dao(t, pDatabase, "fetch all with relation", new qx::QxSqlQueryBuilder_FetchAll_WithRelation<T>());
+      type_dao_helper dao(t, pDatabase, "fetch all with relation", new qx::QxSqlQueryBuilder_FetchAll_WithRelation<T>(), (& query));
       if (! dao.isValid()) { return dao.error(); }
       if (! dao.updateSqlRelationX(relation)) { return dao.errInvalidRelation(); }
 
@@ -63,7 +63,7 @@ struct QxDao_FetchAll_WithRelation_Generic
       QStringList columns;
       QString sql = dao.builder().buildSql(columns, dao.getSqlRelationLinked()).getSqlQuery();
       if (sql.isEmpty()) { return dao.errEmpty(); }
-      if (! query.isEmpty()) { dao.addQuery(query, true); sql = dao.builder().getSqlQuery(); }
+      if (! query.isEmpty()) { dao.addQuery(true); sql = dao.builder().getSqlQuery(); }
       if (! dao.exec()) { return dao.errFailed(); }
 
       {
@@ -189,7 +189,7 @@ struct QxDao_FetchAll_WithRelation_Container
    static QSqlError fetchAll(const QStringList & relation, const qx::QxSqlQuery & query, T & t, QSqlDatabase * pDatabase)
    {
       type_generic_container::clear(t);
-      type_dao_helper dao(t, pDatabase, "fetch all with relation", new qx::QxSqlQueryBuilder_FetchAll_WithRelation<type_value_qx>());
+      type_dao_helper dao(t, pDatabase, "fetch all with relation", new qx::QxSqlQueryBuilder_FetchAll_WithRelation<type_value_qx>(), (& query));
       if (! dao.isValid()) { return dao.error(); }
       if (! dao.updateSqlRelationX(relation)) { return dao.errInvalidRelation(); }
 
@@ -206,7 +206,7 @@ struct QxDao_FetchAll_WithRelation_Container
       bool bComplex = dao.getCartesianProduct(); QVariant vId; QStringList columns;
       QString sql = dao.builder().buildSql(columns, dao.getSqlRelationLinked()).getSqlQuery();
       if (sql.isEmpty()) { return dao.errEmpty(); }
-      if (! query.isEmpty()) { dao.addQuery(query, true); sql = dao.builder().getSqlQuery(); }
+      if (! query.isEmpty()) { dao.addQuery(true); sql = dao.builder().getSqlQuery(); }
       if (! dao.exec()) { return dao.errFailed(); }
       bool bSize = (dao.hasFeature(QSqlDriver::QuerySize) && (dao.query().size() > 0));
       if (bSize) { type_generic_container::reserve(t, dao.query().size()); }

@@ -461,6 +461,11 @@ void miscellaneousOperations()
    qx::serialization::json::from_string(responseCustomQueryCursorAsJson, responseCustomQueryCursor);
    qx::dump(responseCustomQueryCursorAsJson);
    qAssert(responseCustomQueryCursorAsJson.count() == qx::dao::count<author>());
+
+   // Test delete by query using MongoDB aggregation framework (delete all female)
+   qx_query queryAggregate("aggregate", "[ { \"$match\" : { \"sex\" : " + QString::number(static_cast<int>(author::female)) + " } } ]");
+   daoError = qx::dao::delete_by_query<author>(queryAggregate); qAssert(! daoError.isValid());
+   qAssert(qx::dao::count<author>() == 2);
 }
 
 void testQtProperty()

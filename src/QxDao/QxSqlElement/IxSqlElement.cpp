@@ -105,6 +105,7 @@ IxSqlElement_ptr create_sql_element(IxSqlElement::type_class e)
    {
       case IxSqlElement::_sql_compare:          p = std::make_shared<QxSqlCompare>(); break;
       case IxSqlElement::_sql_element_temp:     p = std::make_shared<QxSqlElementTemp>(); break;
+      case IxSqlElement::_sql_embed_query:      p = std::make_shared<QxSqlEmbedQuery>(); break;
       case IxSqlElement::_sql_expression:       p = std::make_shared<QxSqlExpression>(); break;
       case IxSqlElement::_sql_free_text:        p = std::make_shared<QxSqlFreeText>(); break;
       case IxSqlElement::_sql_in:               p = std::make_shared<QxSqlIn>(); break;

@@ -70,6 +70,8 @@ QJsonValue QxConvert_ToJson_Helper(const qx::QxSqlQuery & t, const QString & for
    obj.insert("result_values", qx::cvt::to_json(lstResultValues, format));
    obj.insert("response", QJsonValue(t.m_vResponse.toString()));
    obj.insert("type", QJsonValue(t.m_sType));
+   obj.insert("list_join_query_user", qx::cvt::to_json(t.m_lstJoinQueryUser, format));
+   obj.insert("list_join_query_resolve", qx::cvt::to_json(t.m_lstJoinQueryToResolve, format));
 
    if (! t.m_pSqlElementTemp)
    {
@@ -146,6 +148,8 @@ qx_bool QxConvert_FromJson_Helper(const QJsonValue & j, qx::QxSqlQuery & t, cons
    qx::cvt::from_json(obj.value("result_values"), lstResultValues, format);
    t.m_vResponse = obj.value("response").toVariant();
    t.m_sType = obj.value("type").toString();
+   qx::cvt::from_json(obj.value("list_join_query_user"), t.m_lstJoinQueryUser, format);
+   qx::cvt::from_json(obj.value("list_join_query_resolve"), t.m_lstJoinQueryToResolve, format);
 
    t.m_pSqlResult.reset();
    if ((lstResultPosByKey.count() > 0) || (lstResultValues.count() > 0))

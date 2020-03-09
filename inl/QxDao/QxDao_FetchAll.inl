@@ -39,7 +39,7 @@ struct QxDao_FetchAll_Generic
 
    static QSqlError fetchAll(const qx::QxSqlQuery & query, T & t, QSqlDatabase * pDatabase, const QStringList & columns)
    {
-      qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "fetch all", new qx::QxSqlQueryBuilder_FetchAll<T>());
+      qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "fetch all", new qx::QxSqlQueryBuilder_FetchAll<T>(), (& query));
       if (! dao.isValid()) { return dao.error(); }
 
 #ifdef _QX_ENABLE_MONGODB
@@ -60,7 +60,7 @@ struct QxDao_FetchAll_Generic
 
       QString sql = dao.builder().buildSql(columns).getSqlQuery();
       if (sql.isEmpty()) { return dao.errEmpty(); }
-      if (! query.isEmpty()) { dao.addQuery(query, true); sql = dao.builder().getSqlQuery(); }
+      if (! query.isEmpty()) { dao.addQuery(true); sql = dao.builder().getSqlQuery(); }
       if (! dao.exec()) { return dao.errFailed(); }
 
       if (dao.nextRecord())
@@ -123,7 +123,7 @@ struct QxDao_FetchAll_Container
       typedef typename qx::trait::generic_container<T>::type_value_qx type_item;
 
       qx::trait::generic_container<T>::clear(t);
-      qx::dao::detail::QxDao_Helper_Container<T> dao(t, pDatabase, "fetch all", new qx::QxSqlQueryBuilder_FetchAll<type_item>());
+      qx::dao::detail::QxDao_Helper_Container<T> dao(t, pDatabase, "fetch all", new qx::QxSqlQueryBuilder_FetchAll<type_item>(), (& query));
       if (! dao.isValid()) { return dao.error(); }
 
 #ifdef _QX_ENABLE_MONGODB
@@ -139,7 +139,7 @@ struct QxDao_FetchAll_Container
 
       QString sql = dao.builder().buildSql(columns).getSqlQuery();
       if (sql.isEmpty()) { return dao.errEmpty(); }
-      if (! query.isEmpty()) { dao.addQuery(query, true); sql = dao.builder().getSqlQuery(); }
+      if (! query.isEmpty()) { dao.addQuery(true); sql = dao.builder().getSqlQuery(); }
       if (! dao.exec()) { return dao.errFailed(); }
       dao.setSqlColumns(columns);
 

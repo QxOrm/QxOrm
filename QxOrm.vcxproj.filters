@@ -626,6 +626,9 @@
     <ClCompile Include="src\QxHttpServer\QxHttpSessionManager.cpp">
       <Filter>src\QxHttpServer</Filter>
     </ClCompile>
+    <ClCompile Include="src\QxDao\QxSqlElement\QxSqlEmbedQuery.cpp">
+      <Filter>src\QxDao\QxSqlElement</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\QxMemLeak.h">
@@ -1761,6 +1764,9 @@
     </ClInclude>
     <ClInclude Include="include\QxHttpServer\QxHttpSessionManager.h">
       <Filter>include\QxHttpServer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QxDao\QxSqlElement\QxSqlEmbedQuery.h">
+      <Filter>include\QxDao\QxSqlElement</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

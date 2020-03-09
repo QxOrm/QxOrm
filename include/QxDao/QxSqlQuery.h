@@ -266,22 +266,24 @@ protected:
 
    typedef std::tuple<QVariant, QSql::ParamType> type_bind_value;
 
-   QStringList                               m_sQuery;               //!< Query SQL with place-holder
-   QxCollection<QString, type_bind_value>    m_lstValue;             //!< Bind value in this array
-   qx::dao::detail::IxSqlElement_ptr         m_pSqlElementTemp;      //!< Temporary SQL element
-   QList<qx::dao::detail::IxSqlElement_ptr>  m_lstSqlElement;        //!< List of all SQL elements to build SQL query
-   int                                       m_iSqlElementIndex;     //!< Current index of SQL element
-   int                                       m_iParenthesisCount;    //!< Current parenthesis count
-   bool                                      m_bDistinct;            //!< Replace SELECT by SELECT DISTINCT in SQL query
-   std::shared_ptr<QxSqlResult>              m_pSqlResult;           //!< All results returning by SQL query or stored procedure (after calling qx::dao::call_query function)
-   QVariant                                  m_vResponse;            //!< Can be used to store some responses (from MongoDB database for example in JSON format)
-   QString                                   m_sType;                //!< Query type (for example : 'aggregate' or 'cursor' for MongoDB database)
+   QStringList                               m_sQuery;                  //!< Query SQL with place-holder
+   QxCollection<QString, type_bind_value>    m_lstValue;                //!< Bind value in this array
+   qx::dao::detail::IxSqlElement_ptr         m_pSqlElementTemp;         //!< Temporary SQL element
+   QList<qx::dao::detail::IxSqlElement_ptr>  m_lstSqlElement;           //!< List of all SQL elements to build SQL query
+   int                                       m_iSqlElementIndex;        //!< Current index of SQL element
+   int                                       m_iParenthesisCount;       //!< Current parenthesis count
+   bool                                      m_bDistinct;               //!< Replace SELECT by SELECT DISTINCT in SQL query
+   std::shared_ptr<QxSqlResult>              m_pSqlResult;              //!< All results returning by SQL query or stored procedure (after calling qx::dao::call_query function)
+   QVariant                                  m_vResponse;               //!< Can be used to store some responses (from MongoDB database for example in JSON format)
+   QString                                   m_sType;                   //!< Query type (for example : 'aggregate' or 'cursor' for MongoDB database)
+   QHash<QString, QxSqlQuery>                m_lstJoinQueryUser;        //!< List of SQL queries defined by user to add inside relationships joins (LEFT OUTER JOIN, INNER JOIN), for example : INNER JOIN my_table2 m2 ON (m1.id = m2.parent_id AND (XXX))
+   QList<QxSqlQuery>                         m_lstJoinQueryToResolve;   //!< List of SQL queries to resolve (in the right order) to add inside relationships joins (LEFT OUTER JOIN, INNER JOIN), for example : INNER JOIN my_table2 m2 ON (m1.id = m2.parent_id AND (XXX))
 
 public:
 
    QxSqlQuery();
-   QxSqlQuery(const char * query);
-   QxSqlQuery(const QString & query);
+   QxSqlQuery(const char * query, const QVariantList & values = QVariantList());
+   QxSqlQuery(const QString & query, const QVariantList & values = QVariantList());
    QxSqlQuery(const QStringList & query);
    QxSqlQuery(const QString & type, const QString & query);
    QxSqlQuery(const QString & type, const QStringList & query);
@@ -309,6 +311,8 @@ public:
    void postProcess(QString & sql) const;
    void setResponse(const QVariant & v);
    void setType(const QString & s);
+   QString getJoinQuery(const QString & relationKey, const QString & relationAlias);
+   QString getJoinQueryHash();
 
    QxSqlQuery & query(const QString & sQuery);
    QxSqlQuery & bind(const QVariant & vValue, QSql::ParamType paramType = QSql::In);
@@ -419,8 +423,10 @@ public:
    virtual QxSqlQuery & notIn(const QVariant & val1, const QVariant & val2, const QVariant & val3, const QVariant & val4, const QVariant & val5, const QVariant & val6, const QVariant & val7, const QVariant & val8);
    virtual QxSqlQuery & notIn(const QVariant & val1, const QVariant & val2, const QVariant & val3, const QVariant & val4, const QVariant & val5, const QVariant & val6, const QVariant & val7, const QVariant & val8, const QVariant & val9);
 
-   virtual QxSqlQuery & in_Select(const QString & sql);
-   virtual QxSqlQuery & notIn_Select(const QString & sql);
+   virtual QxSqlQuery & in_Select(const QxSqlQuery & query);
+   virtual QxSqlQuery & notIn_Select(const QxSqlQuery & query);
+   virtual QxSqlQuery & isEqualTo_Select(const QxSqlQuery & query);
+   virtual QxSqlQuery & isNotEqualTo_Select(const QxSqlQuery & query);
 
    virtual QxSqlQuery & isNull();
    virtual QxSqlQuery & isNotNull();
@@ -430,6 +436,8 @@ public:
 
    virtual QxSqlQuery & freeText(const QString & text, const QVariantList & values = QVariantList());
 
+   virtual QxSqlQuery & addJoinQuery(const QString & relationKeyOrAlias, const QxSqlQuery & joinQuery);
+
 private:
 
    QxSqlQuery & addSqlExpression(const QString & column, qx::dao::detail::QxSqlExpression::type type);
@@ -438,6 +446,8 @@ private:
    QxSqlQuery & addSqlIn(const QVariantList & values, qx::dao::detail::QxSqlIn::type type);
    QxSqlQuery & addSqlIsNull(qx::dao::detail::QxSqlIsNull::type type);
    QxSqlQuery & addSqlIsBetween(const QVariant & val1, const QVariant & val2, qx::dao::detail::QxSqlIsBetween::type type);
+   QxSqlQuery & addFreeText(const QString & text, const QVariantList & values);
+   QxSqlQuery & addEmbedQuery(const QxSqlQuery & query, qx::dao::detail::QxSqlEmbedQuery::type type, bool requirePreviousElement);
 
 };
 
@@ -581,8 +591,10 @@ virtual className & notIn(const QVariant & val1, const QVariant & val2, const QV
 virtual className & notIn(const QVariant & val1, const QVariant & val2, const QVariant & val3, const QVariant & val4, const QVariant & val5, const QVariant & val6, const QVariant & val7, const QVariant & val8); \
 virtual className & notIn(const QVariant & val1, const QVariant & val2, const QVariant & val3, const QVariant & val4, const QVariant & val5, const QVariant & val6, const QVariant & val7, const QVariant & val8, const QVariant & val9); \
 \
-virtual className & in_Select(const QString & sql); \
-virtual className & notIn_Select(const QString & sql); \
+virtual className & in_Select(const QxSqlQuery & query); \
+virtual className & notIn_Select(const QxSqlQuery & query); \
+virtual className & isEqualTo_Select(const QxSqlQuery & query); \
+virtual className & isNotEqualTo_Select(const QxSqlQuery & query); \
 \
 virtual className & isNull(); \
 virtual className & isNotNull(); \
@@ -590,7 +602,9 @@ virtual className & isNotNull(); \
 virtual className & isBetween(const QVariant & val1, const QVariant & val2); \
 virtual className & isNotBetween(const QVariant & val1, const QVariant & val2); \
 \
-virtual className & freeText(const QString & text, const QVariantList & values = QVariantList());
+virtual className & freeText(const QString & text, const QVariantList & values = QVariantList()); \
+\
+virtual className & addJoinQuery(const QString & relationKeyOrAlias, const QxSqlQuery & joinQuery);
 
 #define QX_SQL_QUERY_DERIVED_IMPL_COVARIANT_RETURN_TYPE_CPP(className) \
 \
@@ -677,8 +691,10 @@ className & className::notIn(const QVariant & val1, const QVariant & val2, const
 className & className::notIn(const QVariant & val1, const QVariant & val2, const QVariant & val3, const QVariant & val4, const QVariant & val5, const QVariant & val6, const QVariant & val7, const QVariant & val8) { return static_cast<className &>(qx::QxSqlQuery::notIn(val1, val2, val3, val4, val5, val6, val7, val8)); } \
 className & className::notIn(const QVariant & val1, const QVariant & val2, const QVariant & val3, const QVariant & val4, const QVariant & val5, const QVariant & val6, const QVariant & val7, const QVariant & val8, const QVariant & val9) { return static_cast<className &>(qx::QxSqlQuery::notIn(val1, val2, val3, val4, val5, val6, val7, val8, val9)); } \
 \
-className & className::in_Select(const QString & sql) { return static_cast<className &>(qx::QxSqlQuery::in_Select(sql)); } \
-className & className::notIn_Select(const QString & sql) { return static_cast<className &>(qx::QxSqlQuery::notIn_Select(sql)); } \
+className & className::in_Select(const QxSqlQuery & query) { return static_cast<className &>(qx::QxSqlQuery::in_Select(query)); } \
+className & className::notIn_Select(const QxSqlQuery & query) { return static_cast<className &>(qx::QxSqlQuery::notIn_Select(query)); } \
+className & className::isEqualTo_Select(const QxSqlQuery & query) { return static_cast<className &>(qx::QxSqlQuery::isEqualTo_Select(query)); } \
+className & className::isNotEqualTo_Select(const QxSqlQuery & query) { return static_cast<className &>(qx::QxSqlQuery::isNotEqualTo_Select(query)); } \
 \
 className & className::isNull() { return static_cast<className &>(qx::QxSqlQuery::isNull()); } \
 className & className::isNotNull() { return static_cast<className &>(qx::QxSqlQuery::isNotNull()); } \
@@ -686,6 +702,8 @@ className & className::isNotNull() { return static_cast<className &>(qx::QxSqlQu
 className & className::isBetween(const QVariant & val1, const QVariant & val2) { return static_cast<className &>(qx::QxSqlQuery::isBetween(val1, val2)); } \
 className & className::isNotBetween(const QVariant & val1, const QVariant & val2) { return static_cast<className &>(qx::QxSqlQuery::isNotBetween(val1, val2)); } \
 \
-className & className::freeText(const QString & text, const QVariantList & values) { return static_cast<className &>(qx::QxSqlQuery::freeText(text, values)); }
+className & className::freeText(const QString & text, const QVariantList & values) { return static_cast<className &>(qx::QxSqlQuery::freeText(text, values)); } \
+\
+className & className::addJoinQuery(const QString & relationKeyOrAlias, const QxSqlQuery & joinQuery) { return static_cast<className &>(qx::QxSqlQuery::addJoinQuery(relationKeyOrAlias, joinQuery)); }
 
 #endif // _QX_SQL_QUERY_H_

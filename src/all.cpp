@@ -92,6 +92,7 @@
 #include "./QxDao/QxSqlElement/IxSqlElement.cpp"
 #include "./QxDao/QxSqlElement/QxSqlCompare.cpp"
 #include "./QxDao/QxSqlElement/QxSqlElementTemp.cpp"
+#include "./QxDao/QxSqlElement/QxSqlEmbedQuery.cpp"
 #include "./QxDao/QxSqlElement/QxSqlExpression.cpp"
 #include "./QxDao/QxSqlElement/QxSqlFreeText.cpp"
 #include "./QxDao/QxSqlElement/QxSqlIn.cpp"
