@@ -40,7 +40,7 @@
  * \file construct_ptr.h
  * \author Lionel Marty
  * \ingroup QxTraits
- * \brief qx::trait::construct_ptr<T>::get(T & t) : instantiate a new pointer, support both nude-pointer and smart-pointer of boost, Qt and QxOrm libraries
+ * \brief qx::trait::construct_ptr<T>::get(T & t, bool bReset = false) : instantiate (or reset) a new pointer, support both nude-pointer and smart-pointer of boost, Qt and QxOrm libraries
  */
 
 #include <QtCore/qsharedpointer.h>
@@ -56,7 +56,7 @@ namespace trait {
 
 /*!
  * \ingroup QxTraits
- * \brief qx::trait::construct_ptr<T>::get(T & t) : instantiate a new pointer, support both nude-pointer and smart-pointer of boost, Qt and QxOrm libraries
+ * \brief qx::trait::construct_ptr<T>::get(T & t, bool bReset = false) : instantiate (or reset) a new pointer, support both nude-pointer and smart-pointer of boost, Qt and QxOrm libraries
  */
 template <typename T>
 struct construct_ptr
@@ -68,18 +68,18 @@ private:
 
 public:
 
-   static inline void get(T & t)
-   { new_ptr<std::is_abstract<type_ptr>::value, 0>::get(t); }
+   static inline void get(T & t, bool bReset = false)
+   { new_ptr<std::is_abstract<type_ptr>::value, 0>::get(t, bReset); }
 
 private:
 
    template <bool isAbstract /* = false */, int dummy>
    struct new_ptr
-   { static inline void get(T & t) { t = new type_ptr(); } };
+   { static inline void get(T & t, bool bReset) { if (bReset) { t = NULL; } else { t = new type_ptr(); } } };
 
    template <int dummy>
    struct new_ptr<true, dummy>
-   { static inline void get(T & t) { Q_UNUSED(t); qDebug("[QxOrm] qx::trait::construct_ptr<T> : %s", "cannot instantiate abstract class"); } };
+   { static inline void get(T & t, bool bReset) { Q_UNUSED(t); Q_UNUSED(bReset); qDebug("[QxOrm] qx::trait::construct_ptr<T> : %s", "cannot instantiate abstract class"); } };
 
 };
 
@@ -87,39 +87,39 @@ private:
 
 template <typename T>
 struct construct_ptr< boost::scoped_ptr<T> >
-{ static inline void get(boost::scoped_ptr<T> & t) { t.reset(new T()); } };
+{ static inline void get(boost::scoped_ptr<T> & t, bool bReset = false) { if (bReset) { t.reset(); } else { t.reset(new T()); } } };
 
 template <typename T>
 struct construct_ptr< boost::shared_ptr<T> >
-{ static inline void get(boost::shared_ptr<T> & t) { t.reset(new T()); } };
+{ static inline void get(boost::shared_ptr<T> & t, bool bReset = false) { if (bReset) { t.reset(); } else { t.reset(new T()); } } };
 
 template <typename T>
 struct construct_ptr< boost::intrusive_ptr<T> >
-{ static inline void get(boost::intrusive_ptr<T> & t) { t.reset(new T()); } };
+{ static inline void get(boost::intrusive_ptr<T> & t, bool bReset = false) { if (bReset) { t.reset(); } else { t.reset(new T()); } } };
 
 #endif // _QX_ENABLE_BOOST
 
 template <typename T>
 struct construct_ptr< QSharedPointer<T> >
-{ static inline void get(QSharedPointer<T> & t) { t = QSharedPointer<T>(new T()); } };
+{ static inline void get(QSharedPointer<T> & t, bool bReset = false) { if (bReset) { t = QSharedPointer<T>(); } else { t = QSharedPointer<T>(new T()); } } };
 
 #if (QT_VERSION >= 0x040600)
 template <typename T>
 struct construct_ptr< QScopedPointer<T> >
-{ static inline void get(QScopedPointer<T> & t) { t = QScopedPointer<T>(new T()); } };
+{ static inline void get(QScopedPointer<T> & t, bool bReset = false) { if (bReset) { t = QScopedPointer<T>(); } else { t = QScopedPointer<T>(new T()); } } };
 #endif // (QT_VERSION >= 0x040600)
 
 template <typename T>
 struct construct_ptr< qx::dao::ptr<T> >
-{ static inline void get(qx::dao::ptr<T> & t) { t = qx::dao::ptr<T>(new T()); } };
+{ static inline void get(qx::dao::ptr<T> & t, bool bReset = false) { if (bReset) { t = qx::dao::ptr<T>(); } else { t = qx::dao::ptr<T>(new T()); } } };
 
 template <typename T>
 struct construct_ptr< std::unique_ptr<T> >
-{ static inline void get(std::unique_ptr<T> & t) { t.reset(new T()); } };
+{ static inline void get(std::unique_ptr<T> & t, bool bReset = false) { if (bReset) { t.reset(); } else { t.reset(new T()); } } };
 
 template <typename T>
 struct construct_ptr< std::shared_ptr<T> >
-{ static inline void get(std::shared_ptr<T> & t) { t = std::make_shared<T>(); } };
+{ static inline void get(std::shared_ptr<T> & t, bool bReset = false) { if (bReset) { t.reset(); } else { t = std::make_shared<T>(); } } };
 
 } // namespace trait
 } // namespace qx

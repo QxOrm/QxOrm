@@ -374,7 +374,7 @@ template <typename T>
 struct QxConvertHelper_FromVariant<T, qx::cvt::detail::helper::QxConvertHelper_Ptr>
 {
    static inline qx_bool fromVariant(const QVariant & v, T & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
-   { if (! t && ! v.isNull()) { qx::trait::construct_ptr<T>::get(t); }; return (t ? qx::cvt::from_variant(v, (* t), format, index, ctx) : qx_bool(false)); }
+   { if (! t && ! v.isNull()) { qx::trait::construct_ptr<T>::get(t); } else if (v.isNull()) { qx::trait::construct_ptr<T>::get(t, true); }; return (t ? qx::cvt::from_variant(v, (* t), format, index, ctx) : qx_bool(false)); }
 };
 
 #ifndef _QX_NO_JSON
@@ -390,7 +390,7 @@ template <typename T>
 struct QxConvertHelper_FromJson<T, qx::cvt::detail::helper::QxConvertHelper_Ptr>
 {
    static inline qx_bool fromJson(const QJsonValue & j, T & t, const QString & format)
-   { if (! t && ! j.isNull()) { qx::trait::construct_ptr<T>::get(t); }; return (t ? qx::cvt::from_json(j, (* t), format) : qx_bool(false)); }
+   { if (! t && ! j.isNull()) { qx::trait::construct_ptr<T>::get(t); } else if (j.isNull()) { qx::trait::construct_ptr<T>::get(t, true); }; return (t ? qx::cvt::from_json(j, (* t), format) : qx_bool(false)); }
 };
 
 #endif // _QX_NO_JSON

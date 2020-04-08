@@ -52,6 +52,16 @@
 #include <QxCollection/QxCollection.h>
 
 namespace qx {
+namespace dao {
+namespace detail {
+
+class IxDao_Helper;
+
+} // namespace detail
+} // namespace dao
+} // namespace qx
+
+namespace qx {
 
 class IxClass;
 
@@ -102,7 +112,7 @@ public:
    QxSqlRelationLinked(bool bRoot);
    virtual ~QxSqlRelationLinked();
 
-   static type_ptr getHierarchy(IxClass * pClass, const QStringList & sRelationX, qx_bool & bOk);
+   static type_ptr getHierarchy(IxClass * pClass, const QStringList & sRelationX, qx_bool & bOk, qx::dao::detail::IxDao_Helper * pDaoHelper = NULL);
 
    void hierarchySelect(QxSqlRelationParams & params);
    void hierarchyFrom(QxSqlRelationParams & params);

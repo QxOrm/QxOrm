@@ -272,7 +272,7 @@ bool IxDao_Helper::updateSqlRelationX(const QStringList & relation)
    qx_bool bHierarchyOk(true);
    m_pImpl->m_bCartesianProduct = false;
    IxDao_Timer timer(this, IxDao_Helper::timer_cpp_build_hierarchy);
-   m_pImpl->m_pSqlRelationLinked = qx::QxSqlRelationLinked::getHierarchy((m_pImpl->m_pDataMemberX ? m_pImpl->m_pDataMemberX->getClass() : NULL), relation, bHierarchyOk);
+   m_pImpl->m_pSqlRelationLinked = qx::QxSqlRelationLinked::getHierarchy((m_pImpl->m_pDataMemberX ? m_pImpl->m_pDataMemberX->getClass() : NULL), relation, bHierarchyOk, this);
    if (! bHierarchyOk) { m_pImpl->m_pSqlRelationLinked.reset(); }
    if (! bHierarchyOk) { QString txt = bHierarchyOk.getDesc(); qDebug("[QxOrm] %s", qPrintable(txt)); return false; }
    m_pImpl->m_bCartesianProduct = m_pImpl->m_pSqlRelationLinked->getCartesianProduct();

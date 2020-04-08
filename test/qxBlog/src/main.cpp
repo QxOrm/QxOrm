@@ -259,6 +259,17 @@ int main(int argc, char * argv[])
    qAssert(lstBlogWithJoinQueries[0]->m_text == "update blog_text_1");
    qAssert(lstBlogWithJoinQueries[0]->m_author->m_sex == author::female);
 
+   // When join SQL sub-queries are used, then relationships should keep user defined order (in this example : 'list_comment' before 'author')
+   lstBlogWithJoinQueries.clear();
+   query = qx_query().where("blog_alias.blog_text").isEqualTo("update blog_text_1");
+   query.addJoinQuery("list_comment_alias", "AND list_comment_alias.comment_text IS NOT NULL");
+   query.addJoinQuery("author_alias", qx_query("AND author_alias.sex = :sex", QVariantList() << author::female));
+   daoError = qx::dao::fetch_by_query_with_relation(QStringList() << "<blog_alias> { blog_text }" << "list_comment <list_comment_alias> { comment_text }" << "author_id <author_alias> { name, birthdate, sex }", query, lstBlogWithJoinQueries);
+   qx::dump(lstBlogWithJoinQueries);
+   qAssert(lstBlogWithJoinQueries.size() > 0);
+   qAssert(lstBlogWithJoinQueries[0]->m_text == "update blog_text_1");
+   qAssert(lstBlogWithJoinQueries[0]->m_author->m_sex == author::female);
+
    // Check qx::dao::save_with_relation_recursive() function
    daoError = qx::dao::save_with_relation_recursive(blog_tmp);
    qAssert(! daoError.isValid());

@@ -33,6 +33,7 @@
 
 #include <QxDao/QxSqlRelationLinked.h>
 #include <QxDao/IxSqlQueryBuilder.h>
+#include <QxDao/IxDao_Helper.h>
 
 #include <QxRegister/IxClass.h>
 
@@ -54,24 +55,24 @@ struct QxSqlRelationLinked::QxSqlRelationLinkedImpl
    typedef qx::QxCollection<QString, type_relation> type_lst_relation;
    typedef QHash<QString, type_ptr> type_lst_relation_linked;
 
-   type_lst_relation m_relationX;               //!< List of relationships for current level
-   type_lst_relation_linked m_relationLinkedX;  //!< List of child to build the hierarchy
-   IxSqlRelationX * m_allRelationX;             //!< List of all relationships per level
-   bool m_bRoot;                                //!< Root of the hierarchy
-   QSet<QString> m_lstRootColumns;              //!< Root columns to fetch (using syntax { col_1, col_2, etc... } ), if empty then fetch all root columns
-   long m_lRootColumnsOffset;                   //!< Root columns offset to resolve SQL query output
-   bool m_bRootColumnsModeRemove;               //!< Special syntax to remove root columns instead of adding root columns : -{ column1, column2, etc... }
-   QString m_sRootCustomAlias;                  //!< Root custom alias using <my_alias> syntax
+   type_lst_relation m_relationX;                     //!< List of relationships for current level
+   type_lst_relation_linked m_relationLinkedX;        //!< List of child to build the hierarchy
+   IxSqlRelationX * m_allRelationX;                   //!< List of all relationships per level
+   IxSqlRelationX_ptr m_allRelationXOrdered;          //!< List of all relationships per level (order defined by user, used only when necessary, for example with custom join sub-queries)
+   bool m_bRoot;                                      //!< Root of the hierarchy
+   QSet<QString> m_lstRootColumns;                    //!< Root columns to fetch (using syntax { col_1, col_2, etc... } ), if empty then fetch all root columns
+   long m_lRootColumnsOffset;                         //!< Root columns offset to resolve SQL query output
+   bool m_bRootColumnsModeRemove;                     //!< Special syntax to remove root columns instead of adding root columns : -{ column1, column2, etc... }
+   QString m_sRootCustomAlias;                        //!< Root custom alias using <my_alias> syntax
 
    static QMutex m_mutex;                                                        //!< Mutex => qx::QxSqlRelationLinked is thread-safe
    static QHash<QPair<IxClass *, QByteArray>, type_ptr> m_relationLinkedSaved;   //!< Keep relations linked in memory for optimization (to avoid too many parsing)
 
-   QxSqlRelationLinkedImpl() : m_allRelationX(NULL), m_bRoot(true), m_lRootColumnsOffset(0), m_bRootColumnsModeRemove(false) { ; }
    QxSqlRelationLinkedImpl(bool bRoot) : m_allRelationX(NULL), m_bRoot(bRoot), m_lRootColumnsOffset(0), m_bRootColumnsModeRemove(false) { ; }
    ~QxSqlRelationLinkedImpl() { ; }
 
-   qx_bool buildHierarchy(IxSqlRelationX * pRelationX, const QStringList & sRelationX);
-   qx_bool insertRelationToHierarchy(const QStringList & sRelationX, const QString & sKey, qx::dao::sql_join::join_type eJoinType);
+   qx_bool buildHierarchy(IxSqlRelationX * pRelationX, const QStringList & sRelationX, qx::dao::detail::IxDao_Helper * pDaoHelper);
+   qx_bool insertRelationToHierarchy(const QStringList & sRelationX, const QString & sKey, qx::dao::sql_join::join_type eJoinType, qx::dao::detail::IxDao_Helper * pDaoHelper);
    QStringList removeColumns(const QStringList & columnsToRemove, IxSqlRelation * pRelation) const;
 
    bool checkRootColumns(const QString & s) const { return (m_lstRootColumns.isEmpty() || (m_bRootColumnsModeRemove ? (! m_lstRootColumns.contains(s)) : m_lstRootColumns.contains(s))); }
@@ -79,8 +80,8 @@ struct QxSqlRelationLinked::QxSqlRelationLinkedImpl
    void hierarchyAction(QxSqlRelationParams & params, e_hierarchy_action action)
    {
       if (m_bRoot) { params.setIndex(0); params.setIndexOwner(0); params.setCustomAlias(m_sRootCustomAlias); params.setCustomAliasOwner(m_sRootCustomAlias); }
-      if (m_allRelationX == NULL) { qAssert(false); return; }
-      for (auto itr = m_allRelationX->begin(); itr != m_allRelationX->end(); ++itr)
+      IxSqlRelationX * pAllRelationX = (m_allRelationXOrdered ? m_allRelationXOrdered.get() : m_allRelationX); if (! pAllRelationX) { qAssert(false); return; }
+      for (auto itr = pAllRelationX->begin(); itr != pAllRelationX->end(); ++itr)
       {
          IxSqlRelation * p = itr->second; if (! p) { continue; }
          params.setIndex(params.index() + 1);
@@ -145,7 +146,7 @@ struct QxSqlRelationLinked::QxSqlRelationLinkedImpl
 QMutex QxSqlRelationLinked::QxSqlRelationLinkedImpl::m_mutex;
 QHash<QPair<IxClass *, QByteArray>, std::shared_ptr<QxSqlRelationLinked> > QxSqlRelationLinked::QxSqlRelationLinkedImpl::m_relationLinkedSaved;
 
-QxSqlRelationLinked::QxSqlRelationLinked() : m_pImpl(new QxSqlRelationLinkedImpl()) { ; }
+QxSqlRelationLinked::QxSqlRelationLinked() : m_pImpl(new QxSqlRelationLinkedImpl(true)) { ; }
 
 QxSqlRelationLinked::QxSqlRelationLinked(bool bRoot) : m_pImpl(new QxSqlRelationLinkedImpl(bRoot)) { ; }
 
@@ -167,24 +168,25 @@ QxSqlRelationLinked::type_lst_relation_linked QxSqlRelationLinked::getRelationLi
 
 QxSqlRelationLinked::type_lst_relation QxSqlRelationLinked::getRelationX() const { return m_pImpl->m_relationX; }
 
-std::shared_ptr<QxSqlRelationLinked> QxSqlRelationLinked::getHierarchy(IxClass * pClass, const QStringList & sRelationX, qx_bool & bOk)
+std::shared_ptr<QxSqlRelationLinked> QxSqlRelationLinked::getHierarchy(IxClass * pClass, const QStringList & sRelationX, qx_bool & bOk, qx::dao::detail::IxDao_Helper * pDaoHelper /* = NULL */)
 {
    if (! pClass) { qAssert(false); bOk = qx_bool(false, "class is empty"); return std::shared_ptr<QxSqlRelationLinked>(); }
    QByteArray hash = sRelationX.join("|").toLatin1();
    QPair<IxClass *, QByteArray> key(pClass, hash);
-   std::shared_ptr<QxSqlRelationLinked> ptr = QxSqlRelationLinked::QxSqlRelationLinkedImpl::getRelationLinkedSaved(key);
+   bool bHasJoinSubQuery = (pDaoHelper ? (! pDaoHelper->qxQuery().getJoinQueryHash().isEmpty()) : false);
+   std::shared_ptr<QxSqlRelationLinked> ptr = (bHasJoinSubQuery ? std::shared_ptr<QxSqlRelationLinked>() : QxSqlRelationLinked::QxSqlRelationLinkedImpl::getRelationLinkedSaved(key));
    std::shared_ptr<QxSqlRelationLinked> result = std::make_shared<QxSqlRelationLinked>();
    if (ptr) { (* result->m_pImpl) = (* ptr->m_pImpl); return result; }
 
    ptr = std::make_shared<QxSqlRelationLinked>();
-   bOk = ptr->m_pImpl->buildHierarchy(pClass->getSqlRelationX().get(), sRelationX);
+   bOk = ptr->m_pImpl->buildHierarchy(pClass->getSqlRelationX().get(), sRelationX, pDaoHelper);
    if (! bOk) { return std::shared_ptr<QxSqlRelationLinked>(); }
-   QxSqlRelationLinked::QxSqlRelationLinkedImpl::insertRelationLinkedSaved(key, ptr);
+   if (! bHasJoinSubQuery) { QxSqlRelationLinked::QxSqlRelationLinkedImpl::insertRelationLinkedSaved(key, ptr); }
    (* result->m_pImpl) = (* ptr->m_pImpl);
    return result;
 }
 
-qx_bool QxSqlRelationLinked::QxSqlRelationLinkedImpl::buildHierarchy(IxSqlRelationX * pRelationX, const QStringList & sRelationX)
+qx_bool QxSqlRelationLinked::QxSqlRelationLinkedImpl::buildHierarchy(IxSqlRelationX * pRelationX, const QStringList & sRelationX, qx::dao::detail::IxDao_Helper * pDaoHelper)
 {
    if (! pRelationX) { qAssert(false); return qx_bool(false); }
    if (m_bRoot) { m_relationLinkedX.clear(); m_relationX.clear(); }
@@ -223,21 +225,34 @@ qx_bool QxSqlRelationLinked::QxSqlRelationLinkedImpl::buildHierarchy(IxSqlRelati
          QxCollectionIterator<QString, IxSqlRelation *> itr(* m_allRelationX);
          while (itr.next())
          {
-            qx_bool bResult = insertRelationToHierarchy(sNewRelationX, (itr.key() + suffix), eJoinType);
+            qx_bool bResult = insertRelationToHierarchy(sNewRelationX, (itr.key() + suffix), eJoinType, pDaoHelper);
             if (! bResult) { return bResult; }
          }
       }
       else
       {
-         qx_bool bResult = insertRelationToHierarchy(sNewRelationX, sKey, eJoinType);
+         qx_bool bResult = insertRelationToHierarchy(sNewRelationX, sKey, eJoinType, pDaoHelper);
          if (! bResult) { return bResult; }
       }
    }
 
+   bool bRelationXOrdered = (pDaoHelper ? (! pDaoHelper->qxQuery().getJoinQueryHash().isEmpty()) : false);
+   if (bRelationXOrdered && m_allRelationXOrdered)
+   {
+      QxCollectionIterator<QString, IxSqlRelation *> itr(* m_allRelationX);
+      while (itr.next())
+      {
+         QString sKey = itr.key(); if (sKey.isEmpty()) { qAssert(false); continue; }
+         IxSqlRelation * pRelation = itr.value(); if (! pRelation) { qAssert(false); continue; }
+         if (! m_allRelationXOrdered->exist(sKey)) { m_allRelationXOrdered->insert(sKey, pRelation); }
+      }
+   }
+
+   if (m_allRelationXOrdered) { qAssert(m_allRelationXOrdered->count() == m_allRelationX->count()); }
    return qx_bool(true);
 }
 
-qx_bool QxSqlRelationLinked::QxSqlRelationLinkedImpl::insertRelationToHierarchy(const QStringList & sRelationX, const QString & sKey, qx::dao::sql_join::join_type eJoinType)
+qx_bool QxSqlRelationLinked::QxSqlRelationLinkedImpl::insertRelationToHierarchy(const QStringList & sRelationX, const QString & sKey, qx::dao::sql_join::join_type eJoinType, qx::dao::detail::IxDao_Helper * pDaoHelper)
 {
    bool bModeRemoveColumns = false;
    QStringList columns; QString sKeyTemp = sKey;
@@ -286,6 +301,10 @@ qx_bool QxSqlRelationLinked::QxSqlRelationLinkedImpl::insertRelationToHierarchy(
       { return qx_bool(false, QString("invalid relation column : '" + sKeyTemp + "." + sColumn + "' (" + sKey + ")")); }
    }
 
+   bool bRelationXOrdered = (pDaoHelper ? (! pDaoHelper->qxQuery().getJoinQueryHash().isEmpty()) : false);
+   if (bRelationXOrdered && ! m_allRelationXOrdered) { m_allRelationXOrdered = std::make_shared<IxSqlRelationX>(); }
+   if (bRelationXOrdered && ! m_allRelationXOrdered->exist(sKeyTemp)) { m_allRelationXOrdered->insert(sKeyTemp, pRelation); }
+
    if (! customAliasSuffix.isEmpty() && pRelation->getClass()) { customAlias = (pRelation->getClass()->getKey() + customAliasSuffix); }
    if (! customAliasPrefix.isEmpty() && pRelation->getClass()) { customAlias = (customAliasPrefix + pRelation->getClass()->getKey()); }
    if (! m_relationX.exist(sKeyTemp)) { m_relationX.insert(sKeyTemp, QxSqlRelationLinkedImpl::type_relation(eJoinType, pRelation, qMakePair(columns.toSet(), static_cast<long>(0)), customAlias)); }
@@ -298,7 +317,7 @@ qx_bool QxSqlRelationLinked::QxSqlRelationLinkedImpl::insertRelationToHierarchy(
       m_relationLinkedX.insert(sKeyTemp, pRelationLinked);
    }
 
-   return pRelationLinked->m_pImpl->buildHierarchy(pRelation->getLstRelation(), sRelationX);
+   return pRelationLinked->m_pImpl->buildHierarchy(pRelation->getLstRelation(), sRelationX, pDaoHelper);
 }
 
 QStringList QxSqlRelationLinked::QxSqlRelationLinkedImpl::removeColumns(const QStringList & columnsToRemove, IxSqlRelation * pRelation) const
@@ -330,10 +349,10 @@ void QxSqlRelationLinked::hierarchyWhereSoftDelete(QxSqlRelationParams & params)
 void QxSqlRelationLinked::hierarchyResolveOutput(QxSqlRelationParams & params)
 {
    if (m_pImpl->m_bRoot) { params.setIndex(0); params.setIndexOwner(0); params.setCustomAlias(m_pImpl->m_sRootCustomAlias); params.setCustomAliasOwner(m_pImpl->m_sRootCustomAlias); }
-   if (m_pImpl->m_allRelationX == NULL) { qAssert(false); return; }
+   IxSqlRelationX * pAllRelationX = (m_pImpl->m_allRelationXOrdered ? m_pImpl->m_allRelationXOrdered.get() : m_pImpl->m_allRelationX); if (! pAllRelationX) { qAssert(false); return; }
    QVariant vId, vIdRelation;
    bool bByPass(false), bComplex(params.builder().getCartesianProduct());
-   for (auto itr = m_pImpl->m_allRelationX->begin(); itr != m_pImpl->m_allRelationX->end(); ++itr)
+   for (auto itr = pAllRelationX->begin(); itr != pAllRelationX->end(); ++itr)
    {
       IxSqlRelation * p = itr->second; if (! p) { continue; }
       if (! isValidDaoHelper(params)) { return; }
@@ -439,8 +458,8 @@ long QxSqlRelationLinked::getRelationCount() const
 
 void QxSqlRelationLinked::updateOffset(QxSqlRelationParams & params)
 {
-   if (m_pImpl->m_allRelationX == NULL) { qAssert(false); return; }
-   for (auto itr = m_pImpl->m_allRelationX->begin(); itr != m_pImpl->m_allRelationX->end(); ++itr)
+   IxSqlRelationX * pAllRelationX = (m_pImpl->m_allRelationXOrdered ? m_pImpl->m_allRelationXOrdered.get() : m_pImpl->m_allRelationX); if (! pAllRelationX) { qAssert(false); return; }
+   for (auto itr = pAllRelationX->begin(); itr != pAllRelationX->end(); ++itr)
    {
       IxSqlRelation * p = itr->second; if (! p) { continue; }
       params.setRelationX(& m_pImpl->m_relationLinkedX);
