@@ -171,7 +171,7 @@ public:
 
 protected:
 
-   mutable QMutex m_mutex;             //!< Mutex => 'qx::QxCollection' is thread-safe
+   mutable QMutex m_mutex;             //!< Mutex => qx::QxCollection is thread-safe
    type_list_pair_key_value m_list;    //!< Container to keep insertion order
    type_hash_position m_hash;          //!< Container for fast search by key
    bool m_batch;                       //!< Batch mode to sync internal containers

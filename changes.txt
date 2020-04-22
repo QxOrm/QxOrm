@@ -1,5 +1,18 @@
 Changes in version 1.4.7:
-- TODO...
+- Fix a MongoDB issue with qx::dao::fetch_by_id_with_relation() (wrong id fetched)
+- Fix an issue with qx::dao::fetch_all when a custom list of columns with the primary key is used
+- Fix identifier JSON serialization for MongoDB with properties registered as Q_PROPERTY (Qt property meta system)
+- Fix a crash (seg fault) using qx::IxPersistable with multiple inheritance (for example QObject + qx::IxPersistable) due to some static_cast to void * in QxFactory module (fix also for QxService module and multiple inheritance)
+- Remove automatic relationship lazy fetch when not requested in query
+- Fix an issue with QJson and QDataStream serialization when class doesn't contain any identifier (so not a database class) and is a wrapper of another registered class (can have same address pointer as parent)
+- Improve qx::QxSqlQuery::freeText() method to add custom text to build SQL query : support placeholders (add second parameter const QVariantList & values)
+- Improve performance in a multi-threads environment (mutex in qx::IxSqlQueryBuilder)
+- New setting to display more details (execution times) in qx::dao functions logs (to enable this new feature : qx::QxSqlDatabase::getSingleton()->setDisplayTimerDetails(true))
+- Improve MongoDB integration to fetch a list of items : build C++ instances as soon as possible without putting data in a buffer (better performance + less memory usage)
+- Improve MongoDB integration : support qx::dao::delete_by_query() function with MongoDB aggregation framework
+- Improve qx::QxSqlQuery class (or its qx_query alias) : new addJoinQuery() method to insert SQL sub-queries inside LEFT OUT JOIN / INNER JOIN (more details in documentation here : https://www.qxorm.com/qxorm_en/manual.html#manual_3855)
+- Improve qx::QxSqlQuery class : new constructors with placeholders support + new methods to embed SQL sub-queries (in_Select, notIn_Select, isEqualTo_Select, isNotEqualTo_Select)
+- Improve qx::QxCollection class : qx::QxCollection is now a thread-safe container (fix for example QxModelView module when model is fetched in a different thread than the view)
 
 Changes in version 1.4.6:
 - New QxHttpServer module : C++/Qt standalone multi-threaded HTTP 1.1 web server (support SSL/TLS, persistent connections, cookies, sessions, chunked responses, URL dispatcher/routing, no other dependency except QtNetwork) : https://www.qxorm.com/qxorm_en/manual.html#manual_96

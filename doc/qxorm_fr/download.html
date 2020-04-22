@@ -235,6 +235,22 @@
           <tbody>
             <tr>
               <td><i>
+<b><h2>Changes in version 1.4.7:</h2></b>
+- Fix a MongoDB issue with qx::dao::fetch_by_id_with_relation() (wrong id fetched)<br>
+- Fix an issue with qx::dao::fetch_all when a custom list of columns with the primary key is used<br>
+- Fix identifier JSON serialization for MongoDB with properties registered as Q_PROPERTY (Qt property meta system)<br>
+- Fix a crash (seg fault) using qx::IxPersistable with multiple inheritance (for example QObject + qx::IxPersistable) due to some static_cast to void * in QxFactory module (fix also for QxService module and multiple inheritance)<br>
+- Remove automatic relationship lazy fetch when not requested in query<br>
+- Fix an issue with QJson and QDataStream serialization when class doesn't contain any identifier (so not a database class) and is a wrapper of another registered class (can have same address pointer as parent)<br>
+- Improve qx::QxSqlQuery::freeText() method to add custom text to build SQL query : support placeholders (add second parameter const QVariantList & values)<br>
+- Improve performance in a multi-threads environment (mutex in qx::IxSqlQueryBuilder)<br>
+- New setting to display more details (execution times) in qx::dao functions logs (to enable this new feature : qx::QxSqlDatabase::getSingleton()->setDisplayTimerDetails(true))<br>
+- Improve MongoDB integration to fetch a list of items : build C++ instances as soon as possible without putting data in a buffer (better performance + less memory usage)<br>
+- Improve MongoDB integration : support qx::dao::delete_by_query() function with MongoDB aggregation framework<br>
+- Improve qx::QxSqlQuery class (or its qx_query alias) : new addJoinQuery() method to insert SQL sub-queries inside LEFT OUT JOIN / INNER JOIN (more details in documentation here : https://www.qxorm.com/qxorm_en/manual.html#manual_3855)<br>
+- Improve qx::QxSqlQuery class : new constructors with placeholders support + new methods to embed SQL sub-queries (in_Select, notIn_Select, isEqualTo_Select, isNotEqualTo_Select)<br>
+- Improve qx::QxCollection class : qx::QxCollection is now a thread-safe container (fix for example QxModelView module when model is fetched in a different thread than the view)<br>
+<br>
 <b><h2>Changes in version 1.4.6:</h2></b>
 - New QxHttpServer module : C++/Qt standalone multi-threaded HTTP 1.1 web server (support SSL/TLS, persistent connections, cookies, sessions, chunked responses, URL dispatcher/routing, no other dependency except QtNetwork) : https://www.qxorm.com/qxorm_en/manual.html#manual_96<br>
 - New QxRestApi module : provide a REST API to send requests in JSON format from external application (web services), from web-site (written in Angular for example), from QML or from scripting langage (like Python) : https://www.qxorm.com/qxorm_en/manual.html#manual_97<br>
@@ -507,6 +523,12 @@ Here are all other changes of version 1.4.1:<br>
           <tbody>
             <tr>
               <td><i>
+<b><h2>Changes in version QxEntityEditor 1.2.5:</h2></b>
+- Fix an issue with fonts on macOS Catalina 10.15<br>
+- Add command line parameter --font : define application font with syntax &lt;family&gt;||&lt;pointSize&gt;||&lt;weight&gt;||&lt;italic&gt; (only &lt;family&gt; is required), for example : Courier New||14<br>
+- Add command line parameter  --style_sheet : define application style sheet (more details here : https://doc.qt.io/qt-5/stylesheet-reference.html), for example : QWidget { background-color: black }<br>
+- Fix meta-data (property bag) C++ export : keep same order between several C++ exports (this is now easier to check differences between 2 C++ exports using WinMerge or any other comparison/diff tool)<br>
+<br>
 <b><h2>Changes in version QxEntityEditor 1.2.4:</h2></b>
 - New feature in Javascript engine to customize exports : include QxRestApi module to query *.qxee project file<br>
 - Fix a property/relation sorting issue in C++ export after importing a database schema (which could be annoying to make some C++ files diffs between 2 exports)<br>
