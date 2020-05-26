@@ -460,6 +460,7 @@ bool IxModel::removeRows(int row, int count, const QModelIndex & parent /* = QMo
 bool IxModel::removeRowsGeneric(int row, int count)
 {
    if (! m_pCollection) { qAssert(false); return false; }
+   if (!count) return true;
    beginRemoveRows(QModelIndex(), row, (row + count - 1));
    for (int i = 0; i < count; ++i)
    { m_pCollection->_remove(row); removeListOfChild(row); }
