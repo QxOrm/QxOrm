@@ -265,6 +265,7 @@ win32: OSDIR = Win32
 linux-g++: OSDIR = Linux64
 linux-rpi3-g++ | linux-rasp-pi3-g++: OSDIR = LinuxRpi
 linux-rasp-pi2-g++: OSDIR = LinuxRpi2
+macx: OSDIR = Mac
 
 LIBDIR = $${OSDIR}$${DIRSUFFIX}
 TR_EXCLUDE += $(BOOST_INCLUDE)/*
