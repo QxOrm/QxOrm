@@ -37,7 +37,6 @@ include(./QxOrm.pri)
 ######################
 
 TEMPLATE = lib
-CONFIG += dll
 DEFINES += _QX_BUILDING_QX_ORM
 DESTDIR = $$PWD/lib$${LIBDIR}/
 
