@@ -261,7 +261,13 @@ FILESUFFIX = d
 DEFINES += _QX_MODE_RELEASE
 } # CONFIG(debug, debug|release)
 
-win32: OSDIR = Win32
+win32 {
+    contains(QT_ARCH, i386) {
+        OSDIR = Win32
+    } else {
+        OSDIR = Win64
+    }
+}
 linux-g++: OSDIR = Linux64
 linux-rpi3-g++ | linux-rasp-pi3-g++: OSDIR = LinuxRpi
 linux-rasp-pi2-g++: OSDIR = LinuxRpi2
