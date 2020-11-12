@@ -433,11 +433,34 @@ int main(int argc, char * argv[])
    // Test soft delete behavior
    pBar.reset(new Bar());
    pBar->setId(5);
-   daoError = qx::dao::delete_by_id(pBar);      qAssert(! daoError.isValid());
+   daoError = qx::dao::delete_by_id(pBar);      qAssert(! daoError.isValid());      // This Bar item is now soft-deleted in database
    bDaoExist = qx::dao::exist(pBar);            qAssert(! bDaoExist);
-   daoError = qx::dao::delete_all<Bar>();       qAssert(! daoError.isValid());
+   daoError = qx::dao::delete_all<Bar>();       qAssert(! daoError.isValid());      // All Bar items are now soft-deleted in database
    long lBarCount = qx::dao::count<Bar>();      qAssert(lBarCount == 0);            Q_UNUSED(lBarCount);
-   daoError = qx::dao::destroy_all<Bar>();      qAssert(! daoError.isValid());
+
+   {
+      // Fetch soft-deleted items from database using session and ignoreSoftDelete() behavior
+      qx::QxSession session;
+      session.ignoreSoftDelete(); // The second parameter allows to select classes to ignore soft delete behavior (by default, if empty, then all classes are ignored)
+      BarX lstOfSoftDeletedBars;
+      daoError = session.fetchAll(lstOfSoftDeletedBars);
+      qAssert((! daoError.isValid()) && (lstOfSoftDeletedBars.size() > 0));
+      lBarCount = session.count<Bar>(); qAssert(lBarCount > 0); Q_UNUSED(lBarCount);
+
+      // Try to fetch soft-deleted items from database through relationships
+      pFooX.reset(new FooX());
+      daoError = session.fetchAll(pFooX, QStringList(), QStringList() << "lstBar");
+      qAssert((! daoError.isValid()) && (pFooX->size() == 7));
+      pFoo = pFooX->getByKey(3); qAssert(pFoo->getBarX() && (pFoo->getBarX()->size() == 4));
+      pFoo = pFooX->getByKey(4); qAssert(! pFoo->getBarX() || (pFoo->getBarX()->size() == 0));
+      pFoo = pFooX->getByKey(2); qAssert(pFoo->getBarX() && (pFoo->getBarX()->size() == 2));
+
+      // Remove physically items in database even if a soft delete behavior has been defined (using destroy functions)
+      daoError = session.destroyAll<Bar>(); qAssert(! daoError.isValid());
+      daoError = session.fetchAll(lstOfSoftDeletedBars);
+      qAssert((! daoError.isValid()) && (lstOfSoftDeletedBars.size() == 0));
+      lBarCount = session.count<Bar>(); qAssert(lBarCount == 0); Q_UNUSED(lBarCount);
+   }
 
    {
       pFoo.reset(new Foo()); pFoo->setName("name10"); pFoo->setDesc("desc10");

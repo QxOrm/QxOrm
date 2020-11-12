@@ -120,12 +120,8 @@ class QX_DLL_EXPORT QxSession
 
 private:
 
-   QSqlDatabase m_database;            //!< Database connexion of current session
-   QList<QSqlError> m_lstSqlError;     //!< List of SQL errors
-   bool m_bTransaction;                //!< Flag to know if a transaction is opened or not
-   bool m_bThrowable;                  //!< When a SQL error is appended, an exception of type qx::dao::sql_error is thrown
-   bool m_bThrowInEvent;               //!< An exception of type qx::dao::sql_error is throwing
-   bool m_bAutoOpenClose;              //!< Open and close automatically connection to database
+   struct QxSessionImpl;
+   std::shared_ptr<QxSessionImpl> m_pImpl; //!< Private implementation idiom (use std::shared_ptr instead of std::unique_ptr because of incomplete type)
 
 public:
 
@@ -133,16 +129,16 @@ public:
    QxSession(const QSqlDatabase & database);
    QxSession(const QSqlDatabase & database, bool bOpenTransaction);
    QxSession(const QSqlDatabase & database, bool bOpenTransaction, bool bThrowable);
-   virtual ~QxSession() { close(); }
+   virtual ~QxSession();
 
-   inline bool isThrowable() const              { return m_bThrowable; }
-   inline bool isOpened() const                 { return m_bTransaction; }
-   inline bool isValid() const                  { return (m_lstSqlError.count() <= 0); }
-   inline QSqlError firstError() const          { return ((m_lstSqlError.count() > 0) ? m_lstSqlError.first() : QSqlError()); }
-   inline QSqlError lastError() const           { return ((m_lstSqlError.count() > 0) ? m_lstSqlError.last() : QSqlError()); }
-   inline QList<QSqlError> allErrors() const    { return m_lstSqlError; }
-   inline const QSqlDatabase * database() const { return (& m_database); }
-   inline QSqlDatabase * database()             { return (& m_database); }
+   bool isThrowable() const;
+   bool isOpened() const;
+   bool isValid() const;
+   QSqlError firstError() const;
+   QSqlError lastError() const;
+   QList<QSqlError> allErrors() const;
+   const QSqlDatabase * database() const;
+   QSqlDatabase * database();
 
    bool open();
    bool close();
@@ -151,12 +147,11 @@ public:
 
    QxSession & operator+= (const QSqlError & err);
 
-private:
+   static QxSession * getActiveSession(QSqlDatabase * db);
 
-   void appendSqlError(const QSqlError & err);
-   void clear();
-
-public:
+   void ignoreSoftDelete(bool bIgnoreSoftDelete = true, const QStringList & classesToIgnore = QStringList());
+   bool checkIgnoreSoftDelete(const QString & classKey) const;
+   QString getIgnoreSoftDeleteHash() const;
 
    template <class T>
    long count(const qx::QxSqlQuery & query = qx::QxSqlQuery())

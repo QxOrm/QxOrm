@@ -49,7 +49,7 @@ PRECOMPILED_HEADER = ./include/QxPrecompiled.h
 QT -= gui
 } # !contains(DEFINES, _QX_ENABLE_QT_GUI)
 
-unix { VERSION = 1.4.7 }
+unix { VERSION = 1.4.8 }
 
 contains(DEFINES, _QX_STATIC_BUILD) {
 CONFIG -= dll

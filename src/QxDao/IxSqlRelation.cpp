@@ -41,6 +41,7 @@
 #include <QxDao/QxSqlDatabase.h>
 #include <QxDao/QxSqlRelationLinked.h>
 #include <QxDao/QxSqlQuery.h>
+#include <QxDao/QxSession.h>
 
 #include <QxDataMember/IxDataMember.h>
 #include <QxDataMember/IxDataMemberX.h>
@@ -71,8 +72,8 @@ struct IxSqlRelation::IxSqlRelationImpl
    typedef QxCollection<QString, IxDataMember *> type_lst_data_member;
    typedef std::shared_ptr<type_lst_data_member> type_lst_data_member_ptr;
 
-   IxClass *                        m_pClass;               //!< 'IxClass' associated wth sql relation
-   IxClass *                        m_pClassOwner;          //!< 'IxClass' of the owner
+   IxClass *                        m_pClass;               //!< 'IxClass' associated wth sql relation (relation target)
+   IxClass *                        m_pClassOwner;          //!< 'IxClass' of the owner (relation source)
    IxDataMember *                   m_pDataMember;          //!< 'IxDataMember' associated wth sql relation
    IxDataMemberX *                  m_pDataMemberX;         //!< Collection of 'IxDataMember' : parent of 'm_pDataMember'
    IxDataMember *                   m_pDataMemberId;        //!< 'IxDataMember' id of 'm_pDataMemberX'
@@ -81,6 +82,7 @@ struct IxSqlRelation::IxSqlRelationImpl
    qx::dao::sql_join::join_type     m_eJoinType;            //!< Join type to build sql query
    IxSqlRelation::relation_type     m_eRelationType;        //!< Relation type : one-to-one, one-to-many, etc.
    QxSoftDelete                     m_oSoftDelete;          //!< Soft delete (or logical delete) behavior
+   QxSoftDelete                     m_oSoftDeleteEmpty;     //!< Keep an empty soft delete instance (used with qx::QxSession::ignoreSoftDelete())
    QString                          m_sForeignKey;          //!< SQL query foreign key (1-n)
    QString                          m_sExtraTable;          //!< Extra-table that holds the relationship (n-n)
    QString                          m_sForeignKeyOwner;     //!< SQL query foreign key for owner (n-n)
@@ -114,6 +116,16 @@ struct IxSqlRelation::IxSqlRelationImpl
       bool bIsValid = (p && p->getDao() && p->hasSqlRelation());
       if (bIsValid && (! m_iIsSameDataOwner) && (p != m_pDataMember)) { p->getSqlRelation()->init(); }
       return (bIsValid ? p : NULL);
+   }
+
+   const QxSoftDelete & getSoftDelete(QxSqlRelationParams & params) const
+   {
+      qx::IxSqlQueryBuilder & builder = params.builder();
+      qx::dao::detail::IxDao_Helper * pDaoHelper = builder.getDaoHelper();
+      qx::QxSession * pSession = (pDaoHelper ? pDaoHelper->getSession() : NULL);
+      if ((! pSession) || (! m_pClass)) { return m_oSoftDelete; }
+      bool bIgnoreSoftDelete = pSession->checkIgnoreSoftDelete(m_pClass->getKey());
+      return (bIgnoreSoftDelete ? m_oSoftDeleteEmpty : m_oSoftDelete);
    }
 
 };
@@ -367,9 +379,10 @@ QVariant IxSqlRelation::getIdFromQuery_OneToOne(bool bEager, QxSqlRelationParams
 void IxSqlRelation::updateOffset_ManyToMany(bool bEager, QxSqlRelationParams & params) const
 {
    if (! bEager) { return; }
+   const QxSoftDelete & oSoftDelete = this->m_pImpl->getSoftDelete(params);
    long lOffsetNew = params.offset() + this->getDataCount();
    lOffsetNew += (this->getDataId() ? this->getDataId()->getNameCount() : 0);
-   lOffsetNew += (this->m_pImpl->m_oSoftDelete.isEmpty() ? 0 : 1);
+   lOffsetNew += (oSoftDelete.isEmpty() ? 0 : 1);
    params.setOffset(lOffsetNew);
 
    if (bEager && (params.getColumnsCount() > 0) && (params.getColumnsOffset() > 0))
@@ -396,10 +409,11 @@ void IxSqlRelation::updateOffset_ManyToMany(bool bEager, QxSqlRelationParams & p
 
 void IxSqlRelation::updateOffset_ManyToOne(bool bEager, QxSqlRelationParams & params) const
 {
+   const QxSoftDelete & oSoftDelete = this->m_pImpl->getSoftDelete(params);
    long lOffsetDataMember = (this->getDataMember() ? this->getDataMember()->getNameCount() : 0);
    long lOffsetDataId = (bEager ? (this->getDataId() ? this->getDataId()->getNameCount() : 0) : 0);
    long lOffsetDataCount = (bEager ? this->getDataCount() : 0);
-   long lOffsetSoftDelete = (bEager ? (this->m_pImpl->m_oSoftDelete.isEmpty() ? 0 : 1) : 0);
+   long lOffsetSoftDelete = (bEager ? (oSoftDelete.isEmpty() ? 0 : 1) : 0);
    long lOffsetNew = (params.offset() + lOffsetDataMember + lOffsetDataId + lOffsetDataCount + lOffsetSoftDelete);
    params.setOffset(lOffsetNew);
 
@@ -428,12 +442,13 @@ void IxSqlRelation::updateOffset_ManyToOne(bool bEager, QxSqlRelationParams & pa
 void IxSqlRelation::updateOffset_OneToMany(bool bEager, QxSqlRelationParams & params) const
 {
    if (! bEager) { return; }
+   const QxSoftDelete & oSoftDelete = this->m_pImpl->getSoftDelete(params);
    IxDataMember * pForeign = this->getDataByKey(m_pImpl->m_sForeignKey);
    bool bAddOffsetForeign = (pForeign && ! this->getLstDataMember()->exist(m_pImpl->m_sForeignKey));
    long lOffsetId = (this->getDataId() ? this->getDataId()->getNameCount() : 0);
    long lOffsetNew = (params.offset() + this->getDataCount() + lOffsetId);
    lOffsetNew = (lOffsetNew + (bAddOffsetForeign ? pForeign->getNameCount() : 0));
-   lOffsetNew = (lOffsetNew + (this->m_pImpl->m_oSoftDelete.isEmpty() ? 0 : 1));
+   lOffsetNew = (lOffsetNew + (oSoftDelete.isEmpty() ? 0 : 1));
    params.setOffset(lOffsetNew);
 
    if (bEager && (params.getColumnsCount() > 0) && (params.getColumnsOffset() > 0))
@@ -461,9 +476,10 @@ void IxSqlRelation::updateOffset_OneToMany(bool bEager, QxSqlRelationParams & pa
 void IxSqlRelation::updateOffset_OneToOne(bool bEager, QxSqlRelationParams & params) const
 {
    if (! bEager) { return; }
+   const QxSoftDelete & oSoftDelete = this->m_pImpl->getSoftDelete(params);
    long lOffsetNew = params.offset() + this->getDataCount();
    lOffsetNew += (this->getDataId() ? this->getDataId()->getNameCount() : 0);
-   lOffsetNew += (this->m_pImpl->m_oSoftDelete.isEmpty() ? 0 : 1);
+   lOffsetNew += (oSoftDelete.isEmpty() ? 0 : 1);
    params.setOffset(lOffsetNew);
 
    if (bEager && (params.getColumnsCount() > 0) && (params.getColumnsOffset() > 0))
@@ -510,7 +526,8 @@ void IxSqlRelation::eagerSelect_ManyToMany(QxSqlRelationParams & params) const
       params.setCustomAliasOwner(sOldCustomAliasOwner);
    }
 
-   if (! this->m_pImpl->m_oSoftDelete.isEmpty()) { sql += (this->m_pImpl->m_oSoftDelete.buildSqlTablePointName(tableAlias) + ", "); }
+   const QxSoftDelete & oSoftDelete = this->m_pImpl->getSoftDelete(params);
+   if (! oSoftDelete.isEmpty()) { sql += (oSoftDelete.buildSqlTablePointName(tableAlias) + ", "); }
 }
 
 void IxSqlRelation::eagerSelect_ManyToOne(QxSqlRelationParams & params) const
@@ -539,7 +556,8 @@ void IxSqlRelation::eagerSelect_ManyToOne(QxSqlRelationParams & params) const
       params.setCustomAliasOwner(sOldCustomAliasOwner);
    }
 
-   if (! this->m_pImpl->m_oSoftDelete.isEmpty()) { sql += (this->m_pImpl->m_oSoftDelete.buildSqlTablePointName(tableAlias) + ", "); }
+   const QxSoftDelete & oSoftDelete = this->m_pImpl->getSoftDelete(params);
+   if (! oSoftDelete.isEmpty()) { sql += (oSoftDelete.buildSqlTablePointName(tableAlias) + ", "); }
 }
 
 void IxSqlRelation::eagerSelect_OneToMany(QxSqlRelationParams & params) const
@@ -566,7 +584,8 @@ void IxSqlRelation::eagerSelect_OneToMany(QxSqlRelationParams & params) const
       params.setCustomAliasOwner(sOldCustomAliasOwner);
    }
 
-   if (! this->m_pImpl->m_oSoftDelete.isEmpty()) { sql += (this->m_pImpl->m_oSoftDelete.buildSqlTablePointName(tableAlias) + ", "); }
+   const QxSoftDelete & oSoftDelete = this->m_pImpl->getSoftDelete(params);
+   if (! oSoftDelete.isEmpty()) { sql += (oSoftDelete.buildSqlTablePointName(tableAlias) + ", "); }
 }
 
 void IxSqlRelation::eagerSelect_OneToOne(QxSqlRelationParams & params) const
@@ -591,7 +610,8 @@ void IxSqlRelation::eagerSelect_OneToOne(QxSqlRelationParams & params) const
       params.setCustomAliasOwner(sOldCustomAliasOwner);
    }
 
-   if (! this->m_pImpl->m_oSoftDelete.isEmpty()) { sql += (this->m_pImpl->m_oSoftDelete.buildSqlTablePointName(tableAlias) + ", "); }
+   const QxSoftDelete & oSoftDelete = this->m_pImpl->getSoftDelete(params);
+   if (! oSoftDelete.isEmpty()) { sql += (oSoftDelete.buildSqlTablePointName(tableAlias) + ", "); }
 }
 
 void IxSqlRelation::eagerJoin_ManyToMany(QxSqlRelationParams & params) const
@@ -620,13 +640,14 @@ void IxSqlRelation::eagerJoin_ManyToMany(QxSqlRelationParams & params) const
       joinQuery = query.getJoinQuery(this->getKey(), tableAlias);
    }
 
+   const QxSoftDelete & oSoftDelete = this->m_pImpl->getSoftDelete(params);
    sql += this->getSqlJoin(params.joinType()) + qx::IxDataMember::getSqlTableName(table) + " " + tableAlias + " ON ";
    if (! joinQuery.isEmpty()) { sql += "("; }
    params.builder().addSqlQueryAlias(table, tableAlias);
    for (int i = 0; i < pIdData->getNameCount(); i++)
    { sql += sExtraTableAlias + "." + lstForeignKeyDataType.at(i) + " = " + pIdData->getSqlAlias(tableAlias, true, i) + " AND "; }
-   if (! this->m_pImpl->m_oSoftDelete.isEmpty() && this->m_pImpl->m_oSoftDelete.getSqlFetchInJoin())
-   { sql += this->m_pImpl->m_oSoftDelete.buildSqlQueryToFetch(tableAlias) + " AND "; }
+   if (! oSoftDelete.isEmpty() && oSoftDelete.getSqlFetchInJoin())
+   { sql += oSoftDelete.buildSqlQueryToFetch(tableAlias) + " AND "; }
    sql = sql.left(sql.count() - 5); // Remove last " AND "
    if (! joinQuery.isEmpty()) { sql += " " + joinQuery + ")"; }
 }
@@ -648,13 +669,14 @@ void IxSqlRelation::eagerJoin_ManyToOne(QxSqlRelationParams & params) const
       joinQuery = query.getJoinQuery(this->getKey(), tableAlias);
    }
 
+   const QxSoftDelete & oSoftDelete = this->m_pImpl->getSoftDelete(params);
    sql += this->getSqlJoin(params.joinType()) + qx::IxDataMember::getSqlTableName(table) + " " + tableAlias + " ON ";
    if (! joinQuery.isEmpty()) { sql += "("; }
    params.builder().addSqlQueryAlias(table, tableAlias);
    for (int i = 0; i < pId->getNameCount(); i++)
    { sql += pId->getSqlAlias(tableAlias, true, i) + " = " + pData->getSqlAlias(tableRef, true, i) + " AND "; }
-   if (! this->m_pImpl->m_oSoftDelete.isEmpty() && this->m_pImpl->m_oSoftDelete.getSqlFetchInJoin())
-   { sql += this->m_pImpl->m_oSoftDelete.buildSqlQueryToFetch(tableAlias) + " AND "; }
+   if (! oSoftDelete.isEmpty() && oSoftDelete.getSqlFetchInJoin())
+   { sql += oSoftDelete.buildSqlQueryToFetch(tableAlias) + " AND "; }
    sql = sql.left(sql.count() - 5); // Remove last " AND "
    if (! joinQuery.isEmpty()) { sql += " " + joinQuery + ")"; }
 }
@@ -676,13 +698,14 @@ void IxSqlRelation::eagerJoin_OneToMany(QxSqlRelationParams & params) const
       joinQuery = query.getJoinQuery(this->getKey(), tableAlias);
    }
 
+   const QxSoftDelete & oSoftDelete = this->m_pImpl->getSoftDelete(params);
    sql += this->getSqlJoin(params.joinType()) + qx::IxDataMember::getSqlTableName(table) + " " + tableAlias + " ON ";
    if (! joinQuery.isEmpty()) { sql += "("; }
    params.builder().addSqlQueryAlias(table, tableAlias);
    for (int i = 0; i < pId->getNameCount(); i++)
    { sql += pForeign->getSqlAlias(tableAlias, true, i) + " = " + pId->getSqlAlias(tableRef, true, i) + " AND "; }
-   if (! this->m_pImpl->m_oSoftDelete.isEmpty() && this->m_pImpl->m_oSoftDelete.getSqlFetchInJoin())
-   { sql += this->m_pImpl->m_oSoftDelete.buildSqlQueryToFetch(tableAlias) + " AND "; }
+   if (! oSoftDelete.isEmpty() && oSoftDelete.getSqlFetchInJoin())
+   { sql += oSoftDelete.buildSqlQueryToFetch(tableAlias) + " AND "; }
    sql = sql.left(sql.count() - 5); // Remove last " AND "
    if (! joinQuery.isEmpty()) { sql += " " + joinQuery + ")"; }
 }
@@ -704,55 +727,60 @@ void IxSqlRelation::eagerJoin_OneToOne(QxSqlRelationParams & params) const
       joinQuery = query.getJoinQuery(this->getKey(), tableAlias);
    }
 
+   const QxSoftDelete & oSoftDelete = this->m_pImpl->getSoftDelete(params);
    sql += this->getSqlJoin(params.joinType()) + qx::IxDataMember::getSqlTableName(table) + " " + tableAlias + " ON ";
    if (! joinQuery.isEmpty()) { sql += "("; }
    params.builder().addSqlQueryAlias(table, tableAlias);
    for (int i = 0; i < pId->getNameCount(); i++)
    { sql += pId->getSqlAlias(tableAlias, true, i) + " = " + pIdRef->getSqlAlias(tableRef, true, i) + " AND "; }
-   if (! this->m_pImpl->m_oSoftDelete.isEmpty() && this->m_pImpl->m_oSoftDelete.getSqlFetchInJoin())
-   { sql += this->m_pImpl->m_oSoftDelete.buildSqlQueryToFetch(tableAlias) + " AND "; }
+   if (! oSoftDelete.isEmpty() && oSoftDelete.getSqlFetchInJoin())
+   { sql += oSoftDelete.buildSqlQueryToFetch(tableAlias) + " AND "; }
    sql = sql.left(sql.count() - 5); // Remove last " AND "
    if (! joinQuery.isEmpty()) { sql += " " + joinQuery + ")"; }
 }
 
 void IxSqlRelation::eagerWhereSoftDelete_ManyToMany(QxSqlRelationParams & params) const
 {
-   if (this->m_pImpl->m_oSoftDelete.isEmpty()) { return; }
-   if (this->m_pImpl->m_oSoftDelete.getSqlFetchInJoin()) { return; }
+   const QxSoftDelete & oSoftDelete = this->m_pImpl->getSoftDelete(params);
+   if (oSoftDelete.isEmpty()) { return; }
+   if (oSoftDelete.getSqlFetchInJoin()) { return; }
    QString & sql = params.sql();
    QString tableAlias = this->tableAlias(params);
    sql += qx::IxSqlQueryBuilder::addSqlCondition(sql);
-   sql += this->m_pImpl->m_oSoftDelete.buildSqlQueryToFetch(tableAlias);
+   sql += oSoftDelete.buildSqlQueryToFetch(tableAlias);
 }
 
 void IxSqlRelation::eagerWhereSoftDelete_ManyToOne(QxSqlRelationParams & params) const
 {
-   if (this->m_pImpl->m_oSoftDelete.isEmpty()) { return; }
-   if (this->m_pImpl->m_oSoftDelete.getSqlFetchInJoin()) { return; }
+   const QxSoftDelete & oSoftDelete = this->m_pImpl->getSoftDelete(params);
+   if (oSoftDelete.isEmpty()) { return; }
+   if (oSoftDelete.getSqlFetchInJoin()) { return; }
    QString & sql = params.sql();
    QString tableAlias = this->tableAlias(params);
    sql += qx::IxSqlQueryBuilder::addSqlCondition(sql);
-   sql += this->m_pImpl->m_oSoftDelete.buildSqlQueryToFetch(tableAlias);
+   sql += oSoftDelete.buildSqlQueryToFetch(tableAlias);
 }
 
 void IxSqlRelation::eagerWhereSoftDelete_OneToMany(QxSqlRelationParams & params) const
 {
-   if (this->m_pImpl->m_oSoftDelete.isEmpty()) { return; }
-   if (this->m_pImpl->m_oSoftDelete.getSqlFetchInJoin()) { return; }
+   const QxSoftDelete & oSoftDelete = this->m_pImpl->getSoftDelete(params);
+   if (oSoftDelete.isEmpty()) { return; }
+   if (oSoftDelete.getSqlFetchInJoin()) { return; }
    QString & sql = params.sql();
    QString tableAlias = this->tableAlias(params);
    sql += qx::IxSqlQueryBuilder::addSqlCondition(sql);
-   sql += this->m_pImpl->m_oSoftDelete.buildSqlQueryToFetch(tableAlias);
+   sql += oSoftDelete.buildSqlQueryToFetch(tableAlias);
 }
 
 void IxSqlRelation::eagerWhereSoftDelete_OneToOne(QxSqlRelationParams & params) const
 {
-   if (this->m_pImpl->m_oSoftDelete.isEmpty()) { return; }
-   if (this->m_pImpl->m_oSoftDelete.getSqlFetchInJoin()) { return; }
+   const QxSoftDelete & oSoftDelete = this->m_pImpl->getSoftDelete(params);
+   if (oSoftDelete.isEmpty()) { return; }
+   if (oSoftDelete.getSqlFetchInJoin()) { return; }
    QString & sql = params.sql();
    QString tableAlias = this->tableAlias(params);
    sql += qx::IxSqlQueryBuilder::addSqlCondition(sql);
-   sql += this->m_pImpl->m_oSoftDelete.buildSqlQueryToFetch(tableAlias);
+   sql += oSoftDelete.buildSqlQueryToFetch(tableAlias);
 }
 
 void IxSqlRelation::lazySelect_ManyToOne(QxSqlRelationParams & params) const

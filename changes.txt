@@ -1,3 +1,6 @@
+Changes in version 1.4.8:
+- TODO...
+
 Changes in version 1.4.7:
 - Fix a MongoDB issue with qx::dao::fetch_by_id_with_relation() (wrong id fetched)
 - Fix an issue with qx::dao::fetch_all when a custom list of columns with the primary key is used

@@ -35,6 +35,7 @@
 #include <QxDao/QxSqlDatabase.h>
 #include <QxDao/QxSqlRelationParams.h>
 #include <QxDao/QxSqlGenerator/IxSqlGenerator.h>
+#include <QxDao/QxSession.h>
 
 #include <QxRegister/IxClass.h>
 
@@ -62,6 +63,7 @@ struct IxSqlQueryBuilder::IxSqlQueryBuilderImpl
    bool m_bCartesianProduct;                                         //!< Recordset can return cartesian product => same id in multiple records
    type_lst_ptr_by_id_ptr m_pIdX;                                    //!< Collection of id (and pointer associated) to avoid multiple fetch on same id (cartesian product)
    QxSoftDelete m_oSoftDelete;                                       //!< Soft delete (or logical delete) behavior
+   QxSoftDelete m_oSoftDeleteEmpty;                                  //!< Keep an empty soft delete instance (used with qx::QxSession::ignoreSoftDelete())
    QHash<QString, QString> m_lstSqlQueryAlias;                       //!< List of sql alias to replace into sql query
    qx::dao::detail::IxDao_Helper * m_pDaoHelper;                     //!< Pointer to the dao helper class associated to the builder
    IxDataMemberX * m_pDataMemberX;                                   //!< QxDataMemberX<type_sql> singleton reference
@@ -73,6 +75,14 @@ struct IxSqlQueryBuilder::IxSqlQueryBuilderImpl
 
    IxSqlQueryBuilderImpl() : m_pDataMemberId(NULL), m_bCartesianProduct(false), m_pDaoHelper(NULL), m_pDataMemberX(NULL), m_bInitDone(false) { ; }
    ~IxSqlQueryBuilderImpl() { ; }
+
+   bool checkIgnoreSoftDelete() const
+   {
+      if ((! m_pDaoHelper) || (! m_pDataMemberX)) { return false; }
+      qx::QxSession * pSession = m_pDaoHelper->getSession(); if (! pSession) { return false; }
+      qx::IxClass * pClass = m_pDataMemberX->getClass(); if (! pClass) { return false; }
+      return pSession->checkIgnoreSoftDelete(pClass->getKey());
+   }
 
 };
 
@@ -104,7 +114,7 @@ QString IxSqlQueryBuilder::getHashRelation() const { return m_pImpl->m_sHashRela
 
 QString IxSqlQueryBuilder::table() const { return m_pImpl->m_sTableName; }
 
-QxSoftDelete IxSqlQueryBuilder::getSoftDelete() const { return m_pImpl->m_oSoftDelete; }
+QxSoftDelete IxSqlQueryBuilder::getSoftDelete() const { return (m_pImpl->checkIgnoreSoftDelete() ? m_pImpl->m_oSoftDeleteEmpty : m_pImpl->m_oSoftDelete); }
 
 bool IxSqlQueryBuilder::getCartesianProduct() const { return m_pImpl->m_bCartesianProduct; }
 
@@ -120,9 +130,9 @@ IxSqlRelation * IxSqlQueryBuilder::nextRelation(long & l) const { if ((! m_pImpl
 
 bool IxSqlQueryBuilder::isInitDone() const { return m_pImpl->m_bInitDone; }
 
-QxSoftDelete & IxSqlQueryBuilder::softDelete() { return m_pImpl->m_oSoftDelete; }
+QxSoftDelete & IxSqlQueryBuilder::softDelete() { return (m_pImpl->checkIgnoreSoftDelete() ? m_pImpl->m_oSoftDeleteEmpty : m_pImpl->m_oSoftDelete); }
 
-const QxSoftDelete & IxSqlQueryBuilder::softDelete() const { return m_pImpl->m_oSoftDelete; }
+const QxSoftDelete & IxSqlQueryBuilder::softDelete() const { return (m_pImpl->checkIgnoreSoftDelete() ? m_pImpl->m_oSoftDeleteEmpty : m_pImpl->m_oSoftDelete); }
 
 void IxSqlQueryBuilder::setSoftDelete(const QxSoftDelete & o) { m_pImpl->m_oSoftDelete = o; }
 

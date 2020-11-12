@@ -34,6 +34,7 @@
 #include <QtCore/qelapsedtimer.h>
 
 #include <QxDao/IxDao_Helper.h>
+#include <QxDao/QxSession.h>
 
 #include <QxRegister/IxClass.h>
 
@@ -58,7 +59,7 @@
 m_timeTotal(0), m_timeExec(0), m_timeNext(0), m_timePrepare(0), m_timeBuildHierarchy(0), m_timeBuildCppInstance(0), m_timeReadCppInstance(0), \
 m_timeBuildSql(0), m_timeOpen(0), m_timeTransaction(0), m_nextCount(0), m_lDataCount(0), m_bTransaction(false), m_bQuiet(false), m_bTraceQuery(true), \
 m_bTraceRecord(false), m_bCartesianProduct(false), m_bValidatorThrowable(false), m_bNeedToClearDatabaseByThread(false), \
-m_bMongoDB(false), m_bDisplayTimerDetails(false), m_pDataMemberX(NULL), m_pDataId(NULL), m_pSqlGenerator(NULL)
+m_bMongoDB(false), m_bDisplayTimerDetails(false), m_pDataMemberX(NULL), m_pDataId(NULL), m_pSqlGenerator(NULL), m_pSession(NULL)
 
 #if (QT_VERSION >= 0x040800)
 #define QX_DAO_TIMER_ELAPSED(timer) timer.nsecsElapsed()
@@ -118,6 +119,7 @@ struct IxDao_Helper::IxDao_HelperImpl
    IxSqlGenerator *              m_pSqlGenerator;        //!< SQL generator to build SQL query specific for each database
    qx::QxInvalidValueX           m_lstInvalidValues;     //!< List of invalid values using validator engine
    qx::QxSqlRelationLinked_ptr   m_pSqlRelationLinked;   //!< List of relation linked to build a hierarchy of relationships
+   qx::QxSession *               m_pSession;             //!< Current active session
 
    IxDao_HelperImpl(qx::IxSqlQueryBuilder * pBuilder, const qx::QxSqlQuery * pQuery) : QX_CONSTRUCT_IX_DAO_HELPER() { m_pQueryBuilder.reset(pBuilder); if (pQuery) { m_qxQuery = (* pQuery); } }
    ~IxDao_HelperImpl() { ; }
@@ -161,6 +163,10 @@ qx::IxDataMember * IxDao_Helper::nextData(long & l) const { return (m_pImpl->m_p
 QString IxDao_Helper::sql() const { return (m_pImpl->m_pQueryBuilder ? m_pImpl->m_pQueryBuilder->getSqlQuery() : ""); }
 
 qx::QxSqlRelationLinked * IxDao_Helper::getSqlRelationLinked() const { return m_pImpl->m_pSqlRelationLinked.get(); }
+
+qx::QxSession * IxDao_Helper::getSession() const { return m_pImpl->m_pSession; }
+
+QString IxDao_Helper::getIgnoreSoftDeleteHash() const { return (m_pImpl->m_pSession ? m_pImpl->m_pSession->getIgnoreSoftDeleteHash() : QString()); }
 
 bool IxDao_Helper::getCartesianProduct() const { return m_pImpl->m_bCartesianProduct; }
 
@@ -477,6 +483,7 @@ void IxDao_Helper::init(QSqlDatabase * pDatabase, const QString & sContext)
       if (! m_pImpl->m_database.isValid()) { updateError(QX_DAO_ERR_NO_CONNECTION); return; }
       if (! m_pImpl->m_database.isOpen() && ! m_pImpl->m_database.open()) { updateError(QX_DAO_ERR_OPEN_CONNECTION); return; }
       if (! m_pImpl->m_pQueryBuilder) { updateError(QX_DAO_ERR_NO_QUERY_BUILDER); return; }
+      m_pImpl->m_pSession = qx::QxSession::getActiveSession(& m_pImpl->m_database);
       m_pImpl->m_query = QSqlQuery(m_pImpl->m_database);
       m_pImpl->m_query.setForwardOnly(true);
    }

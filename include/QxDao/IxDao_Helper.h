@@ -70,6 +70,7 @@
 namespace qx {
 template <class T>
 QxInvalidValueX validate(T & t, const QString & group);
+class QxSession;
 } // namespace qx
 
 namespace qx {
@@ -123,6 +124,8 @@ public:
    qx::IxDataMember * nextData(long & l) const;
    QString sql() const;
    qx::QxSqlRelationLinked * getSqlRelationLinked() const;
+   qx::QxSession * getSession() const;
+   QString getIgnoreSoftDeleteHash() const;
    bool getCartesianProduct() const;
    QStringList getSqlColumns() const;
    void setSqlColumns(const QStringList & lst);
