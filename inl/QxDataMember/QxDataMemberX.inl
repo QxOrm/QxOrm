@@ -67,6 +67,20 @@ IxDataMember * QxDataMemberX<T>::initData(IxDataMember * pData, long lVersion)
 }
 
 template <class T>
+IxDataMember * QxDataMemberX<T>::initPImpl(IxDataMember * pImpl)
+{
+   if (! pImpl) { qAssert(false); return NULL; }
+   QString sKey = pImpl->getKey();
+   if (this->getListPImplRef().exist(sKey)) { qAssert(false); return NULL; }
+
+   pImpl->setNameParent(getName());
+   pImpl->setParent(this);
+   this->getListPImplRef().insert(sKey, pImpl);
+
+   return pImpl;
+}
+
+template <class T>
 template <typename V, typename U>
 IxDataMember * QxDataMemberX<T>::add(V U::* pData, const QString & sKey, long lVersion /* = 0 */, bool bSerialize /* = true */, bool bDao /* = true */)
 {
@@ -92,7 +106,7 @@ IxDataMember * QxDataMemberX<T>::id(typename QxDataMemberX<T>::type_primary_key 
 {
    if (getId_WithDaoStrategy()) { qDebug("[QxOrm] qx::QxDataMemberX<T> id (primary key) already defined '%s'", qPrintable(getId_WithDaoStrategy()->getName())); }
    if (exist_WithDaoStrategy(sKey) || getId_WithDaoStrategy()) { qAssert(false); return getId_WithDaoStrategy(); }
-   return this->initId(new QxDataMember<typename QxDataMemberX<T>::type_primary_key, T>(pDataMemberId, sKey), lVersion);
+   return this->initId(new QxDataMember<typename QxDataMemberX<T>::type_primary_key, T>(pDataMemberId, sKey, lVersion, true, true), lVersion);
 }
 
 template <class T>
@@ -158,6 +172,92 @@ IxSqlRelation * QxDataMemberX<T>::relationManyToMany(V U::* pData, const QString
    if (exist_WithDaoStrategy(sKey)) { qAssert(false); return NULL; }
 
    IxDataMember * pDataMember = this->add(pData, sKey, lVersion);
+   IxSqlRelation * pSqlRelation = new QxSqlRelation_ManyToMany<V, T>(pDataMember, sExtraTable, sForeignKeyOwner, sForeignKeyDataType);
+   pDataMember->setSqlRelation(pSqlRelation);
+
+   return pSqlRelation;
+}
+
+template <class T>
+template <typename V, typename U>
+IxDataMember * QxDataMemberX<T>::pimpl(V U::* pData, const QString & sKey)
+{
+   IxDataMember * pNewDataMember = new QxDataMember_PImpl<V, U>(pData, sKey);
+   return this->initPImpl(pNewDataMember);
+}
+
+template <class T>
+template <typename U>
+IxDataMember * QxDataMemberX<T>::id(typename QxDataMemberX<T>::type_primary_key U::* pDataMemberId, const QString & sKey, long lVersion, IxDataMember * pImpl)
+{
+   if (pImpl) { qAssert((pImpl->getParent()) && (pImpl->getParent()->getClass() == this->getClass())); }
+   if (getId_WithDaoStrategy()) { qDebug("[QxOrm] qx::QxDataMemberX<T> id (primary key) already defined '%s'", qPrintable(getId_WithDaoStrategy()->getName())); }
+   if (exist_WithDaoStrategy(sKey) || getId_WithDaoStrategy()) { qAssert(false); return getId_WithDaoStrategy(); }
+   return this->initId(new QxDataMember<typename QxDataMemberX<T>::type_primary_key, U>(pDataMemberId, sKey, lVersion, true, true, pImpl), lVersion);
+}
+
+template <class T>
+template <typename V, typename U>
+IxDataMember * QxDataMemberX<T>::add(V U::* pData, const QString & sKey, long lVersion, bool bSerialize, bool bDao, IxDataMember * pImpl)
+{
+   if (pImpl) { qAssert((pImpl->getParent()) && (pImpl->getParent()->getClass() == this->getClass())); }
+   if (exist_WithDaoStrategy(sKey)) { qAssert(false); return NULL; }
+
+   IxDataMember * pNewDataMember = new QxDataMember<V, U>(pData, sKey, lVersion, bSerialize, bDao, pImpl);
+   pNewDataMember->setSqlType(qx::trait::get_sql_type<V>::get());
+   return this->initData(pNewDataMember, lVersion);
+}
+
+template <class T>
+template <typename V, typename U>
+IxSqlRelation * QxDataMemberX<T>::relationOneToOne(V U::* pData, const QString & sKey, long lVersion, IxDataMember * pImpl)
+{
+   if (pImpl) { qAssert((pImpl->getParent()) && (pImpl->getParent()->getClass() == this->getClass())); }
+   if (exist_WithDaoStrategy(sKey)) { qAssert(false); return NULL; }
+
+   IxDataMember * pDataMember = this->add(pData, sKey, lVersion, true, true, pImpl);
+   IxSqlRelation * pSqlRelation = new QxSqlRelation_OneToOne<V, T>(pDataMember);
+   pDataMember->setSqlRelation(pSqlRelation);
+
+   return pSqlRelation;
+}
+
+template <class T>
+template <typename V, typename U>
+IxSqlRelation * QxDataMemberX<T>::relationManyToOne(V U::* pData, const QString & sKey, long lVersion, IxDataMember * pImpl)
+{
+   if (pImpl) { qAssert((pImpl->getParent()) && (pImpl->getParent()->getClass() == this->getClass())); }
+   if (exist_WithDaoStrategy(sKey)) { qAssert(false); return NULL; }
+
+   IxDataMember * pDataMember = this->add(pData, sKey, lVersion, true, true, pImpl);
+   IxSqlRelation * pSqlRelation = new QxSqlRelation_ManyToOne<V, T>(pDataMember);
+   pDataMember->setSqlRelation(pSqlRelation);
+
+   return pSqlRelation;
+}
+
+template <class T>
+template <typename V, typename U>
+IxSqlRelation * QxDataMemberX<T>::relationOneToMany(V U::* pData, const QString & sKey, const QString & sForeignKey, long lVersion, IxDataMember * pImpl)
+{
+   if (pImpl) { qAssert((pImpl->getParent()) && (pImpl->getParent()->getClass() == this->getClass())); }
+   if (exist_WithDaoStrategy(sKey)) { qAssert(false); return NULL; }
+
+   IxDataMember * pDataMember = this->add(pData, sKey, lVersion, true, true, pImpl);
+   IxSqlRelation * pSqlRelation = new QxSqlRelation_OneToMany<V, T>(pDataMember, sForeignKey);
+   pDataMember->setSqlRelation(pSqlRelation);
+
+   return pSqlRelation;
+}
+
+template <class T>
+template <typename V, typename U>
+IxSqlRelation * QxDataMemberX<T>::relationManyToMany(V U::* pData, const QString & sKey, const QString & sExtraTable, const QString & sForeignKeyOwner, const QString & sForeignKeyDataType, long lVersion, IxDataMember * pImpl)
+{
+   if (pImpl) { qAssert((pImpl->getParent()) && (pImpl->getParent()->getClass() == this->getClass())); }
+   if (exist_WithDaoStrategy(sKey)) { qAssert(false); return NULL; }
+
+   IxDataMember * pDataMember = this->add(pData, sKey, lVersion, true, true, pImpl);
    IxSqlRelation * pSqlRelation = new QxSqlRelation_ManyToMany<V, T>(pDataMember, sExtraTable, sForeignKeyOwner, sForeignKeyDataType);
    pDataMember->setSqlRelation(pSqlRelation);
 

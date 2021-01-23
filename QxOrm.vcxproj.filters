@@ -682,6 +682,9 @@
     <ClInclude Include="include\QxDataMember\QxDataMember_QObject.h">
       <Filter>include\QxDataMember</Filter>
     </ClInclude>
+    <ClInclude Include="include\QxDataMember\QxDataMember_PImpl.h">
+      <Filter>include\QxDataMember</Filter>
+    </ClInclude>
     <ClInclude Include="include\QxDataMember\QxDataMemberX.h">
       <Filter>include\QxDataMember</Filter>
     </ClInclude>

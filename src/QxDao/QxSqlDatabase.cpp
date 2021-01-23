@@ -56,7 +56,7 @@ QX_DLL_EXPORT_QX_SINGLETON_CPP(qx::QxSqlDatabase)
 
 namespace qx {
 
-struct QxSqlDatabase::QxSqlDatabaseImpl
+struct Q_DECL_HIDDEN QxSqlDatabase::QxSqlDatabaseImpl
 {
 
    QxSqlDatabase * m_pParent;                               //!< Parent instance of the private implementation idiom

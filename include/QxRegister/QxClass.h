@@ -113,6 +113,14 @@ public:
    template <typename V, typename U> IxSqlRelation * relationOneToMany(V U::* pData, const QString & sKey, const QString & sForeignKey, long lVersion = 0);
    template <typename V, typename U> IxSqlRelation * relationManyToMany(V U::* pData, const QString & sKey, const QString & sExtraTable, const QString & sForeignKeyOwner, const QString & sForeignKeyDataType, long lVersion = 0);
 
+   template <typename V, typename U> IxDataMember * pimpl(V U::* pData, const QString & sKey = QString("_PIMPL_"));
+   template <typename U> IxDataMember * id(type_primary_key U::* pDataMemberId, const QString & sKey, long lVersion, IxDataMember * pImpl);
+   template <typename V, typename U> IxDataMember * data(V U::* pData, const QString & sKey, long lVersion, bool bSerialize, bool bDao, IxDataMember * pImpl);
+   template <typename V, typename U> IxSqlRelation * relationOneToOne(V U::* pData, const QString & sKey, long lVersion, IxDataMember * pImpl);
+   template <typename V, typename U> IxSqlRelation * relationManyToOne(V U::* pData, const QString & sKey, long lVersion, IxDataMember * pImpl);
+   template <typename V, typename U> IxSqlRelation * relationOneToMany(V U::* pData, const QString & sKey, const QString & sForeignKey, long lVersion, IxDataMember * pImpl);
+   template <typename V, typename U> IxSqlRelation * relationManyToMany(V U::* pData, const QString & sKey, const QString & sExtraTable, const QString & sForeignKeyOwner, const QString & sForeignKeyDataType, long lVersion, IxDataMember * pImpl);
+
    template <typename R> IxFunction * fct_0(const typename QxFunction_0<T, R>::type_fct & fct, const QString & sKey);
    template <typename R, typename P1> IxFunction * fct_1(const typename QxFunction_1<T, R, P1>::type_fct & fct, const QString & sKey);
    template <typename R, typename P1, typename P2> IxFunction * fct_2(const typename QxFunction_2<T, R, P1, P2>::type_fct & fct, const QString & sKey);

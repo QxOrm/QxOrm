@@ -275,6 +275,7 @@
     <ClInclude Include="include\QxDataMember\IxDataMemberX.h" />
     <ClInclude Include="include\QxDataMember\QxDataMember.h" />
     <ClInclude Include="include\QxDataMember\QxDataMember_QObject.h" />
+    <ClInclude Include="include\QxDataMember\QxDataMember_PImpl.h" />
     <ClInclude Include="include\QxDataMember\QxDataMemberX.h" />
     <ClInclude Include="include\QxFactory\IxFactory.h" />
     <ClInclude Include="include\QxFactory\QxFactory.h" />

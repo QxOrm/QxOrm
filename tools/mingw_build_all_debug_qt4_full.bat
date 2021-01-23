@@ -65,6 +65,12 @@ qmake %QXORM_QMAKE_PARAMS%
 make %MINGW_CONFIG%
 IF NOT EXIST "../_bin/qxBlogModelView%LIB_SUFFIX%.exe" GOTO END
 
+REM -- BUILD TEST QXBLOG PIMPL IDIOM --
+cd "../qxBlogPImpl/"
+qmake %QXORM_QMAKE_PARAMS%
+make %MINGW_CONFIG%
+IF NOT EXIST "../_bin/qxBlogPImpl%LIB_SUFFIX%.exe" GOTO END
+
 REM -- BUILD TEST QXBLOG REST API AND HTTP SERVER --
 cd "../qxBlogRestApi/"
 qmake %QXORM_QMAKE_PARAMS%

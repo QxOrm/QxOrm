@@ -123,7 +123,7 @@ struct QxHttpServerDispatcher
 
 };
 
-struct QxHttpServer::QxHttpServerImpl
+struct Q_DECL_HIDDEN QxHttpServer::QxHttpServerImpl
 {
 
    typedef std::shared_ptr<QxHttpServer::type_fct_custom_request_handler> type_fct_ptr;

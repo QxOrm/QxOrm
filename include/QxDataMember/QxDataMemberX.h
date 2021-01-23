@@ -46,6 +46,7 @@
 #include <QxDataMember/IxDataMemberX.h>
 #include <QxDataMember/QxDataMember.h>
 #include <QxDataMember/QxDataMember_QObject.h>
+#include <QxDataMember/QxDataMember_PImpl.h>
 
 #include <QxDao/QxSqlRelation.h>
 
@@ -98,6 +99,14 @@ public:
    template <typename V, typename U> IxSqlRelation * relationOneToMany(V U::* pData, const QString & sKey, const QString & sForeignKey, long lVersion = 0);
    template <typename V, typename U> IxSqlRelation * relationManyToMany(V U::* pData, const QString & sKey, const QString & sExtraTable, const QString & sForeignKeyOwner, const QString & sForeignKeyDataType, long lVersion = 0);
 
+   template <typename V, typename U> IxDataMember * pimpl(V U::* pData, const QString & sKey);
+   template <typename U> IxDataMember * id(type_primary_key U::* pDataMemberId, const QString & sKey, long lVersion, IxDataMember * pImpl);
+   template <typename V, typename U> IxDataMember * add(V U::* pData, const QString & sKey, long lVersion, bool bSerialize, bool bDao, IxDataMember * pImpl);
+   template <typename V, typename U> IxSqlRelation * relationOneToOne(V U::* pData, const QString & sKey, long lVersion, IxDataMember * pImpl);
+   template <typename V, typename U> IxSqlRelation * relationManyToOne(V U::* pData, const QString & sKey, long lVersion, IxDataMember * pImpl);
+   template <typename V, typename U> IxSqlRelation * relationOneToMany(V U::* pData, const QString & sKey, const QString & sForeignKey, long lVersion, IxDataMember * pImpl);
+   template <typename V, typename U> IxSqlRelation * relationManyToMany(V U::* pData, const QString & sKey, const QString & sExtraTable, const QString & sForeignKeyOwner, const QString & sForeignKeyDataType, long lVersion, IxDataMember * pImpl);
+
 #ifdef _QX_ENABLE_BOOST_SERIALIZATION
    template <class Archive> inline void toArchive(const T * pOwner, Archive & ar, const unsigned int file_version) const;
    template <class Archive> inline void fromArchive(T * pOwner, Archive & ar, const unsigned int file_version);
@@ -107,6 +116,7 @@ private:
 
    IxDataMember * initId(IxDataMember * pId, long lVersion);
    IxDataMember * initData(IxDataMember * pData, long lVersion);
+   IxDataMember * initPImpl(IxDataMember * pImpl);
 
    inline IxDataMemberX * getBaseClass_Helper() const { return QxDataMemberX<type_base_class>::getSingleton(); }
 

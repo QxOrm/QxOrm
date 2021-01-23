@@ -41,7 +41,7 @@
 
 namespace qx {
 
-struct QxHttpSession::QxHttpSessionImpl
+struct Q_DECL_HIDDEN QxHttpSession::QxHttpSessionImpl
 {
 
    QMutex m_mutex;                           //!< Mutex => 'QxHttpSession' is thread-safe

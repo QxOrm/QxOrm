@@ -71,7 +71,7 @@ namespace qx {
 namespace dao {
 namespace detail {
 
-struct IxDao_Helper::IxDao_HelperImpl
+struct Q_DECL_HIDDEN IxDao_Helper::IxDao_HelperImpl
 {
 
    QElapsedTimer  m_timerTotal;                       //!< Timer to manage total elapsed time : build SQL query + all database operations + fetch C++ classes

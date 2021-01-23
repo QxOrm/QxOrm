@@ -45,7 +45,7 @@
 
 namespace qx {
 
-struct QxSqlRelationLinked::QxSqlRelationLinkedImpl
+struct Q_DECL_HIDDEN QxSqlRelationLinked::QxSqlRelationLinkedImpl
 {
 
    enum e_hierarchy_action { e_hierarchy_select, e_hierarchy_from, e_hierarchy_join, e_hierarchy_where_soft_delete };

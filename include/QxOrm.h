@@ -93,6 +93,7 @@
 #include <QxDataMember/QxDataMember.h>
 #include <QxDataMember/QxDataMemberX.h>
 #include <QxDataMember/QxDataMember_QObject.h>
+#include <QxDataMember/QxDataMember_PImpl.h>
 
 #include <QxFunction/QxFunctionInclude.h>
 

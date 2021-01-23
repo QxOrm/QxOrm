@@ -78,7 +78,7 @@ QX_DLL_EXPORT_QX_SINGLETON_CPP(qx::service::QxConnect)
 namespace qx {
 namespace service {
 
-struct QxConnect::QxConnectImpl
+struct Q_DECL_HIDDEN QxConnect::QxConnectImpl
 {
 
    QMutex                           m_mutex;                   //!< Mutex => 'QxConnect' is thread-safe

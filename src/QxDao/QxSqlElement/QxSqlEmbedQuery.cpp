@@ -45,7 +45,7 @@ namespace qx {
 namespace dao {
 namespace detail {
 
-struct QxSqlEmbedQuery::QxSqlEmbedQueryImpl
+struct Q_DECL_HIDDEN QxSqlEmbedQuery::QxSqlEmbedQueryImpl
 {
 
    qx::QxSqlQuery m_query;          //!< SQL sub-query to embed inside a parent SQL query

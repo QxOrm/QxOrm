@@ -40,7 +40,7 @@
 
 namespace qx {
 
-struct IxClass::IxClassImpl
+struct Q_DECL_HIDDEN IxClass::IxClassImpl
 {
 
    IxDataMemberX * m_pDataMemberX;                    //!< List of data member

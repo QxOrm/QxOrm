@@ -42,24 +42,57 @@ IxCollection::~IxCollection() { ; }
 
 namespace unit_test {
 
+// Compilation option '_QX_HASH_NO_STD_NAMESPACE'
+// Try to avoid compilation error, something like : error: no matching function for call to 'qHash(const std::tuple<...>&)'
+// This is due to C++ ADL to resolve specialized functions : qHash(T) should be implemented in the same namespace as T
+// For 'std' classes, it should be NOT allowed : the behavior of a C++ program is undefined if it adds declarations or definitions to namespace std or to a namespace within namespace std
+// More details here : https://www.kdab.com/how-to-declare-a-qhash-overload/
+// And here : https://stackoverflow.com/questions/47460098/using-standard-library-types-as-keys-in-qhash-or-qset
 void qx_collection_unit_test()
 {
-   QxCollection<QString, QString *> obj;
-   QxCollectionIterator<QString, QString *> itr(obj);
+   {
+      QxCollection<QString, QString *> coll;
+      QxCollectionIterator<QString, QString *> itr(coll);
+      coll.sortByKey(); coll.sortByValue(); itr.toFirst();
+   }
 
-   obj.sortByKey();
-   obj.sortByValue();
+   {
+      typedef std::tuple<QString, std::string, int> type_std_tuple;
+      qx::QxCollection< type_std_tuple, std::shared_ptr<QWidget> > coll;
+      coll.begin(); coll.reserve(10); coll.clear(); coll.count(); coll.empty();
 
-   typedef std::tuple<QString, std::string, int> new_type;
-   qx::QxCollection< new_type, std::shared_ptr<QWidget> > objColTuple;
-   objColTuple.begin();
-   objColTuple.reserve(10);
-   objColTuple.clear();
-   objColTuple.count();
-   objColTuple.empty();
+      type_std_tuple item = std::make_tuple(QString(), std::string(), 1);
+      coll.contains(item);
+   }
 
-   new_type t1 = std::make_tuple(QString(), std::string(), 1);
-   new_type t2 = std::make_tuple(QString(), std::string(), 2);
+   {
+      typedef std::pair<QString, std::string> type_std_pair;
+      qx::QxCollection< type_std_pair, std::shared_ptr<QWidget> > coll;
+      coll.begin(); coll.reserve(10); coll.clear(); coll.count(); coll.empty();
+
+      type_std_pair item = std::make_pair(QString(), std::string("1"));
+      coll.contains(item);
+   }
+
+   {
+      typedef QPair<QDateTime, std::string> type_qt_pair;
+      qx::QxCollection< type_qt_pair, std::shared_ptr<QWidget> > coll;
+      coll.begin(); coll.reserve(10); coll.clear(); coll.count(); coll.empty();
+
+      type_qt_pair item = qMakePair(QDateTime(), std::string("1"));
+      coll.contains(item);
+   }
+
+#ifdef _QX_ENABLE_BOOST
+   {
+      typedef boost::tuple<QString, std::string, int> type_boost_tuple;
+      qx::QxCollection< type_boost_tuple, std::shared_ptr<QWidget> > coll;
+      coll.begin(); coll.reserve(10); coll.clear(); coll.count(); coll.empty();
+
+      type_boost_tuple item = boost::make_tuple(QString(), std::string(), 1);
+      coll.contains(item);
+   }
+#endif // _QX_ENABLE_BOOST
 }
 
 } // namespace unit_test

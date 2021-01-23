@@ -39,17 +39,22 @@
 
 namespace qx {
 
-struct IxDataMemberX::IxDataMemberXImpl
+struct Q_DECL_HIDDEN IxDataMemberX::IxDataMemberXImpl
 {
 
    QxCollection<QString, IxDataMember *> m_lstDataMember;   //!< Collection of IxDataMember
+   QxCollection<QString, IxDataMember *> m_lstPImpl;        //!< Collection of private implementation idiom instances
    IxClass * m_pClass;                                      //!< Class definition
    IxDataMember * m_pDataMemberId;                          //!< Data member id with primary key type
 
    IxDataMemberXImpl() : m_pClass(NULL), m_pDataMemberId(NULL) { ; }
    ~IxDataMemberXImpl() { ; }
 
-   void deleteAllIxDataMember() { for (auto itr = m_lstDataMember.begin(); itr != m_lstDataMember.end(); ++itr) { delete itr->second; } }
+   void deleteAllIxDataMember()
+   {
+      for (auto itr = m_lstDataMember.begin(); itr != m_lstDataMember.end(); ++itr) { delete itr->second; }
+      for (auto itr = m_lstPImpl.begin(); itr != m_lstPImpl.end(); ++itr) { delete itr->second; }
+   }
 
 };
 
@@ -88,5 +93,9 @@ void IxDataMemberX::setId(IxDataMember * p) { m_pImpl->m_pDataMemberId = p; }
 QxCollection<QString, IxDataMember *> & IxDataMemberX::getListDataMemberRef() { return m_pImpl->m_lstDataMember; }
 
 const QxCollection<QString, IxDataMember *> & IxDataMemberX::getListDataMemberRef() const { return m_pImpl->m_lstDataMember; }
+
+QxCollection<QString, IxDataMember *> & IxDataMemberX::getListPImplRef() { return m_pImpl->m_lstPImpl; }
+
+const QxCollection<QString, IxDataMember *> & IxDataMemberX::getListPImplRef() const { return m_pImpl->m_lstPImpl; }
 
 } // namespace qx

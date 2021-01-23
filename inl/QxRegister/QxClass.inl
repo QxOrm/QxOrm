@@ -92,6 +92,41 @@ IxSqlRelation * QxClass<T>::relationManyToMany(V U::* pData, const QString & sKe
 { return this->dataMemberX()->relationManyToMany(pData, sKey, sExtraTable, sForeignKeyOwner, sForeignKeyDataType, lVersion); }
 
 template <class T>
+template <typename V, typename U>
+IxDataMember * QxClass<T>::pimpl(V U::* pData, const QString & sKey /* = QString("_PIMPL_") */)
+{ return this->dataMemberX()->pimpl(pData, sKey); }
+
+template <class T>
+template <typename U>
+IxDataMember * QxClass<T>::id(typename QxClass<T>::type_primary_key U::* pDataMemberId, const QString & sKey, long lVersion, IxDataMember * pImpl)
+{ return this->dataMemberX()->id(pDataMemberId, sKey, lVersion, pImpl); }
+
+template <class T>
+template <typename V, typename U>
+IxDataMember * QxClass<T>::data(V U::* pData, const QString & sKey, long lVersion, bool bSerialize, bool bDao, IxDataMember * pImpl)
+{ return this->dataMemberX()->add(pData, sKey, lVersion, bSerialize, bDao, pImpl); }
+
+template <class T>
+template <typename V, typename U>
+IxSqlRelation * QxClass<T>::relationOneToOne(V U::* pData, const QString & sKey, long lVersion, IxDataMember * pImpl)
+{ return this->dataMemberX()->relationOneToOne(pData, sKey, lVersion, pImpl); }
+
+template <class T>
+template <typename V, typename U>
+IxSqlRelation * QxClass<T>::relationManyToOne(V U::* pData, const QString & sKey, long lVersion, IxDataMember * pImpl)
+{ return this->dataMemberX()->relationManyToOne(pData, sKey, lVersion, pImpl); }
+
+template <class T>
+template <typename V, typename U>
+IxSqlRelation * QxClass<T>::relationOneToMany(V U::* pData, const QString & sKey, const QString & sForeignKey, long lVersion, IxDataMember * pImpl)
+{ return this->dataMemberX()->relationOneToMany(pData, sKey, sForeignKey, lVersion, pImpl); }
+
+template <class T>
+template <typename V, typename U>
+IxSqlRelation * QxClass<T>::relationManyToMany(V U::* pData, const QString & sKey, const QString & sExtraTable, const QString & sForeignKeyOwner, const QString & sForeignKeyDataType, long lVersion, IxDataMember * pImpl)
+{ return this->dataMemberX()->relationManyToMany(pData, sKey, sExtraTable, sForeignKeyOwner, sForeignKeyDataType, lVersion, pImpl); }
+
+template <class T>
 IxFunction * QxClass<T>::insertFct(IxFunction_ptr pFct, const QString & sKey)
 {
    if (! this->getFctMemberX() || sKey.isEmpty() || this->getFctMemberX()->exist(sKey)) { qAssert(false); return NULL; }

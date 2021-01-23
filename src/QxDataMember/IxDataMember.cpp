@@ -52,11 +52,11 @@
 m_iPrecision(6), m_iMinLength(-1), m_iMaxLength(-1), m_bRequired(false), \
 m_bReadOnly(false), m_bAutoIncrement(false), m_bNotNull(false), \
 m_bIsPrimaryKey(false), m_bAccessDataPointer(false), m_bIndex(false), \
-m_bUnique(false), m_pName(NULL), m_pParent(NULL)
+m_bUnique(false), m_pName(NULL), m_pParent(NULL), m_pImpl(NULL)
 
 namespace qx {
 
-struct IxDataMember::IxDataMemberImpl
+struct Q_DECL_HIDDEN IxDataMember::IxDataMemberImpl
 {
 
    typedef QMap<int, QPair<IxSqlRelation *, int> > type_fk_part_of_pk;
@@ -95,11 +95,12 @@ struct IxDataMember::IxDataMemberImpl
 
    std::unique_ptr<IxSqlRelation> m_pSqlRelation;     //!< Sql relation to build/resolve sql query
    IxDataMemberX * m_pParent;                         //!< 'IxDataMemberX' parent
+   IxDataMember * m_pImpl;                            //!< If not NULL then this data member is owned by a private implementation idiom instance
 
    type_fk_part_of_pk_ptr m_pListRelationPartOfPrimaryKey;     //!< Used by primary key to manage the case where a foreign key (relationship) is also a part of primary key (which can contain several columns)
    type_part_of_pk_ptr m_pListPartOfPrimaryKey;                //!< Used by relationship to manage the case where a foreign key (relationship) is also a part of primary key (which can contain several columns)
 
-   IxDataMemberImpl(const QString & sKey, long lVersion, bool bSerialize, bool bDao) : m_sKey(sKey), m_lVersion(lVersion), m_bSerialize(bSerialize), m_bDao(bDao), QX_CONSTRUCT_IX_DATA_MEMBER() { qAssert(! m_sKey.isEmpty()); updateNamePtr(); }
+   IxDataMemberImpl(const QString & sKey, long lVersion, bool bSerialize, bool bDao, IxDataMember * pImpl) : m_sKey(sKey), m_lVersion(lVersion), m_bSerialize(bSerialize), m_bDao(bDao), QX_CONSTRUCT_IX_DATA_MEMBER() { qAssert(! m_sKey.isEmpty()); m_pImpl = pImpl; updateNamePtr(); }
    ~IxDataMemberImpl() { ; }
 
    void updateNamePtr()
@@ -113,9 +114,7 @@ struct IxDataMember::IxDataMemberImpl
 
 };
 
-IxDataMember::IxDataMember(const QString & sKey) : qx::QxPropertyBag(), m_pImpl(new IxDataMemberImpl(sKey, -1, true, true)) { ; }
-
-IxDataMember::IxDataMember(const QString & sKey, long lVersion, bool bSerialize, bool bDao) : qx::QxPropertyBag(), m_pImpl(new IxDataMemberImpl(sKey, lVersion, bSerialize, bDao)) { ; }
+IxDataMember::IxDataMember(const QString & sKey, long lVersion, bool bSerialize, bool bDao, IxDataMember * pImpl) : qx::QxPropertyBag(), m_pImpl(new IxDataMemberImpl(sKey, lVersion, bSerialize, bDao, pImpl)) { ; }
 
 IxDataMember::~IxDataMember() { ; }
 
@@ -207,6 +206,8 @@ bool IxDataMember::getAccessDataPointer() const { return m_pImpl->m_bAccessDataP
 QString IxDataMember::getType() const { return ""; }
 
 QString IxDataMember::getTypeParent() const { IxClass * pClass = (m_pImpl->m_pParent ? m_pImpl->m_pParent->getClass() : NULL); return (pClass ? pClass->getKey() : QString()); }
+
+IxDataMember * IxDataMember::getPImpl() const { return m_pImpl->m_pImpl; }
 
 void IxDataMember::setName(const QString & sName) { m_pImpl->m_sName = sName; m_pImpl->updateNamePtr(); }
 

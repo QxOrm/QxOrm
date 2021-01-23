@@ -94,6 +94,7 @@ set(QX_HEADERS
     ./include/QxDataMember/QxDataMember.h
     ./include/QxDataMember/QxDataMemberX.h
     ./include/QxDataMember/QxDataMember_QObject.h
+    ./include/QxDataMember/QxDataMember_PImpl.h
     ./include/QxDao/IxSqlQueryBuilder.h
     ./include/QxDao/QxSqlQueryBuilder.h
     ./include/QxDao/QxSqlQueryHelper.h

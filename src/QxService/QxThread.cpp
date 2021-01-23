@@ -47,6 +47,15 @@
 
 #include <QxMemLeak/mem_leak.h>
 
+#ifndef QT_NO_SSL
+#ifndef QT_NO_OPENSSL
+#define QX_THREAD_SSL
+#endif // QT_NO_OPENSSL
+#endif // QT_NO_SSL
+#ifndef QX_THREAD_SSL
+#define QX_THREAD_NO_SSL
+#endif // QX_THREAD_SSL
+
 namespace qx {
 namespace service {
 
@@ -107,32 +116,32 @@ void QxThread::onIncomingConnection()
    std::unique_ptr<QTcpSocket> socket;
    m_bIsDisconnected = false;
 
-#ifndef QT_NO_SSL
+#ifndef QX_THREAD_NO_SSL
    bool bSSLEnabled = QxConnect::getSingleton()->getSSLEnabled();
    if (bSSLEnabled) { socket.reset(initSocketSSL()); }
    else { socket.reset(new QTcpSocket()); }
-#else // QT_NO_SSL
+#else // QX_THREAD_NO_SSL
    socket.reset(new QTcpSocket());
-#endif // QT_NO_SSL
+#endif // QX_THREAD_NO_SSL
 
    QObject::connect(socket.get(), SIGNAL(disconnected()), this, SLOT(onSocketDisconnected()));
    QObject::connect(socket.get(), SIGNAL(readyRead()), this, SLOT(onSocketReadyRead()));
 
    if (socket->setSocketDescriptor(getSocketDescriptor()))
    {
-#ifndef QT_NO_SSL
+#ifndef QX_THREAD_NO_SSL
       if ((! bSSLEnabled) || (checkSocketSSLEncrypted(socket.get())))
       {
-#endif // QT_NO_SSL
+#endif // QX_THREAD_NO_SSL
          do { doProcess(* socket); }
          while (checkKeepAlive(* socket) && (! hasBeenStopped()) && (! m_bIsDisconnected));
          socket->disconnectFromHost();
          if ((! m_bIsDisconnected) && (socket->state() != QAbstractSocket::UnconnectedState))
          { socket->waitForDisconnected(QxConnect::getSingleton()->getMaxWait()); }
-#ifndef QT_NO_SSL
+#ifndef QX_THREAD_NO_SSL
       }
       else { Q_EMIT error("[QxOrm] SSL socket encrypted error : " + socket->errorString(), QxTransaction_ptr()); }
-#endif // QT_NO_SSL
+#endif // QX_THREAD_NO_SSL
    }
    else { Q_EMIT error("[QxOrm] invalid socket descriptor : cannot start transaction (" + socket->errorString() + ")", QxTransaction_ptr()); }
 
@@ -161,7 +170,7 @@ bool QxThread::checkKeepAlive(QTcpSocket & socket)
    return false;
 }
 
-#ifndef QT_NO_SSL
+#ifndef QX_THREAD_NO_SSL
 
 bool QxThread::checkSocketSSLEncrypted(QTcpSocket * socket)
 {
@@ -196,7 +205,7 @@ QSslSocket * QxThread::initSocketSSL()
    return socket;
 }
 
-#endif // QT_NO_SSL
+#endif // QX_THREAD_NO_SSL
 
 void QxThread::clearData()
 {
@@ -251,7 +260,7 @@ void QxThread::onSocketReadyRead()
    /* Nothing here */
 }
 
-#ifndef QT_NO_SSL
+#ifndef QX_THREAD_NO_SSL
 
 void QxThread::onSocketSSLEncrypted()
 {
@@ -273,7 +282,7 @@ void QxThread::onSocketSSLPeerVerifyError(const QSslError & error)
    qDebug("[QxOrm] qx::service::QxThread::onSocketSSLPeerVerifyError() : %s", qPrintable(msg));
 }
 
-#endif // QT_NO_SSL
+#endif // QX_THREAD_NO_SSL
 
 } // namespace service
 } // namespace qx

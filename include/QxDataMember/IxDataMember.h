@@ -82,6 +82,9 @@ class IxSqlRelation;
 class QX_DLL_EXPORT IxDataMember : public qx::QxPropertyBag
 {
 
+   template <typename DataType, class Owner>
+   friend class QxDataMember;
+
 private:
 
    struct IxDataMemberImpl;
@@ -89,8 +92,7 @@ private:
 
 public:
 
-   IxDataMember(const QString & sKey);
-   IxDataMember(const QString & sKey, long lVersion, bool bSerialize, bool bDao);
+   IxDataMember(const QString & sKey, long lVersion, bool bSerialize, bool bDao, IxDataMember * pImpl);
    virtual ~IxDataMember() = 0;
 
    QString getKey() const;
@@ -122,6 +124,7 @@ public:
    bool getAccessDataPointer() const;
    virtual QString getType() const;
    QString getTypeParent() const;
+   IxDataMember * getPImpl() const;
 
    void setName(const QString & s);
    void setNameParent(const QString & s);

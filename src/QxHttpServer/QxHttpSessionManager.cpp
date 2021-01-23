@@ -46,7 +46,7 @@ QX_DLL_EXPORT_QX_SINGLETON_CPP(qx::QxHttpSessionManager)
 
 namespace qx {
 
-struct QxHttpSessionManager::QxHttpSessionManagerImpl
+struct Q_DECL_HIDDEN QxHttpSessionManager::QxHttpSessionManagerImpl
 {
 
    QMutex m_mutex;                                       //!< Mutex => 'QxHttpSessionManager' is thread-safe

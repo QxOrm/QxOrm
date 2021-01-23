@@ -71,16 +71,24 @@ protected:
 
    typedef DataType Owner::* type_data_member_ptr;
 
-   type_data_member_ptr m_pData; //!< Data member under format "& Owner::DataMember"
+   type_data_member_ptr m_pData;    //!< Data member under format "& Owner::DataMember"
+   IxDataMember * m_pImpl_;         //!< If not NULL then this data member is owned by a private implementation idiom instance
 
 public:
 
-   QxDataMember(type_data_member_ptr pData, const QString & sKey) : IxDataMember(sKey), m_pData(pData) { this->setAccessDataPointer(true); }
-   QxDataMember(type_data_member_ptr pData, const QString & sKey, long lVersion, bool bSerialize, bool bDao) : IxDataMember(sKey, lVersion, bSerialize, bDao), m_pData(pData) { this->setAccessDataPointer(true); }
+   QxDataMember(type_data_member_ptr pData, const QString & sKey, long lVersion, bool bSerialize, bool bDao, IxDataMember * pImpl = NULL) : IxDataMember(sKey, lVersion, bSerialize, bDao, pImpl), m_pData(pData), m_pImpl_(pImpl) { this->setAccessDataPointer(true); }
    virtual ~QxDataMember() { ; }
 
-   inline DataType * getData(void * pOwner) const              { return (pOwner ? (& ((static_cast<Owner *>(pOwner))->*m_pData)) : NULL); }
-   inline const DataType * getData(const void * pOwner) const  { return (pOwner ? (& ((static_cast<const Owner *>(pOwner))->*m_pData)) : NULL); }
+   inline DataType * getData(void * pOwner) const
+   {
+      void * pOwner_ = (m_pImpl_ ? m_pImpl_->getDataVoidPtr(pOwner) : pOwner);
+      return (pOwner_ ? (& ((static_cast<Owner *>(pOwner_))->*m_pData)) : NULL);
+   }
+   inline const DataType * getData(const void * pOwner) const
+   {
+      const void * pOwner_ = (m_pImpl_ ? m_pImpl_->getDataVoidPtr(pOwner) : pOwner);
+      return (pOwner_ ? (& ((static_cast<const Owner *>(pOwner_))->*m_pData)) : NULL);
+   }
 
    virtual QVariant toVariant(const void * pOwner, const QString & sFormat, int iIndexName = -1, qx::cvt::context::ctx_type ctx = qx::cvt::context::e_no_context) const          { return qx::cvt::to_variant((* getData(pOwner)), sFormat, iIndexName, ctx); }
    virtual qx_bool fromVariant(void * pOwner, const QVariant & v, const QString & sFormat, int iIndexName = -1, qx::cvt::context::ctx_type ctx = qx::cvt::context::e_no_context) { return qx::cvt::from_variant(v, (* getData(pOwner)), sFormat, iIndexName, ctx); }

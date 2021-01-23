@@ -48,7 +48,7 @@ QByteArray to_gzip(const QByteArray & data);
 quint32 crc32(const QByteArray & data);
 } // namespace compress
 
-struct QxHttpTransaction::QxHttpTransactionImpl
+struct Q_DECL_HIDDEN QxHttpTransaction::QxHttpTransactionImpl
 {
 
    qx::QxHttpRequest m_request;        //!< HTTP transaction request

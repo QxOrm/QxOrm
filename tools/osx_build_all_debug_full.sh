@@ -105,6 +105,22 @@ testFile -f ../_bin/qxBlogModelView$SUFFIX
 cd ../
 install_name_tool -change $LIBBOOSTSERIALIZATION @executable_path/$LIBBOOSTSERIALIZATION ./_bin/qxBlogModelView$SUFFIX
 
+echo "-- BUILD TEST QXBLOG PIMPL IDIOM --"
+cd ./qxBlogPImpl/
+eval qmake $QMAKEPARAMS qxBlog.pro -r -spec macx-g++
+make -w $CONFIG $MAKEOPT
+testFile -f ../_bin/qxBlogPImpl$SUFFIX
+cd ../
+install_name_tool -change $LIBBOOSTSERIALIZATION @executable_path/$LIBBOOSTSERIALIZATION ./_bin/qxBlogPImpl$SUFFIX
+
+echo "-- BUILD TEST QXBLOG REST API AND HTTP SERVER --"
+cd ./qxBlogRestApi/
+eval qmake $QMAKEPARAMS qxBlog.pro -r -spec macx-g++
+make -w $CONFIG $MAKEOPT
+testFile -f ../_bin/qxBlogRestApi$SUFFIX
+cd ../
+install_name_tool -change $LIBBOOSTSERIALIZATION @executable_path/$LIBBOOSTSERIALIZATION ./_bin/qxBlogRestApi$SUFFIX
+
 echo "-- CHECK BATCH TYPE : FULL OR MINIMAL --"
 if [[ $2 == "minimal" ]];
 then

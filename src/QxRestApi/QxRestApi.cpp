@@ -64,7 +64,7 @@
 
 namespace qx {
 
-struct QxRestApi::QxRestApiImpl
+struct Q_DECL_HIDDEN QxRestApi::QxRestApiImpl
 {
 
    QString m_requestId;                            //!< Request identifier (GUID for example)

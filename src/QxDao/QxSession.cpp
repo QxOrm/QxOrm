@@ -38,7 +38,7 @@
 
 namespace qx {
 
-struct QxSession::QxSessionImpl
+struct Q_DECL_HIDDEN QxSession::QxSessionImpl
 {
 
    QSqlDatabase m_database;            //!< Database connexion of current session

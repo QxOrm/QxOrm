@@ -66,7 +66,7 @@ m_bInitInEvent(false), m_bInitDone(false), m_iIsSameDataOwner(0), m_mutex(QMutex
 
 namespace qx {
 
-struct IxSqlRelation::IxSqlRelationImpl
+struct Q_DECL_HIDDEN IxSqlRelation::IxSqlRelationImpl
 {
 
    typedef QxCollection<QString, IxDataMember *> type_lst_data_member;

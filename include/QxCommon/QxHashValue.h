@@ -48,24 +48,25 @@
 #include <QtCore/qvariant.h>
 #include <QtCore/qpair.h>
 
+#if (QT_VERSION < 0x060000)
+#define qx_hash_result uint
+#else // (QT_VERSION < 0x060000)
+#define qx_hash_result std::size_t
+#endif // (QT_VERSION < 0x060000)
+
 inline std::size_t hash_value(const QString & s)      { return qHash(s); }
+inline std::size_t hash_value(const QVariant & v)     { return qHash(v.toString()); }
 inline std::size_t hash_value(const QDate & d)        { return qHash(d.toJulianDay()); }
 inline std::size_t hash_value(const QTime & t)        { return qHash(t.toString()); }
 inline std::size_t hash_value(const QDateTime & dt)   { return qHash(dt.toString()); }
-inline std::size_t hash_value(const QVariant & v)     { return qHash(v.toString()); }
 
-inline uint qHash(const QDate & d)                    { return static_cast<uint>(hash_value(d)); }
-inline uint qHash(const QTime & t)                    { return static_cast<uint>(hash_value(t)); }
-inline uint qHash(const QDateTime & dt)               { return static_cast<uint>(hash_value(dt)); }
-inline uint qHash(const QVariant & v)                 { return static_cast<uint>(hash_value(v)); }
+inline qx_hash_result qHash(const QVariant & v)       { return static_cast<qx_hash_result>(hash_value(v)); }
 
-#ifndef QT_NO_STL
-inline uint qHash(const std::string & s)              { QString tmp = QString::fromStdString(s); return qHash(tmp); }
-inline uint qHash(const std::wstring & s)             { QString tmp = QString::fromStdWString(s); return qHash(tmp); }
-#else // QT_NO_STL
-inline uint qHash(const std::string & s)              { QString tmp = QString::fromLatin1(s.data(), int(s.size())); return qHash(tmp); }
-inline uint qHash(const std::wstring & s)             { qAssert(false); /* Need STL compatibility ! */ return 0; }
-#endif // QT_NO_STL
+#if (QT_VERSION < 0x050000)
+inline qx_hash_result qHash(const QDate & d)          { return static_cast<qx_hash_result>(hash_value(d)); }
+inline qx_hash_result qHash(const QTime & t)          { return static_cast<qx_hash_result>(hash_value(t)); }
+inline qx_hash_result qHash(const QDateTime & dt)     { return static_cast<qx_hash_result>(hash_value(dt)); }
+#endif // (QT_VERSION < 0x050000)
 
 namespace qx {
 template <class T>
@@ -204,46 +205,64 @@ inline std::size_t hash_value(const boost::tuple<T0, T1, T2, T3, T4, T5, T6, T7,
    return seed;
 }
 
+template <typename T0, typename T1>
+inline qx_hash_result qHash(const boost::tuple<T0, T1> & tu)
+{ return static_cast<qx_hash_result>(hash_value(tu)); }
+
+template <typename T0, class T1, typename T2>
+inline qx_hash_result qHash(const boost::tuple<T0, T1, T2> & tu)
+{ return static_cast<qx_hash_result>(hash_value(tu)); }
+
+template <typename T0, typename T1, typename T2, typename T3>
+inline qx_hash_result qHash(const boost::tuple<T0, T1, T2, T3> & tu)
+{ return static_cast<qx_hash_result>(hash_value(tu)); }
+
+template <typename T0, typename T1, typename T2, typename T3, typename T4>
+inline qx_hash_result qHash(const boost::tuple<T0, T1, T2, T3, T4> & tu)
+{ return static_cast<qx_hash_result>(hash_value(tu)); }
+
+template <typename T0, typename T1, typename T2, typename T3, typename T4, typename T5>
+inline qx_hash_result qHash(const boost::tuple<T0, T1, T2, T3, T4, T5> & tu)
+{ return static_cast<qx_hash_result>(hash_value(tu)); }
+
+template <typename T0, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6>
+inline qx_hash_result qHash(const boost::tuple<T0, T1, T2, T3, T4, T5, T6> & tu)
+{ return static_cast<qx_hash_result>(hash_value(tu)); }
+
+template <typename T0, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7>
+inline qx_hash_result qHash(const boost::tuple<T0, T1, T2, T3, T4, T5, T6, T7> & tu)
+{ return static_cast<qx_hash_result>(hash_value(tu)); }
+
+template <typename T0, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8>
+inline qx_hash_result qHash(const boost::tuple<T0, T1, T2, T3, T4, T5, T6, T7, T8> & tu)
+{ return static_cast<qx_hash_result>(hash_value(tu)); }
+
+template <typename T0, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8, typename T9>
+inline qx_hash_result qHash(const boost::tuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> & tu)
+{ return static_cast<qx_hash_result>(hash_value(tu)); }
+
 } // namespace tuples
 } // namespace boost
 
-template <typename T0, typename T1>
-inline uint qHash(const boost::tuple<T0, T1> & tu)
-{ return static_cast<uint>(hash_value(tu)); }
-
-template <typename T0, class T1, typename T2>
-inline uint qHash(const boost::tuple<T0, T1, T2> & tu)
-{ return static_cast<uint>(hash_value(tu)); }
-
-template <typename T0, typename T1, typename T2, typename T3>
-inline uint qHash(const boost::tuple<T0, T1, T2, T3> & tu)
-{ return static_cast<uint>(hash_value(tu)); }
-
-template <typename T0, typename T1, typename T2, typename T3, typename T4>
-inline uint qHash(const boost::tuple<T0, T1, T2, T3, T4> & tu)
-{ return static_cast<uint>(hash_value(tu)); }
-
-template <typename T0, typename T1, typename T2, typename T3, typename T4, typename T5>
-inline uint qHash(const boost::tuple<T0, T1, T2, T3, T4, T5> & tu)
-{ return static_cast<uint>(hash_value(tu)); }
-
-template <typename T0, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6>
-inline uint qHash(const boost::tuple<T0, T1, T2, T3, T4, T5, T6> & tu)
-{ return static_cast<uint>(hash_value(tu)); }
-
-template <typename T0, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7>
-inline uint qHash(const boost::tuple<T0, T1, T2, T3, T4, T5, T6, T7> & tu)
-{ return static_cast<uint>(hash_value(tu)); }
-
-template <typename T0, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8>
-inline uint qHash(const boost::tuple<T0, T1, T2, T3, T4, T5, T6, T7, T8> & tu)
-{ return static_cast<uint>(hash_value(tu)); }
-
-template <typename T0, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8, typename T9>
-inline uint qHash(const boost::tuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> & tu)
-{ return static_cast<uint>(hash_value(tu)); }
-
 #endif // _QX_ENABLE_BOOST
+
+// Compilation option '_QX_HASH_NO_STD_NAMESPACE'
+// Try to avoid compilation error, something like : error: no matching function for call to 'qHash(const std::tuple<...>&)'
+// This is due to C++ ADL to resolve specialized functions : qHash(T) should be implemented in the same namespace as T
+// For 'std' classes, it should be NOT allowed : the behavior of a C++ program is undefined if it adds declarations or definitions to namespace std or to a namespace within namespace std
+// More details here : https://www.kdab.com/how-to-declare-a-qhash-overload/
+// And here : https://stackoverflow.com/questions/47460098/using-standard-library-types-as-keys-in-qhash-or-qset
+#ifndef _QX_HASH_NO_STD_NAMESPACE
+namespace std {
+#endif // _QX_HASH_NO_STD_NAMESPACE
+
+#ifndef QT_NO_STL
+inline qx_hash_result qHash(const std::string & s)     { QString tmp = QString::fromStdString(s); return qHash(tmp); }
+inline qx_hash_result qHash(const std::wstring & s)    { QString tmp = QString::fromStdWString(s); return qHash(tmp); }
+#else // QT_NO_STL
+inline qx_hash_result qHash(const std::string & s)     { QString tmp = QString::fromLatin1(s.data(), int(s.size())); return qHash(tmp); }
+inline qx_hash_result qHash(const std::wstring & s)    { qAssert(false); /* Need STL compatibility ! */ return 0; }
+#endif // QT_NO_STL
 
 template <typename T0, typename T1>
 inline std::size_t hash_value(const std::tuple<T0, T1> & tu)
@@ -362,40 +381,55 @@ inline std::size_t hash_value(const std::tuple<T0, T1, T2, T3, T4, T5, T6, T7, T
    return seed;
 }
 
+#if (QT_VERSION < 0x050700)
 template <typename T0, typename T1>
-inline uint qHash(const std::tuple<T0, T1> & tu)
-{ return static_cast<uint>(hash_value(tu)); }
+inline qx_hash_result qHash(const std::pair<T0, T1> & p)
+{
+   std::size_t seed = 0;
+   qx::hash_combine(seed, p.first);
+   qx::hash_combine(seed, p.second);
+   return static_cast<qx_hash_result>(seed);
+}
+#endif // (QT_VERSION < 0x050700)
+
+template <typename T0, typename T1>
+inline qx_hash_result qHash(const std::tuple<T0, T1> & tu)
+{ return static_cast<qx_hash_result>(hash_value(tu)); }
 
 template <typename T0, class T1, typename T2>
-inline uint qHash(const std::tuple<T0, T1, T2> & tu)
-{ return static_cast<uint>(hash_value(tu)); }
+inline qx_hash_result qHash(const std::tuple<T0, T1, T2> & tu)
+{ return static_cast<qx_hash_result>(hash_value(tu)); }
 
 template <typename T0, typename T1, typename T2, typename T3>
-inline uint qHash(const std::tuple<T0, T1, T2, T3> & tu)
-{ return static_cast<uint>(hash_value(tu)); }
+inline qx_hash_result qHash(const std::tuple<T0, T1, T2, T3> & tu)
+{ return static_cast<qx_hash_result>(hash_value(tu)); }
 
 template <typename T0, typename T1, typename T2, typename T3, typename T4>
-inline uint qHash(const std::tuple<T0, T1, T2, T3, T4> & tu)
-{ return static_cast<uint>(hash_value(tu)); }
+inline qx_hash_result qHash(const std::tuple<T0, T1, T2, T3, T4> & tu)
+{ return static_cast<qx_hash_result>(hash_value(tu)); }
 
 template <typename T0, typename T1, typename T2, typename T3, typename T4, typename T5>
-inline uint qHash(const std::tuple<T0, T1, T2, T3, T4, T5> & tu)
-{ return static_cast<uint>(hash_value(tu)); }
+inline qx_hash_result qHash(const std::tuple<T0, T1, T2, T3, T4, T5> & tu)
+{ return static_cast<qx_hash_result>(hash_value(tu)); }
 
 template <typename T0, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6>
-inline uint qHash(const std::tuple<T0, T1, T2, T3, T4, T5, T6> & tu)
-{ return static_cast<uint>(hash_value(tu)); }
+inline qx_hash_result qHash(const std::tuple<T0, T1, T2, T3, T4, T5, T6> & tu)
+{ return static_cast<qx_hash_result>(hash_value(tu)); }
 
 template <typename T0, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7>
-inline uint qHash(const std::tuple<T0, T1, T2, T3, T4, T5, T6, T7> & tu)
-{ return static_cast<uint>(hash_value(tu)); }
+inline qx_hash_result qHash(const std::tuple<T0, T1, T2, T3, T4, T5, T6, T7> & tu)
+{ return static_cast<qx_hash_result>(hash_value(tu)); }
 
 template <typename T0, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8>
-inline uint qHash(const std::tuple<T0, T1, T2, T3, T4, T5, T6, T7, T8> & tu)
-{ return static_cast<uint>(hash_value(tu)); }
+inline qx_hash_result qHash(const std::tuple<T0, T1, T2, T3, T4, T5, T6, T7, T8> & tu)
+{ return static_cast<qx_hash_result>(hash_value(tu)); }
 
 template <typename T0, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8, typename T9>
-inline uint qHash(const std::tuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> & tu)
-{ return static_cast<uint>(hash_value(tu)); }
+inline qx_hash_result qHash(const std::tuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> & tu)
+{ return static_cast<qx_hash_result>(hash_value(tu)); }
+
+#ifndef _QX_HASH_NO_STD_NAMESPACE
+} // namespace std
+#endif // _QX_HASH_NO_STD_NAMESPACE
 
 #endif // _QX_HASH_VALUE_H_

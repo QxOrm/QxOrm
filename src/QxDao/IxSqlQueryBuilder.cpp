@@ -35,6 +35,8 @@
 #include <QxDao/QxSqlDatabase.h>
 #include <QxDao/QxSqlRelationParams.h>
 #include <QxDao/QxSqlGenerator/IxSqlGenerator.h>
+#include <QxDao/IxDao_Helper.h>
+#include <QxDao/QxSqlQuery.h>
 #include <QxDao/QxSession.h>
 
 #include <QxRegister/IxClass.h>
@@ -43,7 +45,7 @@
 
 namespace qx {
 
-struct IxSqlQueryBuilder::IxSqlQueryBuilderImpl
+struct Q_DECL_HIDDEN IxSqlQueryBuilder::IxSqlQueryBuilderImpl
 {
 
    typedef QPair<QString, QString> type_id;
@@ -335,7 +337,8 @@ void IxSqlQueryBuilder::sql_FetchAll(QString & sql, IxSqlQueryBuilder & builder)
    qx::QxSoftDelete oSoftDelete = builder.getSoftDelete();
    QString table = builder.table();
    sql = "SELECT ";
-   if (pId) { sql += (pId->getSqlTablePointNameAsAlias(table) + ", "); }
+   bool isDistinct = (builder.getDaoHelper() ? builder.getDaoHelper()->qxQuery().isDistinct() : false);
+   if (pId && (! isDistinct)) { sql += (pId->getSqlTablePointNameAsAlias(table) + ", "); }
    while ((p = builder.nextData(l1))) { sql += (p->getSqlTablePointNameAsAlias(table) + ", "); }
    if (! oSoftDelete.isEmpty()) { l1++; sql += (oSoftDelete.buildSqlTablePointName() + ", "); }
    while ((pRelation = builder.nextRelation(l2))) { params.setIndex(l2); pRelation->lazySelect(params); }
@@ -356,7 +359,8 @@ void IxSqlQueryBuilder::sql_FetchAll(QString & sql, IxSqlQueryBuilder & builder,
    qx::QxSoftDelete oSoftDelete = builder.getSoftDelete();
    QString table = builder.table();
    sql = "SELECT ";
-   if (pId) { sql += (pId->getSqlTablePointNameAsAlias(table) + ", "); }
+   bool isDistinct = (builder.getDaoHelper() ? builder.getDaoHelper()->qxQuery().isDistinct() : false);
+   if (pId && (! isDistinct)) { sql += (pId->getSqlTablePointNameAsAlias(table) + ", "); }
    for (int i = 0; i < columns.count(); i++)
    { p = pDataMemberX->get_WithDaoStrategy(columns.at(i)); if (p && (p != pId)) { sql += (p->getSqlTablePointNameAsAlias(table) + ", "); } }
    sql = sql.left(sql.count() - 2); // Remove last ", "
@@ -374,7 +378,8 @@ void IxSqlQueryBuilder::sql_FetchAll_WithRelation(qx::QxSqlRelationLinked * pRel
    qx::QxSoftDelete oSoftDelete = builder.getSoftDelete();
    QString table = builder.table();
    sql = "SELECT ";
-   if (pId) { sql += (pId->getSqlTablePointNameAsAlias(table, ", ", "", false, pRelationX->getRootCustomAlias()) + ", "); }
+   bool isDistinct = (builder.getDaoHelper() ? builder.getDaoHelper()->qxQuery().isDistinct() : false);
+   if (pId && (! isDistinct)) { sql += (pId->getSqlTablePointNameAsAlias(table, ", ", "", false, pRelationX->getRootCustomAlias()) + ", "); }
    while ((p = builder.nextData(l))) { if (pRelationX->checkRootColumns(p->getKey())) { sql += (p->getSqlTablePointNameAsAlias(table, ", ", "", false, pRelationX->getRootCustomAlias()) + ", "); } }
    if (! oSoftDelete.isEmpty()) { l++; sql += (oSoftDelete.buildSqlTablePointName(pRelationX->getRootCustomAlias()) + ", "); }
    pRelationX->hierarchySelect(params);
@@ -489,8 +494,9 @@ void IxSqlQueryBuilder::resolveOutput_FetchAll(void * t, QSqlQuery & query, IxSq
    qx::IxDataMember * pId = builder.getDataId();
    qx::IxSqlRelation * pRelation = NULL;
    qx::QxSoftDelete oSoftDelete = builder.getSoftDelete();
-   short iOffset = (pId ? pId->getNameCount() : 0);
-   if (pId) { for (int i = 0; i < pId->getNameCount(); i++) { pId->fromVariant(t, query.value(i), i, qx::cvt::context::e_database); } }
+   bool isDistinct = (builder.getDaoHelper() ? builder.getDaoHelper()->qxQuery().isDistinct() : false);
+   short iOffset = ((pId && (! isDistinct)) ? pId->getNameCount() : 0);
+   if (pId && (! isDistinct)) { for (int i = 0; i < pId->getNameCount(); i++) { pId->fromVariant(t, query.value(i), i, qx::cvt::context::e_database); } }
    while ((p = builder.nextData(l1))) { p->fromVariant(t, query.value(l1 + iOffset - 1), -1, qx::cvt::context::e_database); }
    iOffset = (builder.getDataCount() + iOffset + (oSoftDelete.isEmpty() ? 0 : 1));
    qx::QxSqlRelationParams params(0, iOffset, NULL, (& builder), (& query), t);
@@ -502,8 +508,9 @@ void IxSqlQueryBuilder::resolveOutput_FetchAll(void * t, QSqlQuery & query, IxSq
    qx::IxDataMember * p = NULL; int idx = 0;
    qx::IxDataMember * pId = builder.getDataId();
    qx::IxDataMemberX * pDataMemberX = builder.getDataMemberX(); qAssert(pDataMemberX);
-   short iOffset = (pId ? pId->getNameCount() : 0);
-   if (pId) { for (int i = 0; i < pId->getNameCount(); i++) { pId->fromVariant(t, query.value(i), i, qx::cvt::context::e_database); } }
+   bool isDistinct = (builder.getDaoHelper() ? builder.getDaoHelper()->qxQuery().isDistinct() : false);
+   short iOffset = ((pId && (! isDistinct)) ? pId->getNameCount() : 0);
+   if (pId && (! isDistinct)) { for (int i = 0; i < pId->getNameCount(); i++) { pId->fromVariant(t, query.value(i), i, qx::cvt::context::e_database); } }
    for (int i = 0; i < columns.count(); i++)
    { p = pDataMemberX->get_WithDaoStrategy(columns.at(i)); if (p && (p != pId)) { p->fromVariant(t, query.value(idx + iOffset), -1, qx::cvt::context::e_database); idx++; } }
 }
@@ -514,8 +521,9 @@ void IxSqlQueryBuilder::resolveOutput_FetchAll_WithRelation(qx::QxSqlRelationLin
    qx::IxDataMember * p = NULL;
    qx::IxDataMember * pId = builder.getDataId();
    qx::QxSoftDelete oSoftDelete = builder.getSoftDelete();
-   short iOffsetId = (pId ? pId->getNameCount() : 0);
-   if (pId) { QString sId; for (int i = 0; i < pId->getNameCount(); i++) { sId += query.value(i).toString() + "|"; }; vId = sId; }
+   bool isDistinct = (builder.getDaoHelper() ? builder.getDaoHelper()->qxQuery().isDistinct() : false);
+   short iOffsetId = ((pId && (! isDistinct)) ? pId->getNameCount() : 0);
+   if (pId && (! isDistinct)) { QString sId; for (int i = 0; i < pId->getNameCount(); i++) { sId += query.value(i).toString() + "|"; }; vId = sId; }
    bool bComplex = builder.getCartesianProduct();
    bool bByPass = (bComplex && builder.existIdX(0, vId, vId));
 

@@ -46,7 +46,7 @@
 
 namespace qx {
 
-struct QxHttpResponse::QxHttpResponseImpl
+struct Q_DECL_HIDDEN QxHttpResponse::QxHttpResponseImpl
 {
 
    int m_status;                                   //!< HTTP response status (200 OK, 400 Bad Request, 401 Unauthorized, 500 Internal Server Error, etc...)

@@ -99,6 +99,8 @@ protected:
    void setId(IxDataMember * p);
    QxCollection<QString, IxDataMember *> & getListDataMemberRef();
    const QxCollection<QString, IxDataMember *> & getListDataMemberRef() const;
+   QxCollection<QString, IxDataMember *> & getListPImplRef();
+   const QxCollection<QString, IxDataMember *> & getListPImplRef() const;
 
 };
 

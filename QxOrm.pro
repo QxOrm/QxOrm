@@ -161,6 +161,7 @@ HEADERS += ./include/QxDataMember/IxDataMemberX.h
 HEADERS += ./include/QxDataMember/QxDataMember.h
 HEADERS += ./include/QxDataMember/QxDataMemberX.h
 HEADERS += ./include/QxDataMember/QxDataMember_QObject.h
+HEADERS += ./include/QxDataMember/QxDataMember_PImpl.h
 
 HEADERS += ./include/QxDao/IxSqlQueryBuilder.h
 HEADERS += ./include/QxDao/QxSqlQueryBuilder.h

@@ -100,6 +100,24 @@ then
    exit 1
 fi
 
+echo "-- BUILD TEST QXBLOG PIMPL IDIOM --"
+cd "../qxBlogPImpl/"
+eval qmake $QMAKEPARAMS
+make $CONFIG $MAKEOPT
+if [ ! -f ../_bin/qxBlogPImpl$SUFFIX ];
+then
+   exit 1
+fi
+
+echo "-- BUILD TEST QXBLOG REST API AND HTTP SERVER --"
+cd "../qxBlogRestApi/"
+eval qmake $QMAKEPARAMS
+make $CONFIG $MAKEOPT
+if [ ! -f ../_bin/qxBlogRestApi$SUFFIX ];
+then
+   exit 1
+fi
+
 echo "-- CHECK BATCH TYPE : FULL OR MINIMAL --"
 if [[ $2 == "minimal" ]];
 then

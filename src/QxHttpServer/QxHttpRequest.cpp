@@ -42,7 +42,7 @@
 
 namespace qx {
 
-struct QxHttpRequest::QxHttpRequestImpl
+struct Q_DECL_HIDDEN QxHttpRequest::QxHttpRequestImpl
 {
 
    QUrl m_url;                                  //!< HTTP request path

@@ -205,7 +205,7 @@ struct qx_db_collection
    std::shared_ptr<qx_scoped_wrapper<mongoc_collection_t> > collection;
 };
 
-struct QxMongoDB_Helper::QxMongoDB_HelperImpl
+struct Q_DECL_HIDDEN QxMongoDB_Helper::QxMongoDB_HelperImpl
 {
 
    QMutex m_oDbMutex;                                                                  //!< Mutex => 'QxMongoDB_Helper' is thread-safe

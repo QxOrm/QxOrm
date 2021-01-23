@@ -210,12 +210,13 @@ struct QxDao_FetchAll_WithRelation_Container
       if (! dao.exec()) { return dao.errFailed(); }
       bool bSize = (dao.hasFeature(QSqlDriver::QuerySize) && (dao.query().size() > 0));
       if (bSize) { type_generic_container::reserve(t, dao.query().size()); }
+      bool isDistinct = dao.qxQuery().isDistinct();
 
       while (dao.nextRecord())
       {
          if (! dao.isValid()) { return dao.error(); }
          qx::IxDataMember * pId = dao.getDataId(); qAssert(pId);
-         if (pId) { QString sId; for (int i = 0; i < pId->getNameCount(); i++) { sId += dao.query().value(i).toString() + "|"; }; vId = sId; }
+         if (pId && (! isDistinct)) { QString sId; for (int i = 0; i < pId->getNameCount(); i++) { sId += dao.query().value(i).toString() + "|"; }; vId = sId; }
          void * pItemTmp = (bComplex ? dao.builder().existIdX(0, vId, vId) : NULL);
          if (! pItemTmp) { insertHelper<type_item::is_value_pointer, 0>::insertNewItem(t, dao); continue; }
          type_value_qx * pItem = static_cast<type_value_qx *>(pItemTmp);
@@ -235,9 +236,10 @@ private:
       {
          type_item item = type_generic_container::createItem();
          qx::IxDataMember * pId = dao.getDataId(); qAssert(pId);
+         bool isDistinct = dao.qxQuery().isDistinct();
 
          qx::dao::detail::IxDao_Timer timer((& dao), qx::dao::detail::IxDao_Helper::timer_cpp_build_instance);
-         if (pId) { for (int i = 0; i < pId->getNameCount(); i++) { QVariant v = dao.query().value(i); qx::cvt::from_variant(v, item.key(), "", i, qx::cvt::context::e_database); } }
+         if (pId && (! isDistinct)) { for (int i = 0; i < pId->getNameCount(); i++) { QVariant v = dao.query().value(i); qx::cvt::from_variant(v, item.key(), "", i, qx::cvt::context::e_database); } }
          type_value * pValue = type_generic_container::insertItem(t, item);
          type_value_qx & item_val = (pValue ? (* static_cast<type_value_qx *>(pValue)) : item.value_qx());
          qx::dao::on_before_fetch<type_value_qx>((& item_val), (& dao)); if (! dao.isValid()) { return; }
@@ -255,9 +257,10 @@ private:
          type_item item = type_generic_container::createItem();
          type_value_qx & item_val = item.value_qx();
          qx::IxDataMember * pId = dao.getDataId(); qAssert(pId);
+         bool isDistinct = dao.qxQuery().isDistinct();
 
          qx::dao::detail::IxDao_Timer timer((& dao), qx::dao::detail::IxDao_Helper::timer_cpp_build_instance);
-         if (pId) { for (int i = 0; i < pId->getNameCount(); i++) { QVariant v = dao.query().value(i); qx::cvt::from_variant(v, item.key(), "", i, qx::cvt::context::e_database); } }
+         if (pId && (! isDistinct)) { for (int i = 0; i < pId->getNameCount(); i++) { QVariant v = dao.query().value(i); qx::cvt::from_variant(v, item.key(), "", i, qx::cvt::context::e_database); } }
          qx::dao::on_before_fetch<type_value_qx>((& item_val), (& dao)); if (! dao.isValid()) { return; }
          type_query_helper::resolveOutput(dao.getSqlRelationLinked(), item_val, dao.query(), dao.builder()); if (! dao.isValid()) { return; }
          qx::dao::on_after_fetch<type_value_qx>((& item_val), (& dao)); if (! dao.isValid()) { return; }

@@ -248,4 +248,24 @@
 #endif // QT_NO_SSL
 #endif // QT_NO_OPENSSL
 
+#ifndef Q_DECL_OVERRIDE
+#define Q_DECL_OVERRIDE /* Nothing */
+#endif // Q_DECL_OVERRIDE
+
+#ifndef Q_DECL_FINAL
+#define Q_DECL_FINAL /* Nothing */
+#endif // Q_DECL_FINAL
+
+#ifndef Q_DECL_HIDDEN
+#define Q_DECL_HIDDEN /* Nothing */
+#endif // Q_DECL_HIDDEN
+
+#ifndef Q_DECL_NOEXCEPT
+#define Q_DECL_NOEXCEPT /* Nothing */
+#endif // Q_DECL_NOEXCEPT
+
+#ifndef Q_NULLPTR
+#define Q_NULLPTR NULL
+#endif // Q_NULLPTR
+
 #endif // _QX_MACRO_H_

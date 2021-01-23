@@ -49,7 +49,7 @@ void QxDataMember_QObject::fromArchive(void * pOwner, ArchiveInput & ar) \
 
 namespace qx {
 
-QxDataMember_QObject::QxDataMember_QObject(const QMetaObject * pMetaObject, const QString & sKey) : IxDataMember(sKey), m_metaObject(pMetaObject)
+QxDataMember_QObject::QxDataMember_QObject(const QMetaObject * pMetaObject, const QString & sKey) : IxDataMember(sKey, 0, true, true, NULL), m_metaObject(pMetaObject)
 {
    setAccessDataPointer(false);
    if (! m_metaObject) { qAssert(false); return; }
