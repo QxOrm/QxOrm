@@ -266,18 +266,18 @@ protected:
 
    typedef std::tuple<QVariant, QSql::ParamType> type_bind_value;
 
-   QStringList                               m_sQuery;                  //!< Query SQL with place-holder
-   QxCollection<QString, type_bind_value>    m_lstValue;                //!< Bind value in this array
-   qx::dao::detail::IxSqlElement_ptr         m_pSqlElementTemp;         //!< Temporary SQL element
-   QList<qx::dao::detail::IxSqlElement_ptr>  m_lstSqlElement;           //!< List of all SQL elements to build SQL query
-   int                                       m_iSqlElementIndex;        //!< Current index of SQL element
-   int                                       m_iParenthesisCount;       //!< Current parenthesis count
-   bool                                      m_bDistinct;               //!< Replace SELECT by SELECT DISTINCT in SQL query
-   std::shared_ptr<QxSqlResult>              m_pSqlResult;              //!< All results returning by SQL query or stored procedure (after calling qx::dao::call_query function)
-   QVariant                                  m_vResponse;               //!< Can be used to store some responses (from MongoDB database for example in JSON format)
-   QString                                   m_sType;                   //!< Query type (for example : 'aggregate' or 'cursor' for MongoDB database)
-   QHash<QString, QxSqlQuery>                m_lstJoinQueryUser;        //!< List of SQL queries defined by user to add inside relationships joins (LEFT OUTER JOIN, INNER JOIN), for example : INNER JOIN my_table2 m2 ON (m1.id = m2.parent_id AND (XXX))
-   QList<QxSqlQuery>                         m_lstJoinQueryToResolve;   //!< List of SQL queries to resolve (in the right order) to add inside relationships joins (LEFT OUTER JOIN, INNER JOIN), for example : INNER JOIN my_table2 m2 ON (m1.id = m2.parent_id AND (XXX))
+   QStringList                                     m_sQuery;                  //!< Query SQL with place-holder
+   QxCollection<QString, type_bind_value>          m_lstValue;                //!< Bind value in this array
+   qx::dao::detail::IxSqlElement_ptr               m_pSqlElementTemp;         //!< Temporary SQL element
+   QList<qx::dao::detail::IxSqlElement_ptr>        m_lstSqlElement;           //!< List of all SQL elements to build SQL query
+   int                                             m_iSqlElementIndex;        //!< Current index of SQL element
+   int                                             m_iParenthesisCount;       //!< Current parenthesis count
+   bool                                            m_bDistinct;               //!< Replace SELECT by SELECT DISTINCT in SQL query
+   std::shared_ptr<QxSqlResult>                    m_pSqlResult;              //!< All results returning by SQL query or stored procedure (after calling qx::dao::call_query function)
+   QVariant                                        m_vResponse;               //!< Can be used to store some responses (from MongoDB database for example in JSON format)
+   QString                                         m_sType;                   //!< Query type (for example : 'aggregate' or 'cursor' for MongoDB database)
+   QHash<QString, std::shared_ptr<QxSqlQuery> >    m_lstJoinQueryUser;        //!< List of SQL queries defined by user to add inside relationships joins (LEFT OUTER JOIN, INNER JOIN), for example : INNER JOIN my_table2 m2 ON (m1.id = m2.parent_id AND (XXX))
+   QList<std::shared_ptr<QxSqlQuery> >             m_lstJoinQueryToResolve;   //!< List of SQL queries to resolve (in the right order) to add inside relationships joins (LEFT OUTER JOIN, INNER JOIN), for example : INNER JOIN my_table2 m2 ON (m1.id = m2.parent_id AND (XXX))
 
 public:
 

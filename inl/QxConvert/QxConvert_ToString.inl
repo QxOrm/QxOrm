@@ -97,43 +97,43 @@ static inline QString toString(const char & t, const QString & format, int index
 
 template <> struct QxConvert_ToString< short > {
 static inline QString toString(const short & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
-{ Q_UNUSED(index); Q_UNUSED(ctx); return (format.isEmpty() ? QString::number(t) : QString().sprintf(qPrintable(format), t)); } };
+{ Q_UNUSED(index); Q_UNUSED(ctx); return (format.isEmpty() ? QString::number(t) : QString(format).arg(t)); } };
 
 template <> struct QxConvert_ToString< int > {
 static inline QString toString(const int & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
-{ Q_UNUSED(index); Q_UNUSED(ctx); return (format.isEmpty() ? QString::number(t) : QString().sprintf(qPrintable(format), t)); } };
+{ Q_UNUSED(index); Q_UNUSED(ctx); return (format.isEmpty() ? QString::number(t) : QString(format).arg(t)); } };
 
 template <> struct QxConvert_ToString< long > {
 static inline QString toString(const long & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
-{ Q_UNUSED(index); Q_UNUSED(ctx); return (format.isEmpty() ? QString::number(t) : QString().sprintf(qPrintable(format), t)); } };
+{ Q_UNUSED(index); Q_UNUSED(ctx); return (format.isEmpty() ? QString::number(t) : QString(format).arg(t)); } };
 
 template <> struct QxConvert_ToString< long long > {
 static inline QString toString(const long long & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
-{ Q_UNUSED(index); Q_UNUSED(ctx); return (format.isEmpty() ? QString::number(t) : QString().sprintf(qPrintable(format), t)); } };
+{ Q_UNUSED(index); Q_UNUSED(ctx); return (format.isEmpty() ? QString::number(t) : QString(format).arg(t)); } };
 
 template <> struct QxConvert_ToString< float > {
 static inline QString toString(const float & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
-{ Q_UNUSED(index); Q_UNUSED(ctx); return (format.isEmpty() ? QString::number(t) : QString().sprintf(qPrintable(format), t)); } };
+{ Q_UNUSED(index); Q_UNUSED(ctx); return (format.isEmpty() ? QString::number(t) : QString(format).arg(t)); } };
 
 template <> struct QxConvert_ToString< double > {
 static inline QString toString(const double & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
-{ Q_UNUSED(index); Q_UNUSED(ctx); return (format.isEmpty() ? QString::number(t) : QString().sprintf(qPrintable(format), t)); } };
+{ Q_UNUSED(index); Q_UNUSED(ctx); return (format.isEmpty() ? QString::number(t) : QString(format).arg(t)); } };
 
 template <> struct QxConvert_ToString< unsigned short > {
 static inline QString toString(const unsigned short & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
-{ Q_UNUSED(index); Q_UNUSED(ctx); return (format.isEmpty() ? QString::number(t) : QString().sprintf(qPrintable(format), t)); } };
+{ Q_UNUSED(index); Q_UNUSED(ctx); return (format.isEmpty() ? QString::number(t) : QString(format).arg(t)); } };
 
 template <> struct QxConvert_ToString< unsigned int > {
 static inline QString toString(const unsigned int & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
-{ Q_UNUSED(index); Q_UNUSED(ctx); return (format.isEmpty() ? QString::number(t) : QString().sprintf(qPrintable(format), t)); } };
+{ Q_UNUSED(index); Q_UNUSED(ctx); return (format.isEmpty() ? QString::number(t) : QString(format).arg(t)); } };
 
 template <> struct QxConvert_ToString< unsigned long > {
 static inline QString toString(const unsigned long & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
-{ Q_UNUSED(index); Q_UNUSED(ctx); return (format.isEmpty() ? QString::number(t) : QString().sprintf(qPrintable(format), t)); } };
+{ Q_UNUSED(index); Q_UNUSED(ctx); return (format.isEmpty() ? QString::number(t) : QString(format).arg(t)); } };
 
 template <> struct QxConvert_ToString< unsigned long long > {
 static inline QString toString(const unsigned long long & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
-{ Q_UNUSED(index); Q_UNUSED(ctx); return (format.isEmpty() ? QString::number(t) : QString().sprintf(qPrintable(format), t)); } };
+{ Q_UNUSED(index); Q_UNUSED(ctx); return (format.isEmpty() ? QString::number(t) : QString(format).arg(t)); } };
 
 template <> struct QxConvert_ToString< qx::QxDateNeutral > {
 static inline QString toString(const qx::QxDateNeutral & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
@@ -192,9 +192,11 @@ template <typename T1, typename T2> struct QxConvert_ToString< std::pair<T1, T2>
 static inline QString toString(const std::pair<T1, T2> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return QX_CVT_DEFAULT_ARCHIVE::to_string(t); } };
 
+#if (QT_VERSION < 0x060000)
 template <typename T1, typename T2> struct QxConvert_ToString< QPair<T1, T2> > {
 static inline QString toString(const QPair<T1, T2> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return QX_CVT_DEFAULT_ARCHIVE::to_string(t); } };
+#endif // (QT_VERSION < 0x060000)
 
 template <typename T> struct QxConvert_ToString< std::vector<T> > {
 static inline QString toString(const std::vector<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
@@ -228,17 +230,21 @@ template <typename T> struct QxConvert_ToString< std::unordered_multiset<T> > {
 static inline QString toString(const std::unordered_multiset<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return QX_CVT_DEFAULT_ARCHIVE::to_string(t); } };
 
+#if (QT_VERSION < 0x060000)
 template <typename T> struct QxConvert_ToString< QVector<T> > {
 static inline QString toString(const QVector<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return QX_CVT_DEFAULT_ARCHIVE::to_string(t); } };
+#endif // (QT_VERSION < 0x060000)
 
 template <typename T> struct QxConvert_ToString< QList<T> > {
 static inline QString toString(const QList<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return QX_CVT_DEFAULT_ARCHIVE::to_string(t); } };
 
+#if (QT_VERSION < 0x060000)
 template <typename T> struct QxConvert_ToString< QLinkedList<T> > {
 static inline QString toString(const QLinkedList<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return QX_CVT_DEFAULT_ARCHIVE::to_string(t); } };
+#endif // (QT_VERSION < 0x060000)
 
 template <typename T> struct QxConvert_ToString< QFlags<T> > {
 static inline QString toString(const QFlags<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)

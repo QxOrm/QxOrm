@@ -46,13 +46,20 @@ inline void qx_save(Archive & ar, const QSqlError & t, const unsigned int file_v
    Q_UNUSED(file_version);
    QString sDatabaseText = t.databaseText();
    QString sDriverText = t.driverText();
+#if (QT_VERSION >= 0x050300)
+   int iNumber = t.nativeErrorCode().toInt();
+   QString sNativeErrorCode = t.nativeErrorCode();
+#else // (QT_VERSION >= 0x050300)
    int iNumber = t.number();
+   QString sNativeErrorCode = "";
+#endif // (QT_VERSION >= 0x050300)
    int iType = static_cast<int>(t.type());
 
    ar << boost::serialization::make_nvp("database_text", sDatabaseText);
    ar << boost::serialization::make_nvp("driver_text", sDriverText);
    ar << boost::serialization::make_nvp("number", iNumber);
    ar << boost::serialization::make_nvp("type", iType);
+   ar << boost::serialization::make_nvp("native_error_code", sNativeErrorCode);
 }
 
 template <class Archive>
@@ -61,16 +68,22 @@ inline void qx_load(Archive & ar, QSqlError & t, const unsigned int file_version
    Q_UNUSED(file_version);
    QString sDatabaseText; QString sDriverText;
    int iNumber(0); int iType(0);
+   QString sNativeErrorCode;
 
    ar >> boost::serialization::make_nvp("database_text", sDatabaseText);
    ar >> boost::serialization::make_nvp("driver_text", sDriverText);
    ar >> boost::serialization::make_nvp("number", iNumber);
    ar >> boost::serialization::make_nvp("type", iType);
+   ar >> boost::serialization::make_nvp("native_error_code", sNativeErrorCode);
 
+#if (QT_VERSION >= 0x050300)
+   t = QSqlError(sDriverText, sDatabaseText, static_cast<QSqlError::ErrorType>(iType), sNativeErrorCode);
+#else // (QT_VERSION >= 0x050300)
    t.setDatabaseText(sDatabaseText);
    t.setDriverText(sDriverText);
    t.setNumber(iNumber);
    t.setType(static_cast<QSqlError::ErrorType>(iType));
+#endif // (QT_VERSION >= 0x050300)
 }
 
 } // namespace boost

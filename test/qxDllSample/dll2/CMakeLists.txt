@@ -4,7 +4,7 @@ project(dll2 LANGUAGES CXX)
 
 include(../../../QxOrm.cmake)
 
-find_package(Qt5Gui REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Sql Gui REQUIRED)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -38,7 +38,11 @@ add_library(dll2 SHARED ${SRCS} ${HEADERS})
 
 target_compile_definitions(dll2 PRIVATE -D_QX_BUILDING_DLL2)
 
-target_link_libraries(dll2 ${QX_LIBRARIES} Qt5::Gui QxOrm dll1)
+if(COMMAND target_precompile_headers)
+   target_precompile_headers(dll2 PRIVATE ./include/precompiled.h)
+endif() # (COMMAND target_precompile_headers)
+
+target_link_libraries(dll2 ${QX_LIBRARIES} Qt${QT_VERSION_MAJOR}::Gui QxOrm dll1)
 
 set_target_properties(dll2 PROPERTIES
                       ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../../_bin"

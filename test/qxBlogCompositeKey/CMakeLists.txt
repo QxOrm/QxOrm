@@ -29,6 +29,10 @@ add_executable(qxBlogCompositeKey ${SRCS} ${HEADERS})
 
 target_compile_definitions(qxBlogCompositeKey PRIVATE -D_BUILDING_QX_BLOG)
 
+if(COMMAND target_precompile_headers)
+   target_precompile_headers(qxBlogCompositeKey PRIVATE ./include/precompiled.h)
+endif() # (COMMAND target_precompile_headers)
+
 target_link_libraries(qxBlogCompositeKey ${QX_LIBRARIES} QxOrm)
 
 set_target_properties(qxBlogCompositeKey PROPERTIES

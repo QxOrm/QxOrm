@@ -52,7 +52,7 @@ int main(int argc, char * argv[])
    daoError = qx::dao::insert(authorX);
    qAssert(qx::dao::count<author>() == 3);
 
-   // Clone author n°2 : 'author_id_2'
+   // Clone author 2 : 'author_id_2'
    author_ptr author_clone = qx::clone_to_std_shared_ptr(* author_2);
    qAssert(author_clone->getId() == author::type_composite_key("_222_", 200, "2_2"));
    qAssert(author_clone->m_sex == author::female);
@@ -111,7 +111,7 @@ int main(int argc, char * argv[])
    try { blog_1 = qx::any_cast<blog_ptr>(blog_any); }
    catch (...) { blog_1.reset(new blog()); }
    blog_1->setId_0(1);
-   blog_1->setId_1("blog n°1");
+   blog_1->setId_1("blog 1");
    blog_1->m_text = "blog_text_1";
    blog_1->m_dt_creation = QDateTime::currentDateTime();
    blog_1->m_author = author_1;
@@ -129,12 +129,12 @@ int main(int argc, char * argv[])
    comment_ptr comment_2; comment_2.reset(new comment());
 
    comment_1->setId_0(1);
-   comment_1->setId_1("comment n°1");
+   comment_1->setId_1("comment 1");
    comment_1->m_text = "comment_1 text";
    comment_1->m_dt_create = QDateTime::currentDateTime();
    comment_1->m_blog = blog_1;
    comment_2->setId_0(2);
-   comment_2->setId_1("comment n°2");
+   comment_2->setId_1("comment 2");
    comment_2->m_text = "comment_2 text";
    comment_2->m_dt_create = QDateTime::currentDateTime();
    comment_2->m_blog = blog_1;

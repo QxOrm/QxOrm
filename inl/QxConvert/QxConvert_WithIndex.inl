@@ -65,6 +65,7 @@ template <typename T1, typename T2>
 struct QxConvert_WithIndex_FromVariant< std::pair<T1, T2> >
 { static inline qx_bool fromVariant(std::pair<T1, T2> & data, const QVariant & v, const QString & format, int index, qx::cvt::context::ctx_type ctx) { qAssert((index >= -1) && (index < 2)); return ((index == 1) ? qx::cvt::from_variant(v, data.second, format, -1, ctx) : ((index == 0) ? qx::cvt::from_variant(v, data.first, format, -1, ctx) : qx::cvt::detail::QxConvert_FromVariant< std::pair<T1, T2> >::fromVariant(v, data, format, -1, ctx))); } };
 
+#if (QT_VERSION < 0x060000)
 template <typename T1, typename T2>
 struct QxConvert_WithIndex_ToString< QPair<T1, T2> >
 { static inline QString toString(const QPair<T1, T2> & data, const QString & format, int index, qx::cvt::context::ctx_type ctx) { qAssert((index >= -1) && (index < 2)); return ((index == 1) ? qx::cvt::to_string(data.second, format, -1, ctx) : ((index == 0) ? qx::cvt::to_string(data.first, format, -1, ctx) : qx::cvt::detail::QxConvert_ToString< QPair<T1, T2> >::toString(data, format, -1, ctx))); } };
@@ -80,6 +81,7 @@ struct QxConvert_WithIndex_ToVariant< QPair<T1, T2> >
 template <typename T1, typename T2>
 struct QxConvert_WithIndex_FromVariant< QPair<T1, T2> >
 { static inline qx_bool fromVariant(QPair<T1, T2> & data, const QVariant & v, const QString & format, int index, qx::cvt::context::ctx_type ctx) { qAssert((index >= -1) && (index < 2)); return ((index == 1) ? qx::cvt::from_variant(v, data.second, format, -1, ctx) : ((index == 0) ? qx::cvt::from_variant(v, data.first, format, -1, ctx) : qx::cvt::detail::QxConvert_FromVariant< QPair<T1, T2> >::fromVariant(v, data, format, -1, ctx))); } };
+#endif // (QT_VERSION < 0x060000)
 
 #ifdef _QX_ENABLE_BOOST
 

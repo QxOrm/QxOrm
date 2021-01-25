@@ -151,6 +151,7 @@ private:
       { return qx::dao::detail::QxDao_FetchById_Container<T>::fetchItem(item.second, dao); }
    };
 
+#if (QT_VERSION < 0x060000)
    template <typename U1, typename U2>
    struct fetchItem_Helper<QPair<U1, U2>, false>
    {
@@ -164,6 +165,7 @@ private:
       static inline bool fetch(const QPair<U1, U2> & item, qx::dao::detail::QxDao_Helper_Container<T> & dao)
       { return qx::dao::detail::QxDao_FetchById_Container<T>::fetchItem(item.second, dao); }
    };
+#endif // (QT_VERSION < 0x060000)
 
    template <typename U>
    struct fetchItem_Helper<U, false>

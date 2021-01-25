@@ -78,8 +78,10 @@ inline void qx_save(Archive & ar, const QVariant & t, const unsigned int file_ve
    { QRect qrect; qrect = t.toRect(); ar << boost::serialization::make_nvp(sTag, qrect); }
    else if (iType == QVariant::Size)
    { QSize qsize; qsize = t.toSize(); ar << boost::serialization::make_nvp(sTag, qsize); }
+#if (QT_VERSION < 0x060000)
    else if (iType == QVariant::RegExp)
    { QRegExp qregexp; qregexp = t.toRegExp(); ar << boost::serialization::make_nvp(sTag, qregexp); }
+#endif // (QT_VERSION < 0x060000)
    else if (iType == QVariant::Url)
    { QUrl qurl; qurl = t.toUrl(); ar << boost::serialization::make_nvp(sTag, qurl); }
 #ifdef _QX_ENABLE_QT_GUI

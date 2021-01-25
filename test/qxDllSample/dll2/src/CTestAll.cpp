@@ -20,13 +20,16 @@ void CTestAll::init()
    m_oQPoint = QPoint(8, 11);
    m_oQRect = QRect(QPoint(52, 3), QPoint(574, 1112));
    m_oQSize = QSize(1024, 768);
-   m_oQRegExp = QRegExp("qt reg exp");
    m_oQUrl = QUrl("www.qxorm.com");
    m_oQStringList << "str1" << "str2" << "str3" << "str4";
    m_oQByteArray = QByteArray("QByteArray t\0ext\nwith a new line\0and null multi\0ple null char\0", 55);
    m_oQVariant = QVariant(0.437);
    m_oQObject.setProperty("prop_1", 1);
    m_oQObject.setProperty("prop_2", 2);
+
+#if (QT_VERSION < 0x060000)
+   m_oQRegExp = QRegExp("qt reg exp");
+#endif // (QT_VERSION < 0x060000)
 
    QSharedPointer<CUser> u1(new CUser());
    QSharedPointer<CUser> u2(new CUser());

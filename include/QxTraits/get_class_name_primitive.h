@@ -61,16 +61,19 @@
 #include <QtCore/qdatetime.h>
 #include <QtCore/qvariant.h>
 #include <QtCore/qbytearray.h>
-#include <QtCore/qlinkedlist.h>
 #include <QtCore/qpair.h>
 #include <QtCore/qpoint.h>
 #include <QtCore/qrect.h>
-#include <QtCore/qregexp.h>
 #include <QtCore/qsharedpointer.h>
 #include <QtCore/qsize.h>
 #include <QtCore/qurl.h>
 #include <QtCore/quuid.h>
 #include <QtCore/QWeakPointer>
+
+#if (QT_VERSION < 0x060000)
+#include <QtCore/qlinkedlist.h>
+#include <QtCore/qregexp.h>
+#endif // (QT_VERSION < 0x060000)
 
 #include <QtSql/qsqlerror.h>
 
@@ -79,7 +82,9 @@
 #include <QtGui/qfont.h>
 #include <QtGui/qimage.h>
 #include <QtGui/qbrush.h>
+#if (QT_VERSION < 0x060000)
 #include <QtGui/qmatrix.h>
+#endif // (QT_VERSION < 0x060000)
 #include <QtGui/qpicture.h>
 #include <QtGui/qpixmap.h>
 #include <QtGui/qregion.h>
@@ -118,7 +123,6 @@ QX_REGISTER_CLASS_NAME(QDate)
 QX_REGISTER_CLASS_NAME(QDateTime)
 QX_REGISTER_CLASS_NAME(QPoint)
 QX_REGISTER_CLASS_NAME(QRect)
-QX_REGISTER_CLASS_NAME(QRegExp)
 QX_REGISTER_CLASS_NAME(QSize)
 QX_REGISTER_CLASS_NAME(QTime)
 QX_REGISTER_CLASS_NAME(QUrl)
@@ -126,12 +130,18 @@ QX_REGISTER_CLASS_NAME(QVariant)
 QX_REGISTER_CLASS_NAME(QUuid)
 QX_REGISTER_CLASS_NAME(QSqlError)
 
+#if (QT_VERSION < 0x060000)
+QX_REGISTER_CLASS_NAME(QRegExp)
+#endif // (QT_VERSION < 0x060000)
+
 #ifdef _QX_ENABLE_QT_GUI
 QX_REGISTER_CLASS_NAME(QColor)
 QX_REGISTER_CLASS_NAME(QFont)
 QX_REGISTER_CLASS_NAME(QImage)
 QX_REGISTER_CLASS_NAME(QBrush)
+#if (QT_VERSION < 0x060000)
 QX_REGISTER_CLASS_NAME(QMatrix)
+#endif // (QT_VERSION < 0x060000)
 QX_REGISTER_CLASS_NAME(QPicture)
 QX_REGISTER_CLASS_NAME(QPixmap)
 QX_REGISTER_CLASS_NAME(QRegion)
@@ -151,13 +161,16 @@ QX_REGISTER_CLASS_NAME_TEMPLATE_1(boost::optional)
 
 #endif // _QX_ENABLE_BOOST
 
-QX_REGISTER_CLASS_NAME_TEMPLATE_1(QVector)
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(QList)
-QX_REGISTER_CLASS_NAME_TEMPLATE_1(QLinkedList)
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(QSharedPointer)
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(QWeakPointer)
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(QFlags)
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(QSet)
+
+#if (QT_VERSION < 0x060000)
+QX_REGISTER_CLASS_NAME_TEMPLATE_1(QVector)
+QX_REGISTER_CLASS_NAME_TEMPLATE_1(QLinkedList)
+#endif // (QT_VERSION < 0x060000)
 
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(qx::dao::ptr)
 
@@ -180,7 +193,10 @@ QX_REGISTER_CLASS_NAME_TEMPLATE_2(std::unordered_multimap)
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(std::unordered_set)
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(std::unordered_multiset)
 
+#if (QT_VERSION < 0x060000)
 QX_REGISTER_CLASS_NAME_TEMPLATE_2(QPair)
+#endif // (QT_VERSION < 0x060000)
+
 QX_REGISTER_CLASS_NAME_TEMPLATE_2(QHash)
 QX_REGISTER_CLASS_NAME_TEMPLATE_2(QMultiHash)
 QX_REGISTER_CLASS_NAME_TEMPLATE_2(QMap)

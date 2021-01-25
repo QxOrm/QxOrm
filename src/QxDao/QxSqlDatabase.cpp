@@ -41,8 +41,14 @@
 
 #include <QxMemLeak/mem_leak.h>
 
+#if (QT_VERSION >= 0x051400)
+#define QX_CONSTRUCT_QX_SQL_DATABASE_MUTEX() m_oDbMutex()
+#else // (QT_VERSION >= 0x051400)
+#define QX_CONSTRUCT_QX_SQL_DATABASE_MUTEX() m_oDbMutex(QMutex::Recursive)
+#endif // (QT_VERSION >= 0x051400)
+
 #define QX_CONSTRUCT_QX_SQL_DATABASE() \
-m_oDbMutex(QMutex::Recursive), m_iPort(-1), m_bTraceSqlQuery(true), m_bTraceSqlRecord(false), \
+QX_CONSTRUCT_QX_SQL_DATABASE_MUTEX(), m_iPort(-1), m_bTraceSqlQuery(true), m_bTraceSqlRecord(false), \
 m_bTraceSqlBoundValues(false), m_bTraceSqlBoundValuesOnError(true), \
 m_ePlaceHolderStyle(QxSqlDatabase::ph_style_2_point_name), m_bSessionThrowable(false), \
 m_bSessionAutoTransaction(true), m_bValidatorThrowable(false), \
@@ -61,7 +67,11 @@ struct Q_DECL_HIDDEN QxSqlDatabase::QxSqlDatabaseImpl
 
    QxSqlDatabase * m_pParent;                               //!< Parent instance of the private implementation idiom
    QHash<Qt::HANDLE, QString> m_lstDbByThread;              //!< Collection of databases connexions by thread id
+#if (QT_VERSION >= 0x051400)
+   QRecursiveMutex m_oDbMutex;                              //!< Mutex => 'QxSqlDatabase' is thread-safe
+#else // (QT_VERSION >= 0x051400)
    QMutex m_oDbMutex;                                       //!< Mutex => 'QxSqlDatabase' is thread-safe
+#endif // (QT_VERSION >= 0x051400)
    QString m_sDriverName;                                   //!< Driver name to connect to database
    QString m_sConnectOptions;                               //!< Connect options to database
    QString m_sDatabaseName;                                 //!< Database name
@@ -620,7 +630,9 @@ QSqlDatabase QxSqlDatabase::QxSqlDatabaseImpl::getDatabaseByCurrThreadId(QSqlErr
    if (! m_lstDbByThread.contains(lCurrThreadId)) { return createDatabase(dbError); }
    QString sDbKey = m_lstDbByThread.value(lCurrThreadId);
    if (! QSqlDatabase::contains(sDbKey)) { return createDatabase(dbError); }
-   return QSqlDatabase::database(sDbKey);
+   QSqlDatabase db = QSqlDatabase::database(sDbKey);
+   if (! db.isValid()) { return createDatabase(dbError); }
+   return db;
 }
 
 namespace helper {
@@ -683,7 +695,11 @@ void QxSqlDatabase::QxSqlDatabaseImpl::displayLastError(const QSqlDatabase & db,
 QString QxSqlDatabase::QxSqlDatabaseImpl::formatLastError(const QSqlDatabase & db) const
 {
    QString sLastError;
+#if (QT_VERSION >= 0x050300)
+   if (! db.lastError().nativeErrorCode().isEmpty()) { sLastError += QString("Error number '") + db.lastError().nativeErrorCode() + QString("' : "); }
+#else // (QT_VERSION >= 0x050300)
    if (db.lastError().number() != -1) { sLastError += QString("Error number '") + QString::number(db.lastError().number()) + QString("' : "); }
+#endif // (QT_VERSION >= 0x050300)
    if (! db.lastError().text().isEmpty()) { sLastError += db.lastError().text(); }
    else { sLastError += "<no error description>"; }
    return sLastError;

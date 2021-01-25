@@ -29,6 +29,7 @@
 **
 ****************************************************************************/
 
+#if (QT_VERSION < 0x060000)
 #ifndef _QX_NO_JSON
 #ifdef _QX_ENABLE_QT_GUI
 #ifndef _QX_SERIALIZE_QJSON_QMATRIX_H_
@@ -82,3 +83,4 @@ struct QxConvert_FromJson< QMatrix >
 #endif // _QX_SERIALIZE_QJSON_QMATRIX_H_
 #endif // _QX_ENABLE_QT_GUI
 #endif // _QX_NO_JSON
+#endif // (QT_VERSION < 0x060000)

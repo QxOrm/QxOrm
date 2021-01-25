@@ -130,9 +130,17 @@ void QxRestApi::clearAll() { (* m_pImpl) = QxRestApiImpl(); }
 
 QString QxRestApi::getErrorDesc() const { return (m_pImpl->m_error.isValid() ? (m_pImpl->m_error.driverText() + "\n" + m_pImpl->m_error.databaseText()) : QString()); }
 
+#if (QT_VERSION >= 0x050300)
+int QxRestApi::getErrorCode() const { return (m_pImpl->m_error.isValid() ? m_pImpl->m_error.nativeErrorCode().toInt() : 0); }
+#else // (QT_VERSION >= 0x050300)
 int QxRestApi::getErrorCode() const { return (m_pImpl->m_error.isValid() ? m_pImpl->m_error.number() : 0); }
+#endif // (QT_VERSION >= 0x050300)
 
 QSqlError QxRestApi::getError() const { return m_pImpl->m_error; }
+
+#if (QT_VERSION >= 0x050300)
+QString QxRestApi::getNativeErrorCode() const { return m_pImpl->m_error.nativeErrorCode(); }
+#endif // (QT_VERSION >= 0x050300)
 
 void QxRestApi::setEntity(const QString & entity) { m_pImpl->m_entity = entity; }
 
@@ -251,7 +259,11 @@ void QxRestApi::QxRestApiImpl::resetRequest()
 
 void QxRestApi::QxRestApiImpl::buildError(int errCode, const QString & errDesc)
 {
+#if (QT_VERSION >= 0x050300)
+   m_error = QSqlError(errDesc, "", QSqlError::UnknownError, QString::number(errCode));
+#else // (QT_VERSION >= 0x050300)
    m_error = QSqlError(errDesc, "", QSqlError::UnknownError, errCode);
+#endif // (QT_VERSION >= 0x050300)
    QJsonObject errJson; QJsonObject errDetail;
    errDetail.insert("code", errCode);
    errDetail.insert("desc", errDesc);
@@ -265,7 +277,11 @@ void QxRestApi::QxRestApiImpl::buildError(const QSqlError & error)
    if (! error.isValid()) { return; }
    m_error = error;
    QJsonObject errJson; QJsonObject errDetail;
+#if (QT_VERSION >= 0x050300)
+   errDetail.insert("code", error.nativeErrorCode());
+#else // (QT_VERSION >= 0x050300)
    errDetail.insert("code", error.number());
+#endif // (QT_VERSION >= 0x050300)
    errDetail.insert("desc", (error.driverText() + "\n" + error.databaseText()));
    errJson.insert("error", errDetail);
    if (! m_requestId.isEmpty()) { errJson.insert("request_id", m_requestId); }

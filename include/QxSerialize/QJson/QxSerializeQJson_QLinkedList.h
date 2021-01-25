@@ -29,6 +29,7 @@
 **
 ****************************************************************************/
 
+#if (QT_VERSION < 0x060000)
 #ifndef _QX_NO_JSON
 #ifndef _QX_SERIALIZE_QJSON_QLINKEDLIST_H_
 #define _QX_SERIALIZE_QJSON_QLINKEDLIST_H_
@@ -88,3 +89,4 @@ struct QxConvert_FromJson< QLinkedList<T> >
 
 #endif // _QX_SERIALIZE_QJSON_QLINKEDLIST_H_
 #endif // _QX_NO_JSON
+#endif // (QT_VERSION < 0x060000)

@@ -289,7 +289,7 @@ int main(int argc, char * argv[])
 
    typedef qx::QxCollection< long, std::shared_ptr<CUser> > type_lstUser;
    std::shared_ptr<CUser> ppp1; ppp1.reset(new CUser(53));
-   ppp1->setProfil("profil n°10");
+   ppp1->setProfil("profil 10");
    ppp1->setLastName("ppp1 lastname");
    std::shared_ptr<CUser> ppp2; ppp2.reset(new CUser(108));
    ppp2->setDateModif(QDateTime::currentDateTime());

@@ -381,7 +381,7 @@ inline std::size_t hash_value(const std::tuple<T0, T1, T2, T3, T4, T5, T6, T7, T
    return seed;
 }
 
-#if (QT_VERSION < 0x050700)
+#if ((QT_VERSION < 0x050700) || (QT_VERSION >= 0x060000))
 template <typename T0, typename T1>
 inline qx_hash_result qHash(const std::pair<T0, T1> & p)
 {
@@ -390,7 +390,7 @@ inline qx_hash_result qHash(const std::pair<T0, T1> & p)
    qx::hash_combine(seed, p.second);
    return static_cast<qx_hash_result>(seed);
 }
-#endif // (QT_VERSION < 0x050700)
+#endif // ((QT_VERSION < 0x050700) || (QT_VERSION >= 0x060000))
 
 template <typename T0, typename T1>
 inline qx_hash_result qHash(const std::tuple<T0, T1> & tu)

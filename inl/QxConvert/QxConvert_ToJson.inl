@@ -102,7 +102,11 @@ static inline QJsonValue toJson(const QDate & t, const QString & format)
 {
 #ifdef _QX_ENABLE_MONGODB
    if (t.isValid() && format.startsWith("mongodb"))
+#if (QT_VERSION >= 0x060000)
+   { QTime time = ((t.isValid()) ? QTime(0, 0) : QTime()); QDateTime dt(t, time); return QxConvert_ToJson<QDateTime>::toJson(dt, format); }
+#else // (QT_VERSION >= 0x060000)
    { QDateTime dt(t); return QxConvert_ToJson<QDateTime>::toJson(dt, format); }
+#endif // (QT_VERSION >= 0x060000)
 #endif // _QX_ENABLE_MONGODB
 
    Q_UNUSED(format); if (t.isValid()) { return QJsonValue(t.toString(Qt::ISODate)); }; return QJsonValue(); }

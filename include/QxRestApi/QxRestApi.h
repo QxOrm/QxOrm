@@ -86,6 +86,10 @@ public:
    Q_INVOKABLE int getErrorCode() const;
    QSqlError getError() const;
 
+#if (QT_VERSION >= 0x050300)
+   Q_INVOKABLE QString getNativeErrorCode() const;
+#endif // (QT_VERSION >= 0x050300)
+
    Q_INVOKABLE void setEntity(const QString & entity);
    Q_INVOKABLE void setAction(const QString & action);
    Q_INVOKABLE void setFunction(const QString & fct);

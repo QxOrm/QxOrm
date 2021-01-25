@@ -147,9 +147,11 @@ template <typename T1, typename T2>
 struct get_sql_type< std::pair<T1, T2> >
 { static inline const char * get() { static std::string s; s = (std::string(qx::trait::get_sql_type<T1>::get()) + "|" + std::string(qx::trait::get_sql_type<T2>::get())); return s.c_str(); } };
 
+#if (QT_VERSION < 0x060000)
 template <typename T1, typename T2>
 struct get_sql_type< QPair<T1, T2> >
 { static inline const char * get() { static std::string s; s = (std::string(qx::trait::get_sql_type<T1>::get()) + "|" + std::string(qx::trait::get_sql_type<T2>::get())); return s.c_str(); } };
+#endif // (QT_VERSION < 0x060000)
 
 #ifdef _QX_ENABLE_BOOST
 

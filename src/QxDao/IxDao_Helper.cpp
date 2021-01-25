@@ -441,6 +441,14 @@ QSqlError IxDao_Helper::updateError(const QString & sError)
 
 QSqlError IxDao_Helper::updateError(const QSqlError & error)
 {
+#if (QT_VERSION >= 0x050300)
+   QString sDatabaseText = (((error.databaseText() != m_pImpl->m_error.databaseText()) && (! error.databaseText().isEmpty())) ? (m_pImpl->m_error.databaseText() + "\n" + error.databaseText()) : m_pImpl->m_error.databaseText());
+   QString sDriverText = (((error.driverText() != m_pImpl->m_error.driverText()) && (! error.driverText().isEmpty())) ? (m_pImpl->m_error.driverText() + "\n" + error.driverText()) : m_pImpl->m_error.driverText());
+   QString sNativeErrorCode = (((error.nativeErrorCode() != m_pImpl->m_error.nativeErrorCode()) && (! error.nativeErrorCode().isEmpty())) ? (m_pImpl->m_error.nativeErrorCode() + "\n" + error.nativeErrorCode()) : m_pImpl->m_error.nativeErrorCode());
+   int iType = ((((m_pImpl->m_error.type() == QSqlError::NoError) || (m_pImpl->m_error.type() == QSqlError::UnknownError)) && (error.type() != QSqlError::NoError)) ? error.type() :  m_pImpl->m_error.type());
+   m_pImpl->m_error = QSqlError(sDriverText, sDatabaseText, static_cast<QSqlError::ErrorType>(iType), sNativeErrorCode);
+   return m_pImpl->m_error;
+#else // (QT_VERSION >= 0x050300)
    if (! m_pImpl->m_error.isValid())
    {
       m_pImpl->m_error = error;
@@ -453,6 +461,7 @@ QSqlError IxDao_Helper::updateError(const QSqlError & error)
    if (m_pImpl->m_error.number() == -1) { m_pImpl->m_error.setNumber(error.number()); }
 
    return m_pImpl->m_error;
+#endif // (QT_VERSION >= 0x050300)
 }
 
 void IxDao_Helper::init(QSqlDatabase * pDatabase, const QString & sContext)
@@ -516,9 +525,14 @@ void IxDao_Helper::terminate()
       }
       if (! m_pImpl->m_bQuiet)
       {
+#if (QT_VERSION >= 0x050300)
+         QString serr = m_pImpl->m_error.nativeErrorCode();
+#else // (QT_VERSION >= 0x050300)
          int ierr = m_pImpl->m_error.number();
+         QString serr = QString::number(ierr);
+#endif // (QT_VERSION >= 0x050300)
          QString tmp = m_pImpl->m_error.driverText();
-         qDebug("Database error number '%d' : %s", ierr, qPrintable(tmp));
+         qDebug("Database error number '%s' : %s", qPrintable(serr), qPrintable(tmp));
          tmp = m_pImpl->m_error.databaseText(); qDebug("%s", qPrintable(tmp));
          if (m_pImpl->m_bMongoDB) { tmp = m_pImpl->m_qxQuery.queryAt(0); qDebug("%s", qPrintable(tmp)); }
       }

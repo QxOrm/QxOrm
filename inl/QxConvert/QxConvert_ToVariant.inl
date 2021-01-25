@@ -184,9 +184,11 @@ template <typename T1, typename T2> struct QxConvert_ToVariant< std::pair<T1, T2
 static inline QVariant toVariant(const std::pair<T1, T2> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return QX_CVT_DEFAULT_ARCHIVE_TO_VARIANT; } };
 
+#if (QT_VERSION < 0x060000)
 template <typename T1, typename T2> struct QxConvert_ToVariant< QPair<T1, T2> > {
 static inline QVariant toVariant(const QPair<T1, T2> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return QX_CVT_DEFAULT_ARCHIVE_TO_VARIANT; } };
+#endif // (QT_VERSION < 0x060000)
 
 template <typename T> struct QxConvert_ToVariant< std::vector<T> > {
 static inline QVariant toVariant(const std::vector<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
@@ -220,17 +222,21 @@ template <typename T> struct QxConvert_ToVariant< std::unordered_multiset<T> > {
 static inline QVariant toVariant(const std::unordered_multiset<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return QX_CVT_DEFAULT_ARCHIVE_TO_VARIANT; } };
 
+#if (QT_VERSION < 0x060000)
 template <typename T> struct QxConvert_ToVariant< QVector<T> > {
 static inline QVariant toVariant(const QVector<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return QX_CVT_DEFAULT_ARCHIVE_TO_VARIANT; } };
+#endif // (QT_VERSION < 0x060000)
 
 template <typename T> struct QxConvert_ToVariant< QList<T> > {
 static inline QVariant toVariant(const QList<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return QX_CVT_DEFAULT_ARCHIVE_TO_VARIANT; } };
 
+#if (QT_VERSION < 0x060000)
 template <typename T> struct QxConvert_ToVariant< QLinkedList<T> > {
 static inline QVariant toVariant(const QLinkedList<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return QX_CVT_DEFAULT_ARCHIVE_TO_VARIANT; } };
+#endif // (QT_VERSION < 0x060000)
 
 template <typename T> struct QxConvert_ToVariant< QFlags<T> > {
 static inline QVariant toVariant(const QFlags<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)

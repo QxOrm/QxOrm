@@ -6,8 +6,7 @@ include(../../../QxOrm.cmake)
 
 if(_QX_ENABLE_QT_NETWORK)
 
-find_package(Qt5Gui REQUIRED)
-find_package(Qt5Widgets REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Sql Gui Widgets REQUIRED)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -28,13 +27,21 @@ set(UIS
     ./qt/ui/qxClient.ui
    )
 
+if(COMMAND qt_wrap_ui)
+qt_wrap_ui(UIS_HDRS ${UIS})
+else() # (COMMAND qt_wrap_ui)
 qt5_wrap_ui(UIS_HDRS ${UIS})
+endif() # (COMMAND qt_wrap_ui)
 
 add_executable(qxClient ${SRCS} ${HEADERS} ${UIS_HDRS})
 
 target_compile_definitions(qxClient PRIVATE -D_BUILDING_QX_CLIENT)
 
-target_link_libraries(qxClient ${QX_LIBRARIES} Qt5::Gui Qt5::Widgets QxOrm qxServiceClient)
+if(COMMAND target_precompile_headers)
+   target_precompile_headers(qxClient PRIVATE ./include/precompiled.h)
+endif() # (COMMAND target_precompile_headers)
+
+target_link_libraries(qxClient ${QX_LIBRARIES} Qt${QT_VERSION_MAJOR}::Gui Qt${QT_VERSION_MAJOR}::Widgets QxOrm qxServiceClient)
 
 set_target_properties(qxClient PROPERTIES
                       ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../../_bin"

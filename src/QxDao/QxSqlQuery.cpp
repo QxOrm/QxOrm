@@ -239,8 +239,8 @@ void QxSqlQuery::resolve(QSqlQuery & query) const
 
    for (int i = 0; i < m_lstJoinQueryToResolve.count(); i++)
    {
-      const QxSqlQuery & joinQuery = m_lstJoinQueryToResolve.at(i);
-      joinQuery.resolve(query);
+      std::shared_ptr<QxSqlQuery> joinQuery = m_lstJoinQueryToResolve.at(i);
+      joinQuery->resolve(query);
    }
 
    if (m_lstSqlElement.count() > 0)
@@ -282,15 +282,15 @@ QString QxSqlQuery::getJoinQuery(const QString & relationKey, const QString & re
 {
    if (m_lstJoinQueryUser.contains(relationKey))
    {
-      QxSqlQuery & query = m_lstJoinQueryUser[relationKey];
+      std::shared_ptr<QxSqlQuery> query = m_lstJoinQueryUser.value(relationKey);
       m_lstJoinQueryToResolve.append(query);
-      return query.query().trimmed();
+      return query->query().trimmed();
    }
    else if (m_lstJoinQueryUser.contains(relationAlias))
    {
-      QxSqlQuery & query = m_lstJoinQueryUser[relationAlias];
+      std::shared_ptr<QxSqlQuery> query = m_lstJoinQueryUser.value(relationAlias);
       m_lstJoinQueryToResolve.append(query);
-      return query.query().trimmed();
+      return query->query().trimmed();
    }
    return QString();
 }
@@ -298,12 +298,12 @@ QString QxSqlQuery::getJoinQuery(const QString & relationKey, const QString & re
 QString QxSqlQuery::getJoinQueryHash()
 {
    QString hash;
-   QHashIterator<QString, QxSqlQuery> itr(m_lstJoinQueryUser);
+   QHashIterator<QString, std::shared_ptr<QxSqlQuery> > itr(m_lstJoinQueryUser);
    while (itr.hasNext())
    {
       itr.next();
-      QxSqlQuery tmp = itr.value();
-      hash += "|" + itr.key() + "|" + tmp.query();
+      std::shared_ptr<QxSqlQuery> tmp = itr.value();
+      hash += "|" + itr.key() + "|" + tmp->query();
    }
    return hash;
 }
@@ -311,9 +311,17 @@ QString QxSqlQuery::getJoinQueryHash()
 void QxSqlQuery::dumpBoundValues(const QSqlQuery & query)
 {
    QString sBoundValues = "";
+#if (QT_VERSION >= 0x060000)
+   QVariantList lstBoundValues = query.boundValues();
+#else // (QT_VERSION >= 0x060000)
    QMap<QString, QVariant> lstBoundValues = query.boundValues();
+#endif // (QT_VERSION >= 0x060000)
    if (lstBoundValues.count() <= 0) { return; }
 
+#if (QT_VERSION >= 0x060000)
+   for (int i = 0; i < lstBoundValues.size(); ++i)
+   { sBoundValues += "\n  - position '" + QString::number(i) + "' : " + lstBoundValues.at(i).toString(); }
+#else // (QT_VERSION >= 0x060000)
    if (qx::QxSqlDatabase::getSingleton()->getSqlPlaceHolderStyle() == qx::QxSqlDatabase::ph_style_question_mark)
    {
       QList<QVariant> lst = lstBoundValues.values();
@@ -325,6 +333,7 @@ void QxSqlQuery::dumpBoundValues(const QSqlQuery & query)
       QMapIterator<QString, QVariant> itr(lstBoundValues);
       while (itr.hasNext()) { itr.next(); sBoundValues += "\n  - " + itr.key() + " : " + itr.value().toString(); }
    }
+#endif // (QT_VERSION >= 0x060000)
 
    if (! sBoundValues.isEmpty())
    { qDebug("[QxOrm] dump sql query bound values : %s", qPrintable(sBoundValues)); }
@@ -858,7 +867,8 @@ QxSqlQuery & QxSqlQuery::freeText(const QString & text, const QVariantList & val
 
 QxSqlQuery & QxSqlQuery::addJoinQuery(const QString & relationKeyOrAlias, const QxSqlQuery & joinQuery)
 {
-   m_lstJoinQueryUser.insert(relationKeyOrAlias, joinQuery);
+   std::shared_ptr<QxSqlQuery> pQuery = std::make_shared<QxSqlQuery>(joinQuery);
+   m_lstJoinQueryUser.insert(relationKeyOrAlias, pQuery);
    return (* this);
 }
 
@@ -1008,9 +1018,14 @@ QSqlError call_query_helper(qx::QxSqlQuery & query, QSqlDatabase * pDatabase, bo
    {
       QString log = "custom sql query failed (" + QString::number(ms) + " ms) : " + sql;
       qDebug("[QxOrm] %s", qPrintable(log));
+#if (QT_VERSION >= 0x050300)
+      QString serr = dbError.nativeErrorCode();
+#else // (QT_VERSION >= 0x050300)
       int ierr = dbError.number();
+      QString serr = QString::number(ierr);
+#endif // (QT_VERSION >= 0x050300)
       QString tmp = dbError.driverText();
-      qDebug("Database error number '%d' : %s", ierr, qPrintable(tmp));
+      qDebug("Database error number '%s' : %s", qPrintable(serr), qPrintable(tmp));
       tmp = dbError.databaseText(); qDebug("%s", qPrintable(tmp));
    }
    else if (qx::QxSqlDatabase::getSingleton()->getTraceSqlQuery())

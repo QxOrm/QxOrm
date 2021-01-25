@@ -79,7 +79,6 @@ template <> struct is_qt_variant_compatible<QByteArray>           { enum { value
 template <> struct is_qt_variant_compatible<QLatin1String>        { enum { value = true }; };
 template <> struct is_qt_variant_compatible<QStringList>          { enum { value = true }; };
 template <> struct is_qt_variant_compatible<QChar>                { enum { value = true }; };
-template <> struct is_qt_variant_compatible<QRegExp>              { enum { value = true }; };
 template <> struct is_qt_variant_compatible<QLocale>              { enum { value = true }; };
 template <> struct is_qt_variant_compatible<QSize>                { enum { value = true }; };
 template <> struct is_qt_variant_compatible<QSizeF>               { enum { value = true }; };
@@ -91,6 +90,10 @@ template <> struct is_qt_variant_compatible<QRect>                { enum { value
 template <> struct is_qt_variant_compatible<QRectF>               { enum { value = true }; };
 template <> struct is_qt_variant_compatible<QUrl>                 { enum { value = true }; };
 template <> struct is_qt_variant_compatible<QVariant>             { enum { value = true }; };
+
+#if (QT_VERSION < 0x060000)
+template <> struct is_qt_variant_compatible<QRegExp>              { enum { value = true }; };
+#endif // (QT_VERSION < 0x060000)
 
 #ifdef _QX_ENABLE_QT_GUI
 template <> struct is_qt_variant_compatible<QBrush>               { enum { value = true }; };

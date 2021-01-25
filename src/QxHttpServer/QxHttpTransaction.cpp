@@ -218,7 +218,11 @@ qx_bool QxHttpTransaction::readSocketServer(QTcpSocket & socket)
       int pos = line.indexOf(':'); if (pos <= 0) { setMessageReturn(qx_bool(400, "Bad request : invalid HTTP header : " + line)); return qx_bool(true); }
       QByteArray key = line.left(pos).trimmed();
       QByteArray value = line.mid(pos + 1).trimmed();
+#if (QT_VERSION >= 0x060000)
+      if (key.toLower() == "cookie") { m_pImpl->m_request.cookies().insert(QxHttpCookie::parse(value)); }
+#else // (QT_VERSION >= 0x060000)
       if (key.toLower() == "cookie") { m_pImpl->m_request.cookies().unite(QxHttpCookie::parse(value)); }
+#endif // (QT_VERSION >= 0x060000)
       else { m_pImpl->m_request.headers().insert(key, value); }
       if (key.toLower() == "content-length") { iContentLength = value.toInt(); }
    }

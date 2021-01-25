@@ -353,9 +353,11 @@ template <typename Key, typename Value>
 struct generic_container< std::unordered_multimap<Key, Value> > : public qx::trait::detail::generic_container_base_key_value_multi_std_style< std::unordered_multimap<Key, Value>, Key, Value >
 { QX_TRAIT_GENERIC_CONTAINER_TYPEDEF(QX_TEMPLATE_T_P1_P2(std::unordered_multimap, Key, Value), Key, Value) };
 
+#if (QT_VERSION < 0x060000)
 template <typename T>
 struct generic_container< QVector<T> > : public qx::trait::detail::generic_container_base< QVector<T>, T >
 { QX_TRAIT_GENERIC_CONTAINER_TYPEDEF(QX_TEMPLATE_T_P1(QVector, T), qx::trait::no_type, T) };
+#endif // (QT_VERSION < 0x060000)
 
 #if (QT_VERSION >= 0x040700)
 
@@ -371,9 +373,11 @@ struct generic_container< QList<T> > : public qx::trait::detail::generic_contain
 
 #endif // (QT_VERSION >= 0x040700)
 
+#if (QT_VERSION < 0x060000)
 template <typename T>
 struct generic_container< QLinkedList<T> > : public qx::trait::detail::generic_container_base_without_reserve< QLinkedList<T>, T >
 { QX_TRAIT_GENERIC_CONTAINER_TYPEDEF(QX_TEMPLATE_T_P1(QLinkedList, T), qx::trait::no_type, T) };
+#endif // (QT_VERSION < 0x060000)
 
 template <typename T>
 struct generic_container< QSet<T> > : public qx::trait::detail::generic_container_base_multi_set< QSet<T>, T >

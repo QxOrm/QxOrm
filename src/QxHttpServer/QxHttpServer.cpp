@@ -74,7 +74,7 @@ struct QxHttpServerDispatchSegment
 
    type_segment m_type;             //!< HTTP server dispatcher segment type
    QString m_path;                  //!< HTTP server dispatcher segment path (part of item path splitted by '/' character)
-   unsigned int m_pathHash;         //!< HTTP server dispatcher segment path hash (for optimization)
+   qx_hash_result m_pathHash;       //!< HTTP server dispatcher segment path hash (for optimization)
    QString m_varName;               //!< HTTP server dispatcher segment variable name
    QString m_varType;               //!< HTTP server dispatcher segment variable type (or regular expression)
 
@@ -88,7 +88,7 @@ struct QxHttpServerDispatchSegment
    ~QxHttpServerDispatchSegment() { ; }
 
    bool parse();
-   bool check(const QString & path, unsigned int hash) const;
+   bool check(const QString & path, qx_hash_result hash) const;
    void fillParam(const QString & path, QHash<QString, QVariant> & parameters) const;
 
 };
@@ -97,7 +97,7 @@ struct QxHttpServerDispatchItem
 {
 
    QString m_command;                                                   //!< HTTP server dispatcher item command (GET, POST, DELETE, PUT, etc...)
-   unsigned int m_commandHash;                                          //!< HTTP server dispatcher item command hash (for optimization)
+   qx_hash_result m_commandHash;                                        //!< HTTP server dispatcher item command hash (for optimization)
    bool m_commandWildcard;                                              //!< HTTP server dispatcher item wildcard command (means accept all commands)
    QString m_path;                                                      //!< HTTP server dispatcher item path (example : /foo/bar/<var1>/<var2:int>/*)
    QList<std::shared_ptr<QxHttpServerDispatchSegment> > m_segments;     //!< HTTP server dispatcher item list of segments (path splitted by '/' character)
@@ -338,10 +338,14 @@ std::shared_ptr<QxHttpServerDispatchItem> QxHttpServerDispatcher::find(qx::QxHtt
    // Check and prepare input data
    if (m_lstDispatchItems.count() <= 0) { return std::shared_ptr<QxHttpServerDispatchItem>(); }
    QString requestCommand = request.command().toUpper();
-   unsigned int requestCommandHash = qHash(requestCommand);
+   qx_hash_result requestCommandHash = qHash(requestCommand);
    QString requestPath = request.url().path(); if (requestPath == "/") { requestPath = "/*"; }
+#if (QT_VERSION >= 0x051400)
+   QStringList requestSegments = requestPath.split("/", Qt::SkipEmptyParts);
+#else // (QT_VERSION >= 0x051400)
    QStringList requestSegments = requestPath.split("/", QString::SkipEmptyParts);
-   QList<unsigned int> requestSegmentsHash; requestSegmentsHash.reserve(requestSegments.count());
+#endif // (QT_VERSION >= 0x051400)
+   QList<qx_hash_result> requestSegmentsHash; requestSegmentsHash.reserve(requestSegments.count());
    Q_FOREACH(QString data, requestSegments) { requestSegmentsHash.append(qHash(data)); }
    if (requestSegments.count() <= 0) { return std::shared_ptr<QxHttpServerDispatchItem>(); }
 
@@ -384,7 +388,11 @@ bool QxHttpServerDispatchItem::parse()
    m_segments.clear();
    m_commandHash = qHash(m_command);
    m_commandWildcard = (m_command == "*");
+#if (QT_VERSION >= 0x051400)
+   QStringList segments = m_path.split("/", Qt::SkipEmptyParts);
+#else // (QT_VERSION >= 0x051400)
    QStringList segments = m_path.split("/", QString::SkipEmptyParts);
+#endif // (QT_VERSION >= 0x051400)
    Q_FOREACH(QString data, segments)
    {
       data = data.trimmed(); if (data.isEmpty()) { continue; }
@@ -433,7 +441,7 @@ bool QxHttpServerDispatchSegment::parse()
    return true;
 }
 
-bool QxHttpServerDispatchSegment::check(const QString & path, unsigned int hash) const
+bool QxHttpServerDispatchSegment::check(const QString & path, qx_hash_result hash) const
 {
    bool result = false;
    switch (m_type)

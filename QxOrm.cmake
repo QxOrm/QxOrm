@@ -47,6 +47,7 @@ set(QXORM_CMAKE_CONFIG_FILE_INCLUDED TRUE)
 # Please note that QxOrm library doesn't require a full compliant C++11 compiler : for example, QxOrm library can be built and used with MSVC 2012, GCC 4.5 or Clang 3.2
 
 set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 ######################
 # QxOrm Library Path #
@@ -99,10 +100,26 @@ if(NOT QX_QT_DIR STREQUAL "")
    set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${QX_QT_DIR})
 endif()
 
-find_package(Qt5Core REQUIRED)
-find_package(Qt5Sql REQUIRED)
+find_package(QT NAMES Qt6 Qt5 COMPONENTS Core REQUIRED)
 
-set(QX_LIBRARIES Qt5::Core Qt5::Sql)
+if(_QX_ENABLE_QT_GUI AND _QX_ENABLE_QT_NETWORK)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Sql Gui Network REQUIRED)
+set(QX_LIBRARIES Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Sql Qt${QT_VERSION_MAJOR}::Gui Qt${QT_VERSION_MAJOR}::Network)
+elseif(_QX_ENABLE_QT_GUI)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Sql Gui REQUIRED)
+set(QX_LIBRARIES Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Sql Qt${QT_VERSION_MAJOR}::Gui)
+elseif(_QX_ENABLE_QT_NETWORK)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Sql Network REQUIRED)
+set(QX_LIBRARIES Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Sql Qt${QT_VERSION_MAJOR}::Network)
+else() # (_QX_ENABLE_QT_GUI AND _QX_ENABLE_QT_NETWORK)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Sql REQUIRED)
+set(QX_LIBRARIES Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Sql)
+endif() # (_QX_ENABLE_QT_GUI AND _QX_ENABLE_QT_NETWORK)
+
+if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+endif() # (${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 
 #######################################
 # MongoDB Driver Library Dependencies #
@@ -265,8 +282,6 @@ option(_QX_ENABLE_QT_GUI "If you enable _QX_ENABLE_QT_GUI option, then QxOrm lib
 
 if(_QX_ENABLE_QT_GUI)
    add_definitions(-D_QX_ENABLE_QT_GUI)
-   find_package(Qt5Gui REQUIRED)
-   set(QX_LIBRARIES ${QX_LIBRARIES} Qt5::Gui)
 endif() # _QX_ENABLE_QT_GUI
 
 ################################
@@ -282,8 +297,6 @@ option(_QX_ENABLE_QT_NETWORK "If you enable _QX_ENABLE_QT_NETWORK option, then Q
 
 if(_QX_ENABLE_QT_NETWORK)
    add_definitions(-D_QX_ENABLE_QT_NETWORK)
-   find_package(Qt5Network REQUIRED)
-   set(QX_LIBRARIES ${QX_LIBRARIES} Qt5::Network)
 endif() # _QX_ENABLE_QT_NETWORK
 
 ################################

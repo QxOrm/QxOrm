@@ -28,6 +28,10 @@ add_library(dll1 SHARED ${SRCS} ${HEADERS})
 
 target_compile_definitions(dll1 PRIVATE -D_QX_BUILDING_DLL1)
 
+if(COMMAND target_precompile_headers)
+   target_precompile_headers(dll1 PRIVATE ./include/precompiled.h)
+endif() # (COMMAND target_precompile_headers)
+
 target_link_libraries(dll1 ${QX_LIBRARIES} QxOrm)
 
 set_target_properties(dll1 PROPERTIES

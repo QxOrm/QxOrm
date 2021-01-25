@@ -33,6 +33,10 @@ add_executable(qxBlogMongoDB ${SRCS} ${HEADERS})
 
 target_compile_definitions(qxBlogMongoDB PRIVATE -D_BUILDING_QX_BLOG)
 
+if(COMMAND target_precompile_headers)
+   target_precompile_headers(qxBlogMongoDB PRIVATE ./include/precompiled.h)
+endif() # (COMMAND target_precompile_headers)
+
 target_link_libraries(qxBlogMongoDB ${QX_LIBRARIES} QxOrm)
 
 set_target_properties(qxBlogMongoDB PROPERTIES

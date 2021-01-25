@@ -49,7 +49,11 @@ QJsonValue QxConvert_ToJson_Helper(const QPicture & t, const QString & format)
    QBuffer buffer(& bytes);
    QPicture * pTmp = const_cast<QPicture *>(& t);
    buffer.open(QIODevice::ReadWrite);
+#if (QT_VERSION >= 0x060000)
+   pTmp->save(& buffer);
+#else // (QT_VERSION >= 0x060000)
    pTmp->save(& buffer, "PNG");
+#endif // (QT_VERSION >= 0x060000)
    return qx::cvt::to_json(bytes, format);
 }
 
@@ -61,7 +65,11 @@ qx_bool QxConvert_FromJson_Helper(const QJsonValue & j, QPicture & t, const QStr
    QBuffer buffer(& bytes);
    buffer.open(QIODevice::ReadWrite);
    qx::cvt::from_json(j, bytes, format);
+#if (QT_VERSION >= 0x060000)
+   t.load(& buffer);
+#else // (QT_VERSION >= 0x060000)
    t.load(& buffer, "PNG");
+#endif // (QT_VERSION >= 0x060000)
    return qx_bool(true);
 }
 

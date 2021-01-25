@@ -6,10 +6,7 @@ include(../../QxOrm.cmake)
 
 if(NOT _QX_NO_JSON)
 
-find_package(Qt5Gui REQUIRED)
-find_package(Qt5Widgets REQUIRED)
-find_package(Qt5Quick REQUIRED)
-find_package(Qt5Qml REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Sql Gui Widgets Quick Qml REQUIRED)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -36,13 +33,21 @@ set(QRCS
     ./qt/rcc/qxBlogRestApi.qrc
    )
 
+if(COMMAND qt_add_resources)
+qt_add_resources(QRCS_HDRS ${QRCS})
+else() # (COMMAND qt_add_resources)
 qt5_add_resources(QRCS_HDRS ${QRCS})
+endif() # (COMMAND qt_add_resources)
 
 add_executable(qxBlogRestApi ${SRCS} ${HEADERS} ${QRCS_HDRS})
 
 target_compile_definitions(qxBlogRestApi PRIVATE -D_BUILDING_QX_BLOG)
 
-target_link_libraries(qxBlogRestApi ${QX_LIBRARIES} QxOrm Qt5::Gui Qt5::Widgets Qt5::Quick Qt5::Qml)
+if(COMMAND target_precompile_headers)
+   target_precompile_headers(qxBlogRestApi PRIVATE ./include/precompiled.h)
+endif() # (COMMAND target_precompile_headers)
+
+target_link_libraries(qxBlogRestApi ${QX_LIBRARIES} QxOrm Qt${QT_VERSION_MAJOR}::Gui Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Quick Qt${QT_VERSION_MAJOR}::Qml)
 
 set_target_properties(qxBlogRestApi PROPERTIES
                       ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../_bin"

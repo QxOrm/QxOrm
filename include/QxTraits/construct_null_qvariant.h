@@ -196,10 +196,12 @@ template <> struct construct_null_qvariant<QFont &> { static inline QVariant get
 template <> struct construct_null_qvariant<const QFont> { static inline QVariant get() { return QVariant(QVariant::Font); } };
 template <> struct construct_null_qvariant<const QFont &> { static inline QVariant get() { return QVariant(QVariant::Font); } };
 
+#if (QT_VERSION < 0x060000)
 template <> struct construct_null_qvariant<QMatrix> { static inline QVariant get() { return QVariant(QVariant::Matrix); } };
 template <> struct construct_null_qvariant<QMatrix &> { static inline QVariant get() { return QVariant(QVariant::Matrix); } };
 template <> struct construct_null_qvariant<const QMatrix> { static inline QVariant get() { return QVariant(QVariant::Matrix); } };
 template <> struct construct_null_qvariant<const QMatrix &> { static inline QVariant get() { return QVariant(QVariant::Matrix); } };
+#endif // (QT_VERSION < 0x060000)
 
 template <> struct construct_null_qvariant<QRegion> { static inline QVariant get() { return QVariant(QVariant::Region); } };
 template <> struct construct_null_qvariant<QRegion &> { static inline QVariant get() { return QVariant(QVariant::Region); } };

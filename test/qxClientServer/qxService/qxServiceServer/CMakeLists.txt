@@ -33,6 +33,10 @@ add_library(qxServiceServer SHARED ${SRCS} ${HEADERS})
 
 target_compile_definitions(qxServiceServer PRIVATE -D_BUILDING_QX_SERVICE)
 
+if(COMMAND target_precompile_headers)
+   target_precompile_headers(qxServiceServer PRIVATE ../include/precompiled.h)
+endif() # (COMMAND target_precompile_headers)
+
 target_link_libraries(qxServiceServer ${QX_LIBRARIES} QxOrm)
 
 set_target_properties(qxServiceServer PROPERTIES

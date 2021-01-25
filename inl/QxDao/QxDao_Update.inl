@@ -152,6 +152,7 @@ private:
       { return qx::dao::detail::QxDao_Update_Container<T>::updateItem(item.second, dao); }
    };
 
+#if (QT_VERSION < 0x060000)
    template <typename U1, typename U2>
    struct updateItem_Helper<QPair<U1, U2>, false>
    {
@@ -165,6 +166,7 @@ private:
       static inline bool update(const QPair<U1, U2> & item, qx::dao::detail::QxDao_Helper_Container<T> & dao)
       { return qx::dao::detail::QxDao_Update_Container<T>::updateItem(item.second, dao); }
    };
+#endif // (QT_VERSION < 0x060000)
 
    template <typename U>
    struct updateItem_Helper<U, false>

@@ -124,6 +124,7 @@ private:
       { return qx::dao::detail::QxDao_Exist_Container<T>::existItem(item.second, dao); }
    };
 
+#if (QT_VERSION < 0x060000)
    template <typename U1, typename U2>
    struct existItem_Helper<QPair<U1, U2>, false>
    {
@@ -137,6 +138,7 @@ private:
       static inline bool exist(const QPair<U1, U2> & item, qx::dao::detail::QxDao_Helper_Container<T> & dao)
       { return qx::dao::detail::QxDao_Exist_Container<T>::existItem(item.second, dao); }
    };
+#endif // (QT_VERSION < 0x060000)
 
    template <typename U>
    struct existItem_Helper<U, false>

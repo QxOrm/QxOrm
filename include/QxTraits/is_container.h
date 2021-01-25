@@ -137,6 +137,7 @@ struct is_container< const QHash<Key, Value> > : public std::true_type { ; };
 template <typename Key, typename Value>
 struct is_container< const QHash<Key, Value> & > : public std::true_type { ; };
 
+#if (QT_VERSION < 0x060000)
 template <typename T>
 struct is_container< QLinkedList<T> > : public std::true_type { ; };
 
@@ -148,6 +149,7 @@ struct is_container< const QLinkedList<T> > : public std::true_type { ; };
 
 template <typename T>
 struct is_container< const QLinkedList<T> & > : public std::true_type { ; };
+#endif // (QT_VERSION < 0x060000)
 
 template <typename T>
 struct is_container< QList<T> > : public std::true_type { ; };
@@ -209,6 +211,7 @@ struct is_container< const QSet<T> > : public std::true_type { ; };
 template <typename T>
 struct is_container< const QSet<T> & > : public std::true_type { ; };
 
+#if (QT_VERSION < 0x060000)
 template <typename T>
 struct is_container< QVector<T> > : public std::true_type { ; };
 
@@ -220,6 +223,7 @@ struct is_container< const QVector<T> > : public std::true_type { ; };
 
 template <typename T>
 struct is_container< const QVector<T> & > : public std::true_type { ; };
+#endif // (QT_VERSION < 0x060000)
 
 template <typename Key, typename Value>
 struct is_container< qx::QxCollection<Key, Value> > : public std::true_type { ; };

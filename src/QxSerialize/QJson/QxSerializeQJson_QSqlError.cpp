@@ -47,7 +47,11 @@ QJsonValue QxConvert_ToJson_Helper(const QSqlError & t, const QString & format)
    QJsonArray arr;
    arr.append(QJsonValue(t.databaseText()));
    arr.append(QJsonValue(t.driverText()));
+#if (QT_VERSION >= 0x050300)
+   arr.append(QJsonValue(t.nativeErrorCode()));
+#else // (QT_VERSION >= 0x050300)
    arr.append(QJsonValue(t.number()));
+#endif // (QT_VERSION >= 0x050300)
    arr.append(QJsonValue(static_cast<int>(t.type())));
    return QJsonValue(arr);
 }
@@ -57,10 +61,14 @@ qx_bool QxConvert_FromJson_Helper(const QJsonValue & j, QSqlError & t, const QSt
    Q_UNUSED(format); t = QSqlError();
    if (! j.isArray()) { return qx_bool(true); }
    QJsonArray arr = j.toArray();
+#if (QT_VERSION >= 0x050300)
+   t = QSqlError(arr.at(1).toString(), arr.at(0).toString(), static_cast<QSqlError::ErrorType>(qRound(arr.at(3).toDouble())), arr.at(2).toString());
+#else // (QT_VERSION >= 0x050300)
    t.setDatabaseText(arr.at(0).toString());
    t.setDriverText(arr.at(1).toString());
    t.setNumber(qRound(arr.at(2).toDouble()));
    t.setType(static_cast<QSqlError::ErrorType>(qRound(arr.at(3).toDouble())));
+#endif // (QT_VERSION >= 0x050300)
    return qx_bool(true);
 }
 

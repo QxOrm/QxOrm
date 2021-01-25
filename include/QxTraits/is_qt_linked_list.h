@@ -29,6 +29,7 @@
 **
 ****************************************************************************/
 
+#if (QT_VERSION < 0x060000)
 #ifndef _QX_IS_QT_LINKED_LIST_H_
 #define _QX_IS_QT_LINKED_LIST_H_
 
@@ -71,3 +72,4 @@ struct is_qt_linked_list< const QLinkedList<T> & > : public std::true_type { ; }
 } // namespace qx
 
 #endif // _QX_IS_QT_LINKED_LIST_H_
+#endif // (QT_VERSION < 0x060000)

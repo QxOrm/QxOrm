@@ -29,6 +29,7 @@
 **
 ****************************************************************************/
 
+#if (QT_VERSION < 0x060000)
 #ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #ifndef _QX_SERIALIZE_QREGEXP_H_
 #define _QX_SERIALIZE_QREGEXP_H_
@@ -54,3 +55,4 @@ QX_SERIALIZE_FAST_COMPIL_SAVE_LOAD_HPP(QX_DLL_EXPORT, QRegExp)
 
 #endif // _QX_SERIALIZE_QREGEXP_H_
 #endif // _QX_ENABLE_BOOST_SERIALIZATION
+#endif // (QT_VERSION < 0x060000)

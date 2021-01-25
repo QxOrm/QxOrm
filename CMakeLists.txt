@@ -627,6 +627,10 @@ endif()
 
 target_compile_definitions(QxOrm PRIVATE -D_QX_BUILDING_QX_ORM)
 
+if(COMMAND target_precompile_headers)
+   target_precompile_headers(QxOrm PRIVATE ./include/QxPrecompiled.h)
+endif() # (COMMAND target_precompile_headers)
+
 target_link_libraries(QxOrm ${QX_LIBRARIES})
 
 set_target_properties(QxOrm PROPERTIES

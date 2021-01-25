@@ -77,7 +77,7 @@ void init_data()
    daoError = qx::dao::insert(authorX);
    qAssert(qx::dao::count<author>() == 3);
 
-   // Clone author n°2 : 'author_id_2'
+   // Clone author 2 : 'author_id_2'
    author_ptr author_clone = qx::clone(* author_2);
    qAssert(author_clone->m_id == "author_id_2");
    qAssert(author_clone->m_sex == author::female);

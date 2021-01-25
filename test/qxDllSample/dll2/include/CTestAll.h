@@ -9,10 +9,13 @@
 #include <QtGui/qfont.h>
 #include <QtGui/qimage.h>
 #include <QtGui/qbrush.h>
-#include <QtGui/qmatrix.h>
 #include <QtGui/qpicture.h>
 #include <QtGui/qpixmap.h>
 #include <QtGui/qregion.h>
+
+#if (QT_VERSION < 0x060000)
+#include <QtGui/qmatrix.h>
+#endif // (QT_VERSION < 0x060000)
 
 #include "../../dll1/include/CPerson.h"
 #include "../../dll2/include/CUser.h"
@@ -50,17 +53,23 @@ protected:
    QDateTime m_oQDateTime;
    QTime m_oQTime;
    QFont m_oQFont;
-   QMatrix m_oQMatrix;
    QImage m_oQImage;
    QPicture m_oQPicture;
    QPoint m_oQPoint;
    QRect m_oQRect;
    QSize m_oQSize;
-   QRegExp m_oQRegExp;
    QRegion m_oQRegion;
    QUrl m_oQUrl;
    QVariant m_oQVariant;
    QStringList m_oQStringList;
+
+#if (QT_VERSION < 0x060000)
+   QMatrix m_oQMatrix;
+#endif // (QT_VERSION < 0x060000)
+
+#if (QT_VERSION < 0x060000)
+   QRegExp m_oQRegExp;
+#endif // (QT_VERSION < 0x060000)
 
    QHash<long, QString> m_oQHash;
    QMultiHash<QString, std::shared_ptr<qx::test::CPerson> > m_oQMultiHash;
@@ -69,10 +78,13 @@ protected:
    qx::QxCollection<QString, std::tuple<long, qx::test::CPerson *> > m_oQxCollection;
 
    QList<float> m_oQList;
-   QLinkedList<QString> m_oQLinkedList;
    QVector<CUser *> m_oQVector;
    QSharedPointer<std::tuple<int, std::string, std::shared_ptr<qx::test::CPerson> > > m_oQSharedPointer;
    QPair<QString, QPoint> m_oQPair;
+
+#if (QT_VERSION < 0x060000)
+   QLinkedList<QString> m_oQLinkedList;
+#endif // (QT_VERSION < 0x060000)
 
 public:
 

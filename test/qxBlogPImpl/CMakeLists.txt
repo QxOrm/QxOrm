@@ -29,6 +29,10 @@ add_executable(qxBlogPImpl ${SRCS} ${HEADERS})
 
 target_compile_definitions(qxBlogPImpl PRIVATE -D_BUILDING_QX_BLOG)
 
+if(COMMAND target_precompile_headers)
+   target_precompile_headers(qxBlogPImpl PRIVATE ./include/precompiled.h)
+endif() # (COMMAND target_precompile_headers)
+
 target_link_libraries(qxBlogPImpl ${QX_LIBRARIES} QxOrm)
 
 set_target_properties(qxBlogPImpl PROPERTIES

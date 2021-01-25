@@ -105,6 +105,7 @@ private:
       { return qx::dao::detail::QxDao_Save_Container<T>::saveItem(item.second, dao); }
    };
 
+#if (QT_VERSION < 0x060000)
    template <typename U1, typename U2>
    struct saveItem_Helper<QPair<U1, U2>, false>
    {
@@ -118,6 +119,7 @@ private:
       static inline bool save(const QPair<U1, U2> & item, qx::dao::detail::QxDao_Helper_Container<T> & dao)
       { return qx::dao::detail::QxDao_Save_Container<T>::saveItem(item.second, dao); }
    };
+#endif // (QT_VERSION < 0x060000)
 
    template <typename U>
    struct saveItem_Helper<U, false>

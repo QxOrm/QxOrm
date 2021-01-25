@@ -186,9 +186,11 @@ template <typename T1, typename T2> struct QxConvert_FromVariant< std::pair<T1, 
 static inline qx_bool fromVariant(const QVariant & v, std::pair<T1, T2> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return QX_CVT_DEFAULT_ARCHIVE_FROM_VARIANT; } };
 
+#if (QT_VERSION < 0x060000)
 template <typename T1, typename T2> struct QxConvert_FromVariant< QPair<T1, T2> > {
 static inline qx_bool fromVariant(const QVariant & v, QPair<T1, T2> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return QX_CVT_DEFAULT_ARCHIVE_FROM_VARIANT; } };
+#endif // (QT_VERSION < 0x060000)
 
 template <typename T> struct QxConvert_FromVariant< std::vector<T> > {
 static inline qx_bool fromVariant(const QVariant & v, std::vector<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
@@ -222,17 +224,21 @@ template <typename T> struct QxConvert_FromVariant< std::unordered_multiset<T> >
 static inline qx_bool fromVariant(const QVariant & v, std::unordered_multiset<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return QX_CVT_DEFAULT_ARCHIVE_FROM_VARIANT; } };
 
+#if (QT_VERSION < 0x060000)
 template <typename T> struct QxConvert_FromVariant< QVector<T> > {
 static inline qx_bool fromVariant(const QVariant & v, QVector<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return QX_CVT_DEFAULT_ARCHIVE_FROM_VARIANT; } };
+#endif // (QT_VERSION < 0x060000)
 
 template <typename T> struct QxConvert_FromVariant< QList<T> > {
 static inline qx_bool fromVariant(const QVariant & v, QList<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return QX_CVT_DEFAULT_ARCHIVE_FROM_VARIANT; } };
 
+#if (QT_VERSION < 0x060000)
 template <typename T> struct QxConvert_FromVariant< QLinkedList<T> > {
 static inline qx_bool fromVariant(const QVariant & v, QLinkedList<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return QX_CVT_DEFAULT_ARCHIVE_FROM_VARIANT; } };
+#endif // (QT_VERSION < 0x060000)
 
 template <typename T> struct QxConvert_FromVariant< QFlags<T> > {
 static inline qx_bool fromVariant(const QVariant & v, QFlags<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
