@@ -128,12 +128,14 @@ public:
    QxSession();
    QxSession(const QSqlDatabase & database);
    QxSession(const QSqlDatabase & database, bool bOpenTransaction);
-   QxSession(const QSqlDatabase & database, bool bOpenTransaction, bool bThrowable);
+   QxSession(const QSqlDatabase & database, bool bOpenTransaction, bool bThrowable, bool bAutoRollbackWhenDestroyed = false);
    virtual ~QxSession();
 
    bool isThrowable() const;
    bool isOpened() const;
    bool isValid() const;
+   bool isAutoRollbackWhenDestroyed() const;
+   void setAutoRollbackWhenDestroyed(bool b);
    QSqlError firstError() const;
    QSqlError lastError() const;
    QList<QSqlError> allErrors() const;

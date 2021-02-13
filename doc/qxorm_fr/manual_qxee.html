@@ -3115,10 +3115,11 @@
                <b>-- Section <i>C++ export settings</i> :</b>
                <ul>
                   <li>Champ « <i>C++ project location</i> » : répertoire de destination qui contiendra <a href="#cpp_export_settings_generated">tous les fichiers du projet C++ généré</a>. Il est possible de renseigner dans ce champ un chemin relatif par rapport au fichier projet <i>*.qxee</i> ;</li>
-                  <li>Champ « <i>Relative path to QxOrm library</i> » : si coché, le projet C++ référence la bibliothèque QxOrm avec un chemin relatif, sinon la dépendance à la bibliothèque QxOrm est définie avec un chemin absolu. Il est conseillé d'utiliser <a href="#global_settings">une variable d'environnement dans les paramètres de l'application QxEntityEditor</a> (par exemple : <i>$$(QXORM_DIR)</i>) à la place de cette option ;</li>
-                  <li>Champ « <i>Generate a custom directory with custom files for each entity</i> » : si coché, le projet C++ généré contient un fichier personnalisé par entité.
+                  <li>Option « <i>Relative path to QxOrm library</i> » : si coché, le projet C++ référence la bibliothèque QxOrm avec un chemin relatif, sinon la dépendance à la bibliothèque QxOrm est définie avec un chemin absolu. Il est conseillé d'utiliser <a href="#global_settings">une variable d'environnement dans les paramètres de l'application QxEntityEditor</a> (par exemple : <i>$$(QXORM_DIR)</i>) à la place de cette option ;</li>
+                  <li>Option « <i>Generate a custom directory with custom files for each entity</i> » : si coché, le projet C++ généré contient un fichier personnalisé par entité.
                   Par défaut, ces fichiers custom sont vides et ne seront jamais écrasés par un nouvel export C++.
                   Ces fichiers custom peuvent être utilisés par exemple pour implémenter <a href="./manual.html#manual_420">les méthodes de validation</a>, ou bien <a href="./manual.html#manual_410">les méthodes de trigger</a>.</li>
+                  <li>Option « <i>Generate all persistent classes using the PIMPL (Private Implementation) idiom</i> » : si coché, toutes les classes C++ générées et enregistrées dans le contexte QxOrm seront codées en utilisant <a href="./manual.html#manual_455">le pattern C++ PIMPL (ou d-pointer)</a>.</li>
                </ul>
                <br/>
                <b>-- Section <i>Custom script (Javascript file) to change the default behaviour of the export process</i> :</b> <a href="#js_engine">paramétrage du moteur de personnalisation de l'export</a>.

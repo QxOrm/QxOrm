@@ -355,3 +355,7 @@ QSqlError QxDaoAsyncRunner::runQuery(qx::dao::detail::QxDaoAsyncParams_ptr pDaoP
 } // namespace detail
 } // namespace dao
 } // namespace qx
+
+// Not really implemented, this is just to avoid a compilation error with Qt6 and _QX_UNITY_BUILD compilation option (?)
+QDataStream & operator<< (QDataStream & stream, const qx::dao::detail::QxDaoAsyncParams & t) { Q_UNUSED(t); return stream; }
+QDataStream & operator>> (QDataStream & stream, qx::dao::detail::QxDaoAsyncParams & t) { Q_UNUSED(t); return stream; }

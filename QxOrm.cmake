@@ -182,7 +182,9 @@ set_property(DIRECTORY APPEND PROPERTY COMPILE_DEFINITIONS
 # Note : there is a side effect disabling precompiled headers => compilation times are considerably increased !
 # Other note : to reduce compilation times, it is recommended to define _QX_UNITY_BUILD compilation option
 
+if(NOT COMMAND target_precompile_headers)
 add_definitions(-D_QX_NO_PRECOMPILED_HEADER)
+endif() # (NOT COMMAND target_precompile_headers)
 
 ##############################
 # QxOrm Library Static Build #

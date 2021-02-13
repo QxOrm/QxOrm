@@ -1,5 +1,5 @@
-#ifndef UI_QXSERVER_H
-#define UI_QXSERVER_H
+#ifndef _QX_UI_QXSERVER_H_
+#define _QX_UI_QXSERVER_H_
 
 #include <QtCore/qglobal.h>
 
@@ -11,4 +11,4 @@
 #include "./ui_qxServer_qt4.h"
 #endif // (QT_VERSION >= 0x050000)
 
-#endif // UI_QXSERVER_H
+#endif // _QX_UI_QXSERVER_H_

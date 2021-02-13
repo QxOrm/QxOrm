@@ -287,13 +287,16 @@ void test_qml_view()
    qx::IxModel * pModel = new qx::QxModel<author>();
    pModel->qxFetchAll();
 
-#if (QT_VERSION >= 0x050000)
+#if (QT_VERSION >= 0x060000)
+   QQuickView qmlView;
+   QString sQmlFile = "qrc:/documents/main_qt6.qml";
+#elif (QT_VERSION >= 0x050000) // (QT_VERSION >= 0x060000)
    QQuickView qmlView;
    QString sQmlFile = "qrc:/documents/main.qml";
-#else // (QT_VERSION >= 0x050000)
+#else // (QT_VERSION >= 0x060000)
    QDeclarativeView qmlView;
    QString sQmlFile = "qrc:/documents/main_qt4.qml";
-#endif // (QT_VERSION >= 0x050000)
+#endif // (QT_VERSION >= 0x060000)
 
    qmlView.rootContext()->setContextProperty("myModel", pModel);
    qmlView.setSource(QUrl(sQmlFile));
@@ -308,7 +311,11 @@ void test_qml_view_with_relationship()
    pModel->qxFetchAll(QStringList() << "*");
 
    QQuickView qmlView;
+#if (QT_VERSION >= 0x060000)
+   QString sQmlFile = "qrc:/documents/main_relationship_qt6.qml";
+#else // (QT_VERSION >= 0x060000)
    QString sQmlFile = "qrc:/documents/main_relationship.qml";
+#endif // (QT_VERSION >= 0x060000)
 
    qmlView.rootContext()->setContextProperty("myModel", pModel);
    qmlView.setSource(QUrl(sQmlFile));

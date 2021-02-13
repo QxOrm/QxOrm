@@ -283,6 +283,9 @@
                               <a href="#manual_450">Interface qx::IxPersistable (classe abstraite)</a>
                            </li>
                            <li class="manual_li_title_2">
+                              <a href="#manual_455">Utiliser le pattern C++ PIMPL (Private Implementation idiom ou d-pointer)</a>
+                           </li>
+                           <li class="manual_li_title_2">
                               <a href="#manual_460">Persister des types personnalisés</a>
                            </li>
                            <li class="manual_li_title_2">
@@ -2906,6 +2909,159 @@ int</span> author<span class="operator">::</span>age<span class="operator">()</s
            <li>accéder au fichier <a href="./resource/qx_persistable_cpp.html" target="_blank"><i>QxPersistable.cpp</i></a>.</li>
            </ul>
            <br>
+         </div>
+         <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_455">Utiliser le pattern C++ PIMPL (Private Implementation idiom ou d-pointer)</a></p>
+         <div class="manual_div_content">
+           <a href="https://en.cppreference.com/w/cpp/language/pimpl" target="_blank">Définition du site cppreference :</a> "Pointer to implementation" or "pImpl" is a C++ programming technique that removes implementation details of a class from its object representation by placing them in a separate class, accessed through an opaque pointer.
+           This technique is used to construct C++ library interfaces with stable ABI and to reduce compile-time dependencies.
+           <br><br>
+           <a href="https://dzone.com/articles/the-pimpl-pattern-what-you-should-know" target="_blank">Les avantages à utiliser le pattern PIMPL</a> pour définir une classe persistente enregistrée dans le contexte QxOrm :
+           <ul>
+             <li><b>Compilation Firewall</b> : si l'implémentation privée change, le code client n'a pas besoin d'être recompilé ;</li>
+             <li>Réduction des <b>temps de compilation</b> : les fichiers d'en-têtes (*.h, *.hpp) sont moins volumineux ;</li>
+             <li><b>Compatibilité binaire</b> : vous pouvez développer plusieurs versions d'une bibliothèque sans casser la compatibilité ;</li>
+             <li>Réduction de la <b>taille des exécutables</b> générés.</li>
+           </ul>
+           <a href="https://www.geeksforgeeks.org/pimpl-idiom-in-c-with-examples/" target="_blank">Les inconvients du pattern PIMPL</a> :
+           <ul>
+             <li>Légère baisse des performances : nécessité d'utiliser un niveau d'indirection supplémentaire avec le pointeur opaque ;</li>
+             <li>Nécessité d'allouer un pointeur par instance (peut causer des problèmes de <i>memory fragmentation</i>).</li>
+           </ul>
+           <br>
+           La bibliothèque QxOrm fournit un projet de test où toutes les classes persistantes sont codées en utilisant le pattern PIMPL : <a href="https://github.com/QxOrm/QxOrm/tree/master/test/qxBlogPImpl" target="_blank"><i>qxBlogPImpl</i> (avec gestion des relations)</a>.<br>
+           <font style="background-color:yellow">Il est également possible d'utiliser <a href="./manual_qxee.html#cpp_export_settings_parameters">l'application <b>QxEntityEditor</b></a></font> pour générer facilement et automatiquement toutes les classes persistantes d'un projet C++ avec <b>l'option PIMPL</b>.<br>
+           <br>
+           Exemple de classe persistante C++ enregistrée dans le contexte QxOrm en utilisant le pattern PIMPL (avec relations <i>1-n</i>, <i>n-1</i> et <i>n-n</i>) :<br>
+           <br>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="pre">#ifndef _QX_BLOG_BLOG_H_
+#define _QX_BLOG_BLOG_H_</span>
+
+<span class="keyword">class</span> author;
+<span class="keyword">class</span> comment;
+<span class="keyword">class</span> category;
+
+<span class="keyword">class</span> QX_BLOG_DLL_EXPORT blog
+{
+
+   QX_REGISTER_FRIEND_CLASS(blog)
+
+<font style="background-color:yellow">private:
+
+   <span class="keyword">struct</span> blog_impl;
+   std::unique_ptr&lt;blog_impl&gt; m_pImpl; <span class="comment">//!&lt; Private implementation idiom</span></font>
+
+<span class="keyword">public</span>:
+
+   blog();
+   virtual ~blog();
+
+   <font style="background-color:yellow">blog(<span class="keyword">const</span> blog & other);
+   blog & operator=(<span class="keyword">const</span> blog & other);
+
+#ifdef Q_COMPILER_RVALUE_REFS
+   blog(blog && other) Q_DECL_NOEXCEPT;
+   blog & operator=(blog && other) Q_DECL_NOEXCEPT;
+#endif <span class="comment">// Q_COMPILER_RVALUE_REFS</span></font>
+
+   <span class="type">long</span> id() <span class="keyword">const</span>;
+   <span class="type">QString</span> text() <span class="keyword">const</span>;
+   <span class="type">QDateTime</span> dateCreation() <span class="keyword">const</span>;
+
+   <span class="type">void</span> setId(long l);
+   <span class="type">void</span> setText(<span class="keyword">const</span> QString & s);
+   <span class="type">void</span> setDateCreation(<span class="keyword">const</span> QDateTime & d);
+
+   std::shared_ptr&lt;author&gt; & getAuthor();
+   QList&lt; std::shared_ptr&lt;comment&gt; &gt; & listOfComments();
+   qx::QxCollection&lt;long, QSharedPointer&lt;category&gt; &gt; & listOfCategories();
+
+};
+
+QX_REGISTER_HPP_QX_BLOG(blog, qx::trait::no_base_class_defined, 0)
+
+<span class="keyword">typedef</span> std::shared_ptr&lt;blog&gt; blog_ptr;
+<span class="keyword">typedef</span> std::vector&lt;blog_ptr&gt; list_blog;
+
+<span class="pre">#endif <span class="comment">// _QX_BLOG_BLOG_H_</span></span></pre>
+           </td></tr></tbody></table>
+           <br>
+           <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
+<pre><span class="pre">#include <span class="string">"../include/precompiled.h"</span>
+
+#include <span class="string">"../include/blog.h"</span>
+#include <span class="string">"../include/author.h"</span>
+#include <span class="string">"../include/comment.h"</span>
+#include <span class="string">"../include/category.h"</span>
+
+#include <span class="string">&lt;QxOrm_Impl.h&gt;</span></span>
+
+QX_REGISTER_CPP_QX_BLOG(blog)
+
+<font style="background-color:yellow"><span class="keyword">struct</span> Q_DECL_HIDDEN blog::blog_impl
+{
+   <span class="type">long</span>           m_id;
+   <span class="type">QString</span>        m_text;
+   <span class="type">QDateTime</span>      m_dt_creation;
+   author_ptr     m_author;
+   list_comment   m_commentX;
+   list_category  m_categoryX;
+
+   blog_impl() : m_id(0) { ; }
+   ~blog_impl() { ; }
+};</font>
+
+<span class="keyword">namespace</span> qx {
+<span class="keyword">template</span> &lt;&gt; <span class="keyword">void</span> register_class(QxClass&lt;blog&gt; & t)
+{
+   <font style="background-color:yellow">IxDataMember * pImpl = t.pimpl(& blog::m_pImpl);</font>
+
+   t.id(<font style="background-color:yellow">& blog::blog_impl::m_id</font>, <span class="string">"blog_id"</span>, 0, <font style="background-color:yellow">pImpl</font>);
+
+   t.data(<font style="background-color:yellow">& blog::blog_impl::m_text</font>, <span class="string">"blog_text"</span>, 0, true, true, <font style="background-color:yellow">pImpl</font>);
+   t.data(<font style="background-color:yellow">& blog::blog_impl::m_dt_creation</font>, <span class="string">"date_creation"</span>, 0, true, true, <font style="background-color:yellow">pImpl</font>);
+
+   t.relationManyToOne(<font style="background-color:yellow">& blog::blog_impl::m_author</font>, <span class="string">"author_id"</span>, 0, <font style="background-color:yellow">pImpl</font>);
+   t.relationOneToMany(<font style="background-color:yellow">& blog::blog_impl::m_commentX</font>, <span class="string">"list_comment"</span>, <span class="string">"blog_id"</span>, 0, <font style="background-color:yellow">pImpl</font>);
+   t.relationManyToMany(<font style="background-color:yellow">& blog::blog_impl::m_categoryX</font>, <span class="string">"list_category"</span>, <span class="string">"category_blog"</span>, <span class="string">"blog_id"</span>, <span class="string">"category_id"</span>, 0, <font style="background-color:yellow">pImpl</font>);
+}}
+
+blog::blog() : <font style="background-color:yellow">m_pImpl(new blog_impl())</font> { ; }
+
+blog::~blog() { ; }
+
+<font style="background-color:yellow">blog::blog(<span class="keyword">const</span> blog & other) : m_pImpl(new blog_impl(* other.m_pImpl)) { ; }
+
+blog & blog::operator=(<span class="keyword">const</span> blog & other)
+{
+   if (this != (& other)) { (* m_pImpl) = (* other.m_pImpl); }
+   <span class="keyword">return</span> (* this);
+}
+
+#ifdef Q_COMPILER_RVALUE_REFS
+blog::blog(blog && other) Q_DECL_NOEXCEPT : m_pImpl(std::move(other.m_pImpl)) { ; }
+blog & blog::operator=(blog && other) Q_DECL_NOEXCEPT { if (this != (& other)) { m_pImpl = std::move(other.m_pImpl); }; <span class="keyword">return</span> (* this); }
+#endif <span class="comment">// Q_COMPILER_RVALUE_REFS</span></font>
+
+<span class="type">long</span> blog::id() <span class="keyword">const</span> { <span class="keyword">return</span> <font style="background-color:yellow">m_pImpl-&gt;m_id</font>; }
+
+<span class="type">QString</span> blog::text() <span class="keyword">const</span> { <span class="keyword">return</span> <font style="background-color:yellow">m_pImpl-&gt;m_text</font>; }
+
+<span class="type">QDateTime</span> blog::dateCreation() <span class="keyword">const</span> { <span class="keyword">return</span> <font style="background-color:yellow">m_pImpl-&gt;m_dt_creation</font>; }
+
+<span class="keyword">void</span> blog::setId(<span class="type">long</span> l) { <font style="background-color:yellow">m_pImpl-&gt;m_id</font> = l; }
+
+<span class="keyword">void</span> blog::setText(<span class="keyword">const</span> <span class="type">QString</span> & s) { <font style="background-color:yellow">m_pImpl-&gt;m_text</font> = s; }
+
+<span class="keyword">void</span> blog::setDateCreation(<span class="keyword">const</span> <span class="type">QDateTime</span> & d) { <font style="background-color:yellow">m_pImpl-&gt;m_dt_creation</font> = d; }
+
+std::shared_ptr&lt;author&gt; & blog::getAuthor() { <span class="keyword">return</span> <font style="background-color:yellow">m_pImpl-&gt;m_author</font>; }
+
+QList&lt; std::shared_ptr&lt;comment&gt; &gt; & blog::listOfComments() { <span class="keyword">return</span> <font style="background-color:yellow">m_pImpl-&gt;m_commentX</font>; }
+
+qx::QxCollection&lt;long, QSharedPointer&lt;category&gt; &gt; & blog::listOfCategories() { <span class="keyword">return</span> <font style="background-color:yellow">m_pImpl-&gt;m_categoryX</font>; }</pre>
+           </td></tr></tbody></table>
+           <br><br>
          </div>
          <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_460">Persister des types personnalisés</a></p>
          <div class="manual_div_content">

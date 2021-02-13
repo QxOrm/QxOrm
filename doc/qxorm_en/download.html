@@ -213,6 +213,17 @@
           <tbody>
             <tr>
               <td><i>
+<b><h2>Changes in version 1.4.8:</h2></b>
+- Support Qt6 (tested with MSVC 2019 + CMake 3.19 on Windows) ==&gt; QxOrm library is compatible with Qt4, Qt5 and Qt6<br>
+- Support PIMPL idiom for persistent classes (useful to reduce compilation times, to provide a stable ABI, ascendant compatibility for shared libraries, to reduce binaries size)<br>
+- Documentation about PIMPL idiom for persistent classes : https://www.qxorm.com/qxorm_en/manual.html#manual_455<br>
+- New sample project named qxBlogPImpl in ./test/ directory of QxOrm package to show how to implement persistent classes using the PIMPL idiom<br>
+- Possibility to ignore soft delete behavior during a session execution (useful to fetch logical deleted instances for example) : qx::QxSession::ignoreSoftDelete()<br>
+- Fix SQL DISTINCT keyword in qx::QxSqlQuery class (when DISTINCT is used, then the primary key is not fetched)<br>
+- Fix an issue which could happen after enabling _QX_ENABLE_QT_NETWORK compilation option (due to QT_NO_SSL/QT_NO_OPENSSL used in QxThread.cpp file)<br>
+- Fix an issue in qx::QxSqlDatabase and multi-thread context when a thread identifier is reused (GitHub issue #42)<br>
+- Add new behavior to qx::QxSession class with setAutoRollbackWhenDestroyed() option : if true, then database rollback is called when session instance destructor (or close() method) is invoked (instead of commit by default, GitHub issue #43)<br>
+<br>
 <b><h2>Changes in version 1.4.7:</h2></b>
 - Fix a MongoDB issue with qx::dao::fetch_by_id_with_relation() (wrong id fetched)<br>
 - Fix an issue with qx::dao::fetch_all when a custom list of columns with the primary key is used<br>
@@ -501,6 +512,13 @@ Here are all other changes of version 1.4.1:<br>
           <tbody>
             <tr>
               <td><i>
+<b><h2>Changes in version QxEntityEditor 1.2.6:</h2></b>
+- Support PIMPL (private implementation or d-pointer) idiom in the C++ export plugin<br>
+- Documentation about PIMPL idiom for persistent classes : https://www.qxorm.com/qxorm_en/manual_qxee.html#cpp_export_settings_parameters<br>
+- Fix import database schema for PostgreSQL version 12 and +<br>
+- Fix some assertions on macOS and linux versions due to libavoid library compiled without NDEBUG compilation option (should improve performance too)<br>
+- Add CMake 'target_precompile_headers' command for generated CMakeLists.txt files to support precompiled headers building with CMake (reduce compilation times)<br>
+<br>
 <b><h2>Changes in version QxEntityEditor 1.2.5:</h2></b>
 - Fix an issue with fonts on macOS Catalina 10.15<br>
 - Add command line parameter --font : define application font with syntax &lt;family&gt;||&lt;pointSize&gt;||&lt;weight&gt;||&lt;italic&gt; (only &lt;family&gt; is required), for example : Courier New||14<br>

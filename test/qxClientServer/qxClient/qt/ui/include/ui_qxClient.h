@@ -1,5 +1,5 @@
-#ifndef UI_QXCLIENT_H
-#define UI_QXCLIENT_H
+#ifndef _QX_UI_QXCLIENT_H_
+#define _QX_UI_QXCLIENT_H_
 
 #include <QtCore/qglobal.h>
 
@@ -11,4 +11,4 @@
 #include "./ui_qxClient_qt4.h"
 #endif // (QT_VERSION >= 0x050000)
 
-#endif // UI_QXCLIENT_H
+#endif // _QX_UI_QXCLIENT_H_

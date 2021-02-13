@@ -220,4 +220,7 @@ typedef std::shared_ptr<QxDaoAsync> QxDaoAsync_ptr;
 
 } // namespace qx
 
+QX_DLL_EXPORT QDataStream & operator<< (QDataStream & stream, const qx::dao::detail::QxDaoAsyncParams & t) QX_USED;
+QX_DLL_EXPORT QDataStream & operator>> (QDataStream & stream, qx::dao::detail::QxDaoAsyncParams & t) QX_USED;
+
 #endif // _QX_DAO_ASYNC_H_

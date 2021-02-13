@@ -49,13 +49,14 @@ struct Q_DECL_HIDDEN QxSession::QxSessionImpl
    bool m_bAutoOpenClose;              //!< Open and close automatically connection to database
    bool m_bIgnoreSoftDelete;           //!< Ignore soft delete behavior even if it has been defined for registered classes
    QStringList m_lstIgnoreSoftDelete;  //!< List of registered classes to ignore soft delete behavior (if empty and m_bIgnoreSoftDelete is true, then all classes are ignored)
+   bool m_bAutoRollbackWhenDestroyed;  //!< If true, then database rollback is called when this session instance destructor (or close() method) is invoked
 
    static QMutex m_mutex;                                         //!< Mutex => qx::QxSession is thread-safe
    static QHash<QString, qx::QxSession *> m_lstActiveSessions;    //!< List of active sessions by database connection name
 
-   QxSessionImpl() : m_bTransaction(false), m_bThrowable(false), m_bThrowInEvent(false), m_bAutoOpenClose(false), m_bIgnoreSoftDelete(false) { ; }
-   QxSessionImpl(const QSqlDatabase & database) : m_database(database), m_bTransaction(false), m_bThrowable(false), m_bThrowInEvent(false), m_bAutoOpenClose(false), m_bIgnoreSoftDelete(false) { ; }
-   QxSessionImpl(const QSqlDatabase & database, bool bThrowable) : m_database(database), m_bTransaction(false), m_bThrowable(bThrowable), m_bThrowInEvent(false), m_bAutoOpenClose(false), m_bIgnoreSoftDelete(false) { ; }
+   QxSessionImpl() : m_bTransaction(false), m_bThrowable(false), m_bThrowInEvent(false), m_bAutoOpenClose(false), m_bIgnoreSoftDelete(false), m_bAutoRollbackWhenDestroyed(false) { ; }
+   QxSessionImpl(const QSqlDatabase & database) : m_database(database), m_bTransaction(false), m_bThrowable(false), m_bThrowInEvent(false), m_bAutoOpenClose(false), m_bIgnoreSoftDelete(false), m_bAutoRollbackWhenDestroyed(false) { ; }
+   QxSessionImpl(const QSqlDatabase & database, bool bThrowable, bool bAutoRollbackWhenDestroyed) : m_database(database), m_bTransaction(false), m_bThrowable(bThrowable), m_bThrowInEvent(false), m_bAutoOpenClose(false), m_bIgnoreSoftDelete(false), m_bAutoRollbackWhenDestroyed(bAutoRollbackWhenDestroyed) { ; }
    ~QxSessionImpl() { ; }
 
    void appendSqlError(const QSqlError & err)
@@ -107,7 +108,7 @@ QxSession::QxSession(const QSqlDatabase & database, bool bOpenTransaction) : m_p
    if (! connectionName.isEmpty()) { QxSessionImpl::m_lstActiveSessions.insert(connectionName, this); }
 }
 
-QxSession::QxSession(const QSqlDatabase & database, bool bOpenTransaction, bool bThrowable) : m_pImpl(new QxSessionImpl(database, bThrowable))
+QxSession::QxSession(const QSqlDatabase & database, bool bOpenTransaction, bool bThrowable, bool bAutoRollbackWhenDestroyed /* = false */) : m_pImpl(new QxSessionImpl(database, bThrowable, bAutoRollbackWhenDestroyed))
 {
    if (bOpenTransaction) { open(); }
    QMutexLocker locker(& QxSessionImpl::m_mutex);
@@ -138,6 +139,10 @@ bool QxSession::isOpened() const { return m_pImpl->m_bTransaction; }
 
 bool QxSession::isValid() const { return (m_pImpl->m_lstSqlError.count() <= 0); }
 
+bool QxSession::isAutoRollbackWhenDestroyed() const { return m_pImpl->m_bAutoRollbackWhenDestroyed; }
+
+void QxSession::setAutoRollbackWhenDestroyed(bool b) { m_pImpl->m_bAutoRollbackWhenDestroyed = b; }
+
 QSqlError QxSession::firstError() const { return ((m_pImpl->m_lstSqlError.count() > 0) ? m_pImpl->m_lstSqlError.first() : QSqlError()); }
 
 QSqlError QxSession::lastError() const { return ((m_pImpl->m_lstSqlError.count() > 0) ? m_pImpl->m_lstSqlError.last() : QSqlError()); }
@@ -160,7 +165,8 @@ bool QxSession::open()
 bool QxSession::close()
 {
    bool bCloseOk = true;
-   if (m_pImpl->m_bTransaction && isValid()) { bCloseOk = commit(); }
+   if (m_pImpl->m_bTransaction && m_pImpl->m_bAutoRollbackWhenDestroyed) { bCloseOk = rollback(); }
+   else if (m_pImpl->m_bTransaction && isValid()) { bCloseOk = commit(); }
    else if (m_pImpl->m_bTransaction) { bCloseOk = rollback(); }
    if (m_pImpl->m_bAutoOpenClose) { m_pImpl->m_database.close(); m_pImpl->m_bAutoOpenClose = false; }
    return bCloseOk;

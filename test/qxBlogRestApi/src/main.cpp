@@ -353,7 +353,11 @@ int main(int argc, char * argv[])
       qx::QxRestApi api;
 
       QQuickView qmlView;
+#if (QT_VERSION >= 0x060000)
+      QString sQmlFile = "qrc:/documents/test_rest_api_qt6.qml";
+#else // (QT_VERSION >= 0x060000)
       QString sQmlFile = "qrc:/documents/test_rest_api.qml";
+#endif // (QT_VERSION >= 0x060000)
 
       qmlView.rootContext()->setContextProperty("qxRestApi", (& api));
       qmlView.setResizeMode(QQuickView::SizeRootObjectToView);
@@ -457,7 +461,11 @@ int main(int argc, char * argv[])
 #endif // QT_NO_SSL
 
       QQuickView qmlView;
+#if (QT_VERSION >= 0x060000)
+      QString sQmlFile = "qrc:/documents/test_http_server_qt6.qml";
+#else // (QT_VERSION >= 0x060000)
       QString sQmlFile = "qrc:/documents/test_http_server.qml";
+#endif // (QT_VERSION >= 0x060000)
 
       qmlView.rootContext()->setContextProperty("qxHttpServer", (& httpServer));
       qmlView.setResizeMode(QQuickView::SizeRootObjectToView);

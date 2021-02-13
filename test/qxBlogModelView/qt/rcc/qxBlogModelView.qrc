@@ -2,6 +2,8 @@
 <qresource>
    <file>documents/main.qml</file>
    <file>documents/main_qt4.qml</file>
+   <file>documents/main_qt6.qml</file>
    <file>documents/main_relationship.qml</file>
+   <file>documents/main_relationship_qt6.qml</file>
 </qresource>
 </RCC>
