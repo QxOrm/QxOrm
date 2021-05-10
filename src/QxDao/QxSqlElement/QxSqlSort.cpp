@@ -77,7 +77,7 @@ QString QxSqlSort::toString() const
    return sReturn;
 }
 
-void QxSqlSort::resolve(QSqlQuery & query) const { Q_UNUSED(query); }
+void QxSqlSort::resolve(QSqlQuery & query, qx::QxCollection<QString, QVariantList> * pLstExecBatch /* = NULL */) const { Q_UNUSED(query); Q_UNUSED(pLstExecBatch); }
 
 void QxSqlSort::postProcess(QString & sql) const { Q_UNUSED(sql); }
 

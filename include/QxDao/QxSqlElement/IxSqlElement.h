@@ -57,6 +57,8 @@
 
 #include <QtSql/qsqlquery.h>
 
+#include <QxCollection/QxCollection.h>
+
 #include <QxDao/QxSqlGenerator/IxSqlGenerator.h>
 
 #include <QxSerialize/Qt/QxSerialize_QList.h>
@@ -136,7 +138,7 @@ public:
    virtual IxSqlElement::type_class getTypeClass() const = 0;
 
    virtual QString toString() const = 0;
-   virtual void resolve(QSqlQuery & query) const = 0;
+   virtual void resolve(QSqlQuery & query, qx::QxCollection<QString, QVariantList> * pLstExecBatch = NULL) const = 0;
    virtual void postProcess(QString & sql) const = 0;
 
    virtual void clone(IxSqlElement * other);

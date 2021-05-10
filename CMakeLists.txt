@@ -31,7 +31,7 @@
 
 cmake_minimum_required(VERSION 3.1)
 
-project(QxOrm VERSION 1.4.8 LANGUAGES CXX)
+project(QxOrm VERSION 1.4.9 LANGUAGES CXX)
 
 # Include QxOrm library configuration file (should be included by all projects which depend on QxOrm)
 include(./QxOrm.cmake)

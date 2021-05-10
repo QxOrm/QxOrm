@@ -63,7 +63,7 @@ public:
    virtual ~QxSqlLimit();
 
    virtual QString toString() const;
-   virtual void resolve(QSqlQuery & query) const;
+   virtual void resolve(QSqlQuery & query, qx::QxCollection<QString, QVariantList> * pLstExecBatch = NULL) const;
    virtual void postProcess(QString & sql) const;
 
    int getStartRow() const;

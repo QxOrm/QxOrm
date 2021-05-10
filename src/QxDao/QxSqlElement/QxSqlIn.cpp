@@ -77,7 +77,7 @@ QString QxSqlIn::toString() const
    return sReturn;
 }
 
-void QxSqlIn::resolve(QSqlQuery & query) const
+void QxSqlIn::resolve(QSqlQuery & query, qx::QxCollection<QString, QVariantList> * pLstExecBatch /* = NULL */) const
 {
    if ((m_type == _in_select) || (m_type == _not_in_select)) { return; }
    qAssert((m_lstKeys.count() == 1) && (m_lstValues.count() >= 1));
@@ -86,10 +86,19 @@ void QxSqlIn::resolve(QSqlQuery & query) const
 
    for (int i = 0; i < m_lstValues.count(); i++)
    {
-      QString sCurrKey = (bQuestionMark ? QString("?") : (sKey + QString("_") + QString::number(i)));
+      QString sCurrKey = (sKey + QString("_") + QString::number(i));
       QVariant vValue(m_lstValues.at(i));
-      if (bQuestionMark) { query.addBindValue(vValue); }
-      else { query.bindValue(sCurrKey, vValue); }
+      if (pLstExecBatch)
+      {
+         if (! pLstExecBatch->exist(sCurrKey)) { QVariantList empty; pLstExecBatch->insert(sCurrKey, empty); }
+         QVariantList & values = const_cast<QVariantList &>(pLstExecBatch->getByKey(sCurrKey));
+         values.append(vValue);
+      }
+      else
+      {
+         if (bQuestionMark) { query.addBindValue(vValue); }
+         else { query.bindValue(sCurrKey, vValue); }
+      }
    }
 }
 

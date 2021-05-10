@@ -329,13 +329,13 @@ QSqlError QxDaoAsyncRunner::runQuery(qx::dao::detail::QxDaoAsyncParams_ptr pDaoP
          case qx::dao::detail::QxDaoAsyncParams::dao_fetch_by_id:       daoError = pInstance->qxFetchById(pDaoParams->id, pDaoParams->listColumns, pDaoParams->listRelations, pDatabase); break;
          case qx::dao::detail::QxDaoAsyncParams::dao_fetch_all:         daoError = pInstance->qxFetchAll(pDaoParams->pListOfInstances.get(), pDaoParams->listColumns, pDaoParams->listRelations, pDatabase); break;
          case qx::dao::detail::QxDaoAsyncParams::dao_fetch_by_query:    daoError = pInstance->qxFetchByQuery(pDaoParams->query, pDaoParams->pListOfInstances.get(), pDaoParams->listColumns, pDaoParams->listRelations, pDatabase); break;
-         case qx::dao::detail::QxDaoAsyncParams::dao_insert:            daoError = pInstance->qxInsert(pDaoParams->listRelations, pDatabase); break;
-         case qx::dao::detail::QxDaoAsyncParams::dao_update:            daoError = pInstance->qxUpdate(pDaoParams->query, pDaoParams->listColumns, pDaoParams->listRelations, pDatabase); break;
+         case qx::dao::detail::QxDaoAsyncParams::dao_insert:            daoError = pInstance->qxInsert(pDaoParams->listRelations, pDatabase, pDaoParams->useExecBatch); break;
+         case qx::dao::detail::QxDaoAsyncParams::dao_update:            daoError = pInstance->qxUpdate(pDaoParams->query, pDaoParams->listColumns, pDaoParams->listRelations, pDatabase, pDaoParams->useExecBatch); break;
          case qx::dao::detail::QxDaoAsyncParams::dao_save:              daoError = pInstance->qxSave(pDaoParams->listRelations, pDatabase); break;
-         case qx::dao::detail::QxDaoAsyncParams::dao_delete_by_id:      daoError = pInstance->qxDeleteById(pDaoParams->id, pDatabase); break;
+         case qx::dao::detail::QxDaoAsyncParams::dao_delete_by_id:      daoError = pInstance->qxDeleteById(pDaoParams->id, pDatabase, pDaoParams->useExecBatch); break;
          case qx::dao::detail::QxDaoAsyncParams::dao_delete_all:        daoError = pInstance->qxDeleteAll(pDatabase); break;
          case qx::dao::detail::QxDaoAsyncParams::dao_delete_by_query:   daoError = pInstance->qxDeleteByQuery(pDaoParams->query, pDatabase); break;
-         case qx::dao::detail::QxDaoAsyncParams::dao_destroy_by_id:     daoError = pInstance->qxDestroyById(pDaoParams->id, pDatabase); break;
+         case qx::dao::detail::QxDaoAsyncParams::dao_destroy_by_id:     daoError = pInstance->qxDestroyById(pDaoParams->id, pDatabase, pDaoParams->useExecBatch); break;
          case qx::dao::detail::QxDaoAsyncParams::dao_destroy_all:       daoError = pInstance->qxDestroyAll(pDatabase); break;
          case qx::dao::detail::QxDaoAsyncParams::dao_destroy_by_query:  daoError = pInstance->qxDestroyByQuery(pDaoParams->query, pDatabase); break;
          case qx::dao::detail::QxDaoAsyncParams::dao_execute_query:     daoError = pInstance->qxExecuteQuery(pDaoParams->query, pDaoParams->pListOfInstances.get(), pDatabase); break;

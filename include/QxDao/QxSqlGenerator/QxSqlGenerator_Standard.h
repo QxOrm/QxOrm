@@ -68,7 +68,7 @@ public:
    virtual QString getWildCard() const;
    virtual QString getTableAliasSep() const;
    virtual QString getLimit(const QxSqlLimit * pLimit) const;
-   virtual void resolveLimit(QSqlQuery & query, const QxSqlLimit * pLimit) const;
+   virtual void resolveLimit(QSqlQuery & query, const QxSqlLimit * pLimit, qx::QxCollection<QString, QVariantList> * pLstExecBatch = NULL) const;
    virtual void postProcess(QString & sql, const QxSqlLimit * pLimit) const;
    virtual void onBeforeInsert(IxDao_Helper * pDaoHelper, void * pOwner) const;
    virtual void onAfterInsert(IxDao_Helper * pDaoHelper, void * pOwner) const;

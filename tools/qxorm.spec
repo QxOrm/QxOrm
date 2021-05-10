@@ -1,4 +1,4 @@
-%define version 1.4.8
+%define version 1.4.9
 
 Name: QxOrm
 Version: %{version}

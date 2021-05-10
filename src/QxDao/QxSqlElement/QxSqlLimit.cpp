@@ -55,10 +55,10 @@ QString QxSqlLimit::toString() const
    return m_pSqlGenerator->getLimit(this);
 }
 
-void QxSqlLimit::resolve(QSqlQuery & query) const
+void QxSqlLimit::resolve(QSqlQuery & query, qx::QxCollection<QString, QVariantList> * pLstExecBatch /* = NULL */) const
 {
    if (! m_pSqlGenerator) { qAssert(false); return; }
-   m_pSqlGenerator->resolveLimit(query, this);
+   m_pSqlGenerator->resolveLimit(query, this, pLstExecBatch);
 }
 
 void QxSqlLimit::postProcess(QString & sql) const

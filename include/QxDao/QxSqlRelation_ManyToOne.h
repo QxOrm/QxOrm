@@ -177,7 +177,7 @@ public:
       QSqlQuery & query = params.query();
       typename QxSqlRelation<DataType, Owner>::type_owner & currOwner = this->getOwner(params);
       IxDataMember * pData = this->getDataMember(); qAssert(pData);
-      if (pData) { pData->setSqlPlaceHolder(query, (& currOwner)); }
+      if (pData) { pData->setSqlPlaceHolder(query, (& currOwner), "", "", false, params.getLstExecBatch()); }
    }
 
 };

@@ -146,20 +146,20 @@ public:
    }
 
    template <class U>
-   QSqlError insert(U & u, const QStringList & relation = QStringList())
+   QSqlError insert(U & u, const QStringList & relation = QStringList(), bool bUseExecBatch = false)
    {
       QSqlError err;
-      if (relation.count() == 0) { err = qx::dao::insert(u, this->database()); }
+      if (relation.count() == 0) { err = qx::dao::insert(u, this->database(), bUseExecBatch); }
       else { err = qx::dao::insert_with_relation(relation, u, this->database()); }
       if (err.isValid() && m_pSession) { (* m_pSession) += err; }
       return err;
    }
 
    template <class U>
-   QSqlError update(U & u, const qx::QxSqlQuery & query = qx::QxSqlQuery(), const QStringList & columns = QStringList(), const QStringList & relation = QStringList())
+   QSqlError update(U & u, const qx::QxSqlQuery & query = qx::QxSqlQuery(), const QStringList & columns = QStringList(), const QStringList & relation = QStringList(), bool bUseExecBatch = false)
    {
       QSqlError err;
-      if (relation.count() == 0) { err = qx::dao::update_by_query(query, u, this->database(), columns); }
+      if (relation.count() == 0) { err = qx::dao::update_by_query(query, u, this->database(), columns, bUseExecBatch); }
       else { err = qx::dao::update_by_query_with_relation(relation, query, u, this->database()); }
       if (err.isValid() && m_pSession) { (* m_pSession) += err; }
       return err;
@@ -188,9 +188,9 @@ public:
    }
 
    template <class U>
-   QSqlError deleteById(U & u)
+   QSqlError deleteById(U & u, bool bUseExecBatch = false)
    {
-      QSqlError err = qx::dao::delete_by_id(u, this->database());
+      QSqlError err = qx::dao::delete_by_id(u, this->database(), bUseExecBatch);
       if (err.isValid() && m_pSession) { (* m_pSession) += err; }
       return err;
    }
@@ -222,9 +222,9 @@ public:
    }
 
    template <class U>
-   QSqlError destroyById(U & u)
+   QSqlError destroyById(U & u, bool bUseExecBatch = false)
    {
-      QSqlError err = qx::dao::destroy_by_id(u, this->database());
+      QSqlError err = qx::dao::destroy_by_id(u, this->database(), bUseExecBatch);
       if (err.isValid() && m_pSession) { (* m_pSession) += err; }
       return err;
    }

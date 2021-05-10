@@ -37,8 +37,9 @@ template <class T>
 struct QxDao_Insert_Generic
 {
 
-   static QSqlError insert(T & t, QSqlDatabase * pDatabase)
+   static QSqlError insert(T & t, QSqlDatabase * pDatabase, bool bUseExecBatch)
    {
+      Q_UNUSED(bUseExecBatch); // Useful only with containers
       qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "insert", new qx::QxSqlQueryBuilder_Insert<T>());
       if (! dao.isValid()) { return dao.error(); }
       if (dao.isReadOnly()) { return dao.errReadOnly(); }
@@ -84,7 +85,7 @@ template <class T>
 struct QxDao_Insert_Container
 {
 
-   static QSqlError insert(T & t, QSqlDatabase * pDatabase)
+   static QSqlError insert(T & t, QSqlDatabase * pDatabase, bool bUseExecBatch)
    {
       typedef typename qx::trait::generic_container<T>::type_value_qx type_item;
 
@@ -93,6 +94,7 @@ struct QxDao_Insert_Container
       if (! dao.isValid()) { return dao.error(); }
       if (dao.isReadOnly()) { return dao.errReadOnly(); }
       if (! dao.validateInstance(t)) { return dao.error(); }
+      dao.setUseExecBatch(bUseExecBatch);
 
 #ifdef _QX_ENABLE_MONGODB
       if (dao.isMongoDB())
@@ -116,6 +118,7 @@ struct QxDao_Insert_Container
       for (typename T::iterator it = t.begin(); it != t.end(); ++it)
       { if (! insertItem((* it), dao)) { return dao.error(); } }
 
+      if (bUseExecBatch && (! dao.exec())) { return dao.errFailed(); }
       return dao.error();
    }
 
@@ -194,6 +197,7 @@ private:
             qx::dao::detail::QxSqlQueryHelper_Insert<U>::resolveInput(item, dao.query(), dao.builder());
          }
 
+         if (dao.getUseExecBatch()) { return dao.isValid(); }
          if (! dao.exec(true)) { dao.errFailed(); return false; }
          dao.updateLastInsertId(item);
          if (pSqlGenerator) { pSqlGenerator->onAfterInsert((& dao), (& item)); }
@@ -209,8 +213,8 @@ template <class T>
 struct QxDao_Insert_Ptr
 {
 
-   static inline QSqlError insert(T & t, QSqlDatabase * pDatabase)
-   { return (t ? qx::dao::insert((* t), pDatabase) : QSqlError()); }
+   static inline QSqlError insert(T & t, QSqlDatabase * pDatabase, bool bUseExecBatch)
+   { return (t ? qx::dao::insert((* t), pDatabase, bUseExecBatch) : QSqlError()); }
 
 };
 
@@ -218,13 +222,13 @@ template <class T>
 struct QxDao_Insert
 {
 
-   static inline QSqlError insert(T & t, QSqlDatabase * pDatabase)
+   static inline QSqlError insert(T & t, QSqlDatabase * pDatabase, bool bUseExecBatch = false)
    {
       typedef typename std::conditional< std::is_pointer<T>::value, qx::dao::detail::QxDao_Insert_Ptr<T>, qx::dao::detail::QxDao_Insert_Generic<T> >::type type_dao_1;
       typedef typename std::conditional< qx::trait::is_smart_ptr<T>::value, qx::dao::detail::QxDao_Insert_Ptr<T>, type_dao_1 >::type type_dao_2;
       typedef typename std::conditional< qx::trait::is_container<T>::value, qx::dao::detail::QxDao_Insert_Container<T>, type_dao_2 >::type type_dao_3;
 
-      QSqlError error = type_dao_3::insert(t, pDatabase);
+      QSqlError error = type_dao_3::insert(t, pDatabase, bUseExecBatch);
       if (! error.isValid()) { qx::dao::detail::QxDao_Keep_Original<T>::backup(t); }
       return error;
    }

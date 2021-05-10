@@ -59,7 +59,7 @@
 m_timeTotal(0), m_timeExec(0), m_timeNext(0), m_timePrepare(0), m_timeBuildHierarchy(0), m_timeBuildCppInstance(0), m_timeReadCppInstance(0), \
 m_timeBuildSql(0), m_timeOpen(0), m_timeTransaction(0), m_nextCount(0), m_lDataCount(0), m_bTransaction(false), m_bQuiet(false), m_bTraceQuery(true), \
 m_bTraceRecord(false), m_bCartesianProduct(false), m_bValidatorThrowable(false), m_bNeedToClearDatabaseByThread(false), \
-m_bMongoDB(false), m_bDisplayTimerDetails(false), m_pDataMemberX(NULL), m_pDataId(NULL), m_pSqlGenerator(NULL), m_pSession(NULL)
+m_bMongoDB(false), m_bDisplayTimerDetails(false), m_bUseExecBatch(false), m_pDataMemberX(NULL), m_pDataId(NULL), m_pSqlGenerator(NULL), m_pSession(NULL)
 
 #if (QT_VERSION >= 0x040800)
 #define QX_DAO_TIMER_ELAPSED(timer) timer.nsecsElapsed()
@@ -111,15 +111,17 @@ struct Q_DECL_HIDDEN IxDao_Helper::IxDao_HelperImpl
    bool           m_bMongoDB;                         //!< Current database context is a MongoDB database
    QStringList    m_lstItemsAsJson;                   //!< List of items to insert/update/delete as JSON (used for MongoDB database)
    bool           m_bDisplayTimerDetails;             //!< Display in logs all timers details (exec(), next(), prepare(), open(), etc...)
+   bool           m_bUseExecBatch;                    //!< If true then use the QSqlQuery::execBatch() method to improve performance inserting/updating/deleting a list of instances to database (but doesn't fill the last inserted identifier in the C++ instances)
 
-   qx::IxSqlQueryBuilder_ptr     m_pQueryBuilder;        //!< Sql query builder
-   qx::IxDataMemberX *           m_pDataMemberX;         //!< Collection of data member
-   qx::IxDataMember *            m_pDataId;              //!< Data member id
-   qx::QxSqlQuery                m_qxQuery;              //!< Query sql with place-holder
-   IxSqlGenerator *              m_pSqlGenerator;        //!< SQL generator to build SQL query specific for each database
-   qx::QxInvalidValueX           m_lstInvalidValues;     //!< List of invalid values using validator engine
-   qx::QxSqlRelationLinked_ptr   m_pSqlRelationLinked;   //!< List of relation linked to build a hierarchy of relationships
-   qx::QxSession *               m_pSession;             //!< Current active session
+   qx::IxSqlQueryBuilder_ptr                 m_pQueryBuilder;        //!< Sql query builder
+   qx::IxDataMemberX *                       m_pDataMemberX;         //!< Collection of data member
+   qx::IxDataMember *                        m_pDataId;              //!< Data member id
+   qx::QxSqlQuery                            m_qxQuery;              //!< Query sql with place-holder
+   IxSqlGenerator *                          m_pSqlGenerator;        //!< SQL generator to build SQL query specific for each database
+   qx::QxInvalidValueX                       m_lstInvalidValues;     //!< List of invalid values using validator engine
+   qx::QxSqlRelationLinked_ptr               m_pSqlRelationLinked;   //!< List of relation linked to build a hierarchy of relationships
+   qx::QxSession *                           m_pSession;             //!< Current active session
+   qx::QxCollection<QString, QVariantList>   m_lstExecBatch;         //!< List of data to send to database when QSqlQuery::execBatch() method is used
 
    IxDao_HelperImpl(qx::IxSqlQueryBuilder * pBuilder, const qx::QxSqlQuery * pQuery) : QX_CONSTRUCT_IX_DAO_HELPER() { m_pQueryBuilder.reset(pBuilder); if (pQuery) { m_qxQuery = (* pQuery); } }
    ~IxDao_HelperImpl() { ; }
@@ -174,6 +176,12 @@ QStringList IxDao_Helper::getSqlColumns() const { return m_pImpl->m_lstColumns; 
 
 void IxDao_Helper::setSqlColumns(const QStringList & lst) { m_pImpl->m_lstColumns = lst; }
 
+bool IxDao_Helper::getUseExecBatch() const { return m_pImpl->m_bUseExecBatch; }
+
+void IxDao_Helper::setUseExecBatch(bool b) { m_pImpl->m_bUseExecBatch = b; }
+
+qx::QxCollection<QString, QVariantList> & IxDao_Helper::getListExecBatch() { return m_pImpl->m_lstExecBatch; }
+
 IxSqlGenerator * IxDao_Helper::getSqlGenerator() const { return m_pImpl->m_pSqlGenerator; }
 
 void IxDao_Helper::quiet() { m_pImpl->m_bQuiet = true; }
@@ -190,7 +198,17 @@ bool IxDao_Helper::exec(bool bForceEmptyExec /* = false */)
 {
    bool bExec = false;
    IxDao_Timer timer(this, IxDao_Helper::timer_db_exec);
-   if ((m_pImpl->m_qxQuery.isEmpty()) && (! bForceEmptyExec)) { bExec = this->query().exec(this->builder().getSqlQuery()); }
+   if (m_pImpl->m_bUseExecBatch)
+   {
+      bool bQuestionMark = (qx::QxSqlDatabase::getSingleton()->getSqlPlaceHolderStyle() == qx::QxSqlDatabase::ph_style_question_mark);
+      for (long l = 0; l < m_pImpl->m_lstExecBatch.size(); ++l)
+      {
+         if (bQuestionMark) { this->query().addBindValue(m_pImpl->m_lstExecBatch.getByIndex(l)); }
+         else { this->query().bindValue(m_pImpl->m_lstExecBatch.getKeyByIndex(l), m_pImpl->m_lstExecBatch.getByIndex(l)); }
+      }
+      bExec = this->query().execBatch();
+   }
+   else if ((m_pImpl->m_qxQuery.isEmpty()) && (! bForceEmptyExec)) { bExec = this->query().exec(this->builder().getSqlQuery()); }
    else { bExec = this->query().exec(); }
    return bExec;
 }
@@ -201,6 +219,8 @@ bool IxDao_Helper::prepare(QString & sql)
    IxDao_Timer timer(this, IxDao_Helper::timer_db_prepare);
    if (m_pImpl->m_pSqlGenerator) { m_pImpl->m_pSqlGenerator->onBeforeSqlPrepare(this, sql); }
    if (sqlTemp != sql) { qDebug("[QxOrm] SQL query has been changed by SQL generator (onBeforeSqlPrepare) :\n   - before : '%s'\n   - after : '%s'", qPrintable(sqlTemp), qPrintable(sql)); }
+   sqlTemp = sql; m_pImpl->m_qxQuery.onBeforeSqlPrepare(sql);
+   if (sqlTemp != sql) { qDebug("[QxOrm] SQL query has been changed by qx::QxSqlQuery (onBeforeSqlPrepare) :\n   - before : '%s'\n   - after : '%s'", qPrintable(sqlTemp), qPrintable(sql)); }
    return this->query().prepare(sql);
 }
 
@@ -299,6 +319,12 @@ void IxDao_Helper::dumpRecord() const
    { v = record.value(i); sDump += (v.isNull() ? QString("NULL") : v.toString()) + QString("|"); }
    sDump = sDump.left(sDump.count() - 1); // Remove last "|"
    qDebug("[QxOrm] dump sql record : %s", qPrintable(sDump));
+}
+
+void IxDao_Helper::resolveQuery()
+{
+   if (m_pImpl->m_qxQuery.isEmpty()) { return; }
+   m_pImpl->m_qxQuery.resolve(m_pImpl->m_query, (m_pImpl->m_bUseExecBatch ? (& m_pImpl->m_lstExecBatch) : NULL));
 }
 
 void IxDao_Helper::timerStart(IxDao_Helper::timer_type timer)

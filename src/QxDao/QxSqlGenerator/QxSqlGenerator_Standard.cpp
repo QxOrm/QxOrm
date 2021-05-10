@@ -62,15 +62,28 @@ QString QxSqlGenerator_Standard::getLimit(const QxSqlLimit * pLimit) const
    return ("LIMIT " + sRowsCount + " OFFSET " + sStartRow);
 }
 
-void QxSqlGenerator_Standard::resolveLimit(QSqlQuery & query, const QxSqlLimit * pLimit) const
+void QxSqlGenerator_Standard::resolveLimit(QSqlQuery & query, const QxSqlLimit * pLimit, qx::QxCollection<QString, QVariantList> * pLstExecBatch /* = NULL */) const
 {
    if (! pLimit) { qAssert(false); return; }
    QString sStartRow = pLimit->getStartRow_ParamKey();
    QString sRowsCount = pLimit->getRowsCount_ParamKey();
    int iStartRow(pLimit->getStartRow()), iRowsCount(pLimit->getRowsCount());
    bool bQuestionMark = (qx::QxSqlDatabase::getSingleton()->getSqlPlaceHolderStyle() == qx::QxSqlDatabase::ph_style_question_mark);
-   if (bQuestionMark) { query.addBindValue(iRowsCount); query.addBindValue(iStartRow); }
-   else { query.bindValue(sRowsCount, iRowsCount); query.bindValue(sStartRow, iStartRow); }
+
+   if (pLstExecBatch)
+   {
+      if (! pLstExecBatch->exist(sRowsCount)) { QVariantList empty; pLstExecBatch->insert(sRowsCount, empty); }
+      if (! pLstExecBatch->exist(sStartRow)) { QVariantList empty; pLstExecBatch->insert(sStartRow, empty); }
+      QVariantList & valuesRowsCount = const_cast<QVariantList &>(pLstExecBatch->getByKey(sRowsCount));
+      QVariantList & valuesStartRow = const_cast<QVariantList &>(pLstExecBatch->getByKey(sStartRow));
+      valuesRowsCount.append(iRowsCount);
+      valuesStartRow.append(iStartRow);
+   }
+   else
+   {
+      if (bQuestionMark) { query.addBindValue(iRowsCount); query.addBindValue(iStartRow); }
+      else { query.bindValue(sRowsCount, iRowsCount); query.bindValue(sStartRow, iStartRow); }
+   }
 }
 
 void QxSqlGenerator_Standard::postProcess(QString & sql, const QxSqlLimit * pLimit) const { Q_UNUSED(sql); Q_UNUSED(pLimit); }

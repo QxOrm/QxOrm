@@ -452,20 +452,28 @@ QString IxDataMember::getSqlPlaceHolder(const QString & sAppend /* = QString() *
    return sResult;
 }
 
-void IxDataMember::setSqlPlaceHolder(QSqlQuery & query, void * pOwner, const QString & sAppend /* = QString() */, const QString & sOtherName /* = QString() */, bool bCheckFKPartOfPK /* = false */) const
+void IxDataMember::setSqlPlaceHolder(QSqlQuery & query, void * pOwner, const QString & sAppend /* = QString() */, const QString & sOtherName /* = QString() */, bool bCheckFKPartOfPK /* = false */, qx::QxCollection<QString, QVariantList> * pLstExecBatch /* = NULL */) const
 {
    int iIndexNameFK = 0;
    IxSqlRelation * pRelation = NULL;
+   bool bQuestionMark = (qx::QxSqlDatabase::getSingleton()->getSqlPlaceHolderStyle() == qx::QxSqlDatabase::ph_style_question_mark);
 
    for (int i = 0; i < m_pImpl->m_lstNames.count(); i++)
    {
       if (bCheckFKPartOfPK && m_pImpl->m_bIsPrimaryKey && isThereRelationPartOfPrimaryKey(i, pRelation, iIndexNameFK)) { continue; }
-      switch (QxSqlDatabase::getSingleton()->getSqlPlaceHolderStyle())
+      QString key = (bQuestionMark ? QString() : getSqlPlaceHolder(sAppend, i, "", sOtherName));
+      QVariant val = toVariant(pOwner, i, qx::cvt::context::e_database);
+      if (pLstExecBatch)
       {
-         case QxSqlDatabase::ph_style_question_mark:  query.addBindValue(toVariant(pOwner, i, qx::cvt::context::e_database));                                                 break;
-         case QxSqlDatabase::ph_style_2_point_name:   query.bindValue(getSqlPlaceHolder(sAppend, i, "", sOtherName), toVariant(pOwner, i, qx::cvt::context::e_database));     break;
-         case QxSqlDatabase::ph_style_at_name:        query.bindValue(getSqlPlaceHolder(sAppend, i, "", sOtherName), toVariant(pOwner, i, qx::cvt::context::e_database));     break;
-         default:                                     query.bindValue(getSqlPlaceHolder(sAppend, i, "", sOtherName), toVariant(pOwner, i, qx::cvt::context::e_database));     break;
+         if (bQuestionMark) { key = getName(i, sOtherName); }
+         if (! pLstExecBatch->exist(key)) { QVariantList empty; pLstExecBatch->insert(key, empty); }
+         QVariantList & values = const_cast<QVariantList &>(pLstExecBatch->getByKey(key));
+         values.append(val);
+      }
+      else
+      {
+         if (bQuestionMark) { query.addBindValue(val); }
+         else { query.bindValue(key, val); }
       }
    }
 }

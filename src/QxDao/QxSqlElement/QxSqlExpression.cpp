@@ -64,7 +64,7 @@ QString QxSqlExpression::toString() const
    return sReturn;
 }
 
-void QxSqlExpression::resolve(QSqlQuery & query) const { Q_UNUSED(query); }
+void QxSqlExpression::resolve(QSqlQuery & query, qx::QxCollection<QString, QVariantList> * pLstExecBatch /* = NULL */) const { Q_UNUSED(query); Q_UNUSED(pLstExecBatch); }
 
 void QxSqlExpression::postProcess(QString & sql) const { Q_UNUSED(sql); }
 

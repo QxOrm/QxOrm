@@ -554,9 +554,11 @@ void IxSqlQueryBuilder::resolveInput_Insert(void * t, QSqlQuery & query, IxSqlQu
    qx::IxDataMember * p = NULL;
    qx::IxDataMember * pId = builder.getDataId();
    qx::IxSqlRelation * pRelation = NULL;
-   qx::QxSqlRelationParams params(0, 0, NULL, (& builder), (& query), t);
-   if (pId && ! pId->getAutoIncrement()) { pId->setSqlPlaceHolder(query, t, "", "", true); }
-   while ((p = builder.nextData(l1))) { p->setSqlPlaceHolder(query, t); }
+   bool bUseExecBatch = (builder.getDaoHelper() ? builder.getDaoHelper()->getUseExecBatch() : false);
+   qx::QxCollection<QString, QVariantList> * pLstExecBatch = (bUseExecBatch ? (& builder.getDaoHelper()->getListExecBatch()) : NULL);
+   qx::QxSqlRelationParams params(0, 0, NULL, (& builder), (& query), t, QVariant(), pLstExecBatch);
+   if (pId && ! pId->getAutoIncrement()) { pId->setSqlPlaceHolder(query, t, "", "", true, pLstExecBatch); }
+   while ((p = builder.nextData(l1))) { p->setSqlPlaceHolder(query, t, "", "", false, pLstExecBatch); }
    while ((pRelation = builder.nextRelation(l2))) { params.setIndex(l2); pRelation->lazyInsert_ResolveInput(params); }
 }
 
@@ -566,12 +568,14 @@ void IxSqlQueryBuilder::resolveInput_Update(void * t, QSqlQuery & query, IxSqlQu
    qx::IxDataMember * p = NULL;
    qx::IxDataMember * pId = builder.getDataId(); qAssert(pId);
    qx::IxSqlRelation * pRelation = NULL;
-   qx::QxSqlRelationParams params(0, 0, NULL, (& builder), (& query), t);
+   bool bUseExecBatch = (builder.getDaoHelper() ? builder.getDaoHelper()->getUseExecBatch() : false);
+   qx::QxCollection<QString, QVariantList> * pLstExecBatch = (bUseExecBatch ? (& builder.getDaoHelper()->getListExecBatch()) : NULL);
+   qx::QxSqlRelationParams params(0, 0, NULL, (& builder), (& query), t, QVariant(), pLstExecBatch);
    if (! pId->getAutoIncrement() || (pId->getAutoIncrement() && builder.getAddAutoIncrementIdToUpdateQuery()))
-   { pId->setSqlPlaceHolder(query, t, "", "", true); }
-   while ((p = builder.nextData(l1))) { p->setSqlPlaceHolder(query, t); }
+   { pId->setSqlPlaceHolder(query, t, "", "", true, pLstExecBatch); }
+   while ((p = builder.nextData(l1))) { p->setSqlPlaceHolder(query, t, "", "", false, pLstExecBatch); }
    while ((pRelation = builder.nextRelation(l2))) { params.setIndex(l2); pRelation->lazyUpdate_ResolveInput(params); }
-   pId->setSqlPlaceHolder(query, t, "_bis");
+   pId->setSqlPlaceHolder(query, t, "_bis", "", false, pLstExecBatch);
 }
 
 void IxSqlQueryBuilder::resolveInput_Update(void * t, QSqlQuery & query, IxSqlQueryBuilder & builder, const QStringList & columns)
@@ -579,11 +583,21 @@ void IxSqlQueryBuilder::resolveInput_Update(void * t, QSqlQuery & query, IxSqlQu
    qx::IxDataMember * p = NULL;
    qx::IxDataMember * pId = builder.getDataId(); qAssert(pId);
    qx::IxDataMemberX * pDataMemberX = builder.getDataMemberX(); qAssert(pDataMemberX);
+   bool bUseExecBatch = (builder.getDaoHelper() ? builder.getDaoHelper()->getUseExecBatch() : false);
+   qx::QxCollection<QString, QVariantList> * pLstExecBatch = (bUseExecBatch ? (& builder.getDaoHelper()->getListExecBatch()) : NULL);
    if (! pId->getAutoIncrement() || (pId->getAutoIncrement() && builder.getAddAutoIncrementIdToUpdateQuery()))
-   { pId->setSqlPlaceHolder(query, t); }
+   { pId->setSqlPlaceHolder(query, t, "", "", false, pLstExecBatch); }
    for (int i = 0; i < columns.count(); i++)
-   { p = pDataMemberX->get_WithDaoStrategy(columns.at(i)); if (p && (p != pId)) { p->setSqlPlaceHolder(query, t); } }
-   pId->setSqlPlaceHolder(query, t, "_bis");
+   { p = pDataMemberX->get_WithDaoStrategy(columns.at(i)); if (p && (p != pId)) { p->setSqlPlaceHolder(query, t, "", "", false, pLstExecBatch); } }
+   pId->setSqlPlaceHolder(query, t, "_bis", "", false, pLstExecBatch);
+}
+
+void IxSqlQueryBuilder::resolveInput_DeleteById(void * t, QSqlQuery & query, IxSqlQueryBuilder & builder)
+{
+   qx::IxDataMember * pId = builder.getDataId(); qAssert(pId);
+   bool bUseExecBatch = (builder.getDaoHelper() ? builder.getDaoHelper()->getUseExecBatch() : false);
+   qx::QxCollection<QString, QVariantList> * pLstExecBatch = (bUseExecBatch ? (& builder.getDaoHelper()->getListExecBatch()) : NULL);
+   pId->setSqlPlaceHolder(query, t, "", "", false, pLstExecBatch);
 }
 
 } // namespace qx

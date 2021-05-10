@@ -157,11 +157,11 @@ bool IxModel::qxFetchByQuery_(const QString & sQuery, const QStringList & relati
 
 bool IxModel::qxFetchRow_(int row, const QStringList & relation /* = QStringList() */) { return (! qxFetchRow(row, relation, database(NULL)).isValid()); }
 
-bool IxModel::qxInsert_(const QStringList & relation /* = QStringList() */) { return (! qxInsert(relation, database(NULL)).isValid()); }
+bool IxModel::qxInsert_(const QStringList & relation /* = QStringList() */, bool bUseExecBatch /* = false */) { return (! qxInsert(relation, database(NULL), bUseExecBatch).isValid()); }
 
 bool IxModel::qxInsertRow_(int row, const QStringList & relation /* = QStringList() */) { return (! qxInsertRow(row, relation, database(NULL)).isValid()); }
 
-bool IxModel::qxUpdate_(const QString & sQuery, const QStringList & relation /* = QStringList() */) { qx_query query(sQuery); return (! qxUpdate(query, relation, database(NULL)).isValid()); }
+bool IxModel::qxUpdate_(const QString & sQuery, const QStringList & relation /* = QStringList() */, bool bUseExecBatch /* = false */) { qx_query query(sQuery); return (! qxUpdate(query, relation, database(NULL), bUseExecBatch).isValid()); }
 
 bool IxModel::qxUpdateRow_(int row, const QString & sQuery, const QStringList & relation /* = QStringList() */) { qx_query query(sQuery); return (! qxUpdateRow(row, query, relation, database(NULL)).isValid()); }
 

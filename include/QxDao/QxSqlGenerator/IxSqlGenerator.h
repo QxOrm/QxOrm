@@ -45,6 +45,8 @@
 
 #include <QtSql/qsqlquery.h>
 
+#include <QxCollection/QxCollection.h>
+
 namespace qx {
 namespace dao {
 namespace detail {
@@ -79,7 +81,7 @@ public:
    virtual QString getWildCard() const = 0;
    virtual QString getTableAliasSep() const = 0;
    virtual QString getLimit(const QxSqlLimit * pLimit) const = 0;
-   virtual void resolveLimit(QSqlQuery & query, const QxSqlLimit * pLimit) const = 0;
+   virtual void resolveLimit(QSqlQuery & query, const QxSqlLimit * pLimit, qx::QxCollection<QString, QVariantList> * pLstExecBatch = NULL) const = 0;
    virtual void postProcess(QString & sql, const QxSqlLimit * pLimit) const = 0;
    virtual void onBeforeInsert(IxDao_Helper * pDaoHelper, void * pOwner) const = 0;
    virtual void onAfterInsert(IxDao_Helper * pDaoHelper, void * pOwner) const = 0;

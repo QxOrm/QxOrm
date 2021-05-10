@@ -83,7 +83,7 @@ QString QxSqlEmbedQuery::toString() const
    return result;
 }
 
-void QxSqlEmbedQuery::resolve(QSqlQuery & query) const { m_pImpl->m_query.resolve(query); }
+void QxSqlEmbedQuery::resolve(QSqlQuery & query, qx::QxCollection<QString, QVariantList> * pLstExecBatch /* = NULL */) const { m_pImpl->m_query.resolve(query, pLstExecBatch); }
 
 void QxSqlEmbedQuery::postProcess(QString & sql) const { Q_UNUSED(sql); }
 

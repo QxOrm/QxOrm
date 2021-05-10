@@ -159,9 +159,9 @@ public:
       return this->m_lastError;
    }
 
-   virtual QSqlError qxInsert(const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL)
+   virtual QSqlError qxInsert(const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL, bool bUseExecBatch = false)
    {
-      Q_UNUSED(pDatabase);
+      Q_UNUSED(pDatabase); Q_UNUSED(bUseExecBatch);
       if (relation.count() > 0) { this->syncAllNestedModel(relation); }
 
       type_collection_ptr tmp = std::make_shared<type_collection>();
@@ -188,9 +188,9 @@ public:
       return this->m_lastError;
    }
 
-   virtual QSqlError qxUpdate(const qx::QxSqlQuery & query = qx::QxSqlQuery(), const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL)
+   virtual QSqlError qxUpdate(const qx::QxSqlQuery & query = qx::QxSqlQuery(), const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL, bool bUseExecBatch = false)
    {
-      Q_UNUSED(pDatabase);
+      Q_UNUSED(pDatabase); Q_UNUSED(bUseExecBatch);
       if (relation.count() > 0) { this->syncAllNestedModel(relation); }
 
       type_collection_ptr tmp = std::make_shared<type_collection>();

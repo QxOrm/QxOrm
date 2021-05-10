@@ -115,18 +115,18 @@ public:
       return err;
    }
 
-   virtual QSqlError qxInsert(const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL)
+   virtual QSqlError qxInsert(const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL, bool bUseExecBatch = false)
    {
       QSqlError err;
-      if (relation.count() == 0) { err = qx::dao::insert(m_list, pDatabase); }
+      if (relation.count() == 0) { err = qx::dao::insert(m_list, pDatabase, bUseExecBatch); }
       else { err = qx::dao::insert_with_relation(relation, m_list, pDatabase); }
       return err;
    }
 
-   virtual QSqlError qxUpdate(const qx::QxSqlQuery & query = qx::QxSqlQuery(), const QStringList & columns = QStringList(), const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL)
+   virtual QSqlError qxUpdate(const qx::QxSqlQuery & query = qx::QxSqlQuery(), const QStringList & columns = QStringList(), const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL, bool bUseExecBatch = false)
    {
       QSqlError err;
-      if (relation.count() == 0) { err = qx::dao::update_by_query(query, m_list, pDatabase, columns); }
+      if (relation.count() == 0) { err = qx::dao::update_by_query(query, m_list, pDatabase, columns, bUseExecBatch); }
       else { err = qx::dao::update_by_query_with_relation(relation, query, m_list, pDatabase); }
       return err;
    }
@@ -140,8 +140,8 @@ public:
       return err;
    }
 
-   virtual QSqlError qxDeleteById(const QVariant & id = QVariant(), QSqlDatabase * pDatabase = NULL)
-   { Q_UNUSED(id); return qx::dao::delete_by_id(m_list, pDatabase); }
+   virtual QSqlError qxDeleteById(const QVariant & id = QVariant(), QSqlDatabase * pDatabase = NULL, bool bUseExecBatch = false)
+   { Q_UNUSED(id); return qx::dao::delete_by_id(m_list, pDatabase, bUseExecBatch); }
 
    virtual QSqlError qxDeleteAll(QSqlDatabase * pDatabase = NULL)
    { return qx::dao::delete_all<T>(pDatabase); }
@@ -149,8 +149,8 @@ public:
    virtual QSqlError qxDeleteByQuery(const qx::QxSqlQuery & query, QSqlDatabase * pDatabase = NULL)
    { return qx::dao::delete_by_query<T>(query, pDatabase); }
 
-   virtual QSqlError qxDestroyById(const QVariant & id = QVariant(), QSqlDatabase * pDatabase = NULL)
-   { Q_UNUSED(id); return qx::dao::destroy_by_id(m_list, pDatabase); }
+   virtual QSqlError qxDestroyById(const QVariant & id = QVariant(), QSqlDatabase * pDatabase = NULL, bool bUseExecBatch = false)
+   { Q_UNUSED(id); return qx::dao::destroy_by_id(m_list, pDatabase, bUseExecBatch); }
 
    virtual QSqlError qxDestroyAll(QSqlDatabase * pDatabase = NULL)
    { return qx::dao::destroy_all<T>(pDatabase); }

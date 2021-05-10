@@ -1,3 +1,6 @@
+Changes in version 1.4.9:
+- TODO...
+
 Changes in version 1.4.8:
 - Support Qt6 (tested with MSVC 2019 + CMake 3.19 on Windows) ==> QxOrm library is compatible with Qt4, Qt5 and Qt6
 - Support PIMPL idiom for persistent classes (useful to reduce compilation times, to provide a stable ABI, ascendant compatibility for shared libraries, to reduce binaries size)

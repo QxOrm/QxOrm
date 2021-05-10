@@ -46,8 +46,7 @@ struct QxSqlQueryHelper_DeleteById
    static void resolveInput(T & t, QSqlQuery & query, qx::IxSqlQueryBuilder & builder)
    {
       static_assert(qx::trait::is_qx_registered<T>::value, "qx::trait::is_qx_registered<T>::value");
-      qx::IxDataMember * pId = builder.getDataId(); qAssert(pId);
-      pId->setSqlPlaceHolder(query, (& t));
+      qx::IxSqlQueryBuilder::resolveInput_DeleteById((& t), query, builder);
    }
 
    static void resolveOutput(T & t, QSqlQuery & query, qx::IxSqlQueryBuilder & builder)

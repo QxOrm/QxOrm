@@ -160,13 +160,14 @@ public:
     * \brief Insert current instance into database
     * \param relation List of relationships keys to insert in others tables of database : use "|" separator to put many relationships keys into this parameter
     * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class
+    * \param bUseExecBatch If true then use the QSqlQuery::execBatch() method to improve performance inserting a list of instances to database (but doesn't fill the last inserted identifier in the C++ instances)
     * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
     *
     * qx::IxPersistable * p = ...;<br>
     * p->qxInsert(...) execute following SQL query :<br>
     * <i>INSERT INTO my_table (my_column_1, my_column_2, etc.) VALUES (?, ?, etc.)</i>
     */
-   virtual QSqlError qxInsert(const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL) = 0;
+   virtual QSqlError qxInsert(const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL, bool bUseExecBatch = false) = 0;
 
    /*!
     * \brief Update current instance into database (you can add a user SQL query to the default SQL query builded by QxOrm library)
@@ -174,13 +175,14 @@ public:
     * \param columns List of database table columns (mapped to properties of C++ class) to update (if empty, all columns are updated)
     * \param relation List of relationships keys to update in others tables of database : use "|" separator to put many relationships keys into this parameter
     * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class
+    * \param bUseExecBatch If true then use the QSqlQuery::execBatch() method to improve performance updating a list of instances in database
     * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
     *
     * qx::IxPersistable * p = ...;<br>
     * p->qxUpdate(...) execute following SQL query :<br>
     * <i>UPDATE my_table SET my_column_1 = ?, my_column_2 = ?, etc.</i> + <i>WHERE my_query...</i>
     */
-   virtual QSqlError qxUpdate(const qx::QxSqlQuery & query = qx::QxSqlQuery(), const QStringList & columns = QStringList(), const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL) = 0;
+   virtual QSqlError qxUpdate(const qx::QxSqlQuery & query = qx::QxSqlQuery(), const QStringList & columns = QStringList(), const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL, bool bUseExecBatch = false) = 0;
 
    /*!
     * \brief Insert (if no exist) or update (if already exist) current instance into database
@@ -201,6 +203,7 @@ public:
     * \brief Delete current instance from database
     * \param id Unique id to delete from database (if empty, check id of current instance)
     * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class
+    * \param bUseExecBatch If true then use the QSqlQuery::execBatch() method to improve performance deleting a list of instances in database
     * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
     *
     * qx::IxPersistable * p = ...;<br>
@@ -210,7 +213,7 @@ public:
     * If a soft delete behavior is defined for current class, p->qxDeleteById(...) execute following SQL query :<br>
     * <i>UPDATE my_table SET is_deleted='1' WHERE my_id = ?</i>
     */
-   virtual QSqlError qxDeleteById(const QVariant & id = QVariant(), QSqlDatabase * pDatabase = NULL) = 0;
+   virtual QSqlError qxDeleteById(const QVariant & id = QVariant(), QSqlDatabase * pDatabase = NULL, bool bUseExecBatch = false) = 0;
 
    /*!
     * \brief Delete all lines of a table (database) mapped to current C++ class (registered into QxOrm context)
@@ -245,13 +248,14 @@ public:
     * \brief Delete current instance from database
     * \param id Unique id to delete from database (if empty, check id of current instance)
     * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class
+    * \param bUseExecBatch If true then use the QSqlQuery::execBatch() method to improve performance destroying a list of instances in database
     * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
     *
     * qx::IxPersistable * p = ...;<br>
     * p->qxDestroyById(...) execute following SQL query :<br>
     * <i>DELETE FROM my_table WHERE my_id = ?</i><br>
     */
-   virtual QSqlError qxDestroyById(const QVariant & id = QVariant(), QSqlDatabase * pDatabase = NULL) = 0;
+   virtual QSqlError qxDestroyById(const QVariant & id = QVariant(), QSqlDatabase * pDatabase = NULL, bool bUseExecBatch = false) = 0;
 
    /*!
     * \brief Delete all lines of a table (database) mapped to current C++ class (registered into QxOrm context)
@@ -377,13 +381,13 @@ virtual QSqlError qxCount(long & lCount, const qx::QxSqlQuery & query = qx::QxSq
 virtual QSqlError qxFetchById(const QVariant & id = QVariant(), const QStringList & columns = QStringList(), const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL); \
 virtual QSqlError qxFetchAll(qx::IxPersistableCollection * list = NULL, const QStringList & columns = QStringList(), const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL); \
 virtual QSqlError qxFetchByQuery(const qx::QxSqlQuery & query, qx::IxPersistableCollection * list = NULL, const QStringList & columns = QStringList(), const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL); \
-virtual QSqlError qxInsert(const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL); \
-virtual QSqlError qxUpdate(const qx::QxSqlQuery & query = qx::QxSqlQuery(), const QStringList & columns = QStringList(), const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL); \
+virtual QSqlError qxInsert(const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL, bool bUseExecBatch = false); \
+virtual QSqlError qxUpdate(const qx::QxSqlQuery & query = qx::QxSqlQuery(), const QStringList & columns = QStringList(), const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL, bool bUseExecBatch = false); \
 virtual QSqlError qxSave(const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL, qx::dao::save_mode::e_save_mode eSaveRecursiveMode = qx::dao::save_mode::e_none); \
-virtual QSqlError qxDeleteById(const QVariant & id = QVariant(), QSqlDatabase * pDatabase = NULL); \
+virtual QSqlError qxDeleteById(const QVariant & id = QVariant(), QSqlDatabase * pDatabase = NULL, bool bUseExecBatch = false); \
 virtual QSqlError qxDeleteAll(QSqlDatabase * pDatabase = NULL); \
 virtual QSqlError qxDeleteByQuery(const qx::QxSqlQuery & query, QSqlDatabase * pDatabase = NULL); \
-virtual QSqlError qxDestroyById(const QVariant & id = QVariant(), QSqlDatabase * pDatabase = NULL); \
+virtual QSqlError qxDestroyById(const QVariant & id = QVariant(), QSqlDatabase * pDatabase = NULL, bool bUseExecBatch = false); \
 virtual QSqlError qxDestroyAll(QSqlDatabase * pDatabase = NULL); \
 virtual QSqlError qxDestroyByQuery(const qx::QxSqlQuery & query, QSqlDatabase * pDatabase = NULL); \
 virtual QSqlError qxExecuteQuery(qx::QxSqlQuery & query, QSqlDatabase * pDatabase = NULL); \
@@ -466,18 +470,18 @@ QSqlError className::qxFetchByQuery(const qx::QxSqlQuery & query, qx::IxPersista
    return err; \
 } \
 \
-QSqlError className::qxInsert(const QStringList & relation, QSqlDatabase * pDatabase) \
+QSqlError className::qxInsert(const QStringList & relation, QSqlDatabase * pDatabase, bool bUseExecBatch) \
 { \
    QSqlError err; \
-   if (relation.count() == 0) { err = qx::dao::insert((* this), pDatabase); } \
+   if (relation.count() == 0) { err = qx::dao::insert((* this), pDatabase, bUseExecBatch); } \
    else { err = qx::dao::insert_with_relation(relation, (* this), pDatabase); } \
    return err; \
 } \
 \
-QSqlError className::qxUpdate(const qx::QxSqlQuery & query, const QStringList & columns, const QStringList & relation, QSqlDatabase * pDatabase) \
+QSqlError className::qxUpdate(const qx::QxSqlQuery & query, const QStringList & columns, const QStringList & relation, QSqlDatabase * pDatabase, bool bUseExecBatch) \
 { \
    QSqlError err; \
-   if (relation.count() == 0) { err = qx::dao::update_by_query(query, (* this), pDatabase, columns); } \
+   if (relation.count() == 0) { err = qx::dao::update_by_query(query, (* this), pDatabase, columns, bUseExecBatch); } \
    else { err = qx::dao::update_by_query_with_relation(relation, query, (* this), pDatabase); } \
    return err; \
 } \
@@ -491,7 +495,7 @@ QSqlError className::qxSave(const QStringList & relation, QSqlDatabase * pDataba
    return err; \
 } \
 \
-QSqlError className::qxDeleteById(const QVariant & id, QSqlDatabase * pDatabase) \
+QSqlError className::qxDeleteById(const QVariant & id, QSqlDatabase * pDatabase, bool bUseExecBatch) \
 { \
    if (id.isValid()) \
    { \
@@ -501,7 +505,7 @@ QSqlError className::qxDeleteById(const QVariant & id, QSqlDatabase * pDatabase)
       if (! pDataMemberId) { return QSqlError("[QxOrm] problem with 'qxDeleteById()' method : 'data member id not registered'", "", QSqlError::UnknownError); } \
       pDataMemberId->fromVariant(this, id, -1, qx::cvt::context::e_database); \
    } \
-   return qx::dao::delete_by_id((* this), pDatabase); \
+   return qx::dao::delete_by_id((* this), pDatabase, bUseExecBatch); \
 } \
 \
 QSqlError className::qxDeleteAll(QSqlDatabase * pDatabase) \
@@ -514,7 +518,7 @@ QSqlError className::qxDeleteByQuery(const qx::QxSqlQuery & query, QSqlDatabase 
    return qx::dao::delete_by_query< className >(query, pDatabase); \
 } \
 \
-QSqlError className::qxDestroyById(const QVariant & id, QSqlDatabase * pDatabase) \
+QSqlError className::qxDestroyById(const QVariant & id, QSqlDatabase * pDatabase, bool bUseExecBatch) \
 { \
    if (id.isValid()) \
    { \
@@ -524,7 +528,7 @@ QSqlError className::qxDestroyById(const QVariant & id, QSqlDatabase * pDatabase
       if (! pDataMemberId) { return QSqlError("[QxOrm] problem with 'qxDestroyById()' method : 'data member id not registered'", "", QSqlError::UnknownError); } \
       pDataMemberId->fromVariant(this, id, -1, qx::cvt::context::e_database); \
    } \
-   return qx::dao::destroy_by_id((* this), pDatabase); \
+   return qx::dao::destroy_by_id((* this), pDatabase, bUseExecBatch); \
 } \
 \
 QSqlError className::qxDestroyAll(QSqlDatabase * pDatabase) \

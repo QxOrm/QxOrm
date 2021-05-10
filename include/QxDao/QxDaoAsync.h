@@ -83,8 +83,9 @@ struct QxDaoAsyncParams
    QStringList                   listRelations;       //!< List of relationships parameter to execute action
    QVariant                      id;                  //!< Current instance id parameter to execute action
    long                          daoCount;            //!< Dao count value returned by qx::dao::count query
+   bool                          useExecBatch;        //!< If true then use the QSqlQuery::execBatch() method to improve performance inserting/updating/deleting a list of instances to database (but doesn't fill the last inserted identifier in the C++ instances)
 
-   QxDaoAsyncParams() : daoAction(dao_none), pDatabase(NULL), daoCount(0) { ; }
+   QxDaoAsyncParams() : daoAction(dao_none), pDatabase(NULL), daoCount(0), useExecBatch(false) { ; }
    ~QxDaoAsyncParams() { ; }
 
 };

@@ -363,12 +363,13 @@ public:
     * \brief Insert all items in the model into database
     * \param relation List of relationships keys to be inserted in others tables of database : use "|" separator to put many relationships keys into this parameter
     * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class (optional parameter)
+    * \param bUseExecBatch If true then use the QSqlQuery::execBatch() method to improve performance inserting a list of instances to database (but doesn't fill the last inserted identifier in the C++ instances)
     * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
     */
-   virtual QSqlError qxInsert(const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL)
+   virtual QSqlError qxInsert(const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL, bool bUseExecBatch = false)
    {
       if (relation.count() > 0) { this->syncAllNestedModel(relation); }
-      if (relation.count() == 0) { this->m_lastError = qx::dao::insert(m_model, this->database(pDatabase)); }
+      if (relation.count() == 0) { this->m_lastError = qx::dao::insert(m_model, this->database(pDatabase), bUseExecBatch); }
       else { this->m_lastError = qx::dao::insert_with_relation(relation, m_model, this->database(pDatabase)); }
       if (! this->m_lastError.isValid()) { this->updateAllKeys(); }
       return this->m_lastError;
@@ -396,12 +397,13 @@ public:
     * \param query Define a user SQL query added to default SQL query builded by QxOrm library
     * \param relation List of relationships keys to be inserted in others tables of database : use "|" separator to put many relationships keys into this parameter
     * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class (optional parameter)
+    * \param bUseExecBatch If true then use the QSqlQuery::execBatch() method to improve performance updating a list of instances in database
     * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
     */
-   virtual QSqlError qxUpdate(const qx::QxSqlQuery & query = qx::QxSqlQuery(), const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL)
+   virtual QSqlError qxUpdate(const qx::QxSqlQuery & query = qx::QxSqlQuery(), const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL, bool bUseExecBatch = false)
    {
       if (relation.count() > 0) { this->syncAllNestedModel(relation); }
-      if (relation.count() == 0) { this->m_lastError = qx::dao::update_by_query(query, m_model, this->database(pDatabase), this->m_lstColumns); }
+      if (relation.count() == 0) { this->m_lastError = qx::dao::update_by_query(query, m_model, this->database(pDatabase), this->m_lstColumns, bUseExecBatch); }
       else { this->m_lastError = qx::dao::update_by_query_with_relation(relation, query, m_model, this->database(pDatabase)); }
       if (! this->m_lastError.isValid()) { this->updateAllKeys(); }
       return this->m_lastError;

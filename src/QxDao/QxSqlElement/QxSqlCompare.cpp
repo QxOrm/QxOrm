@@ -77,7 +77,7 @@ QString QxSqlCompare::toString() const
    return sReturn;
 }
 
-void QxSqlCompare::resolve(QSqlQuery & query) const
+void QxSqlCompare::resolve(QSqlQuery & query, qx::QxCollection<QString, QVariantList> * pLstExecBatch /* = NULL */) const
 {
    qAssert((m_lstKeys.count() == 1) && (m_lstValues.count() == 1));
    QString sKey(m_lstKeys.at(0));
@@ -88,9 +88,18 @@ void QxSqlCompare::resolve(QSqlQuery & query) const
    else if (m_type == _ends_with) { vValue = QVariant(sWildCard + vValue.toString()); }
    else if (m_type == _contains_string) { vValue = QVariant(sWildCard + vValue.toString() + sWildCard); }
 
-   bool bQuestionMark = (qx::QxSqlDatabase::getSingleton()->getSqlPlaceHolderStyle() == qx::QxSqlDatabase::ph_style_question_mark);
-   if (bQuestionMark) { query.addBindValue(vValue); }
-   else { query.bindValue(sKey, vValue); }
+   if (pLstExecBatch)
+   {
+      if (! pLstExecBatch->exist(sKey)) { QVariantList empty; pLstExecBatch->insert(sKey, empty); }
+      QVariantList & values = const_cast<QVariantList &>(pLstExecBatch->getByKey(sKey));
+      values.append(vValue);
+   }
+   else
+   {
+      bool bQuestionMark = (qx::QxSqlDatabase::getSingleton()->getSqlPlaceHolderStyle() == qx::QxSqlDatabase::ph_style_question_mark);
+      if (bQuestionMark) { query.addBindValue(vValue); }
+      else { query.bindValue(sKey, vValue); }
+   }
 }
 
 void QxSqlCompare::postProcess(QString & sql) const { Q_UNUSED(sql); }

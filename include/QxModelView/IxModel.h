@@ -246,9 +246,9 @@ public:
    virtual QSqlError qxFetchAll(const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL) = 0;
    virtual QSqlError qxFetchByQuery(const qx::QxSqlQuery & query, const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL) = 0;
    virtual QSqlError qxFetchRow(int row, const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL) = 0;
-   virtual QSqlError qxInsert(const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL) = 0;
+   virtual QSqlError qxInsert(const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL, bool bUseExecBatch = false) = 0;
    virtual QSqlError qxInsertRow(int row, const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL) = 0;
-   virtual QSqlError qxUpdate(const qx::QxSqlQuery & query = qx::QxSqlQuery(), const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL) = 0;
+   virtual QSqlError qxUpdate(const qx::QxSqlQuery & query = qx::QxSqlQuery(), const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL, bool bUseExecBatch = false) = 0;
    virtual QSqlError qxUpdateRow(int row, const qx::QxSqlQuery & query = qx::QxSqlQuery(), const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL) = 0;
    virtual QSqlError qxSave(const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL) = 0;
    virtual QSqlError qxSaveRow(int row, const QStringList & relation = QStringList(), QSqlDatabase * pDatabase = NULL) = 0;
@@ -271,9 +271,9 @@ public:
    Q_INVOKABLE bool qxFetchAll_(const QStringList & relation = QStringList());
    Q_INVOKABLE bool qxFetchByQuery_(const QString & sQuery, const QStringList & relation = QStringList());
    Q_INVOKABLE bool qxFetchRow_(int row, const QStringList & relation = QStringList());
-   Q_INVOKABLE bool qxInsert_(const QStringList & relation = QStringList());
+   Q_INVOKABLE bool qxInsert_(const QStringList & relation = QStringList(), bool bUseExecBatch = false);
    Q_INVOKABLE bool qxInsertRow_(int row, const QStringList & relation = QStringList());
-   Q_INVOKABLE bool qxUpdate_(const QString & sQuery, const QStringList & relation = QStringList());
+   Q_INVOKABLE bool qxUpdate_(const QString & sQuery, const QStringList & relation = QStringList(), bool bUseExecBatch = false);
    Q_INVOKABLE bool qxUpdateRow_(int row, const QString & sQuery, const QStringList & relation = QStringList());
    Q_INVOKABLE bool qxSave_(const QStringList & relation = QStringList());
    Q_INVOKABLE bool qxSaveRow_(int row, const QStringList & relation = QStringList());

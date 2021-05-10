@@ -129,6 +129,9 @@ public:
    bool getCartesianProduct() const;
    QStringList getSqlColumns() const;
    void setSqlColumns(const QStringList & lst);
+   bool getUseExecBatch() const;
+   void setUseExecBatch(bool b);
+   qx::QxCollection<QString, QVariantList> & getListExecBatch();
    IxSqlGenerator * getSqlGenerator() const;
    void addInvalidValues(const qx::QxInvalidValueX & lst);
    bool getAddAutoIncrementIdToUpdateQuery() const;
@@ -153,6 +156,7 @@ public:
    bool updateSqlRelationX(const QStringList & relation);
    void addQuery(bool bResolve);
    void dumpRecord() const;
+   void resolveQuery();
 
    template <class U>
    inline bool isValidPrimaryKey(const U & u)

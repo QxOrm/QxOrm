@@ -37,8 +37,9 @@ template <class T>
 struct QxDao_Update_Generic
 {
 
-   static QSqlError update(const qx::QxSqlQuery & query, T & t, QSqlDatabase * pDatabase, const QStringList & columns)
+   static QSqlError update(const qx::QxSqlQuery & query, T & t, QSqlDatabase * pDatabase, const QStringList & columns, bool bUseExecBatch)
    {
+      Q_UNUSED(bUseExecBatch); // Useful only with containers
       qx::dao::detail::QxDao_Helper<T> dao(t, pDatabase, "update", new qx::QxSqlQueryBuilder_Update<T>(), (& query));
       if (! dao.isValid()) { return dao.error(); }
       if (dao.isReadOnly()) { return dao.errReadOnly(); }
@@ -85,7 +86,7 @@ template <class T>
 struct QxDao_Update_Container
 {
 
-   static QSqlError update(const qx::QxSqlQuery & query, T & t, QSqlDatabase * pDatabase, const QStringList & columns)
+   static QSqlError update(const qx::QxSqlQuery & query, T & t, QSqlDatabase * pDatabase, const QStringList & columns, bool bUseExecBatch)
    {
       typedef typename qx::trait::generic_container<T>::type_value_qx type_item;
 
@@ -94,6 +95,7 @@ struct QxDao_Update_Container
       if (! dao.isValid()) { return dao.error(); }
       if (dao.isReadOnly()) { return dao.errReadOnly(); }
       if (! dao.validateInstance(t)) { return dao.error(); }
+      dao.setUseExecBatch(bUseExecBatch);
 
 #ifdef _QX_ENABLE_MONGODB
       if (dao.isMongoDB())
@@ -118,6 +120,7 @@ struct QxDao_Update_Container
       for (typename T::iterator it = t.begin(); it != t.end(); ++it)
       { if (! updateItem((* it), dao)) { return dao.error(); } }
 
+      if (bUseExecBatch && (! dao.exec())) { return dao.errFailed(); }
       return dao.error();
    }
 
@@ -196,7 +199,8 @@ private:
             qx::dao::detail::QxSqlQueryHelper_Update<U>::resolveInput(item, dao.query(), dao.builder(), columns);
          }
 
-         if (! dao.qxQuery().isEmpty()) { dao.qxQuery().resolve(dao.query()); }
+         dao.resolveQuery();
+         if (dao.getUseExecBatch()) { return dao.isValid(); }
          if (! dao.exec(true)) { dao.errFailed(); return false; }
          if (pSqlGenerator) { pSqlGenerator->onAfterUpdate((& dao), (& item)); }
          qx::dao::on_after_update<U>((& item), (& dao)); if (! dao.isValid()) { return false; }
@@ -211,8 +215,8 @@ template <class T>
 struct QxDao_Update_Ptr
 {
 
-   static inline QSqlError update(const qx::QxSqlQuery & query, T & t, QSqlDatabase * pDatabase, const QStringList & columns)
-   { return (t ? qx::dao::update_by_query(query, (* t), pDatabase, columns) : QSqlError()); }
+   static inline QSqlError update(const qx::QxSqlQuery & query, T & t, QSqlDatabase * pDatabase, const QStringList & columns, bool bUseExecBatch)
+   { return (t ? qx::dao::update_by_query(query, (* t), pDatabase, columns, bUseExecBatch) : QSqlError()); }
 
 };
 
@@ -220,13 +224,13 @@ template <class T>
 struct QxDao_Update
 {
 
-   static inline QSqlError update(const qx::QxSqlQuery & query, T & t, QSqlDatabase * pDatabase, const QStringList & columns)
+   static inline QSqlError update(const qx::QxSqlQuery & query, T & t, QSqlDatabase * pDatabase, const QStringList & columns, bool bUseExecBatch = false)
    {
       typedef typename std::conditional< std::is_pointer<T>::value, qx::dao::detail::QxDao_Update_Ptr<T>, qx::dao::detail::QxDao_Update_Generic<T> >::type type_dao_1;
       typedef typename std::conditional< qx::trait::is_smart_ptr<T>::value, qx::dao::detail::QxDao_Update_Ptr<T>, type_dao_1 >::type type_dao_2;
       typedef typename std::conditional< qx::trait::is_container<T>::value, qx::dao::detail::QxDao_Update_Container<T>, type_dao_2 >::type type_dao_3;
 
-      QSqlError error = type_dao_3::update(query, t, pDatabase, columns);
+      QSqlError error = type_dao_3::update(query, t, pDatabase, columns, bUseExecBatch);
       if (! error.isValid()) { qx::dao::detail::QxDao_Keep_Original<T>::backup(t); }
       return error;
    }

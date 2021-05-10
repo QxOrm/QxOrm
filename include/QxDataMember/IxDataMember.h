@@ -58,6 +58,8 @@
 #include <QxCommon/QxBool.h>
 #include <QxCommon/QxPropertyBag.h>
 
+#include <QxCollection/QxCollection.h>
+
 #include <QxSerialize/boost/QxSerializeInclude.h>
 
 #include <QxConvert/QxConvert.h>
@@ -165,7 +167,7 @@ public:
    QString getSqlType(int iIndexName = -1) const;
    QString getSqlTypeAndParams(int iIndexName = -1) const;
    QString getSqlPlaceHolder(const QString & sAppend = QString(), int iIndexName = 0, const QString & sSep = QString(", "), const QString & sOtherName = QString(), bool bCheckFKPartOfPK = false) const;
-   void setSqlPlaceHolder(QSqlQuery & query, void * pOwner, const QString & sAppend = QString(), const QString & sOtherName = QString(), bool bCheckFKPartOfPK = false) const;
+   void setSqlPlaceHolder(QSqlQuery & query, void * pOwner, const QString & sAppend = QString(), const QString & sOtherName = QString(), bool bCheckFKPartOfPK = false, qx::QxCollection<QString, QVariantList> * pLstExecBatch = NULL) const;
    QString getSqlAliasEqualToPlaceHolder(const QString & sTable = QString(), bool bClauseWhere = false, const QString & sAppend = QString(), const QString & sSep = QString(" AND "), bool bCheckFKPartOfPK = false) const;
    QString getSqlNameEqualToPlaceHolder(const QString & sAppend = QString(), const QString & sSep = QString(" AND "), bool bCheckFKPartOfPK = false) const;
    QString getSqlTablePointNameAsAlias(const QString & sTable, const QString & sSep = QString(", "), const QString & sSuffixAlias = QString(), bool bCheckFKPartOfPK = false, const QString & sCustomAlias = QString()) const;

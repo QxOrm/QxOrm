@@ -62,7 +62,7 @@ QString QxSqlGenerator_Oracle::getTableAliasSep() const { return " "; }
 
 QString QxSqlGenerator_Oracle::getLimit(const QxSqlLimit * pLimit) const { Q_UNUSED(pLimit); return ""; }
 
-void QxSqlGenerator_Oracle::resolveLimit(QSqlQuery & query, const QxSqlLimit * pLimit) const
+void QxSqlGenerator_Oracle::resolveLimit(QSqlQuery & query, const QxSqlLimit * pLimit, qx::QxCollection<QString, QVariantList> * pLstExecBatch /* = NULL */) const
 {
    if (! m_bOldLimitSyntax) { return; }
    if (! pLimit) { qAssert(false); return; }
@@ -70,8 +70,21 @@ void QxSqlGenerator_Oracle::resolveLimit(QSqlQuery & query, const QxSqlLimit * p
    QString sMaxRow = pLimit->getMaxRow_ParamKey();
    int iMinRow(pLimit->getStartRow()), iMaxRow(pLimit->getMaxRow());
    bool bQuestionMark = (qx::QxSqlDatabase::getSingleton()->getSqlPlaceHolderStyle() == qx::QxSqlDatabase::ph_style_question_mark);
-   if (bQuestionMark) { query.addBindValue(iMaxRow); query.addBindValue(iMinRow); }
-   else { query.bindValue(sMaxRow, iMaxRow); query.bindValue(sMinRow, iMinRow); }
+
+   if (pLstExecBatch)
+   {
+      if (! pLstExecBatch->exist(sMaxRow)) { QVariantList empty; pLstExecBatch->insert(sMaxRow, empty); }
+      if (! pLstExecBatch->exist(sMinRow)) { QVariantList empty; pLstExecBatch->insert(sMinRow, empty); }
+      QVariantList & valuesMaxRow = const_cast<QVariantList &>(pLstExecBatch->getByKey(sMaxRow));
+      QVariantList & valuesMinRow = const_cast<QVariantList &>(pLstExecBatch->getByKey(sMinRow));
+      valuesMaxRow.append(iMaxRow);
+      valuesMinRow.append(iMinRow);
+   }
+   else
+   {
+      if (bQuestionMark) { query.addBindValue(iMaxRow); query.addBindValue(iMinRow); }
+      else { query.bindValue(sMaxRow, iMaxRow); query.bindValue(sMinRow, iMinRow); }
+   }
 }
 
 void QxSqlGenerator_Oracle::postProcess(QString & sql, const QxSqlLimit * pLimit) const
@@ -130,7 +143,18 @@ void QxSqlGenerator_Oracle::onBeforeInsert(IxDao_Helper * pDaoHelper, void * pOw
    qx::IxDataMember * pId = pDaoHelper->getDataId();
    if (! pId->getAutoIncrement()) { return; }
    if (pId->getNameCount() > 1) { qAssert(false); return; }
-   pDaoHelper->query().bindValue(":ID", 0, QSql::InOut);
+   QString key = ":ID";
+   if (pDaoHelper->getUseExecBatch())
+   {
+      qx::QxCollection<QString, QVariantList> & lstExecBatch = pDaoHelper->getListExecBatch();
+      if (! lstExecBatch.exist(key)) { QVariantList empty; lstExecBatch.insert(key, empty); }
+      QVariantList & values = const_cast<QVariantList &>(lstExecBatch.getByKey(key));
+      values.append(0);
+   }
+   else
+   {
+      pDaoHelper->query().bindValue(key, 0, QSql::InOut);
+   }
 }
 
 void QxSqlGenerator_Oracle::onAfterInsert(IxDao_Helper * pDaoHelper, void * pOwner) const

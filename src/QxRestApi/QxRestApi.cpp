@@ -85,6 +85,7 @@ struct Q_DECL_HIDDEN QxRestApi::QxRestApiImpl
    qx_bool m_existResult;                          //!< Result after a exist query
    QxInvalidValueX m_validateResult;               //!< Result after a validate query
    qx::dao::save_mode::e_save_mode m_eSaveMode;    //!< Save mode for 'save' action
+   bool m_bUseExecBatch;                           //!< If true then use the QSqlQuery::execBatch() method to improve performance inserting/updating/deleting a list of instances to database (but doesn't fill the last inserted identifier in the C++ instances)
 
 #ifndef _QX_NO_JSON
 
@@ -95,7 +96,7 @@ struct Q_DECL_HIDDEN QxRestApi::QxRestApiImpl
 
 #endif // _QX_NO_JSON
 
-   QxRestApiImpl() : m_countResult(0), m_eSaveMode(qx::dao::save_mode::e_none) { ; }
+   QxRestApiImpl() : m_countResult(0), m_eSaveMode(qx::dao::save_mode::e_none), m_bUseExecBatch(false) { ; }
    ~QxRestApiImpl() { ; }
 
 #ifndef _QX_NO_JSON
@@ -159,6 +160,8 @@ void QxRestApi::setDatabase(const QString & database) { m_pImpl->m_database = da
 void QxRestApi::setQuery(const QString & query) { m_pImpl->m_query = query; }
 
 void QxRestApi::setData(const QString & data) { m_pImpl->m_data = data; }
+
+void QxRestApi::setUseExecBatch(bool useExecBatch) { m_pImpl->m_bUseExecBatch = useExecBatch; }
 
 QString QxRestApi::processRequest(const QString & request)
 {
@@ -251,6 +254,7 @@ void QxRestApi::QxRestApiImpl::resetRequest()
    m_requestJson = QJsonValue();
    m_responseJson = QJsonValue();
    m_eSaveMode = qx::dao::save_mode::e_none;
+   m_bUseExecBatch = false;
    m_columns.clear();
    m_relations.clear();
    m_outputFormat.clear();
@@ -396,6 +400,9 @@ bool QxRestApi::QxRestApiImpl::decodeRequest()
    // Extract database key
    if (request.contains("database")) { m_database = request.value("database").toString(); }
 
+   // Extract use exec batch setting
+   if (request.contains("use_exec_batch")) { m_bUseExecBatch = (request.value("use_exec_batch").toBool() || (request.value("use_exec_batch").toString() == "1")); }
+
    // Extract save mode for 'save' action
    if (request.contains("save_mode"))
    {
@@ -448,13 +455,13 @@ bool QxRestApi::QxRestApiImpl::executeAction()
       else if (m_action == "fetch_by_id")          { QVariant id; m_error = m_instance->qxFetchById(id, m_columns, m_relations, (& m_db)); }
       else if (m_action == "fetch_all")            { m_error = m_instance->qxFetchAll(NULL, m_columns, m_relations, (& m_db)); }
       else if (m_action == "fetch_by_query")       { m_error = m_instance->qxFetchByQuery(m_qxQuery, NULL, m_columns, m_relations, (& m_db)); }
-      else if (m_action == "insert")               { m_error = m_instance->qxInsert(m_relations, (& m_db)); }
-      else if (m_action == "update")               { m_error = m_instance->qxUpdate(m_qxQuery, m_columns, m_relations, (& m_db)); }
+      else if (m_action == "insert")               { m_error = m_instance->qxInsert(m_relations, (& m_db), m_bUseExecBatch); }
+      else if (m_action == "update")               { m_error = m_instance->qxUpdate(m_qxQuery, m_columns, m_relations, (& m_db), m_bUseExecBatch); }
       else if (m_action == "save")                 { m_error = m_instance->qxSave(m_relations, (& m_db), m_eSaveMode); }
-      else if (m_action == "delete_by_id")         { QVariant id; m_error = m_instance->qxDeleteById(id, (& m_db)); }
+      else if (m_action == "delete_by_id")         { QVariant id; m_error = m_instance->qxDeleteById(id, (& m_db), m_bUseExecBatch); }
       else if (m_action == "delete_all")           { m_error = m_instance->qxDeleteAll(& m_db); }
       else if (m_action == "delete_by_query")      { m_error = m_instance->qxDeleteByQuery(m_qxQuery, (& m_db)); }
-      else if (m_action == "destroy_by_id")        { QVariant id; m_error = m_instance->qxDestroyById(id, (& m_db)); }
+      else if (m_action == "destroy_by_id")        { QVariant id; m_error = m_instance->qxDestroyById(id, (& m_db), m_bUseExecBatch); }
       else if (m_action == "destroy_all")          { m_error = m_instance->qxDestroyAll(& m_db); }
       else if (m_action == "destroy_by_query")     { m_error = m_instance->qxDestroyByQuery(m_qxQuery, (& m_db)); }
       else if (m_action == "exec_custom_query")    { m_error = m_instance->qxExecuteQuery(m_qxQuery, NULL, (& m_db)); }

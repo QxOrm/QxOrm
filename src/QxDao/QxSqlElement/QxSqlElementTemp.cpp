@@ -47,7 +47,7 @@ IxSqlElement::type_class QxSqlElementTemp::getTypeClass() const { return IxSqlEl
 
 QString QxSqlElementTemp::toString() const { return ""; }
 
-void QxSqlElementTemp::resolve(QSqlQuery & query) const { Q_UNUSED(query); }
+void QxSqlElementTemp::resolve(QSqlQuery & query, qx::QxCollection<QString, QVariantList> * pLstExecBatch /* = NULL */) const { Q_UNUSED(query); Q_UNUSED(pLstExecBatch); }
 
 void QxSqlElementTemp::postProcess(QString & sql) const { Q_UNUSED(sql); }
 

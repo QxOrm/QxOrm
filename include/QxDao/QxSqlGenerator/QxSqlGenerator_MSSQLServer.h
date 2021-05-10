@@ -63,7 +63,7 @@ public:
 
    virtual void init();
    virtual QString getLimit(const QxSqlLimit * pLimit) const;
-   virtual void resolveLimit(QSqlQuery & query, const QxSqlLimit * pLimit) const;
+   virtual void resolveLimit(QSqlQuery & query, const QxSqlLimit * pLimit, qx::QxCollection<QString, QVariantList> * pLstExecBatch = NULL) const;
    virtual void postProcess(QString & sql, const QxSqlLimit * pLimit) const;
 
 private:

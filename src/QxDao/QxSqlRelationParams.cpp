@@ -40,11 +40,9 @@
 
 namespace qx {
 
-QxSqlRelationParams::QxSqlRelationParams() : m_lIndex(0), m_lIndexOwner(0), m_lOffset(0), m_sql(NULL), m_builder(NULL), m_query(NULL), m_database(NULL), m_pOwner(NULL), m_eJoinType(qx::dao::sql_join::no_join), m_pRelationX(NULL), m_eSaveMode(qx::dao::save_mode::e_check_insert_or_update), m_bRecursiveMode(false), m_pColumns(NULL) { ; }
+QxSqlRelationParams::QxSqlRelationParams() : m_lIndex(0), m_lIndexOwner(0), m_lOffset(0), m_sql(NULL), m_builder(NULL), m_query(NULL), m_database(NULL), m_pOwner(NULL), m_eJoinType(qx::dao::sql_join::no_join), m_pRelationX(NULL), m_eSaveMode(qx::dao::save_mode::e_check_insert_or_update), m_bRecursiveMode(false), m_pColumns(NULL), m_pLstExecBatch(NULL) { ; }
 
-QxSqlRelationParams::QxSqlRelationParams(long lIndex, long lOffset, QString * sql, IxSqlQueryBuilder * builder, QSqlQuery * query, void * pOwner) : m_lIndex(lIndex), m_lIndexOwner(0), m_lOffset(lOffset), m_sql(sql), m_builder(builder), m_query(query), m_database(NULL), m_pOwner(pOwner), m_eJoinType(qx::dao::sql_join::no_join), m_pRelationX(NULL), m_eSaveMode(qx::dao::save_mode::e_check_insert_or_update), m_bRecursiveMode(false), m_pColumns(NULL) { ; }
-
-QxSqlRelationParams::QxSqlRelationParams(long lIndex, long lOffset, QString * sql, IxSqlQueryBuilder * builder, QSqlQuery * query, void * pOwner, const QVariant & vId) : m_vId(vId), m_lIndex(lIndex), m_lIndexOwner(0), m_lOffset(lOffset), m_sql(sql), m_builder(builder), m_query(query), m_database(NULL), m_pOwner(pOwner), m_eJoinType(qx::dao::sql_join::no_join), m_pRelationX(NULL), m_eSaveMode(qx::dao::save_mode::e_check_insert_or_update), m_bRecursiveMode(false), m_pColumns(NULL) { ; }
+QxSqlRelationParams::QxSqlRelationParams(long lIndex, long lOffset, QString * sql, IxSqlQueryBuilder * builder, QSqlQuery * query, void * pOwner, const QVariant & vId /* = QVariant() */, qx::QxCollection<QString, QVariantList> * pLstExecBatch /* = NULL */) : m_vId(vId), m_lIndex(lIndex), m_lIndexOwner(0), m_lOffset(lOffset), m_sql(sql), m_builder(builder), m_query(query), m_database(NULL), m_pOwner(pOwner), m_eJoinType(qx::dao::sql_join::no_join), m_pRelationX(NULL), m_eSaveMode(qx::dao::save_mode::e_check_insert_or_update), m_bRecursiveMode(false), m_pColumns(NULL), m_pLstExecBatch(pLstExecBatch) { ; }
 
 QxSqlRelationParams::~QxSqlRelationParams() { ; }
 

@@ -132,14 +132,15 @@ inline QSqlError count_with_relation(long & lCount, const QStringList & relation
  * \brief Insert an element or a list of elements into database
  * \param t Element (or list of elements) to be inserted into database
  * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class (optional parameter)
+ * \param bUseExecBatch If true then use the QSqlQuery::execBatch() method to improve performance inserting a list of instances to database (but doesn't fill the last inserted identifier in the C++ instances)
  * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
  *
  * qx::dao::insert<T>() execute following SQL query :<br>
  * <i>INSERT INTO my_table (my_column_1, my_column_2, etc.) VALUES (?, ?, etc.)</i>
  */
 template <class T>
-inline QSqlError insert(T & t, QSqlDatabase * pDatabase = NULL)
-{ return qx::dao::detail::QxDao_Insert<T>::insert(t, pDatabase); }
+inline QSqlError insert(T & t, QSqlDatabase * pDatabase = NULL, bool bUseExecBatch = false)
+{ return qx::dao::detail::QxDao_Insert<T>::insert(t, pDatabase, bUseExecBatch); }
 
 /*!
  * \ingroup QxDao
@@ -162,6 +163,7 @@ inline QSqlError save(T & t, QSqlDatabase * pDatabase = NULL)
  * \brief Delete a line (or list of lines) of a table (database) mapped to a C++ object of type T (registered into QxOrm context)
  * \param t Element (or list of elements) to be deleted into database
  * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class (optional parameter)
+ * \param bUseExecBatch If true then use the QSqlQuery::execBatch() method to improve performance deleting a list of instances in database
  * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
  *
  * qx::dao::delete_by_id<T>() execute following SQL query :<br>
@@ -171,22 +173,23 @@ inline QSqlError save(T & t, QSqlDatabase * pDatabase = NULL)
  * <i>UPDATE my_table SET is_deleted='1' WHERE my_id = ?</i>
  */
 template <class T>
-inline QSqlError delete_by_id(T & t, QSqlDatabase * pDatabase = NULL)
-{ return qx::dao::detail::QxDao_DeleteById<T>::deleteById(t, pDatabase, true); }
+inline QSqlError delete_by_id(T & t, QSqlDatabase * pDatabase = NULL, bool bUseExecBatch = false)
+{ return qx::dao::detail::QxDao_DeleteById<T>::deleteById(t, pDatabase, true, bUseExecBatch); }
 
 /*!
  * \ingroup QxDao
  * \brief Destroy a line (or list of lines) of a table (database) mapped to a C++ object of type T (registered into QxOrm context), even if a soft delete behavior is defined for class T
  * \param t Element (or list of elements) to be destroyed into database
  * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class (optional parameter)
+ * \param bUseExecBatch If true then use the QSqlQuery::execBatch() method to improve performance destroying a list of instances in database
  * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
  *
  * qx::dao::destroy_by_id<T>() execute following SQL query :<br>
  * <i>DELETE FROM my_table WHERE my_id = ?</i>
  */
 template <class T>
-inline QSqlError destroy_by_id(T & t, QSqlDatabase * pDatabase = NULL)
-{ return qx::dao::detail::QxDao_DeleteById<T>::deleteById(t, pDatabase, false); }
+inline QSqlError destroy_by_id(T & t, QSqlDatabase * pDatabase = NULL, bool bUseExecBatch = false)
+{ return qx::dao::detail::QxDao_DeleteById<T>::deleteById(t, pDatabase, false, bUseExecBatch); }
 
 /*!
  * \ingroup QxDao
@@ -670,14 +673,15 @@ inline QSqlError fetch_by_query(const qx::QxSqlQuery & query, T & t, QSqlDatabas
  * \param t Element (or list of elements) to be updated into database
  * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class (optional parameter)
  * \param columns List of database table columns (mapped to properties of C++ class T) to be updated (optional parameter)
+ * \param bUseExecBatch If true then use the QSqlQuery::execBatch() method to improve performance updating a list of instances in database
  * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
  *
  * qx::dao::update<T>() execute following SQL query :<br>
  * <i>UPDATE my_table SET my_column_1 = ?, my_column_2 = ?, etc.</i>
  */
 template <class T>
-inline QSqlError update(T & t, QSqlDatabase * pDatabase = NULL, const QStringList & columns = QStringList())
-{ return qx::dao::detail::QxDao_Update<T>::update("", t, pDatabase, columns); }
+inline QSqlError update(T & t, QSqlDatabase * pDatabase = NULL, const QStringList & columns = QStringList(), bool bUseExecBatch = false)
+{ return qx::dao::detail::QxDao_Update<T>::update("", t, pDatabase, columns, bUseExecBatch); }
 
 /*!
  * \ingroup QxDao
@@ -686,28 +690,30 @@ inline QSqlError update(T & t, QSqlDatabase * pDatabase = NULL, const QStringLis
  * \param t Element (or list of elements) to be updated into database
  * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class (optional parameter)
  * \param columns List of database table columns (mapped to properties of C++ class T) to be updated (optional parameter)
+ * \param bUseExecBatch If true then use the QSqlQuery::execBatch() method to improve performance updating a list of instances in database
  * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
  *
  * qx::dao::update_by_query<T>() execute following SQL query :<br>
  * <i>UPDATE my_table SET my_column_1 = ?, my_column_2 = ?, etc.</i> + <i>WHERE my_query...</i>
  */
 template <class T>
-inline QSqlError update_by_query(const qx::QxSqlQuery & query, T & t, QSqlDatabase * pDatabase = NULL, const QStringList & columns = QStringList())
-{ return qx::dao::detail::QxDao_Update<T>::update(query, t, pDatabase, columns); }
+inline QSqlError update_by_query(const qx::QxSqlQuery & query, T & t, QSqlDatabase * pDatabase = NULL, const QStringList & columns = QStringList(), bool bUseExecBatch = false)
+{ return qx::dao::detail::QxDao_Update<T>::update(query, t, pDatabase, columns, bUseExecBatch); }
 
 /*!
  * \ingroup QxDao
  * \brief Update only modified fields/properties of an element or a list of elements into database (using is dirty pattern and qx::dao::ptr<T> smart-pointer)
  * \param ptr Element (or list of elements) to be updated into database
  * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class (optional parameter)
+ * \param bUseExecBatch If true then use the QSqlQuery::execBatch() method to improve performance updating a list of instances in database
  * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
  *
  * qx::dao::update_optimized<T>() execute following SQL query :<br>
  * <i>UPDATE my_table SET my_column_1 = ?, my_column_2 = ?, etc.</i>
  */
 template <class T>
-inline QSqlError update_optimized(qx::dao::ptr<T> & ptr, QSqlDatabase * pDatabase = NULL)
-{ return qx::dao::detail::QxDao_Update_Optimized<T>::update_optimized("", ptr, pDatabase); }
+inline QSqlError update_optimized(qx::dao::ptr<T> & ptr, QSqlDatabase * pDatabase = NULL, bool bUseExecBatch = false)
+{ return qx::dao::detail::QxDao_Update_Optimized<T>::update_optimized("", ptr, pDatabase, bUseExecBatch); }
 
 /*!
  * \ingroup QxDao
@@ -715,14 +721,15 @@ inline QSqlError update_optimized(qx::dao::ptr<T> & ptr, QSqlDatabase * pDatabas
  * \param query Define a user SQL query added to default SQL query builded by QxOrm library
  * \param ptr Element (or list of elements) to be updated into database
  * \param pDatabase Connection to database (you can manage your own connection pool for example, you can also define a transaction, etc.); if NULL, a valid connection for the current thread is provided by qx::QxSqlDatabase singleton class (optional parameter)
+ * \param bUseExecBatch If true then use the QSqlQuery::execBatch() method to improve performance updating a list of instances in database
  * \return Empty QSqlError object (from Qt library) if no error occurred; otherwise QSqlError contains a description of database error executing SQL query
  *
  * qx::dao::update_optimized_by_query<T>() execute following SQL query :<br>
  * <i>UPDATE my_table SET my_column_1 = ?, my_column_2 = ?, etc.</i> + <i>WHERE my_query...</i>
  */
 template <class T>
-inline QSqlError update_optimized_by_query(const qx::QxSqlQuery & query, qx::dao::ptr<T> & ptr, QSqlDatabase * pDatabase = NULL)
-{ return qx::dao::detail::QxDao_Update_Optimized<T>::update_optimized(query, ptr, pDatabase); }
+inline QSqlError update_optimized_by_query(const qx::QxSqlQuery & query, qx::dao::ptr<T> & ptr, QSqlDatabase * pDatabase = NULL, bool bUseExecBatch = false)
+{ return qx::dao::detail::QxDao_Update_Optimized<T>::update_optimized(query, ptr, pDatabase, bUseExecBatch); }
 
 /*!
  * \ingroup QxDao

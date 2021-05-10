@@ -51,7 +51,7 @@ IxSqlElement::type_class QxSqlFreeText::getTypeClass() const { return IxSqlEleme
 
 QString QxSqlFreeText::toString() const { return m_sText; }
 
-void QxSqlFreeText::resolve(QSqlQuery & query) const
+void QxSqlFreeText::resolve(QSqlQuery & query, qx::QxCollection<QString, QVariantList> * pLstExecBatch /* = NULL */) const
 {
    if (m_lstValues.count() <= 0) { return; }
    qx::QxSqlDatabase::ph_style phStyle = qx::QxSqlDatabase::getSingleton()->getSqlPlaceHolderStyle();
@@ -63,17 +63,28 @@ void QxSqlFreeText::resolve(QSqlQuery & query) const
 
    for (int i = 0; i < m_lstValues.count(); i++)
    {
+      QString key = (QString("sql_free_text_") + QString::number(i));
       QVariant val(m_lstValues.at(i));
-      if (bQuestionMark) { query.addBindValue(val); }
-      else
+      if (! bQuestionMark)
       {
          posBegin = txt.indexOf(toFind);
          posEnd = txt.indexOf(" ", (posBegin + 1));
          if ((posEnd == -1) && (i == (m_lstValues.count() - 1))) { posEnd = txt.size(); }
          if ((posBegin == -1) || (posEnd == -1) || (posEnd <= posBegin)) { qAssert(false); break; }
-         QString key = txt.mid(posBegin, (posEnd - posBegin)).replace(")", "");
+         key = txt.mid(posBegin, (posEnd - posBegin)).replace(")", "");
          txt = txt.right(txt.size() - posEnd).trimmed();
-         query.bindValue(key, val);
+      }
+
+      if (pLstExecBatch)
+      {
+         if (! pLstExecBatch->exist(key)) { QVariantList empty; pLstExecBatch->insert(key, empty); }
+         QVariantList & values = const_cast<QVariantList &>(pLstExecBatch->getByKey(key));
+         values.append(val);
+      }
+      else
+      {
+         if (bQuestionMark) { query.addBindValue(val); }
+         else { query.bindValue(key, val); }
       }
    }
 }

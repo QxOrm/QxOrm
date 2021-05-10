@@ -259,6 +259,10 @@ class QX_DLL_EXPORT QxSqlQuery
    friend QX_DLL_EXPORT qx_bool qx::cvt::detail::QxConvert_FromJson_Helper(const QJsonValue & j, qx::QxSqlQuery & t, const QString & format);
 #endif // _QX_NO_JSON
 
+public:
+
+   typedef std::function<void (QString &)> type_fct_on_before_sql_prepare;
+
 protected:
 
    struct QxSqlResult
@@ -278,6 +282,7 @@ protected:
    QString                                         m_sType;                   //!< Query type (for example : 'aggregate' or 'cursor' for MongoDB database)
    QHash<QString, std::shared_ptr<QxSqlQuery> >    m_lstJoinQueryUser;        //!< List of SQL queries defined by user to add inside relationships joins (LEFT OUTER JOIN, INNER JOIN), for example : INNER JOIN my_table2 m2 ON (m1.id = m2.parent_id AND (XXX))
    QList<std::shared_ptr<QxSqlQuery> >             m_lstJoinQueryToResolve;   //!< List of SQL queries to resolve (in the right order) to add inside relationships joins (LEFT OUTER JOIN, INNER JOIN), for example : INNER JOIN my_table2 m2 ON (m1.id = m2.parent_id AND (XXX))
+   type_fct_on_before_sql_prepare                  m_fctOnBeforeSqlPrepare;   //!< Custom callback function to modify SQL query before preparing in database
 
 public:
 
@@ -306,7 +311,7 @@ public:
    bool isEmpty() const;
    bool isDistinct() const;
    void clear();
-   void resolve(QSqlQuery & query) const;
+   void resolve(QSqlQuery & query, qx::QxCollection<QString, QVariantList> * pLstExecBatch = NULL) const;
    void resolveOutput(QSqlQuery & query, bool bFetchSqlResult);
    void postProcess(QString & sql) const;
    void setResponse(const QVariant & v);
@@ -330,6 +335,9 @@ public:
    void dumpSqlResult();
 
    static void dumpBoundValues(const QSqlQuery & query);
+
+   QxSqlQuery & setFctOnBeforeSqlPrepare(type_fct_on_before_sql_prepare fct);
+   void onBeforeSqlPrepare(QString & sql);
 
 private:
 

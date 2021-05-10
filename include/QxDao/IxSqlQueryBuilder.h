@@ -132,6 +132,7 @@ public:
    static void resolveInput_Insert(void * t, QSqlQuery & query, IxSqlQueryBuilder & builder);
    static void resolveInput_Update(void * t, QSqlQuery & query, IxSqlQueryBuilder & builder);
    static void resolveInput_Update(void * t, QSqlQuery & query, IxSqlQueryBuilder & builder, const QStringList & columns);
+   static void resolveInput_DeleteById(void * t, QSqlQuery & query, IxSqlQueryBuilder & builder);
 
 protected:
 

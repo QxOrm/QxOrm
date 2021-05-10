@@ -54,6 +54,12 @@ int main(int argc, char * argv[])
    daoError = qx::dao::insert(authorX);
    qAssert(qx::dao::count<author>() == 3);
 
+   // Delete all authors in database and try to insert them using exec batch method
+   daoError = qx::dao::delete_all<author>(); qAssert(! daoError.isValid());
+   qAssert(qx::dao::count<author>() == 0);
+   daoError = qx::dao::insert(authorX, NULL, true); qAssert(! daoError.isValid());
+   qAssert(qx::dao::count<author>() == 3);
+
    // Clone author 2 : 'author_id_2'
    author_ptr author_clone = qx::clone(* author_2);
    qAssert(author_clone->m_id == "author_id_2");

@@ -67,15 +67,27 @@ QString QxSqlIsBetween::toString() const
    return sReturn;
 }
 
-void QxSqlIsBetween::resolve(QSqlQuery & query) const
+void QxSqlIsBetween::resolve(QSqlQuery & query, qx::QxCollection<QString, QVariantList> * pLstExecBatch /* = NULL */) const
 {
    qAssert((m_lstKeys.count() == 1) && (m_lstValues.count() == 2));
    bool bQuestionMark = (qx::QxSqlDatabase::getSingleton()->getSqlPlaceHolderStyle() == qx::QxSqlDatabase::ph_style_question_mark);
-   QString sKey1(bQuestionMark ? QString("?") : (m_lstKeys.at(0) + "_1")), sKey2(bQuestionMark ? QString("?") : (m_lstKeys.at(0) + "_2"));
+   QString sKey1(m_lstKeys.at(0) + "_1"), sKey2(m_lstKeys.at(0) + "_2");
    QVariant vValue1(m_lstValues.at(0)), vValue2(m_lstValues.at(1));
 
-   if (bQuestionMark) { query.addBindValue(vValue1); query.addBindValue(vValue2); }
-   else { query.bindValue(sKey1, vValue1); query.bindValue(sKey2, vValue2); }
+   if (pLstExecBatch)
+   {
+      if (! pLstExecBatch->exist(sKey1)) { QVariantList empty; pLstExecBatch->insert(sKey1, empty); }
+      if (! pLstExecBatch->exist(sKey2)) { QVariantList empty; pLstExecBatch->insert(sKey2, empty); }
+      QVariantList & values1 = const_cast<QVariantList &>(pLstExecBatch->getByKey(sKey1));
+      QVariantList & values2 = const_cast<QVariantList &>(pLstExecBatch->getByKey(sKey2));
+      values1.append(vValue1);
+      values2.append(vValue2);
+   }
+   else
+   {
+      if (bQuestionMark) { query.addBindValue(vValue1); query.addBindValue(vValue2); }
+      else { query.bindValue(sKey1, vValue1); query.bindValue(sKey2, vValue2); }
+   }
 }
 
 void QxSqlIsBetween::postProcess(QString & sql) const { Q_UNUSED(sql); }

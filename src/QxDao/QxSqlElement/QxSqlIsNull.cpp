@@ -63,7 +63,7 @@ QString QxSqlIsNull::toString() const
    return sReturn;
 }
 
-void QxSqlIsNull::resolve(QSqlQuery & query) const { Q_UNUSED(query); }
+void QxSqlIsNull::resolve(QSqlQuery & query, qx::QxCollection<QString, QVariantList> * pLstExecBatch /* = NULL */) const { Q_UNUSED(query); Q_UNUSED(pLstExecBatch); }
 
 void QxSqlIsNull::postProcess(QString & sql) const { Q_UNUSED(sql); }
 

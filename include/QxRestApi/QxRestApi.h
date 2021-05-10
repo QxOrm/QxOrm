@@ -99,6 +99,7 @@ public:
    Q_INVOKABLE void setDatabase(const QString & database);
    Q_INVOKABLE void setQuery(const QString & query);
    Q_INVOKABLE void setData(const QString & data);
+   Q_INVOKABLE void setUseExecBatch(bool useExecBatch);
 
 #ifndef _QX_NO_JSON
    QJsonValue processRequest(const QJsonValue & request);

@@ -208,20 +208,20 @@ public:
    }
 
    template <class T>
-   QSqlError insert(T & t, const QStringList & relation = QStringList())
+   QSqlError insert(T & t, const QStringList & relation = QStringList(), bool bUseExecBatch = false)
    {
       QSqlError err;
-      if (relation.count() == 0) { err = qx::dao::insert(t, this->database()); }
+      if (relation.count() == 0) { err = qx::dao::insert(t, this->database(), bUseExecBatch); }
       else { err = qx::dao::insert_with_relation(relation, t, this->database()); }
       if (err.isValid()) { (* this) += err; }
       return err;
    }
 
    template <class T>
-   QSqlError update(T & t, const qx::QxSqlQuery & query = qx::QxSqlQuery(), const QStringList & columns = QStringList(), const QStringList & relation = QStringList())
+   QSqlError update(T & t, const qx::QxSqlQuery & query = qx::QxSqlQuery(), const QStringList & columns = QStringList(), const QStringList & relation = QStringList(), bool bUseExecBatch = false)
    {
       QSqlError err;
-      if (relation.count() == 0) { err = qx::dao::update_by_query(query, t, this->database(), columns); }
+      if (relation.count() == 0) { err = qx::dao::update_by_query(query, t, this->database(), columns, bUseExecBatch); }
       else { err = qx::dao::update_by_query_with_relation(relation, query, t, this->database()); }
       if (err.isValid()) { (* this) += err; }
       return err;
@@ -251,9 +251,9 @@ public:
    }
 
    template <class T>
-   QSqlError deleteById(T & t)
+   QSqlError deleteById(T & t, bool bUseExecBatch = false)
    {
-      QSqlError err = qx::dao::delete_by_id(t, this->database());
+      QSqlError err = qx::dao::delete_by_id(t, this->database(), bUseExecBatch);
       if (err.isValid()) { (* this) += err; }
       return err;
    }
@@ -288,9 +288,9 @@ public:
    }
 
    template <class T>
-   QSqlError destroyById(T & t)
+   QSqlError destroyById(T & t, bool bUseExecBatch = false)
    {
-      QSqlError err = qx::dao::destroy_by_id(t, this->database());
+      QSqlError err = qx::dao::destroy_by_id(t, this->database(), bUseExecBatch);
       if (err.isValid()) { (* this) += err; }
       return err;
    }

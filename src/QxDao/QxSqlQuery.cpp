@@ -233,36 +233,46 @@ QVariant QxSqlQuery::boundValue(int iPosition) const
    return std::get<0>(m_lstValue.getByIndex(iPosition));
 }
 
-void QxSqlQuery::resolve(QSqlQuery & query) const
+void QxSqlQuery::resolve(QSqlQuery & query, qx::QxCollection<QString, QVariantList> * pLstExecBatch /* = NULL */) const
 {
    verifyQuery();
 
    for (int i = 0; i < m_lstJoinQueryToResolve.count(); i++)
    {
       std::shared_ptr<QxSqlQuery> joinQuery = m_lstJoinQueryToResolve.at(i);
-      joinQuery->resolve(query);
+      joinQuery->resolve(query, pLstExecBatch);
    }
 
    if (m_lstSqlElement.count() > 0)
    {
       for (int i = 0; i < m_lstSqlElement.count(); i++)
-      { m_lstSqlElement.at(i)->resolve(query); }
+      { m_lstSqlElement.at(i)->resolve(query, pLstExecBatch); }
       return;
    }
 
-   bool bKey = (qx::QxSqlDatabase::getSingleton()->getSqlPlaceHolderStyle() != qx::QxSqlDatabase::ph_style_question_mark);
+   bool bQuestionMark = (qx::QxSqlDatabase::getSingleton()->getSqlPlaceHolderStyle() == qx::QxSqlDatabase::ph_style_question_mark);
    QxCollectionIterator<QString, type_bind_value> itr(m_lstValue);
    while (itr.next())
    {
-      if (bKey) { query.bindValue(itr.key(), std::get<0>(itr.value()), std::get<1>(itr.value())); }
-      else { query.addBindValue(std::get<0>(itr.value()), std::get<1>(itr.value())); }
+      if (pLstExecBatch)
+      {
+         QString key = itr.key();
+         if (! pLstExecBatch->exist(key)) { QVariantList empty; pLstExecBatch->insert(key, empty); }
+         QVariantList & values = const_cast<QVariantList &>(pLstExecBatch->getByKey(key));
+         values.append(std::get<0>(itr.value()));
+      }
+      else
+      {
+         if (bQuestionMark) { query.addBindValue(std::get<0>(itr.value()), std::get<1>(itr.value())); }
+         else { query.bindValue(itr.key(), std::get<0>(itr.value()), std::get<1>(itr.value())); }
+      }
    }
 }
 
 void QxSqlQuery::resolveOutput(QSqlQuery & query, bool bFetchSqlResult)
 {
    QxCollection<QString, type_bind_value> lst; lst.reserve(m_lstValue.count());
-   bool bKey = (qx::QxSqlDatabase::getSingleton()->getSqlPlaceHolderStyle() != qx::QxSqlDatabase::ph_style_question_mark);
+   bool bQuestionMark = (qx::QxSqlDatabase::getSingleton()->getSqlPlaceHolderStyle() == qx::QxSqlDatabase::ph_style_question_mark);
    for (long l = 0; l < m_lstValue.count(); l++)
    {
       QVariant outputValue;
@@ -270,8 +280,8 @@ void QxSqlQuery::resolveOutput(QSqlQuery & query, bool bFetchSqlResult)
       type_bind_value val = m_lstValue.getByIndex(l);
       QSql::ParamType paramType = std::get<1>(val);
       if (paramType == QSql::In) { lst.insert(key, val); continue; }
-      if (bKey) { outputValue = query.boundValue(key); }
-      else { outputValue = query.boundValue(l); }
+      if (bQuestionMark) { outputValue = query.boundValue(l); }
+      else { outputValue = query.boundValue(key); }
       lst.insert(key, type_bind_value(outputValue, paramType));
    }
    if (bFetchSqlResult) { fetchSqlResult(query); }
@@ -337,6 +347,17 @@ void QxSqlQuery::dumpBoundValues(const QSqlQuery & query)
 
    if (! sBoundValues.isEmpty())
    { qDebug("[QxOrm] dump sql query bound values : %s", qPrintable(sBoundValues)); }
+}
+
+QxSqlQuery & QxSqlQuery::setFctOnBeforeSqlPrepare(QxSqlQuery::type_fct_on_before_sql_prepare fct)
+{
+   m_fctOnBeforeSqlPrepare = fct;
+   return (* this);
+}
+
+void QxSqlQuery::onBeforeSqlPrepare(QString & sql)
+{
+   if (m_fctOnBeforeSqlPrepare) { m_fctOnBeforeSqlPrepare(sql); }
 }
 
 void QxSqlQuery::fetchSqlResult(QSqlQuery & query)
