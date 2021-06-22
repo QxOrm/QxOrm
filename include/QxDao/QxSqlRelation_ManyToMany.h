@@ -186,7 +186,9 @@ private:
       qAssert(pIdData->getNameCount() == lstForeignKeyDataType.count());
 
       QString sql = "INSERT INTO " + this->getExtraTable() + " (";
-      sql += pIdOwner->getSqlName(", ", this->getForeignKeyOwner()) + ", " + pIdData->getSqlName(", ", this->getForeignKeyDataType());
+      sql += pIdOwner->getSqlName(", ", this->getForeignKeyOwner(), false, (& params.builder()));
+      sql += ", ";
+      sql += pIdData->getSqlName(", ", this->getForeignKeyDataType(), false, (& params.builder()));
       sql += ") VALUES (";
       sql += pIdOwner->getSqlPlaceHolder("", -1, ", ", this->getForeignKeyOwner()) + ", " + pIdData->getSqlPlaceHolder("", -1, ", ", this->getForeignKeyDataType()) + ")";
       if (this->traceSqlQuery()) { qDebug("[QxOrm] sql query (extra-table) : %s", qPrintable(sql)); }

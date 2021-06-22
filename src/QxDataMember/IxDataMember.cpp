@@ -36,6 +36,8 @@
 
 #include <QxDao/QxSqlDatabase.h>
 #include <QxDao/IxSqlRelation.h>
+#include <QxDao/IxDao_Helper.h>
+#include <QxDao/IxSqlQueryBuilder.h>
 
 #include <QxSerialize/QxSerialize.h>
 
@@ -99,6 +101,12 @@ struct Q_DECL_HIDDEN IxDataMember::IxDataMemberImpl
 
    type_fk_part_of_pk_ptr m_pListRelationPartOfPrimaryKey;     //!< Used by primary key to manage the case where a foreign key (relationship) is also a part of primary key (which can contain several columns)
    type_part_of_pk_ptr m_pListPartOfPrimaryKey;                //!< Used by relationship to manage the case where a foreign key (relationship) is also a part of primary key (which can contain several columns)
+
+   IxDataMember::type_fct_sql_callback m_fctCustomGetSqlName;                       //!< Custom callback function called building SQL queries (GetSqlName method)
+   IxDataMember::type_fct_sql_callback m_fctCustomGetSqlTablePointNameAsAlias;      //!< Custom callback function called building SQL queries (GetSqlTablePointNameAsAlias method)
+   IxDataMember::type_fct_sql_callback m_fctCustomGetSqlNameEqualToPlaceHolder;     //!< Custom callback function called building SQL queries (GetSqlNameEqualToPlaceHolder method)
+   IxDataMember::type_fct_sql_callback m_fctCustomGetSqlAliasEqualToPlaceHolder;    //!< Custom callback function called building SQL queries (GetSqlAliasEqualToPlaceHolder method)
+   IxDataMember::type_fct_sql_callback m_fctCustomGetSqlAlias;                      //!< Custom callback function called building SQL queries (GetSqlAlias method)
 
    IxDataMemberImpl(const QString & sKey, long lVersion, bool bSerialize, bool bDao, IxDataMember * pImpl) : m_sKey(sKey), m_lVersion(lVersion), m_bSerialize(bSerialize), m_bDao(bDao), QX_CONSTRUCT_IX_DATA_MEMBER() { qAssert(! m_sKey.isEmpty()); m_pImpl = pImpl; updateNamePtr(); }
    ~IxDataMemberImpl() { ; }
@@ -369,25 +377,41 @@ QString IxDataMember::getName(int iIndex, const QString & sOtherName /* = QStrin
    return (((iIndex >= 0) && (iIndex < m_pImpl->m_lstNames.count())) ? m_pImpl->m_lstNames.at(iIndex) : QString());
 }
 
-QString IxDataMember::getSqlAlias(const QString & sTable /* = QString() */, bool bClauseWhere /* = false */, int iIndexName /* = 0 */) const
+QString IxDataMember::getSqlAlias(const QString & sTable /* = QString() */, bool bClauseWhere /* = false */, int iIndexName /* = 0 */, qx::IxSqlQueryBuilder * pSqlQueryBuilder /* = NULL */) const
 {
+   QString sSqlAlias;
    QString sTableAlias = sTable;
    sTableAlias.replace(".", "_");
 
-   // Standard SQL disallows references to column aliases in a WHERE clause
-   // cf. <http://dev.mysql.com/doc/refman/5.0/en/problems-with-alias.html>
-   if (bClauseWhere && ! sTableAlias.isEmpty()) { return (getSqlTableName(sTableAlias) + "." + getSqlColumnName(getName(iIndexName))); }
+   do
+   {
+      // Standard SQL disallows references to column aliases in a WHERE clause
+      // cf. <http://dev.mysql.com/doc/refman/5.0/en/problems-with-alias.html>
+      if (bClauseWhere && ! sTableAlias.isEmpty()) { sSqlAlias = (getSqlTableName(sTableAlias) + "." + getSqlColumnName(getName(iIndexName))); break; }
 
-   QString sSqlAlias = m_pImpl->m_sSqlAlias;
-   if (! sSqlAlias.isEmpty()) { return sSqlAlias; }
-   if (! sTableAlias.isEmpty()) { sSqlAlias = (sTableAlias + "_" + getName(iIndexName) + "_0"); }
-   else { sSqlAlias = (m_pImpl->m_sNameParent + "_" + getName(iIndexName) + "_0"); }
+      sSqlAlias = m_pImpl->m_sSqlAlias;
+      if (! sSqlAlias.isEmpty()) { break; }
+      if (! sTableAlias.isEmpty()) { sSqlAlias = (sTableAlias + "_" + getName(iIndexName) + "_0"); }
+      else { sSqlAlias = (m_pImpl->m_sNameParent + "_" + getName(iIndexName) + "_0"); }
 
-   // Special database keywords using '[', ']' or '"' characters
-   sSqlAlias.replace("[", "");
-   sSqlAlias.replace("]", "");
-   sSqlAlias.replace("\"", "");
-   sSqlAlias.replace(".", "_");
+      // Special database keywords using '[', ']' or '"' characters
+      sSqlAlias.replace("[", "");
+      sSqlAlias.replace("]", "");
+      sSqlAlias.replace("\"", "");
+      sSqlAlias.replace(".", "_");
+   }
+   while (0);
+
+   if (m_pImpl->m_fctCustomGetSqlAlias)
+   {
+      IxDataMemberSqlCallbackParams callbackParams(this, sSqlAlias);
+      callbackParams.sTable = sTable;
+      callbackParams.bClauseWhere = bClauseWhere;
+      callbackParams.iIndexName = iIndexName;
+      callbackParams.pDaoHelper = (pSqlQueryBuilder ? pSqlQueryBuilder->getDaoHelper() : NULL);
+      callbackParams.pSqlQueryBuilder = pSqlQueryBuilder;
+      m_pImpl->m_fctCustomGetSqlAlias(callbackParams);
+   }
 
    return sSqlAlias;
 }
@@ -478,7 +502,7 @@ void IxDataMember::setSqlPlaceHolder(QSqlQuery & query, void * pOwner, const QSt
    }
 }
 
-QString IxDataMember::getSqlAliasEqualToPlaceHolder(const QString & sTable /* = QString() */, bool bClauseWhere /* = false */, const QString & sAppend /* = QString() */, const QString & sSep /* = QString(" AND ") */, bool bCheckFKPartOfPK /* = false */) const
+QString IxDataMember::getSqlAliasEqualToPlaceHolder(const QString & sTable /* = QString() */, bool bClauseWhere /* = false */, const QString & sAppend /* = QString() */, const QString & sSep /* = QString(" AND ") */, bool bCheckFKPartOfPK /* = false */, qx::IxSqlQueryBuilder * pSqlQueryBuilder /* = NULL */) const
 {
    QString sResult;
    int iIndexNameFK = 0;
@@ -487,15 +511,29 @@ QString IxDataMember::getSqlAliasEqualToPlaceHolder(const QString & sTable /* = 
    for (int i = 0; i < m_pImpl->m_lstNames.count(); i++)
    {
       if (bCheckFKPartOfPK && m_pImpl->m_bIsPrimaryKey && isThereRelationPartOfPrimaryKey(i, pRelation, iIndexNameFK)) { continue; }
-      sResult += getSqlAlias(sTable, bClauseWhere, i) + " = " + getSqlPlaceHolder(sAppend, i) + sSep;
+      sResult += getSqlAlias(sTable, bClauseWhere, i, pSqlQueryBuilder) + " = " + getSqlPlaceHolder(sAppend, i) + sSep;
    }
 
    if (! sResult.isEmpty())
    { sResult = sResult.left(sResult.count() - sSep.count()); } // Remove last separator
+
+   if (m_pImpl->m_fctCustomGetSqlAliasEqualToPlaceHolder)
+   {
+      IxDataMemberSqlCallbackParams callbackParams(this, sResult);
+      callbackParams.sTable = sTable;
+      callbackParams.bClauseWhere = bClauseWhere;
+      callbackParams.sAppend = sAppend;
+      callbackParams.sSep = sSep;
+      callbackParams.bCheckFKPartOfPK = bCheckFKPartOfPK;
+      callbackParams.pDaoHelper = (pSqlQueryBuilder ? pSqlQueryBuilder->getDaoHelper() : NULL);
+      callbackParams.pSqlQueryBuilder = pSqlQueryBuilder;
+      m_pImpl->m_fctCustomGetSqlAliasEqualToPlaceHolder(callbackParams);
+   }
+
    return sResult;
 }
 
-QString IxDataMember::getSqlNameEqualToPlaceHolder(const QString & sAppend /* = QString() */, const QString & sSep /* = QString(" AND ") */, bool bCheckFKPartOfPK /* = false */) const
+QString IxDataMember::getSqlNameEqualToPlaceHolder(const QString & sAppend /* = QString() */, const QString & sSep /* = QString(" AND ") */, bool bCheckFKPartOfPK /* = false */, qx::IxSqlQueryBuilder * pSqlQueryBuilder /* = NULL */) const
 {
    QString sResult;
    int iIndexNameFK = 0;
@@ -509,10 +547,22 @@ QString IxDataMember::getSqlNameEqualToPlaceHolder(const QString & sAppend /* = 
 
    if (! sResult.isEmpty())
    { sResult = sResult.left(sResult.count() - sSep.count()); } // Remove last separator
+
+   if (m_pImpl->m_fctCustomGetSqlNameEqualToPlaceHolder)
+   {
+      IxDataMemberSqlCallbackParams callbackParams(this, sResult);
+      callbackParams.sAppend = sAppend;
+      callbackParams.sSep = sSep;
+      callbackParams.bCheckFKPartOfPK = bCheckFKPartOfPK;
+      callbackParams.pDaoHelper = (pSqlQueryBuilder ? pSqlQueryBuilder->getDaoHelper() : NULL);
+      callbackParams.pSqlQueryBuilder = pSqlQueryBuilder;
+      m_pImpl->m_fctCustomGetSqlNameEqualToPlaceHolder(callbackParams);
+   }
+
    return sResult;
 }
 
-QString IxDataMember::getSqlTablePointNameAsAlias(const QString & sTable, const QString & sSep /* = QString(", ") */, const QString & sSuffixAlias /* = QString() */, bool bCheckFKPartOfPK /* = false */, const QString & sCustomAlias /* = QString() */) const
+QString IxDataMember::getSqlTablePointNameAsAlias(const QString & sTable, const QString & sSep /* = QString(", ") */, const QString & sSuffixAlias /* = QString() */, bool bCheckFKPartOfPK /* = false */, const QString & sCustomAlias /* = QString() */, qx::IxSqlQueryBuilder * pSqlQueryBuilder /* = NULL */) const
 {
    QString sResult;
    int iIndexNameFK = 0;
@@ -528,15 +578,29 @@ QString IxDataMember::getSqlTablePointNameAsAlias(const QString & sTable, const 
    for (int i = 0; i < m_pImpl->m_lstNames.count(); i++)
    {
       if (bCheckFKPartOfPK && m_pImpl->m_bIsPrimaryKey && isThereRelationPartOfPrimaryKey(i, pRelation, iIndexNameFK)) { continue; }
-      sResult += sTableAlias + "." + getSqlColumnName(getName(i)) + sTableAliasSep + getSqlAlias((sCustomAlias.isEmpty() ? sTable : sCustomAlias), false, i) + sSuffixAlias + sSep;
+      sResult += sTableAlias + "." + getSqlColumnName(getName(i)) + sTableAliasSep + getSqlAlias((sCustomAlias.isEmpty() ? sTable : sCustomAlias), false, i, pSqlQueryBuilder) + sSuffixAlias + sSep;
    }
 
    if (! sResult.isEmpty())
    { sResult = sResult.left(sResult.count() - sSep.count()); } // Remove last separator
+
+   if (m_pImpl->m_fctCustomGetSqlTablePointNameAsAlias)
+   {
+      IxDataMemberSqlCallbackParams callbackParams(this, sResult);
+      callbackParams.sTable = sTable;
+      callbackParams.sSep = sSep;
+      callbackParams.sSuffixAlias = sSuffixAlias;
+      callbackParams.bCheckFKPartOfPK = bCheckFKPartOfPK;
+      callbackParams.sCustomAlias = sCustomAlias;
+      callbackParams.pDaoHelper = (pSqlQueryBuilder ? pSqlQueryBuilder->getDaoHelper() : NULL);
+      callbackParams.pSqlQueryBuilder = pSqlQueryBuilder;
+      m_pImpl->m_fctCustomGetSqlTablePointNameAsAlias(callbackParams);
+   }
+
    return sResult;
 }
 
-QString IxDataMember::getSqlName(const QString & sSep /* = QString(", ") */, const QString & sOtherName /* = QString() */, bool bCheckFKPartOfPK /* = false */) const
+QString IxDataMember::getSqlName(const QString & sSep /* = QString(", ") */, const QString & sOtherName /* = QString() */, bool bCheckFKPartOfPK /* = false */, qx::IxSqlQueryBuilder * pSqlQueryBuilder /* = NULL */) const
 {
    QString sResult;
    int iIndexNameFK = 0;
@@ -550,6 +614,18 @@ QString IxDataMember::getSqlName(const QString & sSep /* = QString(", ") */, con
 
    if (! sResult.isEmpty())
    { sResult = sResult.left(sResult.count() - sSep.count()); } // Remove last separator
+
+   if (m_pImpl->m_fctCustomGetSqlName)
+   {
+      IxDataMemberSqlCallbackParams callbackParams(this, sResult);
+      callbackParams.sSep = sSep;
+      callbackParams.sOtherName = sOtherName;
+      callbackParams.bCheckFKPartOfPK = bCheckFKPartOfPK;
+      callbackParams.pDaoHelper = (pSqlQueryBuilder ? pSqlQueryBuilder->getDaoHelper() : NULL);
+      callbackParams.pSqlQueryBuilder = pSqlQueryBuilder;
+      m_pImpl->m_fctCustomGetSqlName(callbackParams);
+   }
+
    return sResult;
 }
 
@@ -569,6 +645,16 @@ QString IxDataMember::getSqlNameAndTypeAndParams(const QString & sSep /* = QStri
    { sResult = sResult.left(sResult.count() - sSep.count()); } // Remove last separator
    return sResult;
 }
+
+void IxDataMember::customGetSqlName(IxDataMember::type_fct_sql_callback fct) { m_pImpl->m_fctCustomGetSqlName = fct; }
+
+void IxDataMember::customGetSqlTablePointNameAsAlias(IxDataMember::type_fct_sql_callback fct) { m_pImpl->m_fctCustomGetSqlTablePointNameAsAlias = fct; }
+
+void IxDataMember::customGetSqlNameEqualToPlaceHolder(IxDataMember::type_fct_sql_callback fct) { m_pImpl->m_fctCustomGetSqlNameEqualToPlaceHolder = fct; }
+
+void IxDataMember::customGetSqlAliasEqualToPlaceHolder(IxDataMember::type_fct_sql_callback fct) { m_pImpl->m_fctCustomGetSqlAliasEqualToPlaceHolder = fct; }
+
+void IxDataMember::customGetSqlAlias(IxDataMember::type_fct_sql_callback fct) { m_pImpl->m_fctCustomGetSqlAlias = fct; }
 
 QString IxDataMember::getSqlFromTable(const QString & sTable, const QString & sCustomAlias /* = QString() */)
 {
@@ -608,6 +694,10 @@ QString IxDataMember::getSqlColumnName(const QString & sColumn)
    QString sResult = (sStart + sColumn + sEnd); sResult.replace(".", (sEnd + "." + sStart));
    return sResult;
 }
+
+IxDataMemberSqlCallbackParams::IxDataMemberSqlCallbackParams(const IxDataMember * p, QString & sql) : pDataMember(p), sSQL(sql), bClauseWhere(false), bCheckFKPartOfPK(false), iIndexName(0), pDaoHelper(NULL), pSqlQueryBuilder(NULL) { qAssert(pDataMember); }
+
+IxDataMemberSqlCallbackParams::~IxDataMemberSqlCallbackParams() { ; }
 
 } // namespace qx
 

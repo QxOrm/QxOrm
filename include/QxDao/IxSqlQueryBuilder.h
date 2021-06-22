@@ -96,6 +96,7 @@ public:
    IxDataMember * getDataId() const;
    IxDataMember * nextData(long & l) const;
    IxSqlRelation * nextRelation(long & l) const;
+   QString & getCurrentBuildingSql() const;
 
    void initIdX(long lAllRelationCount);
    bool insertIdX(long lIndex, const QVariant & idOwner, const QVariant & idData, void * ptr);

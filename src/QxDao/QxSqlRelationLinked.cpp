@@ -372,6 +372,7 @@ void QxSqlRelationLinked::hierarchyResolveOutput(QxSqlRelationParams & params)
       params.setRelationX(& m_pImpl->m_relationLinkedX);
       params.setJoinType(qx::dao::sql_join::no_join);
       bool bEager = m_pImpl->m_relationX.exist(p->getKey());
+      bool bCheckRootColumn = (m_pImpl->m_bRoot && checkRootColumns(p->getKey()));
       if (bEager)
       {
          QxSqlRelationLinkedImpl::type_relation & temp = const_cast<QxSqlRelationLinkedImpl::type_relation &>(m_pImpl->m_relationX.getByKey(p->getKey()));
@@ -379,7 +380,7 @@ void QxSqlRelationLinked::hierarchyResolveOutput(QxSqlRelationParams & params)
          params.setColumns(& std::get<2>(temp));
          params.setCustomAlias(std::get<3>(temp));
       }
-      if (bComplex) { vIdRelation = ((m_pImpl->m_bRoot || bEager) ? p->getIdFromQuery(bEager, params) : QVariant()); }
+      if (bComplex) { vIdRelation = ((bCheckRootColumn || bEager) ? p->getIdFromQuery(bEager, params) : QVariant()); }
       bool bValidId = (bComplex && qx::trait::is_valid_primary_key(vIdRelation));
       void * pFetched = (bValidId ? params.builder().existIdX(params.index(), params.id(), vIdRelation) : NULL);
       bByPass = (bValidId && (pFetched != NULL));
@@ -387,7 +388,7 @@ void QxSqlRelationLinked::hierarchyResolveOutput(QxSqlRelationParams & params)
       else
       {
          if (bEager) { pFetched = p->eagerFetch_ResolveOutput(params); }
-         else if (m_pImpl->m_bRoot && checkRootColumns(p->getKey())) { p->lazyFetch_ResolveOutput(params); }
+         else if (bCheckRootColumn) { p->lazyFetch_ResolveOutput(params); }
          if (bValidId && pFetched) { params.builder().insertIdX(params.index(), params.id(), vIdRelation, pFetched); }
          if (! isValidDaoHelper(params)) { return; }
       }

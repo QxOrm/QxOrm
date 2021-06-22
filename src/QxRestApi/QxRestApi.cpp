@@ -286,7 +286,8 @@ void QxRestApi::QxRestApiImpl::buildError(const QSqlError & error)
 #else // (QT_VERSION >= 0x050300)
    errDetail.insert("code", error.number());
 #endif // (QT_VERSION >= 0x050300)
-   errDetail.insert("desc", (error.driverText() + "\n" + error.databaseText()));
+   QString errMsg = (error.driverText() + "\n" + error.databaseText());
+   errDetail.insert("desc", errMsg);
    errJson.insert("error", errDetail);
    if (! m_requestId.isEmpty()) { errJson.insert("request_id", m_requestId); }
    m_errorJson = errJson;

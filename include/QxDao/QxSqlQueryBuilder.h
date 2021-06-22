@@ -61,7 +61,7 @@ QString joinQueryHash = (this->getDaoHelper() ? this->getDaoHelper()->qxQuery().
 QString ignoreSoftDeleteHash = (this->getDaoHelper() ? this->getDaoHelper()->getIgnoreSoftDeleteHash() : QString()); \
 QString key = QxClass<type_sql>::getSingleton()->getKey() + joinQueryHash + ignoreSoftDeleteHash + oper; \
 if ((joinQueryHash.isEmpty()) && (this->findSqlQuery(key))) { return (* this); } \
-QString sql; Q_UNUSED(sql);
+QString & sql = this->getCurrentBuildingSql(); sql = "";
 
 #define QX_SQL_BUILDER_INIT_FCT_WITH_RELATION(oper) \
 qx::dao::detail::IxDao_Timer timer(this->getDaoHelper(), qx::dao::detail::IxDao_Helper::timer_build_sql); \
@@ -69,7 +69,7 @@ QString joinQueryHash = (this->getDaoHelper() ? this->getDaoHelper()->qxQuery().
 QString ignoreSoftDeleteHash = (this->getDaoHelper() ? this->getDaoHelper()->getIgnoreSoftDeleteHash() : QString()); \
 QString key = QxClass<type_sql>::getSingleton()->getKey() + joinQueryHash + this->getHashRelation() + ignoreSoftDeleteHash + oper; \
 if ((joinQueryHash.isEmpty()) && (this->findSqlQuery(key))) { this->findSqlAlias(key); return (* this); } \
-QString sql; Q_UNUSED(sql);
+QString & sql = this->getCurrentBuildingSql(); sql = "";
 
 namespace qx {
 

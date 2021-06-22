@@ -342,7 +342,7 @@ bool IxSqlRelation::verifyOffset(QxSqlRelationParams & params, bool bId) const
    QString table = (bId ? this->tableAlias(params) : this->tableAliasOwner(params));
    if (! p || table.isEmpty()) { return true; }
    QString sSuffixAlias = ((! bId && (params.indexOwner() > 0)) ? QString("_" + QString::number(params.indexOwner())) : QString());
-   QString sRecordToFind = p->getSqlAlias(table) + sSuffixAlias;
+   QString sRecordToFind = p->getSqlAlias(table, false, 0, (& params.builder())) + sSuffixAlias;
    int index = params.query().record().indexOf(sRecordToFind);
    qAssert(index == params.offset());
    return (index == params.offset());
@@ -522,8 +522,8 @@ void IxSqlRelation::eagerSelect_ManyToMany(QxSqlRelationParams & params) const
    IxSqlRelation * pRelation = NULL;
    IxDataMember * p = NULL; IxDataMember * pId = this->getDataId(); qAssert(pId);
    QString tableAlias = this->tableAlias(params);
-   if (pId) { sql += (pId->getSqlTablePointNameAsAlias(tableAlias) + ", "); }
-   while ((p = this->nextData(l1))) { if (params.checkColumns(p->getKey())) { sql += (p->getSqlTablePointNameAsAlias(tableAlias) + ", "); } }
+   if (pId) { sql += (pId->getSqlTablePointNameAsAlias(tableAlias, ", ", "", false, "", (& params.builder())) + ", "); }
+   while ((p = this->nextData(l1))) { if (params.checkColumns(p->getKey())) { sql += (p->getSqlTablePointNameAsAlias(tableAlias, ", ", "", false, "", (& params.builder())) + ", "); } }
 
    if (params.relationX())
    {
@@ -551,9 +551,9 @@ void IxSqlRelation::eagerSelect_ManyToOne(QxSqlRelationParams & params) const
    QString table = this->table(); QString tableAlias = this->tableAlias(params);
    QString tableRef = this->tableAliasOwner(params); QString sSuffixAlias;
    if (params.indexOwner() > 0) { sSuffixAlias = "_" + QString::number(params.indexOwner()); }
-   if (pData) { sql += (pData->getSqlTablePointNameAsAlias(tableRef, ", ", sSuffixAlias) + ", "); }
-   if (pId) { sql += (pId->getSqlTablePointNameAsAlias(tableAlias) + ", "); }
-   while ((p = this->nextData(l1))) { if (params.checkColumns(p->getKey())) { sql += (p->getSqlTablePointNameAsAlias(tableAlias) + ", "); } }
+   if (pData) { sql += (pData->getSqlTablePointNameAsAlias(tableRef, ", ", sSuffixAlias, false, "", (& params.builder())) + ", "); }
+   if (pId) { sql += (pId->getSqlTablePointNameAsAlias(tableAlias, ", ", "", false, "", (& params.builder())) + ", "); }
+   while ((p = this->nextData(l1))) { if (params.checkColumns(p->getKey())) { sql += (p->getSqlTablePointNameAsAlias(tableAlias, ", ", "", false, "", (& params.builder())) + ", "); } }
 
    if (params.relationX())
    {
@@ -579,9 +579,9 @@ void IxSqlRelation::eagerSelect_OneToMany(QxSqlRelationParams & params) const
    IxDataMember * pForeign = this->getDataByKey(this->m_pImpl->m_sForeignKey); qAssert(pForeign);
    IxDataMember * p = NULL; IxDataMember * pId = this->getDataId(); qAssert(pId);
    QString tableAlias = this->tableAlias(params);
-   if (pId) { sql += (pId->getSqlTablePointNameAsAlias(tableAlias) + ", "); }
-   if (pForeign) { sql += (pForeign->getSqlTablePointNameAsAlias(tableAlias) + ", "); }
-   while ((p = this->nextData(l1))) { if ((p != pForeign) && (params.checkColumns(p->getKey()))) { sql += (p->getSqlTablePointNameAsAlias(tableAlias) + ", "); } }
+   if (pId) { sql += (pId->getSqlTablePointNameAsAlias(tableAlias, ", ", "", false, "", (& params.builder())) + ", "); }
+   if (pForeign) { sql += (pForeign->getSqlTablePointNameAsAlias(tableAlias, ", ", "", false, "", (& params.builder())) + ", "); }
+   while ((p = this->nextData(l1))) { if ((p != pForeign) && (params.checkColumns(p->getKey()))) { sql += (p->getSqlTablePointNameAsAlias(tableAlias, ", ", "", false, "", (& params.builder())) + ", "); } }
 
    if (params.relationX())
    {
@@ -606,8 +606,8 @@ void IxSqlRelation::eagerSelect_OneToOne(QxSqlRelationParams & params) const
    IxSqlRelation * pRelation = NULL;
    QString tableAlias = this->tableAlias(params);
    IxDataMember * p = NULL; IxDataMember * pId = this->getDataId(); qAssert(pId);
-   if (pId) { sql += (pId->getSqlTablePointNameAsAlias(tableAlias) + ", "); }
-   while ((p = this->nextData(l1))) { if (params.checkColumns(p->getKey())) { sql += (p->getSqlTablePointNameAsAlias(tableAlias) + ", "); } }
+   if (pId) { sql += (pId->getSqlTablePointNameAsAlias(tableAlias, ", ", "", false, "", (& params.builder())) + ", "); }
+   while ((p = this->nextData(l1))) { if (params.checkColumns(p->getKey())) { sql += (p->getSqlTablePointNameAsAlias(tableAlias, ", ", "", false, "", (& params.builder())) + ", "); } }
 
    if (params.relationX())
    {
@@ -637,14 +637,14 @@ void IxSqlRelation::eagerJoin_ManyToMany(QxSqlRelationParams & params) const
    QStringList lstForeignKeyDataType = m_pImpl->m_sForeignKeyDataType.split("|");
    qAssert(pIdOwner->getNameCount() == lstForeignKeyOwner.count());
    qAssert(pIdData->getNameCount() == lstForeignKeyDataType.count());
+   qx::dao::detail::IxDao_Helper * pDaoHelper = params.builder().getDaoHelper();
    QString sExtraTableAlias = m_pImpl->m_sExtraTable + "_" + QString::number(params.index());
    sql += this->getSqlJoin(params.joinType()) + qx::IxDataMember::getSqlTableName(m_pImpl->m_sExtraTable) + " " + sExtraTableAlias + " ON ";
    for (int i = 0; i < pIdOwner->getNameCount(); i++)
-   { sql += pIdOwner->getSqlAlias(tableOwner, true, i) + " = " + sExtraTableAlias + "." + lstForeignKeyOwner.at(i) + " AND "; }
+   { sql += pIdOwner->getSqlAlias(tableOwner, true, i, (& params.builder())) + " = " + sExtraTableAlias + "." + lstForeignKeyOwner.at(i) + " AND "; }
    sql = sql.left(sql.count() - 5); // Remove last " AND "
 
    QString joinQuery;
-   qx::dao::detail::IxDao_Helper * pDaoHelper = params.builder().getDaoHelper();
    if (pDaoHelper)
    {
       qx_query & query = pDaoHelper->qxQuery();
@@ -656,7 +656,7 @@ void IxSqlRelation::eagerJoin_ManyToMany(QxSqlRelationParams & params) const
    if (! joinQuery.isEmpty()) { sql += "("; }
    params.builder().addSqlQueryAlias(table, tableAlias);
    for (int i = 0; i < pIdData->getNameCount(); i++)
-   { sql += sExtraTableAlias + "." + lstForeignKeyDataType.at(i) + " = " + pIdData->getSqlAlias(tableAlias, true, i) + " AND "; }
+   { sql += sExtraTableAlias + "." + lstForeignKeyDataType.at(i) + " = " + pIdData->getSqlAlias(tableAlias, true, i, (& params.builder())) + " AND "; }
    if (! oSoftDelete.isEmpty() && oSoftDelete.getSqlFetchInJoin())
    { sql += oSoftDelete.buildSqlQueryToFetch(tableAlias) + " AND "; }
    sql = sql.left(sql.count() - 5); // Remove last " AND "
@@ -685,7 +685,7 @@ void IxSqlRelation::eagerJoin_ManyToOne(QxSqlRelationParams & params) const
    if (! joinQuery.isEmpty()) { sql += "("; }
    params.builder().addSqlQueryAlias(table, tableAlias);
    for (int i = 0; i < pId->getNameCount(); i++)
-   { sql += pId->getSqlAlias(tableAlias, true, i) + " = " + pData->getSqlAlias(tableRef, true, i) + " AND "; }
+   { sql += pId->getSqlAlias(tableAlias, true, i, (& params.builder())) + " = " + pData->getSqlAlias(tableRef, true, i, (& params.builder())) + " AND "; }
    if (! oSoftDelete.isEmpty() && oSoftDelete.getSqlFetchInJoin())
    { sql += oSoftDelete.buildSqlQueryToFetch(tableAlias) + " AND "; }
    sql = sql.left(sql.count() - 5); // Remove last " AND "
@@ -714,7 +714,7 @@ void IxSqlRelation::eagerJoin_OneToMany(QxSqlRelationParams & params) const
    if (! joinQuery.isEmpty()) { sql += "("; }
    params.builder().addSqlQueryAlias(table, tableAlias);
    for (int i = 0; i < pId->getNameCount(); i++)
-   { sql += pForeign->getSqlAlias(tableAlias, true, i) + " = " + pId->getSqlAlias(tableRef, true, i) + " AND "; }
+   { sql += pForeign->getSqlAlias(tableAlias, true, i, (& params.builder())) + " = " + pId->getSqlAlias(tableRef, true, i, (& params.builder())) + " AND "; }
    if (! oSoftDelete.isEmpty() && oSoftDelete.getSqlFetchInJoin())
    { sql += oSoftDelete.buildSqlQueryToFetch(tableAlias) + " AND "; }
    sql = sql.left(sql.count() - 5); // Remove last " AND "
@@ -743,7 +743,7 @@ void IxSqlRelation::eagerJoin_OneToOne(QxSqlRelationParams & params) const
    if (! joinQuery.isEmpty()) { sql += "("; }
    params.builder().addSqlQueryAlias(table, tableAlias);
    for (int i = 0; i < pId->getNameCount(); i++)
-   { sql += pId->getSqlAlias(tableAlias, true, i) + " = " + pIdRef->getSqlAlias(tableRef, true, i) + " AND "; }
+   { sql += pId->getSqlAlias(tableAlias, true, i, (& params.builder())) + " = " + pIdRef->getSqlAlias(tableRef, true, i, (& params.builder())) + " AND "; }
    if (! oSoftDelete.isEmpty() && oSoftDelete.getSqlFetchInJoin())
    { sql += oSoftDelete.buildSqlQueryToFetch(tableAlias) + " AND "; }
    sql = sql.left(sql.count() - 5); // Remove last " AND "
@@ -800,14 +800,14 @@ void IxSqlRelation::lazySelect_ManyToOne(QxSqlRelationParams & params) const
    IxDataMember * pData = this->getDataMember(); qAssert(pData);
    QString tableRef = this->tableAliasOwner(params); QString sSuffixAlias;
    if (params.indexOwner() > 0) { sSuffixAlias = "_" + QString::number(params.indexOwner()); }
-   if (pData) { sql += (pData->getSqlTablePointNameAsAlias(tableRef, ", ", sSuffixAlias) + ", "); }
+   if (pData) { sql += (pData->getSqlTablePointNameAsAlias(tableRef, ", ", sSuffixAlias, false, "", (& params.builder())) + ", "); }
 }
 
 void IxSqlRelation::lazyInsert_ManyToOne(QxSqlRelationParams & params) const
 {
    QString & sql = params.sql();
    IxDataMember * pData = this->getDataMember(); qAssert(pData);
-   if (pData) { sql += pData->getSqlName(", ") + ", "; }
+   if (pData) { sql += pData->getSqlName(", ", "", false, (& params.builder())) + ", "; }
 }
 
 void IxSqlRelation::lazyInsert_Values_ManyToOne(QxSqlRelationParams & params) const
@@ -821,7 +821,7 @@ void IxSqlRelation::lazyUpdate_ManyToOne(QxSqlRelationParams & params) const
 {
    QString & sql = params.sql();
    IxDataMember * pData = this->getDataMember(); qAssert(pData);
-   if (pData) { sql += pData->getSqlNameEqualToPlaceHolder("", ", ") + ", "; }
+   if (pData) { sql += pData->getSqlNameEqualToPlaceHolder("", ", ", false, (& params.builder())) + ", "; }
 }
 
 void IxSqlRelation::createTable_ManyToOne(QxSqlRelationParams & params) const
