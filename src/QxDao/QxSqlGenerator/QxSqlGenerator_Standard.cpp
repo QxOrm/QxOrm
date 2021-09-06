@@ -125,6 +125,7 @@ void QxSqlGenerator_Standard::formatSqlQuery(IxDao_Helper * pDaoHelper, QString 
    sql.replace(" VALUES ", "\n  VALUES ");
    sql.replace(" SET ", "\n  SET ");
    sql.replace(" RETURNING ", "\n  RETURNING ");
+   sql.replace(" LIMIT ", "\n  LIMIT ");
    sql += "\n";
 }
 

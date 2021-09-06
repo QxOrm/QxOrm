@@ -97,7 +97,7 @@ class QX_DLL_EXPORT QxSqlRelationLinked
 public:
 
    typedef std::shared_ptr<QxSqlRelationLinked> type_ptr;
-   typedef std::tuple<qx::dao::sql_join::join_type, IxSqlRelation *, QPair<QSet<QString>, long>, QString> type_relation;
+   typedef std::tuple<qx::dao::sql_join::join_type, IxSqlRelation *, QPair<QSet<QString>, long>, QString, bool> type_relation;
    typedef qx::QxCollection<QString, type_relation> type_lst_relation;
    typedef QHash<QString, type_ptr> type_lst_relation_linked;
 

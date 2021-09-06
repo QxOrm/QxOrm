@@ -113,7 +113,7 @@ public:
    virtual QString getDescription() const = 0;
    virtual QString createExtraTable() const = 0;
    virtual bool getCartesianProduct() const = 0;
-   virtual QVariant getIdFromQuery(bool bEager, QxSqlRelationParams & params) const = 0;
+   virtual QVariant getIdFromQuery(bool bEager, QxSqlRelationParams & params, int iOffset, int iNameIndex) const = 0;
    virtual void updateOffset(bool bEager, QxSqlRelationParams & params) const = 0;
    virtual void createTable(QxSqlRelationParams & params) const = 0;
    virtual void lazySelect(QxSqlRelationParams & params) const = 0;
@@ -144,10 +144,10 @@ public:
 
 protected:
 
-   QVariant getIdFromQuery_ManyToMany(bool bEager, QxSqlRelationParams & params) const;
-   QVariant getIdFromQuery_ManyToOne(bool bEager, QxSqlRelationParams & params) const;
-   QVariant getIdFromQuery_OneToMany(bool bEager, QxSqlRelationParams & params) const;
-   QVariant getIdFromQuery_OneToOne(bool bEager, QxSqlRelationParams & params) const;
+   QVariant getIdFromQuery_ManyToMany(bool bEager, QxSqlRelationParams & params, int iOffset, int iNameIndex) const;
+   QVariant getIdFromQuery_ManyToOne(bool bEager, QxSqlRelationParams & params, int iOffset, int iNameIndex) const;
+   QVariant getIdFromQuery_OneToMany(bool bEager, QxSqlRelationParams & params, int iOffset, int iNameIndex) const;
+   QVariant getIdFromQuery_OneToOne(bool bEager, QxSqlRelationParams & params, int iOffset, int iNameIndex) const;
 
    void updateOffset_ManyToMany(bool bEager, QxSqlRelationParams & params) const;
    void updateOffset_ManyToOne(bool bEager, QxSqlRelationParams & params) const;

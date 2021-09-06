@@ -367,5 +367,56 @@ int main(int argc, char * argv[])
    qx::dump(category_tmp, false);
    qx::dump(category_tmp, true);
 
+   // Test SQL DISTINCT keyword
+   QList<blog> listOfBlogDistinct;
+   qx_query queryDistinct; queryDistinct.distinct().limit(10);
+   daoError = qx::dao::fetch_by_query(queryDistinct, listOfBlogDistinct, NULL, QStringList() << "blog_text");
+   qAssert(! daoError.isValid());
+   qx::dump(listOfBlogDistinct);
+   qAssert(listOfBlogDistinct.count() > 0);
+   qAssert(listOfBlogDistinct.at(0).m_id == 0);
+   qAssert(! listOfBlogDistinct.at(0).m_text.isEmpty());
+
+   // Test SQL DISTINCT keyword with relationships
+   listOfBlogDistinct.clear();
+   qx_query queryDistinctWithRelations; queryDistinctWithRelations.distinct().limit(10);
+   daoError = qx::dao::fetch_by_query_with_relation(QStringList() << "<blog_alias> { blog_text }" << "list_comment <list_comment_alias> { comment_text }" << "author_id <author_alias> { name, birthdate }", queryDistinctWithRelations, listOfBlogDistinct);
+   qAssert(! daoError.isValid());
+   qx::dump(listOfBlogDistinct);
+   qAssert(listOfBlogDistinct.count() > 0);
+   qAssert(listOfBlogDistinct.at(0).m_id == 0);
+   qAssert(! listOfBlogDistinct.at(0).m_text.isEmpty());
+   qAssert(listOfBlogDistinct.at(0).m_author.get() != NULL);
+   qAssert(listOfBlogDistinct.at(0).m_author->m_id == "0"); // Not fetched
+   qAssert(! listOfBlogDistinct.at(0).m_author->m_name.isEmpty());
+   qAssert(listOfBlogDistinct.at(0).m_commentX.size() > 1);
+   qAssert(listOfBlogDistinct.at(0).m_commentX.at(0)->m_id == 0); // Not fetched
+   qAssert(! listOfBlogDistinct.at(0).m_commentX.at(0)->m_text.isEmpty());
+
+   // Test SQL DISTINCT keyword with relationships forcing ID in root level
+   listOfBlogDistinct.clear();
+   qx_query queryDistinctWithRelationsAndId; queryDistinctWithRelationsAndId.distinct().limit(10);
+   daoError = qx::dao::fetch_by_query_with_relation(QStringList() << "<blog_alias> { blog_id, blog_text }" << "list_comment <list_comment_alias> { comment_text }" << "author_id <author_alias> { name, birthdate }", queryDistinctWithRelationsAndId, listOfBlogDistinct);
+   qAssert(! daoError.isValid());
+   qx::dump(listOfBlogDistinct);
+   qAssert(listOfBlogDistinct.count() > 0);
+   qAssert(listOfBlogDistinct.at(0).m_id != 0); // Force fetched even if DISTINCT keyword is used
+   qAssert(! listOfBlogDistinct.at(0).m_text.isEmpty());
+   qAssert(listOfBlogDistinct.at(0).m_author.get() != NULL);
+   qAssert(listOfBlogDistinct.at(0).m_author->m_id == "0"); // Not fetched
+   qAssert(! listOfBlogDistinct.at(0).m_author->m_name.isEmpty());
+   qAssert(listOfBlogDistinct.at(0).m_commentX.size() > 1);
+   qAssert(listOfBlogDistinct.at(0).m_commentX.at(0)->m_id == 0); // Not fetched
+   qAssert(! listOfBlogDistinct.at(0).m_commentX.at(0)->m_text.isEmpty());
+
+   // Test fetch relationships (with alias) only in LEFT OUTER/INNER JOIN and WHERE clauses (so no columns in SELECT part) : use {NULL} syntax to define no relation columns in SELECT part
+   list_blog lstBlogComplexRelation4;
+   daoError = qx::dao::fetch_all_with_relation(QStringList() << "<blog_alias> { blog_text }" << "author_id <author_alias> { NULL }" << "list_comment <list_comment_alias> { NULL }", lstBlogComplexRelation4);
+   qAssert(! daoError.isValid());
+   qx::dump(lstBlogComplexRelation4);
+   qAssert((lstBlogComplexRelation4.size() > 0) && (lstBlogComplexRelation4[0].get() != NULL));
+   qAssert(lstBlogComplexRelation4[0]->m_author.get() == NULL); // Not fetched
+   qAssert(lstBlogComplexRelation4[0]->m_commentX.size() == 0); // Not fetched
+
    return 0;
 }

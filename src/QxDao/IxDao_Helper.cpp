@@ -190,6 +190,8 @@ bool IxDao_Helper::isReadOnly() const { return ((m_pImpl->m_pDataMemberX && m_pI
 
 bool IxDao_Helper::isMongoDB() const { return m_pImpl->m_bMongoDB; }
 
+bool IxDao_Helper::isDistinct() const { return m_pImpl->m_qxQuery.isDistinct(); }
+
 bool IxDao_Helper::getAddAutoIncrementIdToUpdateQuery() const { return qx::QxSqlDatabase::getSingleton()->getAddAutoIncrementIdToUpdateQuery(); }
 
 QStringList & IxDao_Helper::itemsAsJson() { return m_pImpl->m_lstItemsAsJson; }
@@ -291,6 +293,48 @@ bool IxDao_Helper::nextRecord()
    bool bNext = m_pImpl->m_query.next();
    if (bNext && m_pImpl->m_bTraceRecord) { dumpRecord(); }
    return bNext;
+}
+
+QVariant IxDao_Helper::getIdFromQuery(int iNameIndex /* = -1 */) const
+{
+   QVariant vId;
+   bool isDistinct = this->isDistinct();
+   qx::IxDataMember * pId = m_pImpl->m_pDataId; qAssert(pId); if (! pId) { return vId; }
+   bool bForceRootId = ((isDistinct && pId && m_pImpl->m_pSqlRelationLinked) ? m_pImpl->m_pSqlRelationLinked->checkRootColumns(pId->getKey()) : false);
+   if (((! isDistinct) || (bForceRootId)) && (iNameIndex < 0))
+   {
+      QString sId;
+      for (int i = 0; i < pId->getNameCount(); i++)
+      { sId += m_pImpl->m_query.value(i).toString() + "|"; }
+      vId = sId;
+   }
+   else if (((! isDistinct) || (bForceRootId)) && (iNameIndex >= 0))
+   {
+      qAssert(iNameIndex < pId->getNameCount());
+      vId = m_pImpl->m_query.value(iNameIndex);
+   }
+   else if (isDistinct)
+   {
+      QString sId;
+      QStringList columns = this->getSqlColumns();
+      if ((columns.count() <= 0) || (columns.at(0) == "*"))
+      {
+         long l = 0;
+         qx::IxDataMember * p = NULL;
+         while ((p = this->builder().nextData(l)))
+         { sId += m_pImpl->m_query.value(l - 1).toString() + "|"; }
+      }
+      else
+      {
+         for (int i = 0; i < columns.count(); i++)
+         {
+            qx::IxDataMember * p = m_pImpl->m_pDataMemberX->get_WithDaoStrategy(columns.at(i));
+            if (p && (p != pId)) { sId += m_pImpl->m_query.value(i).toString() + "|"; }
+         }
+      }
+      vId = static_cast<qlonglong>(qHash(sId));
+   }
+   return vId;
 }
 
 bool IxDao_Helper::updateSqlRelationX(const QStringList & relation)

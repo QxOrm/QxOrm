@@ -138,6 +138,8 @@ public:
    QStringList & itemsAsJson();
    bool isReadOnly() const;
    bool isMongoDB() const;
+   bool isDistinct() const;
+   QVariant getIdFromQuery(int iNameIndex = -1) const;
 
    QSqlError errFailed(bool bPrepare = false);
    QSqlError errEmpty();

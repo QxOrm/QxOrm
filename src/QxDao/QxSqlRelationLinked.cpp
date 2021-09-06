@@ -50,8 +50,16 @@ struct Q_DECL_HIDDEN QxSqlRelationLinked::QxSqlRelationLinkedImpl
 
    enum e_hierarchy_action { e_hierarchy_select, e_hierarchy_from, e_hierarchy_join, e_hierarchy_where_soft_delete };
 
+   /*
+      - qx::dao::sql_join::join_type eJoinType : LEFT OUTER JOIN / INNER JOIN / etc...
+      - IxSqlRelation * pRelation : relation instance
+      - QPair<QSet<QString>, long> lstColumns : list of columns ordered by index
+      - QString customAlias : custom SQL alias provided by user using <my_alias> syntax
+      - bool isNullColumn : NULL column (using {NULL} syntax) means : fetch relationships only in LEFT OUTER/INNER JOIN and WHERE clauses (so no columns in SELECT part)
+   */
+   typedef std::tuple<qx::dao::sql_join::join_type, IxSqlRelation *, QPair<QSet<QString>, long>, QString, bool> type_relation;
+
    typedef std::shared_ptr<QxSqlRelationLinked> type_ptr;
-   typedef std::tuple<qx::dao::sql_join::join_type, IxSqlRelation *, QPair<QSet<QString>, long>, QString> type_relation;
    typedef qx::QxCollection<QString, type_relation> type_lst_relation;
    typedef QHash<QString, type_ptr> type_lst_relation_linked;
 
@@ -111,7 +119,7 @@ struct Q_DECL_HIDDEN QxSqlRelationLinked::QxSqlRelationLinkedImpl
 
          switch (action)
          {
-            case e_hierarchy_select:               p->eagerSelect(params); break;
+            case e_hierarchy_select:               if (! std::get<4>(temp)) { p->eagerSelect(params); } break;
             case e_hierarchy_from:                 p->eagerFrom(params); break;
             case e_hierarchy_join:                 p->eagerJoin(params); break;
             case e_hierarchy_where_soft_delete:    p->eagerWhereSoftDelete(params); break;
@@ -298,11 +306,15 @@ qx_bool QxSqlRelationLinked::QxSqlRelationLinkedImpl::insertRelationToHierarchy(
    if (! pRelation) { qAssert(false); return qx_bool(false, QString("invalid relation pointer : 'NULL pointer'")); }
    if (bModeRemoveColumns && (columns.count() > 0)) { columns = removeColumns(columns, pRelation); }
 
-   QString sDataIdKey = (pRelation->getDataId() ? pRelation->getDataId()->getKey() : QString());
-   Q_FOREACH(QString sColumn, columns)
+   bool isNullColumn = ((columns.count() == 1) && (columns.at(0).toUpper() == QString("NULL")));
+   if (! isNullColumn)
    {
-      if ((! pRelation->getDataByKey(sColumn)) && (sDataIdKey != sColumn))
-      { return qx_bool(false, QString("invalid relation column : '" + sKeyTemp + "." + sColumn + "' (" + sKey + ")")); }
+      QString sDataIdKey = (pRelation->getDataId() ? pRelation->getDataId()->getKey() : QString());
+      Q_FOREACH(QString sColumn, columns)
+      {
+         if ((! pRelation->getDataByKey(sColumn)) && (sDataIdKey != sColumn))
+         { return qx_bool(false, QString("invalid relation column : '" + sKeyTemp + "." + sColumn + "' (" + sKey + ")")); }
+      }
    }
 
    bool bRelationXOrdered = (pDaoHelper ? (! pDaoHelper->qxQuery().getJoinQueryHash().isEmpty()) : false);
@@ -312,9 +324,9 @@ qx_bool QxSqlRelationLinked::QxSqlRelationLinkedImpl::insertRelationToHierarchy(
    if (! customAliasSuffix.isEmpty() && pRelation->getClass()) { customAlias = (pRelation->getClass()->getKey() + customAliasSuffix); }
    if (! customAliasPrefix.isEmpty() && pRelation->getClass()) { customAlias = (customAliasPrefix + pRelation->getClass()->getKey()); }
 #if (QT_VERSION >= 0x051400)
-   if (! m_relationX.exist(sKeyTemp)) { m_relationX.insert(sKeyTemp, QxSqlRelationLinkedImpl::type_relation(eJoinType, pRelation, qMakePair(QSet(columns.begin(), columns.end()), static_cast<long>(0)), customAlias)); }
+   if (! m_relationX.exist(sKeyTemp)) { m_relationX.insert(sKeyTemp, QxSqlRelationLinkedImpl::type_relation(eJoinType, pRelation, qMakePair(QSet(columns.begin(), columns.end()), static_cast<long>(0)), customAlias, isNullColumn)); }
 #else // (QT_VERSION >= 0x051400)
-   if (! m_relationX.exist(sKeyTemp)) { m_relationX.insert(sKeyTemp, QxSqlRelationLinkedImpl::type_relation(eJoinType, pRelation, qMakePair(columns.toSet(), static_cast<long>(0)), customAlias)); }
+   if (! m_relationX.exist(sKeyTemp)) { m_relationX.insert(sKeyTemp, QxSqlRelationLinkedImpl::type_relation(eJoinType, pRelation, qMakePair(columns.toSet(), static_cast<long>(0)), customAlias, isNullColumn)); }
 #endif // (QT_VERSION >= 0x051400)
    if (sRelationX.count() <= 0) { return qx_bool(true); }
 
@@ -373,21 +385,23 @@ void QxSqlRelationLinked::hierarchyResolveOutput(QxSqlRelationParams & params)
       params.setJoinType(qx::dao::sql_join::no_join);
       bool bEager = m_pImpl->m_relationX.exist(p->getKey());
       bool bCheckRootColumn = (m_pImpl->m_bRoot && checkRootColumns(p->getKey()));
+      bool bIsNullColumn = false;
       if (bEager)
       {
          QxSqlRelationLinkedImpl::type_relation & temp = const_cast<QxSqlRelationLinkedImpl::type_relation &>(m_pImpl->m_relationX.getByKey(p->getKey()));
          params.setJoinType(std::get<0>(temp));
          params.setColumns(& std::get<2>(temp));
          params.setCustomAlias(std::get<3>(temp));
+         bIsNullColumn = std::get<4>(temp);
       }
-      if (bComplex) { vIdRelation = ((bCheckRootColumn || bEager) ? p->getIdFromQuery(bEager, params) : QVariant()); }
+      if (bComplex) { vIdRelation = ((bCheckRootColumn || (bEager && (! bIsNullColumn))) ? p->getIdFromQuery(bEager, params, -1, -1) : QVariant()); }
       bool bValidId = (bComplex && qx::trait::is_valid_primary_key(vIdRelation));
       void * pFetched = (bValidId ? params.builder().existIdX(params.index(), params.id(), vIdRelation) : NULL);
       bByPass = (bValidId && (pFetched != NULL));
       if (bByPass) { p->updateOffset(bEager, params); }
       else
       {
-         if (bEager) { pFetched = p->eagerFetch_ResolveOutput(params); }
+         if (bEager) { if (! bIsNullColumn) { pFetched = p->eagerFetch_ResolveOutput(params); } }
          else if (bCheckRootColumn) { p->lazyFetch_ResolveOutput(params); }
          if (bValidId && pFetched) { params.builder().insertIdX(params.index(), params.id(), vIdRelation, pFetched); }
          if (! isValidDaoHelper(params)) { return; }
@@ -477,14 +491,16 @@ void QxSqlRelationLinked::updateOffset(QxSqlRelationParams & params)
       IxSqlRelation * p = itr->second; if (! p) { continue; }
       params.setRelationX(& m_pImpl->m_relationLinkedX);
       bool bEager = m_pImpl->m_relationX.exist(p->getKey());
+      bool bIsNullColumn = false;
       if (bEager)
       {
          QxSqlRelationLinkedImpl::type_relation & temp = const_cast<QxSqlRelationLinkedImpl::type_relation &>(m_pImpl->m_relationX.getByKey(p->getKey()));
          params.setColumns(& std::get<2>(temp));
          params.setCustomAlias(std::get<3>(temp));
+         bIsNullColumn = std::get<4>(temp);
       }
       else { params.setColumns(NULL); params.setCustomAlias(""); }
-      if (bEager) { p->updateOffset(true, params); }
+      if (bEager) { if (! bIsNullColumn) { p->updateOffset(true, params); } }
       else if (m_pImpl->m_bRoot) { p->updateOffset(false, params); }
       QxSqlRelationLinked_ptr pRelationLinked = m_pImpl->m_relationLinkedX.value(p->getKey());
       if (! pRelationLinked) { continue; }

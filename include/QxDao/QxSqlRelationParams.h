@@ -90,6 +90,7 @@ protected:
    QString                                      m_sCustomAlias;         //!< Custom SQL table alias instead of generating a new one automatically
    QString                                      m_sCustomAliasOwner;    //!< Custom SQL table alias owner instead of generating a new one automatically
    qx::QxCollection<QString, QVariantList> *    m_pLstExecBatch;        //!< List of data to send to database when QSqlQuery::execBatch() method is used
+   bool                                         m_bIsDistinct;          //!< SQL query of type SELECT DISTINCT
 
 public:
 
@@ -123,13 +124,13 @@ public:
    inline QString getCustomAlias() const                                      { return m_sCustomAlias; }
    inline QString getCustomAliasOwner() const                                 { return m_sCustomAliasOwner; }
    inline qx::QxCollection<QString, QVariantList> * getLstExecBatch() const   { return m_pLstExecBatch; }
+   inline bool isDistinct() const                                             { return m_bIsDistinct; }
 
    inline void setId(const QVariant & vId)                                    { m_vId = vId; }
    inline void setIndex(long lIndex)                                          { m_lIndex = lIndex; }
    inline void setIndexOwner(long lIndex)                                     { m_lIndexOwner = lIndex; }
    inline void setOffset(long lOffset)                                        { m_lOffset = lOffset; }
    inline void setSql(QString * sql)                                          { m_sql = sql; }
-   inline void setBuilder(IxSqlQueryBuilder * builder)                        { m_builder = builder; }
    inline void setQuery(QSqlQuery * query)                                    { m_query = query; }
    inline void setDatabase(QSqlDatabase * database)                           { m_database = database; }
    inline void setOwner(void * pOwner)                                        { m_pOwner = pOwner; }
@@ -144,6 +145,7 @@ public:
    inline void setCustomAlias(const QString & s)                              { m_sCustomAlias = s; }
    inline void setCustomAliasOwner(const QString & s)                         { m_sCustomAliasOwner = s; }
    inline void setLstExecBatch(qx::QxCollection<QString, QVariantList> * p)   { m_pLstExecBatch = p; }
+   void setBuilder(IxSqlQueryBuilder * builder);
 
 };
 

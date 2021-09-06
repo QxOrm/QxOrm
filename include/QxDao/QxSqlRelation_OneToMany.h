@@ -101,8 +101,8 @@ public:
       else { return qx::dao::save_with_relation_recursive(this->getContainer(params), params.saveMode(), (& params.database()), (& params)); }
    }
 
-   virtual QVariant getIdFromQuery(bool bEager, QxSqlRelationParams & params) const
-   { return this->getIdFromQuery_OneToMany(bEager, params); }
+   virtual QVariant getIdFromQuery(bool bEager, QxSqlRelationParams & params, int iOffset, int iNameIndex) const
+   { return this->getIdFromQuery_OneToMany(bEager, params, iOffset, iNameIndex); }
 
    virtual void updateOffset(bool bEager, QxSqlRelationParams & params) const
    { this->updateOffset_OneToMany(bEager, params); }
@@ -122,26 +122,41 @@ public:
       QSqlQuery & query = params.query();
       IxDataMember * p = NULL; IxDataMember * pId = this->getDataId(); qAssert(pId); if (! pId) { return NULL; }
       IxDataMember * pForeign = this->getDataByKey(this->getForeignKey()); qAssert(pForeign); if (! pForeign) { return NULL; }
-      long lIndex = 0; long lOffsetId = (pId ? pId->getNameCount() : 0); long lOffsetForeign = (pForeign ? pForeign->getNameCount() : 0);
+      long lIndex = 0; long lOffsetId = ((pId && (! params.isDistinct())) ? pId->getNameCount() : 0);
+      long lOffsetForeign = ((pForeign && (! params.isDistinct())) ? pForeign->getNameCount() : 0);
       long lOffsetOld = params.offset(); this->updateOffset(true, params);
       long lOffsetRelation = (lOffsetOld + lOffsetId + lOffsetForeign);
       long lRelation = 0; IxSqlRelation * pRelation = NULL;
       bool bValidId(false), bValidForeign(false);
-      for (int i = 0; i < pId->getNameCount(); i++)
-      { QVariant vId = query.value(lOffsetOld + i); bValidId = (bValidId || qx::trait::is_valid_primary_key(vId)); }
-      for (int i = 0; i < pForeign->getNameCount(); i++)
-      { QVariant vForeign = query.value(lOffsetOld + lOffsetId + i); bValidForeign = (bValidForeign || qx::trait::is_valid_primary_key(vForeign)); }
-      if (! bValidId || ! bValidForeign) { return NULL; }
+
+      if (! params.isDistinct())
+      {
+         for (int i = 0; i < pId->getNameCount(); i++)
+         { QVariant vId = query.value(lOffsetOld + i); bValidId = (bValidId || qx::trait::is_valid_primary_key(vId)); }
+         for (int i = 0; i < pForeign->getNameCount(); i++)
+         { QVariant vForeign = query.value(lOffsetOld + lOffsetId + i); bValidForeign = (bValidForeign || qx::trait::is_valid_primary_key(vForeign)); }
+         if (! bValidId || ! bValidForeign) { return NULL; }
+      }
 
       type_item item = this->createItem();
       type_data & item_val = item.value_qx();
       if (! this->callTriggerBeforeFetch(item_val, params)) { return NULL; }
-      for (int i = 0; i < pId->getNameCount(); i++)
-      { QVariant v = query.value(lOffsetOld + i); qx::cvt::from_variant(v, item.key(), "", i, qx::cvt::context::e_database); }
-      for (int i = 0; i < pId->getNameCount(); i++)
-      { QVariant v = query.value(lOffsetOld + i); pId->fromVariant((& item_val), v, "", i, qx::cvt::context::e_database); }
-      for (int i = 0; i < pForeign->getNameCount(); i++)
-      { QVariant v = query.value(lOffsetOld + lOffsetId + i); pForeign->fromVariant((& item_val), v, "", i, qx::cvt::context::e_database); }
+
+      if (! params.isDistinct())
+      {
+         for (int i = 0; i < pId->getNameCount(); i++)
+         { QVariant v = query.value(lOffsetOld + i); qx::cvt::from_variant(v, item.key(), "", i, qx::cvt::context::e_database); }
+         for (int i = 0; i < pId->getNameCount(); i++)
+         { QVariant v = query.value(lOffsetOld + i); pId->fromVariant((& item_val), v, "", i, qx::cvt::context::e_database); }
+         for (int i = 0; i < pForeign->getNameCount(); i++)
+         { QVariant v = query.value(lOffsetOld + lOffsetId + i); pForeign->fromVariant((& item_val), v, "", i, qx::cvt::context::e_database); }
+      }
+      else
+      {
+         for (int i = 0; i < pId->getNameCount(); i++)
+         { QVariant v = this->getIdFromQuery(true, params, (lOffsetOld + i), i); qx::cvt::from_variant(v, item.key(), "", i, qx::cvt::context::e_database); }
+      }
+
       while ((p = this->nextData(lIndex)))
       { if ((p != pForeign) && (params.checkColumns(p->getKey()))) { p->fromVariant((& item_val), query.value(lOffsetRelation++), -1, qx::cvt::context::e_database); } }
 

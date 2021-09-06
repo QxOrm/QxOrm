@@ -337,7 +337,7 @@ QString IxSqlRelation::getSqlJoin(qx::dao::sql_join::join_type e /* = qx::dao::s
 bool IxSqlRelation::verifyOffset(QxSqlRelationParams & params, bool bId) const
 {
 #ifdef _QX_MODE_DEBUG
-   if (! qx::QxSqlDatabase::getSingleton()->getVerifyOffsetRelation()) { return true; }
+   if ((! qx::QxSqlDatabase::getSingleton()->getVerifyOffsetRelation()) || (params.isDistinct())) { return true; }
    IxDataMember * p = (bId ? this->getDataId() : this->getDataMember());
    QString table = (bId ? this->tableAlias(params) : this->tableAliasOwner(params));
    if (! p || table.isEmpty()) { return true; }
@@ -351,40 +351,121 @@ bool IxSqlRelation::verifyOffset(QxSqlRelationParams & params, bool bId) const
 #endif // _QX_MODE_DEBUG
 }
 
-QVariant IxSqlRelation::getIdFromQuery_ManyToMany(bool bEager, QxSqlRelationParams & params) const
+QVariant IxSqlRelation::getIdFromQuery_ManyToMany(bool bEager, QxSqlRelationParams & params, int iOffset, int iNameIndex) const
 {
-   QString sId; IxDataMember * pId = this->getDataId();
+   QVariant vId; IxDataMember * pId = this->getDataId();
    if (! bEager || ! pId) { return QVariant(); }
-   for (int i = 0; i < pId->getNameCount(); i++)
-   { sId += params.query().value(params.offset() + i).toString() + "|"; }
-   return QVariant(sId);
+   iOffset = ((iOffset < 0) ? params.offset() : iOffset);
+   if ((! params.isDistinct()) && (iNameIndex < 0))
+   {
+      QString sId;
+      for (int i = 0; i < pId->getNameCount(); i++)
+      { sId += params.query().value(iOffset + i).toString() + "|"; }
+      vId = sId;
+   }
+   else if ((! params.isDistinct()) && (iNameIndex >= 0))
+   {
+      qAssert(iNameIndex < pId->getNameCount());
+      return params.query().value(iOffset + iNameIndex);
+   }
+   else if (params.isDistinct())
+   {
+      QString sId;
+      IxDataMember * p = NULL;
+      long lIndex = 0; long lCurrIndex = 0;
+      while ((p = this->nextData(lIndex)))
+      { if (params.checkColumns(p->getKey())) { sId += params.query().value(iOffset + lCurrIndex).toString() + "|"; lCurrIndex++; } }
+      vId = static_cast<qlonglong>(qHash(sId));
+   }
+   return vId;
 }
 
-QVariant IxSqlRelation::getIdFromQuery_ManyToOne(bool bEager, QxSqlRelationParams & params) const
+QVariant IxSqlRelation::getIdFromQuery_ManyToOne(bool bEager, QxSqlRelationParams & params, int iOffset, int iNameIndex) const
 {
-   Q_UNUSED(bEager); QString sId;
+   Q_UNUSED(bEager); QVariant vId;
    IxDataMember * pId = this->getDataId(); if (! pId) { return QVariant(); }
-   for (int i = 0; i < pId->getNameCount(); i++)
-   { sId += params.query().value(params.offset() + i).toString() + "|"; }
-   return QVariant(sId);
+   iOffset = ((iOffset < 0) ? params.offset() : iOffset);
+   if ((! params.isDistinct()) && (iNameIndex < 0))
+   {
+      QString sId;
+      for (int i = 0; i < pId->getNameCount(); i++)
+      { sId += params.query().value(iOffset + i).toString() + "|"; }
+      vId = sId;
+   }
+   else if ((! params.isDistinct()) && (iNameIndex >= 0))
+   {
+      qAssert(iNameIndex < pId->getNameCount());
+      return params.query().value(iOffset + iNameIndex);
+   }
+   else if (params.isDistinct())
+   {
+      QString sId;
+      IxDataMember * p = NULL;
+      long lIndex = 0; long lCurrIndex = 0;
+      while ((p = this->nextData(lIndex)))
+      { if (params.checkColumns(p->getKey())) { sId += params.query().value(iOffset + lCurrIndex).toString() + "|"; lCurrIndex++; } }
+      vId = static_cast<qlonglong>(qHash(sId));
+   }
+   return vId;
 }
 
-QVariant IxSqlRelation::getIdFromQuery_OneToMany(bool bEager, QxSqlRelationParams & params) const
+QVariant IxSqlRelation::getIdFromQuery_OneToMany(bool bEager, QxSqlRelationParams & params, int iOffset, int iNameIndex) const
 {
-   QString sId; IxDataMember * pId = this->getDataId();
+   QVariant vId; IxDataMember * pId = this->getDataId();
    if (! bEager || ! pId) { return QVariant(); }
-   for (int i = 0; i < pId->getNameCount(); i++)
-   { sId += params.query().value(params.offset() + i).toString() + "|"; }
-   return QVariant(sId);
+   iOffset = ((iOffset < 0) ? params.offset() : iOffset);
+   if ((! params.isDistinct()) && (iNameIndex < 0))
+   {
+      QString sId;
+      for (int i = 0; i < pId->getNameCount(); i++)
+      { sId += params.query().value(iOffset + i).toString() + "|"; }
+      vId = sId;
+   }
+   else if ((! params.isDistinct()) && (iNameIndex >= 0))
+   {
+      qAssert(iNameIndex < pId->getNameCount());
+      return params.query().value(iOffset + iNameIndex);
+   }
+   else if (params.isDistinct())
+   {
+      QString sId;
+      IxDataMember * p = NULL;
+      IxDataMember * pForeign = this->getDataByKey(this->getForeignKey());
+      long lIndex = 0; long lCurrIndex = 0;
+      while ((p = this->nextData(lIndex)))
+      { if ((p != pForeign) && (params.checkColumns(p->getKey()))) { sId += params.query().value(iOffset + lCurrIndex).toString() + "|"; lCurrIndex++; } }
+      vId = static_cast<qlonglong>(qHash(sId));
+   }
+   return vId;
 }
 
-QVariant IxSqlRelation::getIdFromQuery_OneToOne(bool bEager, QxSqlRelationParams & params) const
+QVariant IxSqlRelation::getIdFromQuery_OneToOne(bool bEager, QxSqlRelationParams & params, int iOffset, int iNameIndex) const
 {
-   QString sId; IxDataMember * pId = this->getDataId();
+   QVariant vId; IxDataMember * pId = this->getDataId();
    if (! bEager || ! pId) { return QVariant(); }
-   for (int i = 0; i < pId->getNameCount(); i++)
-   { sId += params.query().value(params.offset() + i).toString() + "|"; }
-   return QVariant(sId);
+   iOffset = ((iOffset < 0) ? params.offset() : iOffset);
+   if ((! params.isDistinct()) && (iNameIndex < 0))
+   {
+      QString sId;
+      for (int i = 0; i < pId->getNameCount(); i++)
+      { sId += params.query().value(iOffset + i).toString() + "|"; }
+      vId = sId;
+   }
+   else if ((! params.isDistinct()) && (iNameIndex >= 0))
+   {
+      qAssert(iNameIndex < pId->getNameCount());
+      return params.query().value(iOffset + iNameIndex);
+   }
+   else if (params.isDistinct())
+   {
+      QString sId;
+      IxDataMember * p = NULL;
+      long lIndex = 0; long lCurrIndex = 0;
+      while ((p = this->nextData(lIndex)))
+      { if (params.checkColumns(p->getKey())) { sId += params.query().value(iOffset + lCurrIndex).toString() + "|"; lCurrIndex++; } }
+      vId = static_cast<qlonglong>(qHash(sId));
+   }
+   return vId;
 }
 
 void IxSqlRelation::updateOffset_ManyToMany(bool bEager, QxSqlRelationParams & params) const
@@ -392,7 +473,7 @@ void IxSqlRelation::updateOffset_ManyToMany(bool bEager, QxSqlRelationParams & p
    if (! bEager) { return; }
    const QxSoftDelete & oSoftDelete = this->m_pImpl->getSoftDelete(params);
    long lOffsetNew = params.offset() + this->getDataCount();
-   lOffsetNew += (this->getDataId() ? this->getDataId()->getNameCount() : 0);
+   lOffsetNew += ((this->getDataId() && (! params.isDistinct())) ? this->getDataId()->getNameCount() : 0);
    lOffsetNew += (oSoftDelete.isEmpty() ? 0 : 1);
    params.setOffset(lOffsetNew);
 
@@ -421,8 +502,8 @@ void IxSqlRelation::updateOffset_ManyToMany(bool bEager, QxSqlRelationParams & p
 void IxSqlRelation::updateOffset_ManyToOne(bool bEager, QxSqlRelationParams & params) const
 {
    const QxSoftDelete & oSoftDelete = this->m_pImpl->getSoftDelete(params);
-   long lOffsetDataMember = (this->getDataMember() ? this->getDataMember()->getNameCount() : 0);
-   long lOffsetDataId = (bEager ? (this->getDataId() ? this->getDataId()->getNameCount() : 0) : 0);
+   long lOffsetDataMember = ((this->getDataMember() && (! params.isDistinct())) ? this->getDataMember()->getNameCount() : 0);
+   long lOffsetDataId = (bEager ? ((this->getDataId() && (! params.isDistinct())) ? this->getDataId()->getNameCount() : 0) : 0);
    long lOffsetDataCount = (bEager ? this->getDataCount() : 0);
    long lOffsetSoftDelete = (bEager ? (oSoftDelete.isEmpty() ? 0 : 1) : 0);
    long lOffsetNew = (params.offset() + lOffsetDataMember + lOffsetDataId + lOffsetDataCount + lOffsetSoftDelete);
@@ -456,9 +537,9 @@ void IxSqlRelation::updateOffset_OneToMany(bool bEager, QxSqlRelationParams & pa
    const QxSoftDelete & oSoftDelete = this->m_pImpl->getSoftDelete(params);
    IxDataMember * pForeign = this->getDataByKey(m_pImpl->m_sForeignKey);
    bool bAddOffsetForeign = (pForeign && ! this->getLstDataMember()->exist(m_pImpl->m_sForeignKey));
-   long lOffsetId = (this->getDataId() ? this->getDataId()->getNameCount() : 0);
+   long lOffsetId = ((this->getDataId() && (! params.isDistinct())) ? this->getDataId()->getNameCount() : 0);
    long lOffsetNew = (params.offset() + this->getDataCount() + lOffsetId);
-   lOffsetNew = (lOffsetNew + (bAddOffsetForeign ? pForeign->getNameCount() : 0));
+   lOffsetNew = (lOffsetNew + ((bAddOffsetForeign && (! params.isDistinct())) ? pForeign->getNameCount() : 0));
    lOffsetNew = (lOffsetNew + (oSoftDelete.isEmpty() ? 0 : 1));
    params.setOffset(lOffsetNew);
 
@@ -489,7 +570,7 @@ void IxSqlRelation::updateOffset_OneToOne(bool bEager, QxSqlRelationParams & par
    if (! bEager) { return; }
    const QxSoftDelete & oSoftDelete = this->m_pImpl->getSoftDelete(params);
    long lOffsetNew = params.offset() + this->getDataCount();
-   lOffsetNew += (this->getDataId() ? this->getDataId()->getNameCount() : 0);
+   lOffsetNew += ((this->getDataId() && (! params.isDistinct())) ? this->getDataId()->getNameCount() : 0);
    lOffsetNew += (oSoftDelete.isEmpty() ? 0 : 1);
    params.setOffset(lOffsetNew);
 
@@ -522,7 +603,7 @@ void IxSqlRelation::eagerSelect_ManyToMany(QxSqlRelationParams & params) const
    IxSqlRelation * pRelation = NULL;
    IxDataMember * p = NULL; IxDataMember * pId = this->getDataId(); qAssert(pId);
    QString tableAlias = this->tableAlias(params);
-   if (pId) { sql += (pId->getSqlTablePointNameAsAlias(tableAlias, ", ", "", false, "", (& params.builder())) + ", "); }
+   if (pId && (! params.isDistinct())) { sql += (pId->getSqlTablePointNameAsAlias(tableAlias, ", ", "", false, "", (& params.builder())) + ", "); }
    while ((p = this->nextData(l1))) { if (params.checkColumns(p->getKey())) { sql += (p->getSqlTablePointNameAsAlias(tableAlias, ", ", "", false, "", (& params.builder())) + ", "); } }
 
    if (params.relationX())
@@ -551,8 +632,8 @@ void IxSqlRelation::eagerSelect_ManyToOne(QxSqlRelationParams & params) const
    QString table = this->table(); QString tableAlias = this->tableAlias(params);
    QString tableRef = this->tableAliasOwner(params); QString sSuffixAlias;
    if (params.indexOwner() > 0) { sSuffixAlias = "_" + QString::number(params.indexOwner()); }
-   if (pData) { sql += (pData->getSqlTablePointNameAsAlias(tableRef, ", ", sSuffixAlias, false, "", (& params.builder())) + ", "); }
-   if (pId) { sql += (pId->getSqlTablePointNameAsAlias(tableAlias, ", ", "", false, "", (& params.builder())) + ", "); }
+   if (pData && (! params.isDistinct())) { sql += (pData->getSqlTablePointNameAsAlias(tableRef, ", ", sSuffixAlias, false, "", (& params.builder())) + ", "); }
+   if (pId && (! params.isDistinct())) { sql += (pId->getSqlTablePointNameAsAlias(tableAlias, ", ", "", false, "", (& params.builder())) + ", "); }
    while ((p = this->nextData(l1))) { if (params.checkColumns(p->getKey())) { sql += (p->getSqlTablePointNameAsAlias(tableAlias, ", ", "", false, "", (& params.builder())) + ", "); } }
 
    if (params.relationX())
@@ -579,8 +660,8 @@ void IxSqlRelation::eagerSelect_OneToMany(QxSqlRelationParams & params) const
    IxDataMember * pForeign = this->getDataByKey(this->m_pImpl->m_sForeignKey); qAssert(pForeign);
    IxDataMember * p = NULL; IxDataMember * pId = this->getDataId(); qAssert(pId);
    QString tableAlias = this->tableAlias(params);
-   if (pId) { sql += (pId->getSqlTablePointNameAsAlias(tableAlias, ", ", "", false, "", (& params.builder())) + ", "); }
-   if (pForeign) { sql += (pForeign->getSqlTablePointNameAsAlias(tableAlias, ", ", "", false, "", (& params.builder())) + ", "); }
+   if (pId && (! params.isDistinct())) { sql += (pId->getSqlTablePointNameAsAlias(tableAlias, ", ", "", false, "", (& params.builder())) + ", "); }
+   if (pForeign && (! params.isDistinct())) { sql += (pForeign->getSqlTablePointNameAsAlias(tableAlias, ", ", "", false, "", (& params.builder())) + ", "); }
    while ((p = this->nextData(l1))) { if ((p != pForeign) && (params.checkColumns(p->getKey()))) { sql += (p->getSqlTablePointNameAsAlias(tableAlias, ", ", "", false, "", (& params.builder())) + ", "); } }
 
    if (params.relationX())
@@ -606,7 +687,7 @@ void IxSqlRelation::eagerSelect_OneToOne(QxSqlRelationParams & params) const
    IxSqlRelation * pRelation = NULL;
    QString tableAlias = this->tableAlias(params);
    IxDataMember * p = NULL; IxDataMember * pId = this->getDataId(); qAssert(pId);
-   if (pId) { sql += (pId->getSqlTablePointNameAsAlias(tableAlias, ", ", "", false, "", (& params.builder())) + ", "); }
+   if (pId && (! params.isDistinct())) { sql += (pId->getSqlTablePointNameAsAlias(tableAlias, ", ", "", false, "", (& params.builder())) + ", "); }
    while ((p = this->nextData(l1))) { if (params.checkColumns(p->getKey())) { sql += (p->getSqlTablePointNameAsAlias(tableAlias, ", ", "", false, "", (& params.builder())) + ", "); } }
 
    if (params.relationX())

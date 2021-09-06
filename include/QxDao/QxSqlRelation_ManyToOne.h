@@ -87,8 +87,8 @@ public:
    virtual void lazyUpdate_ResolveInput(QxSqlRelationParams & params) const
    { this->lazyInsert_ResolveInput(params); }
 
-   virtual QVariant getIdFromQuery(bool bEager, QxSqlRelationParams & params) const
-   { return this->getIdFromQuery_ManyToOne(bEager, params); }
+   virtual QVariant getIdFromQuery(bool bEager, QxSqlRelationParams & params, int iOffset, int iNameIndex) const
+   { return this->getIdFromQuery_ManyToOne(bEager, params, iOffset, iNameIndex); }
 
    virtual void updateOffset(bool bEager, QxSqlRelationParams & params) const
    { this->updateOffset_ManyToOne(bEager, params); }
@@ -128,21 +128,28 @@ public:
       typename QxSqlRelation<DataType, Owner>::type_owner & currOwner = this->getOwner(params);
       IxDataMember * pData = this->getDataMember(); qAssert(pData); if (! pData) { return NULL; }
       IxDataMember * p = NULL; IxDataMember * pId = this->getDataId(); qAssert(pId); if (! pId) { return NULL; }
-      long lIndex = 0; long lOffsetId = (pId ? pId->getNameCount() : 0); long lOffsetData = (pData ? pData->getNameCount() : 0);
+      long lIndex = 0; long lOffsetId = ((pId && (! params.isDistinct())) ? pId->getNameCount() : 0);
+      long lOffsetData = ((pData && (! params.isDistinct())) ? pData->getNameCount() : 0);
       long lOffsetOld = params.offset(); this->updateOffset(true, params);
       long lOffsetRelation = (lOffsetOld + lOffsetId + lOffsetData);
       long lRelation = 0; IxSqlRelation * pRelation = NULL;
       bool bValidId(false), bValidIdBis(false);
-      for (int i = 0; i < pData->getNameCount(); i++)
-      { QVariant vId = query.value(lOffsetOld + i); bValidId = (bValidId || qx::trait::is_valid_primary_key(vId)); }
-      for (int i = 0; i < pId->getNameCount(); i++)
-      { QVariant vIdBis = query.value(lOffsetOld + lOffsetData + i); bValidIdBis = (bValidIdBis || qx::trait::is_valid_primary_key(vIdBis)); }
-      if (pData && bValidId) { for (int i = 0; i < pData->getNameCount(); i++) { pData->fromVariant((& currOwner), query.value(lOffsetOld + i), i, qx::cvt::context::e_database); } }
-      if (! bValidIdBis) { return NULL; }
+
+      if (! params.isDistinct())
+      {
+         for (int i = 0; i < pData->getNameCount(); i++)
+         { QVariant vId = query.value(lOffsetOld + i); bValidId = (bValidId || qx::trait::is_valid_primary_key(vId)); }
+         for (int i = 0; i < pId->getNameCount(); i++)
+         { QVariant vIdBis = query.value(lOffsetOld + lOffsetData + i); bValidIdBis = (bValidIdBis || qx::trait::is_valid_primary_key(vIdBis)); }
+         if (pData && bValidId) { for (int i = 0; i < pData->getNameCount(); i++) { pData->fromVariant((& currOwner), query.value(lOffsetOld + i), i, qx::cvt::context::e_database); } }
+         if (! bValidIdBis) { return NULL; }
+      }
 
       type_data & currData = this->getData(params);
       if (! this->callTriggerBeforeFetch(currData, params)) { return NULL; }
-      if (pId) { for (int i = 0; i < pId->getNameCount(); i++) { pId->fromVariant((& currData), query.value(lOffsetOld + lOffsetData + i), i, qx::cvt::context::e_database); } }
+
+      if (pId && (! params.isDistinct()))
+      { for (int i = 0; i < pId->getNameCount(); i++) { pId->fromVariant((& currData), query.value(lOffsetOld + lOffsetData + i), i, qx::cvt::context::e_database); } }
       while ((p = this->nextData(lIndex)))
       { if (params.checkColumns(p->getKey())) { p->fromVariant((& currData), query.value(lOffsetRelation++), -1, qx::cvt::context::e_database); } }
 
