@@ -578,7 +578,8 @@ QString IxDataMember::getSqlTablePointNameAsAlias(const QString & sTable, const 
    for (int i = 0; i < m_pImpl->m_lstNames.count(); i++)
    {
       if (bCheckFKPartOfPK && m_pImpl->m_bIsPrimaryKey && isThereRelationPartOfPrimaryKey(i, pRelation, iIndexNameFK)) { continue; }
-      sResult += sTableAlias + "." + getSqlColumnName(getName(i)) + sTableAliasSep + getSqlAlias((sCustomAlias.isEmpty() ? sTable : sCustomAlias), false, i, pSqlQueryBuilder) + sSuffixAlias + sSep;
+      // wrap alias with delimiters if needed
+      sResult += sTableAlias + "." + getSqlColumnName(getName(i)) + sTableAliasSep + getSqlColumnNameAlias(getSqlAlias((sCustomAlias.isEmpty() ? sTable : sCustomAlias), false, i, pSqlQueryBuilder) + sSuffixAlias) + sSep;
    }
 
    if (! sResult.isEmpty())
@@ -694,6 +695,7 @@ QString IxDataMember::getSqlColumnName(const QString & sColumn)
    QString sResult = (sStart + sColumn + sEnd); sResult.replace(".", (sEnd + "." + sStart));
    return sResult;
 }
+
 QString IxDataMember::getSqlTableNameAlias(const QString & sTable)
 {
    QStringList lstDelimiter = QxSqlDatabase::getSingleton()->getSqlDelimiterForTableNameAlias();
