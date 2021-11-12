@@ -197,6 +197,8 @@ public:
    static QString getSqlFromTable(const QString & sTable, const QString & sCustomAlias = QString());
    static QString getSqlTableName(const QString & sTable);
    static QString getSqlColumnName(const QString & sColumn);
+   static QString getSqlTableNameAlias(const QString & sTable);
+   static QString getSqlColumnNameAlias(const QString & sColumn);
 
    virtual bool isEqual(const void * pOwner1, const void * pOwner2) const = 0;
    virtual QVariant toVariant(const void * pOwner, const QString & sFormat, int iIndexName = -1, qx::cvt::context::ctx_type ctx = qx::cvt::context::e_no_context) const = 0;

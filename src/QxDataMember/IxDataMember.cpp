@@ -694,6 +694,29 @@ QString IxDataMember::getSqlColumnName(const QString & sColumn)
    QString sResult = (sStart + sColumn + sEnd); sResult.replace(".", (sEnd + "." + sStart));
    return sResult;
 }
+QString IxDataMember::getSqlTableNameAlias(const QString & sTable)
+{
+   QStringList lstDelimiter = QxSqlDatabase::getSingleton()->getSqlDelimiterForTableNameAlias();
+   QString sStart = QString();
+   QString sEnd = QString();
+   if (lstDelimiter.count() > 0) { sStart = lstDelimiter.at(0); sEnd = lstDelimiter.at(0); }
+   if (lstDelimiter.count() > 1) { sEnd = lstDelimiter.at(1); }
+   if (sStart.isEmpty() || sEnd.isEmpty() || sTable.contains(sStart) || sTable.contains(sEnd)) { return sTable; }
+   QString sResult = (sStart + sTable + sEnd); sResult.replace(".", (sEnd + "." + sStart));
+   return sResult;
+}
+
+QString IxDataMember::getSqlColumnNameAlias(const QString & sColumn)
+{
+   QStringList lstDelimiter = QxSqlDatabase::getSingleton()->getSqlDelimiterForColumnNameAlias();
+   QString sStart = QString();
+   QString sEnd = QString();
+   if (lstDelimiter.count() > 0) { sStart = lstDelimiter.at(0); sEnd = lstDelimiter.at(0); }
+   if (lstDelimiter.count() > 1) { sEnd = lstDelimiter.at(1); }
+   if (sStart.isEmpty() || sEnd.isEmpty() || sColumn.contains(sStart) || sColumn.contains(sEnd)) { return sColumn; }
+   QString sResult = (sStart + sColumn + sEnd); sResult.replace(".", (sEnd + "." + sStart));
+   return sResult;
+}
 
 IxDataMemberSqlCallbackParams::IxDataMemberSqlCallbackParams(const IxDataMember * p, QString & sql) : pDataMember(p), sSQL(sql), bClauseWhere(false), bCheckFKPartOfPK(false), iIndexName(0), pDaoHelper(NULL), pSqlQueryBuilder(NULL) { qAssert(pDataMember); }
 
