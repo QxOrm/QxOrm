@@ -31,6 +31,9 @@
 
 #include <QxPrecompiled.h>
 
+#include <QtCore/qpair.h>
+#include <QtCore/qthread.h>
+
 #include <QxDao/QxSession.h>
 #include <QxDao/QxSqlDatabase.h>
 
@@ -41,18 +44,19 @@ namespace qx {
 struct Q_DECL_HIDDEN QxSession::QxSessionImpl
 {
 
-   QSqlDatabase m_database;            //!< Database connexion of current session
-   QList<QSqlError> m_lstSqlError;     //!< List of SQL errors
-   bool m_bTransaction;                //!< Flag to know if a transaction is opened or not
-   bool m_bThrowable;                  //!< When a SQL error is appended, an exception of type qx::dao::sql_error is thrown
-   bool m_bThrowInEvent;               //!< An exception of type qx::dao::sql_error is throwing
-   bool m_bAutoOpenClose;              //!< Open and close automatically connection to database
-   bool m_bIgnoreSoftDelete;           //!< Ignore soft delete behavior even if it has been defined for registered classes
-   QStringList m_lstIgnoreSoftDelete;  //!< List of registered classes to ignore soft delete behavior (if empty and m_bIgnoreSoftDelete is true, then all classes are ignored)
-   bool m_bAutoRollbackWhenDestroyed;  //!< If true, then database rollback is called when this session instance destructor (or close() method) is invoked
+   QSqlDatabase m_database;                  //!< Database connexion of current session
+   QList<QSqlError> m_lstSqlError;           //!< List of SQL errors
+   bool m_bTransaction;                      //!< Flag to know if a transaction is opened or not
+   bool m_bThrowable;                        //!< When a SQL error is appended, an exception of type qx::dao::sql_error is thrown
+   bool m_bThrowInEvent;                     //!< An exception of type qx::dao::sql_error is throwing
+   bool m_bAutoOpenClose;                    //!< Open and close automatically connection to database
+   bool m_bIgnoreSoftDelete;                 //!< Ignore soft delete behavior even if it has been defined for registered classes
+   QStringList m_lstIgnoreSoftDelete;        //!< List of registered classes to ignore soft delete behavior (if empty and m_bIgnoreSoftDelete is true, then all classes are ignored)
+   bool m_bAutoRollbackWhenDestroyed;        //!< If true, then database rollback is called when this session instance destructor (or close() method) is invoked
+   QPair<Qt::HANDLE, QString> m_sessionId;   //!< Session identifier based on connection name and current thread
 
-   static QMutex m_mutex;                                         //!< Mutex => qx::QxSession is thread-safe
-   static QHash<QString, qx::QxSession *> m_lstActiveSessions;    //!< List of active sessions by database connection name
+   static QMutex m_mutex;                                                           //!< Mutex => qx::QxSession is thread-safe
+   static QHash<QPair<Qt::HANDLE, QString>, qx::QxSession *> m_lstActiveSessions;   //!< List of active sessions by database connection name
 
    QxSessionImpl() : m_bTransaction(false), m_bThrowable(false), m_bThrowInEvent(false), m_bAutoOpenClose(false), m_bIgnoreSoftDelete(false), m_bAutoRollbackWhenDestroyed(false) { ; }
    QxSessionImpl(const QSqlDatabase & database) : m_database(database), m_bTransaction(false), m_bThrowable(false), m_bThrowInEvent(false), m_bAutoOpenClose(false), m_bIgnoreSoftDelete(false), m_bAutoRollbackWhenDestroyed(false) { ; }
@@ -75,10 +79,20 @@ struct Q_DECL_HIDDEN QxSession::QxSessionImpl
       m_bTransaction = false;
    }
 
+   static QPair<Qt::HANDLE, QString> getSessionIdentifier(QSqlDatabase & db, qx::QxSession * pSessionToFill, qx::QxSession * pSessionToFetch)
+   {
+      if (pSessionToFetch && pSessionToFetch->m_pImpl) { return pSessionToFetch->m_pImpl->m_sessionId; }
+      QString connectionName = db.connectionName();
+      Qt::HANDLE hCurrThreadId = QThread::currentThreadId();
+      QPair<Qt::HANDLE, QString> sessionId = qMakePair(hCurrThreadId, connectionName);
+      if (pSessionToFill && pSessionToFill->m_pImpl) { pSessionToFill->m_pImpl->m_sessionId = sessionId; }
+      return sessionId;
+   }
+
 };
 
 QMutex qx::QxSession::QxSessionImpl::m_mutex;
-QHash<QString, qx::QxSession *> qx::QxSession::QxSessionImpl::m_lstActiveSessions;
+QHash<QPair<Qt::HANDLE, QString>, qx::QxSession *> qx::QxSession::QxSessionImpl::m_lstActiveSessions;
 
 QxSession::QxSession() : m_pImpl(new QxSessionImpl())
 {
@@ -86,8 +100,8 @@ QxSession::QxSession() : m_pImpl(new QxSessionImpl())
    m_pImpl->m_bThrowable = qx::QxSqlDatabase::getSingleton()->getSessionThrowable();
    if (qx::QxSqlDatabase::getSingleton()->getSessionAutoTransaction()) { open(); }
    QMutexLocker locker(& QxSessionImpl::m_mutex);
-   QString connectionName = m_pImpl->m_database.connectionName();
-   if (! connectionName.isEmpty()) { QxSessionImpl::m_lstActiveSessions.insert(connectionName, this); }
+   QPair<Qt::HANDLE, QString> sessionId = QxSessionImpl::getSessionIdentifier(m_pImpl->m_database, this, NULL);
+   if (! sessionId.second.isEmpty()) { QxSessionImpl::m_lstActiveSessions.insert(sessionId, this); }
 }
 
 QxSession::QxSession(const QSqlDatabase & database) : m_pImpl(new QxSessionImpl(database))
@@ -95,8 +109,8 @@ QxSession::QxSession(const QSqlDatabase & database) : m_pImpl(new QxSessionImpl(
    m_pImpl->m_bThrowable = qx::QxSqlDatabase::getSingleton()->getSessionThrowable();
    if (qx::QxSqlDatabase::getSingleton()->getSessionAutoTransaction()) { open(); }
    QMutexLocker locker(& QxSessionImpl::m_mutex);
-   QString connectionName = m_pImpl->m_database.connectionName();
-   if (! connectionName.isEmpty()) { QxSessionImpl::m_lstActiveSessions.insert(connectionName, this); }
+   QPair<Qt::HANDLE, QString> sessionId = QxSessionImpl::getSessionIdentifier(m_pImpl->m_database, this, NULL);
+   if (! sessionId.second.isEmpty()) { QxSessionImpl::m_lstActiveSessions.insert(sessionId, this); }
 }
 
 QxSession::QxSession(const QSqlDatabase & database, bool bOpenTransaction) : m_pImpl(new QxSessionImpl(database))
@@ -104,33 +118,33 @@ QxSession::QxSession(const QSqlDatabase & database, bool bOpenTransaction) : m_p
    m_pImpl->m_bThrowable = qx::QxSqlDatabase::getSingleton()->getSessionThrowable();
    if (bOpenTransaction) { open(); }
    QMutexLocker locker(& QxSessionImpl::m_mutex);
-   QString connectionName = m_pImpl->m_database.connectionName();
-   if (! connectionName.isEmpty()) { QxSessionImpl::m_lstActiveSessions.insert(connectionName, this); }
+   QPair<Qt::HANDLE, QString> sessionId = QxSessionImpl::getSessionIdentifier(m_pImpl->m_database, this, NULL);
+   if (! sessionId.second.isEmpty()) { QxSessionImpl::m_lstActiveSessions.insert(sessionId, this); }
 }
 
 QxSession::QxSession(const QSqlDatabase & database, bool bOpenTransaction, bool bThrowable, bool bAutoRollbackWhenDestroyed /* = false */) : m_pImpl(new QxSessionImpl(database, bThrowable, bAutoRollbackWhenDestroyed))
 {
    if (bOpenTransaction) { open(); }
    QMutexLocker locker(& QxSessionImpl::m_mutex);
-   QString connectionName = m_pImpl->m_database.connectionName();
-   if (! connectionName.isEmpty()) { QxSessionImpl::m_lstActiveSessions.insert(connectionName, this); }
+   QPair<Qt::HANDLE, QString> sessionId = QxSessionImpl::getSessionIdentifier(m_pImpl->m_database, this, NULL);
+   if (! sessionId.second.isEmpty()) { QxSessionImpl::m_lstActiveSessions.insert(sessionId, this); }
 }
 
 QxSession::~QxSession()
 {
    close();
    QMutexLocker locker(& QxSessionImpl::m_mutex);
-   QString connectionName = m_pImpl->m_database.connectionName();
-   if (! connectionName.isEmpty()) { QxSessionImpl::m_lstActiveSessions.remove(connectionName); }
+   QPair<Qt::HANDLE, QString> sessionId = QxSessionImpl::getSessionIdentifier(m_pImpl->m_database, NULL, this);
+   if (! sessionId.second.isEmpty()) { QxSessionImpl::m_lstActiveSessions.remove(sessionId); }
 }
 
 QxSession * QxSession::getActiveSession(QSqlDatabase * db)
 {
    if (! db) { return NULL; }
-   QString connectionName = db->connectionName();
-   if (connectionName.isEmpty()) { return NULL; }
    QMutexLocker locker(& QxSessionImpl::m_mutex);
-   return (QxSessionImpl::m_lstActiveSessions.contains(connectionName) ? QxSessionImpl::m_lstActiveSessions.value(connectionName) : NULL);
+   QPair<Qt::HANDLE, QString> sessionId = QxSessionImpl::getSessionIdentifier((* db), NULL, NULL);
+   if (sessionId.second.isEmpty()) { return NULL; }
+   return (QxSessionImpl::m_lstActiveSessions.contains(sessionId) ? QxSessionImpl::m_lstActiveSessions.value(sessionId) : NULL);
 }
 
 bool QxSession::isThrowable() const { return m_pImpl->m_bThrowable; }

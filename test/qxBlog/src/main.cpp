@@ -350,6 +350,9 @@ int main(int argc, char * argv[])
    daoError = qx::dao::call_query(testStoredProc);
    qAssert(! daoError.isValid());
    testStoredProc.dumpSqlResult();
+   QVariant valFromSqlResult = testStoredProc.getSqlResultAt(0, "birthdate"); qAssert(! valFromSqlResult.isNull());
+   valFromSqlResult = testStoredProc.getSqlResultAt(0, "BIRTHDATE", false); qAssert(! valFromSqlResult.isNull());
+   valFromSqlResult = testStoredProc.getSqlResultAt(0, "BIRTHDATE", true); qAssert(valFromSqlResult.isNull());
 
    // Call a custom SQL query or a stored procedure and fetch automatically properties (with a collection of items)
    qx_query testStoredProcBis("SELECT * FROM author");

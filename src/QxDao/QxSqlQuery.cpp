@@ -405,11 +405,23 @@ QVariant QxSqlQuery::getSqlResultAt(long row, long column) const
    return m_pSqlResult->values.at(row).at(column);
 }
 
-QVariant QxSqlQuery::getSqlResultAt(long row, const QString & column) const
+QVariant QxSqlQuery::getSqlResultAt(long row, const QString & column, bool caseSensitive /* = false */) const
 {
    if (! m_pSqlResult) { return QVariant(); }
    if ((row < 0) || (row >= m_pSqlResult->values.count())) { return QVariant(); }
+
    int i(-1); int col = m_pSqlResult->positionByKey.value(column, i);
+   if (col >= 0) { return m_pSqlResult->values.at(row).at(col); }
+   if (caseSensitive) { return QVariant(); }
+
+   if (m_pSqlResult->positionByKeyUpper.count() <= 0)
+   {
+      QHashIterator<QString, int> itr(m_pSqlResult->positionByKey);
+      while (itr.hasNext()) { itr.next(); QString keyUpper = itr.key().toUpper(); int val = itr.value(); m_pSqlResult->positionByKeyUpper.insert(keyUpper, val); }
+   }
+
+   QString columnUpper = column.toUpper();
+   int j(-1); col = m_pSqlResult->positionByKeyUpper.value(columnUpper, j);
    return ((col >= 0) ? m_pSqlResult->values.at(row).at(col) : QVariant());
 }
 

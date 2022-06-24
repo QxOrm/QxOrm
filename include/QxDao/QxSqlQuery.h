@@ -266,7 +266,7 @@ public:
 protected:
 
    struct QxSqlResult
-   { QHash<QString, int> positionByKey; QVector< QVector<QVariant> > values; };
+   { QHash<QString, int> positionByKey; QHash<QString, int> positionByKeyUpper; QVector< QVector<QVariant> > values; };
 
    typedef std::tuple<QVariant, QSql::ParamType> type_bind_value;
 
@@ -329,7 +329,7 @@ public:
    long getSqlResultRowCount() const;
    long getSqlResultColumnCount() const;
    QVariant getSqlResultAt(long row, long column) const;
-   QVariant getSqlResultAt(long row, const QString & column) const;
+   QVariant getSqlResultAt(long row, const QString & column, bool caseSensitive = false) const;
    QVector<QVariant> getSqlResultAt(long row) const;
    QVector<QString> getSqlResultAllColumns() const;
    void dumpSqlResult();
