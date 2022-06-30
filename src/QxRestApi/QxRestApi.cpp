@@ -184,7 +184,18 @@ void QxRestApi::setData(const QJsonValue & data) { m_pImpl->m_dataJson = data; }
 QJsonValue QxRestApi::processRequest(const QJsonValue & request)
 {
    m_pImpl->clear();
-   m_pImpl->m_db = qx::QxSqlDatabase::getDatabase(m_pImpl->m_error);
+
+#ifdef _QX_ENABLE_MONGODB
+   if (qx::QxSqlDatabase::getSingleton()->getDriverName() == "QXMONGODB")
+   {
+      m_pImpl->m_db = QSqlDatabase();
+   }
+   else
+#endif // _QX_ENABLE_MONGODB
+   {
+      m_pImpl->m_db = qx::QxSqlDatabase::getDatabase(m_pImpl->m_error);
+   }
+
    if (m_pImpl->m_error.isValid()) { m_pImpl->buildError(m_pImpl->m_error); return m_pImpl->m_errorJson; }
    if (request.isArray()) { return m_pImpl->processRequestAsArray(request); }
    m_pImpl->m_requestJson = request;
