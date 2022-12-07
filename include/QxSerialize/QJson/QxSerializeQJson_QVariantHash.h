@@ -30,7 +30,7 @@
 ****************************************************************************/
 
 #ifndef _QX_NO_JSON
-#if (QT_VERSION >= 0x050500)
+#if (QT_VERSION >= QT_VERSION_CHECK(5,05,00))
 #ifndef _QX_SERIALIZE_QJSON_QVARIANTHASH_H_
 #define _QX_SERIALIZE_QJSON_QVARIANTHASH_H_
 
@@ -76,5 +76,5 @@ struct QxConvert_FromJson< QVariantHash >
 } // namespace qx
 
 #endif // _QX_SERIALIZE_QJSON_QVARIANTHASH_H_
-#endif // (QT_VERSION >= 0x050500)
+#endif // (QT_VERSION >= QT_VERSION_CHECK(5,05,00))
 #endif // _QX_NO_JSON

@@ -46,13 +46,13 @@ inline void qx_save(Archive & ar, const QSqlError & t, const unsigned int file_v
    Q_UNUSED(file_version);
    QString sDatabaseText = t.databaseText();
    QString sDriverText = t.driverText();
-#if (QT_VERSION >= 0x050300)
+#if (QT_VERSION >= QT_VERSION_CHECK(5,03,00))
    int iNumber = t.nativeErrorCode().toInt();
    QString sNativeErrorCode = t.nativeErrorCode();
-#else // (QT_VERSION >= 0x050300)
+#else // (QT_VERSION >= QT_VERSION_CHECK(5,03,00))
    int iNumber = t.number();
    QString sNativeErrorCode = "";
-#endif // (QT_VERSION >= 0x050300)
+#endif // (QT_VERSION >= QT_VERSION_CHECK(5,03,00))
    int iType = static_cast<int>(t.type());
 
    ar << boost::serialization::make_nvp("database_text", sDatabaseText);
@@ -76,14 +76,14 @@ inline void qx_load(Archive & ar, QSqlError & t, const unsigned int file_version
    ar >> boost::serialization::make_nvp("type", iType);
    ar >> boost::serialization::make_nvp("native_error_code", sNativeErrorCode);
 
-#if (QT_VERSION >= 0x050300)
+#if (QT_VERSION >= QT_VERSION_CHECK(5,03,00))
    t = QSqlError(sDriverText, sDatabaseText, static_cast<QSqlError::ErrorType>(iType), sNativeErrorCode);
-#else // (QT_VERSION >= 0x050300)
+#else // (QT_VERSION >= QT_VERSION_CHECK(5,03,00))
    t.setDatabaseText(sDatabaseText);
    t.setDriverText(sDriverText);
    t.setNumber(iNumber);
    t.setType(static_cast<QSqlError::ErrorType>(iType));
-#endif // (QT_VERSION >= 0x050300)
+#endif // (QT_VERSION >= QT_VERSION_CHECK(5,03,00))
 }
 
 } // namespace boost

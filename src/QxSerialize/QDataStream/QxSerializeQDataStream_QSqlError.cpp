@@ -39,13 +39,13 @@ QDataStream & operator<< (QDataStream & stream, const QSqlError & t)
 {
    QString sDatabaseText = t.databaseText();
    QString sDriverText = t.driverText();
-#if (QT_VERSION >= 0x050300)
+#if (QT_VERSION >= QT_VERSION_CHECK(5,03,00))
    qint32 iNumber = static_cast<qint32>(t.nativeErrorCode().toInt());
    QString sNativeErrorCode = t.nativeErrorCode();
-#else // (QT_VERSION >= 0x050300)
+#else // (QT_VERSION >= QT_VERSION_CHECK(5,03,00))
    qint32 iNumber = static_cast<qint32>(t.number());
    QString sNativeErrorCode = "";
-#endif // (QT_VERSION >= 0x050300)
+#endif // (QT_VERSION >= QT_VERSION_CHECK(5,03,00))
    qint32 iType = static_cast<qint32>(t.type());
 
    stream << sDatabaseText;
@@ -69,14 +69,14 @@ QDataStream & operator>> (QDataStream & stream, QSqlError & t)
    stream >> iType;
    stream >> sNativeErrorCode;
 
-#if (QT_VERSION >= 0x050300)
+#if (QT_VERSION >= QT_VERSION_CHECK(5,03,00))
    t = QSqlError(sDriverText, sDatabaseText, static_cast<QSqlError::ErrorType>(iType), sNativeErrorCode);
-#else // (QT_VERSION >= 0x050300)
+#else // (QT_VERSION >= QT_VERSION_CHECK(5,03,00))
    t.setDatabaseText(sDatabaseText);
    t.setDriverText(sDriverText);
    t.setNumber(static_cast<int>(iNumber));
    t.setType(static_cast<QSqlError::ErrorType>(iType));
-#endif // (QT_VERSION >= 0x050300)
+#endif // (QT_VERSION >= QT_VERSION_CHECK(5,03,00))
 
    return stream;
 }

@@ -2,11 +2,11 @@
 
 #include <QtGui/qcursor.h>
 
-#if (QT_VERSION >= 0x050000)
+#if (QT_VERSION >= QT_VERSION_CHECK(5,00,00))
 #include <QtWidgets/qmessagebox.h>
-#else // (QT_VERSION >= 0x050000)
+#else // (QT_VERSION >= QT_VERSION_CHECK(5,00,00))
 #include <QtGui/qmessagebox.h>
-#endif // (QT_VERSION >= 0x050000)
+#endif // (QT_VERSION >= QT_VERSION_CHECK(5,00,00))
 
 #include "../include/main_dlg.h"
 

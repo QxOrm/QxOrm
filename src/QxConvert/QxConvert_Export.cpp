@@ -79,10 +79,10 @@ QX_DLL_EXPORT_TEMPLATE_T_P1_CPP(struct, qx::cvt::detail::QxConvert_ToString, qx:
 QX_DLL_EXPORT_TEMPLATE_T_P1_CPP(struct, qx::cvt::detail::QxConvert_ToString, qx::QxTimeNeutral)
 QX_DLL_EXPORT_TEMPLATE_T_P1_CPP(struct, qx::cvt::detail::QxConvert_ToString, qx::QxDateTimeNeutral)
 
-#if (QT_VERSION < 0x060000)
+#if (QT_VERSION < QT_VERSION_CHECK(6,00,00))
 QX_DLL_EXPORT_TEMPLATE_T_P1_CPP(struct, qx::cvt::detail::QxConvert_ToString, QRegExp)
 QX_DLL_EXPORT_TEMPLATE_T_P1_CPP(struct, qx::cvt::detail::QxConvert_ToString, QMatrix)
-#endif // (QT_VERSION < 0x060000)
+#endif // (QT_VERSION < QT_VERSION_CHECK(6,00,00))
 
 QX_DLL_EXPORT_TEMPLATE_T_P1_CPP(struct, qx::cvt::detail::QxConvert_FromString, qx::trait::no_type)
 QX_DLL_EXPORT_TEMPLATE_T_P1_CPP(struct, qx::cvt::detail::QxConvert_FromString, QString)
@@ -124,10 +124,10 @@ QX_DLL_EXPORT_TEMPLATE_T_P1_CPP(struct, qx::cvt::detail::QxConvert_FromString, q
 QX_DLL_EXPORT_TEMPLATE_T_P1_CPP(struct, qx::cvt::detail::QxConvert_FromString, qx::QxTimeNeutral)
 QX_DLL_EXPORT_TEMPLATE_T_P1_CPP(struct, qx::cvt::detail::QxConvert_FromString, qx::QxDateTimeNeutral)
 
-#if (QT_VERSION < 0x060000)
+#if (QT_VERSION < QT_VERSION_CHECK(6,00,00))
 QX_DLL_EXPORT_TEMPLATE_T_P1_CPP(struct, qx::cvt::detail::QxConvert_FromString, QRegExp)
 QX_DLL_EXPORT_TEMPLATE_T_P1_CPP(struct, qx::cvt::detail::QxConvert_FromString, QMatrix)
-#endif // (QT_VERSION < 0x060000)
+#endif // (QT_VERSION < QT_VERSION_CHECK(6,00,00))
 
 QX_DLL_EXPORT_TEMPLATE_T_P1_CPP(struct, qx::cvt::detail::QxConvert_ToVariant, qx::trait::no_type)
 QX_DLL_EXPORT_TEMPLATE_T_P1_CPP(struct, qx::cvt::detail::QxConvert_ToVariant, QString)
@@ -169,10 +169,10 @@ QX_DLL_EXPORT_TEMPLATE_T_P1_CPP(struct, qx::cvt::detail::QxConvert_ToVariant, qx
 QX_DLL_EXPORT_TEMPLATE_T_P1_CPP(struct, qx::cvt::detail::QxConvert_ToVariant, qx::QxTimeNeutral)
 QX_DLL_EXPORT_TEMPLATE_T_P1_CPP(struct, qx::cvt::detail::QxConvert_ToVariant, qx::QxDateTimeNeutral)
 
-#if (QT_VERSION < 0x060000)
+#if (QT_VERSION < QT_VERSION_CHECK(6,00,00))
 QX_DLL_EXPORT_TEMPLATE_T_P1_CPP(struct, qx::cvt::detail::QxConvert_ToVariant, QRegExp)
 QX_DLL_EXPORT_TEMPLATE_T_P1_CPP(struct, qx::cvt::detail::QxConvert_ToVariant, QMatrix)
-#endif // (QT_VERSION < 0x060000)
+#endif // (QT_VERSION < QT_VERSION_CHECK(6,00,00))
 
 QX_DLL_EXPORT_TEMPLATE_T_P1_CPP(struct, qx::cvt::detail::QxConvert_FromVariant, qx::trait::no_type)
 QX_DLL_EXPORT_TEMPLATE_T_P1_CPP(struct, qx::cvt::detail::QxConvert_FromVariant, QString)
@@ -214,9 +214,9 @@ QX_DLL_EXPORT_TEMPLATE_T_P1_CPP(struct, qx::cvt::detail::QxConvert_FromVariant, 
 QX_DLL_EXPORT_TEMPLATE_T_P1_CPP(struct, qx::cvt::detail::QxConvert_FromVariant, qx::QxTimeNeutral)
 QX_DLL_EXPORT_TEMPLATE_T_P1_CPP(struct, qx::cvt::detail::QxConvert_FromVariant, qx::QxDateTimeNeutral)
 
-#if (QT_VERSION < 0x060000)
+#if (QT_VERSION < QT_VERSION_CHECK(6,00,00))
 QX_DLL_EXPORT_TEMPLATE_T_P1_CPP(struct, qx::cvt::detail::QxConvert_FromVariant, QRegExp)
 QX_DLL_EXPORT_TEMPLATE_T_P1_CPP(struct, qx::cvt::detail::QxConvert_FromVariant, QMatrix)
-#endif // (QT_VERSION < 0x060000)
+#endif // (QT_VERSION < QT_VERSION_CHECK(6,00,00))
 
 #endif // _QX_USE_QX_CONVERT_EXPORT

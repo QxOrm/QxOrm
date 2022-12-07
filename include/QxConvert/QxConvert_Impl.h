@@ -99,13 +99,13 @@ static inline qx_bool fromVariant(const QVariant & v, className & t, const QStri
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); QString s = v.toString(); return QX_CVT_DEFAULT_ARCHIVE::from_string(t, s); } }; \
 } } } // namespace qx::cvt::detail
 
-#if (QT_VERSION >= 0x050800)
+#if (QT_VERSION >= QT_VERSION_CHECK(5,8,00))
 #define QX_JSON_DATE_TIME_FORMAT Qt::ISODateWithMs
 #define QX_JSON_DATE_TIME_FORMAT_SIZE 23 // yyyy-MM-ddTHH:mm:ss.zzz
-#else // (QT_VERSION >= 0x050800)
+#else // (QT_VERSION >= QT_VERSION_CHECK(5,8,00))
 #define QX_JSON_DATE_TIME_FORMAT Qt::ISODate
 #define QX_JSON_DATE_TIME_FORMAT_SIZE 19 // yyyy-MM-ddTHH:mm:ss
-#endif // (QT_VERSION >= 0x050800)
+#endif // (QT_VERSION >= QT_VERSION_CHECK(5,8,00))
 
 namespace qx {
 namespace cvt {

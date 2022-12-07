@@ -175,10 +175,10 @@
 #define _QX_USE_SERIALIZE_POLYMORPHIC_PATCH  0
 #endif // _MSC_VER
 
-#if (QT_VERSION < 0x050000)
+#if (QT_VERSION < QT_VERSION_CHECK(5,00,00))
 #ifndef _QX_NO_JSON
 #define _QX_NO_JSON
 #endif // _QX_NO_JSON
-#endif // (QT_VERSION < 0x050000)
+#endif // (QT_VERSION < QT_VERSION_CHECK(5,00,00))
 
 #endif // _QX_CONFIG_H_

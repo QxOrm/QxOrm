@@ -77,9 +77,9 @@ struct QxConvert_FromJson< QList<T> >
       if (! j.isArray()) { return qx_bool(true); }
       QJsonArray arr = j.toArray();
 
-#if (QT_VERSION >= 0x040700)
+#if (QT_VERSION >= QT_VERSION_CHECK(4,07,00))
       t.reserve(arr.count());
-#endif // (QT_VERSION >= 0x040700)
+#endif // (QT_VERSION >= QT_VERSION_CHECK(4,07,00))
 
       for (int i = 0; i < arr.count(); i++)
       { T tmp; qx::cvt::from_json(arr.at(i), tmp, format); t.append(tmp); }

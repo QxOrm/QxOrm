@@ -40,11 +40,11 @@
 #include <QtCore/qbytearray.h>
 #include <QtCore/qdatastream.h>
 
-#if (QT_VERSION >= 0x040800)
+#if (QT_VERSION >= QT_VERSION_CHECK(4,8,00))
 #include <QtCore/QXmlStreamWriter>
-#else // (QT_VERSION >= 0x040800)
+#else // (QT_VERSION >= QT_VERSION_CHECK(4,8,00))
 #include <QtXml/QXmlStreamWriter>
-#endif // (QT_VERSION >= 0x040800)
+#endif // (QT_VERSION >= QT_VERSION_CHECK(4,8,00))
 
 #define QX_XML_PREFIX_BINARY_DATA_KEY     "qx_binary_data_key_"
 #define QX_XML_ATTRIBUTE_IS_BINARY_DATA   "qx_is_binary_data"

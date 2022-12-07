@@ -91,9 +91,9 @@ template <> struct is_qt_variant_compatible<QRectF>               { enum { value
 template <> struct is_qt_variant_compatible<QUrl>                 { enum { value = true }; };
 template <> struct is_qt_variant_compatible<QVariant>             { enum { value = true }; };
 
-#if (QT_VERSION < 0x060000)
+#if (QT_VERSION < QT_VERSION_CHECK(6,00,00))
 template <> struct is_qt_variant_compatible<QRegExp>              { enum { value = true }; };
-#endif // (QT_VERSION < 0x060000)
+#endif // (QT_VERSION < QT_VERSION_CHECK(6,00,00))
 
 #ifdef _QX_ENABLE_QT_GUI
 template <> struct is_qt_variant_compatible<QBrush>               { enum { value = true }; };

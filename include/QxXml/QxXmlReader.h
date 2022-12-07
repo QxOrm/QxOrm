@@ -40,11 +40,11 @@
 #include <QtCore/qbytearray.h>
 #include <QtCore/qdatastream.h>
 
-#if (QT_VERSION >= 0x040800)
+#if (QT_VERSION >= QT_VERSION_CHECK(4,8,00))
 #include <QtCore/QXmlStreamReader>
-#else // (QT_VERSION >= 0x040800)
+#else // (QT_VERSION >= QT_VERSION_CHECK(4,8,00))
 #include <QtXml/QXmlStreamReader>
-#endif // (QT_VERSION >= 0x040800)
+#endif // (QT_VERSION >= QT_VERSION_CHECK(4,8,00))
 
 #include <QxXml/QxXmlWriter.h>
 

@@ -297,15 +297,15 @@ public:
 protected:
 
    void raiseEvent_headerDataChanged(Qt::Orientation orientation, int first, int last);
-#if (QT_VERSION >= 0x050000)
+#if (QT_VERSION >= QT_VERSION_CHECK(5,00,00))
    void raiseEvent_dataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight, const QVector<int> & roles = QVector<int>());
    void raiseEvent_layoutAboutToBeChanged(const QList<QPersistentModelIndex> & parents = QList<QPersistentModelIndex>(), QAbstractItemModel::LayoutChangeHint hint = QAbstractItemModel::NoLayoutChangeHint);
    void raiseEvent_layoutChanged(const QList<QPersistentModelIndex> & parents = QList<QPersistentModelIndex>(), QAbstractItemModel::LayoutChangeHint hint = QAbstractItemModel::NoLayoutChangeHint);
-#else // (QT_VERSION >= 0x050000)
+#else // (QT_VERSION >= QT_VERSION_CHECK(5,00,00))
    void raiseEvent_dataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight);
    void raiseEvent_layoutAboutToBeChanged();
    void raiseEvent_layoutChanged();
-#endif // (QT_VERSION >= 0x050000)
+#endif // (QT_VERSION >= QT_VERSION_CHECK(5,00,00))
 
 public:
 
@@ -325,10 +325,10 @@ public:
    virtual bool setHeaderData(int section, Qt::Orientation orientation, const QVariant & value, int role = Qt::EditRole);
    bool setHeaderData(const QString & sColumnName, const QVariant & value, int role = Qt::EditRole);
 
-#if (QT_VERSION >= 0x050000)
+#if (QT_VERSION >= QT_VERSION_CHECK(5,00,00))
    virtual QHash<int, QByteArray> roleNames() const;
    virtual Qt::DropActions supportedDragActions() const;
-#endif // (QT_VERSION >= 0x050000)
+#endif // (QT_VERSION >= QT_VERSION_CHECK(5,00,00))
 
 protected:
 

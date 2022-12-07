@@ -27,9 +27,9 @@ void CTestAll::init()
    m_oQObject.setProperty("prop_1", 1);
    m_oQObject.setProperty("prop_2", 2);
 
-#if (QT_VERSION < 0x060000)
+#if (QT_VERSION < QT_VERSION_CHECK(6,00,00))
    m_oQRegExp = QRegExp("qt reg exp");
-#endif // (QT_VERSION < 0x060000)
+#endif // (QT_VERSION < QT_VERSION_CHECK(6,00,00))
 
    QSharedPointer<CUser> u1(new CUser());
    QSharedPointer<CUser> u2(new CUser());

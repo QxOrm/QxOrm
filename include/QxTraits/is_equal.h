@@ -54,18 +54,18 @@
 #include <QtCore/quuid.h>
 #include <QtCore/qsharedpointer.h>
 
-#if (QT_VERSION < 0x060000)
+#if (QT_VERSION < QT_VERSION_CHECK(6,00,00))
 #include <QtCore/qregexp.h>
-#endif // (QT_VERSION < 0x060000)
+#endif // (QT_VERSION < QT_VERSION_CHECK(6,00,00))
 
 #ifdef _QX_ENABLE_QT_GUI
 #include <QtGui/qcolor.h>
 #include <QtGui/qfont.h>
 #include <QtGui/qimage.h>
 #include <QtGui/qbrush.h>
-#if (QT_VERSION < 0x060000)
+#if (QT_VERSION < QT_VERSION_CHECK(6,00,00))
 #include <QtGui/qmatrix.h>
-#endif // (QT_VERSION < 0x060000)
+#endif // (QT_VERSION < QT_VERSION_CHECK(6,00,00))
 #include <QtGui/qregion.h>
 #endif // _QX_ENABLE_QT_GUI
 
@@ -125,18 +125,18 @@ QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(QUrl)
 QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(QVariant)
 QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(QUuid)
 
-#if (QT_VERSION < 0x060000)
+#if (QT_VERSION < QT_VERSION_CHECK(6,00,00))
 QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(QRegExp)
-#endif // (QT_VERSION < 0x060000)
+#endif // (QT_VERSION < QT_VERSION_CHECK(6,00,00))
 
 #ifdef _QX_ENABLE_QT_GUI
 QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(QColor)
 QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(QFont)
 QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(QImage)
 QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(QBrush)
-#if (QT_VERSION < 0x060000)
+#if (QT_VERSION < QT_VERSION_CHECK(6,00,00))
 QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(QMatrix)
-#endif // (QT_VERSION < 0x060000)
+#endif // (QT_VERSION < QT_VERSION_CHECK(6,00,00))
 QX_TYPE_HAS_OPERATOR_EQUAL_EQUAL(QRegion)
 #endif // _QX_ENABLE_QT_GUI
 

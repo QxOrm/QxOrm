@@ -31,7 +31,7 @@
 
 #include <QxPrecompiled.h>
 
-#if (QT_VERSION < 0x060000)
+#if (QT_VERSION < QT_VERSION_CHECK(6,00,00))
 #ifndef _QX_NO_JSON
 
 #include <QxSerialize/QJson/QxSerializeQJson_QRegExp.h>
@@ -70,4 +70,4 @@ qx_bool QxConvert_FromJson_Helper(const QJsonValue & j, QRegExp & t, const QStri
 } // namespace qx
 
 #endif // _QX_NO_JSON
-#endif // (QT_VERSION < 0x060000)
+#endif // (QT_VERSION < QT_VERSION_CHECK(6,00,00))

@@ -30,7 +30,7 @@
 ****************************************************************************/
 
 #ifndef _QX_NO_JSON
-#if (QT_VERSION >= 0x040600)
+#if (QT_VERSION >= QT_VERSION_CHECK(4,06,00))
 #ifndef _QX_SERIALIZE_QJSON_QSCOPEDPOINTER_H_
 #define _QX_SERIALIZE_QJSON_QSCOPEDPOINTER_H_
 
@@ -82,5 +82,5 @@ struct QxConvert_FromJson< QScopedPointer<T> >
 } // namespace qx
 
 #endif // _QX_SERIALIZE_QJSON_QSCOPEDPOINTER_H_
-#endif // (QT_VERSION >= 0x040600)
+#endif // (QT_VERSION >= QT_VERSION_CHECK(4,06,00))
 #endif // _QX_NO_JSON

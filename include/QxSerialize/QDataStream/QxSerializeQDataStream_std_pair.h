@@ -29,7 +29,7 @@
 **
 ****************************************************************************/
 
-#if (QT_VERSION < 0x060000)
+#if (QT_VERSION < QT_VERSION_CHECK(6,00,00))
 #ifndef _QX_SERIALIZE_QDATASTREAM_STD_PAIR_H_
 #define _QX_SERIALIZE_QDATASTREAM_STD_PAIR_H_
 
@@ -63,4 +63,4 @@ QDataStream & operator>> (QDataStream & stream, std::pair<T0, T1> & t)
 }
 
 #endif // _QX_SERIALIZE_QDATASTREAM_STD_PAIR_H_
-#endif // (QT_VERSION < 0x060000)
+#endif // (QT_VERSION < QT_VERSION_CHECK(6,00,00))

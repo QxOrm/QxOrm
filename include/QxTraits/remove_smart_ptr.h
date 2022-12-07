@@ -45,9 +45,9 @@
 
 #include <QtCore/qsharedpointer.h>
 
-#if (QT_VERSION >= 0x040600)
+#if (QT_VERSION >= QT_VERSION_CHECK(4,06,00))
 #include <QtCore/qscopedpointer.h>
-#endif // (QT_VERSION >= 0x040600)
+#endif // (QT_VERSION >= QT_VERSION_CHECK(4,06,00))
 
 #include <QxDao/QxDaoPointer.h>
 
@@ -77,10 +77,10 @@ struct remove_smart_ptr< boost::intrusive_ptr<T> > { typedef T type; };
 template <typename T>
 struct remove_smart_ptr< QSharedPointer<T> > { typedef T type; };
 
-#if (QT_VERSION >= 0x040600)
+#if (QT_VERSION >= QT_VERSION_CHECK(4,06,00))
 template <typename T>
 struct remove_smart_ptr< QScopedPointer<T> > { typedef T type; };
-#endif // (QT_VERSION >= 0x040600)
+#endif // (QT_VERSION >= QT_VERSION_CHECK(4,06,00))
 
 template <typename T>
 struct remove_smart_ptr< qx::dao::ptr<T> > { typedef T type; };

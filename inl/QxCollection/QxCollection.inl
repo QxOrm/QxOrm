@@ -134,7 +134,7 @@ typename QxCollection<Key, Value>::const_iterator QxCollection<Key, Value>::end(
    return m_list.end();
 }
 
-#if (QT_VERSION >= 0x050600)
+#if (QT_VERSION >= QT_VERSION_CHECK(5,06,00))
 
 template <typename Key, typename Value>
 typename QxCollection<Key, Value>::reverse_iterator QxCollection<Key, Value>::rbegin()
@@ -164,7 +164,7 @@ typename QxCollection<Key, Value>::const_reverse_iterator QxCollection<Key, Valu
    return m_list.rend();
 }
 
-#endif // (QT_VERSION >= 0x050600)
+#endif // (QT_VERSION >= QT_VERSION_CHECK(5,06,00))
 
 template <typename Key, typename Value>
 void QxCollection<Key, Value>::reserve(long size)

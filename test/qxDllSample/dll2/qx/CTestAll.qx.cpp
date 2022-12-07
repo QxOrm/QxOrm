@@ -39,9 +39,9 @@ template <> void register_class(QxClass<CTestAll> & t)
    pData = t.data(& CTestAll::m_oQImage, "m_oQImage", 0);
    pData = t.data(& CTestAll::m_oQPicture, "m_oQPicture", 0);
    pData = t.data(& CTestAll::m_oQRegion, "m_oQRegion", 0);
-#if (QT_VERSION < 0x060000)
+#if (QT_VERSION < QT_VERSION_CHECK(6,00,00))
    pData = t.data(& CTestAll::m_oQMatrix, "m_oQMatrix", 1);
-#endif // (QT_VERSION < 0x060000)
+#endif // (QT_VERSION < QT_VERSION_CHECK(6,00,00))
 #endif // _QX_ENABLE_QT_GUI
 
 #if (0) /* ((! defined(Q_OS_WIN)) || (! defined(__GNUC__))) // MinGW memory bug ? */
@@ -53,9 +53,9 @@ template <> void register_class(QxClass<CTestAll> & t)
    pData = t.data(& CTestAll::m_oQHash, "m_oQHash", 0);
    pData = t.data(& CTestAll::m_oQMultiHash, "m_oQMultiHash", 0);
 
-#if (QT_VERSION < 0x060000)
+#if (QT_VERSION < QT_VERSION_CHECK(6,00,00))
    pData = t.data(& CTestAll::m_oQRegExp, "m_oQRegExp", 0);
-#endif // (QT_VERSION < 0x060000)
+#endif // (QT_VERSION < QT_VERSION_CHECK(6,00,00))
 
    pData = t.data(& CTestAll::m_oQMap, "m_oQMap", 1);
    pData = t.data(& CTestAll::m_oQMultiMap, "m_oQMultiMap", 1);
@@ -67,9 +67,9 @@ template <> void register_class(QxClass<CTestAll> & t)
    pData = t.data(& CTestAll::m_oQSharedPointer, "m_oQSharedPointer", 1);
    pData = t.data(& CTestAll::m_oQSize, "m_oQSize", 1);
 
-#if (QT_VERSION < 0x060000)
+#if (QT_VERSION < QT_VERSION_CHECK(6,00,00))
    pData = t.data(& CTestAll::m_oQLinkedList, "m_oQLinkedList", 1);
-#endif // (QT_VERSION < 0x060000)
+#endif // (QT_VERSION < QT_VERSION_CHECK(6,00,00))
 
 #endif // ((! defined(Q_OS_WIN)) || (! defined(__GNUC__)))
 }}
