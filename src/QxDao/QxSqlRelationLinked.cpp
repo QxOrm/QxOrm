@@ -293,7 +293,7 @@ qx_bool QxSqlRelationLinked::QxSqlRelationLinkedImpl::insertRelationToHierarchy(
 
    if (m_bRoot && sKeyTemp.isEmpty() && (columns.count() > 0))
 #if (QT_VERSION >= 0x050e00)
-   { m_lstRootColumns = QSet(columns.begin(), columns.end()); m_bRootColumnsModeRemove = bModeRemoveColumns; m_sRootCustomAlias = customAlias; return qx_bool(true); }
+   { m_lstRootColumns = QSet<QString>(columns.begin(), columns.end()); m_bRootColumnsModeRemove = bModeRemoveColumns; m_sRootCustomAlias = customAlias; return qx_bool(true); }
 #else // (QT_VERSION >= 0x050e00)
    { m_lstRootColumns = columns.toSet(); m_bRootColumnsModeRemove = bModeRemoveColumns; m_sRootCustomAlias = customAlias; return qx_bool(true); }
 #endif // (QT_VERSION >= 0x050e00)
@@ -324,7 +324,7 @@ qx_bool QxSqlRelationLinked::QxSqlRelationLinkedImpl::insertRelationToHierarchy(
    if (! customAliasSuffix.isEmpty() && pRelation->getClass()) { customAlias = (pRelation->getClass()->getKey() + customAliasSuffix); }
    if (! customAliasPrefix.isEmpty() && pRelation->getClass()) { customAlias = (customAliasPrefix + pRelation->getClass()->getKey()); }
 #if (QT_VERSION >= 0x050e00)
-   if (! m_relationX.exist(sKeyTemp)) { m_relationX.insert(sKeyTemp, QxSqlRelationLinkedImpl::type_relation(eJoinType, pRelation, qMakePair(QSet(columns.begin(), columns.end()), static_cast<long>(0)), customAlias, isNullColumn)); }
+   if (! m_relationX.exist(sKeyTemp)) { m_relationX.insert(sKeyTemp, QxSqlRelationLinkedImpl::type_relation(eJoinType, pRelation, qMakePair(QSet<QString>(columns.begin(), columns.end()), static_cast<long>(0)), customAlias, isNullColumn)); }
 #else // (QT_VERSION >= 0x050e00)
    if (! m_relationX.exist(sKeyTemp)) { m_relationX.insert(sKeyTemp, QxSqlRelationLinkedImpl::type_relation(eJoinType, pRelation, qMakePair(columns.toSet(), static_cast<long>(0)), customAlias, isNullColumn)); }
 #endif // (QT_VERSION >= 0x050e00)
