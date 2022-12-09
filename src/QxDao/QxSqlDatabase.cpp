@@ -41,11 +41,11 @@
 
 #include <QxMemLeak/mem_leak.h>
 
-#if (QT_VERSION >= 0x051400)
+#if (QT_VERSION >= 0x050e00)
 #define QX_CONSTRUCT_QX_SQL_DATABASE_MUTEX() m_oDbMutex()
-#else // (QT_VERSION >= 0x051400)
+#else // (QT_VERSION >= 0x050e00)
 #define QX_CONSTRUCT_QX_SQL_DATABASE_MUTEX() m_oDbMutex(QMutex::Recursive)
-#endif // (QT_VERSION >= 0x051400)
+#endif // (QT_VERSION >= 0x050e00)
 
 #define QX_CONSTRUCT_QX_SQL_DATABASE() \
 QX_CONSTRUCT_QX_SQL_DATABASE_MUTEX(), m_iPort(-1), m_bTraceSqlQuery(true), m_bTraceSqlRecord(false), \
@@ -67,11 +67,11 @@ struct Q_DECL_HIDDEN QxSqlDatabase::QxSqlDatabaseImpl
 
    QxSqlDatabase * m_pParent;                               //!< Parent instance of the private implementation idiom
    QHash<Qt::HANDLE, QString> m_lstDbByThread;              //!< Collection of databases connexions by thread id
-#if (QT_VERSION >= 0x051400)
+#if (QT_VERSION >= 0x050e00)
    QRecursiveMutex m_oDbMutex;                              //!< Mutex => 'QxSqlDatabase' is thread-safe
-#else // (QT_VERSION >= 0x051400)
+#else // (QT_VERSION >= 0x050e00)
    QMutex m_oDbMutex;                                       //!< Mutex => 'QxSqlDatabase' is thread-safe
-#endif // (QT_VERSION >= 0x051400)
+#endif // (QT_VERSION >= 0x050e00)
    QString m_sDriverName;                                   //!< Driver name to connect to database
    QString m_sConnectOptions;                               //!< Connect options to database
    QString m_sDatabaseName;                                 //!< Database name

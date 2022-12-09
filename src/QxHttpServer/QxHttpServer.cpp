@@ -340,11 +340,11 @@ std::shared_ptr<QxHttpServerDispatchItem> QxHttpServerDispatcher::find(qx::QxHtt
    QString requestCommand = request.command().toUpper();
    qx_hash_result requestCommandHash = qHash(requestCommand);
    QString requestPath = request.url().path(); if (requestPath == "/") { requestPath = "/*"; }
-#if (QT_VERSION >= 0x051400)
+#if (QT_VERSION >= 0x050e00)
    QStringList requestSegments = requestPath.split("/", Qt::SkipEmptyParts);
-#else // (QT_VERSION >= 0x051400)
+#else // (QT_VERSION >= 0x050e00)
    QStringList requestSegments = requestPath.split("/", QString::SkipEmptyParts);
-#endif // (QT_VERSION >= 0x051400)
+#endif // (QT_VERSION >= 0x050e00)
    QList<qx_hash_result> requestSegmentsHash; requestSegmentsHash.reserve(requestSegments.count());
    Q_FOREACH(QString data, requestSegments) { requestSegmentsHash.append(qHash(data)); }
    if (requestSegments.count() <= 0) { return std::shared_ptr<QxHttpServerDispatchItem>(); }
@@ -388,11 +388,11 @@ bool QxHttpServerDispatchItem::parse()
    m_segments.clear();
    m_commandHash = qHash(m_command);
    m_commandWildcard = (m_command == "*");
-#if (QT_VERSION >= 0x051400)
+#if (QT_VERSION >= 0x050e00)
    QStringList segments = m_path.split("/", Qt::SkipEmptyParts);
-#else // (QT_VERSION >= 0x051400)
+#else // (QT_VERSION >= 0x050e00)
    QStringList segments = m_path.split("/", QString::SkipEmptyParts);
-#endif // (QT_VERSION >= 0x051400)
+#endif // (QT_VERSION >= 0x050e00)
    Q_FOREACH(QString data, segments)
    {
       data = data.trimmed(); if (data.isEmpty()) { continue; }
