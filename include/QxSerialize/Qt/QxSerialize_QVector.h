@@ -29,7 +29,7 @@
 **
 ****************************************************************************/
 
-#if (QT_VERSION < QT_VERSION_CHECK(6,00,00))
+#if (QT_VERSION < 0x060000)
 #ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #ifndef _QX_SERIALIZE_QVECTOR_H_
 #define _QX_SERIALIZE_QVECTOR_H_
@@ -87,4 +87,4 @@ inline void serialize(Archive & ar, QVector<T> & t, const unsigned int file_vers
 
 #endif // _QX_SERIALIZE_QVECTOR_H_
 #endif // _QX_ENABLE_BOOST_SERIALIZATION
-#endif // (QT_VERSION < QT_VERSION_CHECK(6,00,00))
+#endif // (QT_VERSION < 0x060000)

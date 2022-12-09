@@ -321,17 +321,17 @@ QString QxSqlQuery::getJoinQueryHash()
 void QxSqlQuery::dumpBoundValues(const QSqlQuery & query)
 {
    QString sBoundValues = "";
-#if (QT_VERSION >= QT_VERSION_CHECK(6,00,00))
+#if (QT_VERSION >= 0x060000)
    QVariantList lstBoundValues = query.boundValues();
-#else // (QT_VERSION >= QT_VERSION_CHECK(6,00,00))
+#else // (QT_VERSION >= 0x060000)
    QMap<QString, QVariant> lstBoundValues = query.boundValues();
-#endif // (QT_VERSION >= QT_VERSION_CHECK(6,00,00))
+#endif // (QT_VERSION >= 0x060000)
    if (lstBoundValues.count() <= 0) { return; }
 
-#if (QT_VERSION >= QT_VERSION_CHECK(6,00,00))
+#if (QT_VERSION >= 0x060000)
    for (int i = 0; i < lstBoundValues.size(); ++i)
    { sBoundValues += "\n  - position '" + QString::number(i) + "' : " + lstBoundValues.at(i).toString(); }
-#else // (QT_VERSION >= QT_VERSION_CHECK(6,00,00))
+#else // (QT_VERSION >= 0x060000)
    if (qx::QxSqlDatabase::getSingleton()->getSqlPlaceHolderStyle() == qx::QxSqlDatabase::ph_style_question_mark)
    {
       QList<QVariant> lst = lstBoundValues.values();
@@ -343,7 +343,7 @@ void QxSqlQuery::dumpBoundValues(const QSqlQuery & query)
       QMapIterator<QString, QVariant> itr(lstBoundValues);
       while (itr.hasNext()) { itr.next(); sBoundValues += "\n  - " + itr.key() + " : " + itr.value().toString(); }
    }
-#endif // (QT_VERSION >= QT_VERSION_CHECK(6,00,00))
+#endif // (QT_VERSION >= 0x060000)
 
    if (! sBoundValues.isEmpty())
    { qDebug("[QxOrm] dump sql query bound values : %s", qPrintable(sBoundValues)); }
@@ -1051,12 +1051,12 @@ QSqlError call_query_helper(qx::QxSqlQuery & query, QSqlDatabase * pDatabase, bo
    {
       QString log = "custom sql query failed (" + QString::number(ms) + " ms) : " + sql;
       qDebug("[QxOrm] %s", qPrintable(log));
-#if (QT_VERSION >= QT_VERSION_CHECK(5,03,00))
+#if (QT_VERSION >= 0x050300)
       QString serr = dbError.nativeErrorCode();
-#else // (QT_VERSION >= QT_VERSION_CHECK(5,03,00))
+#else // (QT_VERSION >= 0x050300)
       int ierr = dbError.number();
       QString serr = QString::number(ierr);
-#endif // (QT_VERSION >= QT_VERSION_CHECK(5,03,00))
+#endif // (QT_VERSION >= 0x050300)
       QString tmp = dbError.driverText();
       qDebug("Database error number '%s' : %s", qPrintable(serr), qPrintable(tmp));
       tmp = dbError.databaseText(); qDebug("%s", qPrintable(tmp));

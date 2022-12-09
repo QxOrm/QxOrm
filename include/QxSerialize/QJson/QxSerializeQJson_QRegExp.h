@@ -29,7 +29,7 @@
 **
 ****************************************************************************/
 
-#if (QT_VERSION < QT_VERSION_CHECK(6,00,00))
+#if (QT_VERSION < 0x060000)
 #ifndef _QX_NO_JSON
 #ifndef _QX_SERIALIZE_QJSON_QREGEXP_H_
 #define _QX_SERIALIZE_QJSON_QREGEXP_H_
@@ -80,4 +80,4 @@ struct QxConvert_FromJson< QRegExp >
 
 #endif // _QX_SERIALIZE_QJSON_QREGEXP_H_
 #endif // _QX_NO_JSON
-#endif // (QT_VERSION < QT_VERSION_CHECK(6,00,00))
+#endif // (QT_VERSION < 0x060000)

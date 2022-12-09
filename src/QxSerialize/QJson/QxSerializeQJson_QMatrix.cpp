@@ -31,7 +31,7 @@
 
 #include <QxPrecompiled.h>
 
-#if (QT_VERSION < QT_VERSION_CHECK(6,00,00))
+#if (QT_VERSION < 0x060000)
 #ifndef _QX_NO_JSON
 #ifdef _QX_ENABLE_QT_GUI
 
@@ -78,4 +78,4 @@ qx_bool QxConvert_FromJson_Helper(const QJsonValue & j, QMatrix & t, const QStri
 
 #endif // _QX_ENABLE_QT_GUI
 #endif // _QX_NO_JSON
-#endif // (QT_VERSION < QT_VERSION_CHECK(6,00,00))
+#endif // (QT_VERSION < 0x060000)

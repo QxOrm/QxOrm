@@ -3,12 +3,12 @@
 
 #include <QtCore/qglobal.h>
 
-#if (QT_VERSION >= QT_VERSION_CHECK(6,00,00))
+#if (QT_VERSION >= 0x060000)
 #include "./ui_qxServer_qt6.h"
-#elif (QT_VERSION >= QT_VERSION_CHECK(5,00,00))
+#elif (QT_VERSION >= 0x050000)
 #include "./ui_qxServer_qt5.h"
-#else // (QT_VERSION >= QT_VERSION_CHECK(5,00,00))
+#else // (QT_VERSION >= 0x050000)
 #include "./ui_qxServer_qt4.h"
-#endif // (QT_VERSION >= QT_VERSION_CHECK(5,00,00))
+#endif // (QT_VERSION >= 0x050000)
 
 #endif // _QX_UI_QXSERVER_H_

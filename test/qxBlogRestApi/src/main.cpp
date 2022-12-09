@@ -1,16 +1,16 @@
 #include "../include/precompiled.h"
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5,00,00))
+#if (QT_VERSION >= 0x050000)
 #include <QtWidgets/qapplication.h>
 #include <QtWidgets/qtableview.h>
 #include <QtQuick/qquickview.h>
 #include <QtQml/qqmlcontext.h>
-#else // (QT_VERSION >= QT_VERSION_CHECK(5,00,00))
+#else // (QT_VERSION >= 0x050000)
 #include <QtGui/qapplication.h>
 #include <QtGui/qtableview.h>
 #include <QtDeclarative/qdeclarativeview.h>
 #include <QtDeclarative/qdeclarativecontext.h>
-#endif // (QT_VERSION >= QT_VERSION_CHECK(5,00,00))
+#endif // (QT_VERSION >= 0x050000)
 
 #include <QtGui/qdesktopservices.h>
 
@@ -347,17 +347,17 @@ int main(int argc, char * argv[])
    blog_cloned = qx::clone(* blog_tmp);
    daoError = qx::dao::save_with_relation_recursive(blog_cloned, qx::dao::save_mode::e_insert_only); qAssert(! daoError.isValid());
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5,00,00))
+#if (QT_VERSION >= 0x050000)
 
    {
       qx::QxRestApi api;
 
       QQuickView qmlView;
-#if (QT_VERSION >= QT_VERSION_CHECK(6,00,00))
+#if (QT_VERSION >= 0x060000)
       QString sQmlFile = "qrc:/documents/test_rest_api_qt6.qml";
-#else // (QT_VERSION >= QT_VERSION_CHECK(6,00,00))
+#else // (QT_VERSION >= 0x060000)
       QString sQmlFile = "qrc:/documents/test_rest_api.qml";
-#endif // (QT_VERSION >= QT_VERSION_CHECK(6,00,00))
+#endif // (QT_VERSION >= 0x060000)
 
       qmlView.rootContext()->setContextProperty("qxRestApi", (& api));
       qmlView.setResizeMode(QQuickView::SizeRootObjectToView);
@@ -461,11 +461,11 @@ int main(int argc, char * argv[])
 #endif // QT_NO_SSL
 
       QQuickView qmlView;
-#if (QT_VERSION >= QT_VERSION_CHECK(6,00,00))
+#if (QT_VERSION >= 0x060000)
       QString sQmlFile = "qrc:/documents/test_http_server_qt6.qml";
-#else // (QT_VERSION >= QT_VERSION_CHECK(6,00,00))
+#else // (QT_VERSION >= 0x060000)
       QString sQmlFile = "qrc:/documents/test_http_server.qml";
-#endif // (QT_VERSION >= QT_VERSION_CHECK(6,00,00))
+#endif // (QT_VERSION >= 0x060000)
 
       qmlView.rootContext()->setContextProperty("qxHttpServer", (& httpServer));
       qmlView.setResizeMode(QQuickView::SizeRootObjectToView);
@@ -480,11 +480,11 @@ int main(int argc, char * argv[])
 
 #endif // _QX_ENABLE_QT_NETWORK
 
-#else // (QT_VERSION >= QT_VERSION_CHECK(5,00,00))
+#else // (QT_VERSION >= 0x050000)
 
    qDebug("[QxOrm] %s", "qxBlogRestApi example project only works with Qt5 or +");
 
-#endif // (QT_VERSION >= QT_VERSION_CHECK(5,00,00))
+#endif // (QT_VERSION >= 0x050000)
 
    return 0;
 }

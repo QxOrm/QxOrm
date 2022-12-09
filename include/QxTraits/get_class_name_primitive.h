@@ -70,10 +70,10 @@
 #include <QtCore/quuid.h>
 #include <QtCore/QWeakPointer>
 
-#if (QT_VERSION < QT_VERSION_CHECK(5,15,0))
+#if (QT_VERSION < 0x060000)
 #include <QtCore/qlinkedlist.h>
 #include <QtCore/qregexp.h>
-#endif // (QT_VERSION < QT_VERSION_CHECK(5,15,0))
+#endif // (QT_VERSION < 0x060000)
 
 #include <QtSql/qsqlerror.h>
 
@@ -82,17 +82,17 @@
 #include <QtGui/qfont.h>
 #include <QtGui/qimage.h>
 #include <QtGui/qbrush.h>
-#if (QT_VERSION < QT_VERSION_CHECK(6,00,00))
+#if (QT_VERSION < 0x060000)
 #include <QtGui/qmatrix.h>
-#endif // (QT_VERSION < QT_VERSION_CHECK(6,00,00))
+#endif // (QT_VERSION < 0x060000)
 #include <QtGui/qpicture.h>
 #include <QtGui/qpixmap.h>
 #include <QtGui/qregion.h>
 #endif // _QX_ENABLE_QT_GUI
 
-#if (QT_VERSION >= QT_VERSION_CHECK(4,06,00))
+#if (QT_VERSION >= 0x040600)
 #include <QtCore/qscopedpointer.h>
-#endif // (QT_VERSION >= QT_VERSION_CHECK(4,06,00))
+#endif // (QT_VERSION >= 0x040600)
 
 #include <QxDao/QxDaoPointer.h>
 
@@ -130,18 +130,18 @@ QX_REGISTER_CLASS_NAME(QVariant)
 QX_REGISTER_CLASS_NAME(QUuid)
 QX_REGISTER_CLASS_NAME(QSqlError)
 
-#if (QT_VERSION < QT_VERSION_CHECK(6,00,00))
+#if (QT_VERSION < 0x060000)
 QX_REGISTER_CLASS_NAME(QRegExp)
-#endif // (QT_VERSION < QT_VERSION_CHECK(6,00,00))
+#endif // (QT_VERSION < 0x060000)
 
 #ifdef _QX_ENABLE_QT_GUI
 QX_REGISTER_CLASS_NAME(QColor)
 QX_REGISTER_CLASS_NAME(QFont)
 QX_REGISTER_CLASS_NAME(QImage)
 QX_REGISTER_CLASS_NAME(QBrush)
-#if (QT_VERSION < QT_VERSION_CHECK(6,00,00))
+#if (QT_VERSION < 0x060000)
 QX_REGISTER_CLASS_NAME(QMatrix)
-#endif // (QT_VERSION < QT_VERSION_CHECK(6,00,00))
+#endif // (QT_VERSION < 0x060000)
 QX_REGISTER_CLASS_NAME(QPicture)
 QX_REGISTER_CLASS_NAME(QPixmap)
 QX_REGISTER_CLASS_NAME(QRegion)
@@ -167,10 +167,10 @@ QX_REGISTER_CLASS_NAME_TEMPLATE_1(QWeakPointer)
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(QFlags)
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(QSet)
 
-#if (QT_VERSION < QT_VERSION_CHECK(5,15,0))
+#if (QT_VERSION < 0x060000)
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(QVector)
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(QLinkedList)
-#endif // (QT_VERSION < QT_VERSION_CHECK(5,15,0))
+#endif // (QT_VERSION < 0x060000)
 
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(qx::dao::ptr)
 
@@ -193,9 +193,9 @@ QX_REGISTER_CLASS_NAME_TEMPLATE_2(std::unordered_multimap)
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(std::unordered_set)
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(std::unordered_multiset)
 
-#if (QT_VERSION < QT_VERSION_CHECK(6,00,00))
+#if (QT_VERSION < 0x060000)
 QX_REGISTER_CLASS_NAME_TEMPLATE_2(QPair)
-#endif // (QT_VERSION < QT_VERSION_CHECK(6,00,00))
+#endif // (QT_VERSION < 0x060000)
 
 QX_REGISTER_CLASS_NAME_TEMPLATE_2(QHash)
 QX_REGISTER_CLASS_NAME_TEMPLATE_2(QMultiHash)
@@ -224,8 +224,8 @@ QX_REGISTER_CLASS_NAME_TEMPLATE_7(std::tuple)
 QX_REGISTER_CLASS_NAME_TEMPLATE_8(std::tuple)
 QX_REGISTER_CLASS_NAME_TEMPLATE_9(std::tuple)
 
-#if (QT_VERSION >= QT_VERSION_CHECK(4,06,00))
+#if (QT_VERSION >= 0x040600)
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(QScopedPointer)
-#endif // (QT_VERSION >= QT_VERSION_CHECK(4,06,00))
+#endif // (QT_VERSION >= 0x040600)
 
 #endif // _QX_GET_CLASS_NAME_PRIMITIVE_H_

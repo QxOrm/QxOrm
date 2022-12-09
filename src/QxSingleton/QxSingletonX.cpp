@@ -119,11 +119,11 @@ bool QxSingletonX::removeSingleton(const QString & sKey)
    QMutexLocker locker(pMutex);
    QString sAssertMsg = QString("singleton key '%1' doesn't exist in the singleton manager").arg(sKey); Q_UNUSED(sAssertMsg);
    qAssertMsg((getMapSingletonX().contains(sKey)), "[QxOrm] qx::QxSingletonX::removeSingleton()", qPrintable(sAssertMsg));
-#if (QT_VERSION >= QT_VERSION_CHECK(6,00,00))
+#if (QT_VERSION >= 0x060000)
    bool bRemoveOk = getMapSingletonX().remove(sKey);
-#else // (QT_VERSION >= QT_VERSION_CHECK(6,00,00))
+#else // (QT_VERSION >= 0x060000)
    bool bRemoveOk = (getMapSingletonX().remove(sKey) > 0);
-#endif // (QT_VERSION >= QT_VERSION_CHECK(6,00,00))
+#endif // (QT_VERSION >= 0x060000)
    return bRemoveOk;
 #else // _QX_USE_QX_SINGLETON_X
    Q_UNUSED(sKey);

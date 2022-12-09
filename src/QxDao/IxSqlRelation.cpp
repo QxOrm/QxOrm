@@ -58,11 +58,11 @@
 
 #include <QxMemLeak/mem_leak.h>
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5,14,0))
+#if (QT_VERSION >= 0x051400)
 #define QX_CONSTRUCT_IX_RELATION_MUTEX() m_mutex()
-#else // (QT_VERSION >= QT_VERSION_CHECK(5,14,0))
+#else // (QT_VERSION >= 0x051400)
 #define QX_CONSTRUCT_IX_RELATION_MUTEX() m_mutex(QMutex::Recursive)
-#endif // (QT_VERSION >= QT_VERSION_CHECK(5,14,0))
+#endif // (QT_VERSION >= 0x051400)
 
 #define QX_CONSTRUCT_IX_RELATION() \
 m_pClass(NULL), m_pClassOwner(NULL), m_pDataMember(p), m_pDataMemberX(NULL), \
@@ -97,11 +97,11 @@ struct Q_DECL_HIDDEN IxSqlRelation::IxSqlRelationImpl
    bool                             m_bInitDone;            //!< Class initialization finished
    int                              m_iIsSameDataOwner;     //!< Check if relationship source entity and target entity are equal
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5,14,00))
+#if (QT_VERSION >= 0x051400)
    QRecursiveMutex                  m_mutex;                //!< Mutex => 'qx::IxSqlRelation' is thread-safe (initialization process)
-#else // (QT_VERSION >= QT_VERSION_CHECK(5,14,00))
+#else // (QT_VERSION >= 0x051400)
    QMutex                           m_mutex;                //!< Mutex => 'qx::IxSqlRelation' is thread-safe (initialization process)
-#endif // (QT_VERSION >= QT_VERSION_CHECK(5,14,00))
+#endif // (QT_VERSION >= 0x051400)
 
    type_lst_data_member_ptr m_lstDataMemberPtr;             //!< Optimization : handle to collection of 'IxDataMember'
    std::shared_ptr<IxSqlRelationX> m_lstSqlRelationPtr;     //!< Optimization : handle to collection of 'IxSqlRelation'

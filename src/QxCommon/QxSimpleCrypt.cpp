@@ -31,9 +31,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <QtCore/qdatastream.h>
 #include <QtCore/qcryptographichash.h>
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5,10,00))
+#if (QT_VERSION >= 0x051000)
 #include <QtCore/qrandom.h>
-#endif // (QT_VERSION >= QT_VERSION_CHECK(5,10,00))
+#endif // (QT_VERSION >= 0x051000)
 
 #include <QxCommon/QxSimpleCrypt.h>
 
@@ -47,11 +47,11 @@ QxSimpleCrypt::QxSimpleCrypt():
    m_protectionMode(ProtectionChecksum),
    m_lastError(ErrorNoError)
 {
-#if (QT_VERSION >= QT_VERSION_CHECK(5,10,00))
+#if (QT_VERSION >= 0x051000)
    QRandomGenerator::global()->seed(uint((qint64)(QDateTime::currentDateTime().toSecsSinceEpoch()) & 0xFFFF));
-#else // (QT_VERSION >= QT_VERSION_CHECK(5,10,00))
+#else // (QT_VERSION >= 0x051000)
    qsrand(uint((qint64)(QDateTime::currentDateTime().toTime_t()) & 0xFFFF));
-#endif // (QT_VERSION >= QT_VERSION_CHECK(5,10,00))
+#endif // (QT_VERSION >= 0x051000)
 }
 
 QxSimpleCrypt::QxSimpleCrypt(quint64 key):
@@ -60,11 +60,11 @@ QxSimpleCrypt::QxSimpleCrypt(quint64 key):
    m_protectionMode(ProtectionChecksum),
    m_lastError(ErrorNoError)
 {
-#if (QT_VERSION >= QT_VERSION_CHECK(5,10,00))
+#if (QT_VERSION >= 0x051000)
    QRandomGenerator::global()->seed(uint((qint64)(QDateTime::currentDateTime().toSecsSinceEpoch()) & 0xFFFF));
-#else // (QT_VERSION >= QT_VERSION_CHECK(5,10,00))
+#else // (QT_VERSION >= 0x051000)
    qsrand(uint((qint64)(QDateTime::currentDateTime().toTime_t()) & 0xFFFF));
-#endif // (QT_VERSION >= QT_VERSION_CHECK(5,10,00))
+#endif // (QT_VERSION >= 0x051000)
    splitKey();
 }
 
@@ -128,11 +128,11 @@ QByteArray QxSimpleCrypt::encryptToByteArray(QByteArray plaintext)
    }
 
    //prepend a random char to the string
-#if (QT_VERSION >= QT_VERSION_CHECK(5,10,00))
+#if (QT_VERSION >= 0x051000)
    char randomChar = char(QRandomGenerator::global()->generate() & 0xFF);
-#else // (QT_VERSION >= QT_VERSION_CHECK(5,10,00))
+#else // (QT_VERSION >= 0x051000)
    char randomChar = char(qrand() & 0xFF);
-#endif // (QT_VERSION >= QT_VERSION_CHECK(5,10,00))
+#endif // (QT_VERSION >= 0x051000)
    ba = randomChar + integrityProtection + ba;
 
    int pos(0);

@@ -29,7 +29,7 @@
 **
 ****************************************************************************/
 
-#if (QT_VERSION >= QT_VERSION_CHECK(4,06,00))
+#if (QT_VERSION >= 0x040600)
 #ifndef _QX_SERIALIZE_QDATASTREAM_QSCOPEDPOINTER_H_
 #define _QX_SERIALIZE_QDATASTREAM_QSCOPEDPOINTER_H_
 
@@ -67,4 +67,4 @@ QDataStream & operator>> (QDataStream & stream, QScopedPointer<T> & t)
 }
 
 #endif // _QX_SERIALIZE_QDATASTREAM_QSCOPEDPOINTER_H_
-#endif // (QT_VERSION >= QT_VERSION_CHECK(4,06,00))
+#endif // (QT_VERSION >= 0x040600)

@@ -195,7 +195,7 @@ QString IxModel::qxValidateRow_(int row, const QStringList & groups /* = QString
 
 void IxModel::raiseEvent_headerDataChanged(Qt::Orientation orientation, int first, int last) { Q_EMIT headerDataChanged(orientation, first, last); }
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5,00,00))
+#if (QT_VERSION >= 0x050000)
 
 void IxModel::raiseEvent_dataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight, const QVector<int> & roles /* = QVector<int>() */) { Q_EMIT dataChanged(topLeft, bottomRight, roles); }
 
@@ -203,7 +203,7 @@ void IxModel::raiseEvent_layoutAboutToBeChanged(const QList<QPersistentModelInde
 
 void IxModel::raiseEvent_layoutChanged(const QList<QPersistentModelIndex> & parents /* = QList<QPersistentModelIndex>() */, QAbstractItemModel::LayoutChangeHint hint /* = QAbstractItemModel::NoLayoutChangeHint */) { Q_EMIT layoutChanged(parents, hint); }
 
-#else // (QT_VERSION >= QT_VERSION_CHECK(5,00,00))
+#else // (QT_VERSION >= 0x050000)
 
 void IxModel::raiseEvent_dataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight) { Q_EMIT dataChanged(topLeft, bottomRight); }
 
@@ -211,7 +211,7 @@ void IxModel::raiseEvent_layoutAboutToBeChanged() { Q_EMIT layoutAboutToBeChange
 
 void IxModel::raiseEvent_layoutChanged() { Q_EMIT layoutChanged(); }
 
-#endif // (QT_VERSION >= QT_VERSION_CHECK(5,00,00))
+#endif // (QT_VERSION >= 0x050000)
 
 void IxModel::clear(bool bUpdateColumns /* = false */)
 {
@@ -403,19 +403,19 @@ Qt::ItemFlags IxModel::flags(const QModelIndex & index) const
    return (Qt::ItemIsEditable | QAbstractItemModel::flags(index));
 }
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5,00,00))
+#if (QT_VERSION >= 0x050000)
 QHash<int, QByteArray> IxModel::roleNames() const
 {
    return m_lstRoleNames;
 }
-#endif // (QT_VERSION >= QT_VERSION_CHECK(5,00,00))
+#endif // (QT_VERSION >= 0x050000)
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5,00,00))
+#if (QT_VERSION >= 0x050000)
 Qt::DropActions IxModel::supportedDragActions() const
 {
    return QAbstractItemModel::supportedDragActions();
 }
-#endif // (QT_VERSION >= QT_VERSION_CHECK(5,00,00))
+#endif // (QT_VERSION >= 0x050000)
 
 Qt::DropActions IxModel::supportedDropActions() const
 {
@@ -511,9 +511,9 @@ void IxModel::generateRoleNames()
       iRoleCount++;
    }
 
-#if (QT_VERSION < QT_VERSION_CHECK(5,00,00))
+#if (QT_VERSION < 0x050000)
    setRoleNames(m_lstRoleNames);
-#endif // (QT_VERSION < QT_VERSION_CHECK(5,00,00))
+#endif // (QT_VERSION < 0x050000)
 }
 
 QSqlDatabase * IxModel::database(QSqlDatabase * other)

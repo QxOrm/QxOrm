@@ -62,9 +62,9 @@ private:
    struct QxHttpSessionImpl;
    std::unique_ptr<QxHttpSessionImpl> m_pImpl; //!< Private implementation idiom
 
-#if (QT_VERSION < QT_VERSION_CHECK(5,00,00))
+#if (QT_VERSION < 0x050000)
 public: // Some older compilers don't support std::shared_ptr with private custom deleter, but for Qt5 we assume that all compilers should support it
-#endif // (QT_VERSION < QT_VERSION_CHECK(5,00,00))
+#endif // (QT_VERSION < 0x050000)
 
    QxHttpSession();
    ~QxHttpSession();

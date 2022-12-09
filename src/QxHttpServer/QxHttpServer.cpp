@@ -38,17 +38,17 @@
 #include <QtCore/qmutex.h>
 #include <QtCore/qabstracteventdispatcher.h>
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5,00,00))
+#if (QT_VERSION >= 0x050000)
 #include <QtCore/qregularexpression.h>
-#else // (QT_VERSION >= QT_VERSION_CHECK(5,00,00))
+#else // (QT_VERSION >= 0x050000)
 #include <QtCore/qregexp.h>
-#endif // (QT_VERSION >= QT_VERSION_CHECK(5,00,00))
+#endif // (QT_VERSION >= 0x050000)
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5,00,00))
+#if (QT_VERSION >= 0x050000)
 #include <QtCore/qmimetype.h>
 #include <QtCore/qmimedata.h>
 #include <QtCore/qmimedatabase.h>
-#endif // (QT_VERSION >= QT_VERSION_CHECK(5,00,00))
+#endif // (QT_VERSION >= 0x050000)
 
 #include <QxHttpServer/QxHttpServer.h>
 
@@ -78,11 +78,11 @@ struct QxHttpServerDispatchSegment
    QString m_varName;               //!< HTTP server dispatcher segment variable name
    QString m_varType;               //!< HTTP server dispatcher segment variable type (or regular expression)
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5,00,00))
+#if (QT_VERSION >= 0x050000)
    QRegularExpression m_regExp;     //!< HTTP server dispatcher segment regular expression
-#else // (QT_VERSION >= QT_VERSION_CHECK(5,00,00))
+#else // (QT_VERSION >= 0x050000)
    QRegExp m_regExp;                //!< HTTP server dispatcher segment regular expression (Qt4 version)
-#endif // (QT_VERSION >= QT_VERSION_CHECK(5,00,00))
+#endif // (QT_VERSION >= 0x050000)
 
    QxHttpServerDispatchSegment() : m_type(_static), m_pathHash(0) { ; }
    ~QxHttpServerDispatchSegment() { ; }
@@ -155,9 +155,9 @@ void QxHttpServer::startServer()
    qx::service::QxConnect::getSingleton()->setModeHTTP(true);
    m_pImpl->m_pThreadPool.reset(new qx::service::QxThreadPool());
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5,00,00))
+#if (QT_VERSION >= 0x050000)
    if (m_pImpl->m_pEventDispatcher) { m_pImpl->m_pThreadPool->setEventDispatcher(m_pImpl->m_pEventDispatcher); }
-#endif // (QT_VERSION >= QT_VERSION_CHECK(5,00,00))
+#endif // (QT_VERSION >= 0x050000)
 
    QObject::connect(m_pImpl->m_pThreadPool.get(), SIGNAL(error(const QString &, qx::service::QxTransaction_ptr)), this, SLOT(onError(const QString &, qx::service::QxTransaction_ptr)));
    QObject::connect(m_pImpl->m_pThreadPool.get(), SIGNAL(serverIsRunning(bool, qx::service::QxServer *)), this, SLOT(onServerIsRunning(bool, qx::service::QxServer *)));
@@ -211,12 +211,12 @@ void QxHttpServer::clearDispatcher()
    m_pImpl->m_pDispatcher.reset(new QxHttpServerDispatcher());
 }
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5,00,00))
+#if (QT_VERSION >= 0x050000)
 void QxHttpServer::setEventDispatcher(QAbstractEventDispatcher * pEventDispatcher)
 {
    m_pImpl->m_pEventDispatcher = pEventDispatcher;
 }
-#endif // (QT_VERSION >= QT_VERSION_CHECK(5,00,00))
+#endif // (QT_VERSION >= 0x050000)
 
 void QxHttpServer::onError(const QString & err, qx::service::QxTransaction_ptr transaction)
 {
@@ -340,11 +340,11 @@ std::shared_ptr<QxHttpServerDispatchItem> QxHttpServerDispatcher::find(qx::QxHtt
    QString requestCommand = request.command().toUpper();
    qx_hash_result requestCommandHash = qHash(requestCommand);
    QString requestPath = request.url().path(); if (requestPath == "/") { requestPath = "/*"; }
-#if (QT_VERSION >= QT_VERSION_CHECK(5,14,00))
+#if (QT_VERSION >= 0x051400)
    QStringList requestSegments = requestPath.split("/", Qt::SkipEmptyParts);
-#else // (QT_VERSION >= QT_VERSION_CHECK(5,14,00))
+#else // (QT_VERSION >= 0x051400)
    QStringList requestSegments = requestPath.split("/", QString::SkipEmptyParts);
-#endif // (QT_VERSION >= QT_VERSION_CHECK(5,14,00))
+#endif // (QT_VERSION >= 0x051400)
    QList<qx_hash_result> requestSegmentsHash; requestSegmentsHash.reserve(requestSegments.count());
    Q_FOREACH(QString data, requestSegments) { requestSegmentsHash.append(qHash(data)); }
    if (requestSegments.count() <= 0) { return std::shared_ptr<QxHttpServerDispatchItem>(); }
@@ -388,11 +388,11 @@ bool QxHttpServerDispatchItem::parse()
    m_segments.clear();
    m_commandHash = qHash(m_command);
    m_commandWildcard = (m_command == "*");
-#if (QT_VERSION >= QT_VERSION_CHECK(5,14,00))
+#if (QT_VERSION >= 0x051400)
    QStringList segments = m_path.split("/", Qt::SkipEmptyParts);
-#else // (QT_VERSION >= QT_VERSION_CHECK(5,14,00))
+#else // (QT_VERSION >= 0x051400)
    QStringList segments = m_path.split("/", QString::SkipEmptyParts);
-#endif // (QT_VERSION >= QT_VERSION_CHECK(5,14,00))
+#endif // (QT_VERSION >= 0x051400)
    Q_FOREACH(QString data, segments)
    {
       data = data.trimmed(); if (data.isEmpty()) { continue; }
@@ -462,11 +462,11 @@ bool QxHttpServerDispatchSegment::check(const QString & path, qx_hash_result has
          break;
       case QxHttpServerDispatchSegment::_variable_and_regexp:
          qAssert(! m_varName.isEmpty() && ! m_varType.isEmpty());
-#if (QT_VERSION >= QT_VERSION_CHECK(5,00,00))
+#if (QT_VERSION >= 0x050000)
          result = ((! path.isEmpty()) && (m_regExp.match(path).hasMatch()));
-#else // (QT_VERSION >= QT_VERSION_CHECK(5,00,00))
+#else // (QT_VERSION >= 0x050000)
          result = ((! path.isEmpty()) && (m_regExp.exactMatch(path)));
-#endif // (QT_VERSION >= QT_VERSION_CHECK(5,00,00))
+#endif // (QT_VERSION >= 0x050000)
          break;
       case QxHttpServerDispatchSegment::_wildcard:
          result = true;
@@ -540,11 +540,11 @@ void QxHttpServer::buildResponseStaticFile(qx::QxHttpRequest & request, qx::QxHt
       return;
    }
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5,00,00))
+#if (QT_VERSION >= 0x050000)
    QMimeDatabase mimeDatabase;
    QMimeType mimeType = mimeDatabase.mimeTypeForFile(filePath);
    response.headers().insert("Content-Type", mimeType.name().toLatin1());
-#endif // (QT_VERSION >= QT_VERSION_CHECK(5,00,00))
+#endif // (QT_VERSION >= 0x050000)
 
    // Read file content
    if (chunkedSize > 0) { while (! file.atEnd()) { if (! response.writeChunked(file.read(chunkedSize))) { return; } } }

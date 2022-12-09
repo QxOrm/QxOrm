@@ -48,11 +48,11 @@
 #include <QtCore/qvariant.h>
 #include <QtCore/qpair.h>
 
-#if (QT_VERSION < QT_VERSION_CHECK(6,00,00))
+#if (QT_VERSION < 0x060000)
 #define qx_hash_result uint
-#else // (QT_VERSION < QT_VERSION_CHECK(6,00,00))
+#else // (QT_VERSION < 0x060000)
 #define qx_hash_result std::size_t
-#endif // (QT_VERSION < QT_VERSION_CHECK(6,00,00))
+#endif // (QT_VERSION < 0x060000)
 
 inline std::size_t hash_value(const QString & s)      { return qHash(s); }
 inline std::size_t hash_value(const QVariant & v)     { return qHash(v.toString()); }
@@ -62,11 +62,11 @@ inline std::size_t hash_value(const QDateTime & dt)   { return qHash(dt.toString
 
 inline qx_hash_result qHash(const QVariant & v)       { return static_cast<qx_hash_result>(hash_value(v)); }
 
-#if (QT_VERSION < QT_VERSION_CHECK(5,00,00))
+#if (QT_VERSION < 0x050000)
 inline qx_hash_result qHash(const QDate & d)          { return static_cast<qx_hash_result>(hash_value(d)); }
 inline qx_hash_result qHash(const QTime & t)          { return static_cast<qx_hash_result>(hash_value(t)); }
 inline qx_hash_result qHash(const QDateTime & dt)     { return static_cast<qx_hash_result>(hash_value(dt)); }
-#endif // (QT_VERSION < QT_VERSION_CHECK(5,00,00))
+#endif // (QT_VERSION < 0x050000)
 
 namespace qx {
 template <class T>
@@ -381,7 +381,7 @@ inline std::size_t hash_value(const std::tuple<T0, T1, T2, T3, T4, T5, T6, T7, T
    return seed;
 }
 
-#if ((QT_VERSION < QT_VERSION_CHECK(5,07,00)) || ((QT_VERSION >= 0x060000) && (QT_VERSION < 0x060200)))
+#if ((QT_VERSION < 0x050700) || ((QT_VERSION >= 0x060000) && (QT_VERSION < 0x060200)))
 template <typename T0, typename T1>
 inline qx_hash_result qHash(const std::pair<T0, T1> & p)
 {
@@ -390,7 +390,7 @@ inline qx_hash_result qHash(const std::pair<T0, T1> & p)
    qx::hash_combine(seed, p.second);
    return static_cast<qx_hash_result>(seed);
 }
-#endif // ((QT_VERSION < QT_VERSION_CHECK(5,07,00)) || ((QT_VERSION >= 0x060000) && (QT_VERSION < 0x060200)))
+#endif // ((QT_VERSION < 0x050700) || ((QT_VERSION >= 0x060000) && (QT_VERSION < 0x060200)))
 
 template <typename T0, typename T1>
 inline qx_hash_result qHash(const std::tuple<T0, T1> & tu)

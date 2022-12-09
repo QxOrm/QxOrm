@@ -61,11 +61,11 @@ m_timeBuildSql(0), m_timeOpen(0), m_timeTransaction(0), m_nextCount(0), m_lDataC
 m_bTraceRecord(false), m_bCartesianProduct(false), m_bValidatorThrowable(false), m_bNeedToClearDatabaseByThread(false), \
 m_bMongoDB(false), m_bDisplayTimerDetails(false), m_bUseExecBatch(false), m_pDataMemberX(NULL), m_pDataId(NULL), m_pSqlGenerator(NULL), m_pSession(NULL)
 
-#if (QT_VERSION >= QT_VERSION_CHECK(4,8,00))
+#if (QT_VERSION >= 0x040800)
 #define QX_DAO_TIMER_ELAPSED(timer) timer.nsecsElapsed()
-#else // (QT_VERSION >= QT_VERSION_CHECK(4,8,00))
+#else // (QT_VERSION >= 0x040800)
 #define QX_DAO_TIMER_ELAPSED(timer) (timer.elapsed() * 1000000) // convert milli-seconds to nano-seconds
-#endif // (QT_VERSION >= QT_VERSION_CHECK(4,8,00))
+#endif // (QT_VERSION >= 0x040800)
 
 namespace qx {
 namespace dao {
@@ -511,14 +511,14 @@ QSqlError IxDao_Helper::updateError(const QString & sError)
 
 QSqlError IxDao_Helper::updateError(const QSqlError & error)
 {
-#if (QT_VERSION >= QT_VERSION_CHECK(5,03,00))
+#if (QT_VERSION >= 0x050300)
    QString sDatabaseText = (((error.databaseText() != m_pImpl->m_error.databaseText()) && (! error.databaseText().isEmpty())) ? (m_pImpl->m_error.databaseText() + "\n" + error.databaseText()) : m_pImpl->m_error.databaseText());
    QString sDriverText = (((error.driverText() != m_pImpl->m_error.driverText()) && (! error.driverText().isEmpty())) ? (m_pImpl->m_error.driverText() + "\n" + error.driverText()) : m_pImpl->m_error.driverText());
    QString sNativeErrorCode = (((error.nativeErrorCode() != m_pImpl->m_error.nativeErrorCode()) && (! error.nativeErrorCode().isEmpty())) ? (m_pImpl->m_error.nativeErrorCode() + "\n" + error.nativeErrorCode()) : m_pImpl->m_error.nativeErrorCode());
    int iType = ((((m_pImpl->m_error.type() == QSqlError::NoError) || (m_pImpl->m_error.type() == QSqlError::UnknownError)) && (error.type() != QSqlError::NoError)) ? error.type() :  m_pImpl->m_error.type());
    m_pImpl->m_error = QSqlError(sDriverText, sDatabaseText, static_cast<QSqlError::ErrorType>(iType), sNativeErrorCode);
    return m_pImpl->m_error;
-#else // (QT_VERSION >= QT_VERSION_CHECK(5,03,00))
+#else // (QT_VERSION >= 0x050300)
    if (! m_pImpl->m_error.isValid())
    {
       m_pImpl->m_error = error;
@@ -531,7 +531,7 @@ QSqlError IxDao_Helper::updateError(const QSqlError & error)
    if (m_pImpl->m_error.number() == -1) { m_pImpl->m_error.setNumber(error.number()); }
 
    return m_pImpl->m_error;
-#endif // (QT_VERSION >= QT_VERSION_CHECK(5,03,00))
+#endif // (QT_VERSION >= 0x050300)
 }
 
 void IxDao_Helper::init(QSqlDatabase * pDatabase, const QString & sContext)
@@ -595,12 +595,12 @@ void IxDao_Helper::terminate()
       }
       if (! m_pImpl->m_bQuiet)
       {
-#if (QT_VERSION >= QT_VERSION_CHECK(5,03,00))
+#if (QT_VERSION >= 0x050300)
          QString serr = m_pImpl->m_error.nativeErrorCode();
-#else // (QT_VERSION >= QT_VERSION_CHECK(5,03,00))
+#else // (QT_VERSION >= 0x050300)
          int ierr = m_pImpl->m_error.number();
          QString serr = QString::number(ierr);
-#endif // (QT_VERSION >= QT_VERSION_CHECK(5,03,00))
+#endif // (QT_VERSION >= 0x050300)
          QString tmp = m_pImpl->m_error.driverText();
          qDebug("Database error number '%s' : %s", qPrintable(serr), qPrintable(tmp));
          tmp = m_pImpl->m_error.databaseText(); qDebug("%s", qPrintable(tmp));

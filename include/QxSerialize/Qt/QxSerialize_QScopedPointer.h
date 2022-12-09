@@ -30,7 +30,7 @@
 ****************************************************************************/
 
 #ifdef _QX_ENABLE_BOOST_SERIALIZATION
-#if (QT_VERSION >= QT_VERSION_CHECK(4,06,00))
+#if (QT_VERSION >= 0x040600)
 #ifndef _QX_SERIALIZE_QSCOPEDPOINTER_H_
 #define _QX_SERIALIZE_QSCOPEDPOINTER_H_
 
@@ -74,5 +74,5 @@ inline void serialize(Archive & ar, QScopedPointer<T> & t, const unsigned int fi
 } // namespace serialization
 
 #endif // _QX_SERIALIZE_QSCOPEDPOINTER_H_
-#endif // (QT_VERSION >= QT_VERSION_CHECK(4,06,00))
+#endif // (QT_VERSION >= 0x040600)
 #endif // _QX_ENABLE_BOOST_SERIALIZATION

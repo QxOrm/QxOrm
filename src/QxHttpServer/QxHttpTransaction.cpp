@@ -218,11 +218,11 @@ qx_bool QxHttpTransaction::readSocketServer(QTcpSocket & socket)
       int pos = line.indexOf(':'); if (pos <= 0) { setMessageReturn(qx_bool(400, "Bad request : invalid HTTP header : " + line)); return qx_bool(true); }
       QByteArray key = line.left(pos).trimmed();
       QByteArray value = line.mid(pos + 1).trimmed();
-#if (QT_VERSION >= QT_VERSION_CHECK(6,00,00))
+#if (QT_VERSION >= 0x060000)
       if (key.toLower() == "cookie") { m_pImpl->m_request.cookies().insert(QxHttpCookie::parse(value)); }
-#else // (QT_VERSION >= QT_VERSION_CHECK(6,00,00))
+#else // (QT_VERSION >= 0x060000)
       if (key.toLower() == "cookie") { m_pImpl->m_request.cookies().unite(QxHttpCookie::parse(value)); }
-#endif // (QT_VERSION >= QT_VERSION_CHECK(6,00,00))
+#endif // (QT_VERSION >= 0x060000)
       else { m_pImpl->m_request.headers().insert(key, value); }
       if (key.toLower() == "content-length") { iContentLength = value.toInt(); }
    }
@@ -250,11 +250,11 @@ qx_bool QxHttpTransaction::readSocketServer(QTcpSocket & socket)
       m_pImpl->m_request.data() = body;
    }
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5,00,00))
+#if (QT_VERSION >= 0x050000)
    QByteArray params = m_pImpl->m_request.url().query(QUrl::FullyEncoded).toLatin1();
-#else // (QT_VERSION >= QT_VERSION_CHECK(5,00,00))
+#else // (QT_VERSION >= 0x050000)
    QByteArray params = m_pImpl->m_request.url().encodedQuery();
-#endif // (QT_VERSION >= QT_VERSION_CHECK(5,00,00))
+#endif // (QT_VERSION >= 0x050000)
 
    // HTTP request parameters (from URL and from body if content-type is 'application/x-www-form-urlencoded', which means web-form submit)
    if ((! body.isEmpty()) && (m_pImpl->m_request.header("content-type").toLower() == "application/x-www-form-urlencoded"))

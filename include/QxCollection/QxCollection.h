@@ -161,10 +161,10 @@ public:
    typedef typename type_list_pair_key_value::iterator iterator;
    typedef typename type_list_pair_key_value::const_iterator const_iterator;
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5,06,00))
+#if (QT_VERSION >= 0x050600)
    typedef typename type_list_pair_key_value::reverse_iterator reverse_iterator;
    typedef typename type_list_pair_key_value::const_reverse_iterator const_reverse_iterator;
-#endif // (QT_VERSION >= QT_VERSION_CHECK(5,06,00))
+#endif // (QT_VERSION >= 0x050600)
 
    typedef const Key & const_reference_key;
    typedef const Value & const_reference_value;
@@ -191,12 +191,12 @@ public:
    const_iterator begin() const;      //!< Return a const STL-style iterator pointing to the first item in the list
    const_iterator end() const;        //!< Return a const STL-style iterator pointing to the imaginary item after the last item in the list
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5,06,00))
+#if (QT_VERSION >= 0x050600)
    reverse_iterator rbegin();               //!< Return a reverse STL-style iterator pointing to the first item in the list
    reverse_iterator rend();                 //!< Return a reverse STL-style iterator pointing to the imaginary item after the last item in the list
    const_reverse_iterator rbegin() const;   //!< Return a const reverse STL-style iterator pointing to the first item in the list
    const_reverse_iterator rend() const;     //!< Return a const reverse STL-style iterator pointing to the imaginary item after the last item in the list
-#endif // (QT_VERSION >= QT_VERSION_CHECK(5,06,00))
+#endif // (QT_VERSION >= 0x050600)
 
    void reserve(long size);                 //!< Request that the capacity of the allocated storage space for the items of the container be at least enough to hold 'size' elements
    void reverse();                          //!< Reverse all items in the list
