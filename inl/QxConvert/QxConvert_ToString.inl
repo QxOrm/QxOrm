@@ -240,11 +240,11 @@ template <typename T> struct QxConvert_ToString< QList<T> > {
 static inline QString toString(const QList<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return QX_CVT_DEFAULT_ARCHIVE::to_string(t); } };
 
-#if (QT_VERSION < 0x060000)
+#if (QT_VERSION < 0x050f00)
 template <typename T> struct QxConvert_ToString< QLinkedList<T> > {
 static inline QString toString(const QLinkedList<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return QX_CVT_DEFAULT_ARCHIVE::to_string(t); } };
-#endif // (QT_VERSION < 0x060000)
+#endif // (QT_VERSION < 0x050f00)
 
 template <typename T> struct QxConvert_ToString< QFlags<T> > {
 static inline QString toString(const QFlags<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)

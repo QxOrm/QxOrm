@@ -67,9 +67,9 @@ template <> void register_class(QxClass<CTestAll> & t)
    pData = t.data(& CTestAll::m_oQSharedPointer, "m_oQSharedPointer", 1);
    pData = t.data(& CTestAll::m_oQSize, "m_oQSize", 1);
 
-#if (QT_VERSION < 0x060000)
+#if (QT_VERSION < 0x050f00)
    pData = t.data(& CTestAll::m_oQLinkedList, "m_oQLinkedList", 1);
-#endif // (QT_VERSION < 0x060000)
+#endif // (QT_VERSION < 0x050f00)
 
 #endif // ((! defined(Q_OS_WIN)) || (! defined(__GNUC__)))
 }}

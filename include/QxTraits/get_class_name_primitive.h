@@ -70,10 +70,10 @@
 #include <QtCore/quuid.h>
 #include <QtCore/QWeakPointer>
 
-#if (QT_VERSION < 0x060000)
+#if (QT_VERSION < 0x050f00)
 #include <QtCore/qlinkedlist.h>
 #include <QtCore/qregexp.h>
-#endif // (QT_VERSION < 0x060000)
+#endif // (QT_VERSION < 0x050f00)
 
 #include <QtSql/qsqlerror.h>
 
@@ -169,8 +169,11 @@ QX_REGISTER_CLASS_NAME_TEMPLATE_1(QSet)
 
 #if (QT_VERSION < 0x060000)
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(QVector)
-QX_REGISTER_CLASS_NAME_TEMPLATE_1(QLinkedList)
 #endif // (QT_VERSION < 0x060000)
+
+#if (QT_VERSION < 0x050f00)
+QX_REGISTER_CLASS_NAME_TEMPLATE_1(QLinkedList)
+#endif // (QT_VERSION < 0x050f00)
 
 QX_REGISTER_CLASS_NAME_TEMPLATE_1(qx::dao::ptr)
 

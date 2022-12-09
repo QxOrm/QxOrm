@@ -87,7 +87,7 @@ private:
    template <typename V, typename W>
    static typename std::conditional<std::is_base_of<V, W>::value, char, int>::type removeContainer(const QSet<V> &, const QSet<W> &);
 
-#if (QT_VERSION < 0x060000)
+#if (QT_VERSION < 0x050f00)
    template <typename V, typename W>
    static typename std::conditional<std::is_base_of<V, W>::value, char, int>::type removeContainer(const QLinkedList<V> &, const QLinkedList<W> &);
 #endif // (QT_VERSION < 0x060000)
@@ -119,7 +119,7 @@ private:
    static QList<B> * b_qt_list;
    static QSet<B> * b_qt_set;
 
-#if (QT_VERSION < 0x060000)
+#if (QT_VERSION < 0x050f00)
    static QLinkedList<B> * b_qt_linked_list;
 #endif // (QT_VERSION < 0x060000)
 

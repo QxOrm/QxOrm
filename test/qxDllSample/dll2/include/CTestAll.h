@@ -82,9 +82,9 @@ protected:
    QSharedPointer<std::tuple<int, std::string, std::shared_ptr<qx::test::CPerson> > > m_oQSharedPointer;
    QPair<QString, QPoint> m_oQPair;
 
-#if (QT_VERSION < 0x060000)
+#if (QT_VERSION < 0x050f00)
    QLinkedList<QString> m_oQLinkedList;
-#endif // (QT_VERSION < 0x060000)
+#endif // (QT_VERSION < 0x050f00)
 
 public:
 

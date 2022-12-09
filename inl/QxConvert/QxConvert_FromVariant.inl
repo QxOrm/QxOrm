@@ -234,11 +234,11 @@ template <typename T> struct QxConvert_FromVariant< QList<T> > {
 static inline qx_bool fromVariant(const QVariant & v, QList<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return QX_CVT_DEFAULT_ARCHIVE_FROM_VARIANT; } };
 
-#if (QT_VERSION < 0x060000)
+#if (QT_VERSION < 0x050f00)
 template <typename T> struct QxConvert_FromVariant< QLinkedList<T> > {
 static inline qx_bool fromVariant(const QVariant & v, QLinkedList<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return QX_CVT_DEFAULT_ARCHIVE_FROM_VARIANT; } };
-#endif // (QT_VERSION < 0x060000)
+#endif // (QT_VERSION < 0x050f00)
 
 template <typename T> struct QxConvert_FromVariant< QFlags<T> > {
 static inline qx_bool fromVariant(const QVariant & v, QFlags<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)

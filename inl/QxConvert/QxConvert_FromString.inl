@@ -246,11 +246,11 @@ template <typename T> struct QxConvert_FromString< QList<T> > {
 static inline qx_bool fromString(const QString & s, QList<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return QX_CVT_DEFAULT_ARCHIVE::from_string(t, s); } };
 
-#if (QT_VERSION < 0x060000)
+#if (QT_VERSION < 0x050f00)
 template <typename T> struct QxConvert_FromString< QLinkedList<T> > {
 static inline qx_bool fromString(const QString & s, QLinkedList<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return QX_CVT_DEFAULT_ARCHIVE::from_string(t, s); } };
-#endif // (QT_VERSION < 0x060000)
+#endif // (QT_VERSION < 0x050f00)
 
 template <typename T> struct QxConvert_FromString< QFlags<T> > {
 static inline qx_bool fromString(const QString & s, QFlags<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)

@@ -46,11 +46,11 @@ namespace detail {
 
 QJsonValue QxConvert_ToJson_Helper(const QRegion & t, const QString & format)
 {
-#if (QT_VERSION >= 0x060000)
+#if (QT_VERSION >= 0x050b00)
    QVector<QRect> rectList(t.begin(), t.end());
-#else // (QT_VERSION >= 0x060000)
+#else // (QT_VERSION >= 0x050b00)
    QVector<QRect> rectList = t.rects();
-#endif // (QT_VERSION >= 0x060000)
+#endif // (QT_VERSION >= 0x050b00)
    return qx::cvt::to_json(rectList, format);
 }
 

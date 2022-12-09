@@ -232,11 +232,11 @@ template <typename T> struct QxConvert_ToVariant< QList<T> > {
 static inline QVariant toVariant(const QList<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return QX_CVT_DEFAULT_ARCHIVE_TO_VARIANT; } };
 
-#if (QT_VERSION < 0x060000)
+#if (QT_VERSION < 0x050f00)
 template <typename T> struct QxConvert_ToVariant< QLinkedList<T> > {
 static inline QVariant toVariant(const QLinkedList<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return QX_CVT_DEFAULT_ARCHIVE_TO_VARIANT; } };
-#endif // (QT_VERSION < 0x060000)
+#endif // (QT_VERSION < 0x050f00)
 
 template <typename T> struct QxConvert_ToVariant< QFlags<T> > {
 static inline QVariant toVariant(const QFlags<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)

@@ -46,7 +46,11 @@ template <class Archive>
 inline void qx_save(Archive & ar, const QRegion & t, const unsigned int file_version)
 {
    Q_UNUSED(file_version);
+#if (QT_VERSION >= 0x050b00)
+   QVector<QRect> rectList(t.begin(), t.end());
+#else // (QT_VERSION >= 0x050b00)
    QVector<QRect> rectList = t.rects();
+#endif // (QT_VERSION >= 0x050b00)
    ar << boost::serialization::make_nvp("rectList", rectList);
 }
 

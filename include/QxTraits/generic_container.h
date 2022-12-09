@@ -373,11 +373,11 @@ struct generic_container< QList<T> > : public qx::trait::detail::generic_contain
 
 #endif // (QT_VERSION >= 0x040700)
 
-#if (QT_VERSION < 0x060000)
+#if (QT_VERSION < 0x050f00)
 template <typename T>
 struct generic_container< QLinkedList<T> > : public qx::trait::detail::generic_container_base_without_reserve< QLinkedList<T>, T >
 { QX_TRAIT_GENERIC_CONTAINER_TYPEDEF(QX_TEMPLATE_T_P1(QLinkedList, T), qx::trait::no_type, T) };
-#endif // (QT_VERSION < 0x060000)
+#endif // (QT_VERSION < 0x050f00)
 
 template <typename T>
 struct generic_container< QSet<T> > : public qx::trait::detail::generic_container_base_multi_set< QSet<T>, T >
