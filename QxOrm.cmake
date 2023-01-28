@@ -56,6 +56,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(QXORM_DIR ${CMAKE_CURRENT_LIST_DIR})
 set(QXORM_INCLUDE_DIR ${QXORM_DIR}/include)
 include_directories(${QXORM_INCLUDE_DIR})
+#add h-inomata & akiba-taro
+set(QXORM_LIB_DIR ${QXORM_DIR}/lib)
+link_directories(${QXORM_LIB_DIR})
 
 ###########################################
 # Boost Header-Only Dependency (optional) #
