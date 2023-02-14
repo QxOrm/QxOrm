@@ -207,7 +207,7 @@
 #endif // _MSC_VER
 #endif // QX_DLL_EXPORT_INLINE_FCT
 
-#ifdef __GNUC__
+#if defined(__GNUC__) || defined(_MSC_VER)
 #define QX_GCC_WORKAROUND_TEMPLATE_SPEC_INLINE inline
 #else
 #define QX_GCC_WORKAROUND_TEMPLATE_SPEC_INLINE /* Nothing */
