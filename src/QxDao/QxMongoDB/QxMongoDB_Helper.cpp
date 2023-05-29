@@ -901,7 +901,7 @@ QSqlError QxMongoDB_Helper::QxMongoDB_HelperImpl::count_(qx::dao::detail::IxDao_
 
 QSqlError QxMongoDB_Helper::autoCreateIndexes(bool log /* = true */)
 {
-   qx::QxClassX::registerAllClasses(true);
+   qx::QxClassX::registerAllClasses();
    qx::QxCollection<QString, qx::IxClass *> * pAllClasses = qx::QxClassX::getAllClasses();
    if (! pAllClasses) { return QSqlError("[QxOrm] Unable to get all classes registered in QxOrm context", "", QSqlError::UnknownError); }
 

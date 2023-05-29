@@ -209,6 +209,8 @@
 
 #ifdef __GNUC__
 #define QX_GCC_WORKAROUND_TEMPLATE_SPEC_INLINE inline
+#elif (defined(_MSC_VER) && (_MSC_VER >= 1920)) // MSVC 2019
+#define QX_GCC_WORKAROUND_TEMPLATE_SPEC_INLINE inline
 #else
 #define QX_GCC_WORKAROUND_TEMPLATE_SPEC_INLINE /* Nothing */
 #endif // __GNUC__

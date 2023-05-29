@@ -540,7 +540,7 @@ qx_bool QxRestApi::QxRestApiImpl::callEntityFunction()
 void QxRestApi::QxRestApiImpl::getMetaData()
 {
    QJsonObject response;
-   QxClassX::registerAllClasses(true);
+   QxClassX::registerAllClasses();
    if (m_entity == "*")
    {
       QJsonArray entities;

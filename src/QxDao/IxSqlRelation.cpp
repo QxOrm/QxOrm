@@ -305,7 +305,7 @@ QString IxSqlRelation::tableAlias(QxSqlRelationParams & params) const
    if (! params.getCustomAlias().isEmpty()) { return params.getCustomAlias(); }
    QString sTableAlias = (m_pImpl->m_pDataMemberX ? (m_pImpl->m_pDataMemberX->getName() + "_" + QString::number(params.index())) : QString(""));
    sTableAlias.replace(".", "_");
-   return sTableAlias;
+   return IxDataMember::getSqlTableNameAlias(sTableAlias);
 }
 
 QString IxSqlRelation::tableAliasOwner(QxSqlRelationParams & params) const

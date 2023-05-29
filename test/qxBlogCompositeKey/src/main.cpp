@@ -27,7 +27,7 @@ int main(int argc, char * argv[])
    // Only for debug purpose : assert if invalid offset detected fetching a relation
    qx::QxSqlDatabase::getSingleton()->setVerifyOffsetRelation(true);
    qx::IxSqlRelation::setTraceRelationInit(true);
-   qx::QxClassX::registerAllClasses(true);
+   qx::QxClassX::registerAllClasses();
 
    // Create all tables in database
    QSqlError daoError = qx::dao::create_table<author>();

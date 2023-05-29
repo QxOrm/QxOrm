@@ -208,7 +208,7 @@ QxCollection<QString, IxClass *> * QxClassX::getAllClasses()
    return QxClassX::getSingleton()->getAll();
 }
 
-void QxClassX::registerAllClasses(bool bInitAllRelations /* = false */)
+void QxClassX::registerAllClasses(bool bInitAllRelations /* = true */, bool bInitValidator /* = true */)
 {
    QHash<QString, IxFactory *> * pAllFactory = QxFactoryX::getSingleton()->getAllFactory();
    if (! pAllFactory) { qAssert(false); return; }
@@ -217,8 +217,8 @@ void QxClassX::registerAllClasses(bool bInitAllRelations /* = false */)
    while (itr.hasNext())
    {
       itr.next();
-      IxClass * pClass = QxClassX::getClass(itr.key());
-      qAssert(pClass != NULL); Q_UNUSED(pClass);
+      IxClass * pClass = QxClassX::getClass(itr.key()); qAssert(pClass != NULL);
+      if ((pClass) && (bInitValidator)) { pClass->getAllValidator(); }
    }
 
    if (! bInitAllRelations) { return; }
@@ -241,7 +241,7 @@ void QxClassX::registerAllClasses(bool bInitAllRelations /* = false */)
 
 QString QxClassX::dumpAllClasses()
 {
-   QxClassX::registerAllClasses(true);
+   QxClassX::registerAllClasses();
    QxCollection<QString, IxClass *> * pAllClasses = QxClassX::getAllClasses();
    if (! pAllClasses) { qAssert(false); return ""; }
 

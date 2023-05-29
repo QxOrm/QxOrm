@@ -98,6 +98,8 @@ struct Q_DECL_HIDDEN QxSqlDatabase::QxSqlDatabaseImpl
    bool m_bFormatSqlQueryBeforeLogging;                     //!< Format SQL query (pretty-printing) before logging it (can be customized creating a qx::dao::detail::IxSqlGenerator sub-class)
    QStringList m_lstSqlDelimiterForTableName;               //!< Add delimiter characters for table name in SQL queries (to support specific database keywords) : for example, use ` for MySQL database
    QStringList m_lstSqlDelimiterForColumnName;              //!< Add delimiter characters for column name in SQL queries (to support specific database keywords) : for example, use ` for MySQL database
+   QStringList m_lstSqlDelimiterForTableNameAlias;          //!< Add delimiter characters for table name alias in SQL queries (to support specific database keywords) : for example, use ` for MySQL database
+   QStringList m_lstSqlDelimiterForColumnNameAlias;         //!< Add delimiter characters for column name alias in SQL queries (to support specific database keywords) : for example, use ` for MySQL database
    int m_iTraceSqlOnlySlowQueriesDatabase;                  //!< Trace only slow sql queries (database execution time only, in milliseconds)
    int m_iTraceSqlOnlySlowQueriesTotal;                     //!< Trace only slow sql queries (database execution time + C++ qx::dao execution time, in milliseconds)
    bool m_bDisplayTimerDetails;                             //!< Display in logs all timers details (exec(), next(), prepare(), open(), etc...)
@@ -364,6 +366,22 @@ QStringList QxSqlDatabase::getSqlDelimiterForColumnName() const
    return m_pImpl->m_lstSqlDelimiterForColumnName;
 }
 
+QStringList QxSqlDatabase::getSqlDelimiterForTableNameAlias() const
+{
+   if ((m_pImpl->m_lstSettingsByThread.count() <= 0) && (m_pImpl->m_lstSettingsByDatabase.count() <= 0)) { return m_pImpl->m_lstSqlDelimiterForTableNameAlias; }
+   QVariant setting = m_pImpl->getSetting("SqlDelimiterForTableNameAlias");
+   if (! setting.isNull()) { return setting.toStringList(); }
+   return m_pImpl->m_lstSqlDelimiterForTableNameAlias;
+}
+
+QStringList QxSqlDatabase::getSqlDelimiterForColumnNameAlias() const
+{
+   if ((m_pImpl->m_lstSettingsByThread.count() <= 0) && (m_pImpl->m_lstSettingsByDatabase.count() <= 0)) { return m_pImpl->m_lstSqlDelimiterForColumnNameAlias; }
+   QVariant setting = m_pImpl->getSetting("SqlDelimiterForColumnNameAlias");
+   if (! setting.isNull()) { return setting.toStringList(); }
+   return m_pImpl->m_lstSqlDelimiterForColumnNameAlias;
+}
+
 int QxSqlDatabase::getTraceSqlOnlySlowQueriesDatabase() const
 {
    if ((m_pImpl->m_lstSettingsByThread.count() <= 0) && (m_pImpl->m_lstSettingsByDatabase.count() <= 0)) { return m_pImpl->m_iTraceSqlOnlySlowQueriesDatabase; }
@@ -561,6 +579,18 @@ void QxSqlDatabase::setSqlDelimiterForColumnName(const QStringList & lst, bool b
 {
    bool bUpdateGlobal = m_pImpl->setSetting("SqlDelimiterForColumnName", lst, bJustForCurrentThread, pJustForThisDatabase);
    if (bUpdateGlobal) { m_pImpl->m_lstSqlDelimiterForColumnName = lst; }
+}
+
+void QxSqlDatabase::setSqlDelimiterForTableNameAlias(const QStringList & lst, bool bJustForCurrentThread /* = false */, QSqlDatabase * pJustForThisDatabase /* = NULL */)
+{
+   bool bUpdateGlobal = m_pImpl->setSetting("SqlDelimiterForTableNameAlias", lst, bJustForCurrentThread, pJustForThisDatabase);
+   if (bUpdateGlobal) { m_pImpl->m_lstSqlDelimiterForTableNameAlias = lst; }
+}
+
+void QxSqlDatabase::setSqlDelimiterForColumnNameAlias(const QStringList & lst, bool bJustForCurrentThread /* = false */, QSqlDatabase * pJustForThisDatabase /* = NULL */)
+{
+   bool bUpdateGlobal = m_pImpl->setSetting("SqlDelimiterForColumnNameAlias", lst, bJustForCurrentThread, pJustForThisDatabase);
+   if (bUpdateGlobal) { m_pImpl->m_lstSqlDelimiterForColumnNameAlias = lst; }
 }
 
 void QxSqlDatabase::setTraceSqlOnlySlowQueriesDatabase(int i, bool bJustForCurrentThread /* = false */, QSqlDatabase * pJustForThisDatabase /* = NULL */)

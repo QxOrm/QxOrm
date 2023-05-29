@@ -23,7 +23,7 @@ int main(int argc, char * argv[])
    QCoreApplication app(argc, argv);
 
    // Following command is recommanded to initialize QxOrm introspection engine
-   qx::QxClassX::registerAllClasses(true);
+   qx::QxClassX::registerAllClasses();
 
    // Parameters to connect to MongoDB database
    qx::QxSqlDatabase * pDatabase = qx::QxSqlDatabase::getSingleton();

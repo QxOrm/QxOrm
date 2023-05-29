@@ -119,6 +119,8 @@ public:
    bool getFormatSqlQueryBeforeLogging() const;
    QStringList getSqlDelimiterForTableName() const;
    QStringList getSqlDelimiterForColumnName() const;
+   QStringList getSqlDelimiterForTableNameAlias() const;
+   QStringList getSqlDelimiterForColumnNameAlias() const;
    int getTraceSqlOnlySlowQueriesDatabase() const;
    int getTraceSqlOnlySlowQueriesTotal() const;
    bool getDisplayTimerDetails() const;
@@ -149,6 +151,8 @@ public:
    void setFormatSqlQueryBeforeLogging(bool b, bool bJustForCurrentThread = false, QSqlDatabase * pJustForThisDatabase = NULL);
    void setSqlDelimiterForTableName(const QStringList & lst, bool bJustForCurrentThread = false, QSqlDatabase * pJustForThisDatabase = NULL);
    void setSqlDelimiterForColumnName(const QStringList & lst, bool bJustForCurrentThread = false, QSqlDatabase * pJustForThisDatabase = NULL);
+   void setSqlDelimiterForTableNameAlias(const QStringList & lst, bool bJustForCurrentThread = false, QSqlDatabase * pJustForThisDatabase = NULL);
+   void setSqlDelimiterForColumnNameAlias(const QStringList & lst, bool bJustForCurrentThread = false, QSqlDatabase * pJustForThisDatabase = NULL);
    void setTraceSqlOnlySlowQueriesDatabase(int i, bool bJustForCurrentThread = false, QSqlDatabase * pJustForThisDatabase = NULL);
    void setTraceSqlOnlySlowQueriesTotal(int i, bool bJustForCurrentThread = false, QSqlDatabase * pJustForThisDatabase = NULL);
    void setDisplayTimerDetails(bool b, bool bJustForCurrentThread = false, QSqlDatabase * pJustForThisDatabase = NULL);
