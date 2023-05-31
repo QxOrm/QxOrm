@@ -44,11 +44,11 @@
 namespace qx {
 namespace service {
 
-#if (QT_VERSION >= 0x050000)
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 void QxServer::incomingConnection(qintptr socketDescriptor)
-#else // (QT_VERSION >= 0x050000)
+#else // (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 void QxServer::incomingConnection(int socketDescriptor)
-#endif // (QT_VERSION >= 0x050000)
+#endif // (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 {
    QMutexLocker locker(& m_mutex);
    QxThread * pThread = getAvailable();

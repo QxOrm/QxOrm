@@ -292,11 +292,11 @@ qx_bool QxSqlRelationLinked::QxSqlRelationLinkedImpl::insertRelationToHierarchy(
    }
 
    if (m_bRoot && sKeyTemp.isEmpty() && (columns.count() > 0))
-#if (QT_VERSION >= 0x051400)
-   { m_lstRootColumns = QSet(columns.begin(), columns.end()); m_bRootColumnsModeRemove = bModeRemoveColumns; m_sRootCustomAlias = customAlias; return qx_bool(true); }
-#else // (QT_VERSION >= 0x051400)
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+   { m_lstRootColumns = QSet<QString>(columns.begin(), columns.end()); m_bRootColumnsModeRemove = bModeRemoveColumns; m_sRootCustomAlias = customAlias; return qx_bool(true); }
+#else // (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
    { m_lstRootColumns = columns.toSet(); m_bRootColumnsModeRemove = bModeRemoveColumns; m_sRootCustomAlias = customAlias; return qx_bool(true); }
-#endif // (QT_VERSION >= 0x051400)
+#endif // (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
    else if (m_bRoot && sKeyTemp.isEmpty() && (columns.count() == 0))
    { m_sRootCustomAlias = customAlias; return qx_bool(true); }
 
@@ -323,11 +323,11 @@ qx_bool QxSqlRelationLinked::QxSqlRelationLinkedImpl::insertRelationToHierarchy(
 
    if (! customAliasSuffix.isEmpty() && pRelation->getClass()) { customAlias = (pRelation->getClass()->getKey() + customAliasSuffix); }
    if (! customAliasPrefix.isEmpty() && pRelation->getClass()) { customAlias = (customAliasPrefix + pRelation->getClass()->getKey()); }
-#if (QT_VERSION >= 0x051400)
-   if (! m_relationX.exist(sKeyTemp)) { m_relationX.insert(sKeyTemp, QxSqlRelationLinkedImpl::type_relation(eJoinType, pRelation, qMakePair(QSet(columns.begin(), columns.end()), static_cast<long>(0)), customAlias, isNullColumn)); }
-#else // (QT_VERSION >= 0x051400)
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+   if (! m_relationX.exist(sKeyTemp)) { m_relationX.insert(sKeyTemp, QxSqlRelationLinkedImpl::type_relation(eJoinType, pRelation, qMakePair(QSet<QString>(columns.begin(), columns.end()), static_cast<long>(0)), customAlias, isNullColumn)); }
+#else // (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
    if (! m_relationX.exist(sKeyTemp)) { m_relationX.insert(sKeyTemp, QxSqlRelationLinkedImpl::type_relation(eJoinType, pRelation, qMakePair(columns.toSet(), static_cast<long>(0)), customAlias, isNullColumn)); }
-#endif // (QT_VERSION >= 0x051400)
+#endif // (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
    if (sRelationX.count() <= 0) { return qx_bool(true); }
 
    QxSqlRelationLinked_ptr pRelationLinked = m_relationLinkedX.value(sKeyTemp);
@@ -344,11 +344,11 @@ QStringList QxSqlRelationLinked::QxSqlRelationLinkedImpl::removeColumns(const QS
 {
    if (! pRelation) { return QStringList(); }
    IxDataMember * pCurrData = NULL; IxSqlRelation * pCurrRelation = NULL;
-#if (QT_VERSION >= 0x051400)
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
    QSet<QString> columnsToRemoveSet(columnsToRemove.begin(), columnsToRemove.end());
-#else // (QT_VERSION >= 0x051400)
+#else // (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
    QSet<QString> columnsToRemoveSet = columnsToRemove.toSet();
-#endif // (QT_VERSION >= 0x051400)
+#endif // (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
    QStringList columns;
 
    long lCurrIndex = 0;

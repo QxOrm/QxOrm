@@ -31,11 +31,11 @@
 
 #include <QxPrecompiled.h>
 
-#if (QT_VERSION >= 0x050000)
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 #include <QtCore/qregularexpression.h>
-#else // (QT_VERSION >= 0x050000)
+#else // (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 #include <QtCore/qregexp.h>
-#endif // (QT_VERSION >= 0x050000)
+#endif // (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 
 #include <QxValidator/IxValidator.h>
 #include <QxValidator/QxInvalidValueX.h>
@@ -189,26 +189,26 @@ void IxValidator::validateDateFuture(const QVariant & v, QxInvalidValueX & lstIn
 void IxValidator::validateRegularExpression(const QVariant & v, QxInvalidValueX & lstInvalidValues) const
 {
    QString s = v.toString();
-#if (QT_VERSION >= 0x050000)
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
    QRegularExpression constraint(getConstraint().toString());
    if (! constraint.match(s).hasMatch()) { lstInvalidValues.insert(this); }
-#else // (QT_VERSION >= 0x050000)
+#else // (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
    QRegExp constraint(getConstraint().toString());
    if (! constraint.exactMatch(s)) { lstInvalidValues.insert(this); }
-#endif // (QT_VERSION >= 0x050000)
+#endif // (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 }
 
 void IxValidator::validateEMail(const QVariant & v, QxInvalidValueX & lstInvalidValues) const
 {
    QString s = v.toString();
    QString pattern = "\\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}\\b";
-#if (QT_VERSION >= 0x050000)
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
    QRegularExpression constraint(pattern, QRegularExpression::CaseInsensitiveOption);
    if (! constraint.match(s).hasMatch()) { lstInvalidValues.insert(this); }
-#else // (QT_VERSION >= 0x050000)
+#else // (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
    QRegExp constraint(pattern, Qt::CaseInsensitive);
    if (! constraint.exactMatch(s)) { lstInvalidValues.insert(this); }
-#endif // (QT_VERSION >= 0x050000)
+#endif // (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 }
 
 } // namespace qx

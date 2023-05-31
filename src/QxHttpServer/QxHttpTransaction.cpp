@@ -203,8 +203,18 @@ qx_bool QxHttpTransaction::readSocketServer(QTcpSocket & socket)
    if (! m_pImpl->waitForReadSocket(socket)) { setMessageReturn(qx_bool(500, "Internal server error : cannot read socket to parse HTTP request first line (" + socket.errorString() + ")")); return qx_bool(true); }
    QByteArray line = socket.readLine().trimmed();
    QStringList lst = QString::fromUtf8(line).split(" ");
-   if (lst.count() < 3) { setMessageReturn(qx_bool(400, "Bad request : invalid HTTP request first line : " + line)); return qx_bool(true); }
-   if (! lst.at(2).contains("HTTP")) { setMessageReturn(qx_bool(400, "Bad request : invalid HTTP request first line, third parameter must contain 'HTTP' : " + line)); return qx_bool(true); }
+   if (lst.count() < 3)
+   {
+      QString errMsg = ("Bad request : invalid HTTP request first line : " + line);
+      setMessageReturn(qx_bool(400, errMsg));
+      return qx_bool(true);
+   }
+   if (! lst.at(2).contains("HTTP"))
+   {
+      QString errMsg = ("Bad request : invalid HTTP request first line, third parameter must contain 'HTTP' : " + line);
+      setMessageReturn(qx_bool(400, errMsg));
+      return qx_bool(true);
+   }
    m_pImpl->m_request.command() = lst.at(0).toUpper();
    m_pImpl->m_request.url() = QUrl(lst.at(1));
    m_pImpl->m_request.version() = lst.at(2);
@@ -215,14 +225,20 @@ qx_bool QxHttpTransaction::readSocketServer(QTcpSocket & socket)
    {
       if (! m_pImpl->waitForReadSocket(socket)) { setMessageReturn(qx_bool(500, "Internal server error : cannot read socket to parse HTTP headers (" + socket.errorString() + ")")); return qx_bool(true); }
       line = socket.readLine().trimmed(); if (line.isEmpty()) { break; }
-      int pos = line.indexOf(':'); if (pos <= 0) { setMessageReturn(qx_bool(400, "Bad request : invalid HTTP header : " + line)); return qx_bool(true); }
+      int pos = line.indexOf(':');
+      if (pos <= 0)
+      {
+         QString errMsg = ("Bad request : invalid HTTP header : " + line);
+         setMessageReturn(qx_bool(400, errMsg));
+         return qx_bool(true);
+      }
       QByteArray key = line.left(pos).trimmed();
       QByteArray value = line.mid(pos + 1).trimmed();
-#if (QT_VERSION >= 0x060000)
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
       if (key.toLower() == "cookie") { m_pImpl->m_request.cookies().insert(QxHttpCookie::parse(value)); }
-#else // (QT_VERSION >= 0x060000)
+#else // (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
       if (key.toLower() == "cookie") { m_pImpl->m_request.cookies().unite(QxHttpCookie::parse(value)); }
-#endif // (QT_VERSION >= 0x060000)
+#endif // (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
       else { m_pImpl->m_request.headers().insert(key, value); }
       if (key.toLower() == "content-length") { iContentLength = value.toInt(); }
    }
@@ -250,11 +266,11 @@ qx_bool QxHttpTransaction::readSocketServer(QTcpSocket & socket)
       m_pImpl->m_request.data() = body;
    }
 
-#if (QT_VERSION >= 0x050000)
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
    QByteArray params = m_pImpl->m_request.url().query(QUrl::FullyEncoded).toLatin1();
-#else // (QT_VERSION >= 0x050000)
+#else // (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
    QByteArray params = m_pImpl->m_request.url().encodedQuery();
-#endif // (QT_VERSION >= 0x050000)
+#endif // (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 
    // HTTP request parameters (from URL and from body if content-type is 'application/x-www-form-urlencoded', which means web-form submit)
    if ((! body.isEmpty()) && (m_pImpl->m_request.header("content-type").toLower() == "application/x-www-form-urlencoded"))

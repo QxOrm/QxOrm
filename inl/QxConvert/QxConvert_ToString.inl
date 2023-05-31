@@ -192,11 +192,11 @@ template <typename T1, typename T2> struct QxConvert_ToString< std::pair<T1, T2>
 static inline QString toString(const std::pair<T1, T2> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return QX_CVT_DEFAULT_ARCHIVE::to_string(t); } };
 
-#if (QT_VERSION < 0x060000)
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 template <typename T1, typename T2> struct QxConvert_ToString< QPair<T1, T2> > {
 static inline QString toString(const QPair<T1, T2> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return QX_CVT_DEFAULT_ARCHIVE::to_string(t); } };
-#endif // (QT_VERSION < 0x060000)
+#endif // (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 
 template <typename T> struct QxConvert_ToString< std::vector<T> > {
 static inline QString toString(const std::vector<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
@@ -230,21 +230,21 @@ template <typename T> struct QxConvert_ToString< std::unordered_multiset<T> > {
 static inline QString toString(const std::unordered_multiset<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return QX_CVT_DEFAULT_ARCHIVE::to_string(t); } };
 
-#if (QT_VERSION < 0x060000)
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 template <typename T> struct QxConvert_ToString< QVector<T> > {
 static inline QString toString(const QVector<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return QX_CVT_DEFAULT_ARCHIVE::to_string(t); } };
-#endif // (QT_VERSION < 0x060000)
+#endif // (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 
 template <typename T> struct QxConvert_ToString< QList<T> > {
 static inline QString toString(const QList<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return QX_CVT_DEFAULT_ARCHIVE::to_string(t); } };
 
-#if (QT_VERSION < 0x060000)
+#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 0))
 template <typename T> struct QxConvert_ToString< QLinkedList<T> > {
 static inline QString toString(const QLinkedList<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)
 { Q_UNUSED(format); Q_UNUSED(index); Q_UNUSED(ctx); return QX_CVT_DEFAULT_ARCHIVE::to_string(t); } };
-#endif // (QT_VERSION < 0x060000)
+#endif // (QT_VERSION < QT_VERSION_CHECK(5, 15, 0))
 
 template <typename T> struct QxConvert_ToString< QFlags<T> > {
 static inline QString toString(const QFlags<T> & t, const QString & format, int index, qx::cvt::context::ctx_type ctx)

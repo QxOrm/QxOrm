@@ -67,11 +67,11 @@ private:
 
 public:
 
-#if (QT_VERSION >= 0x050300)
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 3, 0))
    sql_error(const QSqlError & err) : std::exception(), m_error(err) { if (! m_error.text().isEmpty() && (m_error.type() == QSqlError::NoError)) { m_error = QSqlError(m_error.driverText(), m_error.databaseText(), QSqlError::UnknownError, m_error.nativeErrorCode()); }; m_errorMessage = m_error.text().toLocal8Bit(); }
-#else // (QT_VERSION >= 0x050300)
+#else // (QT_VERSION >= QT_VERSION_CHECK(5, 3, 0))
    sql_error(const QSqlError & err) : std::exception(), m_error(err) { if (! m_error.text().isEmpty() && (m_error.type() == QSqlError::NoError)) { m_error.setType(QSqlError::UnknownError); }; m_errorMessage = m_error.text().toLocal8Bit(); }
-#endif // (QT_VERSION >= 0x050300)
+#endif // (QT_VERSION >= QT_VERSION_CHECK(5, 3, 0))
    virtual ~sql_error() throw() { ; }
 
    virtual const char * what() const throw() { if (m_error.isValid()) { return m_errorMessage.constData(); } else { return ""; } }

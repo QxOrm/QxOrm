@@ -33,7 +33,7 @@
 
 #include <QxPrecompiled.h>
 
-#if (QT_VERSION < 0x060000)
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 #ifdef _QX_ENABLE_QT_GUI
 
 #include <QxSerialize/Qt/QxSerialize_QMatrix.h>
@@ -79,5 +79,5 @@ inline void qx_load(Archive & ar, QMatrix & t, const unsigned int file_version)
 QX_SERIALIZE_FAST_COMPIL_SAVE_LOAD_CPP(QMatrix)
 
 #endif // _QX_ENABLE_QT_GUI
-#endif // (QT_VERSION < 0x060000)
+#endif // (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 #endif // _QX_ENABLE_BOOST_SERIALIZATION

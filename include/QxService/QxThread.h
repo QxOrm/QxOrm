@@ -74,11 +74,11 @@
 #include <QxService/QxTransaction.h>
 #endif // Q_MOC_RUN
 
-#if (QT_VERSION >= 0x050000)
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 #define QX_TYPE_SOCKET_DESC qintptr
-#else // (QT_VERSION >= 0x050000)
+#else // (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 #define QX_TYPE_SOCKET_DESC int
-#endif // (QT_VERSION >= 0x050000)
+#endif // (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 
 namespace qx {
 namespace service {

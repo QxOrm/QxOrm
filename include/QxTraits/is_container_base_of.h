@@ -76,10 +76,10 @@ private:
    template <typename V, typename W>
    static typename std::conditional<std::is_base_of<V, W>::value, char, int>::type removeContainer(const std::set<V> &, const std::set<W> &);
 
-#if (QT_VERSION < 0x060000)
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
    template <typename V, typename W>
    static typename std::conditional<std::is_base_of<V, W>::value, char, int>::type removeContainer(const QVector<V> &, const QVector<W> &);
-#endif // (QT_VERSION < 0x060000)
+#endif // (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 
    template <typename V, typename W>
    static typename std::conditional<std::is_base_of<V, W>::value, char, int>::type removeContainer(const QList<V> &, const QList<W> &);
@@ -87,10 +87,10 @@ private:
    template <typename V, typename W>
    static typename std::conditional<std::is_base_of<V, W>::value, char, int>::type removeContainer(const QSet<V> &, const QSet<W> &);
 
-#if (QT_VERSION < 0x060000)
+#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 0))
    template <typename V, typename W>
    static typename std::conditional<std::is_base_of<V, W>::value, char, int>::type removeContainer(const QLinkedList<V> &, const QLinkedList<W> &);
-#endif // (QT_VERSION < 0x060000)
+#endif // (QT_VERSION < QT_VERSION_CHECK(5, 15, 0))
 
 #ifdef _QX_ENABLE_BOOST
 
@@ -119,9 +119,9 @@ private:
    static QList<B> * b_qt_list;
    static QSet<B> * b_qt_set;
 
-#if (QT_VERSION < 0x060000)
+#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 0))
    static QLinkedList<B> * b_qt_linked_list;
-#endif // (QT_VERSION < 0x060000)
+#endif // (QT_VERSION < QT_VERSION_CHECK(5, 15, 0))
 
 #ifdef _QX_ENABLE_BOOST
 

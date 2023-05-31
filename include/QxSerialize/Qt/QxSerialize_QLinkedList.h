@@ -29,7 +29,7 @@
 **
 ****************************************************************************/
 
-#if (QT_VERSION < 0x060000)
+#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 0))
 #ifdef _QX_ENABLE_BOOST_SERIALIZATION
 #ifndef _QX_SERIALIZE_QLINKEDLIST_H_
 #define _QX_SERIALIZE_QLINKEDLIST_H_
@@ -87,4 +87,4 @@ inline void serialize(Archive & ar, QLinkedList<T> & t, const unsigned int file_
 
 #endif // _QX_SERIALIZE_QLINKEDLIST_H_
 #endif // _QX_ENABLE_BOOST_SERIALIZATION
-#endif // (QT_VERSION < 0x060000)
+#endif // (QT_VERSION < QT_VERSION_CHECK(5, 15, 0))

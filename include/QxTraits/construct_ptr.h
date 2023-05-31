@@ -45,9 +45,9 @@
 
 #include <QtCore/qsharedpointer.h>
 
-#if (QT_VERSION >= 0x040600)
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
 #include <QtCore/qscopedpointer.h>
-#endif // (QT_VERSION >= 0x040600)
+#endif // (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
 
 #include <QxDao/QxDaoPointer.h>
 
@@ -103,11 +103,11 @@ template <typename T>
 struct construct_ptr< QSharedPointer<T> >
 { static inline void get(QSharedPointer<T> & t, bool bReset = false) { if (bReset) { t = QSharedPointer<T>(); } else { t = QSharedPointer<T>(new T()); } } };
 
-#if (QT_VERSION >= 0x040600)
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
 template <typename T>
 struct construct_ptr< QScopedPointer<T> >
 { static inline void get(QScopedPointer<T> & t, bool bReset = false) { if (bReset) { t = QScopedPointer<T>(); } else { t = QScopedPointer<T>(new T()); } } };
-#endif // (QT_VERSION >= 0x040600)
+#endif // (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
 
 template <typename T>
 struct construct_ptr< qx::dao::ptr<T> >

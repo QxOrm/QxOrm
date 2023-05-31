@@ -13,9 +13,9 @@
 #include <QtGui/qpixmap.h>
 #include <QtGui/qregion.h>
 
-#if (QT_VERSION < 0x060000)
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 #include <QtGui/qmatrix.h>
-#endif // (QT_VERSION < 0x060000)
+#endif // (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 
 #include "../../dll1/include/CPerson.h"
 #include "../../dll2/include/CUser.h"
@@ -63,13 +63,13 @@ protected:
    QVariant m_oQVariant;
    QStringList m_oQStringList;
 
-#if (QT_VERSION < 0x060000)
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
    QMatrix m_oQMatrix;
-#endif // (QT_VERSION < 0x060000)
+#endif // (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 
-#if (QT_VERSION < 0x060000)
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
    QRegExp m_oQRegExp;
-#endif // (QT_VERSION < 0x060000)
+#endif // (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 
    QHash<long, QString> m_oQHash;
    QMultiHash<QString, std::shared_ptr<qx::test::CPerson> > m_oQMultiHash;
@@ -82,9 +82,9 @@ protected:
    QSharedPointer<std::tuple<int, std::string, std::shared_ptr<qx::test::CPerson> > > m_oQSharedPointer;
    QPair<QString, QPoint> m_oQPair;
 
-#if (QT_VERSION < 0x060000)
+#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 0))
    QLinkedList<QString> m_oQLinkedList;
-#endif // (QT_VERSION < 0x060000)
+#endif // (QT_VERSION < QT_VERSION_CHECK(5, 15, 0))
 
 public:
 

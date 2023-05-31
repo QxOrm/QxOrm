@@ -124,7 +124,7 @@ private:
       { return qx::validator::detail::QxValidator_Helper_Container<T>::validateItem(item.second, group); }
    };
 
-#if (QT_VERSION < 0x060000)
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
    template <typename U1, typename U2>
    struct validateItem_Helper<QPair<U1, U2>, false>
    {
@@ -138,7 +138,7 @@ private:
       static inline qx::QxInvalidValueX validate(const QPair<U1, U2> & item, const QString & group)
       { return qx::validator::detail::QxValidator_Helper_Container<T>::validateItem(item.second, group); }
    };
-#endif // (QT_VERSION < 0x060000)
+#endif // (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 
    template <typename U>
    struct validateItem_Helper<U, false>

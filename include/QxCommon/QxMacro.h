@@ -270,4 +270,9 @@
 #define Q_NULLPTR NULL
 #endif // Q_NULLPTR
 
+// From 'QtCore' directory, 'qtversionchecks.h' file
+#ifndef QT_VERSION_CHECK
+#define QT_VERSION_CHECK(major, minor, patch) ((major<<16)|(minor<<8)|(patch))
+#endif // QT_VERSION_CHECK
+
 #endif // _QX_MACRO_H_

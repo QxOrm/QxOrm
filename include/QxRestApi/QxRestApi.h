@@ -86,9 +86,11 @@ public:
    Q_INVOKABLE int getErrorCode() const;
    QSqlError getError() const;
 
-#if (QT_VERSION >= 0x050300)
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 3, 0))
+#if (QT_VERSION >= 0x050300) // Double check here to support Qt4 (which doesn't manage macro expansion in the moc process)
    Q_INVOKABLE QString getNativeErrorCode() const;
 #endif // (QT_VERSION >= 0x050300)
+#endif // (QT_VERSION >= QT_VERSION_CHECK(5, 3, 0))
 
    Q_INVOKABLE void setEntity(const QString & entity);
    Q_INVOKABLE void setAction(const QString & action);

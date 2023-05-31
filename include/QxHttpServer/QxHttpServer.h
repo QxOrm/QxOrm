@@ -64,9 +64,9 @@
 #include <QxService/QxServer.h>
 #endif // Q_MOC_RUN
 
-#if (QT_VERSION >= 0x050000)
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 class QAbstractEventDispatcher;
-#endif // (QT_VERSION >= 0x050000)
+#endif // (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 
 namespace qx {
 
@@ -102,9 +102,9 @@ public:
    void afterDispatching(type_fct_custom_request_handler fct);
    void clearDispatcher();
 
-#if (QT_VERSION >= 0x050000)
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
    void setEventDispatcher(QAbstractEventDispatcher * pEventDispatcher);
-#endif // (QT_VERSION >= 0x050000)
+#endif // (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 
    static void buildResponseStaticFile(qx::QxHttpRequest & request, qx::QxHttpResponse & response, const QString & serverPath, qlonglong chunkedSize = 0);
    static void buildResponseQxRestApi(qx::QxHttpRequest & request, qx::QxHttpResponse & response);

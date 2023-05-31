@@ -55,9 +55,9 @@ qx_bool QxConvert_FromJson_Helper(const QJsonValue & j, QStringList & t, const Q
    if (! j.isArray()) { return qx_bool(true); }
    QJsonArray arr = j.toArray();
 
-#if (QT_VERSION >= 0x040700)
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 7, 0))
    t.reserve(arr.count());
-#endif // (QT_VERSION >= 0x040700)
+#endif // (QT_VERSION >= QT_VERSION_CHECK(4, 7, 0))
 
    for (int i = 0; i < arr.count(); i++)
    { QString tmp; qx::cvt::from_json(arr.at(i), tmp, format); t.append(tmp); }

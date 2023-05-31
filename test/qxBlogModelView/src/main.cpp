@@ -1,16 +1,16 @@
 #include "../include/precompiled.h"
 
-#if (QT_VERSION >= 0x050000)
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 #include <QtWidgets/qapplication.h>
 #include <QtWidgets/qtableview.h>
 #include <QtQuick/qquickview.h>
 #include <QtQml/qqmlcontext.h>
-#else // (QT_VERSION >= 0x050000)
+#else // (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 #include <QtGui/qapplication.h>
 #include <QtGui/qtableview.h>
 #include <QtDeclarative/qdeclarativeview.h>
 #include <QtDeclarative/qdeclarativecontext.h>
-#endif // (QT_VERSION >= 0x050000)
+#endif // (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 
 #include "../include/blog.h"
 #include "../include/author.h"
@@ -287,16 +287,16 @@ void test_qml_view()
    qx::IxModel * pModel = new qx::QxModel<author>();
    pModel->qxFetchAll();
 
-#if (QT_VERSION >= 0x060000)
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
    QQuickView qmlView;
    QString sQmlFile = "qrc:/documents/main_qt6.qml";
-#elif (QT_VERSION >= 0x050000) // (QT_VERSION >= 0x060000)
+#elif (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)) // (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
    QQuickView qmlView;
    QString sQmlFile = "qrc:/documents/main.qml";
-#else // (QT_VERSION >= 0x060000)
+#else // (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
    QDeclarativeView qmlView;
    QString sQmlFile = "qrc:/documents/main_qt4.qml";
-#endif // (QT_VERSION >= 0x060000)
+#endif // (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
 
    qmlView.rootContext()->setContextProperty("myModel", pModel);
    qmlView.setSource(QUrl(sQmlFile));
@@ -306,20 +306,20 @@ void test_qml_view()
 
 void test_qml_view_with_relationship()
 {
-#if (QT_VERSION >= 0x050000)
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
    qx::IxModel * pModel = new model_view::blog_model();
    pModel->qxFetchAll(QStringList() << "*");
 
    QQuickView qmlView;
-#if (QT_VERSION >= 0x060000)
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
    QString sQmlFile = "qrc:/documents/main_relationship_qt6.qml";
-#else // (QT_VERSION >= 0x060000)
+#else // (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
    QString sQmlFile = "qrc:/documents/main_relationship.qml";
-#endif // (QT_VERSION >= 0x060000)
+#endif // (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
 
    qmlView.rootContext()->setContextProperty("myModel", pModel);
    qmlView.setSource(QUrl(sQmlFile));
    qmlView.show();
    qApp->exec();
-#endif // (QT_VERSION >= 0x050000)
+#endif // (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 }

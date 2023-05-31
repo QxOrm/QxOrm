@@ -151,7 +151,7 @@ private:
       { return qx::dao::detail::QxDao_DeleteById_Container<T>::deleteItem(item.second, dao); }
    };
 
-#if (QT_VERSION < 0x060000)
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
    template <typename U1, typename U2>
    struct deleteItem_Helper<QPair<U1, U2>, false>
    {
@@ -165,7 +165,7 @@ private:
       static inline bool deleteById(const QPair<U1, U2> & item, qx::dao::detail::QxDao_Helper_Container<T> & dao)
       { return qx::dao::detail::QxDao_DeleteById_Container<T>::deleteItem(item.second, dao); }
    };
-#endif // (QT_VERSION < 0x060000)
+#endif // (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 
    template <typename U>
    struct deleteItem_Helper<U, false>

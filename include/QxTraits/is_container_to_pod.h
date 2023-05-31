@@ -57,10 +57,10 @@ private:
    template <typename U>
    static typename std::conditional<qx::trait::is_qx_pod<U>::value, char, int>::type removeContainer(const std::set<U> &);
 
-#if (QT_VERSION < 0x060000)
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
    template <typename U>
    static typename std::conditional<qx::trait::is_qx_pod<U>::value, char, int>::type removeContainer(const QVector<U> &);
-#endif // (QT_VERSION < 0x060000)
+#endif // (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 
    template <typename U>
    static typename std::conditional<qx::trait::is_qx_pod<U>::value, char, int>::type removeContainer(const QList<U> &);
@@ -68,10 +68,10 @@ private:
    template <typename U>
    static typename std::conditional<qx::trait::is_qx_pod<U>::value, char, int>::type removeContainer(const QSet<U> &);
 
-#if (QT_VERSION < 0x060000)
+#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 0))
    template <typename U>
    static typename std::conditional<qx::trait::is_qx_pod<U>::value, char, int>::type removeContainer(const QLinkedList<U> &);
-#endif // (QT_VERSION < 0x060000)
+#endif // (QT_VERSION < QT_VERSION_CHECK(5, 15, 0))
 
 #ifdef _QX_ENABLE_BOOST
 

@@ -29,7 +29,7 @@
 **
 ****************************************************************************/
 
-#if (QT_VERSION >= 0x040600)
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
 #ifndef _QX_IS_QT_SCOPED_PTR_H_
 #define _QX_IS_QT_SCOPED_PTR_H_
 
@@ -72,9 +72,9 @@ struct is_qt_scoped_ptr< const QScopedPointer<T> & > : public std::true_type { ;
 } // namespace qx
 
 #endif // _QX_IS_QT_SCOPED_PTR_H_
-#endif // (QT_VERSION >= 0x040600)
+#endif // (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
 
-#if (QT_VERSION < 0x040600)
+#if (QT_VERSION < QT_VERSION_CHECK(4, 6, 0))
 #ifndef _QX_IS_QT_SCOPED_PTR_H_
 #define _QX_IS_QT_SCOPED_PTR_H_
 namespace qx { namespace trait {
@@ -83,4 +83,4 @@ class is_qt_scoped_ptr
 { public: enum { value = false }; typedef std::false_type type; };
 } } // namespace qx::trait
 #endif // _QX_IS_QT_SCOPED_PTR_H_
-#endif // (QT_VERSION < 0x040600)
+#endif // (QT_VERSION < QT_VERSION_CHECK(4, 6, 0))

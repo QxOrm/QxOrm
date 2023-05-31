@@ -118,7 +118,7 @@ struct is_smart_ptr< const boost::weak_ptr<T> & > : public std::true_type { ; };
 
 #endif // _QX_ENABLE_BOOST
 
-#if (QT_VERSION >= 0x040600)
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
 
 template <typename T>
 struct is_smart_ptr< QScopedPointer<T> > : public std::true_type { ; };
@@ -132,7 +132,7 @@ struct is_smart_ptr< const QScopedPointer<T> > : public std::true_type { ; };
 template <typename T>
 struct is_smart_ptr< const QScopedPointer<T> & > : public std::true_type { ; };
 
-#endif // (QT_VERSION >= 0x040600)
+#endif // (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
 
 template <typename T>
 struct is_smart_ptr< QSharedDataPointer<T> > : public std::true_type { ; };

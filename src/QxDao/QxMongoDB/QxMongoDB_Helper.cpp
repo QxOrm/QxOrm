@@ -48,11 +48,11 @@
 #pragma GCC diagnostic pop
 #endif
 
-#if (QT_VERSION >= 0x051200)
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
 #include <QtCore/qregularexpression.h>
-#else // (QT_VERSION >= 0x051200)
+#else // (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
 #include <QtCore/qregexp.h>
-#endif // (QT_VERSION >= 0x051200)
+#endif // (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
 
 #include <QxPrecompiled.h>
 
@@ -220,15 +220,15 @@ struct Q_DECL_HIDDEN QxMongoDB_Helper::QxMongoDB_HelperImpl
    bool m_bLogDatabaseReply;                                                           //!< Log MongoDB database replies
    bool m_bLogDatabaseInfo;                                                            //!< Log MongoDB database info (ping, server name, etc...)
 
-#if (QT_VERSION >= 0x051200)
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
    QRegularExpression m_regExpCheckNumber;                                             //!< Regular expression to check if a string contains only numbers
-#endif // (QT_VERSION >= 0x051200)
+#endif // (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
 
-#if (QT_VERSION >= 0x051200)
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
    QxMongoDB_HelperImpl() : m_bLogDatabaseReply(false), m_bLogDatabaseInfo(true) { m_pInstance.reset(new qx_scoped_wrapper<qx::dao::mongodb::qx_engine>()); m_regExpCheckNumber = QRegularExpression(QRegularExpression::anchoredPattern("\\d*")); }
-#else // (QT_VERSION >= 0x051200)
+#else // (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
    QxMongoDB_HelperImpl() : m_bLogDatabaseReply(false), m_bLogDatabaseInfo(true) { m_pInstance.reset(new qx_scoped_wrapper<qx::dao::mongodb::qx_engine>()); }
-#endif // (QT_VERSION >= 0x051200)
+#endif // (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
    ~QxMongoDB_HelperImpl() { m_pPool.reset(); m_pUri.reset(); m_pInstance.reset(); }
 
    QSqlError insertOne_(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, const QString & json, QString & insertedId);
@@ -322,11 +322,11 @@ struct Q_DECL_HIDDEN QxMongoDB_Helper::QxMongoDB_HelperImpl
 
    QString asJson(const QString & s) const
    {
-#if (QT_VERSION >= 0x051200)
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
       QString json = s; bool isNumber = m_regExpCheckNumber.match(s).hasMatch();
-#else // (QT_VERSION >= 0x051200)
+#else // (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
       QString json = s; QRegExp regexp("\\d*"); bool isNumber = regexp.exactMatch(s);
-#endif // (QT_VERSION >= 0x051200)
+#endif // (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
       if (s.startsWith("qx_oid:")) { return "{ \"$oid\": \"" + s.right(s.size() - 7) + "\" }"; }
       return ((isNumber ? QString() : QString("\"")) + json.replace("\"", "\\\"") + (isNumber ? QString() : QString("\"")));
    }
