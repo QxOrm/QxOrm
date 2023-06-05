@@ -1,5 +1,19 @@
 Changes in version 1.4.9:
-- TODO...
+- Fix compilation issue with Qt 6.2+ (due to Qt JIRA : https://bugreports.qt.io/browse/QTBUG-92910), more details in GitHub issue #54
+- Support QSqlQuery::execBatch() method to improve performance inserting/updating/deleting a list of C++ instances in database (new optional parameter 'bUseExecBatch' available for functions : qx::dao::insert, qx::dao::update, qx::dao::delete_by_id)
+- New method in qx::QxSqlQuery class named setFctOnBeforeSqlPrepare() to define a custom callback function to modify SQL query before preparing in database
+- New callbacks functions available in qx::IxDataMember interface to customize SQL generated per data member (see an example in ./test/qxBlogCompositeKey/src/blog.cpp file)
+- Fix an issue in qx::QxSqlRelationLinked::hierarchyResolveOutput() which could call getIdFromQuery() for nothing, which could generate some warnings in Qt SQL driver (for example : QPSQLResult::data: column XX out of range)
+- Fix a compilation issue of QxRestApi and QxHttpTransaction modules with Qt QStringBuilder option enabled (GitHub issues #50, #83)
+- Improve SQL DISTINCT to support relationships (unit test available in qxBlog sample project)
+- New feature to fetch relationships only in LEFT OUTER/INNER JOIN and WHERE clauses (so no columns in SELECT part) : use {NULL} syntax to define no relation columns in SELECT part (unit test available in qxBlog sample project)
+- Fix a crash which could occur using qx::QxSession and multi-threaded environment
+- Add a new parameter caseSensitive (default value : false) to the method qx::QxSqlQuery::getSqlResultAt()
+- Fix an issue with JSON REST API (QxRestApi module) and MongoDB database (more details in GitHub issue #70)
+- Improve qx::QxClassX::registerAllClasses() : init all validator instances (can fix some issues in a multi-thread environment)
+- New settings available in the qx::QxSqlDatabase singleton class (setSqlDelimiterForTableNameAlias() and setSqlDelimiterForColumnNameAlias()) to add delimiters to SQL aliases (more details in GitHub issue #57)
+- Fix linking error which could occur with Qt6 and MSVC2019 (should fix GitHub issues #98, #91, #89, #90, #62, #65)
+- Fix all checks with QT_VERSION (using macro QT_VERSION_CHECK), should fix checks from Qt 5.10 to Qt 5.15 (GitHub issue #81)
 
 Changes in version 1.4.8:
 - Support Qt6 (tested with MSVC 2019 + CMake 3.19 on Windows) ==> QxOrm library is compatible with Qt4, Qt5 and Qt6
