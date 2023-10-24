@@ -398,8 +398,9 @@ struct Q_DECL_HIDDEN QxMongoDB_Helper::QxMongoDB_HelperImpl
 
          if (type == qx::IxSqlRelation::many_to_one)
          {
+            qx::IxDataMember * pLinkRelationKey = pRelation->getLinkRelationKey();
             lookup.replace("%COLL_LET_KEY%", pDataMember->getKey());
-            lookup.replace("%COLL_LET_VAL%", pDataMember->getKey());
+            lookup.replace("%COLL_LET_VAL%", (pLinkRelationKey ? pLinkRelationKey->getKey() : pDataMember->getKey()));
             lookup.replace("%COLL_EQ%", "_id");
          }
          else if (type == qx::IxSqlRelation::one_to_many)
@@ -410,8 +411,9 @@ struct Q_DECL_HIDDEN QxMongoDB_Helper::QxMongoDB_HelperImpl
          }
          else if (type == qx::IxSqlRelation::one_to_one)
          {
+            qx::IxDataMember * pLinkRelationKey = pRelation->getLinkRelationKey();
             lookup.replace("%COLL_LET_KEY%", pDataMember->getKey());
-            lookup.replace("%COLL_LET_VAL%", pDataMember->getKey());
+            lookup.replace("%COLL_LET_VAL%", (pLinkRelationKey ? pLinkRelationKey->getKey() : pDataMember->getKey()));
             lookup.replace("%COLL_EQ%", "_id");
          }
 

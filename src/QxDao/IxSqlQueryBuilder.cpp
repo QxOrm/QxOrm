@@ -419,8 +419,10 @@ void IxSqlQueryBuilder::sql_FetchById_WithRelation(qx::QxSqlRelationLinked * pRe
    qx::IxDataMember * pId = builder.getDataId(); qAssert(pId);
    QString table = builder.table(); QStringList columns;
    sql = builder.buildSql(columns, pRelationX).getSqlQuery();
+   QString tableAlias = (pRelationX ? pRelationX->getRootCustomAlias() : QString());
+   if (tableAlias.isEmpty()) { tableAlias = table; }
    sql += IxSqlQueryBuilder::addSqlCondition(sql);
-   sql += pId->getSqlAliasEqualToPlaceHolder(table, true, "", " AND ", false, (& builder));
+   sql += pId->getSqlAliasEqualToPlaceHolder(tableAlias, true, "", " AND ", false, (& builder));
 }
 
 void IxSqlQueryBuilder::sql_Insert(QString & sql, IxSqlQueryBuilder & builder)

@@ -1,3 +1,6 @@
+Changes in version 1.5.0:
+- TODO...
+
 Changes in version 1.4.9:
 - Fix compilation issue with Qt 6.2+ (due to Qt JIRA : https://bugreports.qt.io/browse/QTBUG-92910), more details in GitHub issue #54
 - Support QSqlQuery::execBatch() method to improve performance inserting/updating/deleting a list of C++ instances in database (new optional parameter 'bUseExecBatch' available for functions : qx::dao::insert, qx::dao::update, qx::dao::delete_by_id)

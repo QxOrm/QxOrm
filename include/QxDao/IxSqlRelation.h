@@ -93,6 +93,9 @@ public:
    IxDataMember * getDataId() const;
    IxDataMember * getDataIdOwner() const;
 
+   void linkRelationKeyTo(IxDataMember * p);
+   IxDataMember * getLinkRelationKey() const;
+
    QString getKey() const;
    QString getForeignKey() const;
    QString getForeignKeyOwner() const;

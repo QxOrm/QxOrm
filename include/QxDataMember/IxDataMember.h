@@ -48,6 +48,7 @@
 #pragma warning(disable:4996)
 #endif // _MSC_VER
 
+#include <QtCore/qmutex.h>
 #include <QtSql/qsqlquery.h>
 
 #ifndef _QX_NO_JSON
@@ -105,6 +106,8 @@ private:
 
    struct IxDataMemberImpl;
    std::unique_ptr<IxDataMemberImpl> m_pImpl; //!< Private implementation idiom
+
+   static QMutex m_mutex; //!< Mutex => qx::IxDataMember is thread-safe
 
 public:
 

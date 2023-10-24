@@ -68,7 +68,7 @@
 m_pClass(NULL), m_pClassOwner(NULL), m_pDataMember(p), m_pDataMemberX(NULL), \
 m_pDataMemberId(NULL), m_pDataMemberIdOwner(NULL), m_lOffsetRelation(100), \
 m_eJoinType(qx::dao::sql_join::left_outer_join), m_eRelationType(IxSqlRelation::no_relation), \
-m_bInitInEvent(false), m_bInitDone(false), m_iIsSameDataOwner(0), QX_CONSTRUCT_IX_RELATION_MUTEX()
+m_bInitInEvent(false), m_bInitDone(false), m_iIsSameDataOwner(0), m_pLinkRelationKey(NULL), QX_CONSTRUCT_IX_RELATION_MUTEX()
 
 namespace qx {
 
@@ -96,6 +96,7 @@ struct Q_DECL_HIDDEN IxSqlRelation::IxSqlRelationImpl
    bool                             m_bInitInEvent;         //!< Class initialization in progress
    bool                             m_bInitDone;            //!< Class initialization finished
    int                              m_iIsSameDataOwner;     //!< Check if relationship source entity and target entity are equal
+   IxDataMember *                   m_pLinkRelationKey;     //!< Link relation key to another data member (used by MongoDB to simulate lazy loading)
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
    QRecursiveMutex                  m_mutex;                //!< Mutex => 'qx::IxSqlRelation' is thread-safe (initialization process)
@@ -176,6 +177,10 @@ IxDataMemberX * IxSqlRelation::getDataMemberX() const { return m_pImpl->m_pDataM
 IxDataMember * IxSqlRelation::getDataId() const { return m_pImpl->m_pDataMemberId; }
 
 IxDataMember * IxSqlRelation::getDataIdOwner() const { return m_pImpl->m_pDataMemberIdOwner; }
+
+void IxSqlRelation::linkRelationKeyTo(IxDataMember * p) { m_pImpl->m_pLinkRelationKey = p; }
+
+IxDataMember * IxSqlRelation::getLinkRelationKey() const { return m_pImpl->m_pLinkRelationKey; }
 
 void IxSqlRelation::setIsSameDataOwner(int i) { m_pImpl->m_iIsSameDataOwner = i; }
 

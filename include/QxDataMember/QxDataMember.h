@@ -92,7 +92,7 @@ public:
 
    virtual QVariant toVariant(const void * pOwner, const QString & sFormat, int iIndexName = -1, qx::cvt::context::ctx_type ctx = qx::cvt::context::e_no_context) const          { return qx::cvt::to_variant((* getData(pOwner)), sFormat, iIndexName, ctx); }
    virtual qx_bool fromVariant(void * pOwner, const QVariant & v, const QString & sFormat, int iIndexName = -1, qx::cvt::context::ctx_type ctx = qx::cvt::context::e_no_context) { return qx::cvt::from_variant(v, (* getData(pOwner)), sFormat, iIndexName, ctx); }
-   virtual QString getType() const { return QString(qx::trait::get_class_name<DataType>::get()); }
+   virtual QString getType() const { QMutexLocker locker(& IxDataMember::m_mutex); return QString(qx::trait::get_class_name<DataType>::get()); }
 
 #ifndef _QX_NO_JSON
    virtual QJsonValue toJson(const void * pOwner, const QString & sFormat) const             { return qx::cvt::to_json((* getData(pOwner)), sFormat); }

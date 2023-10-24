@@ -122,6 +122,8 @@ struct Q_DECL_HIDDEN IxDataMember::IxDataMemberImpl
 
 };
 
+QMutex IxDataMember::m_mutex;
+
 IxDataMember::IxDataMember(const QString & sKey, long lVersion, bool bSerialize, bool bDao, IxDataMember * pImpl) : qx::QxPropertyBag(), m_pImpl(new IxDataMemberImpl(sKey, lVersion, bSerialize, bDao, pImpl)) { ; }
 
 IxDataMember::~IxDataMember() { ; }
