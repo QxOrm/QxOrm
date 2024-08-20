@@ -48,7 +48,6 @@ QxSimpleCrypt::QxSimpleCrypt():
    m_lastError(ErrorNoError)
 {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
-   QRandomGenerator::global()->seed(uint((qint64)(QDateTime::currentDateTime().toSecsSinceEpoch()) & 0xFFFF));
 #else // (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
    qsrand(uint((qint64)(QDateTime::currentDateTime().toTime_t()) & 0xFFFF));
 #endif // (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
@@ -61,7 +60,6 @@ QxSimpleCrypt::QxSimpleCrypt(quint64 key):
    m_lastError(ErrorNoError)
 {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
-   QRandomGenerator::global()->seed(uint((qint64)(QDateTime::currentDateTime().toSecsSinceEpoch()) & 0xFFFF));
 #else // (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
    qsrand(uint((qint64)(QDateTime::currentDateTime().toTime_t()) & 0xFFFF));
 #endif // (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
@@ -129,7 +127,8 @@ QByteArray QxSimpleCrypt::encryptToByteArray(QByteArray plaintext)
 
    //prepend a random char to the string
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
-   char randomChar = char(QRandomGenerator::global()->generate() & 0xFF);
+   QRandomGenerator randomGen = QRandomGenerator::securelySeeded();
+   char randomChar = char(randomGen.generate() & 0xFF);
 #else // (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
    char randomChar = char(qrand() & 0xFF);
 #endif // (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))

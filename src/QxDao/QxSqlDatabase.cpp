@@ -31,6 +31,8 @@
 
 #include <QxPrecompiled.h>
 
+#include <QtSql/qsqldriver.h>
+
 #include <QxDao/QxSqlDatabase.h>
 
 #include <QxDao/QxSqlGenerator/QxSqlGenerator.h>
@@ -637,6 +639,19 @@ QSqlDatabase QxSqlDatabase::checkDatabaseByThread()
    return QSqlDatabase::database(sDbKey);
 }
 
+void QxSqlDatabase::removeDatabaseByThread()
+{
+   QxSqlDatabase::QxSqlDatabaseImpl * pImpl = QxSqlDatabase::getSingleton()->m_pImpl.get();
+   QMutexLocker locker(& pImpl->m_oDbMutex);
+   Qt::HANDLE lCurrThreadId = QThread::currentThreadId();
+   if (! pImpl->m_lstDbByThread.contains(lCurrThreadId)) { return; }
+   QString sDbKey = pImpl->m_lstDbByThread.value(lCurrThreadId);
+   if (! QSqlDatabase::contains(sDbKey)) { return; }
+   QSqlDatabase::database(sDbKey).close();
+   QSqlDatabase::removeDatabase(sDbKey);
+   pImpl->m_lstDbByThread.remove(lCurrThreadId);
+}
+
 QSqlDatabase QxSqlDatabase::QxSqlDatabaseImpl::getDatabaseByCurrThreadId(QSqlError & dbError)
 {
    QMutexLocker locker(& m_oDbMutex);
@@ -662,6 +677,7 @@ QSqlDatabase QxSqlDatabase::QxSqlDatabaseImpl::getDatabaseByCurrThreadId(QSqlErr
    if (! QSqlDatabase::contains(sDbKey)) { return createDatabase(dbError); }
    QSqlDatabase db = QSqlDatabase::database(sDbKey);
    if (! db.isValid()) { return createDatabase(dbError); }
+   if (db.driver() && (db.driver()->thread() != QThread::currentThread())) { return createDatabase(dbError); }
    return db;
 }
 

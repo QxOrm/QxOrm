@@ -163,10 +163,10 @@
           </table>
         </p>
         <p align="justify"><b>Remarque : </b>par défaut, l'application <b>QxEntityEditor</b> est limitée à 5 entités par projet.
-        Pour obtenir une clé de licence et ainsi créer un nombre illimité d'entités par projet, vous pouvez nous contacter à l'adresse suivante : <a href="mailto:contact@qxorm.com">contact@qxorm.com</a>.<br>
+        Pour obtenir une clé de licence et ainsi créer un nombre illimité d'entités par projet, vous pouvez nous contacter à l'adresse suivante : <a href="mailto:contact@qxorm.com">contact@qxorm.com</a>.
+        Prix d'une clé de licence <b>QxEntityEditor</b> : <i>500&euro;</i> (par développeur, mise à jour gratuite pendant 12 mois).<br>
         <br>
-        <a href="./manual_qxee.html">Un manuel utilisateur (documentation) dédié à l'application <b>QxEntityEditor</b> est disponible</a>.<br>
-        Prix d'une licence <b>QxEntityEditor</b> : <i>300&euro;</i> (par développeur, mise à jour gratuite pendant 12 mois).</p>
+        <a href="./manual_qxee.html">Un manuel utilisateur (documentation) dédié à l'application <b>QxEntityEditor</b> est disponible</a>.</p>
         <a href="../qxentityeditor/resource/qxee_sample.png" target="_blank"><img alt="QxEntityEditor" src="../qxentityeditor/resource/qxee_sample_small.png" border="0" class="img_with_shadow"></a>
         <br><br>
         <hr style="width: 90%" align="center" size="1" color="#100D5A">
@@ -235,6 +235,14 @@
           <tbody>
             <tr>
               <td><i>
+<b><h2>Changes in version 1.5.0:</h2></b>
+- Fix qx::dao::fetch_by_id_with_relation() when a table alias is used (table alias is now used in the WHERE part instead of table name)<br>
+- Fix qx::IxDataMember::getType() method when used in a multi-thread environment<br>
+- New method qx::IxSqlRelation::linkRelationKeyTo() for MongoDB database to simulate lazy loading for relationships (GitHub #107)<br>
+- Fix qx::QxSqlDatabase and multi-thread issue when the OS assigns an old and destroyed thread identifier to a new one (GitHub #42) + add method qx::QxSqlDatabase::removeDatabaseByThread() to call at the end of a thread execution<br>
+- Fix qx::QxSimpleCrypt class with Qt version >= 5.10 and error "Attempted to overwrite a QRandomGenerator to system() or global()"<br>
+- Fix database not opened using async queries (GitHub #109)<br>
+<br>
 <b><h2>Changes in version 1.4.9:</h2></b>
 - Fix compilation issue with Qt 6.2+ (due to Qt JIRA : https://bugreports.qt.io/browse/QTBUG-92910), more details in GitHub issue #54<br>
 - Support QSqlQuery::execBatch() method to improve performance inserting/updating/deleting a list of C++ instances in database (new optional parameter 'bUseExecBatch' available for functions : qx::dao::insert, qx::dao::update, qx::dao::delete_by_id)<br>
@@ -551,6 +559,23 @@ Here are all other changes of version 1.4.1:<br>
           <tbody>
             <tr>
               <td><i>
+<b><h2>Changes in version QxEntityEditor 1.2.8:</h2></b>
+- New export plugin 'QxEESourceControlExport' : export a *.qxee QxEntityEditor project file to a list of JSON files which can be easily check-in in a source control repository (Git, Perforce, CVS, etc...)<br>
+- New import plugin 'QxEESourceControlImport' : import a list of JSON files (generated using 'QxEESourceControlExport' export plugin) inside a *.qxee QxEntityEditor project file<br>
+- These 2 new plugins allow a team development to work simultaneously on a same *.qxee QxEntityEditor project file<br>
+- A typical workflow could be (with 2 developers named dev A and dev B) :<br>
+  * dev A and dev B work on a same *.qxee QxEntityEditor project file<br>
+  * dev A create/modify/change some entities in QxEntityEditor application<br>
+  * dev B create/modify/change other entities in QxEntityEditor application<br>
+  * dev A and dev B export the *.qxee project file  using the new 'QxEESourceControlExport' export plugin<br>
+  * Once exported, dev A and dev B check-in the JSON files inside the source control manager (Git, Perforce, CVS, etc...) on their own branch<br>
+  * dev A and dev B integrate from their own branch to the DEV (or MAIN or MASTER) branch (if there are some conflicts to resolve, it should be easy because JSON files are easy to read and understand)<br>
+  * dev A and dev B can now get latest JSON files from the DEV (or MAIN or MASTER) branch : these JSON files contain both modifications from dev A and dev B<br>
+  * dev A and dev B can import these JSON files inside QxEntityEditor application using the new 'QxEESourceControlImport' import plugin<br>
+- These 2 new plugins can be executed using command line (like all other QxEntityEditor plugins), here are 2 examples :<br>
+  * Export : QxEntityEditor --no_gui --project="C:\Temp\qxBlog.qxee" --plugin=QxEESourceControlExport --QxEESourceControlExport_path="C:\Temp\source_control\"<br>
+  * Import : QxEntityEditor --no_gui --project="C:\Temp\qxBlog.qxee" --plugin=QxEESourceControlImport --QxEESourceControlImport_path="C:\Temp\source_control\qxBlog.qxee.export.json"<br>
+<br>
 <b><h2>Changes in version QxEntityEditor 1.2.7:</h2></b>
 - Fix an issue with MySQL database schema import process when MySQL server is configured to answer with column names in UPPERCASE (may fix other imports depending on specific database configuration)<br>
 <br>
@@ -702,7 +727,7 @@ Here are all other changes of version 1.4.1:<br>
         <img alt="QxOrm" src="./resource/logo_qxorm_small.png" width="168" height="40">
       </td>
       <td align="center" valign="middle">
-        <font size="2">© 2011-2023 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
+        <font size="2">© 2011-2024 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
       </td>
       <td align="right" valign="middle">
         <form action="https://www.paypal.com/cgi-bin/webscr" method="post">

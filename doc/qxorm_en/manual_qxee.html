@@ -255,6 +255,9 @@
                         <a href="#import_plugins">Import plugins</a>
                         <ol class="manual_ol_title_2" type="1">
                            <li class="manual_li_title_2">
+                              <a href="#wnd_source_control_import">Import from a directory linked to a Source Control manager (Git, Perforce, CVS, etc.)</a>
+                           </li>
+                           <li class="manual_li_title_2">
                               <a href="#wnd_json_import">Import project based on JSON file</a>
                            </li>
                            <li class="manual_li_title_2">
@@ -321,6 +324,9 @@
                            </li>
                            <li class="manual_li_title_2">
                               <a href="#printer_settings">Print entities diagram</a>
+                           </li>
+                           <li class="manual_li_title_2">
+                              <a href="#source_control_export_settings">Export to a directory linked to a Source Control manager (Git, Perforce, CVS, etc.)</a>
                            </li>
                            <li class="manual_li_title_2">
                               <a href="#xml_export_settings">Export project to XML or JSON format</a>
@@ -522,9 +528,9 @@
             <div class="manual_div_content">
                QxEntityEditor application provides several ways to zoom on entities diagram :
                <ul>
-                  <li>using the main menu : <i>View >> Zoom view to XX%</i> ;</li>
+                  <li>using the main menu : <i>View &gt;&gt; Zoom view to XX%</i> ;</li>
                   <li>using the slider at the bottom-right of the screen ;</li>
-                  <li>using a contextual menu, right-click on entities diagram, sub-menu : <i>View >> Zoom view to XX%</i> ;</li>
+                  <li>using a contextual menu, right-click on entities diagram, sub-menu : <i>View &gt;&gt; Zoom view to XX%</i> ;</li>
                   <li>using left-click + mouse wheel on entities diagram.</li>
                </ul>
                <br/>
@@ -533,7 +539,7 @@
             </div>
             <p class="manual_p_title_3"><a class="manual_a_title_3" name="qxee_splitter">"Splitter" view mode</a></p>
             <div class="manual_div_content">
-               <i>View >> Show/hide splitter mode</i> menu switches tabs settings (entities, properties, relationships, enumerations + C++ source code preview) :
+               <i>View &gt;&gt; Show/hide splitter mode</i> menu switches tabs settings (entities, properties, relationships, enumerations + C++ source code preview) :
                <ul>
                   <li>on the right part of the screen to provide a quick access on selected item settings ;</li>
                   <li>hidden to display entities diagram on full screen (default value).</li>
@@ -545,7 +551,7 @@
          </div>
          <p class="manual_p_title_2"><a class="manual_a_title_2" name="global_settings">QxEntityEditor application settings</a></p>
          <div class="manual_div_content">
-            QxEntityEditor application global parameters (for all projects) are accessible via main menu <i>Tools >> Global settings</i> :
+            QxEntityEditor application global parameters (for all projects) are accessible via main menu <i>Tools &gt;&gt; Global settings</i> :
             <br/><br/>
             <img alt="Global settings" src="https://www.qxorm.com/qxentityeditor/resource/qxee_global_settings.png" />
             <br/>
@@ -564,7 +570,7 @@
          <p class="manual_p_title_2"><a class="manual_a_title_2" name="license_details">Register a license key</a></p>
          <div class="manual_div_content">
             Without a valid license key, a QxEntityEditor project is limited to 5 entities per project.
-            To remove this limitation, you can register a license key via main menu <i>Help >> License information</i> :
+            To remove this limitation, you can register a license key via main menu <i>Help &gt;&gt; License information</i> :
             <br/><br/>
             <img alt="License" src="https://www.qxorm.com/qxentityeditor/resource/qxee_license.png" />
             <br/><br/>
@@ -579,7 +585,7 @@
          </div>
          <p class="manual_p_title_2"><a class="manual_a_title_2" name="project_params_wnd">Create/open a *.qxee project</a></p>
          <div class="manual_div_content">
-            A new QxEntityEditor project is created via main menu <i>File >> New project</i> :
+            A new QxEntityEditor project is created via main menu <i>File &gt;&gt; New project</i> :
             <br/><br/>
             <img alt="Project new" src="https://www.qxorm.com/qxentityeditor/resource/qxee_project_new.png" />
             <br/>
@@ -588,7 +594,7 @@
                <li>Field « <i>Project location</i> » : define where QxEntityEditor project is located. You can use the "<i>...</i>" button to select a directory.</li>
             </ul>
             <br/>
-            An existing QxEntityEditor project can be opened via main menu <i>File >> Open project</i> : then just select a project file with <i>*.qxee</i> extension.
+            An existing QxEntityEditor project can be opened via main menu <i>File &gt;&gt; Open project</i> : then just select a project file with <i>*.qxee</i> extension.
             Under the main toolbar of QxEntityEditor application, a list of recent projects is available to switch quickly from a project to another :
             <br/><br/>
             <img alt="Project list" src="https://www.qxorm.com/qxentityeditor/resource/qxee_project_list.png" />
@@ -607,7 +613,7 @@
          </div>
          <p class="manual_p_title_2"><a class="manual_a_title_2" name="project_settings">Project settings</a></p>
          <div class="manual_div_content">
-            QxEntityEditor <i>*.qxee</i> project parameters are accessible via main menu <i>Tools >> Project settings</i> :
+            QxEntityEditor <i>*.qxee</i> project parameters are accessible via main menu <i>Tools &gt;&gt; Project settings</i> :
             <br/><br/>
             <img alt="Project settings tab 1" src="https://www.qxorm.com/qxentityeditor/resource/qxee_project_settings_01.png" />
             <br/><br/>
@@ -627,7 +633,7 @@
             <br/><br/>
             <b>Note :</b> items colors in the entities diagram can be defined at several levels (from the more global level to the more specific level) :
             <ul>
-               <li><a href="#project_settings">at projet level</a> : via main menu <i>Tools >> Project settings</i>, <i>Colors</i> tab ;</li>
+               <li><a href="#project_settings">at projet level</a> : via main menu <i>Tools &gt;&gt; Project settings</i>, <i>Colors</i> tab ;</li>
                <li><a href="#color_settings_by_namespace">at namespace level</a> : via right-click contextual menu on a namespace <i>Define colors by namespace</i> ;</li>
                <li><a href="#color_settings_by_item">at item level (entity, enumeration or post-it)</a> : via right-click contextual menu on an item <i>Define entity colors</i>.</li>
             </ul>
@@ -642,8 +648,8 @@
             <div class="manual_div_content">
                A new entity can be created via :
                <ul>
-                  <li>Main menu : <i>Actions >> New entity</i> ;</li>
-                  <li>Right-click contextual menu on entities diagram : <i>Entity >> New entity</i> ;</li>
+                  <li>Main menu : <i>Actions &gt;&gt; New entity</i> ;</li>
+                  <li>Right-click contextual menu on entities diagram : <i>Entity &gt;&gt; New entity</i> ;</li>
                   <li>The « <i>Create a new entity</i> » button on entity parameters screen when no entity is selected.</li>
                </ul>
                <br/>
@@ -657,8 +663,8 @@
             <div class="manual_div_content">
                An entity can be modified via :
                <ul>
-                  <li>Main menu : <i>Actions >> Modify entity</i> ;</li>
-                  <li>Right-click contextual menu on entities diagram : <i>Entity >> Modify entity</i> ;</li>
+                  <li>Main menu : <i>Actions &gt;&gt; Modify entity</i> ;</li>
+                  <li>Right-click contextual menu on entities diagram : <i>Entity &gt;&gt; Modify entity</i> ;</li>
                   <li>A double-click on entity name in the entities diagram.</li>
                </ul>
                <br/>
@@ -672,8 +678,8 @@
             <div class="manual_div_content">
                An entity (or several entities) can be deleted via :
                <ul>
-                  <li>Main menu : <i>Actions >> Delete entity</i> ;</li>
-                  <li>Right-click contextual menu on entities diagram : <i>Entity >> Delete entity</i> ;</li>
+                  <li>Main menu : <i>Actions &gt;&gt; Delete entity</i> ;</li>
+                  <li>Right-click contextual menu on entities diagram : <i>Entity &gt;&gt; Delete entity</i> ;</li>
                   <li>The "<i>Del</i>" keyboard shortcut when 1 or several entities are selected.</li>
                </ul>
                <br/>
@@ -684,8 +690,8 @@
             <div class="manual_div_content">
                An entity can be cloned via :
                <ul>
-                  <li>Main menu : <i>Actions >> Clone entity</i> ;</li>
-                  <li>Right-click contextual menu on entities diagram : <i>Entity >> Clone entity</i> ;</li>
+                  <li>Main menu : <i>Actions &gt;&gt; Clone entity</i> ;</li>
+                  <li>Right-click contextual menu on entities diagram : <i>Entity &gt;&gt; Clone entity</i> ;</li>
                </ul>
                <br/>
                <img alt="Entity clone" src="https://www.qxorm.com/qxentityeditor/resource/qxee_entity_clone.png" />
@@ -778,7 +784,7 @@
                <br/><br/>
                <b>Note :</b> items colors in the entities diagram can be defined at several levels (from the more global level to the more specific level) :
                <ul>
-                  <li><a href="#project_settings">at projet level</a> : via main menu <i>Tools >> Project settings</i>, <i>Colors</i> tab ;</li>
+                  <li><a href="#project_settings">at projet level</a> : via main menu <i>Tools &gt;&gt; Project settings</i>, <i>Colors</i> tab ;</li>
                   <li><a href="#color_settings_by_namespace">at namespace level</a> : via right-click contextual menu on a namespace <i>Define colors by namespace</i> ;</li>
                   <li><a href="#color_settings_by_item">at item level (entity, enumeration or post-it)</a> : via right-click contextual menu on an item <i>Define entity colors</i>.</li>
                </ul>
@@ -967,7 +973,7 @@
                <br/><br/>
                <b>Note :</b> items colors in the entities diagram can be defined at several levels (from the more global level to the more specific level) :
                <ul>
-                  <li><a href="#project_settings">at projet level</a> : via main menu <i>Tools >> Project settings</i>, <i>Colors</i> tab ;</li>
+                  <li><a href="#project_settings">at projet level</a> : via main menu <i>Tools &gt;&gt; Project settings</i>, <i>Colors</i> tab ;</li>
                   <li><a href="#color_settings_by_namespace">at namespace level</a> : via right-click contextual menu on a namespace <i>Define colors by namespace</i> ;</li>
                   <li><a href="#color_settings_by_item">at item level (entity, enumeration or post-it)</a> : via right-click contextual menu on an item <i>Define entity colors</i>.</li>
                </ul>
@@ -1005,7 +1011,7 @@
                <br/><br/>
                <b>Note :</b> items colors in the entities diagram can be defined at several levels (from the more global level to the more specific level) :
                <ul>
-                  <li><a href="#project_settings">at projet level</a> : via main menu <i>Tools >> Project settings</i>, <i>Colors</i> tab ;</li>
+                  <li><a href="#project_settings">at projet level</a> : via main menu <i>Tools &gt;&gt; Project settings</i>, <i>Colors</i> tab ;</li>
                   <li><a href="#color_settings_by_namespace">at namespace level</a> : via right-click contextual menu on a namespace <i>Define colors by namespace</i> ;</li>
                   <li><a href="#color_settings_by_item">at item level (entity, enumeration or post-it)</a> : via right-click contextual menu on an item <i>Define entity colors</i>.</li>
                </ul>
@@ -1037,7 +1043,7 @@
                <br/><br/>
                <b>Note :</b> items colors in the entities diagram can be defined at several levels (from the more global level to the more specific level) :
                <ul>
-                  <li><a href="#project_settings">at projet level</a> : via main menu <i>Tools >> Project settings</i>, <i>Colors</i> tab ;</li>
+                  <li><a href="#project_settings">at projet level</a> : via main menu <i>Tools &gt;&gt; Project settings</i>, <i>Colors</i> tab ;</li>
                   <li><a href="#color_settings_by_namespace">at namespace level</a> : via right-click contextual menu on a namespace <i>Define colors by namespace</i> ;</li>
                   <li><a href="#color_settings_by_item">at item level (entity, enumeration or post-it)</a> : via right-click contextual menu on an item <i>Define entity colors</i>.</li>
                </ul>
@@ -1046,7 +1052,7 @@
          </div>
          <p class="manual_p_title_2"><a class="manual_a_title_2" name="organize_diagram_layout">Organize diagram layout</a></p>
          <div class="manual_div_content">
-            A feature is available in QxEntityEditor application to group automatically all items in entities diagram depending on namespace, and depending on relationships between entities : main menu <i>View >> Organize diagram layout</i>.
+            A feature is available in QxEntityEditor application to group automatically all items in entities diagram depending on namespace, and depending on relationships between entities : main menu <i>View &gt;&gt; Organize diagram layout</i>.
             This feature can be useful for example to organize entities diagram after executing <a href="#import_plugins">an import process</a>.
             <br/><br/>
             <img alt="Organize diagram layout" src="https://www.qxorm.com/qxentityeditor/resource/qxee_organize_diagram_layout.png" />
@@ -1054,7 +1060,7 @@
          </div>
          <p class="manual_p_title_2"><a class="manual_a_title_2" name="tag_project_state">Project historic (tag project state)</a></p>
          <div class="manual_div_content">
-            A QxEntityEditor project can have several versions/historics : main menu <i>Actions >> Tag project state</i>.
+            A QxEntityEditor project can have several versions/historics : main menu <i>Actions &gt;&gt; Tag project state</i>.
             <br/><br/>
             Each project historic changes project items version number (entities, properties, relationships, etc...).
             Version number is used to manage <a href="./manual.html#manual_605">ascendant compatibility with serialization engine of QxOrm library</a>.
@@ -1093,7 +1099,7 @@
          <p class="manual_p_title_2"><a class="manual_a_title_2" name="plugin_about">List of available plugins</a></p>
          <div class="manual_div_content">
             QxEntityEditor application is based on plugins to manage <a href="#import_plugins">import</a>/<a href="#export_plugins">export</a> process.
-            A list of available plugins with version number and description is available via main menu : <i>Help >> About plugins</i>.
+            A list of available plugins with version number and description is available via main menu : <i>Help &gt;&gt; About plugins</i>.
             <br/><br/>
             <img alt="List of plugins" src="https://www.qxorm.com/qxentityeditor/resource/qxee_plugins_about.png" />
             <br/><br/>
@@ -1106,9 +1112,51 @@
          <br/><br/>
          <img alt="Import plugins" src="https://www.qxorm.com/qxentityeditor/resource/qxee_import_plugins.png" />
          <br/><br/>
+         <p class="manual_p_title_2"><a class="manual_a_title_2" name="wnd_source_control_import">Import from a directory linked to a Source Control manager (Git, Perforce, CVS, etc.)</a></p>
+         <div class="manual_div_content">
+            A QxEntityEditor project (<i>*.qxee</i> file) can be managed by a developers team : the source code of a QxEntityEditor project can be exported/imported (manually or using command line) with <a href="#source_control_export_settings"><b>QxEESourceControlExport</b></a> and <a href="#wnd_source_control_import"><b>QxEESourceControlImport</b></a> plugins.<br/>
+            <br/>
+            Associated with a Source Control manager (Git, Perforce, CVS, etc.), these 2 plugins provide :
+            <ul>
+               <li>several people can work simultaneously on the same project ;</li>
+               <li>a project can easily be versioned in the source code manager ;</li>
+               <li>each element of a project can be compared (difference between 2 versions of the same entity for example).</li>
+            </ul>
+            Here is a use case of <a href="#source_control_export_settings"><b>QxEESourceControlExport</b></a> and <a href="#wnd_source_control_import"><b>QxEESourceControlImport</b></a> plugins, with 2 developers named 'dev A' and 'dev B' (this example can be extended to X developers) :
+            <ul>
+               <li>dev A and dev B work on a same QxEntityEditor project (<i>*.qxee</i> file) ;</li>
+               <li>dev A creates/changes/deletes some entities in QxEntityEditor application ;</li>
+               <li>dev B creates/changes/deletes other entities in QxEntityEditor application ;</li>
+               <li>dev A and dev B export the <i>*.qxee</i> project file with the <a href="#source_control_export_settings"><b>QxEESourceControlExport</b></a> plugin (manually or using command line) ;</li>
+               <li>once the project is exported to a directory, dev A and dev B check-in (or <i>submit</i>) all generated JSON files to the Source Control manager (Git, Perforce, CVS, etc.) on their own branch ;</li>
+               <li>from the Source Control manager, dev A and dev B merge (or <i>integrate</i>) their own branch to the development branch DEV (or MAIN or MASTER or LATEST); <b>Note :</b> even if there are conflicts to resolve, they will be easy to correct because the JSON format is easily readable ;</li>
+               <li>dev A and dev B can now get latest files from Source Control manager from DEV branch (or MAIN or MASTER or LATEST) : these JSON files <b>contain both modifications from dev A and dev B</b> ;</li>
+               <li>dev A and dev B can import these JSON files into the QxEntityEditor application using the import plugin <a href="#wnd_source_control_import"><b>QxEESourceControlImport</b></a> (manually or using command line).</li>
+            </ul>
+            Import plugin settings are accessible from the main menu <i>Import &gt;&gt; Import from Source Control repository (Git, Perforce, CVS, etc.)</i> :
+            <br/><br/>
+            <img alt="Source Control import plugin" src="https://www.qxorm.com/qxentityeditor/resource/qxee_import_source_control.png" />
+            <br/><br/>
+            The parameter to enter corresponds to the JSON file present at the root of the directory where <a href="#source_control_export_settings">the <i>*.qxee</i> project was exported</a>.<br/>
+            This JSON file is named <b><i>&lt;project_name&gt;.qxee.export.json</i></b>, for example with the qxBlog sample project : <i>qxBlog.qxee.export.json</i>.
+            <br/><br/>
+            <img alt="Source Control output directory" src="https://www.qxorm.com/qxentityeditor/resource/qxee_source_control_output_directory.png" />
+            <br/><br/>
+            <b>Warning :</b> an import deletes all elements of the current project (entities, properties, relationships, etc.).
+            <br/><br/>
+            <b>Note :</b> It is possible to start QxEntityEditor from the command line to automatically load a directory associated with a source code manager when the application starts.
+            <br/><br/>
+            Command line example :<br/>
+            <div style="width:900px; height:auto; overflow:auto; background-color:white">
+               <i><pre>QxEntityEditor --project="&lt;path_to_your_qxee_project_file&gt;" --plugin=QxEESourceControlImport --QxEESourceControlImport_path="&lt;path_to_the_root_source_control_json_file&gt;"</pre></i>
+            </div>
+            <br/><br/>
+         </div>
          <p class="manual_p_title_2"><a class="manual_a_title_2" name="wnd_json_import">Import project based on JSON file</a></p>
          <div class="manual_div_content">
-            A QxEntityEditor project can be managed with a text file in JSON format : main menu <i>Import >> Import from JSON file</i>.<br/>
+            <b><font style="background-color:yellow">Note :</font></b> to work with a source code manager (Git, Perforce, CVS, etc.), it is recommended to use <a href="#source_control_export_settings"><b>QxEESourceControlExport</b></a> and <a href="#wnd_source_control_import"><b>QxEESourceControlImport</b></a> plugins (instead of creating a single file).<br/>
+            <br/>
+            A QxEntityEditor project can be managed with a text file in JSON format : main menu <i>Import &gt;&gt; Import from JSON file</i>.<br/>
             To know the JSON structure of a <i>*.qxee</i> project, it is recommended to do <a href="#xml_export_settings">a first export process to JSON file</a>.
             <br/><br/>
             <img alt="Import JSON" src="https://www.qxorm.com/qxentityeditor/resource/qxee_import_json.png" />
@@ -2894,7 +2942,7 @@
          </div>
          <p class="manual_p_title_2"><a class="manual_a_title_2" name="wnd_mysql_import">Import from MySQL or MariaDB database</a></p>
          <div class="manual_div_content">
-            A MySQL (or MariaDB) database structure can be imported in QxEntityEditor application via main menu : <i>Import >> Import from MySQL (or MariaDB) database</i> :
+            A MySQL (or MariaDB) database structure can be imported in QxEntityEditor application via main menu : <i>Import &gt;&gt; Import from MySQL (or MariaDB) database</i> :
             <br/><br/>
             <img alt="Import MySQL or MariaDB" src="https://www.qxorm.com/qxentityeditor/resource/qxee_import_mysql.png" />
             <br/><br/>
@@ -2948,7 +2996,7 @@
          </div>
          <p class="manual_p_title_2"><a class="manual_a_title_2" name="wnd_postgresql_import">Import from PostgreSQL database</a></p>
          <div class="manual_div_content">
-            A PostgreSQL database structure can be imported in QxEntityEditor application via main menu : <i>Import >> Import from PostgreSQL database</i> :
+            A PostgreSQL database structure can be imported in QxEntityEditor application via main menu : <i>Import &gt;&gt; Import from PostgreSQL database</i> :
             <br/><br/>
             <img alt="Import PostgreSQL" src="https://www.qxorm.com/qxentityeditor/resource/qxee_import_postgresql.png" />
             <br/><br/>
@@ -3002,7 +3050,7 @@
          </div>
          <p class="manual_p_title_2"><a class="manual_a_title_2" name="wnd_sqlite_import">Import from SQLite database</a></p>
          <div class="manual_div_content">
-            A SQLite database structure can be imported in QxEntityEditor application via main menu : <i>Import >> Import from SQLite database</i> :
+            A SQLite database structure can be imported in QxEntityEditor application via main menu : <i>Import &gt;&gt; Import from SQLite database</i> :
             <br/><br/>
             <img alt="Import SQLite" src="https://www.qxorm.com/qxentityeditor/resource/qxee_import_sqlite.png" />
             <br/><br/>
@@ -3052,7 +3100,7 @@
          </div>
          <p class="manual_p_title_2"><a class="manual_a_title_2" name="wnd_odbc_import">Import from database using ODBC driver (Oracle, MS SQL Server, etc.)</a></p>
          <div class="manual_div_content">
-            QxEntityEditor application provides a generic database import using ODBC drivers : main menu <i>Import >> Import from database using ODBC driver</i>.
+            QxEntityEditor application provides a generic database import using ODBC drivers : main menu <i>Import &gt;&gt; Import from database using ODBC driver</i>.
             This kind of import process requires <a href="https://en.wikipedia.org/wiki/Data_source_name" target="_blank">a DSN (Data Source Name)</a> defined on the environment.
             Import by ODBC process is able to manage following databases : Oracle, Microsoft SQL Server, SQLite, MySQL/MariaDB, PostgreSQL, etc...
             <br/><br/>
@@ -3121,9 +3169,9 @@
             <br/><br/>
             <p class="manual_p_title_3"><a class="manual_a_title_3" name="cpp_export_settings_parameters">C++ export settings</a></p>
             <div class="manual_div_content">
-               C++ export parameters are accessible via main menu : <i>Tools >> Export to C++ project (settings)</i>.
+               C++ export parameters are accessible via main menu : <i>Tools &gt;&gt; Export to C++ project (settings)</i>.
                Export parameters screen is displayed automatically when the first export is launched if no setting is saved in <i>*.qxee</i> project.
-               When a C++ export process has already been executed, then export parameters screen is only accessible via : <i>Tools >> Export to C++ project (settings)</i> :
+               When a C++ export process has already been executed, then export parameters screen is only accessible via : <i>Tools &gt;&gt; Export to C++ project (settings)</i> :
                <br/><br/>
                <img alt="Export C++" src="https://www.qxorm.com/qxentityeditor/resource/qxee_export_cpp.png" />
                <br/><br/>
@@ -3487,9 +3535,9 @@
             <br/><br/>
             <p class="manual_p_title_3"><a class="manual_a_title_3" name="cpp_model_view_export_settings_parameters">Export settings</a></p>
             <div class="manual_div_content">
-               C++ model/view export parameters are accessible via main menu : <i>Tools >> Export to C++ model/view project (settings)</i>.
+               C++ model/view export parameters are accessible via main menu : <i>Tools &gt;&gt; Export to C++ model/view project (settings)</i>.
                Export parameters screen is displayed automatically when the first export is launched if no setting is saved in <i>*.qxee</i> project.
-               When a C++ model/view export process has already been executed, then export parameters screen is only accessible via : <i>Tools >> Export to C++ model/view project (settings)</i> :
+               When a C++ model/view export process has already been executed, then export parameters screen is only accessible via : <i>Tools &gt;&gt; Export to C++ model/view project (settings)</i> :
                <br/><br/>
                <img alt="Export C++ model/view" src="https://www.qxorm.com/qxentityeditor/resource/qxee_export_cpp_model_view.png" />
                <br/><br/>
@@ -3554,9 +3602,9 @@
             <br/><br/>
             <p class="manual_p_title_3"><a class="manual_a_title_3" name="cpp_services_export_settings_parameters">Export settings</a></p>
             <div class="manual_div_content">
-               C++ services export parameters are accessible via main menu : <i>Tools >> Export to C++ services project (settings)</i>.
+               C++ services export parameters are accessible via main menu : <i>Tools &gt;&gt; Export to C++ services project (settings)</i>.
                Export parameters screen is displayed automatically when the first export is launched if no setting is saved in <i>*.qxee</i> project.
-               When a C++ services export process has already been executed, then export parameters screen is only accessible via : <i>Tools >> Export to C++ services project (settings)</i> :
+               When a C++ services export process has already been executed, then export parameters screen is only accessible via : <i>Tools &gt;&gt; Export to C++ services project (settings)</i> :
                <br/><br/>
                <img alt="Export C++ services" src="https://www.qxorm.com/qxentityeditor/resource/qxee_export_cpp_services.png" />
                <br/><br/>
@@ -3671,7 +3719,7 @@
             QxEntityEditor application is able to generate a database schema (structure) in a DDL SQL format.
             QxEntityEditor application support most commonly used databases : SQLite, MySQL, MariaDB, PostgreSQL, Oracle and Microsoft SQL Server.
             Generated DDL SQL script can be imported in database to create automatically all tables, columns, primary keys, relationships, index, etc...
-            DDL SQL parameters are accessible via main menu : <i>Tools >> Export to DDL SQL script file (settings)</i> :
+            DDL SQL parameters are accessible via main menu : <i>Tools &gt;&gt; Export to DDL SQL script file (settings)</i> :
             <br/><br/>
             <img alt="Export SQL DDL" src="https://www.qxorm.com/qxentityeditor/resource/qxee_export_ddl.png" />
             <br/><br/>
@@ -3703,15 +3751,55 @@
          <p class="manual_p_title_2"><a class="manual_a_title_2" name="printer_settings">Print entities diagram</a></p>
          <div class="manual_div_content">
             QxEntityEditor application is able to print entities diagram to PNG and/or PDF format.
-            Print parameters are accessible via main menu : <i>Tools >> Print the entities diagram (settings)</i> :
+            Print parameters are accessible via main menu : <i>Tools &gt;&gt; Print the entities diagram (settings)</i> :
             <br/><br/>
             <img alt="Export print PNG/PDF" src="https://www.qxorm.com/qxentityeditor/resource/qxee_export_print.png" />
             <br/><br/>
          </div>
+         <p class="manual_p_title_2"><a class="manual_a_title_2" name="source_control_export_settings">Export to a directory linked to a Source Control manager (Git, Perforce, CVS, etc.)</a></p>
+         <div class="manual_div_content">
+            A QxEntityEditor project (<i>*.qxee</i> file) can be managed by a developers team : the source code of a QxEntityEditor project can be exported/imported (manually or using command line) with <a href="#source_control_export_settings"><b>QxEESourceControlExport</b></a> and <a href="#wnd_source_control_import"><b>QxEESourceControlImport</b></a> plugins.<br/>
+            <br/>
+            Associated with a Source Control manager (Git, Perforce, CVS, etc.), these 2 plugins provide :
+            <ul>
+               <li>several people can work simultaneously on the same project ;</li>
+               <li>a project can easily be versioned in the source code manager ;</li>
+               <li>each element of a project can be compared (difference between 2 versions of the same entity for example).</li>
+            </ul>
+            Here is a use case of <a href="#source_control_export_settings"><b>QxEESourceControlExport</b></a> and <a href="#wnd_source_control_import"><b>QxEESourceControlImport</b></a> plugins, with 2 developers named 'dev A' and 'dev B' (this example can be extended to X developers) :
+            <ul>
+               <li>dev A and dev B work on a same QxEntityEditor project (<i>*.qxee</i> file) ;</li>
+               <li>dev A creates/changes/deletes some entities in QxEntityEditor application ;</li>
+               <li>dev B creates/changes/deletes other entities in QxEntityEditor application ;</li>
+               <li>dev A and dev B export the <i>*.qxee</i> project file with the <a href="#source_control_export_settings"><b>QxEESourceControlExport</b></a> plugin (manually or using command line) ;</li>
+               <li>once the project is exported to a directory, dev A and dev B check-in (or <i>submit</i>) all generated JSON files to the Source Control manager (Git, Perforce, CVS, etc.) on their own branch ;</li>
+               <li>from the Source Control manager, dev A and dev B merge (or <i>integrate</i>) their own branch to the development branch DEV (or MAIN or MASTER or LATEST); <b>Note :</b> even if there are conflicts to resolve, they will be easy to correct because the JSON format is easily readable ;</li>
+               <li>dev A and dev B can now get latest files from Source Control manager from DEV branch (or MAIN or MASTER or LATEST) : these JSON files <b>contain both modifications from dev A and dev B</b> ;</li>
+               <li>dev A and dev B can import these JSON files into the QxEntityEditor application using the import plugin <a href="#wnd_source_control_import"><b>QxEESourceControlImport</b></a> (manually or using command line).</li>
+            </ul>
+            The export plugin settings are accessible from the main menu <i>Tools &gt;&gt; Export to Source Control repository (Git, Perforce, CVS, etc.) as JSON files (settings)</i> :
+            <br/><br/>
+            <img alt="Source Control export plugin settings" src="https://www.qxorm.com/qxentityeditor/resource/qxee_export_source_control_settings.png" />
+            <br/><br/>
+            The parameter to enter corresponds to the directory in which the JSON files will be generated.<br/>
+            Each <i>*.qxee</i> project item (entities, properties, relationships, comments, etc.) is exported to a specific JSON file.<br/>
+            The directory where the JSON files are exported has the following structure :
+            <br/><br/>
+            <img alt="Source Control output directory" src="https://www.qxorm.com/qxentityeditor/resource/qxee_source_control_output_directory.png" />
+            <br/><br/>
+            <b>Note :</b> it is possible to export a project from command line without starting the QxEntityEditor application UI.<br/>
+            Command line example :<br/>
+            <div style="width:900px; height:auto; overflow:auto; background-color:white">
+               <i><pre>QxEntityEditor --no_gui --project="&lt;path_to_your_qxee_project_file&gt;" --plugin=QxEESourceControlExport --QxEESourceControlExport_path="&lt;path_to_your_export_output_directory&gt;"</pre></i>
+            </div>
+            <br/><br/>
+         </div>
          <p class="manual_p_title_2"><a class="manual_a_title_2" name="xml_export_settings">Export project to XML or JSON format</a></p>
          <div class="manual_div_content">
+            <b><font style="background-color:yellow">Note :</font></b> to work with a source code manager (Git, Perforce, CVS, etc.), it is recommended to use <a href="#source_control_export_settings"><b>QxEESourceControlExport</b></a> and <a href="#wnd_source_control_import"><b>QxEESourceControlImport</b></a> plugins (instead of creating a single file).<br/>
+            <br/>
             QxEntityEditor application can export a <i>*.qxee</i> project to XML or JSON format.
-            XML/JSON export parameters are accessible via main menu : <i>Tools >> Export to XML or JSON file (settings)</i> :
+            XML/JSON export parameters are accessible via main menu : <i>Tools &gt;&gt; Export to XML or JSON file (settings)</i> :
             <br/><br/>
             <img alt="Export XML/JSON" src="https://www.qxorm.com/qxentityeditor/resource/qxee_export_xml_json.png" />
             <br/><br/>
@@ -4263,7 +4351,7 @@ if</span><span class="operator"> (</span>action<span class="operator"> ==</span>
             <li>modify some values in the <a href="#qxee_database"><i>*.qxee</i> SQLite database project file</a> after importing from a database structure.</li>
          </ul>
          <br/>
-         To define these scripts or executables to run before and/or after a QxEntityEditor plugin execution, just go to the main menu : <i>Tools >> Plugins scripts</i>.
+         To define these scripts or executables to run before and/or after a QxEntityEditor plugin execution, just go to the main menu : <i>Tools &gt;&gt; Plugins scripts</i>.
          <br/><br/>
          <img alt="Plugin scripts" src="https://www.qxorm.com/qxentityeditor/resource/qxee_plugin_scripts.png" />
          <br/><br/>
@@ -4476,6 +4564,18 @@ if</span><span class="operator"> (</span>action<span class="operator"> ==</span>
 <i><pre>QxEntityEditor --no_gui --project="&lt;project_path&gt;" --plugin=QxEEPostgreSQLImport --QxEEPostgreSQLImport_db_ip="&lt;ip&gt;" --QxEEPostgreSQLImport_db_port=5432 --QxEEPostgreSQLImport_db_name="&lt;dbname&gt;" --QxEEPostgreSQLImport_login="&lt;your_login&gt;" --QxEEPostgreSQLImport_pwd="&lt;your_password&gt;" --QxEEPostgreSQLImport_delete_namespace=1</pre></i>
          </div>
          <br/><br/>
+         <b>-- Example n°9 :</b> export a QxEntityEditor project to a Source Control manager/directory Git, Perforce, CVS, etc. (<i>QxEESourceControlExport</i> plugin) :
+         <br/>
+         <div style="width:900px; height:auto; overflow:auto; background-color:white">
+<i><pre>QxEntityEditor --no_gui --project="&lt;path_to_your_qxee_project_file&gt;" --plugin=QxEESourceControlExport --QxEESourceControlExport_path="&lt;path_to_your_export_output_directory&gt;"</pre></i>
+         </div>
+         <br/><br/>
+         <b>-- Example n°10 :</b> import from a Source Control manager/directory Git, Perforce, CVS, etc. (<i>QxEESourceControlImport</i> plugin) :
+         <br/>
+         <div style="width:900px; height:auto; overflow:auto; background-color:white">
+<i><pre>QxEntityEditor --project="&lt;path_to_your_qxee_project_file&gt;" --plugin=QxEESourceControlImport --QxEESourceControlImport_path="&lt;path_to_the_root_source_control_json_file&gt;"</pre></i>
+         </div>
+         <br/><br/>
       </div>
 
       </div>
@@ -4492,7 +4592,7 @@ if</span><span class="operator"> (</span>action<span class="operator"> ==</span>
         <img alt="QxOrm" src="./resource/logo_qxorm_small.png" width="168" height="40">
       </td>
       <td align="center" valign="middle">
-        <font size="2">© 2011-2023 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
+        <font size="2">© 2011-2024 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
       </td>
       <td align="right" valign="middle">
         <form action="https://www.paypal.com/cgi-bin/webscr" method="post">

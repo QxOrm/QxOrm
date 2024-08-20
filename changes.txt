@@ -1,5 +1,10 @@
 Changes in version 1.5.0:
-- TODO...
+- Fix qx::dao::fetch_by_id_with_relation() when a table alias is used (table alias is now used in the WHERE part instead of table name)
+- Fix qx::IxDataMember::getType() method when used in a multi-thread environment
+- New method qx::IxSqlRelation::linkRelationKeyTo() for MongoDB database to simulate lazy loading for relationships (GitHub #107)
+- Fix qx::QxSqlDatabase and multi-thread issue when the OS assigns an old and destroyed thread identifier to a new one (GitHub #42) + add method qx::QxSqlDatabase::removeDatabaseByThread() to call at the end of a thread execution
+- Fix qx::QxSimpleCrypt class with Qt version >= 5.10 and error "Attempted to overwrite a QRandomGenerator to system() or global()"
+- Fix database not opened using async queries (GitHub #109)
 
 Changes in version 1.4.9:
 - Fix compilation issue with Qt 6.2+ (due to Qt JIRA : https://bugreports.qt.io/browse/QTBUG-92910), more details in GitHub issue #54

@@ -113,15 +113,10 @@
              </tr>
            </tbody>
          </table>
-         Le prix de la licence <b>QxOrm Proprietary License</b> dépend du nombre de classes C++ enregistrées dans le contexte QxOrm (nombre de fonctions <i>void qx::register_class&lt;my_class&gt;()</i> par application) :
-         <ul>
-            <li>De 1 à 10 classes C++ enregistrées dans le contexte QxOrm par application : <i>100&euro;</i> ;</li>
-            <li>De 11 à 20 classes C++ enregistrées dans le contexte QxOrm par application : <i>180&euro;</i> ;</li>
-            <li>De 21 à 30 classes C++ enregistrées dans le contexte QxOrm par application : <i>250&euro;</i> ;</li>
-            <li>De 31 à un nombre illimité de classes C++ enregistrées dans le contexte QxOrm par application : <i>300&euro;</i>.</li>
-         </ul>
          La licence QXPL de la bibliothèque QxOrm est une licence par projet (ou par application), peu importe le nombre de développeurs travaillant sur le projet, et peu importe le nombre d'instances déployées de votre logiciel (royalty-free).
          Par exemple, si vous développez 3 applications différentes basées sur la bibliothèque QxOrm, alors vous devez acquérir 3 licences QXPL (une par projet).<br/>
+         <br/>
+         Prix d'une licence <b>QxOrm Proprietary License</b> : <i>400&euro;</i>.<br/>
          <br/>
          Pour toutes questions ou précisions sur les licences, ou bien pour acquérir la licence <b>QXPL</b>, vous pouvez nous contacter à l'adresse suivante : <a href="mailto:contact@qxorm.com">contact@qxorm.com</a>.<br/>
          <br/>
@@ -153,7 +148,7 @@ function checkForm(f) { f.submit(); return true; }
         <img alt="QxOrm" src="./resource/logo_qxorm_small.png" width="168" height="40">
       </td>
       <td align="center" valign="middle">
-        <font size="2">© 2011-2023 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
+        <font size="2">© 2011-2024 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
       </td>
       <td align="right" valign="middle">
         <form action="https://www.paypal.com/cgi-bin/webscr" method="post">

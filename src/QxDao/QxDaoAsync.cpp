@@ -320,7 +320,7 @@ QSqlError QxDaoAsyncRunner::runQuery(qx::dao::detail::QxDaoAsyncParams_ptr pDaoP
       { pDaoParams->pListOfInstances = pInstance->qxNewPersistableCollection(); }
 
       if (pDaoParams->pDatabase != NULL)
-      { dbKey = QUuid::createUuid().toString(); db = QSqlDatabase::cloneDatabase((* pDaoParams->pDatabase), dbKey); }
+      { dbKey = QUuid::createUuid().toString(); db = QSqlDatabase::cloneDatabase((* pDaoParams->pDatabase), dbKey); db.open(); }
       pDatabase = (pDaoParams->pDatabase ? (& db) : NULL);
 
       switch (pDaoParams->daoAction)

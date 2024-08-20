@@ -109,15 +109,10 @@
              </tr>
            </tbody>
          </table>
-         The price of the <b>QxOrm Proprietary License</b> depends on the number of C++ classes registered in QxOrm context (<i>void qx::register_class&lt;my_class&gt;()</i> functions count per application) :
-         <ul>
-            <li>From 1 to 10 C++ classes registered in QxOrm context per application : <i>100&euro;</i> ;</li>
-            <li>From 11 to 20 C++ classes registered in QxOrm context per application : <i>180&euro;</i> ;</li>
-            <li>From 21 to 30 C++ classes registered in QxOrm context per application : <i>250&euro;</i> ;</li>
-            <li>From 31 to unlimited C++ classes registered in QxOrm context per application : <i>300&euro;</i>.</li>
-         </ul>
          The QxOrm QXPL license is a per project (or per application) license, no matter developers count working on the project, and no matter deployed instances count of your software (royalty-free).
          For example, if you develop 3 differents applications based on QxOrm library, then you have to purchase 3 differents QXPL licenses (one per project).<br/>
+         <br/>
+         Price of a <b>QxOrm Proprietary License</b> : <i>400&euro;</i>.<br/>
          <br/>
          If you have any questions, or if you want to purchase the <b>QXPL</b> license, please contact us using this e-mail : <a href="mailto:contact@qxorm.com">contact@qxorm.com</a>.<br/>
          <br/>
@@ -149,7 +144,7 @@ function checkForm(f) { f.submit(); return true; }
         <img alt="QxOrm" src="./resource/logo_qxorm_small.png" width="168" height="40">
       </td>
       <td align="center" valign="middle">
-        <font size="2">© 2011-2023 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
+        <font size="2">© 2011-2024 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
       </td>
       <td align="right" valign="middle">
         <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
