@@ -365,7 +365,7 @@ void IxSqlQueryBuilder::sql_FetchAll(QString & sql, IxSqlQueryBuilder & builder,
    bool isDistinct = (builder.getDaoHelper() ? builder.getDaoHelper()->isDistinct() : false);
    if (pId && (! isDistinct)) { sql += (pId->getSqlTablePointNameAsAlias(table, ", ", "", false, "", (& builder)) + ", "); }
    for (int i = 0; i < columns.count(); i++)
-   { p = pDataMemberX->get_WithDaoStrategy(columns.at(i)); if (p && (p != pId)) { sql += (p->getSqlTablePointNameAsAlias(table, ", ", "", false, "", (& builder)) + ", "); } }
+   { p = pDataMemberX->get_WithDaoStrategy(columns.at(i)); if (p && (p != pId || !pId || isDistinct)) { sql += (p->getSqlTablePointNameAsAlias(table, ", ", "", false, "", (& builder)) + ", "); } }
    sql = sql.left(sql.count() - 2); // Remove last ", "
    if (! oSoftDelete.isEmpty()) { sql += ", " + oSoftDelete.buildSqlTablePointName(); }
    sql += " FROM " + qx::IxDataMember::getSqlFromTable(table);
@@ -518,7 +518,7 @@ void IxSqlQueryBuilder::resolveOutput_FetchAll(void * t, QSqlQuery & query, IxSq
    short iOffset = ((pId && (! isDistinct)) ? pId->getNameCount() : 0);
    if (pId && (! isDistinct)) { for (int i = 0; i < pId->getNameCount(); i++) { pId->fromVariant(t, query.value(i), i, qx::cvt::context::e_database); } }
    for (int i = 0; i < columns.count(); i++)
-   { p = pDataMemberX->get_WithDaoStrategy(columns.at(i)); if (p && (p != pId)) { p->fromVariant(t, query.value(idx + iOffset), -1, qx::cvt::context::e_database); idx++; } }
+   { p = pDataMemberX->get_WithDaoStrategy(columns.at(i)); if (p && (p != pId || !pId || isDistinct)) { p->fromVariant(t, query.value(idx + iOffset), -1, qx::cvt::context::e_database); idx++; } }
 }
 
 void IxSqlQueryBuilder::resolveOutput_FetchAll_WithRelation(qx::QxSqlRelationLinked * pRelationX, void * t, QSqlQuery & query, IxSqlQueryBuilder & builder)
