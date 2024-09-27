@@ -1,3 +1,6 @@
+Changes in version 1.5.1:
+- TODO...
+
 Changes in version 1.5.0:
 - Fix qx::dao::fetch_by_id_with_relation() when a table alias is used (table alias is now used in the WHERE part instead of table name)
 - Fix qx::IxDataMember::getType() method when used in a multi-thread environment

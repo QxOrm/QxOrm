@@ -10,13 +10,15 @@ LIBS += -L"../../../QxOrm/lib"
 PRECOMPILED_HEADER = ./include/precompiled.h
 } # !contains(DEFINES, _QX_NO_PRECOMPILED_HEADER)
 
+!contains(DEFINES, _QX_NO_GUI) {
 greaterThan(QT_MAJOR_VERSION, 4) {
 QT += widgets
 QT += quick
 QT += qml
 } else {
 QT += declarative
-}
+} # greaterThan(QT_MAJOR_VERSION, 4)
+} # !contains(DEFINES, _QX_NO_GUI)
 
 macx:CONFIG-=app_bundle
 

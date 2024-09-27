@@ -1,5 +1,8 @@
 #include "../include/precompiled.h"
 
+#include <QtCore/qcoreapplication.h>
+
+#ifdef QT_GUI_LIB
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 #include <QtWidgets/qapplication.h>
 #include <QtWidgets/qtableview.h>
@@ -13,6 +16,7 @@
 #endif // (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 
 #include <QtGui/qdesktopservices.h>
+#endif // QT_GUI_LIB
 
 #include "../include/blog.h"
 #include "../include/author.h"
@@ -24,7 +28,11 @@
 int main(int argc, char * argv[])
 {
    // Qt application
+#ifdef QT_GUI_LIB
    QApplication app(argc, argv);
+#else // QT_GUI_LIB
+   QCoreApplication app(argc, argv);
+#endif // QT_GUI_LIB
    QFile::remove("./qxBlogRestApi.sqlite");
 
    // Parameters to connect to database
@@ -349,6 +357,7 @@ int main(int argc, char * argv[])
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 
+#ifdef QT_GUI_LIB
    {
       qx::QxRestApi api;
 
@@ -365,6 +374,7 @@ int main(int argc, char * argv[])
       qmlView.show();
       qApp->exec();
    }
+#endif // QT_GUI_LIB
 
 #ifdef _QX_ENABLE_QT_NETWORK
 
@@ -450,8 +460,10 @@ int main(int argc, char * argv[])
       });
 
       // Start HTTP server
+      qDebug("[QxOrm] %s", "Start QxOrm HTTP server, go to : http://localhost:9642/files/test_http_server.html");
       httpServer.startServer();
 
+#ifdef QT_GUI_LIB
       // Open default web browser to connect to QxOrm HTTP server instance
 #ifndef QT_NO_SSL
       if (serverSettings->getSSLEnabled()) { QDesktopServices::openUrl(QUrl("https://localhost:9642/files/test_http_server.html")); }
@@ -471,6 +483,8 @@ int main(int argc, char * argv[])
       qmlView.setResizeMode(QQuickView::SizeRootObjectToView);
       qmlView.setSource(QUrl(sQmlFile));
       qmlView.show();
+#endif // QT_GUI_LIB
+
       qApp->exec();
    }
 

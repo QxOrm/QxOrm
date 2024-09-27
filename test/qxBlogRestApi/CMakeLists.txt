@@ -6,7 +6,11 @@ include(../../QxOrm.cmake)
 
 if(NOT _QX_NO_JSON)
 
+if(NOT _QX_NO_GUI)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Sql Gui Widgets Quick Qml REQUIRED)
+else() # _QX_NO_GUI
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Sql REQUIRED)
+endif() # _QX_NO_GUI
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -47,7 +51,11 @@ if(COMMAND target_precompile_headers)
    target_precompile_headers(qxBlogRestApi PRIVATE ./include/precompiled.h)
 endif() # (COMMAND target_precompile_headers)
 
+if(NOT _QX_NO_GUI)
 target_link_libraries(qxBlogRestApi ${QX_LIBRARIES} QxOrm Qt${QT_VERSION_MAJOR}::Gui Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Quick Qt${QT_VERSION_MAJOR}::Qml)
+else() # _QX_NO_GUI
+target_link_libraries(qxBlogRestApi ${QX_LIBRARIES} QxOrm)
+endif() # _QX_NO_GUI
 
 set_target_properties(qxBlogRestApi PROPERTIES
                       ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../_bin"
