@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <meta http-equiv="content-type" content="text/html; charset=utf-8">
+   <title>QxOrm HTTP Server - qxBlogRestApi project</title>
+   <script type="text/javascript" src="jquery.js"></script>
+</head>
+<body>
+   <h1>Welcome to QxOrm HTTP Server - qxBlogRestApi example project</h1>
+   <table>
+      <tbody>
+         <tr>
+            <td align="center" style="padding-right: 15px; background-color: #e6f9ff;">
+               <label><b><font color="blue">JSON request</font></b></label>
+            </td>
+            <td align="center" style="padding-right: 15px; background-color: #e6f9ff;">
+               <label style="background-color: #e6f9ff;"><b><font color="blue">JSON response</font></b></label>
+            </td>
+         </tr>
+         <tr>
+            <td valign="top" style="padding-right: 15px">
+               <textarea id="txtRequest" rows="10" cols="80" wrap="off" style="width: 100%; background-color: #f9f9fb;"></textarea>
+            </td>
+            <td rowspan="3" valign="top">
+               <textarea id="txtResponse" rows="35" cols="80" wrap="off" style="width: 100%; background-color: #f9f9fb;"></textarea>
+               <br/><br/><a href="https://www.qxorm.com/" target="_blank"><img src="logo_qxorm_and_qxee.png" alt="QxOrm, QxEntityEditor"></a>
+            </td>
+         </tr>
+         <tr>
+            <td style="padding-right: 15px">
+               <input id="btnSendRequest" type="button" value="Send JSON request" style="width: 100%; height: 40px; color: blue; font-weight: bold; font-size: 16px;">
+            </td>
+         </tr>
+         <tr>
+            <td style="padding-right: 15px">
+               <br/><label><i><font color="blue">Here are some request examples :</font></i></label><br/>
+               <select id="lstRequestExample" size="25" style="width: 100%;">
+                  <option id="get_meta_data"> - get project meta-data (all classes)</option>
+                  <option id="fetch_all_blogs"> - fetch all blogs (as list)</option>
+                  <option id="fetch_all_blogs_as_collection"> - fetch all blogs (as collection key/value)</option>
+                  <option id="fetch_all_blogs_with_relationships"> - fetch all blogs with relationships (several levels)</option>
+                  <option id="fetch_all_blogs_with_relationships_output_format"> - fetch all blogs with relationships (several levels) and define output format</option>
+                  <option id="fetch_blog_by_id"> - fetch a single blog by id</option>
+                  <option id="fetch_blog_by_id_columns"> - fetch some columns of a single blog by id</option>
+                  <option id="fetch_list_of_blog_by_id"> - fetch list of blogs by id</option>
+                  <option id="fetch_list_of_blog_by_id_output_format"> - fetch list of blogs by id and define output format</option>
+                  <option id="fetch_authors_by_query"> - fetch authors using a query (only female)</option>
+                  <option id="fetch_authors_by_query_with_relationships"> - fetch authors with relationships using a query</option>
+                  <option id="fetch_authors_by_query_with_relationships_output_format"> - fetch authors with relationships using a query and define output format</option>
+                  <option id="insert_blog"> - insert a blog</option>
+                  <option id="insert_list_of_blog"> - insert list of blogs</option>
+                  <option id="insert_author"> - insert an author</option>
+                  <option id="insert_category"> - insert a category</option>
+                  <option id="update_blog"> - update a blog</option>
+                  <option id="update_blog_columns"> - update some columns of blog</option>
+                  <option id="update_author"> - update an author</option>
+                  <option id="update_list_of_author"> - update list of authors</option>
+                  <option id="update_category"> - update a category</option>
+                  <option id="save_blog"> - save (insert or update) a blog</option>
+                  <option id="save_list_of_blog"> - save (insert or update) list of blogs</option>
+                  <option id="save_blog_recursive"> - save (insert or update) a blog with relationships (recursively)</option>
+                  <option id="save_blog_recursive_insert"> - save (insert optimized) a blog with relationships (recursively)</option>
+                  <option id="exist_blog"> - check if a blog id exist</option>
+                  <option id="exist_list_of_blog"> - check if list of blogs id exist</option>
+                  <option id="exist_author"> - check if an author id exist</option>
+                  <option id="validate_blog"> - validate a blog instance</option>
+                  <option id="count_all_blog"> - count all blogs</option>
+                  <option id="count_author_with_query"> - count authors using a query</option>
+                  <option id="count_blog_with_query_and_relationships"> - count blogs using a query and relationships</option>
+                  <option id="delete_blog_by_id"> - delete a blog by id</option>
+                  <option id="delete_list_of_blog_by_id"> - delete list of blogs by id</option>
+                  <option id="delete_author_by_query"> - delete some authors using a query</option>
+                  <option id="delete_all_comment"> - delete all comments</option>
+                  <option id="call_custom_query"> - call custom database query or stored procedure</option>
+                  <option id="call_entity_function"> - call entity static function with signature : static QJsonValue myEntity::myFct(const QJsonValue & request)</option>
+                  <option id="several_requests_in_array"> - build several requests in array to send only 1 call to server (executed in a transaction commit/rollback)</option>
+               </select>
+            </td>
+         </tr>
+      </tbody>
+   </table>
+   <script type="text/javascript" src="post_qxorm_api.js"></script>
+</body>
+</html>

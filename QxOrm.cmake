@@ -281,6 +281,7 @@ endif() # _QX_ENABLE_BOOST
 # If you want to serialize Qt Gui objects (QBrush, QColor, QFont, QImage, QMatrix, QPicture, QPixmap, QRegion), then you have to define _QX_ENABLE_QT_GUI compilation option
 
 option(_QX_ENABLE_QT_GUI "If you enable _QX_ENABLE_QT_GUI option, then QxOrm library will be able to serialize Qt Gui objects (QBrush, QColor, QFont, QImage, QMatrix, QPicture, QPixmap, QRegion)" OFF)
+option(_QX_NO_GUI "Used for docker container to disable Qt Gui dependency and force QxOrm example projects to run with 'QCoreApplication' instead of 'QApplication'" OFF)
 
 if(_QX_ENABLE_QT_GUI)
    add_definitions(-D_QX_ENABLE_QT_GUI)

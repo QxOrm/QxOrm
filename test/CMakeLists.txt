@@ -4,6 +4,14 @@ project(QxOrmAllTests LANGUAGES CXX)
 
 add_subdirectory(../ ./QxOrm)
 
+option(_QX_TEST_QXBLOGRESTAPI "If you enable _QX_TEST_QXBLOGRESTAPI option, then only 'qxBlogRestApi' example project will be built (used to create Docker images)" OFF)
+
+if(_QX_TEST_QXBLOGRESTAPI)
+
+add_subdirectory(qxBlogRestApi)
+
+else() # _QX_TEST_QXBLOGRESTAPI
+
 add_subdirectory(qxBlog)
 add_subdirectory(qxBlogCompositeKey)
 add_subdirectory(qxBlogCpp11)
@@ -13,3 +21,5 @@ add_subdirectory(qxClientServer)
 add_subdirectory(qxBlogMongoDB)
 add_subdirectory(qxBlogPImpl)
 add_subdirectory(qxBlogRestApi)
+
+endif() # _QX_TEST_QXBLOGRESTAPI

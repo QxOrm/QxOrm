@@ -1,0 +1,16 @@
+{
+   "build": {
+      "dockerComposeFile": "../compose.yaml",
+      "service": "backend_qxorm"
+   },
+   "customizations": {
+      "vscode": {
+         "extensions": [
+            "ms-vscode.cpptools",
+            "ms-vscode.cmake-tools"
+         ]
+      }
+   },
+   "workspaceFolder": "/home/qxorm",
+   "remoteUser": "qxorm"
+}

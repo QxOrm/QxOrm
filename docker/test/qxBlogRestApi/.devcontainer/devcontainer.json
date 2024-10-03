@@ -1,0 +1,16 @@
+{
+   "build": {
+      "dockerfile": "../Dockerfile",
+      "target": "dev"
+   },
+   "customizations": {
+      "vscode": {
+         "extensions": [
+            "ms-vscode.cpptools",
+            "ms-vscode.cmake-tools"
+         ]
+      }
+   },
+   "workspaceFolder": "/home/qxorm",
+   "remoteUser": "qxorm"
+}
