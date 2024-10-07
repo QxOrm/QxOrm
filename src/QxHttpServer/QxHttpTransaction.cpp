@@ -205,13 +205,13 @@ qx_bool QxHttpTransaction::readSocketServer(QTcpSocket & socket)
    QStringList lst = QString::fromUtf8(line).split(" ");
    if (lst.count() < 3)
    {
-      QString errMsg = ("Bad request : invalid HTTP request first line : " + line);
+      QString errMsg = ("Bad request : invalid HTTP request first line : " + QString::fromLatin1(line));
       setMessageReturn(qx_bool(400, errMsg));
       return qx_bool(true);
    }
    if (! lst.at(2).contains("HTTP"))
    {
-      QString errMsg = ("Bad request : invalid HTTP request first line, third parameter must contain 'HTTP' : " + line);
+      QString errMsg = ("Bad request : invalid HTTP request first line, third parameter must contain 'HTTP' : " + QString::fromLatin1(line));
       setMessageReturn(qx_bool(400, errMsg));
       return qx_bool(true);
    }
@@ -228,7 +228,7 @@ qx_bool QxHttpTransaction::readSocketServer(QTcpSocket & socket)
       int pos = line.indexOf(':');
       if (pos <= 0)
       {
-         QString errMsg = ("Bad request : invalid HTTP header : " + line);
+         QString errMsg = ("Bad request : invalid HTTP header : " + QString::fromLatin1(line));
          setMessageReturn(qx_bool(400, errMsg));
          return qx_bool(true);
       }
