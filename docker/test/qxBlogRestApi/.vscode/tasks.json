@@ -1,19 +1,19 @@
 {
-	"version": "2.0.0",
-	"tasks": [
-		{
-			"label": "Build QxOrm library (Debug mode)",
-			"type": "shell",
-			"command": "${workspaceFolder}/scripts/build_qx.sh",
-			"args": [
-				"Debug",
-				"-DCMAKE_BUILD_TYPE=Debug -D_QX_ENABLE_QT_NETWORK=1 -D_QX_NO_GUI=1 -D_QX_TEST_QXBLOGRESTAPI=1"
-			],
-			"problemMatcher": [ "$gcc" ],
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			}
-		}
-	]
+   "version": "2.0.0",
+   "tasks": [
+      {
+         "label": "Build QxOrm library (Debug mode)",
+         "type": "shell",
+         "command": "${QX_SCRIPTS}/build_qx.sh",
+         "args": [
+            "Debug",
+            "%%QX_CMAKE_OPTIONS_DEBUG%%"
+         ],
+         "problemMatcher": [ "$gcc" ],
+         "group": {
+            "kind": "build",
+            "isDefault": true
+         }
+      }
+   ]
 }

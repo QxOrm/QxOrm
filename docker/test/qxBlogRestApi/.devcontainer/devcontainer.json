@@ -1,4 +1,5 @@
 {
+   "name": "QxOrm library - C++ and Qt development environment - Project qxBlogRestApi",
    "build": {
       "dockerfile": "../Dockerfile",
       "target": "dev"
@@ -11,6 +12,8 @@
          ]
       }
    },
-   "workspaceFolder": "/home/qxorm",
+   "overrideCommand": false,
+   "forwardPorts": [ 9642, 9643 ],
+   "workspaceFolder": "/home/qxorm/src/QxOrm",
    "remoteUser": "qxorm"
 }

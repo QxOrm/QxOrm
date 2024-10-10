@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Copy environment variables
+$QX_SCRIPTS/copy_env_var_qx.sh
+
 # Execute SSH server (useful to debug)
 if [ "$1" == "ssh" ]; then
    echo "--- Start SSH server ---"
@@ -7,11 +10,10 @@ if [ "$1" == "ssh" ]; then
 fi
 
 # Build QxOrm library and simple HTTP web server project example
-# This is useful if you mount '/home/qxorm/' as a volume and make some changes in the source code
+# This is useful if you mount '/home/qxorm/src/' as a volume and make some changes in the source code
 # So the container will always execute up-to-date release version
 if [ "$2" == "build" ]; then
-   echo "--- Build QxOrm library and simple HTTP web server ---"
-   su $QX_USER -c "$QX_DIR/scripts/build_qx.sh $CMAKE_CONFIG $CMAKE_OPTIONS"
+   su $QX_USER -c "$QX_SCRIPTS/build_qx.sh $CMAKE_CONFIG $CMAKE_OPTIONS"
 fi
 
 # Execute QxOrm simple HTTP web server example

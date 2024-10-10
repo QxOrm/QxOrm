@@ -23,7 +23,8 @@
 # If you prefer to generate a Docker image with full C++ development environment, execute the following commands :
 #    cd <path_to_this_docker_file>
 #    docker build --target dev -t qxorm/ubuntu-with-qxorm-dev-qxblogrestapi .
-#    docker run --rm -itd -p 9642:9642 -p 2222:22 qxorm/ubuntu-with-qxorm-dev-qxblogrestapi
+#    docker run --rm -itd -p 9642:9642 -p 9643:9643 -p 2222:22 qxorm/ubuntu-with-qxorm-dev-qxblogrestapi
+# 
 # Then access to the remote C++ development environment via Visual Studio Code with the 'Dev Containers' extension or via 'Remote SSH' extension
 # Once connected to the remote C++ development environment :
 #    Press 'CTRL+SHIFT+B' to build the project in debug mode
@@ -47,7 +48,9 @@ LABEL author="Lionel Marty"
 # ---------------------------
 # Create a 'qxorm' user/group
 ENV QX_USER=qxorm
-ENV QX_DIR=/home/$QX_USER
+ENV QX_HOME=/home/$QX_USER
+ENV QX_DIR=$QX_HOME/src/QxOrm
+ENV QX_SCRIPTS=$QX_HOME/scripts
 RUN groupadd -g 1987 $QX_USER && \
     useradd -m -u 1987 -g $QX_USER $QX_USER && \
     echo "$QX_USER:$QX_USER" | chpasswd
@@ -77,7 +80,7 @@ RUN apt update -y \
       nano \
       openssh-server \
       build-essential \
-      qt$QT_VERSION_MAJOR-base-dev \
+      qt${QT_VERSION_MAJOR}-base-dev \
       cmake \
       gdb \
     && apt clean -y \
@@ -86,15 +89,16 @@ RUN apt update -y \
 # ----------------------------------------------
 # Download QxOrm library source code from GitHub
 ENV QX_URL_DOWNLOAD="https://github.com/QxOrm/QxOrm/archive/refs/heads/master.zip"
-WORKDIR $QX_DIR/scripts/
-COPY ./scripts/download_qx.sh .
-RUN chmod +x download_qx.sh
+WORKDIR $QX_SCRIPTS/
+COPY --chmod=+x ./scripts/download_qx.sh .
 USER $QX_USER
 RUN ./download_qx.sh
 
 # --------------------------------------
 # Define environment variables for cmake
-ENV CMAKE_OPTIONS="-DCMAKE_INSTALL_PREFIX=/usr -D_QX_ENABLE_QT_NETWORK=1 -D_QX_UNITY_BUILD=1 -D_QX_NO_GUI=1 -D_QX_TEST_QXBLOGRESTAPI=1"
+ENV QX_CMAKE_OPTIONS_RELEASE="-DCMAKE_INSTALL_PREFIX=/usr -D_QX_ENABLE_QT_NETWORK=1 -D_QX_UNITY_BUILD=1 -D_QX_NO_GUI=1 -D_QX_TEST_QXBLOGRESTAPI=1"
+ENV QX_CMAKE_OPTIONS_DEBUG="-DCMAKE_BUILD_TYPE=Debug -D_QX_ENABLE_QT_NETWORK=1 -D_QX_NO_GUI=1 -D_QX_TEST_QXBLOGRESTAPI=1"
+ENV CMAKE_OPTIONS=${QX_CMAKE_OPTIONS_RELEASE}
 ENV CMAKE_CONFIG="Release"
 ENV CMAKE_BUILD_PARALLEL_LEVEL=2
 
@@ -117,18 +121,15 @@ RUN service ssh start
 #-------------------------------------------------
 # Install Visual Studio Code Server and extensions
 # https://github.com/b01/dl-vscode-server
-WORKDIR $QX_DIR/scripts/
-COPY ./scripts/download-vs-code.sh .
-COPY ./scripts/install-vs-code.sh .
-RUN chmod +x download-vs-code.sh
-RUN chmod +x install-vs-code.sh
+WORKDIR $QX_SCRIPTS/
+COPY --chmod=+x ./scripts/download-vs-code.sh .
+COPY --chmod=+x ./scripts/install-vs-code.sh .
 RUN ./install-vs-code.sh
 
 # -----------------------------------------------------
 # Copy scripts to build and debug in Visual Studio Code
-WORKDIR $QX_DIR/scripts/
-COPY ./scripts/build_qx.sh .
-RUN chmod +x build_qx.sh
+WORKDIR $QX_SCRIPTS/
+COPY --chmod=+x ./scripts/build_qx.sh .
 
 USER $QX_USER
 WORKDIR $QX_DIR/.vscode/
@@ -148,10 +149,12 @@ EXPOSE ${QX_PORT_RELEASE} ${QX_PORT_DEBUG}
 # Execute QxOrm simple HTTP web server example
 # On your host machine, open a web browser and go to URL :
 #    http://localhost:9642/files/test_http_server.html
-ENV LD_LIBRARY_PATH=$QX_DIR/lib:$LD_LIBRARY_PATH
+WORKDIR $QX_SCRIPTS/
+COPY --chmod=+x ./scripts/copy_env_var_qx.sh .
+
 WORKDIR $QX_DIR/test/_bin
-COPY ./scripts/entrypoint.sh .
-RUN chmod +x entrypoint.sh
+ENV LD_LIBRARY_PATH=$QX_DIR/lib:$LD_LIBRARY_PATH
+COPY --chmod=+x ./scripts/entrypoint.sh .
 ENTRYPOINT [ "./entrypoint.sh" ]
 CMD [ "ssh", "build" ]
 
@@ -163,16 +166,9 @@ FROM dev AS prepare_dependencies
 
 # ---------------------------------------------------------
 # Find all QxOrm project example dependencies and copy them
-WORKDIR $QX_DIR/test/_bin/libs
-WORKDIR $QX_DIR/test/_bin/sqldrivers
-WORKDIR $QX_DIR/test/_bin/tls
-WORKDIR $QX_DIR/test/_bin
-RUN cp /usr/lib/x86_64-linux-gnu/qt6/plugins/sqldrivers/libqsqlite.so $QX_DIR/test/_bin/sqldrivers/
-RUN cp /usr/lib/x86_64-linux-gnu/qt6/plugins/tls/* $QX_DIR/test/_bin/tls/
-RUN ldd qxBlogRestApi | awk '/=>/ {print $3}' | xargs -I '{}' cp -v '{}' $QX_DIR/test/_bin/libs
-RUN ldd sqldrivers/libqsqlite.so | awk '/=>/ {print $3}' | xargs -I '{}' cp -v '{}' $QX_DIR/test/_bin/libs
-RUN ldd tls/libqcertonlybackend.so | awk '/=>/ {print $3}' | xargs -I '{}' cp -v '{}' $QX_DIR/test/_bin/libs
-RUN ldd tls/libqopensslbackend.so | awk '/=>/ {print $3}' | xargs -I '{}' cp -v '{}' $QX_DIR/test/_bin/libs
+WORKDIR $QX_SCRIPTS/
+COPY --chmod=+x ./scripts/prepare_dependencies_qx.sh .
+RUN ./prepare_dependencies_qx.sh
 
 # -----------------------------------------------------------------------------------------------
 # Start a new stage to create a minimal Docker image with just QxOrm library and all dependencies
@@ -189,15 +185,18 @@ RUN apt update -y \
 
 # ---------------------------------------
 # Copy QxOrm library and all dependencies
-WORKDIR $QX_DIR/test
-COPY --from=prepare_dependencies $QX_DIR/test/_bin/ $QX_DIR/test/
+WORKDIR $QX_HOME/app
+COPY --from=prepare_dependencies $QX_DIR/test/_bin/ $QX_HOME/app/
 
 # --------------------------------------------
 # Execute QxOrm simple HTTP web server example
 # On your host machine, open a web browser and go to URL :
 #    http://localhost:9642/files/test_http_server.html
-ENV LD_LIBRARY_PATH=$QX_DIR/test/libs:$LD_LIBRARY_PATH
+WORKDIR $QX_SCRIPTS/
+COPY --chmod=+x ./scripts/copy_env_var_qx.sh .
+
+WORKDIR $QX_HOME/app
+ENV LD_LIBRARY_PATH=$QX_HOME/app/libs:$LD_LIBRARY_PATH
 EXPOSE 9642
-COPY ./scripts/entrypoint.sh .
-RUN chmod +x entrypoint.sh
+COPY --chmod=+x ./scripts/entrypoint.sh .
 ENTRYPOINT [ "./entrypoint.sh" ]

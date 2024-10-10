@@ -6,7 +6,10 @@
 			"type": "cppdbg",
 			"request": "launch",
 			"program": "${workspaceFolder}/test/_bin/qxBlogRestApid",
-			"args": [],
+			"args": [
+            "--port=${QX_PORT_DEBUG}",
+            "--db_type=${QX_DB}"
+         ],
 			"stopAtEntry": true,
 			"cwd": "${workspaceFolder}",
 			"environment": [],

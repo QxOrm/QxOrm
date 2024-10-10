@@ -43,6 +43,8 @@ services:
         expose:
             - 9642
             - 9643
+        environment:
+            - QX_DB=MongoDB
 
     db_mongodb:
         hostname: db_mongodb

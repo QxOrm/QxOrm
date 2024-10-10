@@ -16,7 +16,7 @@ fi
 
 # Execute QxOrm simple HTTP web server example
 # URL : http://localhost:9642/files/test_http_server.html
-echo "--- Start QxOrm simple HTTP web server ---"
-./qxBlogRestApi
+echo "--- Start QxOrm simple HTTP web server (database type : $QX_DB) ---"
+./qxBlogRestApi --db_type=$QX_DB
 
 exit 0

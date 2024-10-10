@@ -1,26 +1,28 @@
 {
-	"version": "0.2.0",
-	"configurations": [
-		{
-			"name": "Launch QxOrm library (Debug mode via gdb)",
-			"type": "cppdbg",
-			"request": "launch",
-			"program": "${workspaceFolder}/test/_bin/qxBlogRestApid",
-			"args": [],
-			"stopAtEntry": true,
-			"cwd": "${workspaceFolder}",
-			"environment": [],
-			"externalConsole": false,
-			"MIMode": "gdb",
-			"miDebuggerPath": "/usr/bin/gdb",
-			"setupCommands": [
-				{
-					"description": "Enable pretty-printing for gdb",
-					"text": "-enable-pretty-printing",
-					"ignoreFailures": true
-				},
-			],
-			"preLaunchTask": "${defaultBuildTask}"
-		}
-	]
+   "version": "0.2.0",
+   "configurations": [
+      {
+         "name": "Launch QxOrm library (Debug mode via gdb)",
+         "type": "cppdbg",
+         "request": "launch",
+         "cwd": "%%QX_DIR%%/test/_bin/",
+         "program": "%%QX_DIR%%/test/_bin/qxBlogRestApid",
+         "args": [
+            "--port=%%QX_PORT_DEBUG%%"
+         ],
+         "stopAtEntry": true,
+         "environment": [],
+         "externalConsole": false,
+         "MIMode": "gdb",
+         "miDebuggerPath": "/usr/bin/gdb",
+         "setupCommands": [
+            {
+               "description": "Enable pretty-printing for gdb",
+               "text": "-enable-pretty-printing",
+               "ignoreFailures": true
+            },
+         ],
+         "preLaunchTask": "${defaultBuildTask}"
+      }
+   ]
 }

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "--- Build QxOrm library ---"
+
 if [ "$1" == "Debug" ];
 then
    QX_DIR_SUFFIX=debug
@@ -10,7 +12,8 @@ fi
 if [ -z "${QX_DIR}" ];
 then
    QX_USER=qxorm
-   QX_DIR=/home/$QX_USER
+   QX_HOME=/home/$QX_USER
+   QX_DIR=$QX_HOME/src/QxOrm
 fi
 
 export CMAKE_CONFIG=$1

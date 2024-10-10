@@ -7,7 +7,7 @@
 			"command": "${workspaceFolder}/scripts/build_qx.sh",
 			"args": [
 				"Debug",
-				"-DCMAKE_BUILD_TYPE=Debug -D_QX_ENABLE_QT_NETWORK=1 -D_QX_NO_GUI=1 -D_QX_TEST_QXBLOGRESTAPI=1"
+				"-DCMAKE_BUILD_TYPE=Debug -D_QX_ENABLE_QT_NETWORK=1 -D_QX_NO_GUI=1 -D_QX_TEST_QXBLOGRESTAPI=1 -D_QX_ENABLE_MONGODB=1"
 			],
 			"problemMatcher": [ "$gcc" ],
 			"group": {
