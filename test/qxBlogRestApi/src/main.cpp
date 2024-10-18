@@ -361,6 +361,18 @@ void connectDatabaseMongoDB()
    // For debug purpose : log all replies from MongoDB database
    qx::dao::mongodb::QxMongoDB_Helper::setLogDatabaseReply(true);
 
+   // Wait for MongoDB server ready (max 30s)
+   int timeOut = 0;
+   QString pong = pingDatabaseMongoDB();
+   while ((pong == "ERROR") && (timeOut < 30))
+   {
+      timeOut = (timeOut + 1);
+      QString msg = "Wait for MongoDB server ready (" + QString::number(timeOut) + ")...";
+      qDebug("[QxOrm] %s", qPrintable(msg));
+      QThread::sleep(1);
+      pong = pingDatabaseMongoDB();
+   }
+
    // Clear previous sample database
    qx_query dropDB("{ \"dropDatabase\" : 1 }");
    QSqlError daoError = qx::dao::call_query(dropDB);
@@ -382,6 +394,18 @@ void connectDatabasePostgreSQL()
    pDatabase->setPort(5432);
    pDatabase->setUserName("qxorm");
    pDatabase->setPassword("qxorm");
+
+   // Wait for PostgreSQL server ready (max 30s)
+   int timeOut = 0;
+   QString pong = pingDatabasePostgreSQL();
+   while ((pong == "ERROR") && (timeOut < 30))
+   {
+      timeOut = (timeOut + 1);
+      QString msg = "Wait for PostgreSQL server ready (" + QString::number(timeOut) + ")...";
+      qDebug("[QxOrm] %s", qPrintable(msg));
+      QThread::sleep(1);
+      pong = pingDatabasePostgreSQL();
+   }
 
    // Clear previous sample database
    qx_query query("DROP SCHEMA public CASCADE; CREATE SCHEMA public;");
@@ -407,6 +431,18 @@ void connectDatabaseMySQL()
    pDatabase->setPort(3306);
    pDatabase->setUserName("qxorm");
    pDatabase->setPassword("qxorm");
+
+   // Wait for MySQL/MariaDB server ready (max 30s)
+   int timeOut = 0;
+   QString pong = pingDatabaseMySQL();
+   while ((pong == "ERROR") && (timeOut < 30))
+   {
+      timeOut = (timeOut + 1);
+      QString msg = "Wait for " + QString((dbType == "mariadb") ? "MariaDB" : "MySQL") + " server ready (" + QString::number(timeOut) + ")...";
+      qDebug("[QxOrm] %s", qPrintable(msg));
+      QThread::sleep(1);
+      pong = pingDatabaseMySQL();
+   }
 
    // Clear previous sample database
    qx_query query("DROP DATABASE qxBlog; \nCREATE DATABASE qxBlog; \nUSE qxBlog;");
