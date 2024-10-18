@@ -1,3 +1,5 @@
+var info = {};
+
 $(document).ready(function() {
    $("#lstRequestExample").change(function() {
       var id = $(this).children(":selected").attr("id");
@@ -11,24 +13,43 @@ $(document).ready(function() {
    });
 
    $('select option:even').css({'background-color': '#e6ffe6'});
-   $('#lstRequestExample option[id="get_meta_data"]').prop("selected", true);
-   var request = buildRequestExample("get_meta_data");
+   $('#lstRequestExample option[id="ping"]').prop("selected", true);
+   var request = buildRequestExample("ping");
    $("#txtRequest").val(JSON.stringify(request, null, 3));
    $("#txtResponse").val("");
+
+   setTimeout(function() {
+      var request = buildRequestExample("ping");
+      sendRequest(JSON.stringify(request), function(request, response) {
+         if (response.error) { $("#lblDatabaseType").text(response.error); }
+         else { $("#lblDatabaseType").text(response.database_type); $("#lblDatabaseVersion").text(response.database_version); }
+         if (info) { info.ping = response; }
+      });
+   }, 500);
 });
 
-function sendRequest(request) {
-   $.post("/qx", request, function(data, status, xhr) {
-      $("#txtResponse").val(JSON.stringify(data, null, 3));
+function sendRequest(request, callback) {
+   try { var obj = JSON.parse(request); } catch(exc) { obj = null; }
+   var url = ((obj && (obj.action == "ping")) ? "/ping" : "/qx");
+   $.post(url, request, function(data, status, xhr) {
+      if (callback) { callback(obj, data); }
+      else { $("#txtResponse").val(JSON.stringify(data, null, 3)); }
+      if ((info) && (data) && (info[data.request_id]))
+      { info[info[data.request_id]]["response"] = data; }
    }, "json").fail(function(error) {
-      alert("An error occurred sending request to QxOrm HTTP server : " + error);
+      var msg = "An error occurred sending request to QxOrm HTTP server : " + error;
+      if (callback) { callback(obj, { error: msg }); }
+      else { alert(msg); }
    });
 }
 
 function buildRequestExample(id) {
-   var request = { };
+   var request = {};
    request.request_id = createGUID();
-   if (id == "get_meta_data") {
+   if (id == "ping") {
+      request.action = "ping";
+   }
+   else if (id == "get_meta_data") {
       request.action = "get_meta_data";
       request.entity = "*";
    }
@@ -349,6 +370,76 @@ function buildRequestExample(id) {
    }
    else {
       request.error = "<unknown request example : " + id + ">";
+   }
+   if ((info) && (info.ping) && (info.ping.database_type == "mongodb")) {
+      request = buildRequestExampleMongoDB(id, request);
+   }
+   if ((info) && (! request.error) && (id != "ping")) {
+      info[id] = { request: request };
+      info[request.request_id] = id;
+   }
+   return request;
+}
+
+// Specific for MongoDB database : change some request properties, for example :
+// - identifiers as string instead of integer
+// - queries as json instead of sql
+function buildRequestExampleMongoDB(id, request) {
+   if ((info) && (request) && (! request.error)) {
+      var action = request.action;
+      if (((action == "fetch_by_id") || (action == "update") || (action == "save") || (action == "exist") || (action == "delete_by_id")) && (request.entity == "blog")) {
+         if (request.save_mode == "insert_only") { return request; }
+         var response = ((info.fetch_all_blogs) ? info.fetch_all_blogs.response : null);
+         if (! response) { response = ((info.fetch_all_blogs_with_relationships) ? info.fetch_all_blogs_with_relationships.response : null); }
+         if (! response) { response = ((info.fetch_all_blogs_with_relationships_output_format) ? info.fetch_all_blogs_with_relationships_output_format.response : null); }
+         if (response && response.data) {
+            var array_blog_id = [];
+            for (var i = 0; i < response.data.length; i++) {
+               var blog_id = response.data[i].blog_id;
+               if (blog_id) { array_blog_id.push(blog_id); }
+            }
+            if (array_blog_id.length > 0) {
+               if (Array.isArray(request.data)) {
+                  for (var i = 0; i < request.data.length; i++) {
+                     request.data[i].blog_id = ((array_blog_id[i]) ? array_blog_id[i] : array_blog_id[0]);
+                  }
+               }
+               else {
+                  request.data.blog_id = array_blog_id[0];
+               }
+            }
+         }
+      }
+      else if (id == "fetch_authors_by_query") {
+         request.query = {
+            json: [
+               { sex: 0 },
+               { sort: { sex: -1 }, limit: 1 }
+            ]
+         };
+      }
+      else if ((id == "fetch_authors_by_query_with_relationships") || (id == "fetch_authors_by_query_with_relationships_output_format")) {
+         request.query = { json: { sex: 0 } };
+      }
+      else if (id == "count_author_with_query") {
+         request.query = { json: { sex: 0 } };
+      }
+      else if (id == "count_blog_with_query_and_relationships") {
+         request.query = { json: { "author_id.sex": 0 } };
+      }
+      else if (id == "delete_author_by_query") {
+         request.query = {
+            type: "aggregate",
+            json: "[ { \"$match\": { \"sex\": 0 } } ]"
+         };
+      }
+      else if (id == "call_custom_query") {
+         // Put json query as string to be sure to keep properties order : if 'filter' is before 'find', then MongoDB returns an error
+         request.query = {
+            type: "cursor",
+            json: "{ \"find\": \"author\", \"filter\": { } }"
+         };
+      }
    }
    return request;
 }

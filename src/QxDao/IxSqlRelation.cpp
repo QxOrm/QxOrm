@@ -728,7 +728,7 @@ void IxSqlRelation::eagerJoin_ManyToMany(QxSqlRelationParams & params) const
    sql += this->getSqlJoin(params.joinType()) + qx::IxDataMember::getSqlTableName(m_pImpl->m_sExtraTable) + " " + sExtraTableAlias + " ON ";
    for (int i = 0; i < pIdOwner->getNameCount(); i++)
    { sql += pIdOwner->getSqlAlias(tableOwner, true, i, (& params.builder())) + " = " + sExtraTableAlias + "." + lstForeignKeyOwner.at(i) + " AND "; }
-   sql = sql.left(sql.count() - 5); // Remove last " AND "
+   sql = sql.left(sql.size() - 5); // Remove last " AND "
 
    QString joinQuery;
    if (pDaoHelper)
@@ -745,7 +745,7 @@ void IxSqlRelation::eagerJoin_ManyToMany(QxSqlRelationParams & params) const
    { sql += sExtraTableAlias + "." + lstForeignKeyDataType.at(i) + " = " + pIdData->getSqlAlias(tableAlias, true, i, (& params.builder())) + " AND "; }
    if (! oSoftDelete.isEmpty() && oSoftDelete.getSqlFetchInJoin())
    { sql += oSoftDelete.buildSqlQueryToFetch(tableAlias) + " AND "; }
-   sql = sql.left(sql.count() - 5); // Remove last " AND "
+   sql = sql.left(sql.size() - 5); // Remove last " AND "
    if (! joinQuery.isEmpty()) { sql += " " + joinQuery + ")"; }
 }
 
@@ -774,7 +774,7 @@ void IxSqlRelation::eagerJoin_ManyToOne(QxSqlRelationParams & params) const
    { sql += pId->getSqlAlias(tableAlias, true, i, (& params.builder())) + " = " + pData->getSqlAlias(tableRef, true, i, (& params.builder())) + " AND "; }
    if (! oSoftDelete.isEmpty() && oSoftDelete.getSqlFetchInJoin())
    { sql += oSoftDelete.buildSqlQueryToFetch(tableAlias) + " AND "; }
-   sql = sql.left(sql.count() - 5); // Remove last " AND "
+   sql = sql.left(sql.size() - 5); // Remove last " AND "
    if (! joinQuery.isEmpty()) { sql += " " + joinQuery + ")"; }
 }
 
@@ -803,7 +803,7 @@ void IxSqlRelation::eagerJoin_OneToMany(QxSqlRelationParams & params) const
    { sql += pForeign->getSqlAlias(tableAlias, true, i, (& params.builder())) + " = " + pId->getSqlAlias(tableRef, true, i, (& params.builder())) + " AND "; }
    if (! oSoftDelete.isEmpty() && oSoftDelete.getSqlFetchInJoin())
    { sql += oSoftDelete.buildSqlQueryToFetch(tableAlias) + " AND "; }
-   sql = sql.left(sql.count() - 5); // Remove last " AND "
+   sql = sql.left(sql.size() - 5); // Remove last " AND "
    if (! joinQuery.isEmpty()) { sql += " " + joinQuery + ")"; }
 }
 
@@ -832,7 +832,7 @@ void IxSqlRelation::eagerJoin_OneToOne(QxSqlRelationParams & params) const
    { sql += pId->getSqlAlias(tableAlias, true, i, (& params.builder())) + " = " + pIdRef->getSqlAlias(tableRef, true, i, (& params.builder())) + " AND "; }
    if (! oSoftDelete.isEmpty() && oSoftDelete.getSqlFetchInJoin())
    { sql += oSoftDelete.buildSqlQueryToFetch(tableAlias) + " AND "; }
-   sql = sql.left(sql.count() - 5); // Remove last " AND "
+   sql = sql.left(sql.size() - 5); // Remove last " AND "
    if (! joinQuery.isEmpty()) { sql += " " + joinQuery + ")"; }
 }
 
@@ -931,7 +931,7 @@ QString IxSqlRelation::createExtraTable_ManyToMany() const
    QString sql = "CREATE TABLE IF NOT EXISTS " + this->m_pImpl->m_sExtraTable + " (";
    sql += pIdOwner->getSqlNameAndTypeAndParams(", ", this->m_pImpl->m_sForeignKeyOwner) + ", "; qAssert(! pIdOwner->getSqlType().isEmpty());
    sql += pIdData->getSqlNameAndTypeAndParams(", ", this->m_pImpl->m_sForeignKeyDataType) + ", "; qAssert(! pIdData->getSqlType().isEmpty());
-   sql = sql.left(sql.count() - 2); // Remove last ", "
+   sql = sql.left(sql.size() - 2); // Remove last ", "
    sql += ")";
 
    pIdOwner->setIsPrimaryKey(bOldPKOwner); pIdData->setIsPrimaryKey(bOldPKData);
@@ -948,7 +948,7 @@ QSqlError IxSqlRelation::deleteFromExtraTable_ManyToMany(QxSqlRelationParams & p
    qAssert(pIdOwner->getNameCount() == lstForeignKeyOwner.count());
    for (int i = 0; i < pIdOwner->getNameCount(); i++)
    { sql += this->m_pImpl->m_sExtraTable + "." + lstForeignKeyOwner.at(i) + " = " + pIdOwner->getSqlPlaceHolder("", i) + " AND "; }
-   sql = sql.left(sql.count() - 5); // Remove last " AND "
+   sql = sql.left(sql.size() - 5); // Remove last " AND "
    if (this->traceSqlQuery()) { qDebug("[QxOrm] sql query (extra-table) : %s", qPrintable(sql)); }
 
    QSqlQuery queryDelete(params.database());

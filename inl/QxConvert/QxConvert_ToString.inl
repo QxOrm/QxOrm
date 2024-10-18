@@ -71,7 +71,13 @@ struct QxConvert_ToString< QVariant >
 #ifndef _QX_NO_JSON
       if (qx::cvt::detail::helper::checkConvertQVariantToString(t))
       {
-         QString type = QString("%1").arg(static_cast<int>(t.type()), 6, 10, QChar('0'));
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+         int typeId = t.typeId();
+#else // (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+         int typeId = static_cast<int>(t.type());
+#endif // (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+
+         QString type = QString("%1").arg(typeId, 6, 10, QChar('0'));
          QString val = "$$JSON$$" + type + "$$";
          QJsonValue json = QJsonValue::fromVariant(t);
          QJsonDocument doc = (json.isArray() ? QJsonDocument(json.toArray()) : QJsonDocument(json.toObject()));

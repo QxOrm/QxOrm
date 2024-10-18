@@ -9,7 +9,8 @@ export -p | grep -e "QX_" -e "CMAKE_" | sed "s/declare -x/export/g" >> $QX_HOME/
 export -p | grep -e "QX_" -e "CMAKE_" | sed "s/declare -x/export/g" >> /root/.profile
 
 if [ -f $QX_DIR/.vscode/launch.json ]; then
-   sed -i 's~%%QX_DIR%%~'"$QX_DIR"'~g' $QX_DIR/.vscode/launch.json
+   sed -i 's~%%QX_APP_PATH%%~'"$QX_APP_PATH"'~g' $QX_DIR/.vscode/launch.json
+   sed -i 's~%%QX_APP_NAME%%~'"$QX_APP_NAME"'~g' $QX_DIR/.vscode/launch.json
    sed -i 's~%%QX_PORT_DEBUG%%~'"$QX_PORT_DEBUG"'~g' $QX_DIR/.vscode/launch.json
 fi
 

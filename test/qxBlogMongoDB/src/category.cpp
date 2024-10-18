@@ -14,6 +14,5 @@ template <> void register_class(QxClass<category> & t)
 
    t.data(& category::m_name, "name");
    t.data(& category::m_desc, "description");
-
-   t.relationManyToMany(& category::m_blogX, "list_blog", "category_blog", "category_id", "blog_id");
+   t.data(& category::m_blogX, "list_blog");
 }}

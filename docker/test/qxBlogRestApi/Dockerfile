@@ -34,10 +34,11 @@
 #    http://localhost:9642/files/test_http_server.html
 # -----------------------------------------------------------------------------------
 
-# ----------------------------------------------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Start from Ubuntu Docker image (latest version by default)
 ARG UBUNTU_VERSION=latest
 FROM ubuntu:${UBUNTU_VERSION} AS base
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # -----------------------
 # QxOrm library meta-data
@@ -51,13 +52,15 @@ ENV QX_USER=qxorm
 ENV QX_HOME=/home/$QX_USER
 ENV QX_DIR=$QX_HOME/src/QxOrm
 ENV QX_SCRIPTS=$QX_HOME/scripts
+ENV QX_APP_NAME=qxBlogRestApi
 RUN groupadd -g 1987 $QX_USER && \
     useradd -m -u 1987 -g $QX_USER $QX_USER && \
     echo "$QX_USER:$QX_USER" | chpasswd
 
-# -------------------------------------------------------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Start a new Docker image stage to install a development environment
 FROM base AS dev
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # ---------------------------------------------------------------
 # Define environment variable to install by default Qt6 framework
@@ -98,7 +101,7 @@ RUN ./download_qx.sh
 # Define environment variables for cmake
 ENV QX_CMAKE_OPTIONS_RELEASE="-DCMAKE_INSTALL_PREFIX=/usr -D_QX_ENABLE_QT_NETWORK=1 -D_QX_UNITY_BUILD=1 -D_QX_NO_GUI=1 -D_QX_TEST_QXBLOGRESTAPI=1"
 ENV QX_CMAKE_OPTIONS_DEBUG="-DCMAKE_BUILD_TYPE=Debug -D_QX_ENABLE_QT_NETWORK=1 -D_QX_NO_GUI=1 -D_QX_TEST_QXBLOGRESTAPI=1"
-ENV CMAKE_OPTIONS=${QX_CMAKE_OPTIONS_RELEASE}
+ENV CMAKE_OPTIONS="${QX_CMAKE_OPTIONS_RELEASE}"
 ENV CMAKE_CONFIG="Release"
 ENV CMAKE_BUILD_PARALLEL_LEVEL=2
 
@@ -131,11 +134,20 @@ RUN ./install-vs-code.sh
 WORKDIR $QX_SCRIPTS/
 COPY --chmod=+x ./scripts/build_qx.sh .
 
-USER $QX_USER
 WORKDIR $QX_DIR/.vscode/
-COPY ./.vscode/launch.json .
-COPY ./.vscode/tasks.json .
-USER root
+COPY --chown=$QX_USER:$QX_USER ./.vscode/launch.json .
+COPY --chown=$QX_USER:$QX_USER ./.vscode/tasks.json .
+COPY --chown=$QX_USER:$QX_USER ./.vscode/c_cpp_properties.json .
+
+# -------------------------------------------
+# Install gdb debug pretty print for Qt types
+
+WORKDIR $QX_SCRIPTS/gdb_qt_pretty_print/
+COPY --chown=$QX_USER:$QX_USER ./scripts/gdb_qt_pretty_print/helper.py .
+COPY --chown=$QX_USER:$QX_USER ./scripts/gdb_qt_pretty_print/qt.py .
+
+WORKDIR $QX_HOME/
+COPY --chown=$QX_USER:$QX_USER ./scripts/gdb_qt_pretty_print/.gdbinit .
 
 # -------------------------------------------------------------
 # Expose port to access to QxOrm simple HTTP web server example
@@ -150,19 +162,19 @@ EXPOSE ${QX_PORT_RELEASE} ${QX_PORT_DEBUG}
 # On your host machine, open a web browser and go to URL :
 #    http://localhost:9642/files/test_http_server.html
 WORKDIR $QX_SCRIPTS/
-COPY --chmod=+x ./scripts/copy_env_var_qx.sh .
-
-WORKDIR $QX_DIR/test/_bin
+ENV QX_APP_PATH=$QX_DIR/test/_bin
 ENV LD_LIBRARY_PATH=$QX_DIR/lib:$LD_LIBRARY_PATH
+COPY --chmod=+x ./scripts/copy_env_var_qx.sh .
 COPY --chmod=+x ./scripts/entrypoint.sh .
 ENTRYPOINT [ "./entrypoint.sh" ]
 CMD [ "ssh", "build" ]
 
-# ----------------------------------------------------------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Start a new Docker image stage to find and copy all QxOrm dependencies
 # To stop the image generation here and stay with the development environment :
 #    docker build --target dev -t qxorm/ubuntu-with-qxorm-dev-qxblogrestapi .
 FROM dev AS prepare_dependencies
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # ---------------------------------------------------------
 # Find all QxOrm project example dependencies and copy them
@@ -170,9 +182,10 @@ WORKDIR $QX_SCRIPTS/
 COPY --chmod=+x ./scripts/prepare_dependencies_qx.sh .
 RUN ./prepare_dependencies_qx.sh
 
-# -----------------------------------------------------------------------------------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Start a new stage to create a minimal Docker image with just QxOrm library and all dependencies
 FROM base AS exec
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # -------------------------
 # Install SSL/TLS libraries
@@ -188,15 +201,20 @@ RUN apt update -y \
 WORKDIR $QX_HOME/app
 COPY --from=prepare_dependencies $QX_DIR/test/_bin/ $QX_HOME/app/
 
+# -------------------------
+# Shrink final docker image
+WORKDIR $QX_SCRIPTS/
+COPY --chmod=+x ./scripts/shrink.sh .
+RUN ./shrink.sh
+
 # --------------------------------------------
 # Execute QxOrm simple HTTP web server example
 # On your host machine, open a web browser and go to URL :
 #    http://localhost:9642/files/test_http_server.html
-WORKDIR $QX_SCRIPTS/
-COPY --chmod=+x ./scripts/copy_env_var_qx.sh .
-
-WORKDIR $QX_HOME/app
-ENV LD_LIBRARY_PATH=$QX_HOME/app/libs:$LD_LIBRARY_PATH
 EXPOSE 9642
+WORKDIR $QX_SCRIPTS/
+ENV QX_APP_PATH=$QX_HOME/app
+ENV LD_LIBRARY_PATH=$QX_HOME/app/libs:$LD_LIBRARY_PATH
+COPY --chmod=+x ./scripts/copy_env_var_qx.sh .
 COPY --chmod=+x ./scripts/entrypoint.sh .
 ENTRYPOINT [ "./entrypoint.sh" ]

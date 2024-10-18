@@ -1,0 +1,10 @@
+BEGIN TRANSACTION;
+PRAGMA foreign_keys = OFF;
+CREATE TABLE author (author_id TEXT NOT NULL PRIMARY KEY, name TEXT, birthdate TIMESTAMP, sex INTEGER);
+CREATE TABLE blog (blog_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, title TEXT, blog_text TEXT, date_creation DATE, author_id TEXT, FOREIGN KEY (author_id) REFERENCES author (author_id));
+CREATE TABLE category (category_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, name TEXT, description TEXT);
+CREATE TABLE comment (comment_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, title TEXT, comment_text TEXT, date_creation DATE, blog_id INTEGER, FOREIGN KEY (blog_id) REFERENCES blog (blog_id));
+CREATE TABLE t_qxee_blog_category (blog_id INTEGER, category_id INTEGER);
+CREATE INDEX idx_author_birthdate ON author (birthdate);
+CREATE INDEX idx_blog_title ON blog (title);
+END TRANSACTION;

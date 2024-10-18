@@ -361,7 +361,7 @@ void IxDao_Helper::dumpRecord() const
    if (iCount <= 0) { return; }
    for (int i = 0; i < iCount; ++i)
    { v = record.value(i); sDump += (v.isNull() ? QString("NULL") : v.toString()) + QString("|"); }
-   sDump = sDump.left(sDump.count() - 1); // Remove last "|"
+   sDump = sDump.left(sDump.size() - 1); // Remove last "|"
    qDebug("[QxOrm] dump sql record : %s", qPrintable(sDump));
 }
 

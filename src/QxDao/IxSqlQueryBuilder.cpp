@@ -296,13 +296,13 @@ void IxSqlQueryBuilder::sql_CreateTable(QString & sql, IxSqlQueryBuilder & build
    qx::QxSoftDelete oSoftDelete = builder.getSoftDelete();
    QString table = builder.table();
    sql = "CREATE TABLE " + qx::IxDataMember::getSqlTableName(table) + " (";
-   int iSqlCountRef = sql.count();
+   int iSqlCountRef = sql.size();
    if (pId) { sql += pId->getSqlNameAndTypeAndParams(", ") + ", "; qAssert(! pId->getSqlType().isEmpty()); }
    while ((p = builder.nextData(l1))) { sql += p->getSqlNameAndTypeAndParams(", ") + ", "; qAssert(! p->getSqlType().isEmpty()); }
    if (! oSoftDelete.isEmpty()) { sql += oSoftDelete.buildSqlQueryToCreateTable() + ", "; }
    while ((pRelation = builder.nextRelation(l2))) { params.setIndex(l2); pRelation->createTable(params); }
-   bool bAddBracket = (sql.count() != iSqlCountRef);
-   sql = sql.left(sql.count() - 2); // Remove last ", "
+   bool bAddBracket = (sql.size() != iSqlCountRef);
+   sql = sql.left(sql.size() - 2); // Remove last ", "
    if (bAddBracket) { sql += ")"; }
 }
 
@@ -345,10 +345,10 @@ void IxSqlQueryBuilder::sql_FetchAll(QString & sql, IxSqlQueryBuilder & builder)
    while ((p = builder.nextData(l1))) { sql += (p->getSqlTablePointNameAsAlias(table, ", ", "", false, "", (& builder)) + ", "); }
    if (! oSoftDelete.isEmpty()) { l1++; sql += (oSoftDelete.buildSqlTablePointName() + ", "); }
    while ((pRelation = builder.nextRelation(l2))) { params.setIndex(l2); pRelation->lazySelect(params); }
-   sql = sql.left(sql.count() - 2); // Remove last ", "
+   sql = sql.left(sql.size() - 2); // Remove last ", "
    sql += " FROM " + qx::IxDataMember::getSqlFromTable(table) + ", ";
    while ((pRelation = builder.nextRelation(l3))) { params.setIndex(l3); pRelation->lazyFrom(params); }
-   sql = sql.left(sql.count() - 2); // Remove last ", "
+   sql = sql.left(sql.size() - 2); // Remove last ", "
    while ((pRelation = builder.nextRelation(l4))) { params.setIndex(l4); pRelation->lazyJoin(params); }
    if (! oSoftDelete.isEmpty()) { sql += " WHERE " + oSoftDelete.buildSqlQueryToFetch(); }
    while ((pRelation = builder.nextRelation(l5))) { params.setIndex(l5); pRelation->lazyWhereSoftDelete(params); }
@@ -366,7 +366,7 @@ void IxSqlQueryBuilder::sql_FetchAll(QString & sql, IxSqlQueryBuilder & builder,
    if (pId && (! isDistinct)) { sql += (pId->getSqlTablePointNameAsAlias(table, ", ", "", false, "", (& builder)) + ", "); }
    for (int i = 0; i < columns.count(); i++)
    { p = pDataMemberX->get_WithDaoStrategy(columns.at(i)); if (p && (p != pId)) { sql += (p->getSqlTablePointNameAsAlias(table, ", ", "", false, "", (& builder)) + ", "); } }
-   sql = sql.left(sql.count() - 2); // Remove last ", "
+   sql = sql.left(sql.size() - 2); // Remove last ", "
    if (! oSoftDelete.isEmpty()) { sql += ", " + oSoftDelete.buildSqlTablePointName(); }
    sql += " FROM " + qx::IxDataMember::getSqlFromTable(table);
    if (! oSoftDelete.isEmpty()) { sql += " WHERE " + oSoftDelete.buildSqlQueryToFetch(); }
@@ -387,10 +387,10 @@ void IxSqlQueryBuilder::sql_FetchAll_WithRelation(qx::QxSqlRelationLinked * pRel
    while ((p = builder.nextData(l))) { if (pRelationX->checkRootColumns(p->getKey())) { sql += (p->getSqlTablePointNameAsAlias(table, ", ", "", false, pRelationX->getRootCustomAlias(), (& builder)) + ", "); } }
    if (! oSoftDelete.isEmpty()) { l++; sql += (oSoftDelete.buildSqlTablePointName(pRelationX->getRootCustomAlias()) + ", "); }
    pRelationX->hierarchySelect(params);
-   sql = sql.left(sql.count() - 2); // Remove last ", "
+   sql = sql.left(sql.size() - 2); // Remove last ", "
    sql += " FROM " + qx::IxDataMember::getSqlFromTable(table, pRelationX->getRootCustomAlias()) + ", ";
    pRelationX->hierarchyFrom(params);
-   sql = sql.left(sql.count() - 2); // Remove last ", "
+   sql = sql.left(sql.size() - 2); // Remove last ", "
    pRelationX->hierarchyJoin(params);
    if (! oSoftDelete.isEmpty()) { sql += " WHERE " + oSoftDelete.buildSqlQueryToFetch(pRelationX->getRootCustomAlias()); }
    pRelationX->hierarchyWhereSoftDelete(params);
@@ -437,13 +437,13 @@ void IxSqlQueryBuilder::sql_Insert(QString & sql, IxSqlQueryBuilder & builder)
    if (pId && ! pId->getAutoIncrement()) { tmp = pId->getSqlName(", ", "", true, (& builder)); if (! tmp.isEmpty()) { sql += tmp + ", "; } }
    while ((p = builder.nextData(l1))) { sql += p->getSqlName(", ", "", false, (& builder)) + ", "; }
    while ((pRelation = builder.nextRelation(l2))) { params.setIndex(l2); pRelation->lazyInsert(params); }
-   sql = sql.left(sql.count() - 2); // Remove last ", "
+   sql = sql.left(sql.size() - 2); // Remove last ", "
    sql += ") VALUES (";
    l1 = 0; l2 = 0; p = NULL; pRelation = NULL;
    if (pId && ! pId->getAutoIncrement()) { tmp = pId->getSqlPlaceHolder("", -1, ", ", "", true); if (! tmp.isEmpty()) { sql += tmp + ", "; } }
    while ((p = builder.nextData(l1))) { sql += p->getSqlPlaceHolder("", -1, ", ") + ", "; }
    while ((pRelation = builder.nextRelation(l2))) { params.setIndex(l2); pRelation->lazyInsert_Values(params); }
-   sql = sql.left(sql.count() - 2); // Remove last ", "
+   sql = sql.left(sql.size() - 2); // Remove last ", "
    sql += ")";
 }
 
@@ -460,7 +460,7 @@ void IxSqlQueryBuilder::sql_Update(QString & sql, IxSqlQueryBuilder & builder)
    { tmp = pId->getSqlNameEqualToPlaceHolder("", ", ", true, (& builder)); if (! tmp.isEmpty()) { sql += tmp + ", "; } }
    while ((p = builder.nextData(l1))) { sql += p->getSqlNameEqualToPlaceHolder("", ", ", false, (& builder)) + ", "; }
    while ((pRelation = builder.nextRelation(l2))) { params.setIndex(l2); pRelation->lazyUpdate(params); }
-   sql = sql.left(sql.count() - 2); // Remove last ", "
+   sql = sql.left(sql.size() - 2); // Remove last ", "
    sql += " WHERE " + pId->getSqlNameEqualToPlaceHolder("_bis", " AND ", false, (& builder));
 }
 
@@ -475,7 +475,7 @@ void IxSqlQueryBuilder::sql_Update(QString & sql, IxSqlQueryBuilder & builder, c
    { sql += pId->getSqlNameEqualToPlaceHolder("", ", ", false, (& builder)) + ", "; }
    for (int i = 0; i < columns.count(); i++)
    { p = pDataMemberX->get_WithDaoStrategy(columns.at(i)); if (p && (p != pId)) { sql += p->getSqlNameEqualToPlaceHolder("", ", ", false, (& builder)) + ", "; } }
-   sql = sql.left(sql.count() - 2); // Remove last ", "
+   sql = sql.left(sql.size() - 2); // Remove last ", "
    sql += " WHERE " + pId->getSqlNameEqualToPlaceHolder("_bis", " AND ", false, (& builder));
 }
 
@@ -487,7 +487,7 @@ void IxSqlQueryBuilder::sql_Count_WithRelation(qx::QxSqlRelationLinked * pRelati
    QString table = builder.table();
    sql = "SELECT COUNT(*) FROM " + qx::IxDataMember::getSqlFromTable(table, pRelationX->getRootCustomAlias()) + ", ";
    pRelationX->hierarchyFrom(params);
-   sql = sql.left(sql.count() - 2); // Remove last ", "
+   sql = sql.left(sql.size() - 2); // Remove last ", "
    pRelationX->hierarchyJoin(params);
    if (! oSoftDelete.isEmpty()) { sql += " WHERE " + oSoftDelete.buildSqlQueryToFetch(pRelationX->getRootCustomAlias()); }
    pRelationX->hierarchyWhereSoftDelete(params);

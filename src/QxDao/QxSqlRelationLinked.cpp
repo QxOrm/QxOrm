@@ -271,7 +271,7 @@ qx_bool QxSqlRelationLinked::QxSqlRelationLinkedImpl::insertRelationToHierarchy(
       if (iPos1 > 0) { bModeRemoveColumns = (sKey.at(iPos1 - 1) == QChar('-')); } // syntax to remove columns instead of adding columns : -{ column1, column2, etc... }
       if (iPos1 > 1) { bModeRemoveColumns = (bModeRemoveColumns || ((sKey.at(iPos1 - 2) == QChar('-')) && (sKey.at(iPos1 - 1) == QChar(' ')))); } // syntax to remove columns instead of adding columns : - { column1, column2, etc... }
       sKeyTemp = sKey.left(iPos1); sKeyTemp = sKeyTemp.trimmed();
-      if (sKeyTemp.endsWith("-")) { sKeyTemp = sKeyTemp.left(sKeyTemp.count() - 1).trimmed(); }
+      if (sKeyTemp.endsWith("-")) { sKeyTemp = sKeyTemp.left(sKeyTemp.size() - 1).trimmed(); }
       QString sColumns = sKey.mid((iPos1 + 1), (iPos2 - iPos1 - 1));
       columns = sColumns.split(",");
       for (long l = 0; l < columns.count(); l++) { columns[l] = columns.at(l).trimmed(); }

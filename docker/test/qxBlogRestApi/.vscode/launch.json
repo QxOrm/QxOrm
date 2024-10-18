@@ -5,8 +5,8 @@
          "name": "Launch QxOrm library (Debug mode via gdb)",
          "type": "cppdbg",
          "request": "launch",
-         "cwd": "%%QX_DIR%%/test/_bin/",
-         "program": "%%QX_DIR%%/test/_bin/qxBlogRestApid",
+         "cwd": "%%QX_APP_PATH%%",
+         "program": "%%QX_APP_PATH%%/%%QX_APP_NAME%%d",
          "args": [
             "--port=%%QX_PORT_DEBUG%%"
          ],

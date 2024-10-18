@@ -12,6 +12,8 @@
          ]
       }
    },
+   "overrideCommand": false,
+   "forwardPorts": [ 9642, 9643 ],
    "workspaceFolder": "/home/qxorm/src/QxOrm",
    "remoteUser": "qxorm"
 }

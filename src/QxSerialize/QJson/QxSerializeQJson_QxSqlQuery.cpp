@@ -106,7 +106,28 @@ qx_bool QxConvert_FromJson_Helper(const QJsonValue & j, qx::QxSqlQuery & t, cons
    QHash<QString, int> lstResultPosByKey;
    QVector< QVector<QVariant> > lstResultValues;
 
-   if (obj.contains("sql"))
+   if (obj.contains("json"))
+   {
+      t.m_sQuery.clear();
+      QJsonValue jsonQuery = obj.value("json");
+      if (jsonQuery.isString()) { t.m_sQuery << jsonQuery.toString(); }
+      else if (jsonQuery.isObject())
+      {
+         QString sQuery = qx::cvt::to_string(jsonQuery);
+         t.m_sQuery << sQuery;
+      }
+      else if (jsonQuery.isArray())
+      {
+         QJsonArray arrQuery = jsonQuery.toArray();
+         for (int i = 0; i < arrQuery.count(); i++)
+         {
+            QJsonValue objQuery = arrQuery.at(i);
+            QString sQuery = qx::cvt::to_string(objQuery);
+            t.m_sQuery << sQuery;
+         }
+      }
+   }
+   else if (obj.contains("sql"))
    {
       QJsonValue jsonSql = obj.value("sql");
       if (jsonSql.isString()) { t.m_sQuery.clear(); t.m_sQuery << jsonSql.toString(); }

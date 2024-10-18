@@ -282,7 +282,7 @@ QString QxClassX::dumpSqlSchema()
       sql += (bCreateTable ? "CREATE TABLE " : "ALTER TABLE ");
       sql += pClass->getName() + " ";
       sql += (bCreateTable ? "(" : "ADD (");
-      int iSqlCountRef = sql.count();
+      int iSqlCountRef = sql.size();
 
       // Get the primary key (id) of table, all columns into table, and other parameters associated to table
       IxDataMember * pId = pClass->getId();
@@ -321,8 +321,8 @@ QString QxClassX::dumpSqlSchema()
       }
 
       // Terminate SQL schema for current class
-      bool bAddBracket = (sql.count() != iSqlCountRef);
-      sql = sql.left(sql.count() - 2); // Remove last ", "
+      bool bAddBracket = (sql.size() != iSqlCountRef);
+      sql = sql.left(sql.size() - 2); // Remove last ", "
       if (bAddBracket) { sql += ")\n"; }
       else { sql += "\n"; }
       lSqlCount++;

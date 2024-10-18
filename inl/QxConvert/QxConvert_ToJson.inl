@@ -89,7 +89,7 @@ static inline QJsonValue toJson(const QDateTime & t, const QString & format)
 #ifdef _QX_ENABLE_MONGODB
    if (t.isValid() && format.startsWith("mongodb"))
    {
-      QString dt = t.toString(QX_JSON_DATE_TIME_FORMAT); if (dt.count() <= QX_JSON_DATE_TIME_FORMAT_SIZE) { dt += "Z"; }
+      QString dt = t.toString(QX_JSON_DATE_TIME_FORMAT); if (dt.size() <= QX_JSON_DATE_TIME_FORMAT_SIZE) { dt += "Z"; }
       QJsonObject obj; obj.insert("$date", QJsonValue(dt)); return QJsonValue(obj);
    }
 #endif // _QX_ENABLE_MONGODB

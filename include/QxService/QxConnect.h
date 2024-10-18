@@ -110,6 +110,8 @@ public:
    QString getSSLPeerVerifyName();
    QSslSocket::PeerVerifyMode getSSLPeerVerifyMode();
    int getSSLPeerVerifyDepth();
+#else // QT_NO_SSL
+   bool getSSLEnabled() { return false; }
 #endif // QT_NO_SSL
 
    void setIp(const QString & s);

@@ -24,6 +24,9 @@
             <td rowspan="3" valign="top">
                <textarea id="txtResponse" rows="35" cols="80" wrap="off" style="width: 100%; background-color: #f9f9fb;"></textarea>
                <br/><br/><a href="https://www.qxorm.com/" target="_blank"><img src="logo_qxorm_and_qxee.png" alt="QxOrm, QxEntityEditor"></a>
+               <br/><br/><br/>
+               <br/><label><i><font color="blue">Database type : <label id="lblDatabaseType"></label></font></i></label>
+               <br/><label><i><font color="blue">Database version : <label id="lblDatabaseVersion"></label></font></i></label>
             </td>
          </tr>
          <tr>
@@ -35,6 +38,7 @@
             <td style="padding-right: 15px">
                <br/><label><i><font color="blue">Here are some request examples :</font></i></label><br/>
                <select id="lstRequestExample" size="25" style="width: 100%;">
+                  <option id="ping"> - simple request to fetch system information (ping)</option>
                   <option id="get_meta_data"> - get project meta-data (all classes)</option>
                   <option id="fetch_all_blogs"> - fetch all blogs (as list)</option>
                   <option id="fetch_all_blogs_as_collection"> - fetch all blogs (as collection key/value)</option>

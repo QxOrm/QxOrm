@@ -1,19 +1,28 @@
 services:
     nginx_reverse_proxy:
+        image: qxorm/compose_qxorm_with_mongodb/nginx_reverse_proxy
         build:
             context: ../docker_images/nginx_reverse_proxy/
             dockerfile: Dockerfile
         ports:
-            - 80:80
+            - 8080:8080
+            - 8081:8081
         depends_on:
             - frontend_html_js_css
             - backend_qxorm
         networks:
             - compose_qxorm_with_mongodb_frontnet
+        healthcheck:
+            test: curl --fail --request POST http://backend_qxorm:9642/ping || exit 1
+            interval: 30s
+            timeout: 15s
+            retries: 3
+            start_period: 30s
 
     frontend_html_js_css:
+        image: qxorm/compose_qxorm_with_mongodb/frontend_html_js_css
         hostname: frontend_html_js_css
-        restart: on-failure
+        restart: unless-stopped
         build:
             context: ../docker_images/frontend_html_js_css/
             dockerfile: Dockerfile
@@ -27,41 +36,46 @@ services:
               target: /usr/share/nginx/html/
 
     backend_qxorm:
+        image: qxorm/compose_qxorm_with_mongodb/backend_qxorm
         hostname: backend_qxorm
-        restart: on-failure
+        restart: unless-stopped
         build:
             context: ../docker_images/backend_qxorm/
             dockerfile: Dockerfile
-            target: dev
+            args:
+                - DB_TYPE=mongodb
+        environment:
+            - QX_DB=mongodb
         depends_on:
             - db_mongodb
         networks:
             - compose_qxorm_with_mongodb_frontnet
             - compose_qxorm_with_mongodb_backnet
         volumes:
-            - compose_qxorm_backend_src:/home/qxorm
+            - qxorm_backend_src:/home/qxorm/src
         expose:
             - 9642
             - 9643
-        environment:
-            - QX_DB=MongoDB
+        ports:
+            - 2222:22
 
     db_mongodb:
+        image: qxorm/compose_qxorm_with_mongodb/db_mongodb
         hostname: db_mongodb
-        restart: on-failure
+        restart: unless-stopped
         build:
             context: ../docker_images/db_mongodb/
             dockerfile: Dockerfile
         networks:
             - compose_qxorm_with_mongodb_backnet
         volumes:
-            - compose_qxorm_mongodb_db_data:/data/db
+            - mongodb_db_data:/data/db
         expose:
             - 27017
 
 volumes:
-    compose_qxorm_mongodb_db_data:
-    compose_qxorm_backend_src:
+    mongodb_db_data:
+    qxorm_backend_src:
 
 networks:
     compose_qxorm_with_mongodb_backnet:

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.15)
 
 project(qxBlogRestApi LANGUAGES CXX)
 
@@ -11,6 +11,12 @@ find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Sql Gui Widgets Quick Qml REQ
 else() # _QX_NO_GUI
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Sql REQUIRED)
 endif() # _QX_NO_GUI
+
+option(_QX_TEST_WITH_MONGODB "If you enable _QX_TEST_WITH_MONGODB option, then persistent classes of 'qxBlogRestApi' project change definition, identifiers as 'QString' instead of 'long' to support MongoDB (used to create Docker images)" OFF)
+
+if(_QX_TEST_WITH_MONGODB)
+   add_definitions(-D_QX_TEST_WITH_MONGODB)
+endif() # _QX_TEST_WITH_MONGODB
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)

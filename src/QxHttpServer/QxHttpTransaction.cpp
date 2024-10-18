@@ -80,7 +80,7 @@ struct Q_DECL_HIDDEN QxHttpTransaction::QxHttpTransactionImpl
    {
       if (data.isEmpty()) { return true; }
       const char * pData = data.constData();
-      qint64 iTotalWritten = 0; qint64 iTotalToWrite = static_cast<qint64>(data.count());
+      qint64 iTotalWritten = 0; qint64 iTotalToWrite = static_cast<qint64>(data.size());
       while (iTotalWritten < iTotalToWrite)
       {
          qint64 iWritten = socket.write((pData + iTotalWritten), (iTotalToWrite - iTotalWritten));
@@ -172,7 +172,7 @@ qx_bool QxHttpTransaction::writeSocketServer(QTcpSocket & socket)
 
    // Insert 'Content-Length' header
    QByteArray & body = m_pImpl->m_response.data();
-   QByteArray contentLength = QByteArray::number(body.count());
+   QByteArray contentLength = QByteArray::number(body.size());
    if (! chunked) { m_pImpl->m_response.headers().insert("Content-Length", contentLength); }
 
    // Check if we have to force to close connection
@@ -185,7 +185,7 @@ qx_bool QxHttpTransaction::writeSocketServer(QTcpSocket & socket)
 
    // HTTP response body content
    if (chunked) { if (! m_pImpl->writeToSocket(socket, "0\r\n\r\n")) { return qx_bool(500, "Internal server error : cannot write to socket HTTP last empty chunked data (" + socket.errorString() + ")"); } }
-   else if (! m_pImpl->writeToSocket(socket, body)) { return qx_bool(500, "Internal server error : cannot write to socket HTTP response body content of " + QString::number(body.count()) + " bytes (" + socket.errorString() + ")"); }
+   else if (! m_pImpl->writeToSocket(socket, body)) { return qx_bool(500, "Internal server error : cannot write to socket HTTP response body content of " + QString::number(body.size()) + " bytes (" + socket.errorString() + ")"); }
    return qx_bool(true);
 }
 
@@ -262,7 +262,7 @@ qx_bool QxHttpTransaction::readSocketServer(QTcpSocket & socket)
          if (! m_pImpl->waitForReadSocket(socket)) { setMessageReturn(qx_bool(500, "Internal server error : cannot read socket to get HTTP body content (" + socket.errorString() + ")")); return qx_bool(true); }
          body += socket.readAll();
       }
-      while (body.count() < iContentLength);
+      while (body.size() < iContentLength);
       m_pImpl->m_request.data() = body;
    }
 
@@ -302,8 +302,8 @@ qx_bool QxHttpTransaction::writeChunked(const QByteArray & data)
    }
 
    // Write chunked data
-   QByteArray chunked = (QByteArray::number(data.count(), 16) + "\r\n" + data + "\r\n");
-   if (! m_pImpl->writeToSocket((* m_pImpl->m_socket), chunked)) { return qx_bool(500, "Internal server error : cannot write to socket HTTP chunked data of " + QString::number(data.count()) + " bytes (" + m_pImpl->m_socket->errorString() + ")"); }
+   QByteArray chunked = (QByteArray::number(data.size(), 16) + "\r\n" + data + "\r\n");
+   if (! m_pImpl->writeToSocket((* m_pImpl->m_socket), chunked)) { return qx_bool(500, "Internal server error : cannot write to socket HTTP chunked data of " + QString::number(data.size()) + " bytes (" + m_pImpl->m_socket->errorString() + ")"); }
    return qx_bool(true);
 }
 

@@ -166,9 +166,26 @@ void QxSerializeJsonRegistered_saveHelper_MongoDB(QJsonObject & obj, IxClass * p
 
 void QxSerializeJsonRegistered_saveHelper_WithFilter(QJsonObject & obj, IxClass * pClass, const void * pOwner, const QString & format)
 {
+   std::shared_ptr<qx::QxSqlRelationLinked> pNullRelationLinked; QString nullKey; QString emptyKey("%QX_EMPTY_HIERARCHY%");
+   qx::serialization::helper::QxSerializeCheckInstance::type_hierarchy nullHierarchy = qMakePair(pNullRelationLinked, nullKey);
+   qx::serialization::helper::QxSerializeCheckInstance::type_hierarchy emptyHierarchy = qMakePair(pNullRelationLinked, emptyKey);
+
    qx::serialization::helper::QxSerializeCheckInstance::type_hierarchy currHierarchy = qx::serialization::helper::QxSerializeCheckInstance::getHierarchy();
    std::shared_ptr<qx::QxSqlRelationLinked> pRelationLinked = currHierarchy.first;
    QString sRelation = currHierarchy.second;
+   if (sRelation == emptyKey)
+   {
+      if ((! pClass) || (! pOwner)) { return; }
+      std::shared_ptr<qx::QxCollection<QString, qx::IxDataMember *> > pDataMemberX = pClass->getSqlDataMemberX(); if (! pDataMemberX) { return; }
+      for (long l = 0; l < pDataMemberX->count(); l++)
+      {
+         qx::IxDataMember * pDataMember = pDataMemberX->getByIndex(l);
+         if (! pDataMember || ! pDataMember->getSerialize()) { continue; }
+         QJsonValue val = pDataMember->toJson(pOwner, format);
+         obj.insert(pDataMember->getKey(), val);
+      }
+      return;
+   }
 
    if (! pRelationLinked || ! pClass) { QString msg = ("hierarchy (relations linked) not found : " + sRelation); qAssertMsg(false, "QxSerializeJsonRegistered_saveHelper_WithFilter", qPrintable(msg)); return; }
    qx::QxSqlRelationLinked::type_lst_relation pRelations = pRelationLinked->getRelationX();
@@ -199,8 +216,6 @@ void QxSerializeJsonRegistered_saveHelper_WithFilter(QJsonObject & obj, IxClass 
          obj.insert(pDataMember->getKey(), val);
       }
 
-      std::shared_ptr<qx::QxSqlRelationLinked> pNullRelationLinked; QString empty;
-      qx::serialization::helper::QxSerializeCheckInstance::type_hierarchy nullHierarchy = qMakePair(pNullRelationLinked, empty);
       qx::serialization::helper::QxSerializeCheckInstance::setHierarchy(nullHierarchy);
    }
    else if (pRelations.exist(sRelation))
@@ -209,6 +224,7 @@ void QxSerializeJsonRegistered_saveHelper_WithFilter(QJsonObject & obj, IxClass 
       qx::IxSqlRelation * pRelation = std::get<1>(currRelation); if (! pRelation) { return; }
       QSet<QString> columns = std::get<2>(currRelation).first;
       long l = 0; qx::IxDataMember * pDataMember = NULL;
+      qx::serialization::helper::QxSerializeCheckInstance::setHierarchy(emptyHierarchy);
       while ((pDataMember = pRelation->nextData(l)))
       {
          if (! pDataMember || ! pDataMember->getSerialize()) { continue; }
@@ -216,6 +232,7 @@ void QxSerializeJsonRegistered_saveHelper_WithFilter(QJsonObject & obj, IxClass 
          QJsonValue val = pDataMember->toJson(pOwner, format);
          obj.insert(pDataMember->getKey(), val);
       }
+      qx::serialization::helper::QxSerializeCheckInstance::setHierarchy(currHierarchy);
 
       qx::QxSqlRelationLinked::type_lst_relation_linked allSubRelationsLinked = pRelationLinked->getRelationLinkedX();
       qx::QxSqlRelationLinked::type_ptr pSubRelationLinked = allSubRelationsLinked.value(pRelation->getKey()); if (! pSubRelationLinked) { return; }
@@ -270,6 +287,10 @@ void QxSerializeJsonRegistered_loadHelper_MongoDB(const QJsonObject & obj, IxCla
 
 void QxSerializeJsonRegistered_loadHelper_WithFilter(const QJsonObject & obj, IxClass * pClass, void * pOwner, const QString & format)
 {
+   std::shared_ptr<qx::QxSqlRelationLinked> pNullRelationLinked; QString nullKey; QString emptyKey("%QX_EMPTY_HIERARCHY%");
+   qx::serialization::helper::QxSerializeCheckInstance::type_hierarchy nullHierarchy = qMakePair(pNullRelationLinked, nullKey);
+   qx::serialization::helper::QxSerializeCheckInstance::type_hierarchy emptyHierarchy = qMakePair(pNullRelationLinked, emptyKey);
+
    qx_bool bHierarchyOk = QxSerializeJsonRegistered_initHierarchy_WithFilter(pClass, pOwner, format);
    if (! bHierarchyOk) { QString msg = bHierarchyOk.getDesc(); qDebug("[QxOrm] !!! Error in QxSerializeJsonRegistered_loadHelper_WithFilter !!! : '%s'", qPrintable(msg)); return; }
    qx::serialization::helper::QxSerializeCheckInstance checker(pOwner, pClass);
@@ -278,6 +299,18 @@ void QxSerializeJsonRegistered_loadHelper_WithFilter(const QJsonObject & obj, Ix
    qx::serialization::helper::QxSerializeCheckInstance::type_hierarchy currHierarchy = qx::serialization::helper::QxSerializeCheckInstance::getHierarchy();
    std::shared_ptr<qx::QxSqlRelationLinked> pRelationLinked = currHierarchy.first;
    QString sRelation = currHierarchy.second;
+   if (sRelation == emptyKey)
+   {
+      if ((! pClass) || (! pOwner)) { return; }
+      std::shared_ptr<qx::QxCollection<QString, qx::IxDataMember *> > pDataMemberX = pClass->getSqlDataMemberX(); if (! pDataMemberX) { return; }
+      for (long l = 0; l < pDataMemberX->count(); l++)
+      {
+         qx::IxDataMember * pDataMember = pDataMemberX->getByIndex(l);
+         if (! pDataMember || ! pDataMember->getSerialize()) { continue; }
+         if (obj.contains(pDataMember->getKey())) { pDataMember->fromJson(pOwner, obj.value(pDataMember->getKey()), format); }
+      }
+      return;
+   }
 
    if (! pRelationLinked || ! pClass) { QString msg = ("hierarchy (relations linked) not found : " + sRelation); qAssertMsg(false, "QxSerializeJsonRegistered_loadHelper_WithFilter", qPrintable(msg)); return; }
    qx::QxSqlRelationLinked::type_lst_relation pRelations = pRelationLinked->getRelationX();
@@ -306,8 +339,6 @@ void QxSerializeJsonRegistered_loadHelper_WithFilter(const QJsonObject & obj, Ix
          if (obj.contains(pDataMember->getKey())) { pDataMember->fromJson(pOwner, obj.value(pDataMember->getKey()), format); }
       }
 
-      std::shared_ptr<qx::QxSqlRelationLinked> pNullRelationLinked; QString empty;
-      qx::serialization::helper::QxSerializeCheckInstance::type_hierarchy nullHierarchy = qMakePair(pNullRelationLinked, empty);
       qx::serialization::helper::QxSerializeCheckInstance::setHierarchy(nullHierarchy);
    }
    else if (pRelations.exist(sRelation))
@@ -316,12 +347,14 @@ void QxSerializeJsonRegistered_loadHelper_WithFilter(const QJsonObject & obj, Ix
       qx::IxSqlRelation * pRelation = std::get<1>(currRelation); if (! pRelation) { return; }
       QSet<QString> columns = std::get<2>(currRelation).first;
       long l = 0; qx::IxDataMember * pDataMember = NULL;
+      qx::serialization::helper::QxSerializeCheckInstance::setHierarchy(emptyHierarchy);
       while ((pDataMember = pRelation->nextData(l)))
       {
          if (! pDataMember || ! pDataMember->getSerialize()) { continue; }
          if ((columns.count() > 0) && (! columns.contains(pDataMember->getKey()))) { continue; }
          if (obj.contains(pDataMember->getKey())) { pDataMember->fromJson(pOwner, obj.value(pDataMember->getKey()), format); }
       }
+      qx::serialization::helper::QxSerializeCheckInstance::setHierarchy(currHierarchy);
 
       qx::QxSqlRelationLinked::type_lst_relation_linked allSubRelationsLinked = pRelationLinked->getRelationLinkedX();
       qx::QxSqlRelationLinked::type_ptr pSubRelationLinked = allSubRelationsLinked.value(pRelation->getKey()); if (! pSubRelationLinked) { return; }

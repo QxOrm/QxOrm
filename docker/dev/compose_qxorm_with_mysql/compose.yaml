@@ -1,0 +1,87 @@
+services:
+    nginx_reverse_proxy:
+        image: qxorm/compose_qxorm_with_mysql/nginx_reverse_proxy
+        build:
+            context: ../docker_images/nginx_reverse_proxy/
+            dockerfile: Dockerfile
+        ports:
+            - 8080:8080
+            - 8081:8081
+        depends_on:
+            - frontend_html_js_css
+            - backend_qxorm
+        networks:
+            - compose_qxorm_with_mysql_frontnet
+        healthcheck:
+            test: curl --fail --request POST http://backend_qxorm:9642/ping || exit 1
+            interval: 30s
+            timeout: 15s
+            retries: 3
+            start_period: 30s
+
+    frontend_html_js_css:
+        image: qxorm/compose_qxorm_with_mysql/frontend_html_js_css
+        hostname: frontend_html_js_css
+        restart: unless-stopped
+        build:
+            context: ../docker_images/frontend_html_js_css/
+            dockerfile: Dockerfile
+        networks:
+            - compose_qxorm_with_mysql_frontnet
+        expose:
+            - 80
+        volumes:
+            - type: bind
+              source: ../docker_images/frontend_html_js_css/src/
+              target: /usr/share/nginx/html/
+
+    backend_qxorm:
+        image: qxorm/compose_qxorm_with_mysql/backend_qxorm
+        hostname: backend_qxorm
+        restart: unless-stopped
+        build:
+            context: ../docker_images/backend_qxorm/
+            dockerfile: Dockerfile
+            args:
+                - DB_TYPE=mysql
+        environment:
+            - QX_DB=mysql
+        depends_on:
+            - db_mysql
+        networks:
+            - compose_qxorm_with_mysql_frontnet
+            - compose_qxorm_with_mysql_backnet
+        volumes:
+            - qxorm_backend_src:/home/qxorm/src
+        expose:
+            - 9642
+            - 9643
+        ports:
+            - 2222:22
+
+    db_mysql:
+        image: qxorm/compose_qxorm_with_mysql/db_mysql
+        hostname: db_mysql
+        restart: unless-stopped
+        build:
+            context: ../docker_images/db_mysql/
+            dockerfile: Dockerfile
+        environment:
+            - MYSQL_ROOT_PASSWORD=qxorm
+            - MYSQL_USER=qxorm
+            - MYSQL_PASSWORD=qxorm
+            - MYSQL_DATABASE=qxBlog
+        networks:
+            - compose_qxorm_with_mysql_backnet
+        volumes:
+            - mysql_db_data:/var/lib/mysql
+        expose:
+            - 3306
+
+volumes:
+    mysql_db_data:
+    qxorm_backend_src:
+
+networks:
+    compose_qxorm_with_mysql_backnet:
+    compose_qxorm_with_mysql_frontnet:

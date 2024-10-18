@@ -17,7 +17,12 @@ template <> void register_class(QxClass<blog> & t)
 
    t.relationManyToOne(& blog::m_author, "author_id");
    t.relationOneToMany(& blog::m_commentX, "list_comment", "blog_id");
-   t.relationManyToMany(& blog::m_categoryX, "list_category", "category_blog", "blog_id", "category_id");
+
+#ifdef _QX_TEST_WITH_MONGODB
+   t.data(& blog::m_categoryX, "list_category");
+#else // _QX_TEST_WITH_MONGODB
+   t.relationManyToMany(& blog::m_categoryX, "list_category", "t_qxee_blog_category", "blog_id", "category_id");
+#endif // _QX_TEST_WITH_MONGODB
 
 #ifndef _QX_NO_JSON
    t.fctStatic_1<QJsonValue, const QJsonValue &>(& blog::helloWorld, "helloWorld");

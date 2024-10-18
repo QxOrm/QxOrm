@@ -40,8 +40,13 @@ namespace model_view {
 
 bool compareQVariant(const QVariant & v1, const QVariant & v2, bool bAscending)
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+   int type1 = v1.typeId();
+   int type2 = v2.typeId();
+#else // (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
    int type1 = static_cast<int>(v1.type());
    int type2 = static_cast<int>(v2.type());
+#endif // (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
 
    if (type1 != type2)
    {

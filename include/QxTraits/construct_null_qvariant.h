@@ -44,6 +44,19 @@
  */
 
 #include <QtCore/qvariant.h>
+#include <QtCore/qbitarray.h>
+#include <QtCore/qbytearray.h>
+#include <QtCore/qdatetime.h>
+#include <QtCore/quuid.h>
+
+#ifdef _QX_ENABLE_QT_GUI
+#include <QtGui/qbrush.h>
+#include <QtGui/qcolor.h>
+#include <QtGui/qfont.h>
+#include <QtGui/qregion.h>
+#include <QtGui/qimage.h>
+#include <QtGui/qpixmap.h>
+#endif // _QX_ENABLE_QT_GUI
 
 #include <QxDao/QxDateNeutral.h>
 #include <QxDao/QxTimeNeutral.h>
@@ -58,6 +71,164 @@ namespace trait {
  */
 template <typename T>
 struct construct_null_qvariant { static inline QVariant get() { return QVariant(); } };
+
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+
+template <> struct construct_null_qvariant<QBitArray> { static inline QVariant get() { return QVariant(QMetaType::fromType<QBitArray>()); } };
+template <> struct construct_null_qvariant<QBitArray &> { static inline QVariant get() { return QVariant(QMetaType::fromType<QBitArray>()); } };
+template <> struct construct_null_qvariant<const QBitArray> { static inline QVariant get() { return QVariant(QMetaType::fromType<QBitArray>()); } };
+template <> struct construct_null_qvariant<const QBitArray &> { static inline QVariant get() { return QVariant(QMetaType::fromType<QBitArray>()); } };
+
+template <> struct construct_null_qvariant<QByteArray> { static inline QVariant get() { return QVariant(QMetaType::fromType<QByteArray>()); } };
+template <> struct construct_null_qvariant<QByteArray &> { static inline QVariant get() { return QVariant(QMetaType::fromType<QByteArray>()); } };
+template <> struct construct_null_qvariant<const QByteArray> { static inline QVariant get() { return QVariant(QMetaType::fromType<QByteArray>()); } };
+template <> struct construct_null_qvariant<const QByteArray &> { static inline QVariant get() { return QVariant(QMetaType::fromType<QByteArray>()); } };
+
+template <> struct construct_null_qvariant<bool> { static inline QVariant get() { return QVariant(QMetaType::fromType<bool>()); } };
+template <> struct construct_null_qvariant<bool &> { static inline QVariant get() { return QVariant(QMetaType::fromType<bool>()); } };
+template <> struct construct_null_qvariant<const bool> { static inline QVariant get() { return QVariant(QMetaType::fromType<bool>()); } };
+template <> struct construct_null_qvariant<const bool &> { static inline QVariant get() { return QVariant(QMetaType::fromType<bool>()); } };
+
+template <> struct construct_null_qvariant<short> { static inline QVariant get() { return QVariant(QMetaType::fromType<short>()); } };
+template <> struct construct_null_qvariant<short &> { static inline QVariant get() { return QVariant(QMetaType::fromType<short>()); } };
+template <> struct construct_null_qvariant<const short> { static inline QVariant get() { return QVariant(QMetaType::fromType<short>()); } };
+template <> struct construct_null_qvariant<const short &> { static inline QVariant get() { return QVariant(QMetaType::fromType<short>()); } };
+
+template <> struct construct_null_qvariant<int> { static inline QVariant get() { return QVariant(QMetaType::fromType<int>()); } };
+template <> struct construct_null_qvariant<int &> { static inline QVariant get() { return QVariant(QMetaType::fromType<int>()); } };
+template <> struct construct_null_qvariant<const int> { static inline QVariant get() { return QVariant(QMetaType::fromType<int>()); } };
+template <> struct construct_null_qvariant<const int &> { static inline QVariant get() { return QVariant(QMetaType::fromType<int>()); } };
+
+template <> struct construct_null_qvariant<long> { static inline QVariant get() { return QVariant(QMetaType::fromType<long>()); } };
+template <> struct construct_null_qvariant<long &> { static inline QVariant get() { return QVariant(QMetaType::fromType<long>()); } };
+template <> struct construct_null_qvariant<const long> { static inline QVariant get() { return QVariant(QMetaType::fromType<long>()); } };
+template <> struct construct_null_qvariant<const long &> { static inline QVariant get() { return QVariant(QMetaType::fromType<long>()); } };
+
+template <> struct construct_null_qvariant<long long> { static inline QVariant get() { return QVariant(QMetaType::fromType<long long>()); } };
+template <> struct construct_null_qvariant<long long &> { static inline QVariant get() { return QVariant(QMetaType::fromType<long long>()); } };
+template <> struct construct_null_qvariant<const long long> { static inline QVariant get() { return QVariant(QMetaType::fromType<long long>()); } };
+template <> struct construct_null_qvariant<const long long &> { static inline QVariant get() { return QVariant(QMetaType::fromType<long long>()); } };
+
+template <> struct construct_null_qvariant<float> { static inline QVariant get() { return QVariant(QMetaType::fromType<float>()); } };
+template <> struct construct_null_qvariant<float &> { static inline QVariant get() { return QVariant(QMetaType::fromType<float>()); } };
+template <> struct construct_null_qvariant<const float> { static inline QVariant get() { return QVariant(QMetaType::fromType<float>()); } };
+template <> struct construct_null_qvariant<const float &> { static inline QVariant get() { return QVariant(QMetaType::fromType<float>()); } };
+
+template <> struct construct_null_qvariant<double> { static inline QVariant get() { return QVariant(QMetaType::fromType<double>()); } };
+template <> struct construct_null_qvariant<double &> { static inline QVariant get() { return QVariant(QMetaType::fromType<double>()); } };
+template <> struct construct_null_qvariant<const double> { static inline QVariant get() { return QVariant(QMetaType::fromType<double>()); } };
+template <> struct construct_null_qvariant<const double &> { static inline QVariant get() { return QVariant(QMetaType::fromType<double>()); } };
+
+template <> struct construct_null_qvariant<unsigned short> { static inline QVariant get() { return QVariant(QMetaType::fromType<unsigned short>()); } };
+template <> struct construct_null_qvariant<unsigned short &> { static inline QVariant get() { return QVariant(QMetaType::fromType<unsigned short>()); } };
+template <> struct construct_null_qvariant<const unsigned short> { static inline QVariant get() { return QVariant(QMetaType::fromType<unsigned short>()); } };
+template <> struct construct_null_qvariant<const unsigned short &> { static inline QVariant get() { return QVariant(QMetaType::fromType<unsigned short>()); } };
+
+template <> struct construct_null_qvariant<unsigned int> { static inline QVariant get() { return QVariant(QMetaType::fromType<unsigned int>()); } };
+template <> struct construct_null_qvariant<unsigned int &> { static inline QVariant get() { return QVariant(QMetaType::fromType<unsigned int>()); } };
+template <> struct construct_null_qvariant<const unsigned int> { static inline QVariant get() { return QVariant(QMetaType::fromType<unsigned int>()); } };
+template <> struct construct_null_qvariant<const unsigned int &> { static inline QVariant get() { return QVariant(QMetaType::fromType<unsigned int>()); } };
+
+template <> struct construct_null_qvariant<unsigned long> { static inline QVariant get() { return QVariant(QMetaType::fromType<unsigned long>()); } };
+template <> struct construct_null_qvariant<unsigned long &> { static inline QVariant get() { return QVariant(QMetaType::fromType<unsigned long>()); } };
+template <> struct construct_null_qvariant<const unsigned long> { static inline QVariant get() { return QVariant(QMetaType::fromType<unsigned long>()); } };
+template <> struct construct_null_qvariant<const unsigned long &> { static inline QVariant get() { return QVariant(QMetaType::fromType<unsigned long>()); } };
+
+template <> struct construct_null_qvariant<unsigned long long> { static inline QVariant get() { return QVariant(QMetaType::fromType<unsigned long long>()); } };
+template <> struct construct_null_qvariant<unsigned long long &> { static inline QVariant get() { return QVariant(QMetaType::fromType<unsigned long long>()); } };
+template <> struct construct_null_qvariant<const unsigned long long> { static inline QVariant get() { return QVariant(QMetaType::fromType<unsigned long long>()); } };
+template <> struct construct_null_qvariant<const unsigned long long &> { static inline QVariant get() { return QVariant(QMetaType::fromType<unsigned long long>()); } };
+
+template <> struct construct_null_qvariant<QString> { static inline QVariant get() { return QVariant(QMetaType::fromType<QString>()); } };
+template <> struct construct_null_qvariant<QString &> { static inline QVariant get() { return QVariant(QMetaType::fromType<QString>()); } };
+template <> struct construct_null_qvariant<const QString> { static inline QVariant get() { return QVariant(QMetaType::fromType<QString>()); } };
+template <> struct construct_null_qvariant<const QString &> { static inline QVariant get() { return QVariant(QMetaType::fromType<QString>()); } };
+
+template <> struct construct_null_qvariant<QStringList> { static inline QVariant get() { return QVariant(QMetaType::fromType<QStringList>()); } };
+template <> struct construct_null_qvariant<QStringList &> { static inline QVariant get() { return QVariant(QMetaType::fromType<QStringList>()); } };
+template <> struct construct_null_qvariant<const QStringList> { static inline QVariant get() { return QVariant(QMetaType::fromType<QStringList>()); } };
+template <> struct construct_null_qvariant<const QStringList &> { static inline QVariant get() { return QVariant(QMetaType::fromType<QStringList>()); } };
+
+template <> struct construct_null_qvariant<QDate> { static inline QVariant get() { return QVariant(QMetaType::fromType<QDate>()); } };
+template <> struct construct_null_qvariant<QDate &> { static inline QVariant get() { return QVariant(QMetaType::fromType<QDate>()); } };
+template <> struct construct_null_qvariant<const QDate> { static inline QVariant get() { return QVariant(QMetaType::fromType<QDate>()); } };
+template <> struct construct_null_qvariant<const QDate &> { static inline QVariant get() { return QVariant(QMetaType::fromType<QDate>()); } };
+
+template <> struct construct_null_qvariant<QDateTime> { static inline QVariant get() { return QVariant(QMetaType::fromType<QDateTime>()); } };
+template <> struct construct_null_qvariant<QDateTime &> { static inline QVariant get() { return QVariant(QMetaType::fromType<QDateTime>()); } };
+template <> struct construct_null_qvariant<const QDateTime> { static inline QVariant get() { return QVariant(QMetaType::fromType<QDateTime>()); } };
+template <> struct construct_null_qvariant<const QDateTime &> { static inline QVariant get() { return QVariant(QMetaType::fromType<QDateTime>()); } };
+
+template <> struct construct_null_qvariant<QTime> { static inline QVariant get() { return QVariant(QMetaType::fromType<QTime>()); } };
+template <> struct construct_null_qvariant<QTime &> { static inline QVariant get() { return QVariant(QMetaType::fromType<QTime>()); } };
+template <> struct construct_null_qvariant<const QTime> { static inline QVariant get() { return QVariant(QMetaType::fromType<QTime>()); } };
+template <> struct construct_null_qvariant<const QTime &> { static inline QVariant get() { return QVariant(QMetaType::fromType<QTime>()); } };
+
+template <> struct construct_null_qvariant<QUuid> { static inline QVariant get() { return QVariant(QMetaType::fromType<QUuid>()); } };
+template <> struct construct_null_qvariant<QUuid &> { static inline QVariant get() { return QVariant(QMetaType::fromType<QUuid>()); } };
+template <> struct construct_null_qvariant<const QUuid> { static inline QVariant get() { return QVariant(QMetaType::fromType<QUuid>()); } };
+template <> struct construct_null_qvariant<const QUuid &> { static inline QVariant get() { return QVariant(QMetaType::fromType<QUuid>()); } };
+
+template <> struct construct_null_qvariant<qx::QxDateNeutral> { static inline QVariant get() { return QVariant(QMetaType::fromType<QString>()); } };
+template <> struct construct_null_qvariant<qx::QxDateNeutral &> { static inline QVariant get() { return QVariant(QMetaType::fromType<QString>()); } };
+template <> struct construct_null_qvariant<const qx::QxDateNeutral> { static inline QVariant get() { return QVariant(QMetaType::fromType<QString>()); } };
+template <> struct construct_null_qvariant<const qx::QxDateNeutral &> { static inline QVariant get() { return QVariant(QMetaType::fromType<QString>()); } };
+
+template <> struct construct_null_qvariant<qx::QxTimeNeutral> { static inline QVariant get() { return QVariant(QMetaType::fromType<QString>()); } };
+template <> struct construct_null_qvariant<qx::QxTimeNeutral &> { static inline QVariant get() { return QVariant(QMetaType::fromType<QString>()); } };
+template <> struct construct_null_qvariant<const qx::QxTimeNeutral> { static inline QVariant get() { return QVariant(QMetaType::fromType<QString>()); } };
+template <> struct construct_null_qvariant<const qx::QxTimeNeutral &> { static inline QVariant get() { return QVariant(QMetaType::fromType<QString>()); } };
+
+template <> struct construct_null_qvariant<qx::QxDateTimeNeutral> { static inline QVariant get() { return QVariant(QMetaType::fromType<QString>()); } };
+template <> struct construct_null_qvariant<qx::QxDateTimeNeutral &> { static inline QVariant get() { return QVariant(QMetaType::fromType<QString>()); } };
+template <> struct construct_null_qvariant<const qx::QxDateTimeNeutral> { static inline QVariant get() { return QVariant(QMetaType::fromType<QString>()); } };
+template <> struct construct_null_qvariant<const qx::QxDateTimeNeutral &> { static inline QVariant get() { return QVariant(QMetaType::fromType<QString>()); } };
+
+template <> struct construct_null_qvariant<std::string> { static inline QVariant get() { return QVariant(QMetaType::fromType<QString>()); } };
+template <> struct construct_null_qvariant<std::string &> { static inline QVariant get() { return QVariant(QMetaType::fromType<QString>()); } };
+template <> struct construct_null_qvariant<const std::string> { static inline QVariant get() { return QVariant(QMetaType::fromType<QString>()); } };
+template <> struct construct_null_qvariant<const std::string &> { static inline QVariant get() { return QVariant(QMetaType::fromType<QString>()); } };
+
+template <> struct construct_null_qvariant<std::wstring> { static inline QVariant get() { return QVariant(QMetaType::fromType<QString>()); } };
+template <> struct construct_null_qvariant<std::wstring &> { static inline QVariant get() { return QVariant(QMetaType::fromType<QString>()); } };
+template <> struct construct_null_qvariant<const std::wstring> { static inline QVariant get() { return QVariant(QMetaType::fromType<QString>()); } };
+template <> struct construct_null_qvariant<const std::wstring &> { static inline QVariant get() { return QVariant(QMetaType::fromType<QString>()); } };
+
+#ifdef _QX_ENABLE_QT_GUI
+
+template <> struct construct_null_qvariant<QBrush> { static inline QVariant get() { return QVariant(QMetaType::fromType<QBrush>()); } };
+template <> struct construct_null_qvariant<QBrush &> { static inline QVariant get() { return QVariant(QMetaType::fromType<QBrush>()); } };
+template <> struct construct_null_qvariant<const QBrush> { static inline QVariant get() { return QVariant(QMetaType::fromType<QBrush>()); } };
+template <> struct construct_null_qvariant<const QBrush &> { static inline QVariant get() { return QVariant(QMetaType::fromType<QBrush>()); } };
+
+template <> struct construct_null_qvariant<QColor> { static inline QVariant get() { return QVariant(QMetaType::fromType<QColor>()); } };
+template <> struct construct_null_qvariant<QColor &> { static inline QVariant get() { return QVariant(QMetaType::fromType<QColor>()); } };
+template <> struct construct_null_qvariant<const QColor> { static inline QVariant get() { return QVariant(QMetaType::fromType<QColor>()); } };
+template <> struct construct_null_qvariant<const QColor &> { static inline QVariant get() { return QVariant(QMetaType::fromType<QColor>()); } };
+
+template <> struct construct_null_qvariant<QFont> { static inline QVariant get() { return QVariant(QMetaType::fromType<QFont>()); } };
+template <> struct construct_null_qvariant<QFont &> { static inline QVariant get() { return QVariant(QMetaType::fromType<QFont>()); } };
+template <> struct construct_null_qvariant<const QFont> { static inline QVariant get() { return QVariant(QMetaType::fromType<QFont>()); } };
+template <> struct construct_null_qvariant<const QFont &> { static inline QVariant get() { return QVariant(QMetaType::fromType<QFont>()); } };
+
+template <> struct construct_null_qvariant<QRegion> { static inline QVariant get() { return QVariant(QMetaType::fromType<QRegion>()); } };
+template <> struct construct_null_qvariant<QRegion &> { static inline QVariant get() { return QVariant(QMetaType::fromType<QRegion>()); } };
+template <> struct construct_null_qvariant<const QRegion> { static inline QVariant get() { return QVariant(QMetaType::fromType<QRegion>()); } };
+template <> struct construct_null_qvariant<const QRegion &> { static inline QVariant get() { return QVariant(QMetaType::fromType<QRegion>()); } };
+
+template <> struct construct_null_qvariant<QImage> { static inline QVariant get() { return QVariant(QMetaType::fromType<QImage>()); } };
+template <> struct construct_null_qvariant<QImage &> { static inline QVariant get() { return QVariant(QMetaType::fromType<QImage>()); } };
+template <> struct construct_null_qvariant<const QImage> { static inline QVariant get() { return QVariant(QMetaType::fromType<QImage>()); } };
+template <> struct construct_null_qvariant<const QImage &> { static inline QVariant get() { return QVariant(QMetaType::fromType<QImage>()); } };
+
+template <> struct construct_null_qvariant<QPixmap> { static inline QVariant get() { return QVariant(QMetaType::fromType<QPixmap>()); } };
+template <> struct construct_null_qvariant<QPixmap &> { static inline QVariant get() { return QVariant(QMetaType::fromType<QPixmap>()); } };
+template <> struct construct_null_qvariant<const QPixmap> { static inline QVariant get() { return QVariant(QMetaType::fromType<QPixmap>()); } };
+template <> struct construct_null_qvariant<const QPixmap &> { static inline QVariant get() { return QVariant(QMetaType::fromType<QPixmap>()); } };
+
+#endif // _QX_ENABLE_QT_GUI
+
+#else // (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
 
 template <> struct construct_null_qvariant<QBitArray> { static inline QVariant get() { return QVariant(QVariant::BitArray); } };
 template <> struct construct_null_qvariant<QBitArray &> { static inline QVariant get() { return QVariant(QVariant::BitArray); } };
@@ -219,6 +390,8 @@ template <> struct construct_null_qvariant<const QPixmap> { static inline QVaria
 template <> struct construct_null_qvariant<const QPixmap &> { static inline QVariant get() { return QVariant(QVariant::Pixmap); } };
 
 #endif // _QX_ENABLE_QT_GUI
+
+#endif // (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
 
 } // namespace trait
 } // namespace qx

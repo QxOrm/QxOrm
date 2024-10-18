@@ -20,6 +20,9 @@ export CMAKE_CONFIG=$1
 export CMAKE_OPTIONS=$2
 export CMAKE_BUILD_PARALLEL_LEVEL=2
 
+echo "CMAKE_CONFIG: $CMAKE_CONFIG"
+echo "CMAKE_OPTIONS: $CMAKE_OPTIONS"
+
 cd $QX_DIR/test/build/$QX_DIR_SUFFIX/
 cmake ../.. $CMAKE_OPTIONS
 cmake --build . --config $CMAKE_CONFIG

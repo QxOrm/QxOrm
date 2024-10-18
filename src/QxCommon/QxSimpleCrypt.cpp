@@ -107,7 +107,7 @@ QByteArray QxSimpleCrypt::encryptToByteArray(QByteArray plaintext)
      flags |= CryptoFlagCompression;
    } else if (m_compressionMode == CompressionAuto) {
      QByteArray compressed = qCompress(ba, 9);
-     if (compressed.count() < ba.count()) {
+     if (compressed.size() < ba.size()) {
          ba = compressed;
          flags |= CryptoFlagCompression;
      }
@@ -117,7 +117,11 @@ QByteArray QxSimpleCrypt::encryptToByteArray(QByteArray plaintext)
    if (m_protectionMode == ProtectionChecksum) {
      flags |= CryptoFlagChecksum;
      QDataStream s(&integrityProtection, QIODevice::WriteOnly);
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+     s << qChecksum(ba);
+#else // (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
      s << qChecksum(ba.constData(), ba.length());
+#endif // (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
    } else if (m_protectionMode == ProtectionHash) {
      flags |= CryptoFlagHash;
      QCryptographicHash hash(QCryptographicHash::Sha1);
@@ -136,7 +140,7 @@ QByteArray QxSimpleCrypt::encryptToByteArray(QByteArray plaintext)
 
    int pos(0);
    char lastChar(0);
-   int cnt = ba.count();
+   int cnt = ba.size();
 
    while (pos < cnt) {
      ba[pos] = ba.at(pos) ^ m_keyParts.at(pos % 8) ^ lastChar;
@@ -210,7 +214,7 @@ QByteArray QxSimpleCrypt::decryptToByteArray(QByteArray cypher)
    CryptoFlags flags = CryptoFlags(ba.at(1));
    ba = ba.mid(2);
    int pos(0);
-   int cnt(ba.count());
+   int cnt(ba.size());
    char lastChar = 0;
 
    while (pos < cnt) {
@@ -234,7 +238,11 @@ QByteArray QxSimpleCrypt::decryptToByteArray(QByteArray cypher)
          s >> storedChecksum;
      }
      ba = ba.mid(2);
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+     quint16 checksum = qChecksum(ba);
+#else // (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
      quint16 checksum = qChecksum(ba.constData(), ba.length());
+#endif // (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
      integrityOk = (checksum == storedChecksum);
    } else if (flags.testFlag(CryptoFlagHash)) {
      if (ba.length() < 20) {

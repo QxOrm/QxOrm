@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "name": "qx",
+            "includePath": [
+                "${default}",
+                "${workspaceFolder}/include",
+                "/usr/include/x86_64-linux-gnu/qt6"
+            ]
+        }
+    ],
+    "version": 4,
+	 "enableConfigurationSquiggles": true
+}

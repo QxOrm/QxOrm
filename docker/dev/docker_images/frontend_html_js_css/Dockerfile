@@ -1,4 +1,4 @@
 FROM nginx:latest
 
-COPY entrypoint.sh .
+COPY --chmod=+x ./scripts/entrypoint.sh .
 ENTRYPOINT [ "./entrypoint.sh" ]

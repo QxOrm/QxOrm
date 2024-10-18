@@ -464,7 +464,7 @@ QSqlError QxMongoDB_Helper::insertOne(qx::dao::detail::IxDao_Helper * pDaoHelper
 
 QSqlError QxMongoDB_Helper::QxMongoDB_HelperImpl::insertOne_(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, const QString & json, QString & insertedId)
 {
-   if (json.count() <= 0) { return QSqlError(); }
+   if (json.size() <= 0) { return QSqlError(); }
    qx_db_collection coll; QSqlError err = initCollection(pClass, coll); if (err.isValid()) { return err; }
    if (pDaoHelper) { pDaoHelper->qxQuery().queryAt(0, "MongoDB insert one '" + (pClass ? pClass->getName() : QString()) + "' :\n" + json); }
 
@@ -491,12 +491,12 @@ QSqlError QxMongoDB_Helper::insertMany(qx::dao::detail::IxDao_Helper * pDaoHelpe
 
 QSqlError QxMongoDB_Helper::QxMongoDB_HelperImpl::insertMany_(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, const QStringList & json, QStringList & insertedId)
 {
-   if (json.count() <= 0) { return QSqlError(); }
+   if (json.size() <= 0) { return QSqlError(); }
    qx_db_collection coll; QSqlError err = initCollection(pClass, coll); if (err.isValid()) { return err; }
    if (pDaoHelper) { pDaoHelper->qxQuery().queryAt(0, "MongoDB insert many '" + (pClass ? pClass->getName() : QString()) + "' :\n" + json.join(", \n")); }
-   insertedId.clear(); insertedId.reserve(json.count());
+   insertedId.clear(); insertedId.reserve(json.size());
 
-   qx_scoped_wrapper< std::vector<bson_t> > docs(json.count());
+   qx_scoped_wrapper< std::vector<bson_t> > docs(json.size());
    Q_FOREACH(QString s, json)
    {
       if (s.isEmpty()) { continue; }
@@ -524,7 +524,7 @@ QSqlError QxMongoDB_Helper::updateOne(qx::dao::detail::IxDao_Helper * pDaoHelper
 
 QSqlError QxMongoDB_Helper::QxMongoDB_HelperImpl::updateOne_(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, const QString & json, const qx::QxSqlQuery * query)
 {
-   if (json.count() <= 0) { return QSqlError(); }
+   if (json.size() <= 0) { return QSqlError(); }
    qx_db_collection coll; QSqlError err = initCollection(pClass, coll); if (err.isValid()) { return err; }
    if (pDaoHelper) { pDaoHelper->qxQuery().queryAt(0, "MongoDB update one '" + (pClass ? pClass->getName() : QString()) + "' :\n" + json + "\n" + (query ? query->queryAt(0) : QString())); }
 
@@ -563,7 +563,7 @@ QSqlError QxMongoDB_Helper::updateMany(qx::dao::detail::IxDao_Helper * pDaoHelpe
 
 QSqlError QxMongoDB_Helper::QxMongoDB_HelperImpl::updateMany_(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, const QStringList & json, const qx::QxSqlQuery * query)
 {
-   if (json.count() <= 0) { return QSqlError(); }
+   if (json.size() <= 0) { return QSqlError(); }
    qx_db_collection coll; QSqlError err = initCollection(pClass, coll); if (err.isValid()) { return err; }
    if (pDaoHelper) { pDaoHelper->qxQuery().queryAt(0, "MongoDB update many '" + (pClass ? pClass->getName() : QString()) + "' :\n" + json.join(", \n") + "\n" + (query ? query->queryAt(0) : QString())); }
 
@@ -643,10 +643,10 @@ QSqlError QxMongoDB_Helper::deleteMany(qx::dao::detail::IxDao_Helper * pDaoHelpe
 
 QSqlError QxMongoDB_Helper::QxMongoDB_HelperImpl::deleteMany_(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, const QStringList & json, const qx::QxSqlQuery * query)
 {
-   if ((json.count() <= 0) && (! query)) { return QSqlError(); }
+   if ((json.size() <= 0) && (! query)) { return QSqlError(); }
    if (query && (query->type() == "aggregate")) { QStringList empty; return aggregate_(pDaoHelper, pClass, empty, query, "", NULL, true); }
-   QString listId = (query ? QString() : ((json.count() > 0) ? QString("{ \"_id\": { \"$in\": [ %ID% ] } }") : QString()));
-   if (! listId.isEmpty()) { QString ids; Q_FOREACH(QString s, json) { ids += asJson(s) + ", "; }; ids = ids.left(ids.count() - 2); listId.replace("%ID%", ids); }
+   QString listId = (query ? QString() : ((json.size() > 0) ? QString("{ \"_id\": { \"$in\": [ %ID% ] } }") : QString()));
+   if (! listId.isEmpty()) { QString ids; Q_FOREACH(QString s, json) { ids += asJson(s) + ", "; }; ids = ids.left(ids.size() - 2); listId.replace("%ID%", ids); }
    if (pDaoHelper) { pDaoHelper->qxQuery().queryAt(0, "MongoDB delete many '" + (pClass ? pClass->getName() : QString()) + "' :\n" + json.join(", \n") + "\n" + (query ? query->queryAt(0) : QString())); }
    qx_db_collection coll; QSqlError err = initCollection(pClass, coll); if (err.isValid()) { return err; }
 
@@ -726,8 +726,8 @@ QSqlError QxMongoDB_Helper::QxMongoDB_HelperImpl::findMany_(qx::dao::detail::IxD
    if ((! lookup.isEmpty()) || (query && (query->type() == "aggregate")))
    { return aggregate_(pDaoHelper, pClass, json, query, lookup, pFetcher); }
 
-   QString listId = (query ? QString() : ((json.count() > 0) ? QString("{ \"_id\": { \"$in\": [ %ID% ] } }") : QString()));
-   if (! listId.isEmpty()) { QString ids; Q_FOREACH(QString s, json) { ids += asJson(s) + ", "; }; ids = ids.left(ids.count() - 2); listId.replace("%ID%", ids); }
+   QString listId = (query ? QString() : ((json.size() > 0) ? QString("{ \"_id\": { \"$in\": [ %ID% ] } }") : QString()));
+   if (! listId.isEmpty()) { QString ids; Q_FOREACH(QString s, json) { ids += asJson(s) + ", "; }; ids = ids.left(ids.size() - 2); listId.replace("%ID%", ids); }
    json.clear(); qx_db_collection coll; QSqlError err = initCollection(pClass, coll); if (err.isValid()) { return err; }
 
    QString findQuery = (query ? query->queryAt(0) : listId);
@@ -772,8 +772,8 @@ QSqlError QxMongoDB_Helper::aggregate(qx::dao::detail::IxDao_Helper * pDaoHelper
 
 QSqlError QxMongoDB_Helper::QxMongoDB_HelperImpl::aggregate_(qx::dao::detail::IxDao_Helper * pDaoHelper, qx::IxClass * pClass, QStringList & json, const qx::QxSqlQuery * query, const QString & lookup, QxMongoDB_Fetcher * pFetcher, bool bModeDelete /* = false */)
 {
-   QString listId = (query ? QString() : ((json.count() > 0) ? QString("{ \"_id\": { \"$in\": [ %ID% ] } }") : QString()));
-   if (! listId.isEmpty()) { QString ids; Q_FOREACH(QString s, json) { ids += asJson(s) + ", "; }; ids = ids.left(ids.count() - 2); listId.replace("%ID%", ids); }
+   QString listId = (query ? QString() : ((json.size() > 0) ? QString("{ \"_id\": { \"$in\": [ %ID% ] } }") : QString()));
+   if (! listId.isEmpty()) { QString ids; Q_FOREACH(QString s, json) { ids += asJson(s) + ", "; }; ids = ids.left(ids.size() - 2); listId.replace("%ID%", ids); }
    json.clear(); qx_db_collection coll; QSqlError err = initCollection(pClass, coll); if (err.isValid()) { return err; }
 
    QString findQuery = (query ? query->queryAt(0) : listId);

@@ -2,19 +2,18 @@
 
 echo "--- Find all QxOrm project example dependencies and copy them ---"
 
-QX_BIN_DIR=$QX_DIR/test/_bin
-cd $QX_BIN_DIR
+cd $QX_APP_PATH
 
-mkdir -vp $QX_BIN_DIR/libs
-mkdir -vp $QX_BIN_DIR/sqldrivers
-mkdir -vp $QX_BIN_DIR/tls
+mkdir -vp $QX_APP_PATH/libs
+mkdir -vp $QX_APP_PATH/sqldrivers
+mkdir -vp $QX_APP_PATH/tls
 
-cp /usr/lib/x86_64-linux-gnu/qt6/plugins/sqldrivers/libqsqlite.so $QX_BIN_DIR/sqldrivers/
-cp /usr/lib/x86_64-linux-gnu/qt6/plugins/tls/* $QX_BIN_DIR/tls/
+cp /usr/lib/x86_64-linux-gnu/qt6/plugins/sqldrivers/libqsqlite.so $QX_APP_PATH/sqldrivers/
+cp /usr/lib/x86_64-linux-gnu/qt6/plugins/tls/* $QX_APP_PATH/tls/
 
-ldd qxBlogRestApi | awk '/=>/ {print $3}' | xargs -I '{}' cp -v '{}' $QX_BIN_DIR/libs
-ldd sqldrivers/libqsqlite.so | awk '/=>/ {print $3}' | xargs -I '{}' cp -v '{}' $QX_BIN_DIR/libs
-ldd tls/libqcertonlybackend.so | awk '/=>/ {print $3}' | xargs -I '{}' cp -v '{}' $QX_BIN_DIR/libs
-ldd tls/libqopensslbackend.so | awk '/=>/ {print $3}' | xargs -I '{}' cp -v '{}' $QX_BIN_DIR/libs
+ldd $QX_APP_NAME | awk '/=>/ {print $3}' | xargs -I '{}' cp -v '{}' $QX_APP_PATH/libs
+ldd sqldrivers/libqsqlite.so | awk '/=>/ {print $3}' | xargs -I '{}' cp -v '{}' $QX_APP_PATH/libs
+ldd tls/libqcertonlybackend.so | awk '/=>/ {print $3}' | xargs -I '{}' cp -v '{}' $QX_APP_PATH/libs
+ldd tls/libqopensslbackend.so | awk '/=>/ {print $3}' | xargs -I '{}' cp -v '{}' $QX_APP_PATH/libs
 
 exit 0

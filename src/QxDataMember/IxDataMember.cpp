@@ -456,7 +456,7 @@ QString IxDataMember::getSqlPlaceHolder(const QString & sAppend /* = QString() *
       }
 
       if (! sResult.isEmpty())
-      { sResult = sResult.left(sResult.count() - sSep.count()); } // Remove last separator
+      { sResult = sResult.left(sResult.size() - sSep.size()); } // Remove last separator
       return sResult;
    }
 
@@ -517,7 +517,7 @@ QString IxDataMember::getSqlAliasEqualToPlaceHolder(const QString & sTable /* = 
    }
 
    if (! sResult.isEmpty())
-   { sResult = sResult.left(sResult.count() - sSep.count()); } // Remove last separator
+   { sResult = sResult.left(sResult.size() - sSep.size()); } // Remove last separator
 
    if (m_pImpl->m_fctCustomGetSqlAliasEqualToPlaceHolder)
    {
@@ -548,7 +548,7 @@ QString IxDataMember::getSqlNameEqualToPlaceHolder(const QString & sAppend /* = 
    }
 
    if (! sResult.isEmpty())
-   { sResult = sResult.left(sResult.count() - sSep.count()); } // Remove last separator
+   { sResult = sResult.left(sResult.size() - sSep.size()); } // Remove last separator
 
    if (m_pImpl->m_fctCustomGetSqlNameEqualToPlaceHolder)
    {
@@ -584,7 +584,7 @@ QString IxDataMember::getSqlTablePointNameAsAlias(const QString & sTable, const 
    }
 
    if (! sResult.isEmpty())
-   { sResult = sResult.left(sResult.count() - sSep.count()); } // Remove last separator
+   { sResult = sResult.left(sResult.size() - sSep.size()); } // Remove last separator
 
    if (m_pImpl->m_fctCustomGetSqlTablePointNameAsAlias)
    {
@@ -615,7 +615,7 @@ QString IxDataMember::getSqlName(const QString & sSep /* = QString(", ") */, con
    }
 
    if (! sResult.isEmpty())
-   { sResult = sResult.left(sResult.count() - sSep.count()); } // Remove last separator
+   { sResult = sResult.left(sResult.size() - sSep.size()); } // Remove last separator
 
    if (m_pImpl->m_fctCustomGetSqlName)
    {
@@ -644,7 +644,7 @@ QString IxDataMember::getSqlNameAndTypeAndParams(const QString & sSep /* = QStri
    }
 
    if (! sResult.isEmpty())
-   { sResult = sResult.left(sResult.count() - sSep.count()); } // Remove last separator
+   { sResult = sResult.left(sResult.size() - sSep.size()); } // Remove last separator
    return sResult;
 }
 

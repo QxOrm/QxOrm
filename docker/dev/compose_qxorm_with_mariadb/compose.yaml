@@ -1,0 +1,87 @@
+services:
+    nginx_reverse_proxy:
+        image: qxorm/compose_qxorm_with_mariadb/nginx_reverse_proxy
+        build:
+            context: ../docker_images/nginx_reverse_proxy/
+            dockerfile: Dockerfile
+        ports:
+            - 8080:8080
+            - 8081:8081
+        depends_on:
+            - frontend_html_js_css
+            - backend_qxorm
+        networks:
+            - compose_qxorm_with_mariadb_frontnet
+        healthcheck:
+            test: curl --fail --request POST http://backend_qxorm:9642/ping || exit 1
+            interval: 30s
+            timeout: 15s
+            retries: 3
+            start_period: 30s
+
+    frontend_html_js_css:
+        image: qxorm/compose_qxorm_with_mariadb/frontend_html_js_css
+        hostname: frontend_html_js_css
+        restart: unless-stopped
+        build:
+            context: ../docker_images/frontend_html_js_css/
+            dockerfile: Dockerfile
+        networks:
+            - compose_qxorm_with_mariadb_frontnet
+        expose:
+            - 80
+        volumes:
+            - type: bind
+              source: ../docker_images/frontend_html_js_css/src/
+              target: /usr/share/nginx/html/
+
+    backend_qxorm:
+        image: qxorm/compose_qxorm_with_mariadb/backend_qxorm
+        hostname: backend_qxorm
+        restart: unless-stopped
+        build:
+            context: ../docker_images/backend_qxorm/
+            dockerfile: Dockerfile
+            args:
+                - DB_TYPE=mariadb
+        environment:
+            - QX_DB=mariadb
+        depends_on:
+            - db_mariadb
+        networks:
+            - compose_qxorm_with_mariadb_frontnet
+            - compose_qxorm_with_mariadb_backnet
+        volumes:
+            - qxorm_backend_src:/home/qxorm/src
+        expose:
+            - 9642
+            - 9643
+        ports:
+            - 2222:22
+
+    db_mariadb:
+        image: qxorm/compose_qxorm_with_mariadb/db_mariadb
+        hostname: db_mariadb
+        restart: unless-stopped
+        build:
+            context: ../docker_images/db_mariadb/
+            dockerfile: Dockerfile
+        environment:
+            - MARIADB_ROOT_PASSWORD=qxorm
+            - MARIADB_USER=qxorm
+            - MARIADB_PASSWORD=qxorm
+            - MARIADB_DATABASE=qxBlog
+        networks:
+            - compose_qxorm_with_mariadb_backnet
+        volumes:
+            - mariadb_db_data:/var/lib/mysql
+        expose:
+            - 3306
+
+volumes:
+    mariadb_db_data:
+    qxorm_backend_src:
+
+networks:
+    compose_qxorm_with_mariadb_backnet:
+    compose_qxorm_with_mariadb_frontnet:

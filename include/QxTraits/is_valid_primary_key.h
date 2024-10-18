@@ -92,8 +92,13 @@ struct is_valid_primary_key<QVariant>
 {
    static inline bool get(const QVariant & t)
    {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+      if (t.typeId() == qMetaTypeId<QByteArray>()) { return qx::trait::detail::is_valid_primary_key<QByteArray>::get(t.toByteArray()); }
+      if (t.typeId() == qMetaTypeId<QString>()) { return qx::trait::detail::is_valid_primary_key<QString>::get(t.toString()); }
+#else // (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
       if (t.type() == QVariant::ByteArray) { return qx::trait::detail::is_valid_primary_key<QByteArray>::get(t.toByteArray()); }
       if (t.type() == QVariant::String) { return qx::trait::detail::is_valid_primary_key<QString>::get(t.toString()); }
+#endif // (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
       return (! t.isNull() && (t.toLongLong() != 0));
    }
 };

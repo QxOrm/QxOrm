@@ -29,7 +29,7 @@
 ##
 #############################################################################
 
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.15)
 
 project(QxOrm VERSION 1.5.1 LANGUAGES CXX)
 

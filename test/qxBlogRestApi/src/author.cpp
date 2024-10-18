@@ -14,7 +14,11 @@ template <> void register_class(QxClass<author> & t)
    t.id(& author::m_id, "author_id");
 
    t.data(& author::m_name, "name");
+#ifdef _QX_TEST_WITH_MONGODB
+   t.data(& author::m_birthdate, "birthdate")->setIsIndex(true); // Index created automatically with qx::dao::mongodb::QxMongoDB_Helper::autoCreateIndexes() function
+#else // _QX_TEST_WITH_MONGODB
    t.data(& author::m_birthdate, "birthdate");
+#endif // _QX_TEST_WITH_MONGODB
    t.data(& author::m_sex, "sex");
 
    t.relationOneToMany(& author::m_blogX, "list_blog", "author_id");

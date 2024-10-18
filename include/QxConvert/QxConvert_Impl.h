@@ -119,7 +119,12 @@ struct QxConvertHelper_Persistable { };
 struct QxConvertHelper_Container { };
 struct QxConvertHelper_Enum { };
 
-inline bool checkConvertQVariantToString(const QVariant & v) { return ((v.type() == QVariant::List) || (v.type() == QVariant::Map) || (v.type() == QVariant::Hash) || (v.type() == QVariant::StringList)); }
+inline bool checkConvertQVariantToString(const QVariant & v)
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+{ int type = v.typeId(); return ((type == qMetaTypeId<QVariantList>()) || (type == qMetaTypeId<QVariantMap>()) || (type == qMetaTypeId<QVariantHash>()) || (type == qMetaTypeId<QStringList>())); }
+#else // (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+{ QVariant::Type type = v.type(); return ((type == QVariant::List) || (type == QVariant::Map) || (type == QVariant::Hash) || (type == QVariant::StringList)); }
+#endif // (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
 
 } // namespace helper
 

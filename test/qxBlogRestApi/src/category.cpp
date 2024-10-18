@@ -16,5 +16,9 @@ template <> void register_class(QxClass<category> & t)
    t.data(& category::m_name, "name");
    t.data(& category::m_desc, "description");
 
-   t.relationManyToMany(& category::m_blogX, "list_blog", "category_blog", "category_id", "blog_id");
+#ifdef _QX_TEST_WITH_MONGODB
+   t.data(& category::m_blogX, "list_blog");
+#else // _QX_TEST_WITH_MONGODB
+   t.relationManyToMany(& category::m_blogX, "list_blog", "t_qxee_blog_category", "category_id", "blog_id");
+#endif // _QX_TEST_WITH_MONGODB
 }}

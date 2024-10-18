@@ -61,8 +61,8 @@ ssh qxorm@localhost -p 2222
 #### Build and debug project in container
 Once connected to the remote C++ development environment (with [Dev Containers](https://code.visualstudio.com/docs/devcontainers/tutorial) extension or [Remote SSH](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh) extension) :
 ```
-Press 'CTRL+SHIFT+B' to build the project in debug mode
-Press 'F5' to execute the project in debug mode
+- Press 'CTRL+SHIFT+B' to build the project in debug mode
+- Press 'F5' to execute the project in debug mode
 ```
 
 ## Check QxOrm test application web-page
