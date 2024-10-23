@@ -15,7 +15,8 @@ ARG DB_TYPE
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Start from QxOrm Docker image with full C++ development environment
-FROM qxorm/ubuntu-with-qxorm-dev-qxblogrestapi AS dev_base
+ARG QX_VERSION=latest
+FROM qxorm/ubuntu-with-qxorm-dev-qxblogrestapi:${QX_VERSION} AS dev_base
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # ------------------------------------------------------------------

@@ -1,9 +1,37 @@
+# ------------------------------------------------------------------------------------------------------------------------------------------------------------
+# This Docker compose file builds a development environment to create web applications with very efficient C++ backend based on Qt framework and QxOrm library
+# 
+# This Docker compose file defines an application with 3 services :
+#    - 'nginx_reverse_proxy' : based on latest nginx official image, this service is the entrypoint for the user to access to the application
+#    - 'frontend_html_js_css' : this is where you can develop great UI using famous HTML/JS/CSS frameworks like 'Angular', 'React', etc...
+#    - 'backend_qxorm' : C++ backend based on Qt framework and QxOrm library + SQLite database to store application data
+# 
+# To build Docker images and run Docker containers, execute the following commands :
+#    cd <path_to_this_docker_compose_file>
+#    docker compose up -d
+# 
+# Once Docker containers are running, to test the application, on the host machine open a web-browser and go to :
+#    http://localhost:8080
+# 
+# The C++ Qt QxOrm backend is based on this Docker file : https://github.com/QxOrm/QxOrm/tree/master/docker/test/qxBlogRestApi
+# A full C++ development environment (to build and debug) is available, you can connect to this dev environment with Visual Studio Code
+# Visual Studio Code provides 2 extensions : 'Dev Containers' extension and 'Remote SSH' extension (choose one of them)
+# Once connected to the remote C++ development environment :
+#    - Press 'CTRL+SHIFT+B' to build the project in debug mode
+#    - Press 'F5' to execute the project in debug mode
+# 
+# To access to the application in debug mode, on the host machine open a web-browser and go to :
+#    http://localhost:8081
+# ------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 services:
     nginx_reverse_proxy:
-        image: qxorm/compose_qxorm_with_sqlite/nginx_reverse_proxy
+        image: qxorm/compose_qxorm_with_sqlite-nginx_reverse_proxy:${QX_VERSION}
         build:
             context: ../docker_images/nginx_reverse_proxy/
             dockerfile: Dockerfile
+            args:
+                - NGINX_VERSION=${NGINX_VERSION}
         ports:
             - 8080:8080
             - 8081:8081
@@ -20,12 +48,14 @@ services:
             start_period: 30s
 
     frontend_html_js_css:
-        image: qxorm/compose_qxorm_with_sqlite/frontend_html_js_css
+        image: qxorm/compose_qxorm_with_sqlite-frontend_html_js_css:${QX_VERSION}
         hostname: frontend_html_js_css
         restart: unless-stopped
         build:
             context: ../docker_images/frontend_html_js_css/
             dockerfile: Dockerfile
+            args:
+                - NGINX_VERSION=${NGINX_VERSION}
         networks:
             - compose_qxorm_with_sqlite_frontnet
         expose:
@@ -36,7 +66,7 @@ services:
               target: /usr/share/nginx/html/
 
     backend_qxorm:
-        image: qxorm/compose_qxorm_with_sqlite/backend_qxorm
+        image: qxorm/compose_qxorm_with_sqlite-backend_qxorm:${QX_VERSION}
         hostname: backend_qxorm
         restart: unless-stopped
         build:
@@ -44,6 +74,7 @@ services:
             dockerfile: Dockerfile
             args:
                 - DB_TYPE=sqlite
+                - QX_VERSION=${QX_VERSION}
         environment:
             - QX_DB=sqlite
         networks:

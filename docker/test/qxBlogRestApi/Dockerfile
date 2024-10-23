@@ -45,6 +45,7 @@ FROM ubuntu:${UBUNTU_VERSION} AS base
 LABEL website="https://www.qxorm.com/"
 LABEL email="contact@qxorm.com"
 LABEL author="Lionel Marty"
+LABEL dev="qxorm"
 
 # ---------------------------
 # Create a 'qxorm' user/group
