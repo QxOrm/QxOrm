@@ -1,9 +1,7 @@
 {
    "name": "QxOrm library - C++ and Qt development environment - Project qxBlogRestApi with MongoDB database",
-   "build": {
-      "dockerComposeFile": "../compose.yaml",
-      "service": "backend_qxorm"
-   },
+   "dockerComposeFile": "../compose.yaml",
+   "service": "backend_qxorm",
    "customizations": {
       "vscode": {
          "extensions": [
