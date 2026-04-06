@@ -41,7 +41,7 @@
  * \file QxConnect.h
  * \author Lionel Marty
  * \ingroup QxService
- * \brief Define connection parameters used by QxService module of QxOrm library
+ * \brief Define connection parameters used by QxService module and QxHttpServer module of QxOrm library
  */
 
 #ifndef QT_NO_SSL
@@ -61,14 +61,15 @@ namespace service {
 
 /*!
  * \ingroup QxService
- * \brief qx::service::QxConnect : define connection parameters used by QxService module of QxOrm library (this class is a singleton)
+ * \brief qx::service::IxConnect : interface to define connection parameters used by QxService module and QxHttpServer module of QxOrm library
  *
- * <a href="https://www.qxorm.com/qxorm_en/tutorial_2.html" target="_blank">Click here to access to a tutorial to explain how to work with QxService module.</a>
+ * <ul>
+ * <li><a href="https://www.qxorm.com/qxorm_en/tutorial_2.html" target="_blank">Click here to access to a tutorial to explain how to work with QxService module.</a></li>
+ * <li><a href="https://www.qxorm.com/qxorm_en/manual.html#manual_96" target="_blank">Click here to access to the QxHttpServer module documentation.</a></li>
+ * </ul>
  */
-class QX_DLL_EXPORT QxConnect : public qx::QxSingleton<QxConnect>
+class QX_DLL_EXPORT IxConnect
 {
-
-   friend class qx::QxSingleton<QxConnect>;
 
 public:
 
@@ -77,13 +78,13 @@ public:
                              serialization_polymorphic_binary, serialization_polymorphic_xml, serialization_polymorphic_text, 
                              serialization_qt, serialization_json };
 
-private:
+protected:
 
-   struct QxConnectImpl;
-   std::unique_ptr<QxConnectImpl> m_pImpl; //!< Private implementation idiom
+   struct IxConnectImpl;
+   std::unique_ptr<IxConnectImpl> m_pImpl; //!< Private implementation idiom
 
-   QxConnect();
-   virtual ~QxConnect();
+   IxConnect();
+   virtual ~IxConnect() = 0;
 
 public:
 
@@ -137,6 +138,52 @@ public:
    void setSSLPeerVerifyMode(QSslSocket::PeerVerifyMode e);
    void setSSLPeerVerifyDepth(int i);
 #endif // QT_NO_SSL
+
+};
+
+/*!
+ * \ingroup QxService
+ * \brief qx::service::QxConnect : define default connection parameters used by QxService module and QxHttpServer module of QxOrm library (this class is a singleton)
+ *
+ * <ul>
+ * <li><a href="https://www.qxorm.com/qxorm_en/tutorial_2.html" target="_blank">Click here to access to a tutorial to explain how to work with QxService module.</a></li>
+ * <li><a href="https://www.qxorm.com/qxorm_en/manual.html#manual_96" target="_blank">Click here to access to the QxHttpServer module documentation.</a></li>
+ * </ul>
+ */
+class QX_DLL_EXPORT QxConnect : public IxConnect, public qx::QxSingleton<QxConnect>
+{
+
+   friend class qx::QxSingleton<QxConnect>;
+
+private:
+
+   QxConnect();
+   virtual ~QxConnect();
+
+};
+
+/*!
+ * \ingroup QxService
+ * \brief qx::service::QxConnectOther : define other connection parameters used by QxService module and QxHttpServer module of QxOrm library
+ *
+ * qx::service::QxConnectOther class can be used to create several servers, for example :
+ * <ul>
+ * <li>Server A listening on port X which uses QxService module to handle requests/responses.</li>
+ * <li>Server B listening on port Y which uses QxHttpServer module to handle requests/responses.</li>
+ * </ul>
+ *
+ * <ul>
+ * <li><a href="https://www.qxorm.com/qxorm_en/tutorial_2.html" target="_blank">Click here to access to a tutorial to explain how to work with QxService module.</a></li>
+ * <li><a href="https://www.qxorm.com/qxorm_en/manual.html#manual_96" target="_blank">Click here to access to the QxHttpServer module documentation.</a></li>
+ * </ul>
+ */
+class QX_DLL_EXPORT QxConnectOther : public IxConnect
+{
+
+public:
+
+   QxConnectOther();
+   virtual ~QxConnectOther();
 
 };
 

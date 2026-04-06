@@ -36,6 +36,7 @@
 #ifdef _QX_ENABLE_QT_GUI
 
 #include <QxSerialize/Qt/QxSerialize_QRegion.h>
+#include <QxSerialize/Qt/QxSerialize_QList.h>
 
 #include <QxOrm_Impl.h>
 

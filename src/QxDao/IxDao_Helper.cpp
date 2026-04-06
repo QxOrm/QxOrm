@@ -199,19 +199,21 @@ QStringList & IxDao_Helper::itemsAsJson() { return m_pImpl->m_lstItemsAsJson; }
 bool IxDao_Helper::exec(bool bForceEmptyExec /* = false */)
 {
    bool bExec = false;
+   QSqlQuery & query = this->query();
    IxDao_Timer timer(this, IxDao_Helper::timer_db_exec);
    if (m_pImpl->m_bUseExecBatch)
    {
       bool bQuestionMark = (qx::QxSqlDatabase::getSingleton()->getSqlPlaceHolderStyle() == qx::QxSqlDatabase::ph_style_question_mark);
       for (long l = 0; l < m_pImpl->m_lstExecBatch.size(); ++l)
       {
-         if (bQuestionMark) { this->query().addBindValue(m_pImpl->m_lstExecBatch.getByIndex(l)); }
-         else { this->query().bindValue(m_pImpl->m_lstExecBatch.getKeyByIndex(l), m_pImpl->m_lstExecBatch.getByIndex(l)); }
+         if (bQuestionMark) { query.addBindValue(m_pImpl->m_lstExecBatch.getByIndex(l)); }
+         else { query.bindValue(m_pImpl->m_lstExecBatch.getKeyByIndex(l), m_pImpl->m_lstExecBatch.getByIndex(l)); }
       }
-      bExec = this->query().execBatch();
+      bExec = query.execBatch();
    }
-   else if ((m_pImpl->m_qxQuery.isEmpty()) && (! bForceEmptyExec)) { bExec = this->query().exec(this->builder().getSqlQuery()); }
-   else { bExec = this->query().exec(); }
+   else if ((m_pImpl->m_qxQuery.isEmpty()) && (! bForceEmptyExec)) { bExec = query.exec(this->builder().getSqlQuery()); }
+   else { bExec = query.exec(); }
+   m_pImpl->m_qxQuery.onAfterSqlExec(query);
    return bExec;
 }
 

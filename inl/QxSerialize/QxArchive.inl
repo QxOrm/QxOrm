@@ -132,7 +132,7 @@ qx_bool QxArchive_FromFileCompressed<T, ArchiveInput, ArchiveOutput>::fromFileCo
    if (uncompressed.isEmpty()) { delete[] buffer; qAssert(false); return qx_bool(false, 0, QString("Cannot uncompress archive")); }
    delete[] buffer;
 
-   qx_type_string str(uncompressed.constData(), uncompressed.count());
+   qx_type_string str(uncompressed.constData(), uncompressed.size());
    qx_type_istringstream iss(str, (std::ios_base::binary | std::ios_base::in));
    ArchiveInput iar(iss, flags);
    qx_bool bDeserializeOk = false;

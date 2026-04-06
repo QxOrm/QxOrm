@@ -1,5 +1,11 @@
 Changes in version 1.5.1:
-- TODO...
+- Support latest versions of Qt and boost (Qt 6.10 and boost 1.90) : fix compilation issues and remove several warnings
+- Provide several development-ready Docker images and containers : SQLite, MySQL, MariaDB, PostgreSQL, MongoDB
+- More details about QxOrm and Docker containers : https://hub.docker.com/u/qxorm
+- Improve QxOrm JSON API : possibility to provide a query in JSON format (useful for MongoDB database)
+- Fix error converting registered object from JSON with column filter
+- Improve QxService and QxHttpServer modules : new class qx::service::QxConnectOther to define several connection parameters (for example to create several servers, GitHub #34)
+- New method in qx::QxSqlQuery class named setFctOnAfterSqlExec() to define a custom callback function called after SQL query execution (can be used to get deleted items for example)
 
 Changes in version 1.5.0:
 - Fix qx::dao::fetch_by_id_with_relation() when a table alias is used (table alias is now used in the WHERE part instead of table name)

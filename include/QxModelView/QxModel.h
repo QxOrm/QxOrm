@@ -763,15 +763,25 @@ protected:
    virtual bool setRelationshipValues_Helper(int row, const QString & relation, const QVariant & values)
    {
       if ((row < 0) || (row >= m_model.count())) { return false; }
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
       if ((values.type() != QVariant::List) && (values.type() != QVariant::Map)) { return false; }
+#else // (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+      QMetaType::Type eTypeId = static_cast<QMetaType::Type>(values.typeId());
+      if ((eTypeId != QMetaType::QVariantList) && (eTypeId != QMetaType::QVariantMap)) { return false; }
+#endif // (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
       if (! this->m_pDataMemberId || ! this->m_pDataMemberX || ! this->m_pDataMemberX->exist(relation)) { return false; }
       IxDataMember * pDataMember = this->m_pDataMemberX->get_WithDaoStrategy(relation); if (! pDataMember) { return false; }
       IxSqlRelation * pRelation = (pDataMember->hasSqlRelation() ? pDataMember->getSqlRelation() : NULL); if (! pRelation) { return false; }
       type_ptr pItem = m_model.getByIndex(row); if (! pItem) { return false; }
 
       QJsonValue json;
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
       if (values.type() == QVariant::List) { json = QJsonArray::fromVariantList(values.toList()); }
       else if (values.type() == QVariant::Map) { json = QJsonObject::fromVariantMap(values.toMap()); }
+#else // (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+      if (eTypeId == QMetaType::QVariantList) { json = QJsonArray::fromVariantList(values.toList()); }
+      else if (eTypeId == QMetaType::QVariantMap) { json = QJsonObject::fromVariantMap(values.toMap()); }
+#endif // (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
       if (! pDataMember->fromJson(pItem.get(), json)) { return false; }
 
       QModelIndex idxTopLeft = this->index(row, 0);

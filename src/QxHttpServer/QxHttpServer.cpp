@@ -135,13 +135,14 @@ struct Q_DECL_HIDDEN QxHttpServer::QxHttpServerImpl
    type_fct_ptr m_fctBeforeDispatching;                     //!< Callback function called before handling the request (executed in its dedicated thread), can be used for logging for example
    type_fct_ptr m_fctAfterDispatching;                      //!< Callback function called after handling the request and generating the response (executed in its dedicated thread), can be used for logging for example
    QAbstractEventDispatcher * m_pEventDispatcher;           //!< Can be used to optimize socket implementation (using epoll on Linux for example), for example : https://github.com/sjinks/qt_eventdispatcher_epoll or https://github.com/connectedtable/qeventdispatcher_epoll
+   qx::service::IxConnect * m_pSettings;                    //!< Connection parameters used by QxHttpServer module
 
-   QxHttpServerImpl() : m_pDispatcher(new QxHttpServerDispatcher()), m_pEventDispatcher(NULL) { ; }
+   QxHttpServerImpl(qx::service::IxConnect * pSettings) : m_pDispatcher(new QxHttpServerDispatcher()), m_pEventDispatcher(NULL), m_pSettings(pSettings) { if (! m_pSettings) { m_pSettings = qx::service::QxConnect::getSingleton(); } }
    ~QxHttpServerImpl() { ; }
 
 };
 
-QxHttpServer::QxHttpServer(QObject * parent /* = NULL */) : QObject(parent), m_pImpl(new QxHttpServerImpl())
+QxHttpServer::QxHttpServer(QObject * parent /* = NULL */, qx::service::IxConnect * pSettings /* = NULL */) : QObject(parent), m_pImpl(new QxHttpServerImpl(pSettings))
 {
    qRegisterMetaType<qx::QxHttpTransaction_ptr>("qx::QxHttpTransaction_ptr");
    qRegisterMetaType<qx::QxHttpTransaction_ptr>("QxHttpTransaction_ptr");
@@ -152,8 +153,8 @@ QxHttpServer::~QxHttpServer() { stopServer(); }
 void QxHttpServer::startServer()
 {
    if (m_pImpl->m_pThreadPool) { stopServer(); }
-   qx::service::QxConnect::getSingleton()->setModeHTTP(true);
-   m_pImpl->m_pThreadPool.reset(new qx::service::QxThreadPool());
+   m_pImpl->m_pSettings->setModeHTTP(true);
+   m_pImpl->m_pThreadPool.reset(new qx::service::QxThreadPool(m_pImpl->m_pSettings));
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
    if (m_pImpl->m_pEventDispatcher) { m_pImpl->m_pThreadPool->setEventDispatcher(m_pImpl->m_pEventDispatcher); }
@@ -173,6 +174,8 @@ void QxHttpServer::stopServer()
    m_pImpl->m_pThreadPool.reset();
    Q_EMIT serverStatusChanged(false);
 }
+
+qx::service::IxConnect * QxHttpServer::getSettings() const { return m_pImpl->m_pSettings; }
 
 void QxHttpServer::setCustomRequestHandler(QxHttpServer::type_fct_custom_request_handler fct)
 {
@@ -230,12 +233,11 @@ void QxHttpServer::onServerIsRunning(bool bIsRunning, qx::service::QxServer * pS
    Q_UNUSED(pServer);
    if (bIsRunning)
    {
-      qx::service::QxConnect * serverSettings = qx::service::QxConnect::getSingleton();
       QString msg = "HTTP server is running (";
-      msg += "port: " + QString::number(serverSettings->getPort());
-      msg += ", threads: " + QString::number(serverSettings->getThreadCount());
+      msg += "port: " + QString::number(m_pImpl->m_pSettings->getPort());
+      msg += ", threads: " + QString::number(m_pImpl->m_pSettings->getThreadCount());
 #ifndef QT_NO_SSL
-      msg += ", SSL: " + (serverSettings->getSSLEnabled() ? QString("enabled") : QString("disabled"));
+      msg += ", SSL: " + (m_pImpl->m_pSettings->getSSLEnabled() ? QString("enabled") : QString("disabled"));
 #else // QT_NO_SSL
       msg += ", SSL: disabled";
 #endif // QT_NO_SSL

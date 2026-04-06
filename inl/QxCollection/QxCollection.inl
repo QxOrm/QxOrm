@@ -280,7 +280,11 @@ bool QxCollection<Key, Value>::insert(const QxCollection<Key, Value> & other)
       QMutexLocker locker1(& m_mutex);
       QMutexLocker locker2(& other.m_mutex);
       m_list.append(other.m_list);
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+      m_hash.insert(other.m_hash);
+#else // (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
       m_hash.unite(other.m_hash);
+#endif // (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
    }
 
    updateHashPosition(0, -1, true);

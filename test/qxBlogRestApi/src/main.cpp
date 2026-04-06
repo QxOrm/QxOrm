@@ -136,15 +136,15 @@ void runHTTPServer()
       QFile::copy(":/documents/cert_qxorm_server.key", appPath.filePath("files/cert_qxorm_server.key"));
 
       QFile fileCertCA(appPath.filePath("files/cert_qxorm_ca.pem"));
-      fileCertCA.open(QIODevice::ReadOnly);
+      if (! fileCertCA.open(QIODevice::ReadOnly)) { QString errOpen = "Cannot open file 'files/cert_qxorm_ca.pem'"; qDebug("[QxOrm] %s", qPrintable(errOpen)); }
       QList<QSslCertificate> certCA; certCA << QSslCertificate(fileCertCA.readAll());
 
       QFile fileCertServerPublic(appPath.filePath("files/cert_qxorm_server.crt"));
-      fileCertServerPublic.open(QIODevice::ReadOnly);
+      if (! fileCertServerPublic.open(QIODevice::ReadOnly)) { QString errOpen = "Cannot open file 'files/cert_qxorm_server.crt'"; qDebug("[QxOrm] %s", qPrintable(errOpen)); }
       QSslCertificate certServerPublic(fileCertServerPublic.readAll());
 
       QFile fileCertServerPrivate(appPath.filePath("files/cert_qxorm_server.key"));
-      fileCertServerPrivate.open(QIODevice::ReadOnly);
+      if (! fileCertServerPrivate.open(QIODevice::ReadOnly)) { QString errOpen = "Cannot open file 'files/cert_qxorm_server.key'"; qDebug("[QxOrm] %s", qPrintable(errOpen)); }
       QSslKey certServerPrivate(fileCertServerPrivate.readAll(), QSsl::Rsa, QSsl::Pem, QSsl::PrivateKey, "qxorm");
 
       serverSettings->setSSLEnabled(true);
@@ -155,7 +155,7 @@ void runHTTPServer()
 #endif // QT_NO_SSL
 
    // Create a QxOrm HTTP server instance
-   qx::QxHttpServer httpServer;
+   qx::QxHttpServer httpServer(NULL, serverSettings);
    defineHTTPDispatch(httpServer);
 
    // Start HTTP server

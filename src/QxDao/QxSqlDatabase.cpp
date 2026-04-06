@@ -122,7 +122,15 @@ struct Q_DECL_HIDDEN QxSqlDatabase::QxSqlDatabaseImpl
    QString formatLastError(const QSqlDatabase & db) const;
 
    bool isValid() const { return (m_pParent ? (! m_pParent->getDriverName().isEmpty() && ! m_pParent->getDatabaseName().isEmpty()) : (! m_sDriverName.isEmpty() && ! m_sDatabaseName.isEmpty())); }
-   QString computeDatabaseKey(QSqlDatabase * p) const { return (p ? (p->driverName() + p->hostName() + p->databaseName()) : (m_sDriverName + m_sHostName + m_sDatabaseName)); }
+
+   QString computeDatabaseKey(QSqlDatabase * p) const
+   {
+      if (! p) { return (m_sDriverName + m_sHostName + m_sDatabaseName); }
+      QString sDriverName = p->driverName();
+      QString sHostName = p->hostName();
+      QString sDatabaseName = p->databaseName();
+      return (sDriverName + sHostName + sDatabaseName);
+   }
 
    QVariant getSetting(const QString & key) const
    {

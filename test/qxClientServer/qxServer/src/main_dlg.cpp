@@ -15,18 +15,18 @@ void main_dlg::init()
    QObject::connect(cboSerializationType, SIGNAL(currentIndexChanged(int)), this, SLOT(onCboIndexChanged(int)));
    QObject::connect((& m_daoAsync), SIGNAL(queryFinished(const QSqlError &, qx::dao::detail::QxDaoAsyncParams_ptr)), this, SLOT(onQueryFinished(const QSqlError &, qx::dao::detail::QxDaoAsyncParams_ptr)));
 
-   cboSerializationType->addItem("0- serialization_binary", QVariant((int)qx::service::QxConnect::serialization_binary));
-   cboSerializationType->addItem("1- serialization_xml", QVariant((int)qx::service::QxConnect::serialization_xml));
-   cboSerializationType->addItem("2- serialization_text", QVariant((int)qx::service::QxConnect::serialization_text));
-   cboSerializationType->addItem("3- serialization_portable_binary", QVariant((int)qx::service::QxConnect::serialization_portable_binary));
-   cboSerializationType->addItem("4- serialization_wide_binary", QVariant((int)qx::service::QxConnect::serialization_wide_binary));
-   cboSerializationType->addItem("5- serialization_wide_xml", QVariant((int)qx::service::QxConnect::serialization_wide_xml));
-   cboSerializationType->addItem("6- serialization_wide_text", QVariant((int)qx::service::QxConnect::serialization_wide_text));
-   cboSerializationType->addItem("7- serialization_polymorphic_binary", QVariant((int)qx::service::QxConnect::serialization_polymorphic_binary));
-   cboSerializationType->addItem("8- serialization_polymorphic_xml", QVariant((int)qx::service::QxConnect::serialization_polymorphic_xml));
-   cboSerializationType->addItem("9- serialization_polymorphic_text", QVariant((int)qx::service::QxConnect::serialization_polymorphic_text));
-   cboSerializationType->addItem("10- serialization_qt", QVariant((int)qx::service::QxConnect::serialization_qt));
-   cboSerializationType->addItem("11- serialization_json", QVariant((int)qx::service::QxConnect::serialization_json));
+   cboSerializationType->addItem("0- serialization_binary", QVariant((int)qx::service::IxConnect::serialization_binary));
+   cboSerializationType->addItem("1- serialization_xml", QVariant((int)qx::service::IxConnect::serialization_xml));
+   cboSerializationType->addItem("2- serialization_text", QVariant((int)qx::service::IxConnect::serialization_text));
+   cboSerializationType->addItem("3- serialization_portable_binary", QVariant((int)qx::service::IxConnect::serialization_portable_binary));
+   cboSerializationType->addItem("4- serialization_wide_binary", QVariant((int)qx::service::IxConnect::serialization_wide_binary));
+   cboSerializationType->addItem("5- serialization_wide_xml", QVariant((int)qx::service::IxConnect::serialization_wide_xml));
+   cboSerializationType->addItem("6- serialization_wide_text", QVariant((int)qx::service::IxConnect::serialization_wide_text));
+   cboSerializationType->addItem("7- serialization_polymorphic_binary", QVariant((int)qx::service::IxConnect::serialization_polymorphic_binary));
+   cboSerializationType->addItem("8- serialization_polymorphic_xml", QVariant((int)qx::service::IxConnect::serialization_polymorphic_xml));
+   cboSerializationType->addItem("9- serialization_polymorphic_text", QVariant((int)qx::service::IxConnect::serialization_polymorphic_text));
+   cboSerializationType->addItem("10- serialization_qt", QVariant((int)qx::service::IxConnect::serialization_qt));
+   cboSerializationType->addItem("11- serialization_json", QVariant((int)qx::service::IxConnect::serialization_json));
    cboSerializationType->setCurrentIndex(cboSerializationType->findData(QVariant((int)qx::service::QxConnect::getSingleton()->getSerializationType())));
 
    spinPortNumber->setValue(7694);

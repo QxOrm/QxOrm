@@ -46,6 +46,22 @@
 namespace qx {
 namespace service {
 
+QxThreadPool::QxThreadPool(IxConnect * pSettings /* = NULL */) : QThread(), m_pSettings(pSettings), m_bIsStopped(false)
+{
+   if (! m_pSettings) { m_pSettings = QxConnect::getSingleton(); } // Default connection parameters
+}
+
+QxThreadPool::~QxThreadPool()
+{
+   if (isRunning()) {
+      qDebug("[QxOrm] qx::service::QxThreadPool thread is running : %s", "quit and wait");
+      quit();
+      wait();
+   }
+}
+
+IxConnect * QxThreadPool::getSettings() const { return m_pSettings; }
+
 bool QxThreadPool::isStopped() const { return m_bIsStopped; }
 
 QxThread * QxThreadPool::getAvailable()
@@ -89,8 +105,8 @@ void QxThreadPool::run()
 void QxThreadPool::runServer()
 {
    QxServer server(this);
-   server.setMaxPendingConnections(QxConnect::getSingleton()->getThreadCount());
-   quint16 serverPort = (quint16)(QxConnect::getSingleton()->getPort());
+   server.setMaxPendingConnections(m_pSettings->getThreadCount());
+   quint16 serverPort = (quint16)(m_pSettings->getPort());
    if (! server.listen(QHostAddress::Any, serverPort))
    { raiseError(QString("[QxOrm] cannot run server : '") + server.errorString() + QString("'"), QxTransaction_ptr()); return; }
    Q_EMIT serverIsRunning(true, (& server));
@@ -103,7 +119,7 @@ void QxThreadPool::initServices()
    QMutexLocker locker(& m_mutex);
    qRegisterMetaType<qx::service::QxTransaction_ptr>("qx::service::QxTransaction_ptr");
    qRegisterMetaType<qx::service::QxTransaction_ptr>("QxTransaction_ptr");
-   for (long l = 0; l < QxConnect::getSingleton()->getThreadCount(); l++)
+   for (long l = 0; l < m_pSettings->getThreadCount(); l++)
    {
       QThread * pThread = new QThread();
       QxThread * pWorker = new QxThread(this, pThread);

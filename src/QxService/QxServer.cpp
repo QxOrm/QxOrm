@@ -66,7 +66,7 @@ QxThread * QxServer::getAvailable() const
    qDebug("[QxOrm] qx::service::QxServer no service available : %s", "need to wait (try to increase thread count value)");
 
    int iCurrRetryCount = 0;
-   int iMaxRetryCount = QxConnect::getSingleton()->getMaxWait();
+   int iMaxRetryCount = m_pThreadPool->getSettings()->getMaxWait();
    while ((! pThread) && (iCurrRetryCount < iMaxRetryCount))
    {
       if (m_pThreadPool->isStopped()) { return NULL; }

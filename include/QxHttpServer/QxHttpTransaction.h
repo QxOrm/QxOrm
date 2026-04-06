@@ -77,7 +77,7 @@ private:
 
 public:
 
-   QxHttpTransaction();
+   QxHttpTransaction(qx::service::IxConnect * pSettings = NULL);
    virtual ~QxHttpTransaction();
 
    qx::QxHttpRequest & request();

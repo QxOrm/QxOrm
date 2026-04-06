@@ -38,25 +38,25 @@
 #include <QxMemLeak/mem_leak.h>
 
 #if _QX_SERIALIZE_BINARY
-#define QX_SERVICE_DEFAULT_SERIALIZATION_TYPE QxConnect::serialization_binary
+#define QX_SERVICE_DEFAULT_SERIALIZATION_TYPE IxConnect::serialization_binary
 #elif _QX_SERIALIZE_WIDE_BINARY
-#define QX_SERVICE_DEFAULT_SERIALIZATION_TYPE QxConnect::serialization_wide_binary
+#define QX_SERVICE_DEFAULT_SERIALIZATION_TYPE IxConnect::serialization_wide_binary
 #elif _QX_SERIALIZE_PORTABLE_BINARY
-#define QX_SERVICE_DEFAULT_SERIALIZATION_TYPE QxConnect::serialization_portable_binary
+#define QX_SERVICE_DEFAULT_SERIALIZATION_TYPE IxConnect::serialization_portable_binary
 #elif _QX_SERIALIZE_POLYMORPHIC
-#define QX_SERVICE_DEFAULT_SERIALIZATION_TYPE QxConnect::serialization_polymorphic_binary
+#define QX_SERVICE_DEFAULT_SERIALIZATION_TYPE IxConnect::serialization_polymorphic_binary
 #elif _QX_SERIALIZE_TEXT
-#define QX_SERVICE_DEFAULT_SERIALIZATION_TYPE QxConnect::serialization_text
+#define QX_SERVICE_DEFAULT_SERIALIZATION_TYPE IxConnect::serialization_text
 #elif _QX_SERIALIZE_XML
-#define QX_SERVICE_DEFAULT_SERIALIZATION_TYPE QxConnect::serialization_xml
+#define QX_SERVICE_DEFAULT_SERIALIZATION_TYPE IxConnect::serialization_xml
 #elif _QX_SERIALIZE_WIDE_TEXT
-#define QX_SERVICE_DEFAULT_SERIALIZATION_TYPE QxConnect::serialization_wide_text
+#define QX_SERVICE_DEFAULT_SERIALIZATION_TYPE IxConnect::serialization_wide_text
 #elif _QX_SERIALIZE_WIDE_XML
-#define QX_SERVICE_DEFAULT_SERIALIZATION_TYPE QxConnect::serialization_wide_xml
+#define QX_SERVICE_DEFAULT_SERIALIZATION_TYPE IxConnect::serialization_wide_xml
 #endif // _QX_SERIALIZE_BINARY
 
 #ifndef QX_SERVICE_DEFAULT_SERIALIZATION_TYPE
-#define QX_SERVICE_DEFAULT_SERIALIZATION_TYPE QxConnect::serialization_qt
+#define QX_SERVICE_DEFAULT_SERIALIZATION_TYPE IxConnect::serialization_qt
 #endif // QX_SERVICE_DEFAULT_SERIALIZATION_TYPE
 
 #define QX_SERVICE_DEFAULT_ENCRYPT_KEY Q_UINT64_C(0x0f2aac3b24358a1a)
@@ -78,13 +78,13 @@ QX_DLL_EXPORT_QX_SINGLETON_CPP(qx::service::QxConnect)
 namespace qx {
 namespace service {
 
-struct Q_DECL_HIDDEN QxConnect::QxConnectImpl
+struct Q_DECL_HIDDEN IxConnect::IxConnectImpl
 {
 
-   QMutex                           m_mutex;                   //!< Mutex => 'QxConnect' is thread-safe
+   QMutex                           m_mutex;                   //!< Mutex => 'IxConnect' is thread-safe
    QString                          m_sIp;                     //!< Ip address
    long                             m_lPort;                   //!< Port number
-   QxConnect::serialization_type    m_eSerializationType;      //!< Serialization type to send data over network
+   IxConnect::serialization_type    m_eSerializationType;      //!< Serialization type to send data over network
    long                             m_lThreadCount;            //!< Thread count to execute all transactions (cf. 'QxThreadPool')
    int                              m_iMaxWait;                //!< Max wait in milliseconds for network processes
    bool                             m_bCompressData;           //!< Compress data over network
@@ -107,8 +107,8 @@ struct Q_DECL_HIDDEN QxConnect::QxConnectImpl
    int                              m_sslPeerVerifyDepth;      //!< Peer depth level for certificate validation
 #endif // QT_NO_SSL
 
-   QxConnectImpl() : QX_CONSTRUCT_QX_SERVICE_CONNECT() { m_uiEncryptKey = QX_SERVICE_DEFAULT_ENCRYPT_KEY; ignoreAllSSLErrors(); }
-   ~QxConnectImpl() { ; }
+   IxConnectImpl() : QX_CONSTRUCT_QX_SERVICE_CONNECT() { m_uiEncryptKey = QX_SERVICE_DEFAULT_ENCRYPT_KEY; ignoreAllSSLErrors(); }
+   ~IxConnectImpl() { ; }
 
    void ignoreAllSSLErrors()
    {
@@ -143,71 +143,79 @@ struct Q_DECL_HIDDEN QxConnect::QxConnectImpl
 
 };
 
-QxConnect::QxConnect() : qx::QxSingleton<QxConnect>("qx::service::QxConnect"), m_pImpl(new QxConnectImpl()) { ; }
+IxConnect::IxConnect() : m_pImpl(new IxConnectImpl()) { ; }
+
+IxConnect::~IxConnect() { ; }
+
+QxConnect::QxConnect() : IxConnect(), qx::QxSingleton<QxConnect>("qx::service::QxConnect") { ; }
 
 QxConnect::~QxConnect() { ; }
 
-QString QxConnect::getIp()
+QxConnectOther::QxConnectOther() : IxConnect() { ; }
+
+QxConnectOther::~QxConnectOther() { ; }
+
+QString IxConnect::getIp()
 {
    QMutexLocker locker(& m_pImpl->m_mutex);
    return m_pImpl->m_sIp;
 }
 
-long QxConnect::getPort()
+long IxConnect::getPort()
 {
    QMutexLocker locker(& m_pImpl->m_mutex);
    return m_pImpl->m_lPort;
 }
 
-QxConnect::serialization_type QxConnect::getSerializationType()
+IxConnect::serialization_type IxConnect::getSerializationType()
 {
    QMutexLocker locker(& m_pImpl->m_mutex);
    return m_pImpl->m_eSerializationType;
 }
 
-long QxConnect::getThreadCount()
+long IxConnect::getThreadCount()
 {
    QMutexLocker locker(& m_pImpl->m_mutex);
    return m_pImpl->m_lThreadCount;
 }
 
-int QxConnect::getMaxWait()
+int IxConnect::getMaxWait()
 {
    QMutexLocker locker(& m_pImpl->m_mutex);
    return m_pImpl->m_iMaxWait;
 }
 
-bool QxConnect::getCompressData()
+bool IxConnect::getCompressData()
 {
    QMutexLocker locker(& m_pImpl->m_mutex);
    return m_pImpl->m_bCompressData;
 }
 
-bool QxConnect::getEncryptData()
+bool IxConnect::getEncryptData()
 {
    QMutexLocker locker(& m_pImpl->m_mutex);
    return m_pImpl->m_bEncryptData;
 }
 
-quint64 QxConnect::getEncryptKey()
+quint64 IxConnect::getEncryptKey()
 {
    QMutexLocker locker(& m_pImpl->m_mutex);
    return m_pImpl->m_uiEncryptKey;
 }
 
-long QxConnect::getKeepAlive()
+long IxConnect::getKeepAlive()
 {
    QMutexLocker locker(& m_pImpl->m_mutex);
    return m_pImpl->m_lKeepAlive;
 }
 
-bool QxConnect::getModeHTTP()
+bool IxConnect::getModeHTTP()
 {
    QMutexLocker locker(& m_pImpl->m_mutex);
    return m_pImpl->m_bModeHTTP;
 }
 
-qlonglong QxConnect::getSessionTimeOut()
+qlonglong IxConnect::getSessionTimeOut()
 {
    QMutexLocker locker(& m_pImpl->m_mutex);
    return m_pImpl->m_lSessionTimeOut;
@@ -215,61 +223,61 @@ qlonglong QxConnect::getSessionTimeOut()
 
 #ifndef QT_NO_SSL
 
-bool QxConnect::getSSLEnabled()
+bool IxConnect::getSSLEnabled()
 {
    QMutexLocker locker(& m_pImpl->m_mutex);
    return m_pImpl->m_sslEnabled;
 }
 
-QSslConfiguration QxConnect::getSSLConfiguration()
+QSslConfiguration IxConnect::getSSLConfiguration()
 {
    QMutexLocker locker(& m_pImpl->m_mutex);
    return m_pImpl->m_sslConfig;
 }
 
-QList<QSslCertificate> QxConnect::getSSLCACertificates()
+QList<QSslCertificate> IxConnect::getSSLCACertificates()
 {
    QMutexLocker locker(& m_pImpl->m_mutex);
    return m_pImpl->m_sslCACertificates;
 }
 
-QSslCertificate QxConnect::getSSLLocalCertificate()
+QSslCertificate IxConnect::getSSLLocalCertificate()
 {
    QMutexLocker locker(& m_pImpl->m_mutex);
    return m_pImpl->m_sslLocalCertificate;
 }
 
-QSslKey QxConnect::getSSLPrivateKey()
+QSslKey IxConnect::getSSLPrivateKey()
 {
    QMutexLocker locker(& m_pImpl->m_mutex);
    return m_pImpl->m_sslPrivateKey;
 }
 
-QList<QSslError> QxConnect::getSSLIgnoreErrors()
+QList<QSslError> IxConnect::getSSLIgnoreErrors()
 {
    QMutexLocker locker(& m_pImpl->m_mutex);
    return m_pImpl->m_sslIgnoreErrors;
 }
 
-QSsl::SslProtocol QxConnect::getSSLProtocol()
+QSsl::SslProtocol IxConnect::getSSLProtocol()
 {
    QMutexLocker locker(& m_pImpl->m_mutex);
    return m_pImpl->m_sslProtocol;
 }
 
-QString QxConnect::getSSLPeerVerifyName()
+QString IxConnect::getSSLPeerVerifyName()
 {
    QMutexLocker locker(& m_pImpl->m_mutex);
    return m_pImpl->m_sslPeerVerifyName;
 }
 
-QSslSocket::PeerVerifyMode QxConnect::getSSLPeerVerifyMode()
+QSslSocket::PeerVerifyMode IxConnect::getSSLPeerVerifyMode()
 {
    QMutexLocker locker(& m_pImpl->m_mutex);
    return m_pImpl->m_sslPeerVerifyMode;
 }
 
-int QxConnect::getSSLPeerVerifyDepth()
+int IxConnect::getSSLPeerVerifyDepth()
 {
    QMutexLocker locker(& m_pImpl->m_mutex);
    return m_pImpl->m_sslPeerVerifyDepth;
@@ -277,64 +285,64 @@ int QxConnect::getSSLPeerVerifyDepth()
 
 #endif // QT_NO_SSL
 
-void QxConnect::setIp(const QString & s)
+void IxConnect::setIp(const QString & s)
 {
    QMutexLocker locker(& m_pImpl->m_mutex);
    m_pImpl->m_sIp = s;
 }
 
-void QxConnect::setPort(long l)
+void IxConnect::setPort(long l)
 {
    QMutexLocker locker(& m_pImpl->m_mutex);
    m_pImpl->m_lPort = l;
 }
 
-void QxConnect::setSerializationType(QxConnect::serialization_type e)
+void IxConnect::setSerializationType(IxConnect::serialization_type e)
 {
    QMutexLocker locker(& m_pImpl->m_mutex);
    m_pImpl->m_eSerializationType = e;
 }
 
-void QxConnect::setThreadCount(long l)
+void IxConnect::setThreadCount(long l)
 {
    QMutexLocker locker(& m_pImpl->m_mutex);
    m_pImpl->m_lThreadCount = l;
    qAssert(l > 0);
 }
 
-void QxConnect::setMaxWait(int i)
+void IxConnect::setMaxWait(int i)
 {
    QMutexLocker locker(& m_pImpl->m_mutex);
    m_pImpl->m_iMaxWait = i;
    qAssert(i > 0);
 }
 
-void QxConnect::setCompressData(bool b)
+void IxConnect::setCompressData(bool b)
 {
    QMutexLocker locker(& m_pImpl->m_mutex);
    m_pImpl->m_bCompressData = b;
 }
 
-void QxConnect::setEncryptData(bool b, quint64 key /* = 0 */)
+void IxConnect::setEncryptData(bool b, quint64 key /* = 0 */)
 {
    QMutexLocker locker(& m_pImpl->m_mutex);
    m_pImpl->m_bEncryptData = b;
    if (key != 0) { m_pImpl->m_uiEncryptKey = key; }
 }
 
-void QxConnect::setKeepAlive(long l)
+void IxConnect::setKeepAlive(long l)
 {
    QMutexLocker locker(& m_pImpl->m_mutex);
    m_pImpl->m_lKeepAlive = l;
 }
 
-void QxConnect::setModeHTTP(bool b)
+void IxConnect::setModeHTTP(bool b)
 {
    QMutexLocker locker(& m_pImpl->m_mutex);
    m_pImpl->m_bModeHTTP = b;
 }
 
-void QxConnect::setSessionTimeOut(qlonglong l)
+void IxConnect::setSessionTimeOut(qlonglong l)
 {
    QMutexLocker locker(& m_pImpl->m_mutex);
    m_pImpl->m_lSessionTimeOut = l;
@@ -342,61 +350,61 @@ void QxConnect::setSessionTimeOut(qlonglong l)
 
 #ifndef QT_NO_SSL
 
-void QxConnect::setSSLEnabled(bool b)
+void IxConnect::setSSLEnabled(bool b)
 {
    QMutexLocker locker(& m_pImpl->m_mutex);
    m_pImpl->m_sslEnabled = b;
 }
 
-void QxConnect::setSSLConfiguration(QSslConfiguration cfg)
+void IxConnect::setSSLConfiguration(QSslConfiguration cfg)
 {
    QMutexLocker locker(& m_pImpl->m_mutex);
    m_pImpl->m_sslConfig = cfg;
 }
 
-void QxConnect::setSSLCACertificates(QList<QSslCertificate> lst)
+void IxConnect::setSSLCACertificates(QList<QSslCertificate> lst)
 {
    QMutexLocker locker(& m_pImpl->m_mutex);
    m_pImpl->m_sslCACertificates = lst;
 }
 
-void QxConnect::setSSLLocalCertificate(QSslCertificate cert)
+void IxConnect::setSSLLocalCertificate(QSslCertificate cert)
 {
    QMutexLocker locker(& m_pImpl->m_mutex);
    m_pImpl->m_sslLocalCertificate = cert;
 }
 
-void QxConnect::setSSLPrivateKey(QSslKey key)
+void IxConnect::setSSLPrivateKey(QSslKey key)
 {
    QMutexLocker locker(& m_pImpl->m_mutex);
    m_pImpl->m_sslPrivateKey = key;
 }
 
-void QxConnect::setSSLIgnoreErrors(QList<QSslError> lst)
+void IxConnect::setSSLIgnoreErrors(QList<QSslError> lst)
 {
    QMutexLocker locker(& m_pImpl->m_mutex);
    m_pImpl->m_sslIgnoreErrors = lst;
 }
 
-void QxConnect::setSSLProtocol(QSsl::SslProtocol e)
+void IxConnect::setSSLProtocol(QSsl::SslProtocol e)
 {
    QMutexLocker locker(& m_pImpl->m_mutex);
    m_pImpl->m_sslProtocol = e;
 }
 
-void QxConnect::setSSLPeerVerifyName(const QString & s)
+void IxConnect::setSSLPeerVerifyName(const QString & s)
 {
    QMutexLocker locker(& m_pImpl->m_mutex);
    m_pImpl->m_sslPeerVerifyName = s;
 }
 
-void QxConnect::setSSLPeerVerifyMode(QSslSocket::PeerVerifyMode e)
+void IxConnect::setSSLPeerVerifyMode(QSslSocket::PeerVerifyMode e)
 {
    QMutexLocker locker(& m_pImpl->m_mutex);
    m_pImpl->m_sslPeerVerifyMode = e;
 }
 
-void QxConnect::setSSLPeerVerifyDepth(int i)
+void IxConnect::setSSLPeerVerifyDepth(int i)
 {
    QMutexLocker locker(& m_pImpl->m_mutex);
    m_pImpl->m_sslPeerVerifyDepth = i;

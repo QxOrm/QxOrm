@@ -38,10 +38,21 @@ cd ..
 echo "-- BOOST ENVIRONMENT VARIABLES --"
 export BOOST_INCLUDE=/usr/include
 export BOOST_LIB=/usr/lib
-export BOOST_LIB_SERIALIZATION_DEBUG=boost_serialization-mt-d
-export BOOST_LIB_SERIALIZATION_RELEASE=boost_serialization-mt
-export BOOST_LIB_WIDE_SERIALIZATION_DEBUG=boost_wserialization-mt-d
-export BOOST_LIB_WIDE_SERIALIZATION_RELEASE=boost_wserialization-mt
+
+# Latest versions of boost library remove '-mt' suffix
+if find /usr/lib* /usr/local/lib* -name "libboost_serialization-mt.so*" | grep -q .; then
+	export BOOST_LIB_SERIALIZATION_DEBUG=boost_serialization-mt-d
+	export BOOST_LIB_SERIALIZATION_RELEASE=boost_serialization-mt
+	export BOOST_LIB_WIDE_SERIALIZATION_DEBUG=boost_wserialization-mt-d
+	export BOOST_LIB_WIDE_SERIALIZATION_RELEASE=boost_wserialization-mt
+elif find /usr/lib* /usr/local/lib* -name "libboost_serialization.so*" | grep -q .; then
+	export BOOST_LIB_SERIALIZATION_DEBUG=boost_serialization-d
+	export BOOST_LIB_SERIALIZATION_RELEASE=boost_serialization
+	export BOOST_LIB_WIDE_SERIALIZATION_DEBUG=boost_wserialization-d
+	export BOOST_LIB_WIDE_SERIALIZATION_RELEASE=boost_wserialization
+else
+	echo "boost library boost_serialization not found"
+fi
 
 echo "-- MAKE OPTIONS : USE 8 CORE CPU TO REDUCE BUILD TIMES --"
 MAKEOPT=-j8

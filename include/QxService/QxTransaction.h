@@ -80,7 +80,10 @@
 
 namespace qx {
 namespace service {
+
 class QxTransaction;
+class IxConnect;
+
 } // namespace service
 } // namespace qx
 
@@ -151,11 +154,12 @@ protected:
    IxParameter_ptr      m_pOutputParameter;                 //!< List of output parameters (reply)
    IxService_ptr        m_pServiceInstance;                 //!< Service instance created by 'm_sServiceName' property
    connection_status    m_eForceConnectionStatus;           //!< Sometimes we have to force connection status
+   IxConnect *          m_pSettings;                        //!< Connection parameters used by QxService module and QxHttpServer module
 
 public:
 
-   QxTransaction() : QObject(), m_uiInputTransactionSize(0), m_uiOutputTransactionSize(0), m_lPortSource(0), m_lPortTarget(0), m_eForceConnectionStatus(conn_none) { ; }
-   virtual ~QxTransaction() { ; }
+   QxTransaction(IxConnect * pSettings = NULL);
+   virtual ~QxTransaction();
    virtual void clear();
 
    QString getTransactionId() const                      { return m_sTransactionId; }
@@ -207,6 +211,7 @@ public:
    virtual qx_bool readSocketClient(QTcpSocket & socket);
 
    QString getInfos() const;
+   IxConnect * getSettings() const;
 
 protected:
 

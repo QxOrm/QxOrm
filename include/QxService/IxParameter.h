@@ -81,7 +81,7 @@ public:
    IxParameter();
    virtual ~IxParameter();
 
-   // Need to override these methods only if you are using 'qx::service::QxConnect::serialization_qt' type (based on QDataStream) or 'qx::service::QxConnect::serialization_json' type (based on QJson engine)
+   // Need to override these methods only if you are using 'qx::service::IxConnect::serialization_qt' type (based on QDataStream) or 'qx::service::IxConnect::serialization_json' type (based on QJson engine)
    // You can use QX_SERVICE_IX_PARAMETER_SERIALIZATION_HPP and QX_SERVICE_IX_PARAMETER_SERIALIZATION_CPP macro to override
    virtual void registerClass() const;
    virtual QString getClassName() const;

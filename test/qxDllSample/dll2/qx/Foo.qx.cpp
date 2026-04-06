@@ -10,8 +10,8 @@ QX_PERSISTABLE_CPP(Foo)
 namespace qx {
 template <> void register_class(QxClass<Foo> & t)
 {
-   IxDataMember * pData = NULL;
-   IxSqlRelation * pRelation = NULL;
+   IxDataMember * pData = NULL; Q_UNUSED(pData);
+   IxSqlRelation * pRelation = NULL; Q_UNUSED(pRelation);
 
    pData = t.data(& Foo::m_sName, "name");
    pData = t.data(& Foo::m_sDesc, "desc");

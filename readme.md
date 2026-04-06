@@ -15,7 +15,7 @@ The goal of this documentation is to provide a user guide to learn how to work w
 
 ## QxEntityEditor application
 [QxEntityEditor](https://www.qxorm.com/qxorm_en/manual_qxee.html) is a graphic editor for QxOrm library : **QxEntityEditor provides a graphic way to manage the data model**.
-QxEntityEditor is multi-platform (available for Windows, Linux and Mac OS X) and generates native code for all environments : desktop (Windows, Linux, Mac OS X), embedded and mobile (Android, iOS, Windows Phone, Raspberry Pi, etc.).
+QxEntityEditor is multi-platform (available for Windows, Linux and macOS) and generates native code for all environments : desktop (Windows, Linux, macOS), embedded and mobile (Android, iOS, Windows Phone, Raspberry Pi, etc.).
 [A user manual (documentation) for QxEntityEditor application](https://www.qxorm.com/qxorm_en/manual_qxee.html) is available on QxOrm website.
 
 QxEntityEditor is based on plugins and provides many ways to import/export your data model :

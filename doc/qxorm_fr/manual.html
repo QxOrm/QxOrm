@@ -66,7 +66,7 @@
     <table cellspacing="0" cellpadding="1"><col><col><tbody>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow">Version courante :&nbsp;</font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.5.1 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a> - <a href="https://github.com/QxOrm/QxOrm" target="_blank">GitHub</a></font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.5.1 - <a href="../doxygen/index.html" target="_blank">documentation en ligne de la bibliothèque QxOrm</a> - <a href="https://github.com/QxOrm/QxOrm" target="_blank">GitHub</a> - <a href="https://hub.docker.com/u/qxorm" target="_blank">Docker</a></font></td>
       </tr>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow"></font></td>
@@ -664,7 +664,7 @@
          <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_110">Aperçu rapide de l'application QxEntityEditor</a></p>
          <div class="manual_div_content">
            <b>QxEntityEditor</b> est un éditeur graphique pour la bibliothèque <b>QxOrm</b> : <b>QxEntityEditor</b> permet de gérer graphiquement le modèle d'entités.<br>
-           <b>QxEntityEditor</b> est multi-plateforme (disponible pour Windows, Linux et Mac OS X) et génère du code natif pour tous les environnements : bureau (Windows, Linux, Mac OS X), embarqué et mobile (Android, iOS, Windows Phone, Raspberry Pi, etc.).<br>
+           <b>QxEntityEditor</b> est multi-plateforme (disponible pour Windows, Linux et macOS) et génère du code natif pour tous les environnements : bureau (Windows, Linux, macOS), embarqué et mobile (Android, iOS, Windows Phone, Raspberry Pi, etc.).<br>
            <a href="./tutorial_4.html">Une vidéo de présentation de l'application <b>QxEntityEditor</b> est disponible</a>.<br>
            <br>
            <b>QxEntityEditor</b> est basé sur un système de plugins et propose diverses fonctionnalités pour importer/exporter le modèle de données :
@@ -702,7 +702,7 @@
 
       <p class="manual_p_title_1"><a class="manual_a_title_1" name="manual_20">Installation</a></p>
       <div class="manual_div_content_1">
-         La bibliothèque QxOrm est multi-plateforme et peut être installée sur tous types d'environnement : Windows, Linux (Unix), Mac OS X, Android, iOS, Windows Phone, etc...<br>
+         La bibliothèque QxOrm est multi-plateforme et peut être installée sur tous types d'environnement : Windows, Linux (Unix), macOS, Android, iOS, Windows Phone, etc...<br>
          <a href="./tutorial_3.html">Un tutoriel complet (avec captures d'écran) pour installer un environnement de développement avec QxOrm sous Windows est disponible en cliquant ici.</a>
          <br><br>
          L'objectif de ce chapitre est de présenter rapidement les différentes étapes à suivre pour installer QxOrm sur tous types d'environnement :
@@ -826,7 +826,7 @@
          <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_230">Compiler la bibliothèque QxOrm (avec qmake ou CMake)</a></p>
          <div class="manual_div_content">
            <b>QxOrm</b> utilise le processus <i>qmake</i> de la bibliothèque <b>Qt</b> pour générer les <i>makefile</i> et compiler le projet (il est également possible d'utiliser <a href="https://cmake.org/" target="_blank">l'outil de compilation CMake</a>, un fichier <i>CMakeLists.txt</i> étant fourni avec la bibliothèque QxOrm).<br>
-           <i>qmake</i> est multi-plateforme et fonctionne parfaitement sous Windows, Linux (Unix) et Mac OS X.<br>
+           <i>qmake</i> est multi-plateforme et fonctionne parfaitement sous Windows, Linux (Unix) et macOS.<br>
            Pour compiler <b>QxOrm</b>, il suffit d'exécuter les commandes suivantes :<br>
            <br>
            <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
@@ -839,7 +839,7 @@
            Les fichiers <i>*.pro</i> sont lisibles par l'éditeur <b>Qt Creator</b>, et des plugins existent permettant de s'interfacer avec de nombreux éditeurs C++.<br>
            Les fichiers <i>mingw_build_all_debug.bat</i> et <i>mingw_build_all_release.bat</i> présents dans le dossier <i>./tools/</i> permettent de compiler rapidement QxOrm ainsi que tous les tests avec le compilateur <b>MinGW</b> sous Windows.<br>
            Les fichiers <i>gcc_build_all_debug.sh</i> et <i>gcc_build_all_release.sh</i> présents dans le dossier <i>./tools/</i> permettent de compiler rapidement QxOrm ainsi que tous les tests avec <b>GCC</b> sous <b>Linux</b>.<br>
-           Enfin, les fichiers <i>osx_build_all_debug.sh</i> et <i>osx_build_all_release.sh</i> présents dans le dossier <i>./tools/</i> permettent de compiler rapidement QxOrm ainsi que tous les tests sous <b>Mac OS X</b> (merci à Dominique Billet pour l'écriture des scripts).<br>
+           Enfin, les fichiers <i>osx_build_all_debug.sh</i> et <i>osx_build_all_release.sh</i> présents dans le dossier <i>./tools/</i> permettent de compiler rapidement QxOrm ainsi que tous les tests sous <b>macOS</b> (merci à Dominique Billet pour l'écriture des scripts).<br>
            <br>
          </div>
          <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_240">Pilotes SQL fournis par Qt (drivers)</a></p>
@@ -3887,7 +3887,7 @@ template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</
                <li><a href="../doxygen/html/namespaceqx_1_1serialization_1_1qt.html" target="_blank">qx::serialization::qt::to_file_compressed()</a> : sérialisation binaire d'une instance C++ (dont le type est enregistré dans le contexte QxOrm) dans un fichier compressé ;</li>
                <li><a href="../doxygen/html/namespaceqx_1_1serialization_1_1qt.html" target="_blank">qx::serialization::qt::from_file_compressed()</a> : restauration d'une instance C++ à partir d'un fichier compressé contenant le flux binaire sérialisé.</li>
             </ul>
-            <b>Remarque :</b> la sérialisation <a href="http://doc.qt.io/qt-5/qdatastream.html" target="_blank">QDataStream</a> est portable (sérialisation/désérialisation compatible sur tous types d'environnement : Windows, Linux, Mac OS X, etc...).
+            <b>Remarque :</b> la sérialisation <a href="http://doc.qt.io/qt-5/qdatastream.html" target="_blank">QDataStream</a> est portable (sérialisation/désérialisation compatible sur tous types d'environnement : Windows, Linux, macOS, etc...).
             Le flux sérialisé est au format binaire : la taille du flux est donc réduite (comparé à un flux XML par exemple).
             La sérialisation <a href="http://doc.qt.io/qt-5/qdatastream.html" target="_blank">QDataStream</a> étant basée sur le moteur d'introspection de la bibliothèque QxOrm, elle est moins performante que les sérialisations basées sur le moteur <a href="http://www.boost.org/doc/libs/release/libs/serialization/doc/index.html" target="_blank">boost::serialization</a>.
             <br><br>
@@ -4010,7 +4010,7 @@ qAssert(blogFromJsonFiltered-&gt;m_commentX[0]->m_blog);</pre>
             <br><br>
             Ce type de sérialisation possède les caractéristiques suivantes :
             <ul>
-               <li><i>portable</i> : compatible sur tous types d'environnement : Windows, Linux, Mac OS X, etc... ;</li>
+               <li><i>portable</i> : compatible sur tous types d'environnement : Windows, Linux, macOS, etc... ;</li>
                <li><i>slowest</i> : plus lente que les sérialisations <i>binary</i> et <i>text</i> ;</li>
                <li><i>largest</i> : taille des flux générés plus importante que les sérialisations <i>binary</i> et <i>text</i> ;</li>
                <li><i>human-readable</i> : un flux XML peut facilement être analysé et lu par un éditeur externe ou un être humain.</li>
@@ -9876,7 +9876,7 @@ response.cookies().insert(cookie.name, cookie);</pre>
         <img alt="QxOrm" src="./resource/logo_qxorm_small.png" width="168" height="40">
       </td>
       <td align="center" valign="middle">
-        <font size="2">© 2011-2024 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
+        <font size="2">© 2011-2026 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
       </td>
       <td align="right" valign="middle">
         <form action="https://www.paypal.com/cgi-bin/webscr" method="post">

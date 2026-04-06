@@ -9,7 +9,7 @@ QX_REGISTER_CPP_QX_DLL2(CTestAll)
 namespace qx {
 template <> void register_class(QxClass<CTestAll> & t)
 {
-   IxDataMember * pData = NULL;
+   IxDataMember * pData = NULL; Q_UNUSED(pData);
 
    pData = t.id(& CTestAll::m_lId, "m_lId");
 

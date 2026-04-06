@@ -64,7 +64,7 @@ struct Q_DECL_HIDDEN QxHttpResponse::QxHttpResponseImpl
       m_headers.insert("Server", "QxOrm HTTP server");
       m_headers.insert("Date", currentDateTimeGMT());
       m_headers.insert("Content-Type", "text/plain; charset=iso-8859-1");
-      if (qx::service::QxConnect::getSingleton()->getKeepAlive() != 0) { m_headers.insert("Connection", "keep-alive"); }
+      if (m_transaction && (m_transaction->getSettings()->getKeepAlive() != 0)) { m_headers.insert("Connection", "keep-alive"); }
       else { m_headers.insert("Connection", "close"); }
    }
 

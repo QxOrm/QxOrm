@@ -41,12 +41,79 @@ namespace model_view {
 bool compareQVariant(const QVariant & v1, const QVariant & v2, bool bAscending)
 {
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-   int type1 = v1.typeId();
-   int type2 = v2.typeId();
+
+   int iType1 = v1.typeId();
+   int iType2 = v2.typeId();
+   QMetaType::Type type1 = static_cast<QMetaType::Type>(iType1);
+   QMetaType::Type type2 = static_cast<QMetaType::Type>(iType2);
+
+   if (type1 != type2)
+   {
+      if (bAscending) { return (v1.toString() < v2.toString()); }
+      else { return (v1.toString() > v2.toString()); }
+   }
+
+   if (type1 == QMetaType::Bool)
+   {
+      int i1 = (v1.toBool() ? 1 : 0);
+      int i2 = (v2.toBool() ? 1 : 0);
+      if (bAscending) { return (i1 < i2); }
+      else { return (i1 > i2); }
+   }
+   else if (type1 == QMetaType::Int)
+   {
+      if (bAscending) { return (v1.toInt() < v2.toInt()); }
+      else { return (v1.toInt() > v2.toInt()); }
+   }
+   else if (type1 == QMetaType::UInt)
+   {
+      if (bAscending) { return (v1.toUInt() < v2.toUInt()); }
+      else { return (v1.toUInt() > v2.toUInt()); }
+   }
+   else if (type1 == QMetaType::LongLong)
+   {
+      if (bAscending) { return (v1.toLongLong() < v2.toLongLong()); }
+      else { return (v1.toLongLong() > v2.toLongLong()); }
+   }
+   else if (type1 == QMetaType::ULongLong)
+   {
+      if (bAscending) { return (v1.toULongLong() < v2.toULongLong()); }
+      else { return (v1.toULongLong() > v2.toULongLong()); }
+   }
+   else if (type1 == QMetaType::Double)
+   {
+      if (bAscending) { return (v1.toDouble() < v2.toDouble()); }
+      else { return (v1.toDouble() > v2.toDouble()); }
+   }
+   else if (type1 == QMetaType::QDate)
+   {
+      if (bAscending) { return (v1.toDate() < v2.toDate()); }
+      else { return (v1.toDate() > v2.toDate()); }
+   }
+   else if (type1 == QMetaType::QDateTime)
+   {
+      if (bAscending) { return (v1.toDateTime() < v2.toDateTime()); }
+      else { return (v1.toDateTime() > v2.toDateTime()); }
+   }
+   else if (type1 == QMetaType::QTime)
+   {
+      if (bAscending) { return (v1.toTime() < v2.toTime()); }
+      else { return (v1.toTime() > v2.toTime()); }
+   }
+   else if (type1 == QMetaType::QByteArray)
+   {
+      if (bAscending) { return (v1.toByteArray() < v2.toByteArray()); }
+      else { return (v1.toByteArray() > v2.toByteArray()); }
+   }
+
+   // Default comparaison converting to string
+   if (bAscending) { return (v1.toString() < v2.toString()); }
+   return (v1.toString() > v2.toString());
+
 #else // (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+
    int type1 = static_cast<int>(v1.type());
    int type2 = static_cast<int>(v2.type());
-#endif // (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
 
    if (type1 != type2)
    {
@@ -110,6 +177,8 @@ bool compareQVariant(const QVariant & v1, const QVariant & v2, bool bAscending)
    // Default comparaison converting to string
    if (bAscending) { return (v1.toString() < v2.toString()); }
    return (v1.toString() > v2.toString());
+
+#endif // (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
 }
 
 } // namespace model_view

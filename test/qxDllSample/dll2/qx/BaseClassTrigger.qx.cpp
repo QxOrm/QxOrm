@@ -9,7 +9,7 @@ QX_REGISTER_CPP_QX_DLL2(BaseClassTrigger)
 namespace qx {
 template <> void register_class(QxClass<BaseClassTrigger> & t)
 {
-   IxDataMember * pData = NULL;
+   IxDataMember * pData = NULL; Q_UNUSED(pData);
 
    pData = t.id(& BaseClassTrigger::m_id, "id");
 

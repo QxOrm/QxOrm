@@ -43,6 +43,8 @@
 
 #include <QtCore/qpair.h>
 
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+
 namespace boost {
 namespace serialization {
 
@@ -56,6 +58,8 @@ inline void serialize(Archive & ar, QPair<T1, T2> & t, const unsigned int file_v
 
 } // namespace boost
 } // namespace serialization
+
+#endif // (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 
 #endif // _QX_SERIALIZE_QPAIR_H_
 #endif // _QX_ENABLE_BOOST_SERIALIZATION

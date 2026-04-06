@@ -56,7 +56,11 @@ inline void qx_save(Archive & ar, const QPicture & t, const unsigned int file_ve
    QBuffer buffer(& bytes);
    QPicture * pTmp = const_cast<QPicture *>(& t);
    buffer.open(QIODevice::ReadWrite);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
    pTmp->save(& buffer, "PNG");
+#else // (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+   pTmp->save(& buffer);
+#endif // (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
    ar << boost::serialization::make_nvp("bytes", bytes);
 }
 
@@ -73,7 +77,11 @@ inline void qx_load(Archive & ar, QPicture & t, const unsigned int file_version)
    QBuffer buffer(& bytes);
    buffer.open(QIODevice::ReadWrite);
    ar >> boost::serialization::make_nvp("bytes", bytes);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
    t.load(& buffer, "PNG");
+#else // (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+   t.load(& buffer);
+#endif // (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 }
 
 } // namespace boost

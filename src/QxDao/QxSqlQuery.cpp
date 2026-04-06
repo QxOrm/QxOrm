@@ -360,6 +360,17 @@ void QxSqlQuery::onBeforeSqlPrepare(QString & sql)
    if (m_fctOnBeforeSqlPrepare) { m_fctOnBeforeSqlPrepare(sql); }
 }
 
+QxSqlQuery & QxSqlQuery::setFctOnAfterSqlExec(QxSqlQuery::type_fct_on_after_sql_exec fct)
+{
+   m_fctOnAfterSqlExec = fct;
+   return (* this);
+}
+
+void QxSqlQuery::onAfterSqlExec(QSqlQuery & query)
+{
+   if (m_fctOnAfterSqlExec) { m_fctOnAfterSqlExec(query); }
+}
+
 void QxSqlQuery::fetchSqlResult(QSqlQuery & query)
 {
    bool bCheckRecord = true;

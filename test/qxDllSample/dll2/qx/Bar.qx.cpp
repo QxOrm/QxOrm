@@ -11,8 +11,8 @@ QX_PERSISTABLE_CPP(Bar)
 namespace qx {
 template <> void register_class(QxClass<Bar> & t)
 {
-   IxDataMember * pData = NULL;
-   IxSqlRelation * pRelation = NULL;
+   IxDataMember * pData = NULL; Q_UNUSED(pData);
+   IxSqlRelation * pRelation = NULL; Q_UNUSED(pRelation);
 
    t.setSoftDelete(qx::QxSoftDelete("deleted_at"));
 

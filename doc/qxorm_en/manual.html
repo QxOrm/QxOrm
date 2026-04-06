@@ -66,7 +66,7 @@
     <table cellspacing="0" cellpadding="1"><col><col><tbody>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow">Current version :&nbsp;</font></td>
-         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.5.1 - <a href="../doxygen/index.html" target="_blank">QxOrm library online class documentation</a> - <a href="https://github.com/QxOrm/QxOrm" target="_blank">GitHub</a></font></td>
+         <td align="left" valign="top"><font size="2" class="txt_with_shadow">QxOrm 1.5.1 - <a href="../doxygen/index.html" target="_blank">QxOrm library online class documentation</a> - <a href="https://github.com/QxOrm/QxOrm" target="_blank">GitHub</a> - <a href="https://hub.docker.com/u/qxorm" target="_blank">Docker</a></font></td>
       </tr>
       <tr>
          <td align="right" valign="top"><font size="2" class="txt_with_shadow"></font></td>
@@ -663,7 +663,7 @@
          <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_110">Quick overview of QxEntityEditor application</a></p>
          <div class="manual_div_content">
            <b>QxEntityEditor</b> is a graphic editor for <b>QxOrm</b> library : <b>QxEntityEditor</b> provides a graphic way to manage the data model.<br>
-           <b>QxEntityEditor</b> is multi-platform (available for Windows, Linux and Mac OS X) and generates native code for all environments : desktop (Windows, Linux, Mac OS X), embedded and mobile (Android, iOS, Windows Phone, Raspberry Pi, etc.).<br>
+           <b>QxEntityEditor</b> is multi-platform (available for Windows, Linux and macOS) and generates native code for all environments : desktop (Windows, Linux, macOS), embedded and mobile (Android, iOS, Windows Phone, Raspberry Pi, etc.).<br>
            <a href="./tutorial_4.html">A presentation video of <b>QxEntityEditor</b> application is available on YouTube</a>.<br>
            <br>
            <b>QxEntityEditor</b> is based on plugins and provides many ways to import/export your data model :
@@ -699,7 +699,7 @@
 
       <p class="manual_p_title_1"><a class="manual_a_title_1" name="manual_20">Installation</a></p>
       <div class="manual_div_content_1">
-         <b>QxOrm</b> library is multi-platform and can be installed on all environments : Windows, Linux, Mac OS X, Android, iOS, Windows Phone, Raspberry Pi, etc...<br>
+         <b>QxOrm</b> library is multi-platform and can be installed on all environments : Windows, Linux, macOS, Android, iOS, Windows Phone, Raspberry Pi, etc...<br>
          <a href="./tutorial_3.html">A full tutorial (with screenshots) to install a development environment with QxOrm on Windows is available here.</a>
          <br><br>
          The goal of this chapter is to explain all steps required to install <b>QxOrm</b> library on all environments :
@@ -800,7 +800,7 @@
          <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_230">Build QxOrm library (with qmake or CMake)</a></p>
          <div class="manual_div_content">
            <b>QxOrm</b> library uses <b>qmake</b> process from <b>Qt</b> framework to create <i>makefile</i> and build the project (it is also possible to use <a href="https://cmake.org/" target="_blank">CMake compilation tools</a>, a <b>CMakeLists.txt</b> file is provided with QxOrm library).<br>
-           <b>qmake</b> is portable and multi-platform, so it works perfectly on Windows, Linux (Unix) and Mac OS X.<br>
+           <b>qmake</b> is portable and multi-platform, so it works perfectly on Windows, Linux (Unix) and macOS.<br>
            To build <b>QxOrm</b> library, just execute following commands :<br>
            <br>
            <table border="1" bgcolor="#FFFFFF"><col><tbody><tr><td>
@@ -813,7 +813,7 @@
            <i>*.pro</i> files are readable by <b>Qt Creator</b>, and some plugins are available to interface to other C++ source code editors.<br>
            <i>mingw_build_all_debug.bat</i> and <i>mingw_build_all_release.bat</i> scripts in the directory <i>./tools/</i> can be used to quickly build QxOrm library and all tests with <b>MinGW</b> compiler on Windows.<br>
            <i>gcc_build_all_debug.sh</i> and <i>gcc_build_all_release.sh</i> scripts in the directory <i>./tools/</i> can be used to quickly build QxOrm library and all tests with <b>GCC</b> compiler on <b>Linux</b>.<br>
-           <i>osx_build_all_debug.sh</i> and <i>osx_build_all_release.sh</i> scripts in the directory <i>./tools/</i> can be used to quickly build QxOrm library and all tests on <b>Mac OS X</b> (thanks very much to Dominique Billet for the scripts).
+           <i>osx_build_all_debug.sh</i> and <i>osx_build_all_release.sh</i> scripts in the directory <i>./tools/</i> can be used to quickly build QxOrm library and all tests on <b>macOS</b> (thanks very much to Dominique Billet for the scripts).
            <br><br>
          </div>
          <p class="manual_p_title_2"><a class="manual_a_title_2" name="manual_240">Qt SQL drivers (supported databases)</a></p>
@@ -3845,7 +3845,7 @@ template</span><span class="operator"> &lt;&gt;</span><span class="type"> void</
                <li><a href="../doxygen/html/namespaceqx_1_1serialization_1_1qt.html" target="_blank">qx::serialization::qt::to_file_compressed()</a> : binary serialization of a C++ instance (registered in QxOrm context) to a compressed file ;</li>
                <li><a href="../doxygen/html/namespaceqx_1_1serialization_1_1qt.html" target="_blank">qx::serialization::qt::from_file_compressed()</a> : restore a C++ instance from a compressed file which contains serialized binary stream ;</li>
             </ul>
-            <b>Note :</b> <a href="http://doc.qt.io/qt-5/qdatastream.html" target="_blank">QDataStream</a> serialization is portable (support serialization/deserialization on all environments : Windows, Linux, Mac OS X, etc...).
+            <b>Note :</b> <a href="http://doc.qt.io/qt-5/qdatastream.html" target="_blank">QDataStream</a> serialization is portable (support serialization/deserialization on all environments : Windows, Linux, macOS, etc...).
             The output serialized stream is in binary format : so stream size is smaller than XML or JSON for example.
             <a href="http://doc.qt.io/qt-5/qdatastream.html" target="_blank">QDataStream</a> serialization is based on introspection engine of QxOrm library, so it is slower than <a href="http://www.boost.org/doc/libs/release/libs/serialization/doc/index.html" target="_blank">boost::serialization</a> engine (based on C++ template).
             <br><br>
@@ -3968,7 +3968,7 @@ qAssert(blogFromJsonFiltered-&gt;m_commentX[0]->m_blog);</pre>
             <br><br>
             XML boost serialization engine is :
             <ul>
-               <li><i>portable</i> : support serialization/deserialization on all environments : Windows, Linux, Mac OS X, etc... ;</li>
+               <li><i>portable</i> : support serialization/deserialization on all environments : Windows, Linux, macOS, etc... ;</li>
                <li><i>slowest</i> : slower than <i>binary</i> and <i>text</i> serialization ;</li>
                <li><i>largest</i> : generated stream are bigger than <i>binary</i> and <i>text</i> serialization ;</li>
                <li><i>human-readable</i> : a XML stream can easily be parsed by a text editor and can be read by a human.</li>
@@ -9838,7 +9838,7 @@ response.cookies().insert(cookie.name, cookie);</pre>
         <img alt="QxOrm" src="./resource/logo_qxorm_small.png" width="168" height="40">
       </td>
       <td align="center" valign="middle">
-        <font size="2">© 2011-2024 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
+        <font size="2">© 2011-2026 Lionel Marty - <a href="mailto:contact@qxorm.com">contact@qxorm.com</a></font>
       </td>
       <td align="right" valign="middle">
         <form action="https://www.paypal.com/cgi-bin/webscr" method="post">

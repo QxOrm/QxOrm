@@ -51,19 +51,20 @@ quint32 crc32(const QByteArray & data);
 struct Q_DECL_HIDDEN QxHttpTransaction::QxHttpTransactionImpl
 {
 
-   qx::QxHttpRequest m_request;        //!< HTTP transaction request
-   qx::QxHttpResponse m_response;      //!< HTTP transaction response
-   QTcpSocket * m_socket;              //!< HTTP transaction socket
-   bool m_headersWritten;              //!< HTTP response headers already written (used to write chunked data)
-   bool m_chunkAllowed;                //!< If we receive a HTTP 1.0 request, then chunked responses are not supported by client
+   QxHttpRequest m_request;         //!< HTTP transaction request
+   QxHttpResponse m_response;       //!< HTTP transaction response
+   QTcpSocket * m_socket;           //!< HTTP transaction socket
+   bool m_headersWritten;           //!< HTTP response headers already written (used to write chunked data)
+   bool m_chunkAllowed;             //!< If we receive a HTTP 1.0 request, then chunked responses are not supported by client
+   QxHttpTransaction * m_parent;    //!< HTTP transaction parent instance
 
-   QxHttpTransactionImpl(QxHttpTransaction * parent) : m_request(parent), m_response(parent), m_socket(NULL), m_headersWritten(false), m_chunkAllowed(true) { qAssert(parent != NULL); }
+   QxHttpTransactionImpl(QxHttpTransaction * parent) : m_request(parent), m_response(parent), m_socket(NULL), m_headersWritten(false), m_chunkAllowed(true), m_parent(parent) { qAssert(parent != NULL); }
    ~QxHttpTransactionImpl() { ; }
 
    bool waitForReadSocket(QTcpSocket & socket)
    {
       if (socket.bytesAvailable() > 0) { return true; }
-      long lMaxWait = qx::service::QxConnect::getSingleton()->getMaxWait();
+      long lMaxWait = (m_parent ? m_parent->getSettings()->getMaxWait() : 0);
       long lCurrRetry = 0;
       do
       {
@@ -127,7 +128,7 @@ struct Q_DECL_HIDDEN QxHttpTransaction::QxHttpTransactionImpl
 
 };
 
-QxHttpTransaction::QxHttpTransaction() : qx::service::QxTransaction(), m_pImpl(new QxHttpTransactionImpl(this)) { ; }
+QxHttpTransaction::QxHttpTransaction(qx::service::IxConnect * pSettings /* = NULL */) : qx::service::QxTransaction(pSettings), m_pImpl(new QxHttpTransactionImpl(this)) { ; }
 
 QxHttpTransaction::~QxHttpTransaction() { ; }
 
@@ -154,8 +155,8 @@ qx_bool QxHttpTransaction::writeSocketServer(QTcpSocket & socket)
    }
 
    // Check if we can compress response data
+   bool compress = m_pSettings->getCompressData();
    bool chunked = (m_pImpl->m_response.isChunked() && m_pImpl->m_chunkAllowed);
-   bool compress = qx::service::QxConnect::getSingleton()->getCompressData();
    QString contentType = m_pImpl->m_response.header("Content-Type").toLower();
    compress = (compress && (contentType.startsWith("text/") || contentType.startsWith("application/json") || contentType.startsWith("application/javascript")));
    compress = (compress && (m_pImpl->m_request.header("Accept-Encoding").toLower().contains("gzip")));

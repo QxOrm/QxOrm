@@ -44,7 +44,7 @@ template <class Archive>
 inline void qx_save(Archive & ar, const QByteArray & t, const unsigned int file_version)
 {
    Q_UNUSED(file_version);
-   long lCount = t.count();
+   long lCount = t.size();
    std::string data(t.constData(), lCount);
    ar << boost::serialization::make_nvp("size", lCount);
    ar << boost::serialization::make_nvp("data", data);

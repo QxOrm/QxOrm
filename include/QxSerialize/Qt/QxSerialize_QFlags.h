@@ -46,6 +46,8 @@
 namespace boost {
 namespace serialization {
 
+#if (QT_VERSION < QT_VERSION_CHECK(6, 2, 0))
+
 template <class Archive, typename T>
 inline void save(Archive & ar, const QFlags<T> & t, const unsigned int file_version)
 {
@@ -68,6 +70,28 @@ inline void serialize(Archive & ar, QFlags<T> & t, const unsigned int file_versi
 {
    boost::serialization::split_free(ar, t, file_version);
 }
+
+#else // (QT_VERSION < QT_VERSION_CHECK(6, 2, 0))
+
+template <class Archive, typename T, typename std::enable_if<std::is_enum<T>::value, int>::type = 0>
+inline void serialize(Archive & ar, QFlags<T> & t, const unsigned int file_version)
+{
+   Q_UNUSED(file_version);
+   if (Archive::is_saving::value)
+   {
+      int iValue = static_cast<int>(t.toInt());
+      ar & boost::serialization::make_nvp("value", iValue);
+   }
+   else
+   {
+      int iValue = 0;
+      ar & boost::serialization::make_nvp("value", iValue);
+      T eValue = static_cast<T>(iValue);
+      t = QFlags<T>(eValue);
+   }
+}
+
+#endif // (QT_VERSION < QT_VERSION_CHECK(6, 2, 0))
 
 } // namespace boost
 } // namespace serialization

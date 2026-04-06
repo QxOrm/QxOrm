@@ -58,6 +58,15 @@ QX_REGISTER_INTERNAL_HELPER_START_FILE_CPP(qx::service::QxTransaction)
 namespace qx {
 namespace service {
 
+QxTransaction::QxTransaction(IxConnect * pSettings /* = NULL */) : QObject(), m_uiInputTransactionSize(0), m_uiOutputTransactionSize(0), m_lPortSource(0), m_lPortTarget(0), m_eForceConnectionStatus(conn_none), m_pSettings(pSettings)
+{
+   if (! m_pSettings) { m_pSettings = QxConnect::getSingleton(); } // Default connection parameters
+}
+
+QxTransaction::~QxTransaction() { ; }
+
+IxConnect * QxTransaction::getSettings() const { return m_pSettings; }
+
 void QxTransaction::clear()
 {
    m_sTransactionId = QString();
@@ -137,15 +146,15 @@ void QxTransaction::executeClient(IxService * pService, const QString & sMethod)
    pService->registerClass();
 
 #ifndef QT_NO_SSL
-   bool bSSLEnabled = QxConnect::getSingleton()->getSSLEnabled();
+   bool bSSLEnabled = m_pSettings->getSSLEnabled();
    if (bSSLEnabled) { socket.reset(initSocketSSL()); }
    else { socket.reset(new QTcpSocket()); }
 #else // QT_NO_SSL
    socket.reset(new QTcpSocket());
 #endif // QT_NO_SSL
 
-   QString serverName = QxConnect::getSingleton()->getIp();
-   long serverPort = QxConnect::getSingleton()->getPort();
+   QString serverName = m_pSettings->getIp();
+   long serverPort = m_pSettings->getPort();
 
 #ifndef QT_NO_SSL
    if (bSSLEnabled) { static_cast<QSslSocket *>(socket.get())->connectToHostEncrypted(serverName, serverPort); }
@@ -156,7 +165,7 @@ void QxTransaction::executeClient(IxService * pService, const QString & sMethod)
    socket->connectToHost(serverName, serverPort);
 #endif // QT_NO_SSL
 
-   if (! socket->waitForConnected(QxConnect::getSingleton()->getMaxWait()))
+   if (! socket->waitForConnected(m_pSettings->getMaxWait()))
    { pService->setMessageReturn(qx_bool(QX_ERROR_SERVER_NOT_FOUND, "[QxOrm] unable to connect to server : " + socket->errorString())); return; }
 
    if (m_sTransactionId.isEmpty())
@@ -181,7 +190,7 @@ void QxTransaction::executeClient(IxService * pService, const QString & sMethod)
    setTransactionEnd(QDateTime::currentDateTime());
    socket->disconnectFromHost();
    if (socket->state() != QAbstractSocket::UnconnectedState)
-   { socket->waitForDisconnected(QxConnect::getSingleton()->getMaxWait()); }
+   { socket->waitForDisconnected(m_pSettings->getMaxWait()); }
 }
 
 qx_bool QxTransaction::writeSocketClient(QTcpSocket & socket)
@@ -240,29 +249,28 @@ QString QxTransaction::getInfos() const
 QSslSocket * QxTransaction::initSocketSSL()
 {
    QSslSocket * socket = new QSslSocket();
-   QxConnect * settings = QxConnect::getSingleton();
-   QSslConfiguration config = settings->getSSLConfiguration();
+   QSslConfiguration config = m_pSettings->getSSLConfiguration();
    if (config.isNull()) { config = QSslConfiguration::defaultConfiguration(); }
-   QList<QSslCertificate> allCACertificates = settings->getSSLCACertificates();
+   QList<QSslCertificate> allCACertificates = m_pSettings->getSSLCACertificates();
    config.setCaCertificates(allCACertificates); // because QSslSocket::setCaCertificates() is obsolete
 
    socket->setSslConfiguration(config);
-   socket->ignoreSslErrors(settings->getSSLIgnoreErrors());
-   socket->setProtocol(settings->getSSLProtocol());
-   socket->setPeerVerifyName(settings->getSSLPeerVerifyName());
-   socket->setPeerVerifyMode(settings->getSSLPeerVerifyMode());
-   socket->setPeerVerifyDepth(settings->getSSLPeerVerifyDepth());
-   socket->setPrivateKey(settings->getSSLPrivateKey());
-   socket->setLocalCertificate(settings->getSSLLocalCertificate());
+   socket->ignoreSslErrors(m_pSettings->getSSLIgnoreErrors());
+   socket->setProtocol(m_pSettings->getSSLProtocol());
+   socket->setPeerVerifyName(m_pSettings->getSSLPeerVerifyName());
+   socket->setPeerVerifyMode(m_pSettings->getSSLPeerVerifyMode());
+   socket->setPeerVerifyDepth(m_pSettings->getSSLPeerVerifyDepth());
+   socket->setPrivateKey(m_pSettings->getSSLPrivateKey());
+   socket->setLocalCertificate(m_pSettings->getSSLLocalCertificate());
 
    return socket;
 }
 
 bool QxTransaction::checkSocketSSLEncrypted(QTcpSocket * socket)
 {
-   if (! QxConnect::getSingleton()->getSSLEnabled()) { qAssert(false); return false; }
+   if (! m_pSettings->getSSLEnabled()) { qAssert(false); return false; }
    QSslSocket * ssl = static_cast<QSslSocket *>(socket);
-   return ssl->waitForEncrypted(QxConnect::getSingleton()->getMaxWait());
+   return ssl->waitForEncrypted(m_pSettings->getMaxWait());
 }
 
 #endif // QT_NO_SSL

@@ -12,9 +12,9 @@ QX_REGISTER_COMPLEX_CLASS_NAME_CPP_QX_DLL1(qx::test::CPerson, qx_test_CPerson)
 namespace qx {
 template <> void register_class(QxClass<qx::test::CPerson> & t)
 {
-   IxDataMember * pData = NULL;
-   IxFunction * pFct = NULL;
-   IxValidator * pValidator = NULL;
+   IxDataMember * pData = NULL; Q_UNUSED(pData);
+   IxFunction * pFct = NULL; Q_UNUSED(pFct);
+   IxValidator * pValidator = NULL; Q_UNUSED(pValidator);
 
    t.setName("CPerson");
 

@@ -262,6 +262,7 @@ class QX_DLL_EXPORT QxSqlQuery
 public:
 
    typedef std::function<void (QString &)> type_fct_on_before_sql_prepare;
+   typedef std::function<void (QSqlQuery &)> type_fct_on_after_sql_exec;
 
 protected:
 
@@ -283,6 +284,7 @@ protected:
    QHash<QString, std::shared_ptr<QxSqlQuery> >    m_lstJoinQueryUser;        //!< List of SQL queries defined by user to add inside relationships joins (LEFT OUTER JOIN, INNER JOIN), for example : INNER JOIN my_table2 m2 ON (m1.id = m2.parent_id AND (XXX))
    QList<std::shared_ptr<QxSqlQuery> >             m_lstJoinQueryToResolve;   //!< List of SQL queries to resolve (in the right order) to add inside relationships joins (LEFT OUTER JOIN, INNER JOIN), for example : INNER JOIN my_table2 m2 ON (m1.id = m2.parent_id AND (XXX))
    type_fct_on_before_sql_prepare                  m_fctOnBeforeSqlPrepare;   //!< Custom callback function to modify SQL query before preparing in database
+   type_fct_on_after_sql_exec                      m_fctOnAfterSqlExec;       //!< Custom callback function called after SQL query execution (can be used to get deleted items for example)
 
 public:
 
@@ -338,6 +340,9 @@ public:
 
    QxSqlQuery & setFctOnBeforeSqlPrepare(type_fct_on_before_sql_prepare fct);
    void onBeforeSqlPrepare(QString & sql);
+
+   QxSqlQuery & setFctOnAfterSqlExec(type_fct_on_after_sql_exec fct);
+   void onAfterSqlExec(QSqlQuery & query);
 
 private:
 

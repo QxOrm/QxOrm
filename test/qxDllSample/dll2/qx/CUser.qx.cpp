@@ -9,9 +9,9 @@ QX_REGISTER_CPP_QX_DLL2(CUser)
 namespace qx {
 template <> void register_class(QxClass<CUser> & t)
 {
-   IxDataMember * pData = NULL;
-   IxSqlRelation * pRelation = NULL;
-   IxValidator * pValidator = NULL;
+   IxDataMember * pData = NULL; Q_UNUSED(pData);
+   IxSqlRelation * pRelation = NULL; Q_UNUSED(pRelation);
+   IxValidator * pValidator = NULL; Q_UNUSED(pValidator);
 
    pData = t.data(& CUser::m_lUserId, "idUser", 0);
    pData = t.data(& CUser::m_sProfil, "profil", 0);    pData->setSqlAlias("profil");

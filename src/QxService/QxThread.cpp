@@ -111,13 +111,14 @@ QX_TYPE_SOCKET_DESC QxThread::getSocketDescriptor()
 
 void QxThread::onIncomingConnection()
 {
+   IxConnect * settings = m_pThreadPool->getSettings();
    if (getSocketDescriptor() == 0) { qAssert(false); return; }
    if (hasBeenStopped()) { quit(); return; }
    std::unique_ptr<QTcpSocket> socket;
    m_bIsDisconnected = false;
 
 #ifndef QX_THREAD_NO_SSL
-   bool bSSLEnabled = QxConnect::getSingleton()->getSSLEnabled();
+   bool bSSLEnabled = settings->getSSLEnabled();
    if (bSSLEnabled) { socket.reset(initSocketSSL()); }
    else { socket.reset(new QTcpSocket()); }
 #else // QX_THREAD_NO_SSL
@@ -137,7 +138,7 @@ void QxThread::onIncomingConnection()
          while (checkKeepAlive(* socket) && (! hasBeenStopped()) && (! m_bIsDisconnected));
          socket->disconnectFromHost();
          if ((! m_bIsDisconnected) && (socket->state() != QAbstractSocket::UnconnectedState))
-         { socket->waitForDisconnected(QxConnect::getSingleton()->getMaxWait()); }
+         { socket->waitForDisconnected(settings->getMaxWait()); }
 #ifndef QX_THREAD_NO_SSL
       }
       else { Q_EMIT error("[QxOrm] SSL socket encrypted error : " + socket->errorString(), QxTransaction_ptr()); }
@@ -153,7 +154,8 @@ void QxThread::onIncomingConnection()
 bool QxThread::checkKeepAlive(QTcpSocket & socket)
 {
    if (m_pTransaction && (m_pTransaction->getForceConnectionStatus() == qx::service::QxTransaction::conn_close)) { return false; }
-   long lKeepAlive = QxConnect::getSingleton()->getKeepAlive();
+   IxConnect * settings = m_pThreadPool->getSettings();
+   long lKeepAlive = settings->getKeepAlive();
    if (lKeepAlive == 0) { return false; }
 
    long lCurrRetry = 0;
@@ -174,16 +176,17 @@ bool QxThread::checkKeepAlive(QTcpSocket & socket)
 
 bool QxThread::checkSocketSSLEncrypted(QTcpSocket * socket)
 {
-   if (! QxConnect::getSingleton()->getSSLEnabled()) { qAssert(false); return false; }
+   IxConnect * settings = m_pThreadPool->getSettings();
+   if (! settings->getSSLEnabled()) { qAssert(false); return false; }
    QSslSocket * ssl = static_cast<QSslSocket *>(socket);
    ssl->startServerEncryption();
-   return ssl->waitForEncrypted(QxConnect::getSingleton()->getMaxWait());
+   return ssl->waitForEncrypted(settings->getMaxWait());
 }
 
 QSslSocket * QxThread::initSocketSSL()
 {
    QSslSocket * socket = new QSslSocket();
-   QxConnect * settings = QxConnect::getSingleton();
+   IxConnect * settings = m_pThreadPool->getSettings();
    QSslConfiguration config = settings->getSSLConfiguration();
    if (config.isNull()) { config = QSslConfiguration::defaultConfiguration(); }
    QList<QSslCertificate> allCACertificates = settings->getSSLCACertificates();
@@ -217,10 +220,11 @@ void QxThread::clearData()
 
 void QxThread::doProcess(QTcpSocket & socket)
 {
-   long lMaxWait = QxConnect::getSingleton()->getMaxWait();
-   bool bModeHTTP = QxConnect::getSingleton()->getModeHTTP();
-   if (bModeHTTP) { m_pTransaction = std::make_shared<qx::QxHttpTransaction>(); }
-   else { m_pTransaction = std::make_shared<QxTransaction>(); }
+   IxConnect * settings = m_pThreadPool->getSettings();
+   long lMaxWait = settings->getMaxWait();
+   bool bModeHTTP = settings->getModeHTTP();
+   if (bModeHTTP) { m_pTransaction = std::make_shared<qx::QxHttpTransaction>(settings); }
+   else { m_pTransaction = std::make_shared<QxTransaction>(settings); }
    QObject::connect(m_pTransaction.get(), SIGNAL(onCustomRequestHandler()), this, SLOT(onCustomRequestHandler()), Qt::DirectConnection);
 
    qx_bool bReadOk = m_pTransaction->readSocketServer(socket);

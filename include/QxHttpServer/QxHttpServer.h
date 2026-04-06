@@ -90,12 +90,13 @@ private:
 
 public:
 
-   QxHttpServer(QObject * parent = NULL);
+   QxHttpServer(QObject * parent = NULL, qx::service::IxConnect * pSettings = NULL);
    virtual ~QxHttpServer();
 
    Q_INVOKABLE void startServer();
    Q_INVOKABLE void stopServer();
 
+   qx::service::IxConnect * getSettings() const;
    void setCustomRequestHandler(type_fct_custom_request_handler fct);
    QxHttpServer & dispatch(const QString & command, const QString & path, type_fct_custom_request_handler fct, long position = -1);
    void beforeDispatching(type_fct_custom_request_handler fct);

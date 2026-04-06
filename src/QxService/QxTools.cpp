@@ -53,8 +53,9 @@ namespace service {
 
 qx_bool QxTools::readSocket(QTcpSocket & socket, QxTransaction & transaction, quint32 & size)
 {
+   IxConnect * pSettings = transaction.getSettings();
    while (socket.bytesAvailable() < (qint64)(QX_SERVICE_TOOLS_HEADER_SIZE))
-   { if (! socket.waitForReadyRead(QxConnect::getSingleton()->getMaxWait())) { return qx_bool(QX_ERROR_SERVICE_READ_ERROR, "invalid bytes count available to retrieve transaction header (" + socket.errorString() + ")"); } }
+   { if (! socket.waitForReadyRead(pSettings->getMaxWait())) { return qx_bool(QX_ERROR_SERVICE_READ_ERROR, "invalid bytes count available to retrieve transaction header (" + socket.errorString() + ")"); } }
 
    quint32 uiSerializedSize = 0;
    quint16 uiSerializationType(0), uiCompressData(0), uiEncryptData(0);
@@ -68,7 +69,7 @@ qx_bool QxTools::readSocket(QTcpSocket & socket, QxTransaction & transaction, qu
    in >> uiEncryptData;
 
    while (socket.bytesAvailable() < (qint64)(uiSerializedSize))
-   { if (! socket.waitForReadyRead(QxConnect::getSingleton()->getMaxWait())) { return qx_bool(QX_ERROR_SERVICE_READ_ERROR, "invalid bytes count available to retrieve transaction serialized data (" + socket.errorString() + ")"); } }
+   { if (! socket.waitForReadyRead(pSettings->getMaxWait())) { return qx_bool(QX_ERROR_SERVICE_READ_ERROR, "invalid bytes count available to retrieve transaction serialized data (" + socket.errorString() + ")"); } }
 
    QByteArray dataSerialized = socket.read((qint64)(uiSerializedSize));
    qAssert(dataSerialized.size() == (int)(uiSerializedSize));
@@ -76,7 +77,7 @@ qx_bool QxTools::readSocket(QTcpSocket & socket, QxTransaction & transaction, qu
 
    if (uiEncryptData != 0)
    {
-      QxSimpleCrypt crypto(QxConnect::getSingleton()->getEncryptKey());
+      QxSimpleCrypt crypto(pSettings->getEncryptKey());
       QByteArray decrypted = crypto.decryptToByteArray(dataSerialized);
       if ((crypto.lastError() != QxSimpleCrypt::ErrorNoError) || decrypted.isEmpty()) { return qx_bool(QX_ERROR_UNKNOWN, "an error occured during decryption of data"); }
       dataSerialized = decrypted;
@@ -86,37 +87,37 @@ qx_bool QxTools::readSocket(QTcpSocket & socket, QxTransaction & transaction, qu
    { QByteArray uncompressed = qUncompress(dataSerialized); if (! uncompressed.isEmpty()) { dataSerialized = uncompressed; } }
 
    qx_bool bDeserializeOk;
-   switch (static_cast<QxConnect::serialization_type>(uiSerializationType))
+   switch (static_cast<IxConnect::serialization_type>(uiSerializationType))
    {
 #if _QX_SERIALIZE_BINARY
-      case QxConnect::serialization_binary:                 bDeserializeOk = qx::serialization::binary::from_byte_array(transaction, dataSerialized); break;
+      case IxConnect::serialization_binary:                 bDeserializeOk = qx::serialization::binary::from_byte_array(transaction, dataSerialized); break;
 #endif // _QX_SERIALIZE_BINARY
 #if _QX_SERIALIZE_XML
-      case QxConnect::serialization_xml:                    bDeserializeOk = qx::serialization::xml::from_byte_array(transaction, dataSerialized); break;
+      case IxConnect::serialization_xml:                    bDeserializeOk = qx::serialization::xml::from_byte_array(transaction, dataSerialized); break;
 #endif // _QX_SERIALIZE_XML
 #if _QX_SERIALIZE_TEXT
-      case QxConnect::serialization_text:                   bDeserializeOk = qx::serialization::text::from_byte_array(transaction, dataSerialized); break;
+      case IxConnect::serialization_text:                   bDeserializeOk = qx::serialization::text::from_byte_array(transaction, dataSerialized); break;
 #endif // _QX_SERIALIZE_TEXT
 #if _QX_SERIALIZE_PORTABLE_BINARY
-      case QxConnect::serialization_portable_binary:        bDeserializeOk = qx::serialization::portable_binary::from_byte_array(transaction, dataSerialized, 0); break;
+      case IxConnect::serialization_portable_binary:        bDeserializeOk = qx::serialization::portable_binary::from_byte_array(transaction, dataSerialized, 0); break;
 #endif // _QX_SERIALIZE_PORTABLE_BINARY
 #if _QX_SERIALIZE_WIDE_BINARY
-      case QxConnect::serialization_wide_binary:            bDeserializeOk = qx::serialization::wide::binary::from_byte_array(transaction, dataSerialized); break;
+      case IxConnect::serialization_wide_binary:            bDeserializeOk = qx::serialization::wide::binary::from_byte_array(transaction, dataSerialized); break;
 #endif // _QX_SERIALIZE_WIDE_BINARY
 #if _QX_SERIALIZE_WIDE_XML
-      case QxConnect::serialization_wide_xml:               bDeserializeOk = qx::serialization::wide::xml::from_byte_array(transaction, dataSerialized); break;
+      case IxConnect::serialization_wide_xml:               bDeserializeOk = qx::serialization::wide::xml::from_byte_array(transaction, dataSerialized); break;
 #endif // _QX_SERIALIZE_WIDE_XML
 #if _QX_SERIALIZE_WIDE_TEXT
-      case QxConnect::serialization_wide_text:              bDeserializeOk = qx::serialization::wide::text::from_byte_array(transaction, dataSerialized); break;
+      case IxConnect::serialization_wide_text:              bDeserializeOk = qx::serialization::wide::text::from_byte_array(transaction, dataSerialized); break;
 #endif // _QX_SERIALIZE_WIDE_TEXT
 #if _QX_SERIALIZE_POLYMORPHIC
-      case QxConnect::serialization_polymorphic_binary:     bDeserializeOk = qx::serialization::polymorphic_binary::from_byte_array(transaction, dataSerialized); break;
-      case QxConnect::serialization_polymorphic_xml:        bDeserializeOk = qx::serialization::polymorphic_xml::from_byte_array(transaction, dataSerialized); break;
-      case QxConnect::serialization_polymorphic_text:       bDeserializeOk = qx::serialization::polymorphic_text::from_byte_array(transaction, dataSerialized); break;
+      case IxConnect::serialization_polymorphic_binary:     bDeserializeOk = qx::serialization::polymorphic_binary::from_byte_array(transaction, dataSerialized); break;
+      case IxConnect::serialization_polymorphic_xml:        bDeserializeOk = qx::serialization::polymorphic_xml::from_byte_array(transaction, dataSerialized); break;
+      case IxConnect::serialization_polymorphic_text:       bDeserializeOk = qx::serialization::polymorphic_text::from_byte_array(transaction, dataSerialized); break;
 #endif // _QX_SERIALIZE_POLYMORPHIC
-      case QxConnect::serialization_qt:                     bDeserializeOk = qx::serialization::qt::from_byte_array(transaction, dataSerialized); break;
+      case IxConnect::serialization_qt:                     bDeserializeOk = qx::serialization::qt::from_byte_array(transaction, dataSerialized); break;
 #ifndef _QX_NO_JSON
-      case QxConnect::serialization_json:                   bDeserializeOk = qx::serialization::json::from_byte_array(transaction, dataSerialized); break;
+      case IxConnect::serialization_json:                   bDeserializeOk = qx::serialization::json::from_byte_array(transaction, dataSerialized); break;
 #endif // _QX_NO_JSON
       default:                                              return qx_bool(QX_ERROR_UNKNOWN, "unknown serialization type to read data from socket");
    }
@@ -129,37 +130,38 @@ qx_bool QxTools::writeSocket(QTcpSocket & socket, QxTransaction & transaction, q
    QByteArray dataSerialized;
    std::string owner; Q_UNUSED(owner);
    std::wstring w_owner; Q_UNUSED(w_owner);
-   switch (QxConnect::getSingleton()->getSerializationType())
+   IxConnect * pSettings = transaction.getSettings();
+   switch (pSettings->getSerializationType())
    {
 #if _QX_SERIALIZE_BINARY
-      case QxConnect::serialization_binary:                 dataSerialized = qx::serialization::binary::to_byte_array(transaction, (& owner)); break;
+      case IxConnect::serialization_binary:                 dataSerialized = qx::serialization::binary::to_byte_array(transaction, (& owner)); break;
 #endif // _QX_SERIALIZE_BINARY
 #if _QX_SERIALIZE_XML
-      case QxConnect::serialization_xml:                    dataSerialized = qx::serialization::xml::to_byte_array(transaction, (& owner)); break;
+      case IxConnect::serialization_xml:                    dataSerialized = qx::serialization::xml::to_byte_array(transaction, (& owner)); break;
 #endif // _QX_SERIALIZE_XML
 #if _QX_SERIALIZE_TEXT
-      case QxConnect::serialization_text:                   dataSerialized = qx::serialization::text::to_byte_array(transaction, (& owner)); break;
+      case IxConnect::serialization_text:                   dataSerialized = qx::serialization::text::to_byte_array(transaction, (& owner)); break;
 #endif // _QX_SERIALIZE_TEXT
 #if _QX_SERIALIZE_PORTABLE_BINARY
-      case QxConnect::serialization_portable_binary:        dataSerialized = qx::serialization::portable_binary::to_byte_array(transaction, (& owner), 0); break;
+      case IxConnect::serialization_portable_binary:        dataSerialized = qx::serialization::portable_binary::to_byte_array(transaction, (& owner), 0); break;
 #endif // _QX_SERIALIZE_PORTABLE_BINARY
 #if _QX_SERIALIZE_WIDE_BINARY
-      case QxConnect::serialization_wide_binary:            dataSerialized = qx::serialization::wide::binary::to_byte_array(transaction, (& w_owner)); break;
+      case IxConnect::serialization_wide_binary:            dataSerialized = qx::serialization::wide::binary::to_byte_array(transaction, (& w_owner)); break;
 #endif // _QX_SERIALIZE_WIDE_BINARY
 #if _QX_SERIALIZE_WIDE_XML
-      case QxConnect::serialization_wide_xml:               dataSerialized = qx::serialization::wide::xml::to_byte_array(transaction, (& w_owner)); break;
+      case IxConnect::serialization_wide_xml:               dataSerialized = qx::serialization::wide::xml::to_byte_array(transaction, (& w_owner)); break;
 #endif // _QX_SERIALIZE_WIDE_XML
 #if _QX_SERIALIZE_WIDE_TEXT
-      case QxConnect::serialization_wide_text:              dataSerialized = qx::serialization::wide::text::to_byte_array(transaction, (& w_owner)); break;
+      case IxConnect::serialization_wide_text:              dataSerialized = qx::serialization::wide::text::to_byte_array(transaction, (& w_owner)); break;
 #endif // _QX_SERIALIZE_WIDE_TEXT
 #if _QX_SERIALIZE_POLYMORPHIC
-      case QxConnect::serialization_polymorphic_binary:     dataSerialized = qx::serialization::polymorphic_binary::to_byte_array(transaction, (& owner)); break;
-      case QxConnect::serialization_polymorphic_xml:        dataSerialized = qx::serialization::polymorphic_xml::to_byte_array(transaction, (& owner)); break;
-      case QxConnect::serialization_polymorphic_text:       dataSerialized = qx::serialization::polymorphic_text::to_byte_array(transaction, (& owner)); break;
+      case IxConnect::serialization_polymorphic_binary:     dataSerialized = qx::serialization::polymorphic_binary::to_byte_array(transaction, (& owner)); break;
+      case IxConnect::serialization_polymorphic_xml:        dataSerialized = qx::serialization::polymorphic_xml::to_byte_array(transaction, (& owner)); break;
+      case IxConnect::serialization_polymorphic_text:       dataSerialized = qx::serialization::polymorphic_text::to_byte_array(transaction, (& owner)); break;
 #endif // _QX_SERIALIZE_POLYMORPHIC
-      case QxConnect::serialization_qt:                     dataSerialized = qx::serialization::qt::to_byte_array(transaction, (& owner)); break;
+      case IxConnect::serialization_qt:                     dataSerialized = qx::serialization::qt::to_byte_array(transaction, (& owner)); break;
 #ifndef _QX_NO_JSON
-      case QxConnect::serialization_json:                   dataSerialized = qx::serialization::json::to_byte_array(transaction, (& owner)); break;
+      case IxConnect::serialization_json:                   dataSerialized = qx::serialization::json::to_byte_array(transaction, (& owner)); break;
 #endif // _QX_NO_JSON
       default:                                              return qx_bool(QX_ERROR_UNKNOWN, "unknown serialization type to write data to socket");
    }
@@ -168,13 +170,13 @@ qx_bool QxTools::writeSocket(QTcpSocket & socket, QxTransaction & transaction, q
    { return qx_bool(QX_ERROR_UNKNOWN, "an error occured during serialization of data"); }
 
    quint16 uiCompressData = 0;
-   if (QxConnect::getSingleton()->getCompressData() && (dataSerialized.size() > QX_SERVICE_MIN_SIZE_TO_COMPRESS_DATA))
+   if (pSettings->getCompressData() && (dataSerialized.size() > QX_SERVICE_MIN_SIZE_TO_COMPRESS_DATA))
    { QByteArray compressed = qCompress(dataSerialized, -1); if (! compressed.isEmpty()) { dataSerialized = compressed; uiCompressData = 1; } }
 
    quint16 uiEncryptData = 0;
-   if (QxConnect::getSingleton()->getEncryptData())
+   if (pSettings->getEncryptData())
    {
-      QxSimpleCrypt crypto(QxConnect::getSingleton()->getEncryptKey());
+      QxSimpleCrypt crypto(pSettings->getEncryptKey());
       crypto.setCompressionMode(QxSimpleCrypt::CompressionNever);
       crypto.setIntegrityProtectionMode(QxSimpleCrypt::ProtectionChecksum);
       QByteArray encrypted = crypto.encryptToByteArray(dataSerialized);
@@ -187,7 +189,7 @@ qx_bool QxTools::writeSocket(QTcpSocket & socket, QxTransaction & transaction, q
    QDataStream out(& dataHeader, QIODevice::WriteOnly);
    out.setVersion(QDataStream::Qt_4_5);
    out << (quint32)(dataSerialized.size());
-   out << (quint16)(QxConnect::getSingleton()->getSerializationType());
+   out << (quint16)(pSettings->getSerializationType());
    out << (quint16)(uiCompressData);
    out << (quint16)(uiEncryptData);
    qAssert(dataHeader.size() == (int)(QX_SERVICE_TOOLS_HEADER_SIZE));

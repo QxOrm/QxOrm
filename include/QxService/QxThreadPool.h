@@ -65,6 +65,7 @@ namespace qx {
 namespace service {
 
 class QxThread;
+class IxConnect;
 
 /*!
  * \ingroup QxService
@@ -79,6 +80,7 @@ class QX_DLL_EXPORT QxThreadPool : public QThread
 
 protected:
 
+   IxConnect * m_pSettings;                  //!< Connection parameters used by QxService module and QxHttpServer module
    QList<QxThread *> m_lstAllServices;       //!< List of all services created by 'QxThreadPool'
    QQueue<QxThread *> m_lstAvailable;        //!< List of services available to execute process
    bool m_bIsStopped;                        //!< Flag to indicate if thread has been stopped
@@ -86,9 +88,10 @@ protected:
 
 public:
 
-   QxThreadPool() : QThread(), m_bIsStopped(false) { ; }
-   virtual ~QxThreadPool() { if (isRunning()) { qDebug("[QxOrm] qx::service::QxThreadPool thread is running : %s", "quit and wait"); quit(); wait(); } }
+   QxThreadPool(IxConnect * pSettings = NULL);
+   virtual ~QxThreadPool();
 
+   IxConnect * getSettings() const;
    bool isStopped() const;
    QxThread * getAvailable();
    void setAvailable(QxThread * p);
