@@ -1,0 +1,119 @@
+# ----------------------------------------------------------------------------------
+# QxOrm Demo Stack (C++ / Qt / ORM / HTTP Web Server / REST API / MySQL)
+# 
+# This demo environment runs a complete C++ backend stack using:
+#   - QxOrm (C++ ORM based on Qt)
+#   - REST API server (C++ backend)
+#   - MySQL database
+#   - Nginx reverse proxy
+#   - Optional frontend UI
+# 
+# Goal:
+#   Run a complete C++ backend stack in one command
+# 
+# Requirements:
+#   - Docker
+#   - Docker Compose
+# 
+# Quick start:
+#   curl -L -O https://raw.githubusercontent.com/QxOrm/QxOrm/master/docker/demo/compose_qxorm_with_mysql/compose_demo_qxorm_with_mysql.yaml
+#   docker compose -f compose_demo_qxorm_with_mysql.yaml up -d
+# 
+# URL web access:
+#   http://localhost:8080
+# 
+# API test:
+#   - ping:             curl -X POST http://localhost:8080/ping -H "Content-Type: application/json" -d "{ \"request_id\":\"random_request_id\", \"action\":\"ping\" }"
+#   - list entities:    curl -X POST http://localhost:8080/qx -H "Content-Type: application/json" -d "{ \"request_id\":\"random_request_id\", \"action\":\"get_meta_data\", \"entity\":\"*\" }"
+#   - database access:  curl -X POST http://localhost:8080/qx -H "Content-Type: application/json" -d "{ \"request_id\":\"random_request_id\", \"action\":\"fetch_all\", \"entity\":\"blog\" }"
+# 
+# Images are pulled automatically from Docker Hub:
+#   https://hub.docker.com/u/qxorm
+# 
+# This is a demo setup:
+#   - No build required
+#   - No local dependencies
+#   - Designed for quick evaluation
+# 
+# Advanced (full development environment with Docker):
+#   A complete C++ development setup is also available, including:
+#      - Debug-ready backend environment
+#      - VS Code Remote / Dev Containers support
+# 
+# See documentation for details:
+#   https://github.com/QxOrm/QxOrm/tree/master/docker/dev/compose_qxorm_with_mysql
+# ----------------------------------------------------------------------------------
+
+services:
+  nginx_reverse_proxy:
+    image: qxorm/compose_qxorm_with_mysql-nginx_reverse_proxy:latest
+    container_name: qxorm_demo_mysql_nginx
+    ports:
+      - 8080:8080
+      - 8081:8081
+    depends_on:
+      - frontend_html_js_css
+      - backend_qxorm
+    networks:
+      - compose_qxorm_with_mysql_frontnet
+    healthcheck:
+      test: curl --fail --request POST http://backend_qxorm:9642/ping || exit 1
+      interval: 30s
+      timeout: 15s
+      retries: 3
+      start_period: 30s
+
+  frontend_html_js_css:
+    image: qxorm/compose_qxorm_with_mysql-frontend_html_js_css:latest
+    container_name: qxorm_demo_mysql_frontend
+    hostname: frontend_html_js_css
+    restart: unless-stopped
+    networks:
+      - compose_qxorm_with_mysql_frontnet
+    expose:
+      - 80
+
+  backend_qxorm:
+    image: qxorm/compose_qxorm_with_mysql-backend_qxorm:latest
+    container_name: qxorm_demo_mysql_backend
+    hostname: backend_qxorm
+    restart: unless-stopped
+    environment:
+      - QX_DB=mysql
+    depends_on:
+      - db_mysql
+    networks:
+      - compose_qxorm_with_mysql_frontnet
+      - compose_qxorm_with_mysql_backnet
+    volumes:
+      - qxorm_backend_src:/home/qxorm/src
+    expose:
+      - 9642
+      - 9643
+    ports:
+      - 2222:22
+
+  db_mysql:
+    image: qxorm/compose_qxorm_with_mysql-db_mysql:latest
+    container_name: qxorm_demo_mysql_db
+    hostname: db_mysql
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=qxorm
+      - MYSQL_USER=qxorm
+      - MYSQL_PASSWORD=qxorm
+      - MYSQL_DATABASE=qxBlog
+    networks:
+      - compose_qxorm_with_mysql_backnet
+    volumes:
+      - mysql_db_data:/var/lib/mysql
+    expose:
+      - 3306
+
+volumes:
+  mysql_db_data:
+  qxorm_backend_src:
+
+networks:
+  compose_qxorm_with_mysql_backnet:
+  compose_qxorm_with_mysql_frontnet:
