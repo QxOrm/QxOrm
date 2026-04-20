@@ -131,7 +131,7 @@ struct bad_any_cast : public std::exception
 
 template <typename ValueType>
 ValueType * any_cast(any * operand)
-{ return ((operand && (operand->type() == QX_TYPE_ID(ValueType))) ? (& static_cast<any::holder<typename std::remove_cv<ValueType>::type> *>(operand->content)->held) : NULL); }
+{ return ((operand && ((operand->type() == QX_TYPE_ID(ValueType)) || (strcmp(operand->type().name(), QX_TYPE_ID(ValueType).name()) == 0))) ? (& static_cast<any::holder<typename std::remove_cv<ValueType>::type> *>(operand->content)->held) : NULL); }
 
 template <typename ValueType>
 const ValueType * any_cast(const any * operand)
