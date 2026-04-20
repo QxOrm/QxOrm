@@ -105,7 +105,7 @@ static inline QJsonValue toJson(const QDate & t, const QString & format)
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
    { QTime time = ((t.isValid()) ? QTime(0, 0) : QTime()); QDateTime dt(t, time); return QxConvert_ToJson<QDateTime>::toJson(dt, format); }
 #else // (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-   { QDateTime dt(t); return QxConvert_ToJson<QDateTime>::toJson(dt, format); }
+   { QDateTime dt(t.startOfDay()); return QxConvert_ToJson<QDateTime>::toJson(dt, format); }
 #endif // (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
 #endif // _QX_ENABLE_MONGODB
 
