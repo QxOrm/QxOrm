@@ -854,7 +854,7 @@ QSqlError QxMongoDB_Helper::QxMongoDB_HelperImpl::executeCommand_(qx::dao::detai
    if (query && (query->type() == "cursor"))
    {
       reply->m_destroy = false;
-      qx_scoped_wrapper<mongoc_cursor_t> cursor(mongoc_cursor_new_from_command_reply(coll.client->get(), reply->get(), 0));
+	  qx_scoped_wrapper<mongoc_cursor_t> cursor(mongoc_cursor_new_from_command_reply_with_opts(coll.client->get(), reply->get(), NULL));
       if (! cursor.get()) { return QSqlError("[QxOrm] Unable to create a 'mongoc_cursor_t' cursor instance from reply (" + pClass->getName() + ")", "", QSqlError::UnknownError); }
 
       const bson_t * doc = NULL; QString json;
@@ -896,7 +896,8 @@ QSqlError QxMongoDB_Helper::QxMongoDB_HelperImpl::count_(qx::dao::detail::IxDao_
 
    bson_error_t bsonError; qx_opts_ptr opts;
    err = getOptions_(QxMongoDB_Helper::opts_collection_count, opts, (query ? query->queryAt(1) : QString())); if (err.isValid()) { return err; }
-   cnt = static_cast<long>(mongoc_collection_count_with_opts(coll.collection->get(), MONGOC_QUERY_NONE, query_.get(), 0, 0, (opts ? opts->get() : NULL), NULL, (& bsonError)));
+//   cnt = static_cast<long>(mongoc_collection_count_with_opts(coll.collection->get(), MONGOC_QUERY_NONE, query_.get(), 0, 0, (opts ? opts->get() : NULL), NULL, (& bsonError)));
+   cnt = static_cast<long>(mongoc_collection_count_documents(coll.collection->get(), query_.get(), (opts ? opts->get() : NULL), NULL, NULL, (& bsonError)));
    if (cnt < 0) { cnt = 0; return QSqlError("[QxOrm] Unable to count 'bson_t' documents (" + pClass->getName() + ") in MongoDB database : " + QString(bsonError.message), "", QSqlError::UnknownError); }
    return QSqlError();
 }
